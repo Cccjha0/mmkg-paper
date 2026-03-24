@@ -24,7 +24,7 @@ training:
   img_dropout: 0.2
   gate_reg_weight: 0.001
   gate_reg_target: 0.3
-  early_stop_patience: 10
+  early_stop_patience: 15
   fusion_warmup_epochs: 0
 
 evaluation:
