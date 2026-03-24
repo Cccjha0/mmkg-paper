@@ -41,9 +41,18 @@ def _load_openbg_img_features(cache_dir: str, cache_format: str) -> tuple[torch.
 def build_model(cfg: dict):
     model_name = cfg["model"]["name"]
 
-    if model_name == "openbg_img_gated":
-        from ml.training.src.models.openbg_img_gated_lp import OpenBGImgGatedLP
-
+    if model_name in {
+        "openbg_img_gated",
+        "openbg_img_gate_only",
+        "openbg_img_residual_only",
+        "openbg_img_gate_residual",
+    }:
+        from ml.training.src.models.openbg_img_gated_lp import (
+            OpenBGImgGateOnlyLP,
+            OpenBGImgGateResidualLP,
+            OpenBGImgGatedLP,
+            OpenBGImgResidualOnlyLP,
+        )
         cache_dir = cfg["dataset"]["cache_dir"]
         cache_format = cfg["dataset"].get("cache_format", "legacy")
         d = cfg["embedding"]["d"]
@@ -61,22 +70,71 @@ def build_model(cfg: dict):
 
         text_feat, img_feat, has_img = _load_openbg_img_features(cache_dir, cache_format)
 
-        model = OpenBGImgGatedLP(
-            text_feat=text_feat,
-            img_feat=img_feat,
-            has_img=has_img,
-            num_relations=num_relations,
-            d=d,
-            use_layernorm=use_layernorm,
-            neg_ratio=neg_ratio,
-            adv_temperature=adv_temperature,
-            img_dropout=img_dropout,
-            use_fusion=use_fusion,
-            use_residual=use_residual,
-            use_normalized_mix=use_normalized_mix,
-            gate_reg_weight=gate_reg_weight,
-            gate_reg_target=gate_reg_target,
-        )
+        if model_name == "openbg_img_gate_only":
+            print("[BuildModel] building explicit model: Gate-Only")
+            model = OpenBGImgGateOnlyLP(
+                text_feat=text_feat,
+                img_feat=img_feat,
+                has_img=has_img,
+                num_relations=num_relations,
+                d=d,
+                use_layernorm=use_layernorm,
+                neg_ratio=neg_ratio,
+                adv_temperature=adv_temperature,
+                img_dropout=img_dropout,
+                gate_reg_weight=gate_reg_weight,
+                gate_reg_target=gate_reg_target,
+            )
+        elif model_name == "openbg_img_residual_only":
+            print("[BuildModel] building explicit model: Residual-Only")
+            model = OpenBGImgResidualOnlyLP(
+                text_feat=text_feat,
+                img_feat=img_feat,
+                has_img=has_img,
+                num_relations=num_relations,
+                d=d,
+                neg_ratio=neg_ratio,
+                adv_temperature=adv_temperature,
+                img_dropout=img_dropout,
+            )
+        elif model_name == "openbg_img_gate_residual":
+            print("[BuildModel] building explicit model: Gate+Residual")
+            model = OpenBGImgGateResidualLP(
+                text_feat=text_feat,
+                img_feat=img_feat,
+                has_img=has_img,
+                num_relations=num_relations,
+                d=d,
+                use_layernorm=use_layernorm,
+                neg_ratio=neg_ratio,
+                adv_temperature=adv_temperature,
+                img_dropout=img_dropout,
+                use_normalized_mix=use_normalized_mix,
+                gate_reg_weight=gate_reg_weight,
+                gate_reg_target=gate_reg_target,
+            )
+        else:
+            print(
+                "[BuildModel] building legacy openbg_img_gated via compatibility path: "
+                f"use_fusion={use_fusion}, use_residual={use_residual}, "
+                f"use_normalized_mix={use_normalized_mix}"
+            )
+            model = OpenBGImgGatedLP(
+                text_feat=text_feat,
+                img_feat=img_feat,
+                has_img=has_img,
+                num_relations=num_relations,
+                d=d,
+                use_layernorm=use_layernorm,
+                neg_ratio=neg_ratio,
+                adv_temperature=adv_temperature,
+                img_dropout=img_dropout,
+                use_fusion=use_fusion,
+                use_residual=use_residual,
+                use_normalized_mix=use_normalized_mix,
+                gate_reg_weight=gate_reg_weight,
+                gate_reg_target=gate_reg_target,
+            )
         num_entities = text_feat.shape[0]
         return model, num_entities
 

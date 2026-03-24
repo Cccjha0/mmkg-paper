@@ -11,11 +11,9 @@ dataset:
   cache_format: auto
 
 model:
-  name: openbg_img_gated
+  name: openbg_img_gate_only
   num_relations: 136
   use_layernorm: true
-  use_fusion: true
-  use_residual: false
 
 training:
   lr: 0.0003
