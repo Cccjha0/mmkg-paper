@@ -71,6 +71,33 @@ def load_images_batch(paths):
     return images
 
 
+def extract_image_features(model, inputs):
+    """
+    Compatibility wrapper for different transformers / CLIP return types.
+
+    Expected cases:
+    - Tensor returned directly by model.get_image_features(...)
+    - object with image_embeds / pooler_output / last_hidden_state
+    """
+    feats = model.get_image_features(**inputs)
+    if isinstance(feats, torch.Tensor):
+        return feats
+
+    for attr in ("image_embeds", "pooler_output"):
+        value = getattr(feats, attr, None)
+        if isinstance(value, torch.Tensor):
+            return value
+
+    last_hidden = getattr(feats, "last_hidden_state", None)
+    if isinstance(last_hidden, torch.Tensor):
+        # Fall back to CLS token style pooling if only hidden states are available.
+        return last_hidden[:, 0]
+
+    raise TypeError(
+        f"Unsupported CLIP image feature output type: {type(feats).__name__}"
+    )
+
+
 @torch.no_grad()
 def main():
     ap = argparse.ArgumentParser()
@@ -111,7 +138,7 @@ def main():
         inputs = processor(images=images, return_tensors="pt")
         inputs = {k: v.to(device) for k, v in inputs.items()}
 
-        feats = model.get_image_features(**inputs)  # [B, raw_dim]
+        feats = extract_image_features(model, inputs)  # [B, raw_dim]
         feats = feats.detach().cpu().float()
 
         for idx, eid in enumerate(eids):

@@ -1,10 +1,12 @@
 import os
 import json
 import argparse
+import warnings
 from datetime import datetime
 
 import torch
 from sentence_transformers import SentenceTransformer
+from transformers import logging as hf_logging
 
 
 def parse_ent_id(ent_str: str) -> int:
@@ -58,16 +60,30 @@ def main():
     ap.add_argument("--model_name", default="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
     ap.add_argument("--d", type=int, default=256)
     ap.add_argument("--batch_size", type=int, default=256)
+    ap.add_argument("--hf_token", default=os.environ.get("HF_TOKEN", ""))
     args = ap.parse_args()
 
     os.makedirs(args.cache_dir, exist_ok=True)
+
+    # Keep cache building logs focused on actual failures.
+    warnings.filterwarnings(
+        "ignore",
+        message=r"You are sending unauthenticated requests to the HF Hub.*",
+    )
+    hf_logging.set_verbosity_error()
+    if args.hf_token:
+        os.environ["HF_TOKEN"] = args.hf_token
 
     num_entities = get_num_entities_from_entity2text(args.entity2text)
     texts, has_text = load_texts(args.entity2text, num_entities)
 
     print(f"[TextCache] num_entities={num_entities}, has_text.sum={int(has_text.sum())}")
 
-    encoder = SentenceTransformer(args.model_name)
+    try:
+        encoder = SentenceTransformer(args.model_name, token=args.hf_token or None)
+    except TypeError:
+        # Older sentence-transformers versions may not support the token kwarg.
+        encoder = SentenceTransformer(args.model_name)
     raw = encoder.encode(
         texts,
         batch_size=args.batch_size,
