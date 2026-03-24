@@ -16,24 +16,26 @@ model:
   entity_emb_file: entity_bert_emb.pt
   hidden_dim: 128
   num_layers: 1
-  num_bases: 4
+  num_bases: 8
   sample_neighbors: 3
-  eval_on_cpu: true
+  eval_on_cpu: false
   dropout: 0.1
 
 training:
   lr: 0.001
-  batch_size: 2048
+  batch_size: 4096
   neg_ratio: 2
   epochs: 200
-  eval_every: 1
+  eval_every: 5
   early_stop_patience: 10
+  profile_steps: true
+  profile_log_every: 50
 
 evaluation:
   filtered: true
-  chunk_size: 1024
+  chunk_size: 8192
   query_batch_size: 32
-  dev_eval_limit: 200
+  dev_eval_limit: 1000
 
 output:
   root_dir: ml/artifacts/outputs
@@ -41,6 +43,6 @@ output:
   save_best_only: true
 
 system:
-  seed: 1
+  seed: 2
   device: cuda
   deterministic: false

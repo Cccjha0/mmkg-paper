@@ -49,7 +49,8 @@ def resolve_device(requested: str) -> str:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--config", required=True, help="path to experiment yaml, e.g., ml/configs/openbg_img_gate_only.yaml")
+    ap.add_argument("--config", required=True,
+                    help="path to experiment yaml, e.g., ml/configs/openbg_img_gate_only.yaml")
     ap.add_argument("--common", default="ml/configs/common.yaml", help="path to common yaml")
     args = ap.parse_args()
 
