@@ -30,18 +30,18 @@
 | `openbg_img_gate_only` | `gate-only` | `openbg_img_gate_only/20260308_180434_seed1` | 1 | `use_fusion=True, use_residual=False, img_dropout=0.2` | 0.3743 | 70 | 可用 | 配置与结果完整 |
 | `openbg_img_gate_only` | `gate-only` | `openbg_img_gate_only/20260308_201856_seed2` | 2 | `use_fusion=True, use_residual=False, img_dropout=0.2` | 0.3472 | 170 | 可用 | 配置与结果完整 |
 | `openbg_img_gate_only` | `gate-only` | `openbg_img_gate_only/20260309_001045_seed3` | 3 | `use_fusion=True, use_residual=False, img_dropout=0.2` | 0.3621 | 50 | 可用 | metrics 文件为 `metrics_gate_residual_seed2.csv` |
-| `openbg_img_gated_vec_res_rel` | `full model` | `openbg_img_gated_vec_res_rel/20260314_212911_seed1` | 1 | `use_fusion=True, use_residual=True, use_normalized_mix=True, img_dropout=0.2` | 0.4788 | 50 | 可用 | metrics 文件为 `metrics_seed1.csv` |
-| `openbg_img_gated_vec_res_rel` | `full model` | `openbg_img_gated_vec_res_rel/20260314_223034_seed2` | 2 | `use_fusion=True, use_residual=True, use_normalized_mix=True, img_dropout=0.2` | 0.5175 | 16 | 可用 | metrics 文件为 `metrics_seed2.csv` |
-| `openbg_img_gated_vec_res_rel` | `full model` | `openbg_img_gated_vec_res_rel/20260314_231558_seed3` | 3 | `use_fusion=True, use_residual=True, use_normalized_mix=True, img_dropout=0.2` | 0.4978 | 30 | 可用 | metrics 文件为 `metrics_seed3.csv` |
-| `openbg_img_gated_vec_res_rel` | `full model` | `openbg_img_gated_vec_res_rel/20260315_000727_seed4` | 4 | `use_fusion=True, use_residual=True, use_normalized_mix=True, img_dropout=0.2` | 0.4881 | 14 | 可用 | metrics 文件为 `metrics_seed4.csv` |
-| `openbg_img_gated_vec_res_rel` | `full model` | `openbg_img_gated_vec_res_rel/20260315_005115_seed5` | 5 | `use_fusion=True, use_residual=True, use_normalized_mix=True, img_dropout=0.2` | 0.4364 | 16 | 可用 | 配置与结果完整 |
+| `openbg_img_gated_vec_res_rel` | `Gate+Residual` | `openbg_img_gated_vec_res_rel/20260314_212911_seed1` | 1 | `model.name=openbg_img_gate_residual, use_normalized_mix=True, img_dropout=0.2` | 0.4788 | 50 | 可用 | metrics 文件为 `metrics_seed1.csv` |
+| `openbg_img_gated_vec_res_rel` | `Gate+Residual` | `openbg_img_gated_vec_res_rel/20260314_223034_seed2` | 2 | `model.name=openbg_img_gate_residual, use_normalized_mix=True, img_dropout=0.2` | 0.5175 | 16 | 可用 | metrics 文件为 `metrics_seed2.csv` |
+| `openbg_img_gated_vec_res_rel` | `Gate+Residual` | `openbg_img_gated_vec_res_rel/20260314_231558_seed3` | 3 | `model.name=openbg_img_gate_residual, use_normalized_mix=True, img_dropout=0.2` | 0.4978 | 30 | 可用 | metrics 文件为 `metrics_seed3.csv` |
+| `openbg_img_gated_vec_res_rel` | `Gate+Residual` | `openbg_img_gated_vec_res_rel/20260315_000727_seed4` | 4 | `model.name=openbg_img_gate_residual, use_normalized_mix=True, img_dropout=0.2` | 0.4881 | 14 | 可用 | metrics 文件为 `metrics_seed4.csv` |
+| `openbg_img_gated_vec_res_rel` | `Gate+Residual` | `openbg_img_gated_vec_res_rel/20260315_005115_seed5` | 5 | `model.name=openbg_img_gate_residual, use_normalized_mix=True, img_dropout=0.2` | 0.4364 | 16 | 可用 | 配置与结果完整 |
 | `openbg_img_residual_only` | `residual-only` | `openbg_img_residual_only/20260313_161055_seed1` | 1 | `use_fusion=False, use_residual=True, img_dropout=0.1` | 0.5998 | 29 | 可用 | 配置与结果完整 |
 
 ## 4. 当前可直接使用的结果分组
 
 ### 4.1 当前相对完整的组
 
-- `full model`
+- `Gate+Residual`
   - 当前已有 5 个可用 run，seed: 1, 2, 3, 4, 5
   - 可作为后续主结果比较与汇总的基础
 - `gate-only`

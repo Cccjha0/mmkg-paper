@@ -16,9 +16,10 @@
 
 定义：
 
-- 开启 fusion
-- 关闭 residual
-- 当前目录为 `openbg_img_gate_only`
+- 模型名为 `openbg_img_gate_only`
+- 实现类为 `OpenBGImgGateOnlyLP`
+- 仅保留关系感知 gate 融合路径
+- 不包含 residual 分支
 
 当前状态：
 
@@ -40,10 +41,11 @@
 
 定义：
 
-- 开启 fusion
-- 开启 residual
-- 开启 normalized mix
-- 当前目录为 `openbg_img_gated_vec_res_rel`
+- 模型名为 `openbg_img_gate_residual`
+- 实现类为 `OpenBGImgGateResidualLP`
+- 同时保留 gate 融合与 residual 分支
+- 当前配置中启用 `use_normalized_mix`
+- 当前目录仍为 `openbg_img_gated_vec_res_rel`
 
 当前状态：
 
@@ -69,8 +71,10 @@
 
 定义：
 
-- 关闭 fusion
-- 开启 residual
+- 模型名为 `openbg_img_residual_only`
+- 实现类为 `OpenBGImgResidualOnlyLP`
+- 仅保留 residual 分支
+- 最终表示不依赖 gate 路径
 - 当前目录为 `openbg_img_residual_only`
 
 当前状态：
@@ -78,6 +82,7 @@
 - 当前只有 1 个 seed
 - 结果完整，但不够稳定
 - 可用来观察现象，不足以作为正式多 seed baseline
+- 已与 gate-only 在代码实现上明确分离
 
 对应 run：
 
