@@ -8,6 +8,7 @@ dataset:
   dev: data/datasets/openbg_img/raw/OpenBG-IMG_dev.tsv
   test: data/datasets/openbg_img/raw/OpenBG-IMG_test.tsv
   cache_dir: data/cache/openbg_img
+  cache_format: auto
 
 model:
   name: openbg_img_gated

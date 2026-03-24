@@ -47,8 +47,8 @@ class OpenBGImgEarlyLP(nn.Module):
 
     def __init__(
         self,
-        text_emb: torch.Tensor,
-        img_emb: torch.Tensor,
+        text_feat: torch.Tensor,
+        img_feat: torch.Tensor,
         has_img: torch.Tensor,
         num_relations: int,
         d: int = 256,
@@ -63,11 +63,16 @@ class OpenBGImgEarlyLP(nn.Module):
         self.neg_ratio = neg_ratio
         self.adv_temperature = adv_temperature
         self.img_dropout = float(img_dropout)
-        num_entities = text_emb.shape[0]
+        text_in_dim = int(text_feat.shape[1])
+        img_in_dim = int(img_feat.shape[1])
+        num_entities = text_feat.shape[0]
 
-        self.register_buffer("text_emb", text_emb)
-        self.register_buffer("img_emb", img_emb)
+        self.register_buffer("text_feat", text_feat)
+        self.register_buffer("img_feat", img_feat)
         self.register_buffer("has_img", has_img)
+
+        self.text_proj = nn.Identity() if text_in_dim == d else nn.Linear(text_in_dim, d)
+        self.img_proj = nn.Identity() if img_in_dim == d else nn.Linear(img_in_dim, d)
 
         self.v_missing = nn.Parameter(torch.zeros(d))
         nn.init.normal_(self.v_missing, mean=0.0, std=0.02)
@@ -76,10 +81,10 @@ class OpenBGImgEarlyLP(nn.Module):
         self.decoder = ComplEx(num_relations=num_relations, d=d)
 
     def _entity_text(self, eids: torch.Tensor) -> torch.Tensor:
-        return self.text_emb[eids]
+        return self.text_proj(self.text_feat[eids])
 
     def _entity_image(self, eids: torch.Tensor) -> torch.Tensor:
-        v = self.img_emb[eids]
+        v = self.img_proj(self.img_feat[eids])
         has_img = self.has_img[eids]
         mask = has_img.unsqueeze(-1)
         v = torch.where(mask, v, self.v_missing.unsqueeze(0).expand_as(v))

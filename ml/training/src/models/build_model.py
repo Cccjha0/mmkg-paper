@@ -3,6 +3,41 @@ import torch
 from ml.training.src.data.tsv_reader import read_allow_2or3
 
 
+def _load_cache_tensor(cache_dir: str, candidates: list[str]) -> tuple[torch.Tensor, str]:
+    for name in candidates:
+        path = f"{cache_dir}/{name}"
+        try:
+            return torch.load(path, map_location="cpu"), name
+        except FileNotFoundError:
+            continue
+    raise FileNotFoundError(f"No cache file found in {cache_dir} for candidates: {candidates}")
+
+
+def _load_openbg_img_features(cache_dir: str, cache_format: str) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    cache_format = (cache_format or "legacy").lower()
+
+    if cache_format == "legacy":
+        text_feat, _ = _load_cache_tensor(cache_dir, ["text_emb.pt"])
+        img_feat, _ = _load_cache_tensor(cache_dir, ["img_emb.pt"])
+    elif cache_format == "raw":
+        text_feat, _ = _load_cache_tensor(cache_dir, ["text_feat_raw.pt"])
+        img_feat, _ = _load_cache_tensor(cache_dir, ["img_feat_raw.pt", "img_emb_raw.pt"])
+    elif cache_format == "auto":
+        try:
+            text_feat, text_name = _load_cache_tensor(cache_dir, ["text_feat_raw.pt"])
+            img_feat, img_name = _load_cache_tensor(cache_dir, ["img_feat_raw.pt", "img_emb_raw.pt"])
+            print(f"[BuildModel] using raw caches: text={text_name}, image={img_name}")
+        except FileNotFoundError:
+            text_feat, _ = _load_cache_tensor(cache_dir, ["text_emb.pt"])
+            img_feat, _ = _load_cache_tensor(cache_dir, ["img_emb.pt"])
+            print("[BuildModel] raw caches unavailable, falling back to legacy projected caches")
+    else:
+        raise ValueError(f"Unsupported dataset.cache_format: {cache_format}")
+
+    has_img, _ = _load_cache_tensor(cache_dir, ["has_img.pt"])
+    return text_feat.float(), img_feat.float(), has_img
+
+
 def build_model(cfg: dict):
     model_name = cfg["model"]["name"]
 
@@ -10,6 +45,7 @@ def build_model(cfg: dict):
         from ml.training.src.models.openbg_img_gated_lp import OpenBGImgGatedLP
 
         cache_dir = cfg["dataset"]["cache_dir"]
+        cache_format = cfg["dataset"].get("cache_format", "legacy")
         d = cfg["embedding"]["d"]
         tr = cfg["training"]
         num_relations = cfg["model"]["num_relations"]
@@ -23,13 +59,11 @@ def build_model(cfg: dict):
         gate_reg_weight = tr.get("gate_reg_weight", 1e-3)
         gate_reg_target = tr.get("gate_reg_target", 0.5)
 
-        text_emb = torch.load(f"{cache_dir}/text_emb.pt")
-        img_emb = torch.load(f"{cache_dir}/img_emb.pt")
-        has_img = torch.load(f"{cache_dir}/has_img.pt")
+        text_feat, img_feat, has_img = _load_openbg_img_features(cache_dir, cache_format)
 
         model = OpenBGImgGatedLP(
-            text_emb=text_emb,
-            img_emb=img_emb,
+            text_feat=text_feat,
+            img_feat=img_feat,
             has_img=has_img,
             num_relations=num_relations,
             d=d,
@@ -43,13 +77,14 @@ def build_model(cfg: dict):
             gate_reg_weight=gate_reg_weight,
             gate_reg_target=gate_reg_target,
         )
-        num_entities = text_emb.shape[0]
+        num_entities = text_feat.shape[0]
         return model, num_entities
 
     if model_name == "openbg_img_early":
         from ml.training.src.models.fusion.early import OpenBGImgEarlyLP
 
         cache_dir = cfg["dataset"]["cache_dir"]
+        cache_format = cfg["dataset"].get("cache_format", "legacy")
         d = cfg["embedding"]["d"]
         tr = cfg["training"]
         num_relations = cfg["model"]["num_relations"]
@@ -58,13 +93,11 @@ def build_model(cfg: dict):
         adv_temperature = tr.get("adv_temperature", 1.0)
         img_dropout = tr.get("img_dropout", 0.0)
 
-        text_emb = torch.load(f"{cache_dir}/text_emb.pt")
-        img_emb = torch.load(f"{cache_dir}/img_emb.pt")
-        has_img = torch.load(f"{cache_dir}/has_img.pt")
+        text_feat, img_feat, has_img = _load_openbg_img_features(cache_dir, cache_format)
 
         model = OpenBGImgEarlyLP(
-            text_emb=text_emb,
-            img_emb=img_emb,
+            text_feat=text_feat,
+            img_feat=img_feat,
             has_img=has_img,
             num_relations=num_relations,
             d=d,
@@ -73,7 +106,7 @@ def build_model(cfg: dict):
             adv_temperature=adv_temperature,
             img_dropout=img_dropout,
         )
-        num_entities = text_emb.shape[0]
+        num_entities = text_feat.shape[0]
         return model, num_entities
 
     if model_name == "text_rgcn":

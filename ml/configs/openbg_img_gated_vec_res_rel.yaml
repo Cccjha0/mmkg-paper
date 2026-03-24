@@ -8,6 +8,7 @@ dataset:
   dev: data/datasets/openbg_img/raw/OpenBG-IMG_dev.tsv
   test: data/datasets/openbg_img/raw/OpenBG-IMG_test.tsv
   cache_dir: data/cache/openbg_img
+  cache_format: auto
 
 model:
   name: openbg_img_gated
@@ -18,11 +19,11 @@ model:
   use_normalized_mix: true
 
 training:
-  lr: 0.0003
+  lr: 0.0004
   adv_temperature: 2.0
   img_dropout: 0.2
-  gate_reg_weight: 0.0001
-  gate_reg_target: 0.5
+  gate_reg_weight: 0.001
+  gate_reg_target: 0.3
   early_stop_patience: 10
   fusion_warmup_epochs: 0
 

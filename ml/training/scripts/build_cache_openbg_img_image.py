@@ -128,6 +128,7 @@ def main():
         img_emb[s:e] = proj(img_emb_raw[s:e].to(device)).detach().cpu()
 
     # Save artifacts
+    torch.save(img_emb_raw, os.path.join(args.cache_dir, "img_feat_raw.pt"))
     torch.save(img_emb_raw, os.path.join(args.cache_dir, "img_emb_raw.pt"))
     torch.save(img_emb, os.path.join(args.cache_dir, "img_emb.pt"))
     torch.save(has_img, os.path.join(args.cache_dir, "has_img.pt"))
@@ -135,6 +136,7 @@ def main():
 
     meta = {
         "created_at": datetime.utcnow().isoformat(),
+        "cache_version": 2,
         "image_encoder": args.model_name,
         "num_entities": num_entities,
         "num_images": int(has_img.sum().item()),
@@ -142,6 +144,8 @@ def main():
         "d": args.d,
         "images_root": os.path.abspath(args.images_root),
         "entity2text": os.path.abspath(args.entity2text),
+        "feature_file": "img_feat_raw.pt",
+        "legacy_files": ["img_emb_raw.pt", "img_emb.pt", "img_proj.pt"],
         "notes": "ent_XXXXXX/image_0.jpg; missing images have zero raw embedding in cache; use v_missing during training",
     }
     with open(os.path.join(args.cache_dir, "img_meta.json"), "w", encoding="utf-8") as f:

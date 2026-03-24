@@ -7,7 +7,7 @@ from ml.training.src.models.decoders.complex import ComplEx
 
 
 class OpenBGImgGatedLP(nn.Module):
-    def __init__(self, text_emb: torch.Tensor, img_emb: torch.Tensor, has_img: torch.Tensor,
+    def __init__(self, text_feat: torch.Tensor, img_feat: torch.Tensor, has_img: torch.Tensor,
                  num_relations: int, d: int = 256, use_layernorm: bool = True,
                  neg_ratio: int = 10, adv_temperature: float = 1.0, img_dropout: float = 0.0,
                  use_fusion: bool = True, use_residual: bool = True,
@@ -27,12 +27,17 @@ class OpenBGImgGatedLP(nn.Module):
         self.gate_reg_target = float(gate_reg_target)
         if not self.use_fusion and not self.use_residual:
             raise ValueError("At least one of use_fusion/use_residual must be True.")
-        num_entities = text_emb.shape[0]
+        num_entities = text_feat.shape[0]
+        text_in_dim = int(text_feat.shape[1])
+        img_in_dim = int(img_feat.shape[1])
 
-        # register cached embeddings as buffers (not trainable)
-        self.register_buffer("text_emb", text_emb)  # [N,d]
-        self.register_buffer("img_emb", img_emb)    # [N,d]
+        # register cached modality features as buffers (not trainable)
+        self.register_buffer("text_feat", text_feat)  # [N,text_in_dim]
+        self.register_buffer("img_feat", img_feat)    # [N,img_in_dim]
         self.register_buffer("has_img", has_img)    # [N]
+
+        self.text_proj = nn.Identity() if text_in_dim == d else nn.Linear(text_in_dim, d)
+        self.img_proj = nn.Identity() if img_in_dim == d else nn.Linear(img_in_dim, d)
 
         # missing image token (trainable)
         self.v_missing = nn.Parameter(torch.zeros(d))
@@ -53,10 +58,10 @@ class OpenBGImgGatedLP(nn.Module):
         self.v_adapter = nn.Sequential(nn.Linear(d, d), nn.GELU(), nn.LayerNorm(d))
 
     def _entity_text(self, eids: torch.Tensor) -> torch.Tensor:
-        return self.text_emb[eids]  # [B,d]
+        return self.text_proj(self.text_feat[eids])  # [B,d]
 
     def _entity_image(self, eids: torch.Tensor) -> torch.Tensor:
-        v = self.img_emb[eids]  # [B,d] (zero for missing in cache)
+        v = self.img_proj(self.img_feat[eids])  # [B,d] or projected from raw cache
         has_img = self.has_img[eids]  # [B] bool
         mask = has_img.unsqueeze(-1)  # [B,1] bool
         # if missing -> v_missing

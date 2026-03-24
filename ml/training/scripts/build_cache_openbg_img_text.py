@@ -79,22 +79,26 @@ def main():
     raw_dim = raw.shape[1]
     print(f"[TextCache] raw_dim={raw_dim}")
 
+    # Legacy projected cache is still written during the transition period.
     proj = torch.nn.Linear(raw_dim, args.d, bias=False)
     torch.nn.init.normal_(proj.weight, mean=0.0, std=0.02)
-
     text_emb = proj(raw)  # [N, d]
 
+    torch.save(raw, os.path.join(args.cache_dir, "text_feat_raw.pt"))
     torch.save(text_emb, os.path.join(args.cache_dir, "text_emb.pt"))
     torch.save(has_text, os.path.join(args.cache_dir, "has_text.pt"))
     torch.save(proj.state_dict(), os.path.join(args.cache_dir, "text_proj.pt"))
 
     meta = {
         "created_at": datetime.utcnow().isoformat(),
+        "cache_version": 2,
         "text_encoder": args.model_name,
         "num_entities": num_entities,
         "raw_dim": raw_dim,
         "d": args.d,
         "entity2text": os.path.abspath(args.entity2text),
+        "feature_file": "text_feat_raw.pt",
+        "legacy_files": ["text_emb.pt", "text_proj.pt"],
         "notes": "text from 2nd column of TSV; ids parsed from ent_XXXXXX",
     }
     with open(os.path.join(args.cache_dir, "text_meta.json"), "w", encoding="utf-8") as f:
