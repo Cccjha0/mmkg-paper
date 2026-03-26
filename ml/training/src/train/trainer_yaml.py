@@ -5,19 +5,25 @@ import torch.nn.functional as F
 from tqdm import tqdm
 
 from ml.training.src.data.sampler import negative_sample
-from ml.training.src.eval.filtered_ranking import filtered_ranking_eval, prepare_true_tails_index
+from ml.training.src.eval.filtered_ranking import (
+    filtered_ranking_eval,
+    prepare_true_heads_index,
+    prepare_true_tails_index,
+)
 from ml.training.src.utils.io import make_run_dir, append_csv, save_json, copy_file
 
 
 class TrainerYAML:
-    def __init__(self, model, train_triples, dev_triples, num_entities, true_tails, true_heads, cfg: dict):
+    def __init__(self, model, train_triples, dev_triples, test_triples, num_entities, true_tails, true_heads, cfg: dict):
         self.model = model
         self.train_triples = train_triples
         self.dev_triples = dev_triples
+        self.test_triples = test_triples
         self.num_entities = num_entities
         self.true_tails = true_tails
         self.true_heads = true_heads
         self.true_tails_index = prepare_true_tails_index(true_tails)
+        self.true_heads_index = prepare_true_heads_index(true_heads)
         self.cfg = cfg
 
         self.device = cfg["system"].get("device", "cuda")
@@ -34,8 +40,10 @@ class TrainerYAML:
         self.patience = tr.get("early_stop_patience", 10)
 
         self.dev_eval_limit = ev.get("dev_eval_limit", len(dev_triples))
+        self.test_eval_limit = ev.get("test_eval_limit", len(test_triples))
         self.chunk_size = ev.get("chunk_size", 10000)
         self.query_batch_size = ev.get("query_batch_size", 1)
+        self.eval_direction = ev.get("direction", "both")
 
         seed = cfg["system"].get("seed", 1)
         root_dir = out.get("root_dir", "ml/artifacts/outputs")
@@ -53,6 +61,7 @@ class TrainerYAML:
 
         self.metrics_csv = os.path.join(self.run_dir, "metrics_seed1.csv")
         self.ckpt_path = os.path.join(self.run_dir, "best.ckpt")
+        self.test_metrics_json = os.path.join(self.run_dir, "test_metrics.json")
 
         self.optim = torch.optim.Adam(self.model.parameters(), lr=self.lr)
         self.base_use_fusion = getattr(self.model, "use_fusion", None)
@@ -111,6 +120,7 @@ class TrainerYAML:
 
         train_tensor = torch.tensor(self.train_triples, dtype=torch.long)
         dev_tensor = torch.tensor(self.dev_triples[: self.dev_eval_limit], dtype=torch.long)
+        test_tensor = torch.tensor(self.test_triples[: self.test_eval_limit], dtype=torch.long)
 
         for epoch in range(1, self.epochs + 1):
             if self.base_use_fusion is not None and self.base_use_fusion and self.fusion_warmup_epochs > 0:
@@ -149,12 +159,13 @@ class TrainerYAML:
                     model=self.model,
                     triples=dev_tensor,
                     true_tails=self.true_tails_index,
-                    true_heads=self.true_heads,
+                    true_heads=self.true_heads_index,
                     num_entities=self.num_entities,
                     chunk_size=self.chunk_size,
                     query_batch_size=self.query_batch_size,
                     device=self.device,
                     ks=(1, 3, 10),
+                    direction=self.eval_direction,
                 )
                 row = {
                     "epoch": epoch,
@@ -205,5 +216,26 @@ class TrainerYAML:
                         print("[EarlyStop] triggered.")
                         break
 
+        test_metrics = None
+        if os.path.exists(self.ckpt_path):
+            state = torch.load(self.ckpt_path, map_location=self.device)
+            self.model.load_state_dict(state)
+            self.model.eval()
+            test_metrics = filtered_ranking_eval(
+                model=self.model,
+                triples=test_tensor,
+                true_tails=self.true_tails_index,
+                true_heads=self.true_heads_index,
+                num_entities=self.num_entities,
+                chunk_size=self.chunk_size,
+                query_batch_size=self.query_batch_size,
+                device=self.device,
+                ks=(1, 3, 10),
+                direction=self.eval_direction,
+            )
+            save_json(self.test_metrics_json, test_metrics)
+            print("[Test] " + " ".join([f"{k}={v:.6f}" for k, v in test_metrics.items()]))
+            print(f"[Test] saved -> {self.test_metrics_json}")
+
         print(f"[Done] best_dev_mrr={best_mrr:.6f} run_dir={self.run_dir}")
-        return best_mrr
+        return {"best_dev_mrr": best_mrr, "test_metrics": test_metrics, "run_dir": self.run_dir}

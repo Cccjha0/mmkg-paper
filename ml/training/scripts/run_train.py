@@ -68,20 +68,22 @@ def main():
     # load triples
     train_path = cfg["dataset"]["train"]
     dev_path = cfg["dataset"]["dev"]
+    test_path = cfg["dataset"]["test"]
 
     train3, _, bad_train = read_allow_2or3(train_path)
     dev3, _, bad_dev = read_allow_2or3(dev_path)
+    test3, _, bad_test = read_allow_2or3(test_path)
 
-    if bad_train or bad_dev:
-        print(f"[WARN] malformed lines skipped: train={bad_train}, dev={bad_dev}")
+    if bad_train or bad_dev or bad_test:
+        print(f"[WARN] malformed lines skipped: train={bad_train}, dev={bad_dev}, test={bad_test}")
 
-    if len(train3) == 0 or len(dev3) == 0:
-        raise RuntimeError("Train/Dev must contain 3-column triples for training/evaluation.")
+    if len(train3) == 0 or len(dev3) == 0 or len(test3) == 0:
+        raise RuntimeError("Train/Dev/Test must contain 3-column triples for training/evaluation.")
 
-    print(f"train triples: {len(train3)} | dev triples: {len(dev3)}")
+    print(f"train triples: {len(train3)} | dev triples: {len(dev3)} | test triples: {len(test3)}")
 
-    # build filtered facts (train+dev)
-    true_tails, true_heads = build_true_facts(train3 + dev3)
+    # build filtered facts (train+dev+test) for unified filtered ranking protocol
+    true_tails, true_heads = build_true_facts(train3 + dev3 + test3)
 
     # build model from config
     model, num_entities = build_model(cfg)
@@ -92,6 +94,7 @@ def main():
         model=model,
         train_triples=train3,
         dev_triples=dev3,
+        test_triples=test3,
         num_entities=num_entities,
         true_tails=true_tails,
         true_heads=true_heads,

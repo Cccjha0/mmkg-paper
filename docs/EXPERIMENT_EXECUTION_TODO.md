@@ -24,7 +24,7 @@
   - Residual-only
   - Full Model
 - [x] 确认每组模型配置文件路径
-- [ ] 确认每组模型都能正常构建并启动训练
+- [x] 确认每组模型都能正常构建并启动训练
 
 当前固定的主模型映射如下：
 
@@ -53,15 +53,28 @@
 
 ### 2.3 评测协议统一
 
-- [ ] 明确 train/dev/test 的统一流程
-- [ ] 明确 dev 仅用于 early stopping 和 model selection
-- [ ] 明确最终统一在 test 上汇报
-- [ ] 明确使用 filtered ranking 指标：
+- [x] 明确 train/dev/test 的统一流程
+- [x] 明确 dev 仅用于 early stopping 和 model selection
+- [x] 明确最终统一在 test 上汇报
+- [x] 明确使用 filtered ranking 指标：
   - MRR
   - Hits@1
   - Hits@3
   - Hits@10
 - [ ] 明确每组至少跑 3 个 seeds
+
+当前已完成的协议改造：
+
+- `run_train.py` 已统一读取 `train/dev/test`
+- 训练时仅使用 `dev` 做 early stopping 和 checkpoint 选择
+- 训练结束后会自动加载 `best.ckpt` 并在 `test` 上评测
+- `test` 指标会保存为 `test_metrics.json`
+- `filtered_ranking_eval` 已支持 `tail / head / both`，当前默认协议为 `both`
+- `common.yaml` 和 `common_smoke.yaml` 已显式固定 `evaluation.direction: both`
+
+当前尚未完成的唯一项：
+
+- 五组主模型的正式主实验还没有按统一协议补齐 `3 seeds`
 
 ### 2.4 输入流程确认
 

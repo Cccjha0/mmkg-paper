@@ -18,6 +18,7 @@ evaluation:
   filtered: true
   chunk_size: 10000
   dev_eval_limit: 5000
+  direction: both
 
 output:
   root_dir: ml/artifacts/outputs
