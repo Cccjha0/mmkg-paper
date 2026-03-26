@@ -72,17 +72,26 @@ def main():
 
     train3, _, bad_train = read_allow_2or3(train_path)
     dev3, _, bad_dev = read_allow_2or3(dev_path)
-    test3, _, bad_test = read_allow_2or3(test_path)
+    test3, test2, bad_test = read_allow_2or3(test_path)
 
     if bad_train or bad_dev or bad_test:
         print(f"[WARN] malformed lines skipped: train={bad_train}, dev={bad_dev}, test={bad_test}")
 
-    if len(train3) == 0 or len(dev3) == 0 or len(test3) == 0:
-        raise RuntimeError("Train/Dev/Test must contain 3-column triples for training/evaluation.")
+    if len(train3) == 0 or len(dev3) == 0:
+        raise RuntimeError("Train/Dev must contain 3-column triples for training/evaluation.")
 
-    print(f"train triples: {len(train3)} | dev triples: {len(dev3)} | test triples: {len(test3)}")
+    has_labeled_test = len(test3) > 0
+    has_query_only_test = len(test2) > 0 and len(test3) == 0
+    if not has_labeled_test and not has_query_only_test:
+        raise RuntimeError("Test file must contain either 3-column triples or 2-column query pairs.")
 
-    # build filtered facts (train+dev+test) for unified filtered ranking protocol
+    if has_labeled_test:
+        print(f"train triples: {len(train3)} | dev triples: {len(dev3)} | test triples: {len(test3)}")
+    else:
+        print(f"train triples: {len(train3)} | dev triples: {len(dev3)} | test queries: {len(test2)}")
+        print("[WARN] test file is query-only (2 columns); final test ranking metrics will be skipped.")
+
+    # build filtered facts. Only labeled triples can contribute to filtered ranking facts.
     true_tails, true_heads = build_true_facts(train3 + dev3 + test3)
 
     # build model from config

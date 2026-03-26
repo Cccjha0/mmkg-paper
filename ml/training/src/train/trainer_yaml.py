@@ -217,7 +217,7 @@ class TrainerYAML:
                         break
 
         test_metrics = None
-        if os.path.exists(self.ckpt_path):
+        if os.path.exists(self.ckpt_path) and test_tensor.numel() > 0:
             state = torch.load(self.ckpt_path, map_location=self.device)
             self.model.load_state_dict(state)
             self.model.eval()
@@ -236,6 +236,8 @@ class TrainerYAML:
             save_json(self.test_metrics_json, test_metrics)
             print("[Test] " + " ".join([f"{k}={v:.6f}" for k, v in test_metrics.items()]))
             print(f"[Test] saved -> {self.test_metrics_json}")
+        elif test_tensor.numel() == 0:
+            print("[Test] skipped: no labeled 3-column test triples were provided.")
 
         print(f"[Done] best_dev_mrr={best_mrr:.6f} run_dir={self.run_dir}")
         return {"best_dev_mrr": best_mrr, "test_metrics": test_metrics, "run_dir": self.run_dir}
