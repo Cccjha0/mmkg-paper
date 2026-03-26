@@ -148,6 +148,41 @@ class OpenBGImgGateOnlyLP(BaseOpenBGImgLP):
         return self.gate_reg_weight * (g_mean - self.gate_reg_target).pow(2)
 
 
+class OpenBGImgTextOnlyLP(BaseOpenBGImgLP):
+    def __init__(
+        self,
+        text_feat: torch.Tensor,
+        img_feat: torch.Tensor,
+        has_img: torch.Tensor,
+        num_relations: int,
+        d: int = 256,
+        neg_ratio: int = 10,
+        adv_temperature: float = 1.0,
+        img_dropout: float = 0.0,
+    ):
+        super().__init__(
+            text_feat=text_feat,
+            img_feat=img_feat,
+            has_img=has_img,
+            num_relations=num_relations,
+            d=d,
+            neg_ratio=neg_ratio,
+            adv_temperature=adv_temperature,
+            img_dropout=img_dropout,
+        )
+        self.use_fusion = False
+        self.use_residual = False
+        self.t_adapter = nn.Sequential(nn.Linear(d, d), nn.GELU(), nn.LayerNorm(d))
+
+    def _entity_with_relation(self, eids: torch.LongTensor, rids: torch.LongTensor):
+        del rids
+        return self.t_adapter(self._entity_text(eids)), None
+
+    def extra_loss(self, pos_aux_h, pos_aux_t, neg_aux_h, neg_aux_t, device: torch.device) -> torch.Tensor:
+        del pos_aux_h, pos_aux_t, neg_aux_h, neg_aux_t
+        return torch.zeros((), device=device)
+
+
 class OpenBGImgResidualOnlyLP(BaseOpenBGImgLP):
     def __init__(
         self,

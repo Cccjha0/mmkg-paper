@@ -1,0 +1,30 @@
+# =========================
+# Common Config (smoke test)
+# =========================
+
+embedding:
+  d: 256
+
+training:
+  lr: 0.001
+  batch_size: 512
+  neg_ratio: 2
+  adv_temperature: 1.0
+  epochs: 1
+  eval_every: 1
+  early_stop_patience: 2
+
+evaluation:
+  filtered: true
+  chunk_size: 1024
+  dev_eval_limit: 128
+  query_batch_size: 8
+
+output:
+  root_dir: ml/artifacts/outputs
+  save_best_only: true
+
+system:
+  seed: 1
+  device: cuda
+  deterministic: false
