@@ -1,0 +1,30 @@
+# =========================
+# Common Config (seed 1)
+# =========================
+
+embedding:
+  d: 256
+
+training:
+  lr: 0.001
+  batch_size: 4096
+  neg_ratio: 10
+  adv_temperature: 2.0
+  epochs: 200
+  eval_every: 5
+  early_stop_patience: 10
+
+evaluation:
+  filtered: true
+  chunk_size: 10000
+  dev_eval_limit: 5000
+  direction: both
+
+output:
+  root_dir: ml/artifacts/outputs
+  save_best_only: true
+
+system:
+  seed: 1
+  device: cuda
+  deterministic: false
