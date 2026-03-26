@@ -165,6 +165,7 @@ def build_model(cfg: dict):
 
         text_feat, img_feat, has_img = _load_openbg_img_features(cache_dir, cache_format)
 
+        print("[BuildModel] building explicit model: Early Fusion")
         model = OpenBGImgEarlyLP(
             text_feat=text_feat,
             img_feat=img_feat,
