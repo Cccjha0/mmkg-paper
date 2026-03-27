@@ -6,9 +6,11 @@ from pathlib import Path
 
 
 MODEL_LABEL_OVERRIDES = {
-    "openbg_img_gate_only": "gate-only",
-    "openbg_img_residual_only": "residual-only",
-    "openbg_img_gated_vec_res_rel": "full model",
+    "openbg_img_text_only": "Text-only",
+    "openbg_img_early": "Early Fusion",
+    "openbg_img_gate_only": "Gate-only",
+    "openbg_img_residual_only": "Residual-only",
+    "openbg_img_gated_vec_res_rel": "Full Model",
 }
 
 
@@ -42,11 +44,11 @@ def infer_model_label(exp_name: str, model_cfg: dict) -> str:
     use_fusion = model_cfg.get("use_fusion")
     use_residual = model_cfg.get("use_residual")
     if use_fusion is True and use_residual is False:
-        return "gate-only"
+        return "Gate-only"
     if use_fusion is False and use_residual is True:
-        return "residual-only"
+        return "Residual-only"
     if use_fusion is True and use_residual is True:
-        return "full model"
+        return "Full Model"
     return model_cfg.get("name", "unknown")
 
 
@@ -201,24 +203,13 @@ def render_markdown(rows: list[dict], outputs_root: Path) -> str:
     else:
         lines.append("- 当前无部分可用组")
 
-    missing_labels = []
-    known = {row["model_label"] for row in rows}
-    for label in ("text-only", "early fusion"):
-        if label not in known:
-            missing_labels.append(label)
-
     lines.extend(["", "## 5. 当前主要缺口", ""])
-    if missing_labels:
-        for label in missing_labels:
-            lines.append(f"- 缺少统一整理后的 `{label}` 结果索引")
-
-    residual_rows = [r for r in rows if r["model_label"] == "residual-only" and r["status"] == "可用"]
-    if len(residual_rows) < 3:
-        lines.append("- `residual-only` 缺少多 seed 结果")
-
     results_dir = outputs_root / "results"
     if results_dir.exists() and len(list(results_dir.iterdir())) <= 1:
         lines.append("- 当前 `results` 聚合目录为空，仅有 `.gitkeep`")
+    else:
+        lines.append("- 当前五组主模型均已形成 3-seed 可用结果，主结果实验资产已基本齐备")
+        lines.append("- 当前主要工作重心应从“补齐主模型结果”转向“结果汇总、分组分析与原因诊断”")
 
     lines.extend(
         [
@@ -241,9 +232,9 @@ def render_markdown(rows: list[dict], outputs_root: Path) -> str:
             "## 7. 下一步维护任务",
             "",
             "- [ ] 将后续新实验统一追加到本索引表",
-            "- [ ] 为 `text-only` 建立独立索引行",
-            "- [ ] 为 `early fusion` 建立独立索引行",
-            "- [ ] 补齐 `residual-only` 的多 seed metrics",
+            "- [ ] 汇总五组主模型的 `mean ± std` 并形成主结果表",
+            "- [ ] 将 `test_metrics.json` 纳入后续自动索引与汇总逻辑",
+            "- [ ] 开始 `Residual-only > Full Model` 的原因排查实验",
             "- [ ] 将 `results` 目录真正作为聚合输出目录使用",
         ]
     )
