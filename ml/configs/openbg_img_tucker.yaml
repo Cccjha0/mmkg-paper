@@ -21,8 +21,8 @@ training:
   core_l2_weight: 0.000001
 
 evaluation:
-  chunk_size: 4096
-  query_batch_size: 32
+  chunk_size: 256
+  query_batch_size: 1
 
 output:
   exp_name: openbg_img_tucker
