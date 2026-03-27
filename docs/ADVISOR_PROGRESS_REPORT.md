@@ -81,7 +81,7 @@
 
 - `Gate+Residual` 并没有稳定超过强结构基线
 - `Residual-Only` 在现有结果中表现非常强
-- 一些结构强基线如 TuckER、RSME 的结果也明显更高
+- 一些结构强基线如 TuckER、ComplEx 的结果也明显更高
 
 这意味着当前项目不适合直接包装成“提出一个全面领先的新方法”。
 
@@ -129,7 +129,7 @@
 
 - `Residual-Only`
 - TuckER
-- RSME
+- ComplEx
 
 因此，论文必须避免预设“full model 一定最强”。
 
@@ -196,7 +196,6 @@
 
 - ComplEx
 - TuckER
-- RSME
 
 ### 第三阶段：核心分析实验
 

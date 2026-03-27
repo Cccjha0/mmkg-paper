@@ -39,6 +39,62 @@ def _load_openbg_img_features(cache_dir: str, cache_format: str) -> tuple[torch.
 def build_model(cfg: dict):
     model_name = cfg["model"]["name"]
 
+    if model_name == "openbg_img_tucker":
+        from ml.training.src.models.structure_baselines import StructureTuckERLP
+
+        cache_dir = cfg["dataset"]["cache_dir"]
+        cache_format = cfg["dataset"].get("cache_format", "auto")
+        d = cfg["embedding"]["d"]
+        tr = cfg["training"]
+        num_relations = cfg["model"]["num_relations"]
+        neg_ratio = tr.get("neg_ratio", 10)
+        adv_temperature = tr.get("adv_temperature", 1.0)
+        entity_l2_weight = tr.get("entity_l2_weight", 1e-6)
+        relation_l2_weight = tr.get("relation_l2_weight", 1e-6)
+        core_l2_weight = tr.get("core_l2_weight", 1e-6)
+
+        text_feat, _, _ = _load_openbg_img_features(cache_dir, cache_format)
+        num_entities = text_feat.shape[0]
+
+        print("[BuildModel] building explicit model: TuckER")
+        model = StructureTuckERLP(
+            num_entities=num_entities,
+            num_relations=num_relations,
+            d=d,
+            neg_ratio=neg_ratio,
+            adv_temperature=adv_temperature,
+            entity_l2_weight=entity_l2_weight,
+            relation_l2_weight=relation_l2_weight,
+            core_l2_weight=core_l2_weight,
+        )
+        return model, num_entities
+
+    if model_name == "openbg_img_complex":
+        from ml.training.src.models.structure_baselines import StructureComplExLP
+
+        cache_dir = cfg["dataset"]["cache_dir"]
+        cache_format = cfg["dataset"].get("cache_format", "auto")
+        d = cfg["embedding"]["d"]
+        tr = cfg["training"]
+        num_relations = cfg["model"]["num_relations"]
+        neg_ratio = tr.get("neg_ratio", 10)
+        adv_temperature = tr.get("adv_temperature", 1.0)
+        entity_l2_weight = tr.get("entity_l2_weight", 1e-6)
+
+        text_feat, _, _ = _load_openbg_img_features(cache_dir, cache_format)
+        num_entities = text_feat.shape[0]
+
+        print("[BuildModel] building explicit model: ComplEx")
+        model = StructureComplExLP(
+            num_entities=num_entities,
+            num_relations=num_relations,
+            d=d,
+            neg_ratio=neg_ratio,
+            adv_temperature=adv_temperature,
+            entity_l2_weight=entity_l2_weight,
+        )
+        return model, num_entities
+
     if model_name in {
         "openbg_img_text_only",
         "openbg_img_gated",

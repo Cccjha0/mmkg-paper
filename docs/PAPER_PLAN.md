@@ -150,7 +150,6 @@
 
 - ComplEx
 - TuckER
-- RSME
 
 这些强基线不是“尴尬结果”，而是论文要解释的重要对象。
 
@@ -189,7 +188,7 @@
 
 主结果表建议包含：
 
-- 结构强基线：ComplEx / TuckER / RSME
+- 结构强基线：ComplEx / TuckER
 - 框架内部模型：Text-only / Early Fusion / Gate-only / Residual-only / Full Model
 
 这里不需要回避 `Full Model` 不如强结构基线，反而要把它作为核心发现之一。
@@ -256,7 +255,7 @@
 
 判据：
 
-- `Residual-only`、TuckER、RSME 长期明显强于纯融合模型
+- `Residual-only`、TuckER、ComplEx 等结构模型长期明显强于纯融合模型
 
 ### H2
 

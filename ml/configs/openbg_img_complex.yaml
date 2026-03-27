@@ -1,0 +1,26 @@
+# =========================
+# Experiment Config: OpenBG-IMG ComplEx Baseline
+# =========================
+
+dataset:
+  name: openbg_img
+  train: data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_train.tsv
+  dev: data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_dev.tsv
+  test: data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_test.tsv
+  cache_dir: data/cache/openbg_img
+  cache_format: auto
+
+model:
+  name: openbg_img_complex
+  num_relations: 136
+
+training:
+  lr: 0.001
+  entity_l2_weight: 0.000001
+
+evaluation:
+  chunk_size: 4096
+  query_batch_size: 32
+
+output:
+  exp_name: openbg_img_complex

@@ -47,7 +47,6 @@
 - [ ] 明确保留的结构强基线：
   - ComplEx
   - TuckER
-  - RSME
 - [ ] 整理这些基线已有结果的来源与口径
 - [ ] 标记哪些结果可以直接用于论文，哪些只能暂作参考
 
@@ -61,7 +60,7 @@
   - Hits@1
   - Hits@3
   - Hits@10
-- [ ] 明确每组至少跑 3 个 seeds
+- [x] 明确每组至少跑 3 个 seeds
 
 当前已完成的协议改造：
 
@@ -78,33 +77,33 @@
 
 ### 2.4 输入流程确认
 
-- [ ] 确认 raw cache 已稳定启用
-- [ ] 确认 `text_proj` / `img_proj` 均为可训练层
-- [ ] 确认旧缓存只作为兼容，不再作为主流程证据
+- [x] 确认 raw cache 已稳定启用
+- [x] 确认 `text_proj` / `img_proj` 均为可训练层
+- [x] 确认旧缓存只作为兼容，不再作为主流程证据
 
 ## 3. 第二阶段：主结果实验
 
 ### 3.1 五组主模型重跑
 
-- [ ] 跑 `Text-only` 3 seeds
-- [ ] 跑 `Early Fusion` 3 seeds
-- [ ] 跑 `Gate-only` 3 seeds
-- [ ] 跑 `Residual-only` 3 seeds
-- [ ] 跑 `Full Model` 3 seeds
+- [x] 跑 `Text-only` 3 seeds
+- [x] 跑 `Early Fusion` 3 seeds
+- [x] 跑 `Gate-only` 3 seeds
+- [x] 跑 `Residual-only` 3 seeds
+- [x] 跑 `Full Model` 3 seeds
 
 ### 3.2 结果汇总
 
-- [ ] 汇总每组模型的 test MRR / Hits@1 / Hits@3 / Hits@10
-- [ ] 汇总每组模型的 mean ± std
-- [ ] 整理主结果表
+- [x] 汇总每组模型的 test MRR / Hits@1 / Hits@3 / Hits@10
+- [x] 汇总每组模型的 mean ± std
+- [x] 整理主结果表
 - [ ] 对比结构强基线结果
 
 ### 3.3 初步判断
 
-- [ ] 判断 `Full Model` 是否稳定优于 `Gate-only`
-- [ ] 判断 `Full Model` 是否稳定优于 `Residual-only`
+- [x] 判断 `Full Model` 是否稳定优于 `Gate-only`
+- [x] 判断 `Full Model` 是否稳定优于 `Residual-only`
 - [ ] 判断 `Full Model` 与强结构基线差距是否缩小
-- [ ] 记录主结果对论文主线的影响
+- [x] 记录主结果对论文主线的影响
 
 ## 4. 第三阶段：Residual dominance 排查
 
