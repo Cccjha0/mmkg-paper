@@ -44,11 +44,11 @@
 
 ### 2.2 强基线固定
 
-- [ ] 明确保留的结构强基线：
+- [x] 明确保留的结构强基线：
   - ComplEx
   - TuckER
-- [ ] 整理这些基线已有结果的来源与口径
-- [ ] 标记哪些结果可以直接用于论文，哪些只能暂作参考
+- [x] 整理这些基线已有结果的来源与口径
+- [x] 标记哪些结果可以直接用于论文，哪些只能暂作参考
 
 ### 2.3 评测协议统一
 
@@ -96,13 +96,13 @@
 - [x] 汇总每组模型的 test MRR / Hits@1 / Hits@3 / Hits@10
 - [x] 汇总每组模型的 mean ± std
 - [x] 整理主结果表
-- [ ] 对比结构强基线结果
+- [x] 对比结构强基线结果
 
 ### 3.3 初步判断
 
 - [x] 判断 `Full Model` 是否稳定优于 `Gate-only`
 - [x] 判断 `Full Model` 是否稳定优于 `Residual-only`
-- [ ] 判断 `Full Model` 与强结构基线差距是否缩小
+- [x] 判断 `Full Model` 与强结构基线差距是否缩小
 - [x] 记录主结果对论文主线的影响
 
 ## 4. 第三阶段：Residual dominance 排查
@@ -111,11 +111,17 @@
 
 ### 4.1 观测量补齐
 
-- [ ] 记录 residual 相关梯度
-- [ ] 记录 fusion 相关梯度
-- [ ] 记录 projection 相关梯度
-- [ ] 记录 `residual_scale`
-- [ ] 记录 mix 权重
+- [x] 记录 residual 相关梯度
+- [x] 记录 fusion 相关梯度
+- [x] 记录 projection 相关梯度
+- [x] 记录 `residual_scale`
+- [x] 记录 mix 权重
+
+当前已完成的接入说明：
+
+- `trainer_yaml.py` 已在每个 eval epoch 写出 `grad_residual / grad_fusion / grad_projection`
+- `trainer_yaml.py` 已将 `residual_scale_value / mix_w_fusion / mix_w_residual` 写入 `metrics.csv`
+- 当前阶段剩余工作从“接日志”转为“实际跑实验并读取这些观测量”
 
 ### 4.2 干预实验
 

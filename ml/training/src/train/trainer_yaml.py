@@ -66,6 +66,60 @@ class TrainerYAML:
         self.optim = torch.optim.Adam(self.model.parameters(), lr=self.lr)
         self.base_use_fusion = getattr(self.model, "use_fusion", None)
 
+    @staticmethod
+    def _grad_norm_sq(param: torch.nn.Parameter) -> float:
+        if param.grad is None:
+            return 0.0
+        g = param.grad.detach()
+        return float(torch.sum(g * g).item())
+
+    def _compute_grad_group_stats(self) -> dict:
+        residual_sq = 0.0
+        fusion_sq = 0.0
+        projection_sq = 0.0
+
+        for name, param in self.model.named_parameters():
+            sq = self._grad_norm_sq(param)
+            if sq <= 0.0:
+                continue
+
+            if name.startswith("entity_residual") or name == "residual_scale":
+                residual_sq += sq
+            elif (
+                name.startswith("fusion")
+                or name.startswith("t_adapter")
+                or name.startswith("v_adapter")
+                or name.startswith("v_missing")
+            ):
+                fusion_sq += sq
+            elif name.startswith("text_proj") or name.startswith("img_proj"):
+                projection_sq += sq
+
+        return {
+            "grad_residual": math.sqrt(residual_sq),
+            "grad_fusion": math.sqrt(fusion_sq),
+            "grad_projection": math.sqrt(projection_sq),
+        }
+
+    def _compute_scalar_stats(self) -> dict:
+        out = {
+            "residual_scale_value": 0.0,
+            "mix_w_fusion": 0.0,
+            "mix_w_residual": 0.0,
+        }
+
+        if hasattr(self.model, "residual_scale"):
+            out["residual_scale_value"] = float(F.softplus(self.model.residual_scale).detach().cpu().item())
+
+        if hasattr(self.model, "use_normalized_mix") and getattr(self.model, "use_normalized_mix", False):
+            a = F.softplus(self.model.mix_fusion_raw).detach()
+            b = F.softplus(self.model.mix_residual_raw).detach()
+            denom = (a + b).clamp_min(1e-12)
+            out["mix_w_fusion"] = float((a / denom).cpu().item())
+            out["mix_w_residual"] = float((b / denom).cpu().item())
+
+        return out
+
     @torch.no_grad()
     def _compute_gate_stats(self, sample_size: int = 5000):
         """
@@ -135,6 +189,11 @@ class TrainerYAML:
             perm = torch.randperm(train_tensor.size(0))
             total_loss = 0.0
             steps = 0
+            epoch_grad_stats = {
+                "grad_residual": 0.0,
+                "grad_fusion": 0.0,
+                "grad_projection": 0.0,
+            }
 
             for i in tqdm(range(0, train_tensor.size(0), self.batch_size), desc=f"epoch {epoch}"):
                 idx = perm[i : i + self.batch_size]
@@ -144,6 +203,7 @@ class TrainerYAML:
                 loss = self.model(pos, neg)
                 self.optim.zero_grad()
                 loss.backward()
+                epoch_grad_stats = self._compute_grad_group_stats()
                 self.optim.step()
 
                 total_loss += float(loss.item())
@@ -178,13 +238,18 @@ class TrainerYAML:
 
                 # gate stats (only for models that support it, e.g., Gated Fusion)
                 gate_stats = self._compute_gate_stats(sample_size=5000)
+                scalar_stats = self._compute_scalar_stats()
                 row.update(gate_stats)
+                row.update(epoch_grad_stats)
+                row.update(scalar_stats)
 
                 append_csv(
                     self.metrics_csv,
                     row,
                     header_order=[
                         "epoch", "avg_loss", "mrr", "hits@1", "hits@3", "hits@10",
+                        "grad_residual", "grad_fusion", "grad_projection",
+                        "residual_scale_value", "mix_w_fusion", "mix_w_residual",
                         "g_mean_all", "g_std_all",
                         "g_mean_img", "g_std_img",
                         "g_mean_noimg", "g_std_noimg",
@@ -193,17 +258,19 @@ class TrainerYAML:
                 )
                 print("[Dev] " + " ".join([f"{k}={v:.6f}" for k, v in metrics.items()]))
 
-                # print residual_scale if exists
+                print(
+                    "[Diag] "
+                    f"grad_residual={epoch_grad_stats['grad_residual']:.6f} "
+                    f"grad_fusion={epoch_grad_stats['grad_fusion']:.6f} "
+                    f"grad_projection={epoch_grad_stats['grad_projection']:.6f}"
+                )
                 if hasattr(self.model, "residual_scale"):
-                    rs = F.softplus(self.model.residual_scale).detach().cpu().item()
-                    print(f"[Debug] residual_scale = {rs:.6f}")
+                    print(f"[Diag] residual_scale = {scalar_stats['residual_scale_value']:.6f}")
                 if hasattr(self.model, "use_normalized_mix") and getattr(self.model, "use_normalized_mix", False):
-                    a = F.softplus(self.model.mix_fusion_raw).detach()
-                    b = F.softplus(self.model.mix_residual_raw).detach()
-                    denom = (a + b).clamp_min(1e-12)
-                    wf = (a / denom).cpu().item()
-                    wr = (b / denom).cpu().item()
-                    print(f"[Debug] mix_w_fusion = {wf:.6f} mix_w_residual = {wr:.6f}")
+                    print(
+                        f"[Diag] mix_w_fusion = {scalar_stats['mix_w_fusion']:.6f} "
+                        f"mix_w_residual = {scalar_stats['mix_w_residual']:.6f}"
+                    )
 
                 if metrics["mrr"] > best_mrr:
                     best_mrr = metrics["mrr"]
