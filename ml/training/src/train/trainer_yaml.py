@@ -25,6 +25,12 @@ class TrainerYAML:
         self.true_tails_index = prepare_true_tails_index(true_tails)
         self.true_heads_index = prepare_true_heads_index(true_heads)
         self.cfg = cfg
+        self.entity_has_img = getattr(model, "has_img", None)
+        if self.entity_has_img is None:
+            cache_dir = cfg.get("dataset", {}).get("cache_dir")
+            has_img_path = os.path.join(cache_dir, "has_img.pt") if cache_dir else None
+            if has_img_path and os.path.exists(has_img_path):
+                self.entity_has_img = torch.load(has_img_path, map_location="cpu")
 
         self.device = cfg["system"].get("device", "cuda")
         tr = cfg["training"]
@@ -234,6 +240,7 @@ class TrainerYAML:
                     device=self.device,
                     ks=(1, 3, 10),
                     direction=self.eval_direction,
+                    entity_has_img=self.entity_has_img,
                 )
                 row = {
                     "epoch": epoch,
@@ -307,6 +314,7 @@ class TrainerYAML:
                 device=self.device,
                 ks=(1, 3, 10),
                 direction=self.eval_direction,
+                entity_has_img=self.entity_has_img,
             )
             save_json(self.test_metrics_json, test_metrics)
             print("[Test] " + " ".join([f"{k}={v:.6f}" for k, v in test_metrics.items()]))

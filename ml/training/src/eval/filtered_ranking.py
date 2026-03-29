@@ -1,6 +1,47 @@
 import torch
 
 
+def _metrics_from_ranks(ranks: torch.Tensor, ks=(1, 3, 10)) -> dict:
+    ranks = ranks.to(dtype=torch.long).detach().cpu()
+    count = int(ranks.numel())
+    if count == 0:
+        out = {"mrr": 0.0}
+        for k in ks:
+            out[f"hits@{k}"] = 0.0
+        out["count"] = 0
+        return out
+
+    ranks_f = ranks.to(dtype=torch.float32)
+    out = {
+        "mrr": float((1.0 / ranks_f).mean().item()),
+        "count": count,
+    }
+    for k in ks:
+        out[f"hits@{k}"] = float((ranks <= k).float().mean().item())
+    return out
+
+
+def _split_metrics_from_ranks(ranks: torch.Tensor, mask: torch.Tensor, prefix: str, ks=(1, 3, 10)) -> dict:
+    ranks = ranks.detach().cpu()
+    mask = mask.detach().cpu().to(dtype=torch.bool)
+    pos = _metrics_from_ranks(ranks[mask], ks=ks)
+    neg = _metrics_from_ranks(ranks[~mask], ks=ks)
+
+    out = {
+        f"{prefix}_has_img_count": pos["count"],
+        f"{prefix}_no_img_count": neg["count"],
+    }
+    for key, value in pos.items():
+        if key == "count":
+            continue
+        out[f"{prefix}_has_img_{key}"] = value
+    for key, value in neg.items():
+        if key == "count":
+            continue
+        out[f"{prefix}_no_img_{key}"] = value
+    return out
+
+
 def _prepare_index(mapping: dict) -> dict:
     """
     Convert filtering map to sorted CPU LongTensor values once.
@@ -39,13 +80,13 @@ def _filtered_tail_ranking_eval(
         query_batch_size: int = 1,
         device: str = "cuda",
         ks=(1, 3, 10),
+        entity_has_img: torch.Tensor | None = None,
 ):
     model.eval()
     device = torch.device(device)
 
-    mrr_sum = 0.0
-    hits = {k: 0 for k in ks}
-    count = 0
+    all_ranks = []
+    all_target_has_img = []
 
     all_entities = torch.arange(num_entities, dtype=torch.long)
     neg_inf = float("-inf")
@@ -114,15 +155,15 @@ def _filtered_tail_ranking_eval(
 
         rank_tail = greater + 1
 
-        mrr_sum += float((1.0 / rank_tail.float()).sum().item())
-        for k in ks:
-            hits[k] += int((rank_tail <= k).sum().item())
-        count += bq
+        all_ranks.append(rank_tail.detach().cpu())
+        if entity_has_img is not None:
+            all_target_has_img.append(entity_has_img[t_cpu].detach().cpu())
 
-    mrr = mrr_sum / count
-    out = {"mrr": mrr}
-    for k in ks:
-        out[f"hits@{k}"] = hits[k] / count
+    rank_tail_all = torch.cat(all_ranks, dim=0) if all_ranks else torch.empty(0, dtype=torch.long)
+    out = _metrics_from_ranks(rank_tail_all, ks=ks)
+    if entity_has_img is not None and all_target_has_img:
+        target_has_img_all = torch.cat(all_target_has_img, dim=0)
+        out.update(_split_metrics_from_ranks(rank_tail_all, target_has_img_all, prefix="tail", ks=ks))
     return out
 
 
@@ -136,13 +177,13 @@ def _filtered_head_ranking_eval(
         query_batch_size: int = 1,
         device: str = "cuda",
         ks=(1, 3, 10),
+        entity_has_img: torch.Tensor | None = None,
 ):
     model.eval()
     device = torch.device(device)
 
-    mrr_sum = 0.0
-    hits = {k: 0 for k in ks}
-    count = 0
+    all_ranks = []
+    all_target_has_img = []
 
     all_entities = torch.arange(num_entities, dtype=torch.long)
     neg_inf = float("-inf")
@@ -211,15 +252,15 @@ def _filtered_head_ranking_eval(
 
         rank_head = greater + 1
 
-        mrr_sum += float((1.0 / rank_head.float()).sum().item())
-        for k in ks:
-            hits[k] += int((rank_head <= k).sum().item())
-        count += bq
+        all_ranks.append(rank_head.detach().cpu())
+        if entity_has_img is not None:
+            all_target_has_img.append(entity_has_img[h_cpu].detach().cpu())
 
-    mrr = mrr_sum / count
-    out = {"mrr": mrr}
-    for k in ks:
-        out[f"hits@{k}"] = hits[k] / count
+    rank_head_all = torch.cat(all_ranks, dim=0) if all_ranks else torch.empty(0, dtype=torch.long)
+    out = _metrics_from_ranks(rank_head_all, ks=ks)
+    if entity_has_img is not None and all_target_has_img:
+        target_has_img_all = torch.cat(all_target_has_img, dim=0)
+        out.update(_split_metrics_from_ranks(rank_head_all, target_has_img_all, prefix="head", ks=ks))
     return out
 
 
@@ -235,6 +276,7 @@ def filtered_ranking_eval(
         device: str = "cuda",
         ks=(1, 3, 10),
         direction: str = "both",
+        entity_has_img: torch.Tensor | None = None,
 ):
     """
     model.score(triples) -> scores (higher is better)
@@ -255,6 +297,7 @@ def filtered_ranking_eval(
             query_batch_size=query_batch_size,
             device=device,
             ks=ks,
+            entity_has_img=entity_has_img,
         )
     if direction == "head":
         return _filtered_head_ranking_eval(
@@ -266,6 +309,7 @@ def filtered_ranking_eval(
             query_batch_size=query_batch_size,
             device=device,
             ks=ks,
+            entity_has_img=entity_has_img,
         )
     if direction != "both":
         raise ValueError(f"Unsupported evaluation direction: {direction}")
@@ -279,6 +323,7 @@ def filtered_ranking_eval(
         query_batch_size=query_batch_size,
         device=device,
         ks=ks,
+        entity_has_img=entity_has_img,
     )
     head_metrics = _filtered_head_ranking_eval(
         model=model,
@@ -289,11 +334,32 @@ def filtered_ranking_eval(
         query_batch_size=query_batch_size,
         device=device,
         ks=ks,
+        entity_has_img=entity_has_img,
     )
 
     out = {}
     for key in tail_metrics.keys():
+        if key.startswith("tail_") or key.startswith("head_"):
+            continue
+        if key.endswith("_count"):
+            continue
         out[key] = 0.5 * (tail_metrics[key] + head_metrics[key])
     out["tail_mrr"] = tail_metrics["mrr"]
     out["head_mrr"] = head_metrics["mrr"]
+    if entity_has_img is not None:
+        out["tail_has_img_count"] = tail_metrics.get("tail_has_img_count", 0)
+        out["tail_no_img_count"] = tail_metrics.get("tail_no_img_count", 0)
+        out["head_has_img_count"] = head_metrics.get("head_has_img_count", 0)
+        out["head_no_img_count"] = head_metrics.get("head_no_img_count", 0)
+        for suffix in ["mrr", "hits@1", "hits@3", "hits@10"]:
+            out[f"has_img_{suffix}"] = 0.5 * (
+                tail_metrics.get(f"tail_has_img_{suffix}", 0.0) + head_metrics.get(f"head_has_img_{suffix}", 0.0)
+            )
+            out[f"no_img_{suffix}"] = 0.5 * (
+                tail_metrics.get(f"tail_no_img_{suffix}", 0.0) + head_metrics.get(f"head_no_img_{suffix}", 0.0)
+            )
+            out[f"tail_has_img_{suffix}"] = tail_metrics.get(f"tail_has_img_{suffix}", 0.0)
+            out[f"tail_no_img_{suffix}"] = tail_metrics.get(f"tail_no_img_{suffix}", 0.0)
+            out[f"head_has_img_{suffix}"] = head_metrics.get(f"head_has_img_{suffix}", 0.0)
+            out[f"head_no_img_{suffix}"] = head_metrics.get(f"head_no_img_{suffix}", 0.0)
     return out
