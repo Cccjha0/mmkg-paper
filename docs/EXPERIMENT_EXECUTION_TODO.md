@@ -130,6 +130,12 @@
 - [ ] 跑更强 residual 正则
 - [ ] 比较干预前后 `Full Model` 的变化
 
+当前已完成的实现准备：
+
+- `OpenBGImgGateResidualLP` 已支持运行时开关 `enable_residual`
+- `trainer_yaml.py` 已支持 `training.residual_warmup_epochs`
+- 已新增实验配置 `ml/configs/openbg_img_gated_vec_res_rel_reswarmup10.yaml`
+
 ### 4.3 结果判断
 
 - [ ] 判断 residual 是否长期主导训练

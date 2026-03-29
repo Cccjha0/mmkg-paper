@@ -35,6 +35,7 @@ class TrainerYAML:
         self.batch_size = tr.get("batch_size", 1024)
         self.neg_ratio = tr.get("neg_ratio", 10)
         self.fusion_warmup_epochs = tr.get("fusion_warmup_epochs", 0)
+        self.residual_warmup_epochs = tr.get("residual_warmup_epochs", 0)
         self.epochs = tr.get("epochs", 200)
         self.eval_every = tr.get("eval_every", 5)
         self.patience = tr.get("early_stop_patience", 10)
@@ -183,6 +184,13 @@ class TrainerYAML:
                 if epoch == 1 or epoch == (self.fusion_warmup_epochs + 1):
                     phase = "warmup(residual-only)" if not use_fusion_now else "joint(fusion+residual)"
                     print(f"[Train] phase={phase} epoch={epoch}")
+
+            if hasattr(self.model, "enable_residual") and self.residual_warmup_epochs > 0:
+                enable_residual_now = epoch > self.residual_warmup_epochs
+                self.model.enable_residual = enable_residual_now
+                if epoch == 1 or epoch == (self.residual_warmup_epochs + 1):
+                    phase = "warmup(fusion-only)" if not enable_residual_now else "joint(fusion+residual)"
+                    print(f"[Train] residual_phase={phase} epoch={epoch}")
 
             self.model.train()
 

@@ -256,6 +256,7 @@ class OpenBGImgGateResidualLP(OpenBGImgGateOnlyLP):
             gate_reg_target=gate_reg_target,
         )
         self.use_residual = True
+        self.enable_residual = True
         self.use_normalized_mix = bool(use_normalized_mix)
         num_entities = text_feat.shape[0]
         self.entity_residual = nn.Embedding(num_entities, d)
@@ -266,9 +267,12 @@ class OpenBGImgGateResidualLP(OpenBGImgGateOnlyLP):
 
     def _entity_with_relation(self, eids: torch.LongTensor, rids: torch.LongTensor):
         z_fused, g = super()._entity_with_relation(eids, rids)
-        res = self.entity_residual(eids)
-        scale = F.softplus(self.residual_scale)
-        z_res = scale * res
+        if self.enable_residual:
+            res = self.entity_residual(eids)
+            scale = F.softplus(self.residual_scale)
+            z_res = scale * res
+        else:
+            z_res = torch.zeros_like(z_fused)
         if self.use_normalized_mix:
             a = F.softplus(self.mix_fusion_raw)
             b = F.softplus(self.mix_residual_raw)
