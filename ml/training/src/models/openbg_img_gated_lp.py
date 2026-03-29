@@ -194,6 +194,9 @@ class OpenBGImgResidualOnlyLP(BaseOpenBGImgLP):
         neg_ratio: int = 10,
         adv_temperature: float = 1.0,
         img_dropout: float = 0.0,
+        residual_scale_init: float = -2.0,
+        residual_l2_weight: float = 1e-6,
+        residual_scale_l2_weight: float = 1e-4,
     ):
         super().__init__(
             text_feat=text_feat,
@@ -207,9 +210,11 @@ class OpenBGImgResidualOnlyLP(BaseOpenBGImgLP):
         )
         self.use_fusion = False
         self.use_residual = True
+        self.residual_l2_weight = float(residual_l2_weight)
+        self.residual_scale_l2_weight = float(residual_scale_l2_weight)
         num_entities = text_feat.shape[0]
         self.entity_residual = nn.Embedding(num_entities, d)
-        self.residual_scale = nn.Parameter(torch.tensor(-2.0))
+        self.residual_scale = nn.Parameter(torch.tensor(float(residual_scale_init)))
         nn.init.xavier_uniform_(self.entity_residual.weight)
 
     def _entity_with_relation(self, eids: torch.LongTensor, rids: torch.LongTensor):
@@ -220,9 +225,9 @@ class OpenBGImgResidualOnlyLP(BaseOpenBGImgLP):
 
     def extra_loss(self, pos_aux_h, pos_aux_t, neg_aux_h, neg_aux_t, device: torch.device) -> torch.Tensor:
         del pos_aux_h, pos_aux_t, neg_aux_h, neg_aux_t, device
-        l2 = 1e-6 * self.entity_residual.weight.pow(2).mean()
+        l2 = self.residual_l2_weight * self.entity_residual.weight.pow(2).mean()
         scale = F.softplus(self.residual_scale)
-        scale_l2 = 1e-4 * scale.pow(2)
+        scale_l2 = self.residual_scale_l2_weight * scale.pow(2)
         return l2 + scale_l2
 
 
@@ -241,6 +246,9 @@ class OpenBGImgGateResidualLP(OpenBGImgGateOnlyLP):
         use_normalized_mix: bool = False,
         gate_reg_weight: float = 1e-3,
         gate_reg_target: float = 0.5,
+        residual_scale_init: float = -2.0,
+        residual_l2_weight: float = 1e-6,
+        residual_scale_l2_weight: float = 1e-4,
     ):
         super().__init__(
             text_feat=text_feat,
@@ -258,9 +266,11 @@ class OpenBGImgGateResidualLP(OpenBGImgGateOnlyLP):
         self.use_residual = True
         self.enable_residual = True
         self.use_normalized_mix = bool(use_normalized_mix)
+        self.residual_l2_weight = float(residual_l2_weight)
+        self.residual_scale_l2_weight = float(residual_scale_l2_weight)
         num_entities = text_feat.shape[0]
         self.entity_residual = nn.Embedding(num_entities, d)
-        self.residual_scale = nn.Parameter(torch.tensor(-2.0))
+        self.residual_scale = nn.Parameter(torch.tensor(float(residual_scale_init)))
         nn.init.xavier_uniform_(self.entity_residual.weight)
         self.mix_fusion_raw = nn.Parameter(torch.tensor(-3.0))
         self.mix_residual_raw = nn.Parameter(torch.tensor(0.0))
@@ -284,9 +294,9 @@ class OpenBGImgGateResidualLP(OpenBGImgGateOnlyLP):
 
     def extra_loss(self, pos_aux_h, pos_aux_t, neg_aux_h, neg_aux_t, device: torch.device) -> torch.Tensor:
         gate_reg = super().extra_loss(pos_aux_h, pos_aux_t, neg_aux_h, neg_aux_t, device)
-        l2 = 1e-6 * self.entity_residual.weight.pow(2).mean()
+        l2 = self.residual_l2_weight * self.entity_residual.weight.pow(2).mean()
         scale = F.softplus(self.residual_scale)
-        scale_l2 = 1e-4 * scale.pow(2)
+        scale_l2 = self.residual_scale_l2_weight * scale.pow(2)
         return gate_reg + l2 + scale_l2
 
 

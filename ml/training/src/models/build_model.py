@@ -123,6 +123,9 @@ def build_model(cfg: dict):
         img_dropout = tr.get("img_dropout", 0.0)
         gate_reg_weight = tr.get("gate_reg_weight", 1e-3)
         gate_reg_target = tr.get("gate_reg_target", 0.5)
+        residual_scale_init = tr.get("residual_scale_init", -2.0)
+        residual_l2_weight = tr.get("residual_l2_weight", 1e-6)
+        residual_scale_l2_weight = tr.get("residual_scale_l2_weight", 1e-4)
 
         text_feat, img_feat, has_img = _load_openbg_img_features(cache_dir, cache_format)
 
@@ -164,6 +167,9 @@ def build_model(cfg: dict):
                 neg_ratio=neg_ratio,
                 adv_temperature=adv_temperature,
                 img_dropout=img_dropout,
+                residual_scale_init=residual_scale_init,
+                residual_l2_weight=residual_l2_weight,
+                residual_scale_l2_weight=residual_scale_l2_weight,
             )
         elif model_name == "openbg_img_gate_residual":
             print("[BuildModel] building explicit model: Gate+Residual")
@@ -180,6 +186,9 @@ def build_model(cfg: dict):
                 use_normalized_mix=use_normalized_mix,
                 gate_reg_weight=gate_reg_weight,
                 gate_reg_target=gate_reg_target,
+                residual_scale_init=residual_scale_init,
+                residual_l2_weight=residual_l2_weight,
+                residual_scale_l2_weight=residual_scale_l2_weight,
             )
         else:
             print(
@@ -202,6 +211,9 @@ def build_model(cfg: dict):
                 use_normalized_mix=use_normalized_mix,
                 gate_reg_weight=gate_reg_weight,
                 gate_reg_target=gate_reg_target,
+                residual_scale_init=residual_scale_init,
+                residual_l2_weight=residual_l2_weight,
+                residual_scale_l2_weight=residual_scale_l2_weight,
             )
         num_entities = text_feat.shape[0]
         return model, num_entities
