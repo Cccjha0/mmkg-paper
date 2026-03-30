@@ -166,13 +166,26 @@
 - 正式汇总文件为：
   - `docs/RELATION_TYPE_SUMMARY_ALL.md`
   - `docs/relation_type_summary_all.json`
+  - `docs/RELATION_TYPE_SUMMARY_MIN20.md`
+  - `docs/relation_type_summary_min20.json`
+- 当前口径说明文档为：
+  - `docs/RELATION_TYPE_ANALYSIS.md`
 
 当前 3-seed 结果支持的结论：
-- 三个关系组上的总体排序都保持为：`Residual-only > ComplEx > Full Model`
-- 在 `visual_relations` 上，未观察到多模态模型形成组级优势；`Full Model` 仍明显低于 `Residual-only` 与 `ComplEx`
+- 在 7 模型 grouped result 中，三个关系组上的总体排序都保持为：`Residual-only > ComplEx > Full Model`
+- 在聚焦 3 模型的 grouped result 中，三个关系组上的总体排序都保持为：`Residual-only > Full Model > Gate-only`
+- 在 `visual_relations` 上，未观察到多模态模型形成组级优势；`Full Model` 仍明显低于 `Residual-only`
 - 在 `weak_visual_relations` 上，`Full Model` 的组级 MRR 高于其在 `visual_relations` 上的表现，因此当前粗分组结果不支持“视觉关系天然更适合多模态”的强结论
-- relation-type 分析更支持这样的判断：多模态收益不是按“视觉关系组”整体出现，而更可能是局部关系、局部样本或与目标位置/模态可用性共同作用的现象
-- 因此 `6.2` 当前更适合作为“收益边界”叙事中的限制性证据，而不是“视觉关系上多模态普遍占优”的直接证据
+- 在 `MIN20` relation-level 结果中：
+  - `visual_relations` 上 `Full Model > Gate-only` 为 `22 / 24`
+  - `weak_visual_relations` 上 `Full Model > Gate-only` 为 `15 / 18`
+  - `ambiguous_material_relations` 上 `Full Model > Gate-only` 为 `9 / 9`
+- 但在同一套 `MIN20` relation-level 结果中，`Full Model > Residual-only` 只出现在少数关系上：
+  - `visual_relations` 为 `4 / 24`
+  - `weak_visual_relations` 为 `4 / 18`
+  - `ambiguous_material_relations` 为 `1 / 9`
+- 因此 relation-type 分析更支持这样的判断：`Full Model` 相比 `Gate-only` 在多数中等以上支持度关系上具有稳定增益，但这种增益仍不足以在组级层面或大多数关系上超过 `Residual-only`
+- `6.2` 当前更适合作为“收益边界”叙事中的限制性证据：多模态收益是局部、条件化且有边界的，而不是“视觉关系上多模态普遍占优”的直接证据
 
 ### 6.3 结果判断
 - [ ] 判断多模态收益是否是“局部有效”
