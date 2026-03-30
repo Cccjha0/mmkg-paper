@@ -584,11 +584,12 @@ def main() -> None:
 
     groups_json = load_json(groups_json_path)
     source_files = groups_json.get("source_files", {})
-    if "relation2text_zh" not in source_files or "relation2text_en" not in source_files:
-        raise RuntimeError("groups json must define source_files.relation2text_zh and source_files.relation2text_en")
+    if "relation2text_zh" not in source_files:
+        raise RuntimeError("groups json must define source_files.relation2text_zh")
 
     zh_map = load_tsv_map(Path(source_files["relation2text_zh"]))
-    en_map = load_tsv_map(Path(source_files["relation2text_en"]))
+    en_path = source_files.get("relation2text_en")
+    en_map = load_tsv_map(Path(en_path)) if en_path else {}
     group_defs = build_group_definitions(groups_json, zh_map=zh_map, en_map=en_map)
     if not group_defs:
         raise RuntimeError("No valid relation groups found in groups json.")

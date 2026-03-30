@@ -1,7 +1,6 @@
 {
   "source_files": {
-    "relation2text_zh": "data/datasets/openbg_img/raw/OpenBG-IMG_relation2text.tsv",
-    "relation2text_en": "data/datasets/openbg_img/raw/OpenBG-IMG_relation2text_en.tsv"
+    "relation2text_zh": "data/datasets/openbg_img/raw/OpenBG-IMG_relation2text.tsv"
   },
   "grouping_version": "draft_v1",
   "grouping_principle": {
