@@ -1,4 +1,4 @@
-# Inference Module
+﻿# Inference Module
 
 This module turns training artifacts into stable Python inference entry points.
 It currently supports checkpoint loading, tail prediction, attribute completion,
@@ -37,7 +37,7 @@ All public predictor methods now return the same top-level structure:
 ```json
 {
   "task": "tail",
-  "model": "openbg_img_gated",
+  "model": "openbg_img_gate_residual",
   "device": "cpu",
   "inputs": {},
   "results": [],
@@ -150,7 +150,7 @@ Approximate indexing is not implemented yet.
 
 ```powershell
 python ml/inference/scripts/run_predict.py `
-  --run_dir ml/artifacts/outputs/openbg_img_gated_vec_res_rel/20260308_123356_seed1 `
+  --run_dir ml/artifacts/outputs/openbg_img_gated_vec_res_rel/<timestamp>_seed1 `
   --task tail `
   --head ent_007314 `
   --relation rel_0096 `
@@ -162,7 +162,7 @@ python ml/inference/scripts/run_predict.py `
 
 ```powershell
 python ml/inference/scripts/demo_openbg_img.py `
-  --run_dir ml/artifacts/outputs/openbg_img_gated_vec_res_rel/20260308_123356_seed1 `
+  --run_dir ml/artifacts/outputs/openbg_img_gated_vec_res_rel/<timestamp>_seed1 `
   --entity ent_007314 `
   --relation rel_0096 `
   --topk 5 `
@@ -175,7 +175,7 @@ python ml/inference/scripts/demo_openbg_img.py `
 $env:CONDA_NO_PLUGINS='true'
 $env:PYTHONIOENCODING='utf-8'
 conda run -n pytorch_env python ml/inference/scripts/benchmark_inference.py `
-  --run_dir ml/artifacts/outputs/openbg_img_gated_vec_res_rel/20260308_123356_seed1 `
+  --run_dir ml/artifacts/outputs/openbg_img_gated_vec_res_rel/<timestamp>_seed1 `
   --entity ent_007314 `
   --relation rel_0096 `
   --topk 5 `
@@ -189,8 +189,8 @@ conda run -n pytorch_env python ml/inference/scripts/benchmark_inference.py `
 
 Measured on March 12, 2026 with:
 
-- model: `openbg_img_gated`
-- run dir: `ml/artifacts/outputs/openbg_img_gated_vec_res_rel/20260308_123356_seed1`
+- model: `openbg_img_gate_residual`
+- run dir: `ml/artifacts/outputs/openbg_img_gated_vec_res_rel/<timestamp>_seed1`
 - device: `cpu`
 - entity: `ent_007314`
 - relation: `rel_0096`
@@ -231,3 +231,4 @@ Recommended next steps:
 3. add a thin backend wrapper around the predictor contract
 4. fix terminal and API text-encoding presentation end-to-end
 5. optionally add approximate retrieval for `similar`
+

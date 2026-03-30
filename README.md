@@ -1,106 +1,151 @@
-# MMKG Project
+﻿# MMKG Project Research
 
-Multi-module repository for multimodal knowledge graph work. The current implementation focus is the ML training stack, with placeholders for inference, backend APIs, frontend web, shared data, and project docs.
+This repository currently focuses on the ML research workflow for multimodal knowledge graph completion on OpenBG-IMG. The active work is a paper-oriented training, evaluation, and analysis codebase.
 
 ## Repository Layout
 
 ```text
-mmkg-project/
-  ml/
-    training/
-      src/
-      scripts/
-    inference/
-    artifacts/
-      outputs/
-    configs/
-  backend/
-  frontend/
+mmkg-project-research/
   data/
     datasets/
     cache/
   docs/
+  ml/
+    artifacts/
+    configs/
+    inference/
+    training/
 ```
 
-## Current Status
+## Current Focus
 
-- `ml/training`: training framework and model implementations
-- `ml/configs`: experiment and shared config files
-- `ml/artifacts`: training outputs and checkpoints
-- `data/datasets`: raw and processed datasets
-- `data/cache`: cached text and image embeddings
-- `ml/inference`: runtime loader, predictor API, CLI demo, and benchmarking
-- `frontend`: Vite + React + TypeScript UI scaffold
-- `backend`, `docs`: project support modules
+- unified OpenBG-IMG training pipeline
+- paper split with 3-column `train/dev/test`
+- raw text/image cache loading with trainable projection layers
+- explicit model lineup for the paper
+- structural baselines under the same evaluation protocol
+- subgroup analysis for image availability
 
-## Training Quick Start
+## Main Models
 
-Install dependencies:
+- `Text-only`
+- `Early Fusion`
+- `Gate-only`
+- `Residual-only`
+- `Full Model`
+- `ComplEx`
+- `TuckER`
 
-```bash
-python -m venv venv
-venv\Scripts\activate
+Main experiment configs:
+
+- `ml/configs/openbg_img_text_only.yaml`
+- `ml/configs/openbg_img_early.yaml`
+- `ml/configs/openbg_img_gate_only.yaml`
+- `ml/configs/openbg_img_residual_only.yaml`
+- `ml/configs/openbg_img_gated_vec_res_rel.yaml`
+- `ml/configs/openbg_img_complex.yaml`
+- `ml/configs/openbg_img_tucker.yaml`
+
+## Environment
+
+```powershell
+conda create -n mmkg python=3.10 -y
+conda activate mmkg
+pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu118
 pip install -r requirements.txt
 ```
 
-Build OpenBG-IMG text cache:
+## Data and Cache
 
-```bash
-python ml/training/scripts/build_cache_openbg_img_text.py ^
-  --entity2text data/datasets/openbg_img/raw/OpenBG-IMG_entity2text.tsv ^
+Raw OpenBG-IMG files are expected under:
+
+```text
+data/datasets/openbg_img/raw/
+```
+
+Build text cache:
+
+```powershell
+python ml/training/scripts/build_cache_openbg_img_text.py `
+  --entity2text data/datasets/openbg_img/raw/OpenBG-IMG_entity2text.tsv `
   --cache_dir data/cache/openbg_img
 ```
 
-Build OpenBG-IMG image cache:
+Build image cache:
 
-```bash
-python ml/training/scripts/build_cache_openbg_img_image.py ^
-  --entity2text data/datasets/openbg_img/raw/OpenBG-IMG_entity2text.tsv ^
-  --images_root data/datasets/openbg_img/raw/OpenBG-IMG_images ^
+```powershell
+python ml/training/scripts/build_cache_openbg_img_image.py `
+  --entity2text data/datasets/openbg_img/raw/OpenBG-IMG_entity2text.tsv `
+  --images_root data/datasets/openbg_img/raw/OpenBG-IMG_images `
   --cache_dir data/cache/openbg_img
 ```
 
-Run training:
+Current cache behavior:
 
-```bash
-python ml/training/scripts/run_train.py ^
-  --config ml/configs/openbg_img_gated_vec_res_rel.yaml ^
-  --common ml/configs/common.yaml
+- text uses `text_feat_raw.pt`
+- image uses `img_feat_raw.pt`
+- legacy `img_emb_raw.pt` remains compatible
+- model-side `text_proj` and `img_proj` are trainable
+
+## Paper Split
+
+Formal paper experiments use:
+
+```text
+data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_train.tsv
+data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_dev.tsv
+data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_test.tsv
 ```
 
-Artifacts are written under:
+Rebuild the split with:
+
+```powershell
+python ml/training/scripts/build_openbg_img_paper_split.py
+```
+
+## Training
+
+```powershell
+python ml/training/scripts/run_train.py `
+  --config ml/configs/openbg_img_gated_vec_res_rel.yaml `
+  --common ml/configs/common_seed1.yaml
+```
+
+Artifacts are written to:
 
 ```text
 ml/artifacts/outputs/<exp_name>/<timestamp>_seed<seed>/
 ```
 
-## Inference Notes
+## Evaluation Protocol
 
-The inference layer now supports:
+Current formal protocol:
 
-- tail prediction
-- attribute completion
-- multimodal entity inspection
-- similar-entity retrieval
-- bilingual output fields for UI use
+- 3-column `train/dev/test`
+- `dev` for early stopping and model selection
+- final reporting on `test`
+- filtered ranking
+- `direction: both`
 
-Bilingual text resolution uses:
+Do not compare current `both` results directly with older `tail-only` internal runs.
 
-- `*_entity2text.tsv` / `*_relation2text.tsv`
-- optional `*_entity2text_en.tsv` / `*_relation2text_en.tsv`
+## Useful Documents
 
-English relation maps can be curated manually. Entity English text is intended to be generated offline and stored in `*_entity2text_en.tsv`.
+- `docs/MAIN_EXPERIMENT_RUNBOOK.md`
+- `docs/HAS_IMG_RUNBOOK.md`
+- `docs/RESULT_INDEX.md`
+- `docs/MAIN_RESULTS_SUMMARY.md`
+- `docs/INITIAL_JUDGMENT.md`
+- `docs/HAS_IMG_SPLIT_SUMMARY.md`
 
-## Frontend Quick Start
+## Current Result Snapshot
 
-Run the Vite development server from the frontend directory:
+Current ordering under the unified paper protocol:
 
-```powershell
-cd frontend
-npm install
-npm run dev
-```
-
-The dev server is configured in [vite.config.ts](/E:/learn/R&D/mmkg-project/frontend/vite.config.ts) and runs on:
-
-- [http://localhost:3000](http://localhost:3000)
+1. `Residual-only`
+2. `ComplEx`
+3. `Full Model`
+4. `Gate-only`
+5. `Early Fusion`
+6. `Text-only`
+7. `TuckER`
