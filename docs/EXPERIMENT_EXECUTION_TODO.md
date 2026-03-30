@@ -202,13 +202,16 @@
 
 ### 7.1 Gate
 - [x] 统计 gate 均值与方差
-- [ ] 按关系统计 gate 分布
+- [x] 按关系统计 gate 分布
 - [ ] 判断 gate 是否真的随关系变化
 
 当前进展：
 - 已基于 run 目录中的 `metrics_seed1.csv` 完成第一轮 gate 行为汇总，结果见：
   - `docs/BEHAVIOR_SUMMARY.md`
   - `docs/behavior_summary.json`
+- 已进一步完成 relation-aware gate 汇总，结果见：
+  - `docs/RELATION_AWARE_GATE_SUMMARY.md`
+  - `docs/relation_aware_gate_summary.json`
 - 当前汇总方式为：对 `Gate-only / Full Model / Residual-only` 的最新 3-seed 正式 run，取各自 `best dev epoch` 的训练期诊断统计
 - 当前已确认：
   - `Gate-only` 与 `Full Model` 都具备稳定的 gate 统计项（`g_mean_all / g_std_all / g_mean_img / g_mean_noimg`）
@@ -216,7 +219,11 @@
   - 两个模型都表现出 `g_mean_img < g_mean_noimg`，其中：
     - `Gate-only` 的 `img-noimg gap` 约为 `-0.1863`
     - `Full Model` 的 `img-noimg gap` 约为 `-0.1510`
-- 当前仍未完成的部分是 relation-aware gate 分析，因此还不能正式回答“gate 是否真的随关系变化”
+  - relation-aware gate 结果表明：在真实 test `(entity, relation)` 对上，`Gate-only` 与 `Full Model` 的 gate 在三个 relation group 上都存在系统差异
+  - 在 group-level 上，`Full Model` 的 gate mean 在 `visual / weak_visual / ambiguous` 三组中都低于 `Gate-only`
+  - 两个模型在 relation-aware 统计下仍稳定表现为 `target_has_img mean < target_noimg mean`
+- 当前初步判断是：gate 并非完全不随关系变化，但 relation group 间的变化幅度暂时还不足以单独解释 `6.2` 的性能差异；更显著的现象是 `Full Model` 整体 gate 更低、且对 `noimg` 目标更偏向文本侧
+- 当前仍未完成的部分是把 relation-aware gate 模式与 residual/group behavior 联合起来，因此“gate 是否真的随关系变化”还没有到最终定论阶段
 
 ### 7.2 Residual
 - [x] 统计 `residual_scale`
