@@ -203,7 +203,7 @@
 ### 7.1 Gate
 - [x] 统计 gate 均值与方差
 - [x] 按关系统计 gate 分布
-- [ ] 判断 gate 是否真的随关系变化
+- [x] 判断 gate 是否真的随关系变化
 
 当前进展：
 - 已基于 run 目录中的 `metrics_seed1.csv` 完成第一轮 gate 行为汇总，结果见：
@@ -222,8 +222,17 @@
   - relation-aware gate 结果表明：在真实 test `(entity, relation)` 对上，`Gate-only` 与 `Full Model` 的 gate 在三个 relation group 上都存在系统差异
   - 在 group-level 上，`Full Model` 的 gate mean 在 `visual / weak_visual / ambiguous` 三组中都低于 `Gate-only`
   - 两个模型在 relation-aware 统计下仍稳定表现为 `target_has_img mean < target_noimg mean`
-- 当前初步判断是：gate 并非完全不随关系变化，但 relation group 间的变化幅度暂时还不足以单独解释 `6.2` 的性能差异；更显著的现象是 `Full Model` 整体 gate 更低、且对 `noimg` 目标更偏向文本侧
-- 当前仍未完成的部分是把 relation-aware gate 模式与 residual/group behavior 联合起来，因此“gate 是否真的随关系变化”还没有到最终定论阶段
+- 已新增 `7.1` 的正式判断文档：
+  - `docs/GATE_RELATION_JUDGMENT.md`
+- 当前正式判断为：
+  - gate 的确会随关系变化，这一点在 relation-group level 和 per-relation level 上都成立
+  - 例如 `Full Model` 的 group-level gate mean 在三个关系组上分别为：
+    - `visual_relations`: `0.4719 ± 0.0056`
+    - `weak_visual_relations`: `0.4955 ± 0.0073`
+    - `ambiguous_material_relations`: `0.4814 ± 0.0040`
+  - 同时，同组内部不同关系也存在明显差异，例如 `visual_relations` 中 `rel_0009` (`裤长`) 与 `rel_0044` (`闭合方式`) 的 gate mean 就明显不同
+  - 但这种 gate 变化幅度仍不足以单独解释 `6.2` 的主性能格局；更完整的解释仍然需要结合 residual 偏好、mix 权重以及缺图子集上的 residual 增强
+  - 因此 `7.1` 的最终收口结论为：`gate is relation-aware, but not relation-dominant`
 
 ### 7.2 Residual
 - [x] 统计 `residual_scale`
