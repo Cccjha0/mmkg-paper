@@ -201,14 +201,41 @@
 ## 7. 第六阶段：行为分析
 
 ### 7.1 Gate
-- [ ] 统计 gate 均值与方差
+- [x] 统计 gate 均值与方差
 - [ ] 按关系统计 gate 分布
 - [ ] 判断 gate 是否真的随关系变化
 
+当前进展：
+- 已基于 run 目录中的 `metrics_seed1.csv` 完成第一轮 gate 行为汇总，结果见：
+  - `docs/BEHAVIOR_SUMMARY.md`
+  - `docs/behavior_summary.json`
+- 当前汇总方式为：对 `Gate-only / Full Model / Residual-only` 的最新 3-seed 正式 run，取各自 `best dev epoch` 的训练期诊断统计
+- 当前已确认：
+  - `Gate-only` 与 `Full Model` 都具备稳定的 gate 统计项（`g_mean_all / g_std_all / g_mean_img / g_mean_noimg`）
+  - 在 best epoch 上，`Gate-only` 的 `g_mean_all` 约为 `0.5346 ± 0.0107`，`Full Model` 的 `g_mean_all` 约为 `0.4288 ± 0.0058`
+  - 两个模型都表现出 `g_mean_img < g_mean_noimg`，其中：
+    - `Gate-only` 的 `img-noimg gap` 约为 `-0.1863`
+    - `Full Model` 的 `img-noimg gap` 约为 `-0.1510`
+- 当前仍未完成的部分是 relation-aware gate 分析，因此还不能正式回答“gate 是否真的随关系变化”
+
 ### 7.2 Residual
-- [ ] 统计 `residual_scale`
+- [x] 统计 `residual_scale`
 - [ ] 分析 residual 在不同实体子集上的行为
 - [ ] 判断 residual 是否在缺图实体上更强
+
+当前进展：
+- 已基于同一批 `metrics_seed1.csv` 完成第一轮 residual / mix 行为汇总，结果同样记录在：
+  - `docs/BEHAVIOR_SUMMARY.md`
+  - `docs/behavior_summary.json`
+- 当前已确认：
+  - `Full Model` 在 best epoch 的 `residual_scale_value` 约为 `0.5198 ± 0.1801`
+  - `Residual-only` 在 best epoch 的 `residual_scale_value` 约为 `0.2585 ± 0.0034`
+  - `Full Model` 在 best epoch 的混合权重大致为：
+    - `mix_w_fusion ≈ 0.2049 ± 0.0402`
+    - `mix_w_residual ≈ 0.7951 ± 0.0402`
+  - 从 first eval 到 best epoch，`Full Model` 的 `residual_scale_value` 平均上升约 `0.3728`，同时 `mix_w_residual` 继续上升、`mix_w_fusion` 相应下降
+- 这进一步支持了已有 residual dominance 判断：最终表示混合层面仍然明显偏向 residual 路径
+- 当前仍未完成的部分是 residual 在不同实体子集、不同关系组上的行为分析，因此还不能正式回答“residual 是否在缺图实体上更强”
 
 ### 7.3 Fusion vs residual
 - [ ] 结合 mix 权重分析主导关系
