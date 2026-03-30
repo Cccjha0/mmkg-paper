@@ -404,6 +404,7 @@ def build_summary(
                 "relation_token": rel_token,
                 "text_zh": rel["text_zh"],
                 "text_en": rel["text_en"],
+                "test_triple_count": int(test_relation_counter[rel["relation_id"]]),
                 "models": {
                     label: {
                         "num_seeds": len(rows),
@@ -432,6 +433,7 @@ def render_markdown(
     duplicates: dict[str, dict[str, list[str]]],
     outputs_root: Path,
     groups_json_path: Path,
+    min_relation_test_triples: int = 0,
 ) -> str:
     labels = ordered_labels(list(summary["models"].keys()))
     group_names = list(summary["groups"].keys())
@@ -519,13 +521,30 @@ def render_markdown(
             for rank_idx, (label, mean_mrr) in enumerate(sorted(ranking, key=lambda item: item[1], reverse=True), start=1):
                 lines.append(f"{rank_idx}. `{label}`: {mean_mrr:.4f}")
 
-        lines.extend(["", "Per-relation details:", ""])
+        group_relations = summary["per_relation"].get(group_name, {})
+        kept_relation_count = sum(
+            1
+            for rel_payload in group_relations.values()
+            if rel_payload.get("test_triple_count", 0) >= min_relation_test_triples
+        )
+
+        if min_relation_test_triples > 0:
+            lines.extend(
+                [
+                    "",
+                    f"Per-relation details (`test triples >= {min_relation_test_triples}`; kept {kept_relation_count} / {len(group_relations)} relations):",
+                    "",
+                ]
+            )
+        else:
+            lines.extend(["", "Per-relation details:", ""])
         lines.append("| Relation | Chinese | English | Model | Seeds | MRR | Tail MRR | Head MRR | Test Triples |")
         lines.append("|---|---|---|---|---:|---:|---:|---:|---:|")
 
-        group_relations = summary["per_relation"].get(group_name, {})
         for rel_token in sorted(group_relations.keys(), key=lambda token: group_relations[token]["relation_id"]):
             rel_payload = group_relations[rel_token]
+            if rel_payload.get("test_triple_count", 0) < min_relation_test_triples:
+                continue
             for label in labels:
                 model_payload = rel_payload["models"].get(label)
                 if not model_payload:
@@ -574,6 +593,12 @@ def main() -> None:
         "--skip-per-relation",
         action="store_true",
         help="skip per-relation evaluation and only compute group-level metrics",
+    )
+    ap.add_argument(
+        "--min-relation-test-triples",
+        type=int,
+        default=0,
+        help="only render per-relation rows whose test triple count is at least this value",
     )
     args = ap.parse_args()
 
@@ -629,6 +654,7 @@ def main() -> None:
         },
         "duplicate_candidates": duplicates,
         "skip_per_relation": bool(args.skip_per_relation),
+        "min_relation_test_triples": int(args.min_relation_test_triples),
     }
 
     output_json.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -639,6 +665,7 @@ def main() -> None:
             duplicates=duplicates,
             outputs_root=outputs_root,
             groups_json_path=groups_json_path,
+            min_relation_test_triples=max(0, int(args.min_relation_test_triples)),
         ),
         encoding="utf-8",
     )
