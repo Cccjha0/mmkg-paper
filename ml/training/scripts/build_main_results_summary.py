@@ -1,12 +1,13 @@
 import argparse
 import json
-import math
 import statistics
 from collections import defaultdict
 from pathlib import Path
 
 
 MODEL_LABEL_OVERRIDES = {
+    "openbg_img_complex": "ComplEx",
+    "openbg_img_tucker": "TuckER",
     "openbg_img_text_only": "Text-only",
     "openbg_img_early": "Early Fusion",
     "openbg_img_gate_only": "Gate-only",
@@ -15,7 +16,7 @@ MODEL_LABEL_OVERRIDES = {
 }
 
 METRIC_KEYS = ["mrr", "hits@1", "hits@3", "hits@10", "tail_mrr", "head_mrr"]
-PRIMARY_ORDER = ["Text-only", "Early Fusion", "Gate-only", "Full Model", "Residual-only"]
+PRIMARY_ORDER = ["ComplEx", "TuckER", "Text-only", "Early Fusion", "Gate-only", "Full Model", "Residual-only"]
 
 
 def load_json(path: Path) -> dict:
@@ -80,12 +81,14 @@ def render_markdown(summary: dict[str, dict], outputs_root: Path) -> str:
         f"本文档基于 `{outputs_root.as_posix()}` 下各 run 目录中的 `test_metrics.json` 自动汇总，",
         "用于完成论文计划中的 `3.2 结果汇总`：",
         "",
-        "- 汇总五组主模型的 test 指标",
+        "- 汇总主模型与结构强基线的 test 指标",
         "- 计算各模型的 mean ± std",
         "- 形成可直接写入论文的主结果表",
         "",
-        "当前仅汇总五组主模型：",
+        "当前汇总的模型包括：",
         "",
+        "- `ComplEx`",
+        "- `TuckER`",
         "- `Text-only`",
         "- `Early Fusion`",
         "- `Gate-only`",
@@ -111,14 +114,7 @@ def render_markdown(summary: dict[str, dict], outputs_root: Path) -> str:
             f"{fmt(stats['head_mrr']['mean'], stats['head_mrr']['std'])} |"
         )
 
-    lines.extend(
-        [
-            "",
-            "## 3. 当前排序",
-            "",
-        ]
-    )
-
+    lines.extend(["", "## 3. 当前排序", ""])
     ranked = sorted(
         ((label, summary[label]["stats"]["mrr"]["mean"]) for label in ordered_labels),
         key=lambda x: x[1],
@@ -131,10 +127,16 @@ def render_markdown(summary: dict[str, dict], outputs_root: Path) -> str:
     worst_label, worst_mrr = ranked[-1]
     gap_full_gate = None
     gap_full_res = None
+    gap_full_complex = None
+    gap_full_tucker = None
     if "Full Model" in summary and "Gate-only" in summary:
         gap_full_gate = summary["Full Model"]["stats"]["mrr"]["mean"] - summary["Gate-only"]["stats"]["mrr"]["mean"]
     if "Full Model" in summary and "Residual-only" in summary:
         gap_full_res = summary["Full Model"]["stats"]["mrr"]["mean"] - summary["Residual-only"]["stats"]["mrr"]["mean"]
+    if "Full Model" in summary and "ComplEx" in summary:
+        gap_full_complex = summary["Full Model"]["stats"]["mrr"]["mean"] - summary["ComplEx"]["stats"]["mrr"]["mean"]
+    if "Full Model" in summary and "TuckER" in summary:
+        gap_full_tucker = summary["Full Model"]["stats"]["mrr"]["mean"] - summary["TuckER"]["stats"]["mrr"]["mean"]
 
     lines.extend(
         [
@@ -149,6 +151,10 @@ def render_markdown(summary: dict[str, dict], outputs_root: Path) -> str:
         lines.append(f"- `Full Model` 相比 `Gate-only` 的平均 MRR 提升为 `{gap_full_gate:.4f}`。")
     if gap_full_res is not None:
         lines.append(f"- `Full Model` 相比 `Residual-only` 的平均 MRR 差距为 `{gap_full_res:.4f}`。")
+    if gap_full_complex is not None:
+        lines.append(f"- `Full Model` 相比 `ComplEx` 的平均 MRR 差距为 `{gap_full_complex:.4f}`。")
+    if gap_full_tucker is not None:
+        lines.append(f"- `Full Model` 相比 `TuckER` 的平均 MRR 差距为 `{gap_full_tucker:.4f}`。")
     lines.extend(
         [
             "- 当前所有模型的 `head_mrr` 明显低于 `tail_mrr`，说明正式 `both` 协议显著严于早期 `tail-only` 观察结果。",
@@ -158,8 +164,8 @@ def render_markdown(summary: dict[str, dict], outputs_root: Path) -> str:
         ]
     )
 
-    for label in ordered_labels:
-        lines.append(f"### 5.{ordered_labels.index(label) + 1} {label}")
+    for idx, label in enumerate(ordered_labels, start=1):
+        lines.append(f"### 5.{idx} {label}")
         lines.append("")
         lines.append("| Seed | Run 目录 | MRR | Hits@1 | Hits@3 | Hits@10 | Tail MRR | Head MRR |")
         lines.append("|---|---|---:|---:|---:|---:|---:|---:|")
@@ -177,8 +183,8 @@ def render_markdown(summary: dict[str, dict], outputs_root: Path) -> str:
         [
             "## 6. 当前未完成项",
             "",
-            "- 结构强基线（`ComplEx` / `TuckER`）尚未统一并入本主结果表。",
-            "- 当前文档只完成了五组主模型之间的规范 test 汇总，尚未完成与强结构基线的正式对比。",
+            "- 当前主结果表虽已纳入 `ComplEx` / `TuckER`，但对应的论文式结论与讨论仍待补充。",
+            "- 当前尚未完成 `Full Model` 相对 `ComplEx / TuckER` 的正式差距分析。",
         ]
     )
     return "\n".join(lines) + "\n"

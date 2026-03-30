@@ -6,7 +6,9 @@ from pathlib import Path
 
 
 MODEL_LABEL_OVERRIDES = {
+    "openbg_img_complex": "ComplEx",
     "openbg_img_text_only": "Text-only",
+    "openbg_img_tucker": "TuckER",
     "openbg_img_early": "Early Fusion",
     "openbg_img_gate_only": "Gate-only",
     "openbg_img_residual_only": "Residual-only",
@@ -207,9 +209,8 @@ def render_markdown(rows: list[dict], outputs_root: Path) -> str:
     results_dir = outputs_root / "results"
     if results_dir.exists() and len(list(results_dir.iterdir())) <= 1:
         lines.append("- 当前 `results` 聚合目录为空，仅有 `.gitkeep`")
-    else:
-        lines.append("- 当前五组主模型均已形成 3-seed 可用结果，主结果实验资产已基本齐备")
-        lines.append("- 当前主要工作重心应从“补齐主模型结果”转向“结果汇总、分组分析与原因诊断”")
+    lines.append("- 当前五组主模型与两组结构强基线均已形成 3-seed 可用结果")
+    lines.append("- 当前主要工作重心应从“补齐主模型结果”转向“强基线对比、分组分析与原因诊断”")
 
     lines.extend(
         [
@@ -232,9 +233,10 @@ def render_markdown(rows: list[dict], outputs_root: Path) -> str:
             "## 7. 下一步维护任务",
             "",
             "- [ ] 将后续新实验统一追加到本索引表",
-            "- [ ] 汇总五组主模型的 `mean ± std` 并形成主结果表",
+            "- [ ] 汇总七组模型的 `mean ± std` 并形成最终主结果表",
             "- [ ] 将 `test_metrics.json` 纳入后续自动索引与汇总逻辑",
             "- [ ] 开始 `Residual-only > Full Model` 的原因排查实验",
+            "- [ ] 开始 `Full Model` 与 `ComplEx / TuckER` 的正式对比分析",
             "- [ ] 将 `results` 目录真正作为聚合输出目录使用",
         ]
     )
