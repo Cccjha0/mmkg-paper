@@ -188,8 +188,15 @@
 - `6.2` 当前更适合作为“收益边界”叙事中的限制性证据：多模态收益是局部、条件化且有边界的，而不是“视觉关系上多模态普遍占优”的直接证据
 
 ### 6.3 结果判断
-- [ ] 判断多模态收益是否是“局部有效”
-- [ ] 判断论文是否可以建立“收益边界”核心结论
+- [x] 判断多模态收益是否是“局部有效”
+- [x] 判断论文是否可以建立“收益边界”核心结论
+
+当前正式判定：
+- 综合 `docs/HAS_IMG_ANALYSIS.md`、`docs/RELATION_TYPE_ANALYSIS.md`、`docs/GAIN_BOUNDARY_JUDGMENT.md` 与 residual dominance 阶段诊断结果，当前证据已足以判定：多模态收益是局部、条件化、且有边界的
+- `6.1` 说明收益受目标位置与模态可用性约束：最强局部收益出现在 `head_has_img`，但 overall 仍被 `tail_no_img` 上的结构优势主导
+- `6.2` 说明收益受关系特征约束：`Full Model` 虽然在多数中等以上支持度关系上稳定优于 `Gate-only`，但仍很少超过 `Residual-only`
+- residual dominance 诊断说明：`Residual-only` 的优势不能简单归因于训练 bug 或 residual shortcut，更合理的解释是当前任务本身更偏好结构补偿路径
+- 因此当前论文主线可以正式收敛为：多模态收益边界分析，而不是“Full Model 全局优于结构基线”的方法改进叙事
 
 ## 7. 第六阶段：行为分析
 
