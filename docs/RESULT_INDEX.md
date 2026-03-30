@@ -27,6 +27,9 @@
 
 | 实验组 | 模型口径 | run目录 | seed | 配置 | 最佳MRR | 最佳epoch | 状态 | 备注 |
 |---|---|---|---:|---|---:|---:|---|---|
+| `openbg_img_complex` | `ComplEx` | `openbg_img_complex/20260328_004926_seed1` | 1 | `-` | 0.2610 | 5 | 可用 | metrics 文件为 `metrics_seed1.csv` |
+| `openbg_img_complex` | `ComplEx` | `openbg_img_complex/20260328_005017_seed2` | 2 | `-` | 0.2625 | 5 | 可用 | metrics 文件为 `metrics_seed1.csv` |
+| `openbg_img_complex` | `ComplEx` | `openbg_img_complex/20260328_005322_seed3` | 3 | `-` | 0.2606 | 5 | 可用 | metrics 文件为 `metrics_seed1.csv` |
 | `openbg_img_early` | `Early Fusion` | `openbg_img_early/20260326_235410_seed1` | 1 | `-` | 0.1670 | 90 | 可用 | metrics 文件为 `metrics_seed1.csv` |
 | `openbg_img_early` | `Early Fusion` | `openbg_img_early/20260327_144829_seed2` | 2 | `-` | 0.1638 | 125 | 可用 | metrics 文件为 `metrics_seed1.csv` |
 | `openbg_img_early` | `Early Fusion` | `openbg_img_early/20260327_153219_seed3` | 3 | `-` | 0.1626 | 130 | 可用 | metrics 文件为 `metrics_seed1.csv` |
@@ -42,11 +45,17 @@
 | `openbg_img_text_only` | `Text-only` | `openbg_img_text_only/20260326_184048_seed1` | 1 | `img_dropout=0.0` | 0.1220 | 320 | 可用 | metrics 文件为 `metrics_seed1.csv` |
 | `openbg_img_text_only` | `Text-only` | `openbg_img_text_only/20260326_191652_seed2` | 2 | `img_dropout=0.0` | 0.1298 | 320 | 可用 | metrics 文件为 `metrics_seed1.csv` |
 | `openbg_img_text_only` | `Text-only` | `openbg_img_text_only/20260326_211111_seed3` | 3 | `img_dropout=0.0` | 0.1257 | 315 | 可用 | metrics 文件为 `metrics_seed1.csv` |
+| `openbg_img_tucker` | `TuckER` | `openbg_img_tucker/20260328_011550_seed1` | 1 | `-` | 0.0886 | 20 | 可用 | metrics 文件为 `metrics_seed1.csv` |
+| `openbg_img_tucker` | `TuckER` | `openbg_img_tucker/20260328_131930_seed2` | 2 | `-` | 0.0881 | 15 | 可用 | metrics 文件为 `metrics_seed1.csv` |
+| `openbg_img_tucker` | `TuckER` | `openbg_img_tucker/20260328_170728_seed3` | 3 | `-` | 0.0865 | 15 | 可用 | metrics 文件为 `metrics_seed1.csv` |
 
 ## 4. 当前可直接使用的结果分组
 
 ### 4.1 当前相对完整的组
 
+- `ComplEx`
+  - 当前已有 3 个可用 run，seed: 1, 2, 3
+  - 可作为后续主结果比较与汇总的基础
 - `Early Fusion`
   - 当前已有 3 个可用 run，seed: 1, 2, 3
   - 可作为后续主结果比较与汇总的基础
@@ -62,6 +71,9 @@
 - `Text-only`
   - 当前已有 3 个可用 run，seed: 1, 2, 3
   - 可作为后续主结果比较与汇总的基础
+- `TuckER`
+  - 当前已有 3 个可用 run，seed: 1, 2, 3
+  - 可作为后续主结果比较与汇总的基础
 
 ### 4.2 当前部分可用的组
 
@@ -70,6 +82,8 @@
 ## 5. 当前主要缺口
 
 - 当前 `results` 聚合目录为空，仅有 `.gitkeep`
+- 当前五组主模型与两组结构强基线均已形成 3-seed 可用结果
+- 当前主要工作重心应从“补齐主模型结果”转向“强基线对比、分组分析与原因诊断”
 
 ## 6. 当前建议标签
 
@@ -89,7 +103,8 @@
 ## 7. 下一步维护任务
 
 - [ ] 将后续新实验统一追加到本索引表
-- [ ] 汇总五组主模型的 `mean ± std` 并形成主结果表
+- [ ] 汇总七组模型的 `mean ± std` 并形成最终主结果表
 - [ ] 将 `test_metrics.json` 纳入后续自动索引与汇总逻辑
 - [ ] 开始 `Residual-only > Full Model` 的原因排查实验
+- [ ] 开始 `Full Model` 与 `ComplEx / TuckER` 的正式对比分析
 - [ ] 将 `results` 目录真正作为聚合输出目录使用

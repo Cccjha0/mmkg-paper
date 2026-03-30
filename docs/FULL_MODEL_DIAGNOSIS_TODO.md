@@ -400,3 +400,65 @@ OpenBG-IMG 虽然包含图像，但这并不意味着：
 
 - [ ] 重新评估当前方法改进型主线是否仍然站得住
 - [ ] 如有必要，转向收益边界分析叙事
+
+## 13. 4.3 阶段结论（2026-03-29）
+
+### 13.1 已完成的干预实验
+
+- 默认 `Gate+Residual`
+- `residual_warmup_epochs=10`
+- weaker residual init
+- stronger residual regularization
+
+对应输出目录：
+
+- `ml/artifacts/outputs/openbg_img_gated_vec_res_rel`
+- `ml/artifacts/outputs/openbg_img_gated_vec_res_rel_reswarmup10`
+- `ml/artifacts/outputs/openbg_img_gated_vec_res_rel_weakres`
+- `ml/artifacts/outputs/openbg_img_gated_vec_res_rel_strongresreg`
+
+### 13.2 观察结论
+
+1. `Residual dominance` 是成立的，但主要体现在最终表示混合层面，而不是梯度层面。
+
+- 默认 `Full Model` 中，`mix_w_residual` 长期高于 `mix_w_fusion`，通常维持在约 `0.74 ~ 0.83`。
+- 同时，`grad_projection > grad_fusion > grad_residual` 是更常见的现象。
+- 这说明 fusion 和 projection 并没有停止学习，但最终模型仍更依赖 residual 分支。
+
+2. `Full Model < Residual-only` 不能简单解释为“residual 抢走了所有训练梯度”。
+
+- 从梯度统计看，residual 并不是最活跃的训练分支。
+- 更准确的解释是：模型虽然学习了 fusion，但在最终表示组合时，仍持续把 residual 当作主干。
+
+3. `residual warmup` 没有验证“先手优势”是假设。
+
+- `reswarmup10` 能成功在前 10 个 epoch 压住 residual 梯度。
+- 但 residual 一旦恢复，模型仍会重新回到 residual 主导的 mix。
+- 最终 `test MRR` 低于默认 `Full Model`。
+
+4. weaker residual 和 stronger residual regularization 都改变了分支行为，但没有超过默认 `Full Model`。
+
+- weaker residual 能让 `mix_w_fusion` 上升，并让 `residual_scale_value` 增长更慢。
+- stronger residual regularization 也能一定程度限制 residual 扩张。
+- 但两者最终都没有稳定超过默认 `Full Model`。
+
+### 13.3 阶段性判断
+
+- 当前证据支持：`Residual-only` 的优势不是单纯训练 bug。
+- 当前证据也支持：`Full Model` 的劣势不只是“residual 太早进入训练”。
+- 更合理的解释是：在当前数据和协议下，结构补偿路径本身就更符合任务偏好；fusion 路径虽然在学习，但尚不足以改变最终主导关系。
+
+### 13.4 对论文主线的影响
+
+- 这组结果不支持把论文写成“通过抑制 residual 后，full model 即可稳定超过结构基线”的方法改进故事。
+- 这组结果支持把论文继续写成“多模态收益边界与结构补偿作用关系分析”。
+- 后续最有价值的工作不再是继续小范围扫 residual 超参，而是进入子集分析：
+  - `has_img / no_img`
+  - relation type
+  - gate / residual 行为统计
+
+### 13.5 4.3 结论
+
+- [x] 判定 residual 长期主导最终表示混合
+- [x] 判定 `Full Model` 弱于 `Residual-only` 不能仅归因于梯度级 residual shortcut
+- [x] 输出一版 residual dominance 阶段诊断结论
