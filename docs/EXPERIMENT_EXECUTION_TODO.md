@@ -152,10 +152,27 @@
 - 因此多模态收益不是全局存在，而是具有目标位置与模态可用性边界
 
 ### 6.2 relation type
-- [ ] 粗略定义视觉相关关系
-- [ ] 粗略定义视觉弱相关或抽象关系
-- [ ] 比较各模型在不同关系组上的表现
-- [ ] 判断多模态收益是否具有关系依赖性
+- [x] 粗略定义视觉相关关系
+- [x] 粗略定义视觉弱相关或抽象关系
+- [x] 比较各模型在不同关系组上的表现
+- [x] 判断多模态收益是否具有关系依赖性
+
+当前正式口径说明：
+- 基于 `docs/relation_type_groups_draft.json` 将关系粗分为：
+  - `visual_relations`
+  - `weak_visual_relations`
+  - `ambiguous_material_relations`
+- 使用与主实验一致的 `paper_split`、`best.ckpt`、`test`、filtered ranking、`direction=both`
+- 正式汇总文件为：
+  - `docs/RELATION_TYPE_SUMMARY_ALL.md`
+  - `docs/relation_type_summary_all.json`
+
+当前 3-seed 结果支持的结论：
+- 三个关系组上的总体排序都保持为：`Residual-only > ComplEx > Full Model`
+- 在 `visual_relations` 上，未观察到多模态模型形成组级优势；`Full Model` 仍明显低于 `Residual-only` 与 `ComplEx`
+- 在 `weak_visual_relations` 上，`Full Model` 的组级 MRR 高于其在 `visual_relations` 上的表现，因此当前粗分组结果不支持“视觉关系天然更适合多模态”的强结论
+- relation-type 分析更支持这样的判断：多模态收益不是按“视觉关系组”整体出现，而更可能是局部关系、局部样本或与目标位置/模态可用性共同作用的现象
+- 因此 `6.2` 当前更适合作为“收益边界”叙事中的限制性证据，而不是“视觉关系上多模态普遍占优”的直接证据
 
 ### 6.3 结果判断
 - [ ] 判断多模态收益是否是“局部有效”
@@ -219,7 +236,7 @@
 - [x] 五组主模型正式 test 结果完成
 - [x] 主结果表完成
 - [x] `has_img / no_img` 分组结果完成
-- [ ] relation type 分组结果完成
+- [x] relation type 分组结果完成
 - [ ] gate / residual 行为分析完成
 - [ ] 至少 2 组成功案例与 2 组失败案例完成
 - [ ] 论文主线最终定稿
