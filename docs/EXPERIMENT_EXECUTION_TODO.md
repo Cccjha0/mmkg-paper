@@ -227,13 +227,16 @@
 
 ### 7.2 Residual
 - [x] 统计 `residual_scale`
-- [ ] 分析 residual 在不同实体子集上的行为
-- [ ] 判断 residual 是否在缺图实体上更强
+- [x] 分析 residual 在不同实体子集上的行为
+- [x] 判断 residual 是否在缺图实体上更强
 
 当前进展：
 - 已基于同一批 `metrics_seed1.csv` 完成第一轮 residual / mix 行为汇总，结果同样记录在：
   - `docs/BEHAVIOR_SUMMARY.md`
   - `docs/behavior_summary.json`
+- 已进一步完成 relation-aware residual 汇总，结果见：
+  - `docs/RELATION_AWARE_RESIDUAL_SUMMARY.md`
+  - `docs/relation_aware_residual_summary.json`
 - 当前已确认：
   - `Full Model` 在 best epoch 的 `residual_scale_value` 约为 `0.5198 ± 0.1801`
   - `Residual-only` 在 best epoch 的 `residual_scale_value` 约为 `0.2585 ± 0.0034`
@@ -242,12 +245,44 @@
     - `mix_w_residual ≈ 0.7951 ± 0.0402`
   - 从 first eval 到 best epoch，`Full Model` 的 `residual_scale_value` 平均上升约 `0.3728`，同时 `mix_w_residual` 继续上升、`mix_w_fusion` 相应下降
 - 这进一步支持了已有 residual dominance 判断：最终表示混合层面仍然明显偏向 residual 路径
-- 当前仍未完成的部分是 residual 在不同实体子集、不同关系组上的行为分析，因此还不能正式回答“residual 是否在缺图实体上更强”
+- relation-aware residual 结果进一步表明：在真实 test `(entity, relation)` 对上，`Full Model` 的 residual 有效贡献在 `head_noimg` 上稳定高于 `head_has_img`
+  - `visual_relations` 的 head-side `effective residual norm`：`0.7462 > 0.6776`
+  - `weak_visual_relations` 的 head-side `effective residual norm`：`0.7976 > 0.6909`
+  - `ambiguous_material_relations` 的 head-side `effective residual norm`：`0.7504 > 0.6812`
+- 同时，`Full Model` 的 head-side `residual / fused ratio` 也在 `head_noimg` 上系统更高：
+  - `visual_relations`：`0.4461 > 0.4212`
+  - `weak_visual_relations`：`0.4733 > 0.4279`
+  - `ambiguous_material_relations`：`0.4490 > 0.4232`
+- 因此 `7.2` 当前可以正式收口为：在 `Full Model` 内部，缺图 head 目标实体确实更依赖 residual 补偿；tail 方向由于当前 `paper_split` 中目标实体恒为 `no_img`，主要体现为结构路径整体主导而非额外的 `has_img/no_img` 对照
+- `Residual-only` 的 subgroup 差异相对更弱或更混合，因此“缺图实体上 residual 更强”的核心证据主要来自 `Full Model` 的内部行为，而不是 `Residual-only` 的幅度变化
 
 ### 7.3 Fusion vs residual
-- [ ] 结合 mix 权重分析主导关系
-- [ ] 判断 fusion 是否长期被 residual 压制
-- [ ] 形成“互补还是竞争”的结论
+- [x] 结合 mix 权重分析主导关系
+- [x] 判断 fusion 是否长期被 residual 压制
+- [x] 形成“互补还是竞争”的结论
+
+当前进展：
+- 已形成 `7.3` 的正式综合分析文档：
+  - `docs/FUSION_VS_RESIDUAL_ANALYSIS.md`
+- 当前判断综合了三类证据：
+  - `docs/BEHAVIOR_SUMMARY.md`
+  - `docs/RELATION_AWARE_GATE_SUMMARY.md`
+  - `docs/RELATION_AWARE_RESIDUAL_SUMMARY.md`
+- 当前已确认：
+  - 在 `Full Model` 的 best epoch 上，最终混合权重长期偏向 residual：
+    - `mix_w_fusion ≈ 0.2049 ± 0.0402`
+    - `mix_w_residual ≈ 0.7951 ± 0.0402`
+  - 从 first eval 到 best epoch，`mix_w_residual` 持续上升、`mix_w_fusion` 持续下降，因此 residual 偏好不是偶然快照，而是训练后期稳定形成的趋势
+  - 但 fusion 并未失活：
+    - `grad_fusion` 与 `grad_projection` 持续非零
+    - relation-aware gate 在不同 relation group 上仍有系统差异
+    - `6.2 MIN20` 已表明 `Full Model` 在多数中等支持度关系上稳定优于 `Gate-only`
+  - relation-aware residual 进一步表明：当 head 目标实体缺图时，`Full Model` 内部 residual 贡献会系统上升，因此 residual 不只是“全局默认更强”，而是在弱视觉支持条件下被进一步偏好
+- 因此 `7.3` 的正式收口结论为：
+  - fusion 与 residual 不是纯冗余关系
+  - 两者存在真实互补，因为 fusion 的加入能够把 `Gate-only` 推进到 `Full Model`
+  - 但这种互补是明显不对称的：最终表示混合与弱图像条件下的行为都更偏向 residual
+  - 当前最准确的描述是：`residual-dominant asymmetric complementarity`
 
 ## 8. 第七阶段：案例分析
 
