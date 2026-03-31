@@ -354,6 +354,7 @@ def build_case_records(
                     "triple_index": idx,
                     "direction": direction,
                     "triple": [h, r, t],
+                    "relation_id": r,
                     "target_entity_id": target,
                     "target_has_img": target_has_img,
                     "head_has_img": bool(has_img[h].item()),
@@ -374,21 +375,99 @@ def build_case_records(
     return records
 
 
+def success_priority(row: dict) -> tuple:
+    grouped = row["relation_group"] != "ungrouped"
+    preferred_group = row["relation_group"] in {"visual_relations", "weak_visual_relations"}
+    head_has_img = row["direction"] == "head" and row["target_has_img"]
+    moderate_gap = 1 if row["residual_mean_rank"] <= 500 else 0
+    return (
+        1 if head_has_img else 0,
+        1 if preferred_group else 0,
+        1 if grouped else 0,
+        moderate_gap,
+        row["delta_mean_mrr"],
+        row["delta_mean_rank"],
+        -row["full_mean_rank"],
+    )
+
+
+def failure_priority(row: dict) -> tuple:
+    grouped = row["relation_group"] != "ungrouped"
+    structure_favorable = (row["direction"] == "tail") or (row["direction"] == "head" and not row["target_has_img"])
+    return (
+        1 if structure_favorable else 0,
+        1 if grouped else 0,
+        -row["delta_mean_mrr"],
+        row["full_mean_rank"],
+        -row["residual_mean_rank"],
+    )
+
+
+def diverse_pick(pool: list[dict], topn: int, ranking_key, allow_same_target: bool = False) -> list[dict]:
+    ranked = sorted(pool, key=ranking_key, reverse=True)
+    picked = []
+    used_relation_ids: set[int] = set()
+    used_targets: set[int] = set()
+    for row in ranked:
+        relation_id = row["relation_id"]
+        target_id = row["target_entity_id"]
+        if relation_id in used_relation_ids:
+            continue
+        if (not allow_same_target) and target_id in used_targets:
+            continue
+        picked.append(row)
+        used_relation_ids.add(relation_id)
+        used_targets.add(target_id)
+        if len(picked) >= topn:
+            return picked
+    for row in ranked:
+        if row in picked:
+            continue
+        picked.append(row)
+        if len(picked) >= topn:
+            break
+    return picked
+
+
 def select_cases(records: list[dict], topn: int) -> tuple[list[dict], list[dict]]:
-    success_pool = [
+    success_strict = [
         row for row in records
-        if row["full_better_all_seeds"] and row["full_mean_rank"] <= 10 and row["residual_mean_rank"] >= 20
+        if row["full_better_all_seeds"]
+        and row["direction"] == "head"
+        and row["target_has_img"]
+        and row["relation_group"] in {"visual_relations", "weak_visual_relations"}
+        and row["full_mean_rank"] <= 20
+        and row["residual_mean_rank"] >= 5
     ]
-    failure_pool = [
+    success_relaxed = [
         row for row in records
-        if row["residual_better_all_seeds"] and row["residual_mean_rank"] <= 10 and row["full_mean_rank"] >= 20
+        if row["full_better_all_seeds"]
+        and row["target_has_img"]
+        and row["full_mean_rank"] <= 50
+        and row["residual_mean_rank"] >= 5
     ]
-    if len(success_pool) < topn:
-        success_pool = [row for row in records if row["full_better_all_seeds"]]
-    if len(failure_pool) < topn:
-        failure_pool = [row for row in records if row["residual_better_all_seeds"]]
-    success = sorted(success_pool, key=lambda row: (row["delta_mean_mrr"], row["delta_mean_rank"]), reverse=True)[:topn]
-    failure = sorted(failure_pool, key=lambda row: (row["delta_mean_mrr"], row["delta_mean_rank"]))[:topn]
+    success_fallback = [row for row in records if row["full_better_all_seeds"]]
+
+    failure_strict = [
+        row for row in records
+        if row["residual_better_all_seeds"]
+        and ((row["direction"] == "tail") or (row["direction"] == "head" and not row["target_has_img"]))
+        and row["residual_mean_rank"] <= 10
+        and row["full_mean_rank"] >= 20
+    ]
+    failure_relaxed = [
+        row for row in records
+        if row["residual_better_all_seeds"]
+        and row["residual_mean_rank"] <= 20
+        and row["full_mean_rank"] >= 20
+    ]
+    failure_fallback = [row for row in records if row["residual_better_all_seeds"]]
+
+    success_pool = success_strict or success_relaxed or success_fallback
+    failure_pool = failure_strict or failure_relaxed or failure_fallback
+
+    success = diverse_pick(success_pool, topn, success_priority, allow_same_target=False)
+    failure = diverse_pick(failure_pool, topn, failure_priority, allow_same_target=False)
     return success, failure
 
 
