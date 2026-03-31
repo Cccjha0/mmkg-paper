@@ -296,12 +296,49 @@
 ## 8. 第七阶段：案例分析
 
 ### 8.1 成功案例
-- [ ] 选择 `Full Model` 优于 `Residual-only` 的样本
-- [ ] 分析是否依赖图像或文本线索
+- [x] 选择 `Full Model` 优于 `Residual-only` 的样本
+- [x] 分析是否依赖图像或文本线索
+
+当前进展：
+- 已生成正式案例抽取结果：
+  - `docs/CASE_ANALYSIS.md`
+  - `docs/case_analysis.json`
+  - `docs/CASE_ANALYSIS_INTERPRETATION.md`
+- 当前 success cases 已按更贴近论文主线的规则重筛：
+  - 优先 `direction=head`
+  - 优先 `target_has_img=True`
+  - 优先 `visual_relations / weak_visual_relations`
+  - 同时加入 relation 与目标实体去重约束，避免极端样本重复主导
+- 当前 6 个成功案例全部满足：
+  - `Full Model` 在 3 个 seed 上稳定优于 `Residual-only`
+  - `direction=head`
+  - `target_has_img=True`
+- 其中更适合作为正文主例的成功案例主要集中在：
+  - `佩戴方式`
+  - `裙长`
+  - `细分风格`
+- 这些样本共同支持的判断是：当预测目标位于 head 侧、实体具备图像、且关系更接近外观属性时，`Full Model` 可以形成清晰的局部收益
+- 另外也存在 `品牌 / 地市 / 是否精酿` 这类 `weak_visual_relations` 成功案例，它们更适合作为“局部、条件化收益并不等于纯视觉收益”的补充证据，而不是最核心的视觉主例
 
 ### 8.2 失败案例
-- [ ] 选择 `Residual-only` 优于 `Full Model` 的样本
-- [ ] 分析是否更依赖结构模式
+- [x] 选择 `Residual-only` 优于 `Full Model` 的样本
+- [x] 分析是否更依赖结构模式
+
+当前进展：
+- 当前 6 个失败案例全部满足：
+  - `Residual-only` 在 3 个 seed 上稳定优于 `Full Model`
+  - `direction=tail`
+  - `target_has_img=False`
+- 失败案例覆盖：
+  - `weak_visual_relations`
+  - `ambiguous_material_relations`
+  - `visual_relations`
+- 其中最适合作为正文主例的失败案例主要包括：
+  - `适用场景`
+  - `材质`
+  - `净含量`
+- 这些样本共同支持的判断是：当预测目标位于 tail 侧且目标实体无图时，结构路径通常显著优于多模态融合路径；即使关系名称看起来带有一定视觉色彩，最终表现仍可能被当前 split 下的结构可预测性主导
+- 因此 `8.2` 的正式结论可以写为：失败案例不是随机误差，而是与 `6.1`、`6.2`、`7.2` 中已经观察到的 `tail_noimg` 结构主导边界一致
 
 ### 8.3 案例结论
 - [ ] 总结哪些场景更适合多模态
@@ -335,6 +372,6 @@
 - [x] 主结果表完成
 - [x] `has_img / no_img` 分组结果完成
 - [x] relation type 分组结果完成
-- [ ] gate / residual 行为分析完成
-- [ ] 至少 2 组成功案例与 2 组失败案例完成
+- [x] gate / residual 行为分析完成
+- [x] 至少 2 组成功案例与 2 组失败案例完成
 - [ ] 论文主线最终定稿
