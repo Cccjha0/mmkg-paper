@@ -1,0 +1,236 @@
+\documentclass[11pt]{article}
+
+% ---------- Packages ----------
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage{enumitem}
+\usepackage{float}
+
+% ---------- Formatting ----------
+\onehalfspacing
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+% ---------- Metadata ----------
+\title{Understanding Bounded Multimodal Gain in OpenBG-IMG: A Protocol-Aware Analysis}
+\author{
+Author One\textsuperscript{1} \and
+Author Two\textsuperscript{1} \and
+Author Three\textsuperscript{2}
+}
+\date{}
+
+% Running title (copy into target journal template later)
+\newcommand{\runningtitle}{Bounded Multimodal Gain in OpenBG-IMG}
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+\textsuperscript{1} Department / School / University, City, Country \\
+\textsuperscript{2} Department / School / University, City, Country \\
+\vspace{0.5em}
+\textbf{Corresponding author:} Author Name \\
+\textbf{Email:} \texttt{corresponding.author@email.com}
+\end{center}
+
+\begin{abstract}
+Multimodal knowledge graph completion (MMKGC) augments link prediction with auxiliary modalities such as text and images. In product-oriented knowledge graphs, this setting is especially appealing because many relations appear visually grounded. However, under realistic incomplete-modality conditions, multimodal benefit is not uniformly available. This raises a more precise question: when does multimodal information help, and why does its gain remain bounded?
+
+We investigate this question on OpenBG-IMG under a unified protocol with filtered ranking, bidirectional evaluation, and three-seed reporting. We compare structural baselines with a family of multimodal variants, including Text-only, Early Fusion, Gate-only, Residual-only, and a Full Model that combines relation-aware fusion with residual compensation. Beyond overall comparison, we analyze multimodal gain through target-side image-availability subgroups, relation-type grouped evaluation, behavior analysis, and case analysis.
+
+The results reveal a clear but bounded pattern. Under the current protocol, Residual-only is the strongest overall model. The Full Model consistently outperforms simpler multimodal baselines, but does not surpass the stronger structural alternatives globally. The clearest multimodal-favorable regime appears in head-side queries with image-available targets (\texttt{head\_has\_img}), whereas the globally dominant \texttt{tail\_no\_img} regime continues to favor structure-heavy modeling. Behavior analysis further shows that the fusion branch remains active and relation-sensitive, while overall branch preference remains residual-dominant.
+
+We conclude that multimodal gain in OpenBG-IMG is real but bounded under the current protocol. Its effect depends on target position, modality availability, relation characteristics, and branch competition, rather than emerging as a uniformly dominant advantage. The main contribution of this work is therefore not a globally superior multimodal architecture, but a protocol-aware gain-boundary analysis of when multimodal information helps and why stronger structural compensation remains dominant overall.
+\end{abstract}
+
+\textbf{Keywords:} multimodal knowledge graph completion; link prediction; incomplete visual modality; protocol-aware evaluation; gain-boundary analysis
+
+\section{Introduction}
+Knowledge graph completion (KGC) aims to infer missing facts from observed triples. In multimodal knowledge graph completion (MMKGC), entities are further associated with auxiliary modalities such as text and images, making it possible to enrich entity representations beyond pure graph structure. In product-oriented knowledge graphs, this setting is especially appealing because many relations---such as style, length, or wearing mode---appear naturally compatible with visual evidence. A natural expectation therefore follows: once textual and visual information are incorporated into link prediction, multimodal models should outperform structure-only alternatives.
+
+Under incomplete-modality conditions, however, this expectation becomes less straightforward. In practical product graphs, image support is often missing, unevenly distributed, or only useful for a subset of prediction settings. The key issue is therefore not simply how to fuse more modalities, but whether the evaluation protocol actually allows multimodal information to matter in a stable way. This issue is particularly important in OpenBG-IMG, where modality availability is part of the evaluation condition rather than neutral background detail.
+
+Our experiments make this tension explicit. Under the unified OpenBG-IMG protocol used in this work, the strongest overall model is not the most complete multimodal architecture. \texttt{Residual-only} achieves the best global performance, and \texttt{ComplEx} also remains stronger than the \texttt{Full Model}. At the same time, \texttt{Full Model} consistently outperforms weaker multimodal baselines such as \texttt{Gate-only}, \texttt{Early Fusion}, and \texttt{Text-only}. The central empirical fact of the paper is therefore not global multimodal superiority, but the coexistence of two observations: multimodal fusion is useful, yet stronger structural compensation remains globally dominant under the current protocol.
+
+This leads to the main question addressed in the paper: when does multimodal information produce real gain in OpenBG-IMG, and why does that gain remain bounded? To answer this question, we evaluate structural baselines and a family of multimodal variants under a unified protocol with filtered ranking, bidirectional evaluation, and three-seed reporting. We then analyze the resulting gain boundary from four complementary perspectives: target-side image-availability subgroups, relation-type grouped evaluation, branch-level behavior, and representative case study.
+
+The resulting picture is clear. Under the current protocol, multimodal gain in OpenBG-IMG is real but bounded. It appears most clearly when the target side is image-available and the relation is compatible with appearance-aware evidence, but it does not become globally dominant because evaluation remains strongly influenced by structurally favorable regimes, especially tail-side no-image prediction. The contribution of this work is therefore not a globally superior multimodal architecture, but a protocol-aware gain-boundary analysis of when multimodal information helps and why stronger structural compensation remains dominant overall.
+
+\section{Related Work}
+\subsection{Multimodal Knowledge Graph Completion Foundations}
+Classical knowledge graph completion (KGC) focuses on learning from graph structure alone. Strong structural models such as ComplEx, TuckER, ConvE, and RotatE showed that carefully designed scoring functions can achieve competitive link prediction performance without external modalities \cite{trouillon2016complex,balazevic2019tucker,dettmers2018conve,sun2019rotate}. In product-oriented domains, however, structure alone often struggles to capture appearance-sensitive cues. This limitation motivated multimodal knowledge graph completion (MMKGC), where entities are associated with auxiliary signals such as text and images.
+
+Early MMKGC work showed that such modalities can enrich entity representations and improve completion quality. IKRL incorporated entity images into knowledge representation learning \cite{xie2017ikrl}, and multimodal translation-based approaches further combined structural, textual, and visual evidence within unified scoring formulations \cite{mousselly2018multimodal}. As the area matured, datasets such as MMKG enabled more systematic evaluation \cite{liu2019mmkg}, while recent surveys organized the broader landscape of multimodal KG construction, completion, alignment, and reasoning \cite{chen2024kgmultimodalsurvey}. Together, these studies establish that auxiliary modalities can help link prediction under suitable conditions.
+
+Our work builds on this foundation but asks a different question. Rather than asking whether multimodal information is useful in principle, we ask when it remains useful under incomplete visual support and why its gain stays bounded under the current protocol.
+
+\subsection{Adaptive and Relation-Aware Fusion}
+Once multimodal information became part of the KGC setting, a central design question emerged: how should different modalities be fused? The simplest strategies rely on direct concatenation, averaging, or additive combination \cite{mousselly2018multimodal}. Such methods are straightforward, but they implicitly assume that all modalities are similarly informative across entities, relations, and query settings. In practice, this assumption is often too strong. A product image may be highly informative for one relation yet only weakly relevant for another.
+
+A major line of research therefore studies how modality contribution should vary with relation or query context. RSME is especially relevant because it explicitly asks whether visual context is truly helpful for knowledge graph representation learning, introducing relation-sensitive mechanisms that can attenuate noisy visual evidence \cite{wang2021rsme}. HRGAT extends this idea through relation-specific graph attention \cite{liang2023hrgat}, while LAFA emphasizes link-aware fusion and aggregation, showing that the usefulness of images can vary even for the same entity across prediction settings \cite{shang2024lafa}. Existing adaptive-fusion work is primarily architecture-driven. By contrast, we treat relation-aware fusion as one component within a larger analytical framework and examine how its contribution behaves under the current protocol.
+
+\subsection{Missing-Modality, Modality Imbalance, and Robustness}
+A second major line of research recognizes that multimodal knowledge graphs rarely provide complete and uniformly reliable side information. In realistic settings, modalities may be missing, noisy, imbalanced, or only partially relevant to the current prediction target. This issue is particularly important in product-oriented graphs, where image quality, visual availability, and semantic usefulness vary substantially across entities and relations.
+
+Some studies treat missing modality as part of the task itself. MKBE incorporates multimodal values into knowledge base completion while also considering missing-value generation and imputation \cite{pezeshkpour2018mkbe}. Other work focuses more on robustness to modality conflict. MoSE separates modality-specific learning and uses ensemble-style inference to reduce interference between heterogeneous signals \cite{zhao2022mose}. Adaptive Modality Interaction Transformer further emphasizes modality imbalance and adaptive interaction, showing that robust MMKGC may require explicit mechanisms for handling unequal information density \cite{jian2025amit}. Our work is related to this line, but instead of proposing a recovery-oriented solution, we treat incomplete visual support as the central condition for diagnosing when multimodal gain remains visible and why it does not become globally dominant.
+
+\subsection{Structural Baselines and Careful Positioning}
+Any claim about multimodal gain is only meaningful when evaluated against strong structural baselines. Classical KGC models such as ComplEx and TuckER remain important reference points, while ConvE and RotatE further show how structural design alone can remain highly competitive \cite{trouillon2016complex,balazevic2019tucker,dettmers2018conve,sun2019rotate}. This matters for our paper in two ways. First, multimodal benefit must be judged against meaningful structural competition rather than only against weak multimodal references. Second, structural KGC research has repeatedly shown that evaluation protocol can strongly affect empirical conclusions; prior discussion around ConvE is a useful reminder that apparent gains must be interpreted in light of data regime and protocol design \cite{dettmers2018conve}.
+
+For this reason, we do not frame multimodal modeling as a replacement for structural approaches. The central empirical tension of our study is precisely that the strongest overall competitor is a stronger structural compensation path. We therefore position structural models such as ComplEx and TuckER as necessary anchors for interpretation rather than as ceremonial baselines.
+
+\subsection{Summary and Positioning of This Work}
+Prior work mainly follows three directions: establishing MMKGC as an extension of conventional KGC, developing increasingly adaptive fusion mechanisms, and addressing incomplete-modality realism through robustness-oriented strategies. Our work is related to all three directions, but differs in both paper identity and research question. We do not primarily claim a globally superior multimodal architecture. Instead, we ask a protocol-aware question: under incomplete visual support, when does multimodal information produce real gain, and why does that gain remain bounded rather than globally dominant?
+
+In this sense, our paper complements prior MMKGC research by shifting the emphasis from architecture-first improvement to gain-boundary diagnosis. It treats multimodal usefulness not as a single aggregate outcome, but as a conditional phenomenon shaped by target position, modality availability, relation characteristics, and competition between fusion and structural compensation. This positioning motivates the task setting and protocol described in the next section.
+
+\section{Task Setting and Protocol}
+OpenBG-IMG is the evaluation setting used throughout this work. The task is link prediction on a product-oriented multimodal knowledge graph in which entities are associated with textual descriptions and, for a subset of entities, image support. Our goal is not only to compare models on a shared benchmark, but to analyze when multimodal information produces measurable benefit under incomplete visual conditions. For that reason, all final paper-stage results are reported under a single unified protocol rather than a mixture of exploratory settings.
+
+A central property of this protocol is the current \texttt{paper\_split}. Figure~\ref{fig:protocol_asymmetry} illustrates the protocol asymmetry of target-side image availability under this split. Head-side targets remain partly image-available, whereas tail-side targets are effectively always \texttt{no\_img} in the final test distribution. This asymmetry is not a minor implementation artifact. It is the main reason why the paper later interprets multimodal gain in a protocol-aware manner rather than as a universal property of MMKGC.
+
+\begin{figure}[t]
+    \centering
+    % \includegraphics[width=0.9\linewidth]{figures/figure1_protocol_asymmetry.pdf}
+    \fbox{\parbox[c][5cm][c]{0.9\linewidth}{\centering Figure 1 placeholder}}
+    \caption{Figure 1 illustrates the protocol asymmetry of target-side image availability in the current OpenBG-IMG \texttt{paper\_split}. Head-side targets remain partly image-available, whereas tail-side targets are entirely \texttt{no\_img} under the current test distribution. As a result, target position is entangled with modality availability, and subsequent subgroup results should not be interpreted as fully symmetric evidence about multimodal usefulness.}
+    \label{fig:protocol_asymmetry}
+\end{figure}
+
+All final results use a shared model-selection and evaluation pipeline. For each run, the reported checkpoint is the \texttt{best.ckpt} selected according to development performance. Final metrics are then computed on the test set using filtered ranking. The reported metrics include MRR, Hits@1, Hits@3, and Hits@10, and all headline comparisons use \texttt{direction=both}, so that both head prediction and tail prediction are included in evaluation. Subgroup evaluation, relation-type grouped evaluation, behavior summaries, and case extraction all trace back to the same paper-stage runs, the same checkpoint-selection rule, and the same filtered-ranking setup. This consistency is essential because it allows later analyses to be interpreted as decompositions of the same main result rather than as separate experiments conducted under incompatible settings.
+
+Because the current \texttt{paper\_split} is asymmetric, subgroup analysis must also be defined in a protocol-aware way. Rather than assuming both directions contain \texttt{has\_img} and \texttt{no\_img} targets, we analyze three meaningful subgroups: \texttt{head\_has\_img}, \texttt{head\_no\_img}, and \texttt{tail\_no\_img}. We do not define \texttt{tail\_has\_img} for the final analysis because it does not meaningfully exist under the current test distribution. Relation-type analysis follows the same principle. Relations are grouped into three coarse categories---\texttt{visual\_relations}, \texttt{weak\_visual\_relations}, and \texttt{ambiguous\_material\_relations}---and all grouped metrics are computed from the same selected paper-stage runs. For finer-grained interpretation, relation-level analysis additionally uses a minimum-support filter so that extremely small-support relations do not dominate the narrative.
+
+Taken together, these protocol details directly shape the paper's central conclusion. Under the current protocol, the combination of target-position asymmetry, image-availability asymmetry, and branch competition produces a specific empirical pattern: multimodal gain is visible but local, while stronger structural compensation remains globally dominant. The findings of this work should therefore be interpreted as protocol-aware empirical conclusions rather than as universal claims about MMKGC in general.
+
+\section{Models and Compared Methods}
+To study multimodal gain under missing-visual conditions, we compare a family of internal multimodal models together with classical structural baselines. The purpose of this comparison is not only to identify which model obtains the best overall score, but also to isolate the roles of text grounding, direct multimodal fusion, relation-aware fusion, structural compensation, and branch interaction under a unified protocol. For that reason, the compared methods are organized as an analytical family rather than as unrelated standalone systems.
+
+Our internal model family consists of five variants: \texttt{Text-only}, \texttt{Early Fusion}, \texttt{Gate-only}, \texttt{Residual-only}, and \texttt{Full Model}. \texttt{Text-only} provides the simplest semantic reference, allowing us to separate the effect of multimodality from the broader effect of semantic enrichment. \texttt{Early Fusion} serves as the most direct multimodal baseline, testing whether straightforward combination of text and image information is already sufficient. \texttt{Gate-only} introduces relation-aware multimodal fusion without an explicit residual compensation branch, making it the cleanest reference for understanding what the \texttt{Full Model} gains from adding structural fallback. \texttt{Residual-only} removes the fusion path and retains only structural compensation, providing the strongest structure-heavy alternative inside the same implementation family. \texttt{Full Model} combines both relation-aware fusion and residual compensation and serves as the main diagnostic model of the paper rather than an assumed winner.
+
+This comparison is particularly important because some variants are not merely ablations. Under the current protocol, \texttt{Residual-only} is the strongest model in the internal family and therefore the most informative competitor for diagnosing why the complete multimodal architecture does or does not succeed. \texttt{Full Model}, in turn, is useful precisely because it lets us ask whether fusion and residual pathways are genuinely complementary and under what conditions the multimodal path contributes enough signal to matter.
+
+Among the structural baselines, \texttt{ComplEx} is included as a classical structural model under the same unified protocol and emerges as a genuinely competitive structural baseline in the final results. \texttt{TuckER} is also included as a classical structural reference model under the same pipeline, but it does not emerge as competitive under the current OpenBG-IMG protocol. This distinction matters for interpretation: the empirical tension of the paper is not between the \texttt{Full Model} and a weak straw baseline, but between the complete multimodal model and stronger structural alternatives.
+
+The comparison logic therefore serves the gain-boundary analysis directly. It lets us ask whether multimodal information helps beyond text-only semantics, whether relation-aware fusion improves over direct fusion, whether structural compensation remains stronger than multimodal fusion, and how the complete model behaves when both pathways are available. These are exactly the questions required for the paper's analysis-driven framing.
+
+\section{Main Results}
+Table~\ref{tab:main_results} reports the overall comparison under the unified OpenBG-IMG protocol. All results are evaluated on the test split using filtered ranking, \texttt{direction=both}, and three-seed aggregation. Under this setting, the overall ordering is \texttt{Residual-only > ComplEx > Full Model > Gate-only > Early Fusion > Text-only > TuckER}. This ranking establishes the main empirical tension of the paper: the strongest overall model is not the most complete multimodal architecture.
+
+\begin{table}[t]
+    \centering
+    \caption{Table 1 reports the overall test performance of all compared models under the unified OpenBG-IMG protocol, using filtered ranking, \texttt{direction=both}, and three-seed reporting. The results establish the central empirical tension of the paper: although the \texttt{Full Model} is the strongest variant within the internal multimodal family, the strongest overall model under the current protocol remains \texttt{Residual-only}, with \texttt{ComplEx} also outperforming \texttt{Full Model}.}
+    \label{tab:main_results}
+    % \input{tables/table1_main_results.tex}
+    \fbox{\parbox[c][4cm][c]{0.9\linewidth}{\centering Table 1 placeholder}}
+\end{table}
+
+At the same time, Table~\ref{tab:main_results} should not be read as evidence that multimodal modeling is ineffective. Although \texttt{Full Model} is not the strongest model overall, it consistently outperforms the simpler multimodal baselines, including \texttt{Gate-only}, \texttt{Early Fusion}, and \texttt{Text-only}. Under the current protocol, it is therefore best understood as the strongest variant within the internal multimodal family rather than as the strongest model overall. The correct interpretation is not that multimodal information fails to help, but that its contribution remains insufficient to overcome the strongest structural competitors.
+
+Table~\ref{tab:main_results} also clarifies that the main competition faced by \texttt{Full Model} comes from meaningful structural alternatives rather than trivial baselines. \texttt{Residual-only} achieves the best overall performance, and \texttt{ComplEx} also remains stronger than \texttt{Full Model}. A more precise question therefore follows from the main table: if multimodal information is genuinely useful, why does that usefulness fail to become globally dominant under the current protocol?
+
+Answering this question requires moving beyond aggregate ranking. The overall results in Table~\ref{tab:main_results} combine prediction settings with different modality conditions and therefore do not reveal where multimodal gain actually appears or why it remains bounded. The next section addresses this issue by decomposing the overall result into protocol-aware subgroups and relation-type conditions.
+
+\section{Gain-Boundary Analysis}
+Before interpreting subgroup performance, the protocol asymmetry of the current split must be made explicit. Figure~\ref{fig:protocol_asymmetry} illustrates the key protocol asymmetry underlying the current paper split: head-side targets remain partly image-available, whereas tail-side targets are entirely \texttt{no\_img} under the current test distribution. Consequently, head-side and tail-side evaluation should not be treated as fully symmetric evidence about multimodal usefulness.
+
+Table~\ref{tab:subgroup_results} decomposes the overall ranking into protocol-aware target-side image-availability subgroups. Once this decomposition is introduced, the aggregate result becomes substantially more informative. Although the overall ordering remains \texttt{Residual-only > Full Model > Gate-only}, the subgroup rankings differ markedly across conditions. In \texttt{head\_has\_img}, the ordering becomes \texttt{Gate-only > Full Model > Residual-only}, identifying the clearest multimodal-favorable regime under the current protocol. In \texttt{head\_no\_img}, the ordering becomes \texttt{Full Model > Gate-only > Residual-only}, showing that the complete model remains more stable than pure gated fusion even when image support is absent on the head side. By contrast, the globally dominant \texttt{tail\_no\_img} regime continues to favor structural modeling and pulls the aggregate result back toward \texttt{Residual-only}.
+
+\begin{table}[t]
+    \centering
+    \caption{Table 2 reports subgroup performance by target-side image availability under the current protocol. Because the current OpenBG-IMG \texttt{paper\_split} is asymmetric, only three formal subgroups are meaningful: \texttt{head\_has\_img}, \texttt{head\_no\_img}, and \texttt{tail\_no\_img}. The results show that multimodal benefit is local rather than globally uniform: the clearest multimodal-favorable regime appears in \texttt{head\_has\_img}, whereas the globally dominant \texttt{tail\_no\_img} regime continues to favor stronger structural modeling.}
+    \label{tab:subgroup_results}
+    % \input{tables/table2_subgroup_results.tex}
+    \fbox{\parbox[c][4cm][c]{0.9\linewidth}{\centering Table 2 placeholder}}
+\end{table}
+
+The subgroup evidence therefore supports a bounded interpretation of multimodal gain. Multimodal information is not uniformly helpful across the task, yet neither is it globally irrelevant. Its clearest benefit appears when the prediction target is head-side and image-available. Once evaluation moves into the structurally dominant tail-side no-image regime, stronger structural compensation becomes more reliable than multimodal fusion.
+
+Table~\ref{tab:relation_grouped} extends this analysis from target-side modality condition to relation-type condition. Across all three coarse relation groups---\texttt{visual\_relations}, \texttt{weak\_visual\_relations}, and \texttt{ambiguous\_material\_relations}---the grouped ordering remains \texttt{Residual-only > Full Model > Gate-only}. This shows that relation dependence is real, but it does not overturn stronger structural competition at the grouped level. At the same time, \texttt{Full Model} remains consistently stronger than \texttt{Gate-only} across all three groups, indicating that relation characteristics do affect where multimodal benefit is more plausible even though that effect remains bounded.
+
+\begin{table}[t]
+    \centering
+    \caption{Table 3 reports relation-type grouped evaluation under the unified OpenBG-IMG protocol. The grouped results show that multimodal gain is relation-dependent, but not globally dominant: although relation characteristics affect where multimodal benefit is more plausible, stronger structural competition remains generally stronger at the grouped level. The table therefore supports a gain-boundary interpretation rather than a blanket claim that visually grounded relations always favor multimodal models.}
+    \label{tab:relation_grouped}
+    % \input{tables/table3_relation_grouped.tex}
+    \fbox{\parbox[c][4cm][c]{0.9\linewidth}{\centering Table 3 placeholder}}
+\end{table}
+
+Taken together, Figure~\ref{fig:protocol_asymmetry}, Table~\ref{tab:subgroup_results}, and Table~\ref{tab:relation_grouped} establish the central gain-boundary conclusion of the paper. Under the current protocol, multimodal gain in OpenBG-IMG is real but bounded. Its visibility depends on both target-side modality condition and relation characteristics, while the globally dominant evaluation regimes remain more favorable to stronger structural compensation.
+
+\section{Behavior Analysis}
+The gain-boundary analysis establishes where multimodal gain appears, but it does not yet explain why that gain remains bounded. In particular, the earlier sections reveal a stable empirical pattern: \texttt{Full Model} consistently improves over \texttt{Gate-only}, yet still fails to surpass \texttt{Residual-only} overall. The central issue is therefore not whether multimodal fusion works at all, but how the fusion branch interacts with structural compensation inside the complete model.
+
+Table~\ref{tab:branch_preference} reports the global residual and mixture statistics at the best epoch. As shown in Table~\ref{tab:branch_preference}, the final mixture clearly favors the residual branch over the fusion branch. The \texttt{Full Model} is therefore residual-dominant under the current protocol: its residual mixture weight is substantially larger than its fusion mixture weight. This directly helps explain why the model improves over \texttt{Gate-only} while still remaining below \texttt{Residual-only} in the overall ranking.
+
+\begin{table}[t]
+    \centering
+    \caption{Table 4 reports the global residual and mixture statistics at the best epoch. The \texttt{Full Model} shows a clearly residual-dominant preference, with \texttt{mix\_w\_residual} substantially larger than \texttt{mix\_w\_fusion}. At the same time, non-zero fusion and projection gradients indicate that the fusion branch remains active. Together, these results support a residual-dominant asymmetric complementarity interpretation rather than a simple fusion-collapse explanation.}
+    \label{tab:branch_preference}
+    % \input{tables/table4_branch_preference.tex}
+    \fbox{\parbox[c][4cm][c]{0.9\linewidth}{\centering Table 4 placeholder}}
+\end{table}
+
+However, Table~\ref{tab:branch_preference} also shows that the fusion branch remains active rather than collapsing to zero. The fusion mixture and its associated gradient statistics remain non-zero, indicating that the fusion branch still participates in learning. The appropriate interpretation is therefore not fusion failure, but residual-dominant asymmetric complementarity: the complete model still uses fusion, yet under the current protocol its final preference is drawn more strongly toward the residual path.
+
+Table~\ref{tab:gate_behavior} complements this interpretation by showing that gate behavior remains stable and condition-sensitive rather than fixed. In both \texttt{Gate-only} and \texttt{Full Model}, \texttt{g\_mean\_img} is lower than \texttt{g\_mean\_noimg}, indicating systematic differences across modality conditions. Moreover, the global gate mean of \texttt{Full Model} is lower than that of \texttt{Gate-only}, suggesting that residual competition changes gate behavior rather than simply preserving the same fusion preference.
+
+\begin{table}[t]
+    \centering
+    \caption{Table 5 summarizes global gate statistics at the best epoch. The results show that gate behavior is stable and condition-sensitive rather than fixed: both \texttt{Gate-only} and \texttt{Full Model} exhibit lower gate means under image-available conditions than under no-image conditions, and the complete model maintains a lower global gate mean than \texttt{Gate-only} under residual competition. At the same time, gate responsiveness alone does not explain the full performance pattern, which is why gate analysis must be interpreted together with the residual-dominance evidence in Table 4.}
+    \label{tab:gate_behavior}
+    % \input{tables/table5_gate_behavior.tex}
+    \fbox{\parbox[c][4cm][c]{0.9\linewidth}{\centering Table 5 placeholder}}
+\end{table}
+
+Taken together, Table~\ref{tab:branch_preference} and Table~\ref{tab:gate_behavior} support a coherent mechanism-level interpretation. The gate branch is neither fixed nor trivial, but its contextual responsiveness is not strong enough to overcome the stronger residual preference that emerges in the complete model. This is why the \texttt{Full Model} exhibits real but bounded multimodal benefit: fusion remains active, yet final decision-making is still shaped more strongly by residual compensation under the current protocol.
+
+\section{Case Study}
+The purpose of this section is not to replace the earlier statistical analyses with selected examples, but to validate them at the sample level. Table~\ref{tab:case_study} summarizes representative success and failure cases selected under fixed rules from the completed paper-stage runs. These cases are therefore not isolated anecdotes; they are chosen to align with the subgroup, relation-type, and behavior patterns established earlier.
+
+\begin{table}[t]
+    \centering
+    \caption{Table 6 summarizes representative success and failure cases selected under fixed rules from the completed paper-stage runs. The selected success cases align with the image-available head-side regime identified in the subgroup analysis, whereas the selected failure cases align with the structure-dominant tail-side no-image regime. The table therefore serves as sample-level validation of the broader gain-boundary conclusions rather than as a replacement for the earlier statistical analyses.}
+    \label{tab:case_study}
+    % \input{tables/table6_case_study.tex}
+    \fbox{\parbox[c][4cm][c]{0.9\linewidth}{\centering Table 6 placeholder}}
+\end{table}
+
+As shown in Table~\ref{tab:case_study}, the selected success cases cluster in head-side image-available queries, whereas the selected failure cases cluster in tail-side no-image conditions. This pattern mirrors the earlier gain-boundary analysis closely. Success cases appear in the multimodal-favorable regime identified by Table~\ref{tab:subgroup_results}, while failure cases appear in the structurally dominant regime that pulls the overall ranking back toward \texttt{Residual-only}.
+
+The \texttt{wearing\_mode} case provides the clearest success example in the main-text set. It is a head-side query with an image-available target, and the relation itself is directly compatible with appearance-based evidence. Under this condition, \texttt{Full Model} substantially outperforms \texttt{Residual-only}, providing a concrete sample-level demonstration that multimodal gain can be both real and large when the query setting is favorable.
+
+By contrast, the \texttt{usage\_scenario} case illustrates the opposite regime. It is a tail-side no-image query, and \texttt{Residual-only} ranks the correct answer perfectly while \texttt{Full Model} performs extremely poorly. This example shows why overall multimodal dominance does not emerge under the current protocol: once the task moves into a structure-dominant, image-missing setting, stronger structural compensation becomes far more reliable than multimodal fusion.
+
+The value of Table~\ref{tab:case_study} is therefore confirmatory. It shows that the statistical and mechanism-level conclusions of the paper are also visible at the sample level. Multimodal gain is conditional, and structural dominance remains decisive in the globally dominant regimes. The case study therefore strengthens the gain-boundary narrative rather than introducing a separate one.
+
+\section{Discussion, Limitations, and Conclusion}
+The completed experiments show that multimodal information is useful under the current OpenBG-IMG protocol, but not uniformly useful. \texttt{Full Model} is clearly stronger than simpler multimodal baselines such as \texttt{Gate-only} and \texttt{Early Fusion}, which means that multimodal fusion is not failing in a trivial sense. At the same time, \texttt{Residual-only} remains the strongest overall model, and \texttt{ComplEx} also outperforms \texttt{Full Model} globally. The relevant question is therefore not why multimodal information provides no value, but why its value is insufficient to become dominant at the task level.
+
+The earlier analyses suggest that the answer lies in the interaction of three factors. First, multimodal gain depends on target-side modality condition: the clearest favorable regime appears in \texttt{head\_has\_img}, whereas the overall evaluation remains heavily shaped by \texttt{tail\_no\_img}. Second, multimodal gain depends on relation context: relation characteristics affect where multimodal benefit is more plausible, but grouped relation results still do not overturn stronger structural competition. Third, branch preference inside the \texttt{Full Model} remains residual-dominant: the fusion branch is active and condition-sensitive, yet final preference is still drawn more strongly toward structural compensation. Together, these observations explain why multimodal usefulness can be real without becoming globally dominant.
+
+This should not be overinterpreted as evidence that multimodal modeling is unnecessary. The subgroup analysis shows a clear multimodal-favorable regime, the relation-type analysis shows that \texttt{Full Model} remains consistently stronger than \texttt{Gate-only} at the grouped level, the behavior analysis shows that the fusion branch is neither dead nor fixed, and the case study confirms that multimodal evidence can produce large sample-level gains under favorable conditions. The contribution of this work is therefore not to reject multimodal modeling, but to characterize its realistic boundary under missing-visual conditions.
+
+The main limitation of the current study is that its conclusions are protocol-bound. In particular, the current OpenBG-IMG \texttt{paper\_split} is asymmetric: head-side targets remain partly image-available, whereas tail-side targets are entirely \texttt{no\_img}. Target position is therefore entangled with modality availability, and the resulting gain-boundary conclusions should be interpreted as applying under the current protocol rather than as universal claims about MMKGC. A second limitation is that the present work is analysis-driven rather than benchmark-redefining. We do not construct a new split to remove the asymmetry, because doing so would answer a different question from the one pursued here. A third limitation is that our mechanism interpretation remains empirical rather than causal: the behavior analyses strongly support residual-dominant asymmetric complementarity, but they do not claim a fully closed-form theoretical account of branch interaction.
+
+These limitations suggest several directions for future work. One direction is to evaluate the same model family under alternative splits with more symmetric modality availability, in order to test how much the current conclusions depend on protocol design. A second direction is to study stronger or more explicitly controlled multimodal compensation strategies that may preserve fusion benefit without allowing residual preference to dominate so strongly. A third direction is to extend the analysis beyond OpenBG-IMG to additional product-oriented or multimodal knowledge graph benchmarks, thereby testing whether the same gain boundary appears in other incomplete-modality settings.
+
+In summary, this work shows that multimodal gain in OpenBG-IMG is real but bounded under the current protocol. The strongest overall model remains \texttt{Residual-only}, while the \texttt{Full Model} consistently improves over weaker multimodal baselines without surpassing the strongest structural alternatives globally. The main contribution of the paper is therefore not a globally superior multimodal architecture, but a protocol-aware gain-boundary analysis of when multimodal information helps and why stronger structural compensation remains globally dominant.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
