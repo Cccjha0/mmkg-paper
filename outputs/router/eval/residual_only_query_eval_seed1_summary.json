@@ -1,0 +1,17 @@
+{
+  "expert_name": "residual_only",
+  "split": "dev",
+  "seed": 1,
+  "n_rows": 10000,
+  "direction_counts": {
+    "head": 5000,
+    "tail": 5000
+  },
+  "target_regime_counts": {
+    "head_has_img": 3507,
+    "head_no_img": 1493,
+    "tail_no_img": 5000
+  },
+  "ckpt_path": "ml\\artifacts\\outputs\\openbg_img_residual_only\\20260326_171401_seed1\\best.ckpt",
+  "out_path": "outputs/router/dev/residual_only_query_eval_seed1.csv"
+}

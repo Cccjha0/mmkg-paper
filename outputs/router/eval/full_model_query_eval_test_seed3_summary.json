@@ -1,0 +1,17 @@
+{
+  "expert_name": "full_model",
+  "split": "test",
+  "seed": 3,
+  "n_rows": 20000,
+  "direction_counts": {
+    "head": 10000,
+    "tail": 10000
+  },
+  "target_regime_counts": {
+    "head_has_img": 7048,
+    "head_no_img": 2952,
+    "tail_no_img": 10000
+  },
+  "ckpt_path": "ml\\artifacts\\outputs\\openbg_img_gated_vec_res_rel\\20260327_211759_seed3\\best.ckpt",
+  "out_path": "outputs/router/test/full_model_query_eval_seed3.csv"
+}

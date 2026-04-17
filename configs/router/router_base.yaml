@@ -1,0 +1,9 @@
+output_dir: outputs/router
+split_train: dev
+split_test: test
+fusion_expert: gate_only
+struct_expert: residual_only
+label_delta: 0.01
+routing_threshold: 0.5
+seed_list: [1, 2, 3]
+

@@ -1,0 +1,18 @@
+{
+  "delta": "0.00",
+  "feature_set": "FULL",
+  "threshold": 0.5,
+  "n_samples": 30000,
+  "models": {
+    "xgb": {
+      "n_samples": 30000,
+      "positive_rate": 0.48106666666666664,
+      "pred_positive_rate": 0.48696666666666666,
+      "auc": 0.9614216386433141,
+      "f1": 0.8941840845700906,
+      "precision": 0.8887671983024164,
+      "recall": 0.8996674057649667,
+      "balanced_accuracy": 0.8976433123377763
+    }
+  }
+}
