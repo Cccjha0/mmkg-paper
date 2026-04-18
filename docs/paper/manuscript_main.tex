@@ -635,23 +635,24 @@ The ablation evidence strongly argues against a trivial explanation of the routi
 Relation-group evaluation remains part of the paper because the earlier bounded-gain analysis showed that multimodal usefulness is not determined by target regime alone. Relation characteristics also matter. We therefore retain relation-group evidence in the experiments section as supporting analysis for the selective-activation narrative.
 
 \paragraph{Main findings.}
-Using the focused three-model comparison (\texttt{Gate-only}, \texttt{Full Model}, \texttt{Residual-only}), the grouped ordering remains stable across all three coarse relation groups:
+We keep a focused three-model comparison among \texttt{Gate-only}, \texttt{Full Model}, and \texttt{Residual-only}. Across all three coarse relation groups, the ordering remains stable: \texttt{Residual-only} performs best, \texttt{Full Model} ranks second, and \texttt{Gate-only} remains third.
 
-\begin{enumerate}[leftmargin=1.5em]
-    \item \texttt{Residual-only}
-    \item \texttt{Full Model}
-    \item \texttt{Gate-only}
-\end{enumerate}
+\begin{table}[t]
+    \centering
+    \caption{Relation-group MRR for the focused three-model comparison.}
+    \label{tab:relation_group_results}
+    \begin{tabular}{lccc}
+        \toprule
+        Group & Gate-only & Full Model & Residual-only \\
+        \midrule
+        \texttt{visual\_relations} & 0.1350 & 0.1826 & 0.2691 \\
+        \texttt{weak\_visual\_relations} & 0.2194 & 0.2252 & 0.3197 \\
+        \texttt{ambiguous\_material\_relations} & 0.1337 & 0.1948 & 0.2842 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
-The grouped MRR values are:
-
-\begin{itemize}
-    \item \texttt{visual\_relations}: \texttt{Gate-only 0.1350}, \texttt{Full Model 0.1826}, \texttt{Residual-only 0.2691}
-    \item \texttt{weak\_visual\_relations}: \texttt{Gate-only 0.2194}, \texttt{Full Model 0.2252}, \texttt{Residual-only 0.3197}
-    \item \texttt{ambiguous\_material\_relations}: \texttt{Gate-only 0.1337}, \texttt{Full Model 0.1948}, \texttt{Residual-only 0.2842}
-\end{itemize}
-
-With the \texttt{MIN20} support filter at the relation level, \texttt{Full Model} outperforms \texttt{Gate-only} on most retained relations, but surpasses \texttt{Residual-only} on only a minority of them.
+With the \texttt{MIN20} support filter at the relation level, \texttt{Full Model} still outperforms \texttt{Gate-only} on most retained relations, but surpasses \texttt{Residual-only} on only a minority of them.
 
 \paragraph{Interpretation.}
 These results do not support a naive claim that ``visual relations as a whole favor multimodal models.'' Instead, they support the more careful statement that multimodal gain is relation-dependent but still bounded. This makes relation-group evidence a useful supporting bridge between the earlier gain-boundary analysis and the present routing results. It helps justify why query-level selective activation is necessary: relation conditions matter, but not in a sufficiently simple way to be handled by a single coarse rule.
