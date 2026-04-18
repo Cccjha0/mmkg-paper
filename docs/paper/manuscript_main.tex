@@ -138,6 +138,31 @@ The most important property of the current \texttt{paper\_split} is the asymmetr
 
 This asymmetry is central to the paper. It explains why multimodal gain can appear clearly in some local regimes, especially when the prediction target is image-supported, while overall performance can still remain dominated by structure-favorable conditions. In the earlier analysis-oriented version of the paper, this asymmetry motivated a bounded-gain interpretation. In the present gain-threshold version, it also motivates the method itself: if multimodal gain depends on protocol-shaped query conditions, then multimodal activation should be treated as a selective decision rather than a globally uniform default.
 
+\begin{figure}[t]
+    \centering
+    \setlength{\fboxsep}{6pt}
+    \begin{tabular}{m{0.28\textwidth} m{0.28\textwidth} m{0.28\textwidth}}
+        \centering \textbf{Head-side targets} \\
+        \centering {\small Partially image-available} \\
+        \centering \fbox{\parbox[c][1.0cm][c]{0.78\linewidth}{\centering \texttt{head\_has\_img}}} \\
+        \centering \fbox{\parbox[c][1.0cm][c]{0.78\linewidth}{\centering \texttt{head\_no\_img}}}
+        &
+        \centering \textbf{Target position is intrinsically entangled} \\
+        \centering \textbf{with modality availability} \\
+        \\
+        \centering {\small Bidirectional evaluation} \\
+        \centering {\small becomes inherently asymmetric}
+        &
+        \centering \textbf{Tail-side targets} \\
+        \centering {\small Fully image-unavailable} \\
+        \centering \fbox{\parbox[c][2.4cm][c]{0.78\linewidth}{\centering \texttt{tail\_no\_img}}}
+    \end{tabular}
+    \caption{Role--modality asymmetry in OpenBG-IMG. Tail entities are image-unavailable, whereas head entities are only partially image-available. As a result, target position is intrinsically entangled with modality availability in bidirectional link prediction, yielding three meaningful target-side regimes: \texttt{head\_has\_img}, \texttt{head\_no\_img}, and \texttt{tail\_no\_img}.}
+    \label{fig:protocol_asymmetry}
+\end{figure}
+
+Figure~\ref{fig:protocol_asymmetry} makes this role--modality asymmetry explicit. The subgroup design used later in the paper is therefore not an artificial decomposition introduced for convenience; instead, it makes the dataset's intrinsic target-side modality regimes explicit. This is also why later subgroup results should not be interpreted as fully symmetric evidence about multimodal usefulness. Under the current setting, the question is not whether multimodal information helps equally in all directions, but where it remains available and informative enough to matter.
+
 \subsection{Unified Training and Selection Protocol}
 All models are trained under a unified train/dev/test workflow. The development split is used only for model selection and early stopping, while all final paper-facing metrics are reported on the test split. This separation is important because the current paper moves from analysis to method. The router and all paper conclusions must therefore remain grounded in development-side supervision and test-side reporting, without mixing exploratory observations into final claims.
 
@@ -489,22 +514,24 @@ Table~\ref{tab:official_main_results} reports the official seven-model compariso
 Using the official aggregated line, \texttt{Residual-only} reaches \texttt{0.2930 $\pm$ 0.0008} MRR, \texttt{ComplEx} reaches \texttt{0.2588 $\pm$ 0.0018}, and \texttt{Full Model} reaches \texttt{0.2100 $\pm$ 0.0097}. Within the internal multimodal family, \texttt{Full Model} is therefore the strongest multimodal variant, outperforming \texttt{Gate-only} (\texttt{0.1739 $\pm$ 0.0044}), \texttt{Early Fusion} (\texttt{0.1666 $\pm$ 0.0013}), and \texttt{Text-only} (\texttt{0.1261 $\pm$ 0.0043}).
 
 \begin{table}[t]
-    \centering
-    \caption{Official seven-model comparison under the paper-facing \texttt{test\_metrics.json} aggregation line. For compile-ready cleanup, this table summarizes the MRR values that are already used by the surrounding text.}
-    \label{tab:official_main_results}
-    \begin{tabular}{lc}
-        \toprule
-        Model & MRR \\
-        \midrule
-        \texttt{Residual-only} & $0.2930 \pm 0.0008$ \\
-        \texttt{ComplEx} & $0.2588 \pm 0.0018$ \\
-        \texttt{Full Model} & $0.2100 \pm 0.0097$ \\
-        \texttt{Gate-only} & $0.1739 \pm 0.0044$ \\
-        \texttt{Early Fusion} & $0.1666 \pm 0.0013$ \\
-        \texttt{Text-only} & $0.1261 \pm 0.0043$ \\
-        \texttt{TuckER} & not competitive under current protocol \\
-        \bottomrule
-    \end{tabular}
+\centering
+\caption{Overall test performance under the unified OpenBG-IMG protocol with filtered ranking, \texttt{direction=both}, and three-seed reporting.}
+\label{tab:official_main_results}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lcccc}
+\toprule
+Model & MRR & Hits@1 & Hits@3 & Hits@10 \\
+\midrule
+\texttt{Residual-only} & 0.2930 $\pm$ 0.0008 & 0.2328 $\pm$ 0.0003 & 0.3306 $\pm$ 0.0021 & 0.4031 $\pm$ 0.0017 \\
+\texttt{ComplEx} & 0.2588 $\pm$ 0.0018 & 0.1920 $\pm$ 0.0026 & 0.2946 $\pm$ 0.0012 & 0.3871 $\pm$ 0.0014 \\
+\texttt{Full Model} & 0.2100 $\pm$ 0.0097 & 0.1167 $\pm$ 0.0107 & 0.2658 $\pm$ 0.0131 & 0.3794 $\pm$ 0.0116 \\
+\texttt{Gate-only} & 0.1739 $\pm$ 0.0044 & 0.0946 $\pm$ 0.0108 & 0.2113 $\pm$ 0.0030 & 0.3261 $\pm$ 0.0010 \\
+\texttt{Early Fusion} & 0.1666 $\pm$ 0.0013 & 0.0905 $\pm$ 0.0008 & 0.1998 $\pm$ 0.0034 & 0.3155 $\pm$ 0.0022 \\
+\texttt{Text-only} & 0.1261 $\pm$ 0.0043 & 0.0524 $\pm$ 0.0050 & 0.1499 $\pm$ 0.0036 & 0.2761 $\pm$ 0.0046 \\
+\texttt{TuckER} & 0.0890 $\pm$ 0.0024 & 0.0360 $\pm$ 0.0019 & 0.1054 $\pm$ 0.0042 & 0.1892 $\pm$ 0.0012 \\
+\bottomrule
+\end{tabular}
 \end{table}
 
 \paragraph{Interpretation.}
@@ -554,11 +581,27 @@ Although the routing table shows overall improvement, overall metrics alone do n
     \item \texttt{tail\_no\_img}
 \end{itemize}
 
-\paragraph{Main subgroup pattern.}
-The subgroup results show a clear and coherent pattern.
+\paragraph{Focused three-model subgroup view.}
+Table~\ref{tab:subgroup_results} reports subgroup MRR by target-side image availability for the three core diagnostic variants---\texttt{Gate-only}, \texttt{Full Model}, and \texttt{Residual-only}. Once this decomposition is introduced, the aggregate result becomes substantially more informative. Although the overall ordering remains \texttt{Residual-only > Full Model > Gate-only}, the subgroup rankings differ markedly across conditions. In \texttt{head\_has\_img}, the ordering becomes \texttt{Gate-only > Full Model > Residual-only}, identifying the clearest multimodal-favorable regime under the current protocol. In \texttt{head\_no\_img}, the ordering becomes \texttt{Full Model > Gate-only > Residual-only}, showing that the complete model remains more stable than pure gated fusion even when image support is absent on the head side. By contrast, the globally dominant \texttt{tail\_no\_img} regime continues to favor structural modeling and pulls the aggregate result back toward \texttt{Residual-only}.
 
-For the fixed experts, the contrast remains sharp. \texttt{Gate-only} performs best among the fixed endpoints in \texttt{head\_has\_img} (\texttt{0.01235}), whereas \texttt{Residual-only} dominates the globally stronger \texttt{tail\_no\_img} regime (\texttt{0.58325}). \texttt{Full Model} lies between them, reflecting the earlier bounded-gain picture.
+\begin{table}[t]
+\centering
+\caption{Subgroup MRR by target-side image availability under the current protocol. All cells report mean $\pm$ standard deviation over seeds 1, 2, and 3.}
+\label{tab:subgroup_results}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lccc}
+\toprule
+Model & \texttt{head\_has\_img} & \texttt{head\_no\_img} & \texttt{tail\_no\_img} \\
+\midrule
+\texttt{Residual-only} & 0.0017 $\pm$ 0.0001 & 0.0055 $\pm$ 0.0003 & 0.5832 $\pm$ 0.0015 \\
+\texttt{Full Model} & 0.0069 $\pm$ 0.0009 & 0.0119 $\pm$ 0.0014 & 0.4116 $\pm$ 0.0193 \\
+\texttt{Gate-only} & 0.0125 $\pm$ 0.0004 & 0.0108 $\pm$ 0.0014 & 0.3359 $\pm$ 0.0087 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
+\paragraph{Learned-router subgroup pattern.}
 The learned routers follow the expected selective pattern. As the threshold \(\tau\) increases, fusion coverage declines across all regimes, but the decline is especially consequential in \texttt{tail\_no\_img}, where stronger structural fallback is more reliable. For the strongest learned setting (\texttt{xgb}, \texttt{delta=0.01}, \texttt{tau=0.7}), the subgroup metrics are:
 
 \begin{itemize}
@@ -635,21 +678,23 @@ The ablation evidence strongly argues against a trivial explanation of the routi
 Relation-group evaluation remains part of the paper because the earlier bounded-gain analysis showed that multimodal usefulness is not determined by target regime alone. Relation characteristics also matter. We therefore retain relation-group evidence in the experiments section as supporting analysis for the selective-activation narrative.
 
 \paragraph{Main findings.}
-We keep a focused three-model comparison among \texttt{Gate-only}, \texttt{Full Model}, and \texttt{Residual-only}. Across all three coarse relation groups, the ordering remains stable: \texttt{Residual-only} performs best, \texttt{Full Model} ranks second, and \texttt{Gate-only} remains third.
+Table~\ref{tab:relation_grouped} extends the analysis from target-side modality regime to relation-type condition. Across all three coarse relation groups---\texttt{visual\_relations}, \texttt{weak\_visual\_relations}, and \texttt{ambiguous\_material\_relations}---the grouped ordering remains \texttt{Residual-only > Full Model > Gate-only}. This shows that relation dependence is real, but it does not overturn stronger structural competition at the grouped level. At the same time, \texttt{Full Model} remains consistently stronger than \texttt{Gate-only} across all three groups, indicating that relation characteristics do affect where multimodal benefit is more plausible even though that effect remains bounded.
 
 \begin{table}[t]
-    \centering
-    \caption{Relation-group MRR for the focused three-model comparison.}
-    \label{tab:relation_group_results}
-    \begin{tabular}{lccc}
-        \toprule
-        Group & Gate-only & Full Model & Residual-only \\
-        \midrule
-        \texttt{visual\_relations} & 0.1350 & 0.1826 & 0.2691 \\
-        \texttt{weak\_visual\_relations} & 0.2194 & 0.2252 & 0.3197 \\
-        \texttt{ambiguous\_material\_relations} & 0.1337 & 0.1948 & 0.2842 \\
-        \bottomrule
-    \end{tabular}
+\centering
+\caption{Relation-type grouped MRR under the unified OpenBG-IMG protocol. All cells report mean $\pm$ standard deviation over seeds 1, 2, and 3.}
+\label{tab:relation_grouped}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lccc}
+\toprule
+Model & \texttt{visual\_relations} & \texttt{weak\_visual\_relations} & \texttt{ambiguous\_material\_relations} \\
+\midrule
+\texttt{Residual-only} & 0.2691 $\pm$ 0.0011 & 0.3197 $\pm$ 0.0010 & 0.2842 $\pm$ 0.0028 \\
+\texttt{Full Model} & 0.1826 $\pm$ 0.0071 & 0.2252 $\pm$ 0.0154 & 0.1948 $\pm$ 0.0201 \\
+\texttt{Gate-only} & 0.1350 $\pm$ 0.0068 & 0.2194 $\pm$ 0.0073 & 0.1337 $\pm$ 0.0083 \\
+\bottomrule
+\end{tabular}
 \end{table}
 
 With the \texttt{MIN20} support filter at the relation level, \texttt{Full Model} still outperforms \texttt{Gate-only} on most retained relations, but surpasses \texttt{Residual-only} on only a minority of them.
