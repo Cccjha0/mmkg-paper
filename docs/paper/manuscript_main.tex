@@ -141,22 +141,27 @@ This asymmetry is central to the paper. It explains why multimodal gain can appe
 \begin{figure}[t]
     \centering
     \setlength{\fboxsep}{6pt}
-    \begin{tabular}{m{0.28\textwidth} m{0.28\textwidth} m{0.28\textwidth}}
-        \centering \textbf{Head-side targets} \\
-        \centering {\small Partially image-available} \\
-        \centering \fbox{\parbox[c][1.0cm][c]{0.78\linewidth}{\centering \texttt{head\_has\_img}}} \\
-        \centering \fbox{\parbox[c][1.0cm][c]{0.78\linewidth}{\centering \texttt{head\_no\_img}}}
-        &
-        \centering \textbf{Target position is intrinsically entangled} \\
-        \centering \textbf{with modality availability} \\
-        \\
-        \centering {\small Bidirectional evaluation} \\
-        \centering {\small becomes inherently asymmetric}
-        &
-        \centering \textbf{Tail-side targets} \\
-        \centering {\small Fully image-unavailable} \\
-        \centering \fbox{\parbox[c][2.4cm][c]{0.78\linewidth}{\centering \texttt{tail\_no\_img}}}
-    \end{tabular}
+    \begin{minipage}[t]{0.29\textwidth}
+        \centering
+        \textbf{Head-side targets}\\[0.3em]
+        {\small Partially image-available}\\[0.6em]
+        \fbox{\parbox[c][1.0cm][c]{0.78\linewidth}{\centering \texttt{head\_has\_img}}}\\[0.5em]
+        \fbox{\parbox[c][1.0cm][c]{0.78\linewidth}{\centering \texttt{head\_no\_img}}}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.30\textwidth}
+        \centering
+        \vspace*{0.7em}
+        \textbf{Target position is intrinsically entangled}\\
+        \textbf{with modality availability}\\[1.1em]
+        {\small Bidirectional evaluation}\\
+        {\small becomes inherently asymmetric}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.29\textwidth}
+        \centering
+        \textbf{Tail-side targets}\\[0.3em]
+        {\small Fully image-unavailable}\\[0.6em]
+        \fbox{\parbox[c][2.7cm][c]{0.78\linewidth}{\centering \texttt{tail\_no\_img}}}
+    \end{minipage}
     \caption{Role--modality asymmetry in OpenBG-IMG. Tail entities are image-unavailable, whereas head entities are only partially image-available. As a result, target position is intrinsically entangled with modality availability in bidirectional link prediction, yielding three meaningful target-side regimes: \texttt{head\_has\_img}, \texttt{head\_no\_img}, and \texttt{tail\_no\_img}.}
     \label{fig:protocol_asymmetry}
 \end{figure}
@@ -678,7 +683,7 @@ The ablation evidence strongly argues against a trivial explanation of the routi
 Relation-group evaluation remains part of the paper because the earlier bounded-gain analysis showed that multimodal usefulness is not determined by target regime alone. Relation characteristics also matter. We therefore retain relation-group evidence in the experiments section as supporting analysis for the selective-activation narrative.
 
 \paragraph{Main findings.}
-Table~\ref{tab:relation_grouped} extends the analysis from target-side modality regime to relation-type condition. Across all three coarse relation groups---\texttt{visual\_relations}, \texttt{weak\_visual\_relations}, and \texttt{ambiguous\_material\_relations}---the grouped ordering remains \texttt{Residual-only > Full Model > Gate-only}. This shows that relation dependence is real, but it does not overturn stronger structural competition at the grouped level. At the same time, \texttt{Full Model} remains consistently stronger than \texttt{Gate-only} across all three groups, indicating that relation characteristics do affect where multimodal benefit is more plausible even though that effect remains bounded.
+Table~\ref{tab:relation_grouped} extends the analysis from target-side modality regime to relation-type condition. The same three-model ordering appears in every coarse relation group. \texttt{Residual-only} is best, \texttt{Full Model} is second, and \texttt{Gate-only} is third. This pattern shows that relation dependence is real, but it does not overturn stronger structural competition at the grouped level. At the same time, \texttt{Full Model} remains stronger than \texttt{Gate-only} in all three groups. This indicates that relation characteristics still shape where multimodal benefit is more plausible, even though that effect remains bounded.
 
 \begin{table}[t]
 \centering
