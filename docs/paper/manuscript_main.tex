@@ -474,7 +474,7 @@ The router is trained on development-side query-level features and evaluated on 
 
 \subsection{Official Main Results}
 \paragraph{Seven-model comparison under the official line.}
-Table X reports the official seven-model comparison under the formal paper protocol. The overall ordering is:
+Table~\ref{tab:official_main_results} reports the official seven-model comparison under the formal paper protocol. The overall ordering is:
 
 \begin{enumerate}[leftmargin=1.5em]
     \item \texttt{Residual-only}
@@ -488,6 +488,25 @@ Table X reports the official seven-model comparison under the formal paper proto
 
 Using the official aggregated line, \texttt{Residual-only} reaches \texttt{0.2930 $\pm$ 0.0008} MRR, \texttt{ComplEx} reaches \texttt{0.2588 $\pm$ 0.0018}, and \texttt{Full Model} reaches \texttt{0.2100 $\pm$ 0.0097}. Within the internal multimodal family, \texttt{Full Model} is therefore the strongest multimodal variant, outperforming \texttt{Gate-only} (\texttt{0.1739 $\pm$ 0.0044}), \texttt{Early Fusion} (\texttt{0.1666 $\pm$ 0.0013}), and \texttt{Text-only} (\texttt{0.1261 $\pm$ 0.0043}).
 
+\begin{table}[t]
+    \centering
+    \caption{Official seven-model comparison under the paper-facing \texttt{test\_metrics.json} aggregation line. For compile-ready cleanup, this table summarizes the MRR values that are already used by the surrounding text.}
+    \label{tab:official_main_results}
+    \begin{tabular}{lc}
+        \toprule
+        Model & MRR \\
+        \midrule
+        \texttt{Residual-only} & $0.2930 \pm 0.0008$ \\
+        \texttt{ComplEx} & $0.2588 \pm 0.0018$ \\
+        \texttt{Full Model} & $0.2100 \pm 0.0097$ \\
+        \texttt{Gate-only} & $0.1739 \pm 0.0044$ \\
+        \texttt{Early Fusion} & $0.1666 \pm 0.0013$ \\
+        \texttt{Text-only} & $0.1261 \pm 0.0043$ \\
+        \texttt{TuckER} & not competitive under current protocol \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
 \paragraph{Interpretation.}
 These official results establish the core tension inherited from the earlier analysis. The most complete multimodal architecture is not the strongest overall model under the current protocol. Instead, the strongest global result comes from the structure-heavy \texttt{Residual-only} model, while the classical structural baseline \texttt{ComplEx} also remains stronger than \texttt{Full Model}. At the same time, \texttt{Full Model} consistently improves over the weaker multimodal baselines, which means that multimodal modeling is not useless even though it does not dominate globally.
 
@@ -495,7 +514,7 @@ The official main table therefore supports two conclusions at once. First, multi
 
 \subsection{Routing Results Under the Unified Query-Level Line}
 \paragraph{Main routing comparison.}
-Table Y reports the routing comparison under the unified query-level recomputed line. On this line, the fixed fusion expert \texttt{Gate-only} reaches \texttt{0.1688} MRR, while the fixed structural expert \texttt{Residual-only} reaches \texttt{0.2930}. The rule-based router yields \texttt{0.2939}, which is only marginally above the fixed structural expert. By contrast, learned routers improve more substantially:
+Table~\ref{tab:routing_results} reports the routing comparison under the unified query-level recomputed line. On this line, the fixed fusion expert \texttt{Gate-only} reaches \texttt{0.1688} MRR, while the fixed structural expert \texttt{Residual-only} reaches \texttt{0.2930}. The rule-based router yields \texttt{0.2939}, which is only marginally above the fixed structural expert. By contrast, learned routers improve more substantially:
 
 \begin{itemize}
     \item logistic (\texttt{delta=0.01}, \texttt{tau=0.7}): \texttt{0.3111}
@@ -503,6 +522,24 @@ Table Y reports the routing comparison under the unified query-level recomputed 
 \end{itemize}
 
 The best learned router is therefore \texttt{XGBoost + delta=0.01 + tau=0.7}, with overall MRR \texttt{0.3159569}. This result is higher than the fixed \texttt{Residual-only} expert (\texttt{0.2930494}), higher than the rule-based router (\texttt{0.2939469}), and also higher than the original \texttt{Full Model} (\texttt{0.2100}, reported from the official line for context). Oracle routing reaches \texttt{0.3337373}, showing that the routing problem still contains additional exploitable headroom.
+
+\begin{table}[t]
+    \centering
+    \caption{Routing comparison under the unified query-level recomputed line. This table replaces the earlier \texttt{Table Y} placeholder with a formal LaTeX table for the main routing results discussed in the text.}
+    \label{tab:routing_results}
+    \begin{tabular}{lc}
+        \toprule
+        Method & MRR \\
+        \midrule
+        \texttt{Gate-only} (fixed expert) & $0.1688$ \\
+        \texttt{Residual-only} (fixed expert) & $0.2930$ \\
+        Rule-based routing & $0.2939$ \\
+        Logistic routing ($\delta=0.01, \tau=0.7$) & $0.3111$ \\
+        XGBoost routing ($\delta=0.01, \tau=0.7$) & $0.3160$ \\
+        Oracle routing & $0.3337$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
 \paragraph{Interpretation.}
 The routing table supports the central method claim of the paper. Once the earlier bounded-gain finding is converted into a query-level expert-selection problem, a lightweight router can improve over both fixed experts and over the original always-on multimodal design. Importantly, the rule-based router provides only negligible improvement, whereas learned routing provides a clear gain. This means that the problem cannot be solved well by a simple heuristic such as ``use fusion whenever images are available.'' Query-level selective activation is useful precisely because the gain boundary is more complex than a single protocol flag.
