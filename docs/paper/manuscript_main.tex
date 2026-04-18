@@ -634,51 +634,94 @@ The main message of this section is therefore:
 The experiments do not show that multimodal fusion is universally stronger than structural modeling. They show that under the current OpenBG-IMG protocol, multimodal gain can be used more effectively when activation is made selective rather than always-on.
 \end{quote}
 
-\section{Behavior Analysis}
-The gain-boundary analysis establishes where multimodal gain appears, but it does not yet explain why that gain remains bounded. In particular, the earlier sections reveal a stable empirical pattern: \texttt{Full Model} consistently improves over \texttt{Gate-only}, yet still fails to surpass \texttt{Residual-only} overall. The central issue is therefore not whether multimodal fusion works at all, but how the fusion branch interacts with structural compensation inside the complete model.
+\section{Analysis and Discussion}
+\subsection{Overview}
+The experiments establish two facts that are individually clear but conceptually incomplete unless interpreted together.
 
-Table~\ref{tab:branch_preference} reports the global residual and mixture statistics at the best epoch. As shown in Table~\ref{tab:branch_preference}, the final mixture clearly favors the residual branch over the fusion branch. The \texttt{Full Model} is therefore residual-dominant under the current protocol: its residual mixture weight is substantially larger than its fusion mixture weight. This directly helps explain why the model improves over \texttt{Gate-only} while still remaining below \texttt{Residual-only} in the overall ranking.
+First, under the official paper protocol, the strongest fixed model remains \texttt{Residual-only}, while \texttt{Full Model} is only the strongest multimodal variant inside the internal family. This preserves the earlier bounded-gain diagnosis: multimodal information is useful, but not globally dominant.
 
-\begin{table}[t]
-    \centering
-    \caption{Table 4 reports the global residual and mixture statistics at the best epoch. The \texttt{Full Model} shows a clearly residual-dominant preference, with \texttt{mix\_w\_residual} substantially larger than \texttt{mix\_w\_fusion}. At the same time, non-zero fusion and projection gradients indicate that the fusion branch remains active. Together, these results support a residual-dominant asymmetric complementarity interpretation rather than a simple fusion-collapse explanation.}
-    \label{tab:branch_preference}
-    % \input{tables/table4_branch_preference.tex}
-    \fbox{\parbox[c][4cm][c]{0.9\linewidth}{\centering Table 4 placeholder}}
-\end{table}
+Second, under the unified routing line, learned selective activation outperforms both fixed experts and the original always-on multimodal design. The best learned router (\texttt{xgb + delta=0.01 + tau=0.7}) reaches \texttt{0.3160} MRR, exceeding fixed \texttt{Residual-only}, rule-based routing, and the original \texttt{Full Model}, while still remaining below Oracle routing.
 
-However, Table~\ref{tab:branch_preference} also shows that the fusion branch remains active rather than collapsing to zero. The fusion mixture and its associated gradient statistics remain non-zero, indicating that the fusion branch still participates in learning. The appropriate interpretation is therefore not fusion failure, but residual-dominant asymmetric complementarity: the complete model still uses fusion, yet under the current protocol its final preference is drawn more strongly toward the residual path.
+Taken together, these results suggest a more precise interpretation of the problem. The main obstacle in the current protocol is not the absence of multimodal value. It is the absence of a mechanism that activates multimodal evidence only under conditions where it is likely to help and suppresses it where stronger structural fallback is more reliable. This section explains that interpretation and clarifies what the new results do and do not imply.
 
-Table~\ref{tab:gate_behavior} complements this interpretation by showing that gate behavior remains stable and condition-sensitive rather than fixed. In both \texttt{Gate-only} and \texttt{Full Model}, \texttt{g\_mean\_img} is lower than \texttt{g\_mean\_noimg}, indicating systematic differences across modality conditions. Moreover, the global gate mean of \texttt{Full Model} is lower than that of \texttt{Gate-only}, suggesting that residual competition changes gate behavior rather than simply preserving the same fusion preference.
+\subsection{Why Selective Activation Works Under the Current Protocol}
+\paragraph{Bounded gain is a routing problem in disguise.}
+The earlier analysis showed that multimodal usefulness is unevenly distributed across the test space. The clearest favorable regime appears in \texttt{head\_has\_img}, while the globally dominant \texttt{tail\_no\_img} regime remains strongly structure-favorable. Relation-group evidence further shows that multimodal benefit is relation-dependent but does not scale into grouped-level structural dominance. Behavior analysis adds a mechanism-level view: the fusion path is real and adaptive, but final branch preference remains residual-dominant, especially under weak visual support.
 
-\begin{table}[t]
-    \centering
-    \caption{Table 5 summarizes global gate statistics at the best epoch. The results show that gate behavior is stable and condition-sensitive rather than fixed: both \texttt{Gate-only} and \texttt{Full Model} exhibit lower gate means under image-available conditions than under no-image conditions, and the complete model maintains a lower global gate mean than \texttt{Gate-only} under residual competition. At the same time, gate responsiveness alone does not explain the full performance pattern, which is why gate analysis must be interpreted together with the residual-dominance evidence in Table 4.}
-    \label{tab:gate_behavior}
-    % \input{tables/table5_gate_behavior.tex}
-    \fbox{\parbox[c][4cm][c]{0.9\linewidth}{\centering Table 5 placeholder}}
-\end{table}
+Once these pieces are viewed together, the natural conclusion is that the original always-on multimodal setup is mismatched to the protocol. The protocol does not reward multimodal activation uniformly. It rewards it only under specific query conditions. In that sense, bounded multimodal gain is already a routing problem in disguise. The real challenge is not to force one model path to dominate everywhere, but to decide when multimodal evidence is likely to be worth trusting.
 
-Taken together, Table~\ref{tab:branch_preference} and Table~\ref{tab:gate_behavior} support a coherent mechanism-level interpretation. The gate branch is neither fixed nor trivial, but its contextual responsiveness is not strong enough to overcome the stronger residual preference that emerges in the complete model. This is why the \texttt{Full Model} exhibits real but bounded multimodal benefit: fusion remains active, yet final decision-making is still shaped more strongly by residual compensation under the current protocol.
+The gain-threshold router is effective precisely because it makes this hidden decision problem explicit. It converts the earlier diagnosis from a descriptive statement—multimodal gain is conditional—into an operational rule: activate the fusion expert only when the current query is likely to benefit from it.
 
-\section{Case Study}
-The purpose of this section is not to replace the earlier statistical analyses with selected examples, but to validate them at the sample level. Table~\ref{tab:case_study} summarizes representative success and failure cases selected under fixed rules from the completed paper-stage runs. These cases are therefore not isolated anecdotes; they are chosen to align with the subgroup, relation-type, and behavior patterns established earlier.
+\paragraph{Why always-on \texttt{Full Model} underperforms the routed system.}
+The contrast between \texttt{Full Model} and the learned router is especially instructive. \texttt{Full Model} already contains both multimodal fusion and structural compensation, yet it remains far below the best routing result. This gap should not be read as evidence that \texttt{Full Model} learned nothing useful. Instead, it reflects a limitation of always-on branch interaction under the current protocol.
 
-\begin{table}[t]
-    \centering
-    \caption{Table 6 summarizes representative success and failure cases selected under fixed rules from the completed paper-stage runs. The selected success cases align with the image-available head-side regime identified in the subgroup analysis, whereas the selected failure cases align with the structure-dominant tail-side no-image regime. The table therefore serves as sample-level validation of the broader gain-boundary conclusions rather than as a replacement for the earlier statistical analyses.}
-    \label{tab:case_study}
-    % \input{tables/table6_case_study.tex}
-    \fbox{\parbox[c][4cm][c]{0.9\linewidth}{\centering Table 6 placeholder}}
-\end{table}
+The behavior analysis already showed that \texttt{Full Model} learns a meaningful fusion branch, but that the final representation remains residual-dominant. This is a reasonable internal response to the current data regime: because a large part of the evaluation space is structure-favorable, the model learns to trust the structural path more heavily. The difficulty is that such a shared internal compromise cannot cleanly separate the local multimodal-favorable region from the global structure-favorable region.
 
-As shown in Table~\ref{tab:case_study}, the selected success cases cluster in head-side image-available queries, whereas the selected failure cases cluster in tail-side no-image conditions. This pattern mirrors the earlier gain-boundary analysis closely. Success cases appear in the multimodal-favorable regime identified by Table~\ref{tab:subgroup_results}, while failure cases appear in the structurally dominant regime that pulls the overall ranking back toward \texttt{Residual-only}.
+By contrast, the router does not need to learn a single globally balanced representation. It can preserve the fusion expert for one subset of queries and rely on the structural expert for another subset. In other words, the routed system wins not because it has a stronger fusion module than \texttt{Full Model}, but because it is better matched to the protocol's heterogeneous gain structure.
 
-The \texttt{wearing\_mode} case provides the clearest success example in the main-text set. It is a head-side query with an image-available target, and the relation itself is directly compatible with appearance-based evidence. Under this condition, \texttt{Full Model} substantially outperforms \texttt{Residual-only}, providing a concrete sample-level demonstration that multimodal gain can be both real and large when the query setting is favorable.
+\subsection{Why Learned Routing Beats Rule-Based Heuristics}
+\paragraph{The protocol is informative but not simple.}
+At first glance, the current protocol might suggest an easy routing rule: use fusion when images are available and avoid it when they are not. The experimental results show that this intuition is incomplete. The rule-based router improves only negligibly over the fixed structural expert, while learned routing yields a clear gain.
 
-By contrast, the \texttt{usage\_scenario} case illustrates the opposite regime. It is a tail-side no-image query, and \texttt{Residual-only} ranks the correct answer perfectly while \texttt{Full Model} performs extremely poorly. This example shows why overall multimodal dominance does not emerge under the current protocol: once the task moves into a structure-dominant, image-missing setting, stronger structural compensation becomes far more reliable than multimodal fusion.
+This difference indicates that the gain boundary is not equivalent to a single protocol flag. Target regime matters, but it is only one part of the decision. Relation context matters as well, because multimodal gain is not aligned perfectly with a coarse visual/nonvisual split. Expert-confidence signals matter too, because even within the same subgroup the fixed experts are not equally reliable on every query.
 
-The value of Table~\ref{tab:case_study} is therefore confirmatory. It shows that the statistical and mechanism-level conclusions of the paper are also visible at the sample level. Multimodal gain is conditional, and structural dominance remains decisive in the globally dominant regimes. The case study therefore strengthens the gain-boundary narrative rather than introducing a separate one.
+\paragraph{Evidence from feature ablation.}
+The feature ablation results make this point especially clear. Minimal image-availability features alone (\texttt{F1}) perform poorly. Large improvements appear only after protocol-aware condition features are added, and another clear jump appears when expert-confidence features are introduced. This shows that routing success depends on a richer decision boundary that combines subgroup, relation-prior, and confidence information.
+
+The learned router therefore does not merely discover that some queries have images. It discovers that multimodal activation is worthwhile only when several conditions align: the protocol regime is not strongly hostile, the relation-level prior is not unfavorable, and the fusion expert is not obviously less trustworthy than the structural expert for the current query.
+
+\paragraph{Why XGBoost becomes the strongest learned router.}
+The stronger performance of XGBoost over logistic regression fits this picture. The protocol-aware gain structure is not purely linear. There are interactions among direction, target regime, relation priors, and confidence margins. A nonlinear router is better able to model these interactions and therefore better able to make conservative but useful activation decisions. The improvement over logistic regression is not dramatic enough to suggest a radically different problem, but it is stable enough to indicate that query-level routing is not governed by a single simple threshold in the raw feature space.
+
+\subsection{How the New Results Reposition \texttt{Gate-only}, \texttt{Residual-only}, and \texttt{Full Model}}
+\paragraph{\texttt{Gate-only} is locally useful, not globally reliable.}
+The current paper should not position \texttt{Gate-only} as a failed model. It remains the clearest fusion endpoint in the internal family and performs well in the multimodal-favorable subgroup structure, especially on the head side when image support is present. Its value in the new paper is conceptual as much as empirical: it represents what pure relation-aware multimodal activation looks like without explicit structural fallback.
+
+The routing results strengthen this interpretation. \texttt{Gate-only} is not globally reliable enough to serve as a standalone best model, but it is useful enough to function as the fusion expert inside a selective system. This is exactly the kind of role one would expect for a locally strong but globally unstable multimodal component.
+
+\paragraph{\texttt{Residual-only} is more than an ablation baseline.}
+The new results also make it even clearer that \texttt{Residual-only} should not be described as a mere ablation. Under both the official model-comparison line and the routing line, it is the strongest fixed structural reference inside the internal family. Behavior analysis further shows that the complete model becomes increasingly residual-biased when image support weakens, which means that \texttt{Residual-only} captures a genuine task-level preference rather than an accidental simplification.
+
+For this reason, \texttt{Residual-only} is best understood as the structurally reliable fallback expert around which the routing problem is organized. Its strength is exactly why selective activation is needed in the first place.
+
+\paragraph{\texttt{Full Model} remains analytically important even if it is not the final winner.}
+The original analysis paper treated \texttt{Full Model} as the central diagnostic model, and that remains true in the new paper. Its role has changed, however. It is no longer the method to be defended as the likely global winner. Instead, it becomes the clearest demonstration that always-on multimodal enhancement is not sufficient under the current protocol.
+
+This is still an important contribution. Without \texttt{Full Model}, the paper could only compare pure fusion with pure structure. With \texttt{Full Model}, the paper can show that even when both paths are integrated inside one richer model, protocol-shaped gain heterogeneity still prevents always-on multimodal modeling from becoming globally optimal. This is the immediate bridge from the old analysis narrative to the new routing method.
+
+\subsection{What Relation-Group Evidence Still Contributes}
+The relation-group results should not be used to claim that the router succeeds because the relation ontology has solved the problem in advance. The grouped evidence does not support such a simple reading. Even coarse visual relations do not become globally favorable to multimodal models as a group.
+
+What relation-group evidence does contribute is something more subtle and more useful: it shows that multimodal gain is relation-dependent, but not in a way that can be captured by one naive semantic grouping. At the relation level, \texttt{Full Model} often improves over \texttt{Gate-only}, yet still loses to \texttt{Residual-only} on most retained relations. This is exactly the kind of pattern that motivates query-level routing rather than global semantic partitioning.
+
+In other words, relation-group analysis supports the selective-activation story indirectly. It tells us that multimodal benefit is not random, but it also tells us that the decision boundary is too fine-grained and too interaction-dependent to be handled by a simple grouped rule.
+
+\subsection{What the New Results Do Not Prove}
+The strongest claim supported by the present paper is that \textbf{selective activation is effective under the current OpenBG-IMG protocol}. Several stronger claims are not supported and should be avoided.
+
+First, the results do not show that multimodal fusion is globally superior to structural modeling in general. Even in the new paper, structural fallback remains indispensable, and the strongest fixed model is still structure-heavy.
+
+Second, the results do not show that the current gain-threshold router is the final or universally best way to exploit bounded multimodal gain. The method is intentionally lightweight and controlled. It is designed to demonstrate that the bounded-gain hypothesis can be operationalized, not to exhaust the entire routing design space.
+
+Third, the results do not prove that the same expert pair, thresholding strategy, or feature set would transfer unchanged to other MMKGC benchmarks or to a different split of OpenBG-IMG. The entire contribution is protocol-aware by construction.
+
+These limits are not weaknesses to hide. They are part of what makes the paper credible. The present work is strongest when it is framed as a careful, protocol-grounded demonstration that query-level selective activation can exploit bounded multimodal gain more effectively than always-on fusion under the current setting.
+
+\subsection{Broader Implications}
+The new results suggest three broader implications for MMKGC research.
+
+First, protocol-aware evaluation matters more than aggregate leaderboard ranking alone. The current study shows that target position, modality availability, and relation structure can jointly shape whether multimodal information appears useful at all.
+
+Second, strong structural competitors remain essential anchors for interpretation. If the paper had compared multimodal variants only to weak baselines, the bounded-gain story would have been far less informative. The central tension appears precisely because strong structural alternatives remain competitive.
+
+Third, selective activation deserves attention as a first-class design principle in multimodal graph learning. The present paper does not claim to solve that agenda completely, but it does show that under heterogeneous modality conditions, deciding \textbf{when to trust multimodal evidence} can be as important as deciding \textbf{how to fuse it}.
+
+\subsection{Section-Level Takeaway}
+The main message of this section is:
+
+\begin{quote}
+The success of gain-threshold routing does not overturn the earlier bounded-gain analysis. It operationalizes it. Under the current OpenBG-IMG protocol, multimodal gain is real but query-dependent, and learned selective activation works because it preserves multimodal benefit where it is locally useful while falling back to stronger structural modeling where fusion is less reliable.
+\end{quote}
 
 \section{Discussion, Limitations, and Conclusion}
 The completed experiments show that multimodal information is useful under the current OpenBG-IMG protocol, but not uniformly useful. \texttt{Full Model} is clearly stronger than simpler multimodal baselines such as \texttt{Gate-only} and \texttt{Early Fusion}, which means that multimodal fusion is not failing in a trivial sense. At the same time, \texttt{Residual-only} remains the strongest overall model, and \texttt{ComplEx} also outperforms \texttt{Full Model} globally. The relevant question is therefore not why multimodal information provides no value, but why its value is insufficient to become dominant at the task level.
