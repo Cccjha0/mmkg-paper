@@ -23,7 +23,7 @@
 \setlength{\parindent}{0pt}
 
 % ---------- Metadata ----------
-\title{Understanding Bounded Multimodal Gain in OpenBG-IMG: A Protocol-Aware Analysis}
+\title{From Bounded Multimodal Gain to Selective Activation: Gain-Threshold Routing on OpenBG-IMG}
 \author{
 Author One\textsuperscript{1} \and
 Author Two\textsuperscript{1} \and
@@ -32,7 +32,7 @@ Author Three\textsuperscript{2}
 \date{}
 
 % Running title (copy into target journal template later)
-\newcommand{\runningtitle}{Bounded Multimodal Gain in OpenBG-IMG}
+\newcommand{\runningtitle}{Selective Multimodal Activation on OpenBG-IMG}
 
 \begin{document}
 
@@ -47,13 +47,13 @@ Author Three\textsuperscript{2}
 \end{center}
 
 \begin{abstract}
-Multimodal knowledge graph completion (MMKGC) augments link prediction with auxiliary modalities such as text and images. In product-oriented knowledge graphs, this setting is especially appealing because many relations appear visually grounded. Under incomplete visual support, however, multimodal benefit is not uniformly available. This raises a more precise question: not only whether multimodal information helps, but when it should be activated under protocol-shaped missing-modality conditions.
+Multimodal knowledge graph completion (MMKGC) aims to improve link prediction by incorporating auxiliary modalities such as text and images. In product-oriented knowledge graphs, however, visual support is often incomplete, so multimodal evidence does not help uniformly. The key problem is therefore not only whether multimodal information is useful, but when it should be activated under a protocol-shaped missing-modality setting.
 
-We study this problem on OpenBG-IMG under a unified protocol with filtered ranking, \texttt{direction=both}, and three-seed reporting. Under the official model-comparison line, the strongest fixed model is not the most complete multimodal architecture: \texttt{Residual-only} is the best overall model, while \texttt{Full Model} remains only the strongest multimodal variant within the internal family. Protocol-aware subgroup, relation-group, and behavior evidence jointly show that multimodal gain is real but bounded. It is strongest in image-supported head-side regimes, weaker in structure-favorable conditions, and shaped by target position, modality availability, relation context, and residual-dominant branch competition.
+We investigate this problem on OpenBG-IMG under a unified protocol with filtered ranking, \texttt{direction=both}, and three-seed reporting. First, we conduct a protocol-aware analysis and show that the current split exhibits clear role--modality asymmetry: head-side targets may be image-available, whereas tail-side targets are effectively image-unavailable. As a result, multimodal gain is strongest in image-supported head-side regimes but remains bounded overall, while the strongest fixed model is still the structure-heavy \texttt{Residual-only} model.
 
-Motivated by this bounded-gain structure, we reformulate the problem from always-on fusion to query-level selective activation and propose a lightweight gain-threshold routing framework. The method uses \texttt{Gate-only} as a fusion expert, \texttt{Residual-only} as a structural expert, and a protocol-aware router trained from development-side query-level gain labels. Under the unified query-level routing line, the best learned router (XGBoost with $\delta=0.01$ and $\tau=0.7$) reaches an overall MRR of \texttt{0.3160}, outperforming the fixed \texttt{Residual-only} expert (\texttt{0.2930}), the rule-based router, and the original always-on \texttt{Full Model}, while still leaving room to Oracle routing.
+Then, we propose a lightweight gain-threshold routing framework for selective multimodal activation. The framework uses \texttt{Gate-only} as a fusion expert and \texttt{Residual-only} as a structural expert, constructs development-side query-level gain labels from reciprocal-rank improvement, and trains a protocol-aware router with target-regime, relation-prior, modality-consistency, and expert-confidence features. Finally, a hard threshold is used to decide whether the current query should activate the multimodal path or fall back to the structural expert.
 
-These results support a controlled conclusion. The contribution of this work is not a universally dominant multimodal architecture, but a protocol-aware transition from gain-boundary analysis to gain-aware selective activation. Under the current OpenBG-IMG protocol, multimodal gain is conditional rather than globally reliable, and a lightweight router can exploit this bounded-gain structure more effectively than always-on multimodal fusion.
+Finally, the proposed method achieves better performance than fixed-expert and always-on multimodal baselines under the unified query-level routing line. The best learned router (XGBoost with $\delta=0.01$ and $\tau=0.7$) reaches an MRR of \texttt{0.3160}, outperforming \texttt{Residual-only} (\texttt{0.2930}), rule-based routing (\texttt{0.2939}), and the original \texttt{Full Model} (\texttt{0.2100}), while Oracle routing (\texttt{0.3337}) still indicates additional headroom. These results show that the contribution of this work lies not in a universally dominant multimodal architecture, but in a protocol-aware transition from bounded-gain analysis to gain-aware selective activation.
 \end{abstract}
 
 \textbf{Keywords:} multimodal knowledge graph completion; selective activation; routing; incomplete visual modality; protocol-aware evaluation
@@ -76,10 +76,9 @@ This paper therefore makes a deliberately controlled claim. We do not argue that
 In summary, this paper makes the following contributions:
 
 \begin{enumerate}[leftmargin=1.5em]
-    \item We establish a protocol-aware problem framing in which multimodal gain on OpenBG-IMG is bounded, conditional, and entangled with target position, image availability, and relation context rather than globally uniform.
-    \item We reformulate this bounded-gain phenomenon as a \textbf{query-level selective activation problem} and propose a lightweight \textbf{gain-threshold routing} framework that chooses between a fusion expert (\texttt{Gate-only}) and a structural expert (\texttt{Residual-only}) through hard-threshold decision making.
-    \item We design a protocol-aware router feature space that combines target regime, relation-level gain priors, modality-consistency signals, and expert-confidence cues, and show through feature ablation that the learned router does not collapse into a trivial image-availability heuristic.
-    \item We provide empirical evidence that selective activation is effective under the current protocol: the best learned router outperforms the strongest fixed expert and the original \texttt{Full Model} on the routing evaluation line, while Oracle routing indicates additional headroom for future work.
+    \item We reveal a \textbf{protocol-aware bounded-gain mechanism} on OpenBG-IMG. Specifically, we show that role--modality asymmetry entangles target position with image availability, causing multimodal benefit to be local rather than globally uniform.
+    \item We propose a \textbf{gain-threshold routing framework for selective multimodal activation}. The method converts bounded multimodal gain into a query-level decision problem and routes each query between a fusion expert (\texttt{Gate-only}) and a structural expert (\texttt{Residual-only}) through development-supervised hard-threshold selection.
+    \item We demonstrate that \textbf{selective activation is effective and non-trivial} under the current protocol. The best learned router achieves an MRR of \texttt{0.3160}, outperforming the strongest fixed expert and the original always-on \texttt{Full Model}, while ablation results show that the gain does not reduce to a simple image-availability heuristic.
 \end{enumerate}
 
 \section{Related Work}
