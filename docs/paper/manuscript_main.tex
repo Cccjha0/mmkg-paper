@@ -127,7 +127,7 @@ Regime & Query count & Proportion \\
 \end{figure}
 
 \subsection{Unified Training and Selection Protocol}
-All base models are trained under a unified train/dev/test workflow. The development split is used for early stopping and checkpoint selection, and all final paper-facing metrics are reported on the test split. Router training follows the same separation principle at the feature-label level: query-level gain labels and relation priors are constructed from development-side expert outcomes only, and the trained router is then applied to test-side query features without using test labels during training.
+All base models are trained under a unified train/dev/test workflow. The development split is used for early stopping and checkpoint selection, and all final paper-facing metrics are reported on the test split. Router training follows the same separation principle at the feature-label level: query-level gain labels and relation priors are constructed from development-side expert outcomes only, and the trained router is then applied to test-side query features without using test labels during training. The router family, gain margin $\delta$, and routing threshold $\tau$ were selected on the development split only; the test split was used once for final reporting of the selected configuration.
 
 \subsection{Evaluation Protocol}
 All formal comparisons use filtered ranking metrics on the test set, including MRR, Hits@1, Hits@3, and Hits@10. All main paper-stage comparisons use \texttt{direction=both}, so both head prediction and tail prediction are included in evaluation.
@@ -254,7 +254,7 @@ The rule-based baseline is defined as
 The first learned router is logistic regression. In the current implementation, it uses a sparse \texttt{DictVectorizer} representation, \texttt{solver=liblinear}, \texttt{class\_weight=balanced}, \texttt{max\_iter=2000}, and \texttt{random\_state=42}.
 
 \paragraph{Gradient-boosted router.}
-The second learned router is XGBoost. The current implementation uses \texttt{n\_estimators=300}, \texttt{max\_depth=4}, \texttt{learning\_rate=0.05}, \texttt{subsample=0.8}, \texttt{colsample\_bytree=0.8}, \texttt{reg\_lambda=1.0}, \texttt{objective=binary:logistic}, \texttt{eval\_metric=logloss}, \texttt{random\_state=42}, and \texttt{n\_jobs=1}. Class imbalance is handled through \texttt{scale\_pos\_weight = N\_neg / N\_pos} computed from the current training labels.
+The second learned router is XGBoost. The current implementation uses \texttt{n\_estimators=300}, \texttt{max\_depth=4}, \texttt{learning\_rate=0.05}, \texttt{subsample=0.8}, \texttt{colsample\_bytree=0.8}, \texttt{reg\_lambda=1.0}, \texttt{objective=binary:logistic}, \texttt{eval\_metric=logloss}, \texttt{random\_state=42}, and \texttt{n\_jobs=1}. Class imbalance is handled through \texttt{scale\_pos\_weight = N\_neg / N\_pos} computed from the current training labels. Among the candidate router families and hyperparameter settings, the final paper-reported configuration was selected using development-side routing performance only.
 
 \section{Experiments}
 \subsection{Experimental Setup}
@@ -274,6 +274,7 @@ Official final reporting & filtered ranking on the test split with \texttt{direc
 Official summary statistics & mean $\pm$ standard deviation over three seeds \\
 Routing training source & development-side query-level feature tables from fixed experts \\
 Routing inference source & test-side query-level exported expert outcomes with unified recomputation \\
+Router model selection & router family, $\delta$, and $\tau$ selected on the development split only \\
 Gain-margin scan & $\delta \in \{0.00, 0.01, 0.02\}$ \\
 Threshold scan & $\tau \in \{0.1, 0.3, 0.5, 0.7, 0.9\}$ \\
 Meaningful target-side regimes & \texttt{head\_has\_img}: 7{,}048 (35.24\%), \texttt{head\_no\_img}: 2{,}952 (14.76\%), \texttt{tail\_no\_img}: 10{,}000 (50.00\%) \\
