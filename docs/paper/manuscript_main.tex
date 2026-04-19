@@ -16,6 +16,7 @@
 \usepackage[nameinlink,noabbrev]{cleveref}
 \usepackage{enumitem}
 \usepackage{float}
+\graphicspath{{figures/}}
 
 % ---------- Formatting ----------
 \onehalfspacing
@@ -138,31 +139,15 @@ The most important property of the current \texttt{paper\_split} is the asymmetr
 This asymmetry is central to the paper. It explains why multimodal gain can appear clearly in some local regimes, especially when the prediction target is image-supported, while overall performance can still remain dominated by structure-favorable conditions. In the earlier analysis-oriented version of the paper, this asymmetry motivated a bounded-gain interpretation. In the present gain-threshold version, it also motivates the method itself: if multimodal gain depends on protocol-shaped query conditions, then multimodal activation should be treated as a selective decision rather than a globally uniform default.
 
 \begin{figure}[t]
+
     \centering
-    \setlength{\fboxsep}{6pt}
-    \begin{minipage}[t]{0.29\textwidth}
-        \centering
-        \textbf{Head-side targets}\\[0.3em]
-        {\small Partially image-available}\\[0.6em]
-        \fbox{\parbox[c][1.0cm][c]{0.78\linewidth}{\centering \texttt{head\_has\_img}}}\\[0.5em]
-        \fbox{\parbox[c][1.0cm][c]{0.78\linewidth}{\centering \texttt{head\_no\_img}}}
-    \end{minipage}\hfill
-    \begin{minipage}[t]{0.30\textwidth}
-        \centering
-        \vspace*{0.7em}
-        \textbf{Target position is intrinsically entangled}\\
-        \textbf{with modality availability}\\[1.1em]
-        {\small Bidirectional evaluation}\\
-        {\small becomes inherently asymmetric}
-    \end{minipage}\hfill
-    \begin{minipage}[t]{0.29\textwidth}
-        \centering
-        \textbf{Tail-side targets}\\[0.3em]
-        {\small Fully image-unavailable}\\[0.6em]
-        \fbox{\parbox[c][2.7cm][c]{0.78\linewidth}{\centering \texttt{tail\_no\_img}}}
-    \end{minipage}
+
+    \includegraphics[width=0.8\textwidth]{Figure1.pdf}   % 注意文件名中的空格最好去掉或改用下划线
+
     \caption{Role--modality asymmetry in OpenBG-IMG. Tail entities are image-unavailable, whereas head entities are only partially image-available. As a result, target position is intrinsically entangled with modality availability in bidirectional link prediction, yielding three meaningful target-side regimes: \texttt{head\_has\_img}, \texttt{head\_no\_img}, and \texttt{tail\_no\_img}.}
+
     \label{fig:protocol_asymmetry}
+
 \end{figure}
 
 Figure~\ref{fig:protocol_asymmetry} makes this role--modality asymmetry explicit. The subgroup design used later in the paper is therefore not an artificial decomposition introduced for convenience; instead, it makes the dataset's intrinsic target-side modality regimes explicit. This is also why later subgroup results should not be interpreted as fully symmetric evidence about multimodal usefulness. Under the current setting, the question is not whether multimodal information helps equally in all directions, but where it remains available and informative enough to matter.
