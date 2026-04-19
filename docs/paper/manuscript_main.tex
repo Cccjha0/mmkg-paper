@@ -115,12 +115,15 @@ Regime & Query count & Proportion \\
 \end{table}
 
 \begin{figure}[t]
+
     \centering
-    \IfFileExists{Figure1.pdf}
-      {\includegraphics[width=0.8\textwidth]{Figure1.pdf}}
-      {\fbox{\parbox{0.75\textwidth}{\centering Figure~1 placeholder: protocol-defined target-side availability structure in OpenBG-IMG.}}}
+
+    \includegraphics[width=0.8\textwidth]{Figure1.pdf}   % 注意文件名中的空格最好去掉或改用下划线
+
     \caption{Protocol-defined target-side availability structure in OpenBG-IMG. At test time, head-side targets are only partially image-available, whereas tail-side targets are image-unavailable. This induces exactly three meaningful target-side regimes---\texttt{head\_has\_img}, \texttt{head\_no\_img}, and \texttt{tail\_no\_img}---and explains why bidirectional evaluation is not symmetric in practice under the current protocol.}
+
     \label{fig:protocol_asymmetry}
+
 \end{figure}
 
 \subsection{Unified Training and Selection Protocol}
