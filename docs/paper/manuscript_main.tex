@@ -356,7 +356,7 @@ Model & \texttt{head\_has\_img} & \texttt{head\_no\_img} & \texttt{tail\_no\_img
 The subgroup pattern is not uniform across regimes. In \texttt{head\_has\_img}, the ordering becomes \texttt{Gate-only > Full Model > Residual-only}, identifying the clearest multimodal-favorable regime under the current protocol. In \texttt{tail\_no\_img}, however, \texttt{Residual-only} remains decisively strongest.
 
 \subsection{Threshold Scan}
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Threshold scan summary at $\delta=0.01$.}
 \label{tab:threshold_scan_summary}
@@ -374,7 +374,7 @@ $\tau$ & Logistic MRR & Logistic coverage & XGBoost MRR & XGBoost coverage & XGB
 \end{tabular}
 \end{table}
 
-\begin{figure}[t]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.92\textwidth]{figures/threshold_scan_router.pdf}
 \caption{Threshold-scan behavior under the routing-compatible line at $\delta = 0.01$. (a) MRR as a function of routing threshold $\tau$ for Logistic and XGBoost routers. XGBoost reaches its peak MRR of 0.3160 at $\tau = 0.7$. (b) For XGBoost, fusion coverage decreases monotonically as $\tau$ increases, while gain precision increases, indicating that improved performance comes from more selective activation rather than more aggressive fusion use.}
@@ -384,7 +384,7 @@ $\tau$ & Logistic MRR & Logistic coverage & XGBoost MRR & XGBoost coverage & XGB
 XGBoost MRR rises from 0.2514 at $\tau = 0.1$ to a peak of 0.3160 at $\tau = 0.7$, then slightly declines to 0.3142 at $\tau = 0.9$. Over the same range, fusion coverage decreases monotonically from 0.4831 to 0.0962, while gain precision increases from 0.3270 to 0.8460. This pattern indicates that better performance is achieved through more selective activation rather than more aggressive fusion use.
 
 \subsection{Feature Ablation}
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Feature ablation for learned routers at $\delta=0.01$ and $\tau=0.5$.}
 \label{tab:feature_ablation}
@@ -399,14 +399,14 @@ XGBoost & 0.1651 & 0.2306 & 0.2303 & 0.2556 \\
 \end{tabular}
 \end{table}
 
-The hierarchy is clear. Image availability alone is insufficient, protocol-aware condition features are central, and expert-confidence features provide the strongest additional gain.
+The hierarchy is clear. Image availability alone is insufficient, protocol-aware condition features are central, and expert-confidence features provide the strongest additional gain. Both learned routers perform poorly under \texttt{F1}, while the strongest gains appear only after protocol-aware and expert-confidence features are added, which supports the claim that routing does not reduce to a simple image-availability heuristic.
 
 \subsection{Relation-Group Evaluation}
 Relation-group evidence is retained as supporting analysis rather than as a second main-result line.
 
 To keep this analysis interpretable and statistically stable, relation groups were defined before grouped reporting, and only relations with at least 20 test queries were retained in the grouped summary. For transparency, we report the retained support for each group in terms of both the number of retained relations and the number of test queries covered by those relations.
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Relation-type grouped MRR under the unified OpenBG-IMG protocol. Relation groups are reported as supporting analysis only. Only relations with at least 20 test queries are retained. All cells report mean $\pm$ standard deviation over seeds 1, 2, and 3.}
 \label{tab:relation_grouped}
@@ -423,7 +423,7 @@ Model & \texttt{visual\_relations} & \texttt{weak\_visual\_relations} & \texttt{
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Retained support for relation-group analysis after minimum-support filtering.}
 \label{tab:relation_group_support}
@@ -493,7 +493,7 @@ Analytically, we show that multimodal gain is real but bounded. The clearest mul
 
 Methodologically, we reformulate bounded gain as a query-level selective activation problem. Using \texttt{Gate-only} as a fusion expert, \texttt{Residual-only} as a structural expert, and a lightweight gain-threshold router, we show that the best learned router improves over the fixed-expert baselines and the heuristic router on the shared routing-compatible line, while Oracle routing still indicates remaining headroom.
 
-The strongest claim of this paper is therefore controlled rather than universal. We do not show that multimodal fusion is globally superior to structural modeling, nor that the present router is the final solution for MMKGC under incomplete visual support. What we do show is narrower and more defensible: under the current OpenBG-IMG protocol, multimodal gain is conditional, and selective activation can exploit that gain more effectively than always-on multimodal use on the routing-compatible basis.
+The strongest claim of this paper is therefore controlled rather than universal. We do not show that multimodal fusion is globally superior to structural modeling, nor that the present router is the final solution for MMKGC under incomplete visual support. What we do show is narrower and more defensible: under the current OpenBG-IMG protocol, multimodal gain is conditional, and selective activation can exploit that gain more effectively than fixed-expert routing baselines under the routing-compatible basis, while avoiding the limitations of always-on multimodal use under the current protocol.
 
 The main contribution of the paper is thus not a universally dominant multimodal architecture, but a protocol-aware transition from gain-boundary analysis to gain-aware selective activation. More broadly, this suggests that future MMKGC research should study not only how to fuse modalities more richly, but also when multimodal evidence should be trusted at all.
 
