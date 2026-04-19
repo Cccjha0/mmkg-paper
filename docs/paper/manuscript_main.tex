@@ -312,6 +312,7 @@ Model & MRR & Hits@1 & Hits@3 & Hits@10 \\
 \end{table}
 
 The official model-comparison line therefore establishes the paper's central tension: the strongest fixed model is structure-heavy, yet multimodal modeling still matters within the multimodal family because \texttt{Full Model} consistently outperforms \texttt{Gate-only}, \texttt{Early Fusion}, and \texttt{Text-only}.
+More specifically, the official line shows that \texttt{Residual-only} is the strongest overall model under the current protocol, whereas \texttt{Full Model} remains the strongest multimodal variant within the internal family. This distinction is important for interpretation: multimodal modeling is not ineffective, but its benefit is not strong enough to overturn structure-dominant performance at the global level. \texttt{TuckER} is retained as a classical structural reference baseline, but under the current split and evaluation protocol it does not emerge as competitive.
 
 \subsection{Routing Results Under the Routing-Compatible Line}
 \begin{table}[t]
@@ -354,6 +355,7 @@ Model & \texttt{head\_has\_img} & \texttt{head\_no\_img} & \texttt{tail\_no\_img
 \end{table}
 
 The subgroup pattern is not uniform across regimes. In \texttt{head\_has\_img}, the ordering becomes \texttt{Gate-only > Full Model > Residual-only}, identifying the clearest multimodal-favorable regime under the current protocol. In \texttt{tail\_no\_img}, however, \texttt{Residual-only} remains decisively strongest.
+Interpreting these subgroup results together with the regime counts in Table~\ref{tab:protocol_test_regime_counts}, the overall performance pattern becomes easier to understand: although multimodal-favorable behavior appears most clearly in \texttt{head\_has\_img}, the globally dominant \texttt{tail\_no\_img} regime still contributes the largest share of bidirectional test queries and therefore exerts the strongest pull on aggregate performance.
 
 \subsection{Threshold Scan}
 \begin{table}[H]
@@ -439,7 +441,7 @@ Group & \#Relations retained & \#Test queries retained \\
 \end{tabular}
 \end{table}
 
-Relation-group evidence therefore remains auditable as supporting analysis: the grouped ordering is reported together with the retained minimum-support rule and the retained support for each coarse relation group. It shows that relation dependence is real, but still bounded.
+Relation-group evidence therefore remains auditable as supporting analysis: the grouped ordering is reported together with the retained minimum-support rule and the retained support for each coarse relation group. Across all three retained coarse relation groups, the ordering remains \texttt{Residual-only > Full Model > Gate-only}. This indicates that relation dependence is real, but still bounded: relation conditions affect where multimodal benefit is more plausible, yet they do not overturn the broader structure-dominant pattern established by the official main results. It shows that relation dependence is real, but still bounded.
 
 \section{Analysis and Discussion}
 \subsection{Overview}
