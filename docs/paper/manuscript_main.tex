@@ -444,7 +444,7 @@ The current results indicate that multimodal gain is heterogeneous across the ev
 \subsection{Why Learned Routing Beats Rule-Based Heuristics}
 The experiments show that the gain boundary is richer than a single image-availability flag. Relation context matters, subgroup conditions matter, and expert-confidence signals matter as well. The feature-ablation results reinforce this interpretation: \texttt{F1} performs poorly, while protocol-aware and confidence features produce the strongest improvements.
 
-\subsection{How the New Results Reposition \texttt{Gate-only}, \texttt{Residual-only}, and \texttt{Full Model}}
+\subsection{How the Current Results Reposition \texttt{Gate-only}, \texttt{Residual-only}, and \texttt{Full Model}}
 \paragraph{\texttt{Gate-only} is locally useful, not globally reliable.}
 \texttt{Gate-only} remains the clearest fusion endpoint in the internal family and performs best in the most multimodal-favorable subgroup, namely \texttt{head\_has\_img}.
 
@@ -454,7 +454,7 @@ The experiments show that the gain boundary is richer than a single image-availa
 \paragraph{\texttt{Full Model} remains analytically important even if it is not the final winner.}
 \texttt{Full Model} remains a key diagnostic reference even though it is not the final winner. Its value is that it demonstrates the limitation of always-on multimodal enhancement under the current protocol.
 
-\subsection{What the New Results Do Not Prove}
+\subsection{What the Current Results Do Not Prove}
 The strongest claim supported by this paper is narrow and deliberate: \textbf{selective activation is effective under the current OpenBG-IMG protocol}. The results do not show that multimodal fusion is globally superior to structural modeling in general, nor do they show that the current gain-threshold router is the final or universally best solution for bounded multimodal gain. Nor do these results imply that the same expert pair, feature set, gain margin, or routing threshold can be transferred unchanged to other benchmarks, data splits, or missing-modality patterns.
 
 \subsection{Broader Implications}
