@@ -695,38 +695,36 @@ Third, the current results suggest that deciding \\textbf{when} to trust multimo
 
 \\section{Limitations}
 \\subsection{Protocol Specificity}
-The most important limitation of this study is that its strongest claims are \\textbf{protocol-aware rather than universal}. The central findings are derived under the current OpenBG-IMG \\texttt{paper\\_split}, unified train/dev/test workflow, filtered ranking, and \\texttt{direction=both} evaluation. Under a different split, a different modality distribution, or a more symmetric target-side condition, the relative strength of multimodal fusion, structural compensation, and selective routing could change.
+The strongest claims of this paper are \\textbf{protocol-specific rather than universal}. They are established under the current OpenBG-IMG \\texttt{paper\\_split}, filtered ranking, and \\texttt{direction=both} evaluation, so the relative behavior of multimodal fusion, structural compensation, and selective routing should not be assumed to remain unchanged under different benchmark conditions.
 
-This limitation is not incidental. The entire argument of the paper begins from the observation that the current protocol creates a meaningful but asymmetric missing-visual setting. As a result, the paper should not claim that bounded multimodal gain or gain-threshold routing has exactly the same form in all MMKGC settings. The strongest defensible statement is narrower: under the present OpenBG-IMG protocol, multimodal gain is conditional and query-dependent, and selective activation is an effective way to exploit it.
+This boundary is not incidental. The paper begins from the asymmetry created by the current protocol, so its contribution should be read as a protocol-grounded demonstration rather than as a universal MMKGC prescription.
 
 \\subsection{Entanglement Between Target Position and Modality Availability}
-A second limitation is the entanglement between target position and image availability. In the current test distribution, head-side targets can still be image-supported, whereas tail-side targets are effectively \\texttt{no\\_img}. This asymmetry is analytically useful because it reveals the gain boundary clearly, but it also restricts generalization.
+A second limitation is the coupling between target position and modality availability in the current test distribution. Under the present protocol, head-side targets may still be image-supported, whereas tail-side targets are effectively \\texttt{no\\_img}; this asymmetry is analytically useful, but it also limits external generalization.
 
-In particular, the conclusion that multimodal gain is strongest in \\texttt{head\\_has\\_img} should not be read as a universal superiority of head-side prediction or as a claim that tail-side prediction is inherently structure-only in multimodal KGC. It is a finding tied to the present protocol, where target position and modality availability are coupled. A more symmetric benchmark could lead to a different distribution of local multimodal benefit.
+Accordingly, the finding that multimodal gain is strongest in \\texttt{head\\_has\\_img} should not be read as a universal superiority of head-side prediction, and the dominance of structural fallback on the tail side should not be read as an inherent property of multimodal KGC. A more symmetric benchmark could produce a different local gain distribution.
 
 \\subsection{Fixed-Expert Routing Scope}
-The proposed method is intentionally lightweight and controlled. We fix two experts - \\texttt{Gate-only} and \\texttt{Residual-only} - and learn a query-level router on top of them. This is a strength for interpretability, because it isolates the contribution of selective activation itself. However, it is also a limitation.
+The proposed routing framework is deliberately narrow. It validates selective activation in a fixed-expert, query-level setting with \\texttt{Gate-only} and \\texttt{Residual-only}, which improves interpretability but also limits scope.
 
-Other possibilities remain open, including routing with different expert families, incorporating \\texttt{ComplEx} or other structural references, using soft rather than hard routing, adopting end-to-end co-adaptive training of experts and router, and moving from query-level to representation-level routing.
-
-The present paper does not attempt to cover these alternatives. Its goal is narrower: to show that bounded multimodal gain can already be operationalized effectively with a simple, interpretable routing framework.
+Alternative expert choices, softer routing schemes, end-to-end co-adaptive training, and representation-level routing remain open. The present paper does not attempt to cover that broader design space; it shows only that bounded multimodal gain can already be operationalized effectively with a simple and interpretable routing framework.
 
 \\subsection{Evaluation-Dialect Separation}
-Another limitation is that the paper necessarily relies on two complementary evaluation dialects.
+This paper necessarily relies on two complementary evaluation dialects: the official model-comparison line and the routing-compatible recomputed line. That separation is methodologically necessary for fairness, but it also makes the paper more difficult to present and interpret than if every number came from one single aggregation pipeline.
 
-The official seven-model comparison uses the paper-facing \\texttt{test\\_metrics.json} aggregation line. The routing experiments use a unified query-level recomputed line, because Oracle, rule-based routing, and learned routing all depend on query-level exported expert outcomes. This separation is methodologically justified and necessary for fairness inside the routing experiments, but it also introduces additional complexity into presentation and interpretation.
-
-Although the paper makes this distinction explicit, readers must still interpret some tables with care. In particular, the fixed experts in the routing comparison are not simply copied from the official main-result table; they are recomputed under the routing-compatible line. This is the correct choice for internal consistency, but it also means the paper cannot be read as if every number came from one single aggregation pipeline.
+In particular, some tables require careful reading because the fixed experts in the routing comparison are recomputed on the routing-compatible basis rather than copied from the official main-result line. This is the correct choice for internal consistency, but it adds interpretive cost.
 
 \\subsection{Coarseness of Relation-Group and Feature Design}
-The relation-group analysis in this paper is deliberately coarse and analysis-oriented. The groups such as \\texttt{visual\\_relations}, \\texttt{weak\\_visual\\_relations}, and \\texttt{ambiguous\\_material\\_relations} are useful for testing whether multimodal gain varies with broad relation characteristics, but they do not define a complete semantic ontology of relations. Likewise, the router feature sets are designed to test protocol-aware selective activation in a controlled way, not to exhaust every possible feature family.
+The relation-group analysis is deliberately coarse and analysis-oriented. It is useful for testing broad tendencies, but it does not provide a complete semantic ontology of multimodal-favorable relation types.
 
-As a result, the current paper should not be interpreted as offering a final taxonomy of multimodal-favorable relation types or a complete characterization of all useful router features. Instead, it provides a first operational decomposition showing that target regime, relation priors, and expert-confidence signals already contain enough information to support effective selective activation under the current protocol.
+The router feature design is similarly coarse-but-sufficient. It is enough to support the current controlled claim, but it is not intended as a complete characterization of all useful routing signals.
+
+For this reason, the paper should not be read as offering a final taxonomy of multimodal-favorable relations or an exhaustive feature blueprint. It provides only a first operational decomposition showing that target regime, relation priors, and expert-confidence signals are already sufficient to support selective activation under the present protocol.
 
 \\subsection{No Claim of Universal Multimodal Superiority}
-Finally, the present work does not claim that multimodal fusion is globally superior to structural modeling in MMKGC. In fact, one of the paper's central empirical findings is the opposite: under the current protocol, strong structural fallback remains indispensable, and the strongest fixed model is still structure-heavy.
+Finally, this paper does not claim that multimodal fusion is globally superior to structural modeling. Under the current protocol, strong structural fallback remains indispensable, and the strongest fixed model is still structure-heavy.
 
-This is a limitation in the sense that the paper does not deliver a universally dominant multimodal architecture. But it is also part of the paper's honesty and positioning. The contribution is not to ``win MMKGC'' in the most general sense. It is to identify a bounded-gain regime clearly and then show that once this regime is treated as a routing problem, selective activation can outperform always-on multimodal use under the present setting.
+The paper therefore does not deliver a universally dominant multimodal architecture. What it does deliver instead is a protocol-aware result: once a bounded-gain regime is identified clearly, selective activation can use multimodal evidence more effectively than always-on multimodal use under the present setting.
 
 \\section{Conclusion}
 This paper revisits multimodal knowledge graph completion on OpenBG-IMG under a more precise question than the standard ``does multimodal information help?'' framing. Under the current protocol, the answer is not a simple yes or no. Multimodal information is useful, but its usefulness is not globally uniform. It depends on target position, image availability, relation context, and the competition between multimodal fusion and stronger structural compensation.
