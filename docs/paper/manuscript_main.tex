@@ -225,30 +225,14 @@ This is why the paper moves from gain-boundary analysis to gain-aware selective 
 
 \section{Method: Gain-Threshold Routing for Selective Multimodal Activation}
 \subsection{Overview}
-The previous sections establish a protocol-aware empirical tension. Under the current OpenBG-IMG setting, multimodal gain is visible but not globally reliable. \texttt{Full Model} improves over weaker multimodal baselines, yet stronger structural alternatives---especially \texttt{Residual-only}, and in the official main-result line also \texttt{ComplEx}---remain superior at the global level. This means that the key problem is no longer simply how to build a richer multimodal encoder. Instead, the problem becomes whether multimodal fusion should be activated for the current query at all.
+The method introduced in this section is motivated by one central observation: under the current OpenBG-IMG protocol, multimodal gain is conditional rather than globally reliable. We therefore recast the problem as \textbf{gain-aware selective activation}: instead of building a larger always-on multimodal encoder, we decide at the query level whether multimodal fusion is worth activating.
 
-We therefore move from always-on multimodal fusion to \textbf{gain-aware selective activation}. The central idea is simple: if multimodal gain is conditional rather than uniformly available, then the model should predict when fusion is likely to help and use a stronger structural fallback otherwise. To operationalize this idea, we propose a lightweight \textbf{gain-threshold routing} framework that performs query-level expert selection between a fusion expert and a structural expert~\cite{jacobs1991adaptive,jordan1994hierarchical,shazeer2017outrageously}.
-
-Importantly, this design does not attempt to train a new large end-to-end multimodal architecture. Instead, it isolates the contribution of selective activation itself. The experts are fixed, the router is lightweight, and the method is evaluated under the same protocol-aware conditions that motivated the bounded-gain analysis in the first place.
+The proposed framework is deliberately lightweight. It keeps the experts fixed, uses a small router on top of them, and attributes any resulting gain to selective activation rather than to added model capacity or a newly trained end-to-end multimodal architecture.
 
 \subsection{Problem Formulation}
-We study link prediction on OpenBG-IMG under the current paper protocol. A query may be written either as \((h, r, ?)\) for tail prediction or as \((?, r, t)\) for head prediction. Under the present split, target position is entangled with image availability: head-side targets may be image-supported, whereas tail-side targets are effectively image-unavailable. As a result, multimodal usefulness is not symmetric across the evaluation space.
+For a query \(q\), we consider either tail prediction \((h,r,?)\) or head prediction \((?,r,t)\). Under the protocol-aware target-side regime structure defined in Section~3, the usefulness of multimodal fusion is not symmetric across queries.
 
-Earlier analysis showed that the test space is naturally decomposed into three target-side regimes:
-
-\begin{itemize}
-    \item \texttt{head\_has\_img}
-    \item \texttt{head\_no\_img}
-    \item \texttt{tail\_no\_img}
-\end{itemize}
-
-These regimes are not equally favorable to multimodal fusion. In particular, \texttt{head\_has\_img} is the clearest multimodal-favorable regime, whereas \texttt{tail\_no\_img} remains strongly structure-favorable. The problem can therefore be reframed as follows:
-
-\begin{quote}
-Given a query \(q\), decide whether multimodal fusion is expected to produce sufficient gain over a stronger structural alternative, and activate the corresponding expert accordingly.
-\end{quote}
-
-This formulation differs from standard multimodal modeling in one important respect. We are not asking the model to use multimodal evidence everywhere. We are asking it to decide \textbf{when multimodal evidence is worth using} under a protocol where gain is known to be bounded.
+The routing problem is therefore defined at the query level rather than at the candidate level: given a query \(q\), decide whether multimodal fusion is expected to provide sufficient gain over a stronger structural alternative, and activate the corresponding expert accordingly. In this formulation, \(y(q)\) denotes a gain-positive query label, \(\tau\) denotes the routing threshold, and the goal is not to use multimodal evidence everywhere but to decide \textbf{when multimodal evidence is worth using} under the current protocol.
 
 \subsection{Dual-Expert Gain-Threshold Routing}
 \paragraph{Fixed experts.}
@@ -259,159 +243,141 @@ We define two fixed experts:
     \item \textbf{Structural expert:} \texttt{Residual-only}
 \end{itemize}
 
-This choice is deliberate. \texttt{Gate-only} represents relation-aware multimodal fusion without an explicit structural compensation branch. \texttt{Residual-only} represents structure-heavy compensation within the same internal model family. Together, they are the clearest diagnostic endpoints in the current framework and provide a clean basis for selective routing.
+This choice is deliberate rather than ad hoc. The pair gives the clearest within-family competition between relation-aware multimodal fusion and structure-heavy fallback, preserves diagnostic clarity, and provides an interpretable basis for selective routing.
 
-We do not use \texttt{Full Model} itself as the routed fusion expert in the first version of the method. Doing so would make the interpretation less clear, because \texttt{Full Model} already contains a residual path internally. By contrast, routing between \texttt{Gate-only} and \texttt{Residual-only} keeps the competition interpretable as \textbf{fusion versus structural fallback}.
+\paragraph{Why not route with \texttt{Full Model}?}
+Using \texttt{Full Model} as the fusion-side routed expert would be tempting, but it would also blur the interpretation because \texttt{Full Model} already contains an internal residual path. We therefore do not use it as the routed fusion expert in the first version of the method. Routing between \texttt{Gate-only} and \texttt{Residual-only} isolates expert selection from the internal branch competition already present in \texttt{Full Model} and keeps the comparison interpretable as \textbf{fusion versus structural fallback}.
 
 \paragraph{Query-level routing formulation.}
-For a query \(q\) and a candidate entity \(e\), let \(s_f(q,e)\) denote the score from the fusion expert and \(s_s(q,e)\) denote the score from the structural expert.
-
-A query-level router receives a feature vector \(x_q\) and predicts the probability that the fusion expert should be selected:
+Let \(s_f(q,e)\) denote the score assigned to candidate entity \(e\) for query \(q\) by the fusion expert, and let \(s_s(q,e)\) denote the corresponding score from the structural expert. A router receives a query-level feature vector \(x_q\) and predicts the probability that fusion should be selected:
 
 \[
-p(q) = P(y=1 \mid x_q).
+p(q)=P(y=1\mid x_q).
 \]
 
-At inference time, we apply a hard threshold \(\tau\) and define the routing decision as:
+We then apply hard routing with threshold \(\tau\):
 
 \[
-\alpha(q) = \mathbf{1}[p(q) > \tau].
+\alpha(q)=\mathbf{1}[p(q)>\tau].
 \]
 
-The final candidate score is then
+The final score is defined as
 
 \[
-s_{\text{final}}(q,e) = \alpha(q) s_f(q,e) + (1-\alpha(q)) s_s(q,e).
+s_{\text{final}}(q,e)=\alpha(q)s_f(q,e)+(1-\alpha(q))s_s(q,e).
 \]
 
-This design has two advantages. First, it keeps the experts fixed and changes only the selection mechanism, so any improvement can be attributed to selective activation rather than to added model capacity or end-to-end co-adaptation. Second, it matches the current problem structure well: the goal is not to blend experts softly everywhere, but to activate the multimodal path only when it is sufficiently likely to help~\cite{jacobs1991adaptive,jordan1994hierarchical,shazeer2017outrageously}.
+This design keeps the experts fixed and places the method contribution on the selection rule itself. It is also better aligned with the current bounded-gain setting than soft blending everywhere, because the main question is whether fusion should be activated for the current query at all.
 
 \subsection{Gain Label Construction}
-To train the router, we construct query-level supervision from development-set expert performance. For each query \(q\), let \(\mathrm{rank}_f(q)\) and \(\mathrm{rank}_s(q)\) denote the filtered ranks of the correct target entity under the fusion expert and the structural expert, respectively.
+Router supervision is constructed per query, not per candidate entity. For each query \(q\), we compute the filtered rank of the correct target entity under the fusion expert and the structural expert, denoted by \(\mathrm{rank}_f(q)\) and \(\mathrm{rank}_s(q)\), respectively. All ranks are computed under the same filtered-ranking protocol as the final task evaluation.
 
-We define reciprocal ranks as:
-
-\[
-RR_f(q) = \frac{1}{\mathrm{rank}_f(q)}, \qquad RR_s(q) = \frac{1}{\mathrm{rank}_s(q)}.
-\]
-
-The gain difference is then
+We convert ranks into reciprocal ranks:
 
 \[
-\Delta(q) = RR_f(q) - RR_s(q).
+RR_f(q)=\frac{1}{\mathrm{rank}_f(q)}, \qquad RR_s(q)=\frac{1}{\mathrm{rank}_s(q)}.
 \]
 
-Using this quantity, we define the binary gain label:
+The gain difference is then defined as
 
 \[
-y(q) = \mathbf{1}[\Delta(q) > \delta],
+\Delta(q)=RR_f(q)-RR_s(q).
 \]
 
-where \(\delta\) is a gain margin that controls how much positive advantage the fusion expert must demonstrate before the query is labeled as gain-positive.
+Using reciprocal-rank difference aligns the label with ranking improvement rather than with raw score magnitude. We define the binary gain label as
 
-This label should be interpreted carefully. It does \textbf{not} mean that the query belongs to a universally multimodal-favorable semantic class. Instead, it means that under the current protocol and current expert pair, the fusion expert yields sufficiently larger reciprocal-rank improvement than the structural expert for this specific query.
+\[
+y(q)=\mathbf{1}[\Delta(q)>\delta],
+\]
 
-In the first-round routing experiments, we evaluate \(\delta \in \{0.00, 0.01, 0.02\}\). All labels are constructed from development-set query outcomes only. Test labels are never used to train the router, and relation priors are also estimated strictly from train/dev-side information to avoid leakage.
+where \(\delta\) is a gain margin controlling how conservative the definition of a gain-positive query is.
+
+This label should not be interpreted as a semantic class of inherently multimodal-friendly queries. It only means that, under the current protocol and the current expert pair, the fusion expert yields sufficiently larger reciprocal-rank improvement than the structural expert for this specific query.
+
+In the first-round routing study, we evaluate \(\delta\in\{0.00,0.01,0.02\}\). All gain labels are constructed from development-side expert outcomes only. Test labels are never used for router training, and relation priors are estimated strictly from train/dev-side information to avoid leakage.
 
 \subsection{Protocol-Aware Router Features}
-A naive router could easily degenerate into a shallow heuristic such as ``use fusion whenever images are available.'' To prevent this, we design the router feature space to cover multiple complementary views of the query.
+The feature design follows one guiding principle: a useful router should not collapse into the shallow rule ``use fusion whenever images are available.'' We therefore combine protocol-aware condition features, modality-consistency features, and expert-confidence features.
 
-\paragraph{Protocol-aware condition features.}
-The first feature group directly encodes the protocol conditions under which multimodal gain is known to vary. These features include:
+\begin{table}[t]
+\centering
+\caption{Router feature definitions in the \texttt{FULL} setting.}
+\label{tab:router_feature_definitions}
+\small
+\begin{tabular}{p{0.20\textwidth}p{0.12\textwidth}p{0.36\textwidth}p{0.22\textwidth}}
+\toprule
+Feature & Type & Definition & Source \\
+\midrule
+\texttt{direction} & categorical & query direction (head / tail) & current query \\
+\texttt{target\_has\_img} & binary & whether the target entity has image support & current query \\
+\texttt{target\_regime} & categorical & \texttt{head\_has\_img}, \texttt{head\_no\_img}, or \texttt{tail\_no\_img} & current query \\
+\texttt{relation\_id} & categorical & relation identifier & current query \\
+\texttt{relation\_gain\_prior} & numeric & mean gain-oriented prior estimated for the relation & dev-side relation stats \\
+\texttt{relation\_fusion\_win\_rate} & numeric & fraction of dev queries on which fusion beats structure for that relation & dev-side relation stats \\
+\texttt{relation\_support} & numeric & support count for that relation in prior estimation & dev-side relation stats \\
+\texttt{relation\_is\_visual\_prior} & binary & binary flag derived from the relation prior statistics & dev-side relation stats \\
+\texttt{text\_img\_cosine} & numeric & cosine similarity between text and image representations & modality cache / current query \\
+\texttt{img\_is\_missing\_replaced} & binary & whether the image branch uses a missing-image replacement vector & modality cache / current query \\
+\texttt{fusion\_margin} & numeric & top1--top2 score gap from \texttt{Gate-only} & current query expert output \\
+\texttt{struct\_margin} & numeric & top1--top2 score gap from \texttt{Residual-only} & current query expert output \\
+\texttt{fusion\_correct\_score} & numeric & score of the correct target under \texttt{Gate-only} & current query expert output \\
+\texttt{struct\_correct\_score} & numeric & score of the correct target under \texttt{Residual-only} & current query expert output \\
+\texttt{delta\_margin} & numeric & \texttt{fusion\_margin} $-$ \texttt{struct\_margin} & derived from expert outputs \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\begin{itemize}
-    \item \texttt{direction}
-    \item \texttt{target\_has\_img}
-    \item \texttt{target\_regime}
-    \item \texttt{relation\_id}
-    \item \texttt{relation\_gain\_prior}
-    \item \texttt{relation\_fusion\_win\_rate}
-    \item \texttt{relation\_support}
-\end{itemize}
+Protocol-aware condition features describe the query under the current asymmetric protocol. Modality-consistency features describe whether the query appears to have coherent cross-modal evidence. Expert-confidence features describe whether one expert currently appears more trustworthy than the other, which is a stronger decision signal than raw image availability alone.
 
-These features let the router represent the empirical reality that multimodal usefulness depends on target position, modality availability, and relation context under the current role-conditioned missing-modality protocol.
+For learned routing, the current implementation uses the \texttt{FULL} feature set by default. For ablation, we additionally define four nested feature subsets shown in Table~\ref{tab:router_feature_sets}.
 
-\paragraph{Modality-consistency features.}
-The second feature group describes whether the query appears to have coherent multimodal evidence. These features include \texttt{text\_img\_cosine} and \texttt{img\_is\_missing\_replaced}.
-
-The cosine feature measures the compatibility between text and image representations, while the missing-image indicator distinguishes real visual support from the learnable replacement used when an entity lacks an image. In the present results, modality-consistency features appear to provide weaker gains than protocol or confidence features, but they remain useful as a complementary signal.
-
-\paragraph{Expert-confidence features.}
-The third feature group captures whether one expert appears more trustworthy for the current query. These features include:
-
-\begin{itemize}
-    \item \texttt{fusion\_margin}
-    \item \texttt{struct\_margin}
-    \item \texttt{fusion\_correct\_score}
-    \item \texttt{struct\_correct\_score}
-    \item \texttt{delta\_margin}
-\end{itemize}
-
-These signals go beyond the question ``is fusion plausible?'' and address the stronger question ``is the fusion expert currently confident enough to trust more than the structural expert?'' In the later feature-ablation study, this confidence-aware information is one of the main reasons why the learned router outperforms shallow heuristics.
-
-\paragraph{Feature-set view for ablation.}
-For ablation, the full feature space is also organized into incremental feature sets:
-
-\begin{itemize}
-    \item \texttt{F1}: minimal image-availability signal
-    \item \texttt{F2}: protocol-aware condition features
-    \item \texttt{F3}: protocol-aware + modality-consistency features
-    \item \texttt{F4}: protocol-aware + modality-consistency + expert-confidence features
-\end{itemize}
-
-This staged organization allows us to test whether routing success comes only from modality availability or from a richer protocol-aware decision boundary.
+\begin{table}[t]
+\centering
+\caption{Feature subsets used in ablation.}
+\label{tab:router_feature_sets}
+\small
+\begin{tabular}{p{0.10\textwidth}p{0.78\textwidth}}
+\toprule
+Set & Features \\
+\midrule
+\texttt{F1} & \texttt{target\_has\_img} \\
+\texttt{F2} & \texttt{target\_has\_img}, \texttt{direction}, \texttt{relation\_gain\_prior} \\
+\texttt{F3} & \texttt{F2} + \texttt{text\_img\_cosine}, \texttt{img\_is\_missing\_replaced} \\
+\texttt{F4} & \texttt{F3} + \texttt{fusion\_margin}, \texttt{struct\_margin}, \texttt{delta\_margin} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Router Baselines and Training}
-We evaluate three classes of routers.
+We evaluate three router classes.
 
 \paragraph{Rule-based router.}
-The first baseline is a rule-based router that selects fusion only when the target has image support and the relation-level gain prior is positive. This baseline represents the strongest simple heuristic interpretation of the earlier gain-boundary analysis. It is deliberately shallow and serves as a lower bound for learned routing.
+The rule-based baseline is defined as
+\[
+\text{route to fusion} \iff \texttt{target\_has\_img}=1 \;\text{and}\; \texttt{relation\_gain\_prior}>0.
+\]
+It is intentionally shallow and serves as the strongest simple heuristic lower bound for learned routing.
 
 \paragraph{Logistic regression router.}
-The second router is logistic regression. Its purpose is to provide a lightweight and interpretable learned decision boundary. If logistic regression already improves over the rule-based router, this would indicate that gain-positive queries are learnable from the proposed feature space without requiring a highly flexible nonlinear model.
+The first learned router is logistic regression. In the current implementation, it uses a sparse \texttt{DictVectorizer} representation, \texttt{solver=liblinear}, \texttt{class\_weight=balanced}, \texttt{max\_iter=2000}, and \texttt{random\_state=42}. Categorical features such as \texttt{direction}, \texttt{target\_regime}, and \texttt{relation\_id} are string-encoded before vectorization. Missing values are mapped to \(0.0\) by construction.
 
 \paragraph{Gradient-boosted router.}
-The third router is an XGBoost-based classifier. This router can model nonlinear interactions among protocol-aware, relation-level, modality, and confidence features. In the first-round experiments, it is the strongest learned router and provides the best trade-off between routing precision and retained multimodal benefit.
+The second learned router is XGBoost. The current implementation uses \texttt{n\_estimators=300}, \texttt{max\_depth=4}, \texttt{learning\_rate=0.05}, \texttt{subsample=0.8}, \texttt{colsample\_bytree=0.8}, \texttt{reg\_lambda=1.0}, \texttt{objective=binary:logistic}, \texttt{eval\_metric=logloss}, \texttt{random\_state=42}, and \texttt{n\_jobs=1}. Class imbalance is handled through \texttt{scale\_pos\_weight = N_{neg}/N_{pos}} computed from the current training labels.
 
-\paragraph{Training protocol.}
-Router training is performed on development-side query-level feature tables constructed from the fixed experts. The supervised target is the gain label defined above. Training uses only development-set data, and the resulting router is then applied to test-side query-level features without seeing test outcomes during training.
+\paragraph{Training and selection protocol.}
+All learned routers are trained on development-side query-level feature tables constructed from the fixed experts. The supervised target is the gain label defined above, and the trained router is then applied to test-side query features without observing test labels during training.
 
-For the learned routers, we evaluate multiple gain margins \(\delta\) and multiple routing thresholds \(\tau\). This separation is important because \(\delta\) controls how gain-positive labels are defined during training, whereas \(\tau\) controls how conservatively the router activates fusion at inference time.
-
-By scanning both, we can separate the question of \textbf{what counts as useful gain} from the question of \textbf{how cautious the final routing decision should be}.
+In the current first-round study, we train learned routers for multiple gain margins \(\delta\) and then evaluate threshold scans over \(\tau\in\{0.1,0.3,0.5,0.7,0.9\}\). The strongest reported settings should therefore be interpreted as first-round empirical best settings within the routing study, not as the output of a fully locked held-out hyperparameter-selection protocol. This is why the present paper frames these routing results as a protocol-aware method demonstration rather than as a final hyperparameter-optimized benchmark submission.
 
 \subsection{Hard-Threshold Inference and Evaluation Dialects}
-The routing framework is evaluated under a unified query-level recomputed line. This detail matters because the router, the Oracle selector, and the rule-based selector all operate on query-level exported expert outcomes. To keep the comparison fair, fixed experts in the routing table are also reported under the same query-level recomputed aggregation rather than mixed with the official main-result summary line.
+As an implementation consequence of the evaluation protocol defined in Section~3, all routing claims are made on the unified query-level recomputed line. Oracle routing, rule-based routing, and learned routing all require query-level exported expert outcomes, so fixed experts inside the routing comparison are also recomputed on that same basis for fairness.
 
-This leads to two distinct but complementary evaluation dialects in the paper:
-
-\begin{enumerate}[leftmargin=1.5em]
-    \item \textbf{Official main-result dialect}
-    \begin{itemize}
-        \item based on \texttt{test\_metrics.json}
-        \item used for the seven-model paper-facing main table
-        \item supports claims about the original model family under the formal paper protocol
-    \end{itemize}
-    \item \textbf{Routing dialect}
-    \begin{itemize}
-        \item based on query-level exported expert predictions and recomputed aggregation
-        \item used for Oracle, rule-based routing, logistic routing, XGBoost routing, and the fixed experts inside the router comparison
-        \item supports claims about selective activation under a shared routing-compatible line
-    \end{itemize}
-\end{enumerate}
-
-These two dialects must not be mixed in the same table. The first addresses the performance ordering of the original models. The second addresses whether query-level selective activation improves over fixed experts once all rows are computed under the same routing-compatible protocol.
+These routing-compatible results must not be mixed with the official model-comparison line. Official model-family claims remain on the formal \texttt{test\_metrics.json} line, whereas routing claims are made only on the routing-compatible line.
 
 \subsection{Design Rationale and Scope}
-The proposed method is intentionally lightweight and controlled. Several design decisions reflect this goal.
+The design is intentionally lightweight and interpretable. The experts are fixed rather than jointly optimized with the router, routing is performed at the query level rather than at the token or representation level, and hard-threshold routing is used instead of soft mixing. Together, these choices isolate the effect of selective activation itself.
 
-First, the experts are fixed rather than jointly optimized with the router. This isolates the value of selective activation itself.
-
-Second, routing is performed at the query level rather than at the representation or token level. This matches the protocol-aware problem framing and keeps the method simple enough to interpret.
-
-Third, we use hard-threshold routing in the first version of the method rather than soft mixing. Hard routing aligns more naturally with the bounded-gain hypothesis: the central claim is that multimodal activation should be selective, not merely softly down-weighted everywhere.
-
-Finally, the method is protocol-specific by design. It is not intended to prove that all MMKGC settings should use the same expert pair or the same router features. Instead, it shows that under the current OpenBG-IMG protocol, bounded multimodal gain can be turned into a useful decision problem and exploited through selective activation.
+The scope is also deliberately narrow. The current method is protocol-specific by construction: it is designed to show that, under the present OpenBG-IMG setting, bounded multimodal gain can be turned into a useful query-level decision problem. We do not claim that the same expert pair, feature space, or thresholding strategy should transfer unchanged to all MMKGC settings.
 
 \section{Experiments}
 \subsection{Experimental Setup}
