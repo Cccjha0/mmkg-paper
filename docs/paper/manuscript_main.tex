@@ -395,9 +395,13 @@ XGBoost & 0.1651 & 0.2306 & 0.2303 & 0.2556 \\
 The hierarchy is clear. Image availability alone is insufficient, protocol-aware condition features are central, and expert-confidence features provide the strongest additional gain.
 
 \subsection{Relation-Group Evaluation}
+Relation-group evidence is retained as supporting analysis rather than as a second main-result line.
+
+To keep this analysis interpretable and statistically stable, relation groups were defined before grouped reporting, and only relations with at least 20 test queries were retained in the grouped summary. For transparency, we report the retained support for each group in terms of both the number of retained relations and the number of test queries covered by those relations.
+
 \begin{table}[t]
 \centering
-\caption{Relation-type grouped MRR under the unified OpenBG-IMG protocol. All cells report mean $\pm$ standard deviation over seeds 1, 2, and 3.}
+\caption{Relation-type grouped MRR under the unified OpenBG-IMG protocol. Relation groups are reported as supporting analysis only. Only relations with at least 20 test queries are retained. All cells report mean $\pm$ standard deviation over seeds 1, 2, and 3.}
 \label{tab:relation_grouped}
 \small
 \setlength{\tabcolsep}{5pt}
@@ -412,7 +416,23 @@ Model & \texttt{visual\_relations} & \texttt{weak\_visual\_relations} & \texttt{
 \end{tabular}
 \end{table}
 
-Relation-group evidence is retained as supporting analysis rather than as a second main-result line. It shows that relation dependence is real, but still bounded.
+\begin{table}[t]
+\centering
+\caption{Retained support for relation-group analysis after minimum-support filtering.}
+\label{tab:relation_group_support}
+\small
+\begin{tabular}{lcc}
+\toprule
+Group & \#Relations retained & \#Test queries retained \\
+\midrule
+\texttt{visual\_relations} & 24 & 3{,}804 \\
+\texttt{weak\_visual\_relations} & 18 & 3{,}304 \\
+\texttt{ambiguous\_material\_relations} & 9 & 1{,}150 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Relation-group evidence therefore remains auditable as supporting analysis: the grouped ordering is reported together with the retained minimum-support rule and the retained support for each coarse relation group. It shows that relation dependence is real, but still bounded.
 
 \section{Analysis and Discussion}
 \subsection{Overview}
