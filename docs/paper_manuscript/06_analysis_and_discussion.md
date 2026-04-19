@@ -8,7 +8,7 @@ First, under the official paper protocol, the strongest fixed model remains `Res
 
 Second, under the unified routing line, learned selective activation outperforms both fixed experts and the original always-on multimodal design. The best learned router (`xgb + delta=0.01 + tau=0.7`) reaches `0.3160` MRR, exceeding fixed `Residual-only`, rule-based routing, and the original `Full Model`, while still remaining below Oracle routing.
 
-Taken together, these results suggest a more precise interpretation of the problem. The main obstacle in the current protocol is not the absence of multimodal value. It is the absence of a mechanism that activates multimodal evidence only under conditions where it is likely to help and suppresses it where stronger structural fallback is more reliable. This section explains that interpretation and clarifies what the new results do and do not imply.
+Taken together, these results suggest a more precise interpretation of the problem. The main obstacle in the current protocol is not the absence of multimodal value. It is the absence of a mechanism that activates multimodal evidence only under conditions where it is likely to help and suppresses it where stronger structural fallback is more reliable. This section explains that interpretation and clarifies what the current results do and do not imply.
 
 ## 2. Why Selective Activation Works Under the Current Protocol
 
@@ -46,7 +46,7 @@ The learned router therefore does not merely discover that some queries have ima
 
 The stronger performance of XGBoost over logistic regression fits this picture. The protocol-aware gain structure is not purely linear. There are interactions among direction, target regime, relation priors, and confidence margins. A nonlinear router is better able to model these interactions and therefore better able to make conservative but useful activation decisions. The improvement over logistic regression is not dramatic enough to suggest a radically different problem, but it is stable enough to indicate that query-level routing is not governed by a single simple threshold in the raw feature space.
 
-## 4. How the New Results Reposition `Gate-only`, `Residual-only`, and `Full Model`
+## 4. How the Current Results Reposition `Gate-only`, `Residual-only`, and `Full Model`
 
 ### 4.1 `Gate-only` is locally useful, not globally reliable
 
@@ -56,7 +56,7 @@ The routing results strengthen this interpretation. `Gate-only` is not globally 
 
 ### 4.2 `Residual-only` is more than an ablation baseline
 
-The new results also make it even clearer that `Residual-only` should not be described as a mere ablation. Under both the official model-comparison line and the routing line, it is the strongest fixed structural reference inside the internal family. Behavior analysis further shows that the complete model becomes increasingly residual-biased when image support weakens, which means that `Residual-only` captures a genuine task-level preference rather than an accidental simplification.
+The current results also make it even clearer that `Residual-only` should not be described as a mere ablation. Under both the official model-comparison line and the routing line, it is the strongest fixed structural reference inside the internal family. Behavior analysis further shows that the complete model becomes increasingly residual-biased when image support weakens, which means that `Residual-only` captures a genuine task-level preference rather than an accidental simplification.
 
 For this reason, `Residual-only` is best understood as the structurally reliable fallback expert around which the routing problem is organized. Its strength is exactly why selective activation is needed in the first place.
 
@@ -74,7 +74,7 @@ What relation-group evidence does contribute is something more subtle and more u
 
 In other words, relation-group analysis supports the selective-activation story indirectly. It tells us that multimodal benefit is not random, but it also tells us that the decision boundary is too fine-grained and too interaction-dependent to be handled by a simple grouped rule.
 
-## 6. What the New Results Do Not Prove
+## 6. What the Current Results Do Not Prove
 
 The strongest claim supported by the present paper is that **selective activation is effective under the current OpenBG-IMG protocol**. Several stronger claims are not supported and should be avoided.
 
@@ -88,7 +88,7 @@ These limits are not weaknesses to hide. They are part of what makes the paper c
 
 ## 7. Broader Implications
 
-The new results suggest three broader implications for MMKGC research.
+The current results suggest three broader implications for MMKGC research.
 
 First, protocol-aware evaluation matters more than aggregate leaderboard ranking alone. The current study shows that target position, modality availability, and relation structure can jointly shape whether multimodal information appears useful at all.
 
