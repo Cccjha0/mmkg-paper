@@ -1,0 +1,17 @@
+feature_name,coefficient,direction,rank_abs
+relation_id=rel_126,2.7650,positive_for_fusion,4
+relation_id=rel_39,2.4744,positive_for_fusion,5
+relation_id=rel_66,2.3155,positive_for_fusion,8
+delta_margin,2.2684,positive_for_fusion,9
+relation_id=rel_103,2.2061,positive_for_fusion,10
+fusion_correct_score,1.7497,positive_for_fusion,12
+relation_id=rel_33,1.4651,positive_for_fusion,15
+relation_id=rel_98,1.3461,positive_for_fusion,16
+struct_margin,-4.7224,negative_for_fusion,1
+struct_correct_score,-4.2584,negative_for_fusion,2
+relation_id=rel_132,-3.6045,negative_for_fusion,3
+fusion_margin,-2.4540,negative_for_fusion,6
+relation_id=rel_29,-2.3227,negative_for_fusion,7
+relation_id=rel_2,-2.1409,negative_for_fusion,11
+relation_id=rel_69,-1.5645,negative_for_fusion,13
+relation_id=rel_101,-1.4674,negative_for_fusion,14

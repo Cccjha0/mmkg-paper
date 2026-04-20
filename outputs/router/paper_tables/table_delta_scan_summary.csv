@@ -1,0 +1,7 @@
+model_type,delta,selected_tau,best_mrr,fusion_coverage,gain_precision,positive_label_rate_dev,oracle_gap_at_best_tau
+logistic,0.00,0.5,0.3140,0.4976,0.8408,0.4811,0.0197
+logistic,0.01,0.7,0.3111,0.1788,0.6171,0.1562,0.0226
+logistic,0.02,0.7,0.3105,0.1650,0.5633,0.1291,0.0232
+xgb,0.00,0.5,0.3175,0.4933,0.8745,0.4811,0.0162
+xgb,0.01,0.7,0.3160,0.1848,0.6696,0.1562,0.0177
+xgb,0.02,0.7,0.3146,0.1695,0.6019,0.1291,0.0191

@@ -1,0 +1,16 @@
+feature_family,feature_count,aggregated_gain,aggregated_weight,aggregated_cover
+relation_id,123,1079.4977,642.0000,114571.8574
+direction,2,365.3547,233.0000,3577.3756
+target_regime,3,352.3156,47.0000,3138.5988
+fusion_correct_score,1,238.0224,803.0000,1925.3564
+struct_correct_score,1,98.9467,647.0000,1519.6398
+relation_fusion_win_rate,1,64.5952,204.0000,1387.9501
+target_has_img,1,60.0073,9.0000,747.5022
+relation_support,1,50.1067,286.0000,1502.2257
+relation_gain_prior,1,43.5277,212.0000,1018.8434
+struct_margin,1,36.8792,400.0000,956.4281
+img_is_missing_replaced,1,27.7955,55.0000,640.4326
+fusion_margin,1,16.2641,164.0000,702.9017
+text_img_cosine,1,15.1602,137.0000,738.7371
+delta_margin,1,12.9444,197.0000,524.7883
+relation_is_visual_prior,1,5.8452,2.0000,45.1646

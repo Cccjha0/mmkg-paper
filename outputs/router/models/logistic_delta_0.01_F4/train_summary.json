@@ -1,0 +1,49 @@
+{
+  "model_type": "logistic",
+  "feature_set": "F4",
+  "delta": 0.01,
+  "delta_tag": "0.01",
+  "n_train": 30000,
+  "positive_rate": 0.15616666666666668,
+  "selected_features": [
+    "target_has_img",
+    "direction",
+    "relation_gain_prior",
+    "text_img_cosine",
+    "img_is_missing_replaced",
+    "fusion_margin",
+    "struct_margin",
+    "delta_margin"
+  ],
+  "train_label_name": "gain_label_d001",
+  "train_table": "outputs/router/features/router_features_dev.parquet",
+  "threshold_for_metrics": 0.5,
+  "random_state": 42,
+  "hyperparams": {
+    "C": 1.0,
+    "class_weight": "balanced",
+    "dual": false,
+    "fit_intercept": true,
+    "intercept_scaling": 1,
+    "l1_ratio": null,
+    "max_iter": 2000,
+    "multi_class": "deprecated",
+    "n_jobs": null,
+    "penalty": "l2",
+    "random_state": 42,
+    "solver": "liblinear",
+    "tol": 0.0001,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "train_metrics": {
+    "n_samples": 30000,
+    "positive_rate": 0.15616666666666668,
+    "pred_positive_rate": 0.3981,
+    "auc": 0.7202668574467579,
+    "f1": 0.3743083954775078,
+    "precision": 0.2605710458008875,
+    "recall": 0.6642475987193169,
+    "balanced_accuracy": 0.6577015200785998
+  }
+}
