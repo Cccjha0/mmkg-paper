@@ -17,6 +17,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--router-preds", required=True)
     parser.add_argument("--delta", required=True)
     parser.add_argument("--tau", type=float, required=True)
+    parser.add_argument("--seed", type=int, default=None, help="Optional seed filter to build a single-seed master table")
     parser.add_argument("--out", required=True)
     return parser.parse_args()
 
@@ -44,10 +45,25 @@ def infer_model_name(router_preds: Path) -> str:
     return "router"
 
 
+def infer_seed_series(df: pd.DataFrame) -> pd.Series:
+    if "seed" in df.columns:
+        return df["seed"].astype(int)
+    if "source_seed" in df.columns:
+        return df["source_seed"].astype(int)
+    if "query_id" in df.columns:
+        seeds = df["query_id"].astype(str).str.split("|").str[1]
+        if seeds.isna().any():
+            raise RuntimeError("Failed to infer seed from query_id.")
+        return seeds.astype(int)
+    raise RuntimeError("Cannot infer seed column from input table.")
+
+
 def prepare_outcome(df: pd.DataFrame, prefix: str) -> pd.DataFrame:
     if "margin" not in df.columns and "score_margin" in df.columns:
         df = df.copy()
         df["margin"] = df["score_margin"]
+    df = df.copy()
+    df["seed"] = infer_seed_series(df)
     rename = {
         "rr": f"rr_{prefix}",
         "rank": f"rank_{prefix}",
@@ -58,6 +74,7 @@ def prepare_outcome(df: pd.DataFrame, prefix: str) -> pd.DataFrame:
     }
     keep = [
         "query_id",
+        "seed",
         "direction",
         "relation_id",
         "head_id",
@@ -81,11 +98,14 @@ def main() -> None:
     residual_df = prepare_outcome(read_table(Path(args.residual_test)), "residual")
     full_df = prepare_outcome(read_table(Path(args.full_test)), "full_official")
     pred_df = read_table(Path(args.router_preds))
+    pred_df = pred_df.copy()
+    pred_df["seed"] = infer_seed_series(pred_df)
 
     merged = gate_df.merge(
         residual_df[
             [
                 "query_id",
+                "seed",
                 "rank_residual",
                 "rr_residual",
                 "correct_score_residual",
@@ -102,6 +122,7 @@ def main() -> None:
         full_df[
             [
                 "query_id",
+                "seed",
                 "rank_full_official",
                 "rr_full_official",
                 "correct_score_full_official",
@@ -115,11 +136,16 @@ def main() -> None:
         validate="one_to_one",
     )
     merged = merged.merge(
-        pred_df[["query_id", "prob_fusion"]],
-        on="query_id",
+        pred_df[["query_id", "seed", "prob_fusion"]],
+        on=["query_id", "seed"],
         how="inner",
         validate="one_to_one",
     )
+
+    if args.seed is not None:
+        merged = merged.loc[merged["seed"].astype(int) == int(args.seed)].copy()
+        if merged.empty:
+            raise RuntimeError(f"No rows found for seed={args.seed}")
 
     model_name = infer_model_name(Path(args.router_preds))
     d_code = delta_code(args.delta)
