@@ -1,203 +1,45 @@
-# Experiments
+# Experiments and Discussion
 
 ## 1. Experimental Setup
 
-All experiments are conducted on the current OpenBG-IMG `paper_split` under the unified protocol described in the previous section. Model selection is based on development performance, and all final paper-facing metrics are computed on the test set using filtered ranking with `direction=both`. Unless otherwise stated, results are aggregated over three random seeds and reported as `mean ± std` when the source line supports that form.
+All experiments are conducted on the current OpenBG-IMG `paper_split` under the unified protocol defined in the previous section. Base-model checkpoints are selected on the development split, and final paper-facing base-model metrics are reported on the test split using filtered ranking with `direction=both`. Unless otherwise stated, official main-result metrics are aggregated over three random seeds and reported as `mean ± std` when the source line supports that form.
 
-The overall experimental design contains two complementary evaluation lines.
+This chapter is organized around three research questions. **RQ1** asks where multimodal gain actually appears under the current protocol. **RQ2** asks when multimodal evidence should be activated rather than deferred to structural fallback. **RQ3** asks how bounded multimodal gain should be exploited effectively once it is known to be conditional.
 
-The first is the **official model-comparison line**, which is based on the aggregated `test_metrics.json` files from the completed paper-stage runs. This line is used for the seven-model comparison among `Text-only`, `Early Fusion`, `Gate-only`, `Residual-only`, `Full Model`, `ComplEx`, and `TuckER`. It answers the question: how do the original models rank under the formal paper protocol?
+To answer these questions cleanly, we distinguish between two complementary evaluation lines. The **official model-comparison line** is based on the aggregated `test_metrics.json` files from completed paper-stage runs and is used for the seven-model comparison among `Text-only`, `Early Fusion`, `Gate-only`, `Residual-only`, `Full Model`, `ComplEx`, and `TuckER`. The **routing-compatible line** is based on query-level exported expert predictions and unified recomputation, and is used for `Gate-only`, `Residual-only`, Oracle routing, rule-based routing, logistic routing, and XGBoost routing. These two lines answer different questions and should not be mixed in the same table: the official line supports claims about the original model family under the formal paper protocol, whereas the routing-compatible line supports claims about gain-aware selective activation.
 
-The second is the **routing line**, which is based on query-level exported expert predictions and unified recomputation. This line is used for `Gate-only`, `Residual-only`, Oracle selection, rule-based routing, logistic routing, and XGBoost routing. It answers a different question: once all rows are placed on the same query-level routing-compatible line, does selective activation improve over fixed experts?
+## 2. RQ1: Where does multimodal gain appear?
 
-These two lines serve different purposes and must not be mixed in the same table. The official line supports claims about the original model family under the formal paper protocol. The routing line supports claims about gain-aware selective activation.
+RQ1 asks where multimodal gain actually appears under the current OpenBG-IMG protocol. Our starting point is that the benchmark is not a neutral multimodal setting. Under the current paper split, target position is intrinsically entangled with modality availability: head-side targets may still be image-supported, whereas tail-side targets are effectively image-unavailable. As a result, the bidirectional test space is partitioned into three meaningful target-side regimes, namely `head_has_img`, `head_no_img`, and `tail_no_img`, rather than into two symmetric prediction directions alone. Table 1 and Figure 1 make this asymmetry explicit and show that `tail_no_img` alone accounts for half of all bidirectional test queries, which already suggests that aggregate performance will be strongly shaped by a globally large structure-favorable region.
 
-## 2. Compared Methods and Evaluation Dialects
+The subgroup results confirm that multimodal gain is not uniformly distributed across this evaluation space. In `head_has_img`, the ordering becomes `Gate-only > Full Model > Residual-only`, which identifies the clearest multimodal-favorable regime under the current protocol. In contrast, `Residual-only` remains decisively strongest in `tail_no_img`, the regime that is both structurally favorable and globally dominant in support. Interpreting these subgroup outcomes together with the regime counts helps explain the broader pattern of the paper: multimodal benefit is visible and meaningful, but it is concentrated in a local subset of queries rather than spread uniformly across the benchmark.
 
-### 2.1 Official model-comparison line
+Relation-group evidence provides a second, but supporting, view of this bounded-gain structure. Across the retained coarse relation groups, the grouped ordering remains `Residual-only > Full Model > Gate-only`, indicating that relation dependence is real but still bounded. In other words, relation characteristics do affect where multimodal benefit is more plausible, yet they do not overturn the broader structure-dominant pattern established by the official main results. The retained-support summary further keeps this analysis auditable by reporting retained relation and query support after minimum-support filtering, so that the grouped trends are not driven by a handful of low-support cases. Taken together, these observations answer RQ1: under the current OpenBG-IMG protocol, multimodal gain appears in specific protocol-shaped local regions rather than as a globally reliable property of the benchmark.
 
-The official line compares the seven completed paper-stage models:
+## 3. RQ2: When should multimodal evidence be activated?
 
-- `Text-only`
-- `Early Fusion`
-- `Gate-only`
-- `Residual-only`
-- `Full Model`
-- `ComplEx`
-- `TuckER`
+RQ2 asks when multimodal evidence should be activated rather than deferred to structural fallback. A natural first guess is that the answer might reduce to a simple heuristic: use fusion whenever images are available, and otherwise rely on structure. However, the routing results show that this intuition is incomplete. On the routing-compatible line, the rule-based router yields only negligible improvement over the fixed structural expert, whereas learned routers achieve substantially stronger gains on the same basis. This already suggests that the gain boundary is richer than a single image-availability flag and that worthwhile activation decisions depend on more than target-side modality presence alone.
 
-This line establishes the empirical status of the original model family and the structural baselines before any routing is introduced.
+The feature-ablation results make this point more explicit. Using image availability alone performs poorly for both learned routers, while adding protocol-aware condition features already produces a large jump, and expert-confidence features provide the strongest additional gain. This hierarchy shows that routing does not reduce to a shallow `has-image` rule. Instead, effective activation requires a query-level decision boundary that integrates target regime, relation context, and the relative confidence of the fusion and structural experts.
 
-### 2.2 Routing line
+The threshold scan reinforces the same interpretation. As the routing threshold increases, XGBoost MRR first rises and then stabilizes slightly below its peak, while fusion coverage decreases monotonically and gain precision increases monotonically. Better performance therefore does not come from using fusion more aggressively; it comes from becoming selective enough to suppress low-value fusion while still preserving useful local multimodal cases.
 
-The routing line compares:
+We further examine sensitivity to the gain margin `delta`. The post-hoc delta summary shows that XGBoost with `delta=0.00` attains a slightly higher best test MRR than the final `delta=0.01` configuration, with `0.3175` versus `0.3160`, respectively. However, we do not redefine the paper configuration using that test observation, because router family, `delta`, and `tau` are selected on the development split only. We therefore retain `XGBoost + delta=0.01 + tau=0.7` as the final paper configuration and interpret the `delta=0.00` result as post-hoc sensitivity evidence rather than as a replacement configuration. This choice is also semantically consistent with the method definition: whereas `delta=0.00` treats any positive reciprocal-rank difference as gain-positive, `delta=0.01` targets a more conservative notion of non-trivial gain. Consistently, the development-side positive-label rate rises sharply from `0.1562` at `delta=0.01` to `0.4811` at `delta=0.00`, indicating that the two settings do not merely differ numerically, but also induce substantially different label semantics.
 
-- `Gate-only` (fixed fusion expert, query-level recomputed)
-- `Residual-only` (fixed structural expert, query-level recomputed)
-- `Full Model` (paper baseline, reported for context)
-- Oracle routing
-- Rule-based routing
-- learned routing with logistic regression
-- learned routing with XGBoost
+Interpretability evidence further clarifies what the learned router is using. The grouped XGBoost feature-importance summary shows that the strongest feature families include `relation_id`, `direction`, `target_regime`, and expert-confidence signals such as `fusion_correct_score` and `struct_correct_score`, whereas simple image-availability cues are much less dominant than the full decision structure. The logistic coefficients provide consistent auxiliary evidence: strong structural-confidence signals such as `struct_margin` and `struct_correct_score` are associated with lower fusion preference, whereas `delta_margin` and `fusion_correct_score` are associated with higher fusion preference. These findings support a clear answer to RQ2: multimodal evidence should be activated only under a richer query-level decision rule that integrates protocol-aware subgroup conditions, relation context, and expert-confidence signals, rather than by a simple modality-availability shortcut.
 
-The router is trained on development-side query-level features and evaluated on test-side query-level exported results. Gain margins `delta` and routing thresholds `tau` are varied in the router experiments, while the final routing comparison focuses on the strongest learned settings.
+## 4. RQ3: How should bounded multimodal gain be exploited effectively?
 
-## 3. Official Main Results
+RQ3 asks how bounded multimodal gain should be exploited effectively once it is known to be conditional. The official model-comparison line establishes the motivating tension of the paper. Under the formal paper protocol, `Residual-only` is the strongest overall model, whereas `Full Model` remains the strongest multimodal variant within the internal family. This means that multimodal modeling is not ineffective, but its benefit is not strong enough to overturn structure-dominant performance at the global level. In other words, the benchmark does not simply call for a larger always-on multimodal model. Instead, it presents a setting in which multimodal benefit is real but uneven, and therefore unlikely to be handled optimally by one globally shared compromise representation.
 
-### 3.1 Seven-model comparison under the official line
+The routing-compatible results provide the operational answer to this problem. By routing between `Gate-only` as a fusion expert and `Residual-only` as a structural expert, the best learned router improves over both fixed-expert baselines and the heuristic router on a shared routing-compatible basis. At the same time, Oracle routing still leaves visible headroom, which indicates that the learned router is effective but not yet perfect. Even so, the empirical picture is already sufficient to show that bounded multimodal gain can be turned into a practically useful selective-activation mechanism. The key point is not that the router discovers globally dominant multimodal superiority, but that it exploits local gain more effectively than fixed, always-on usage patterns.
 
-Table X reports the official seven-model comparison under the formal paper protocol. The overall ordering is:
+These results also help reposition the three core models in the paper. `Gate-only` should not be interpreted as a failed model, but as a locally useful fusion endpoint. Its value lies in being the clearest fusion-side expert in the regime where multimodal gain is most plausible. `Residual-only` is more than an ablation baseline: it functions as the strongest fixed structural reference in the internal family and provides the reliable fallback expert around which the routing problem is organized. `Full Model` remains analytically important even though it is not the final winner, because it demonstrates the limitation of always-on multimodal enhancement under the current protocol. Integrating both paths into one richer model does not by itself resolve heterogeneous gain structure. The system-level conclusion is therefore clear: once gain is known to be conditional rather than globally reliable, selective activation is a more appropriate operational response than forcing one always-on multimodal representation to compromise across all queries.
 
-1. `Residual-only`
-2. `ComplEx`
-3. `Full Model`
-4. `Gate-only`
-5. `Early Fusion`
-6. `Text-only`
-7. `TuckER`
+## 5. Integrated Discussion and Limitations
 
-Using the official aggregated line, `Residual-only` reaches `0.2930 ± 0.0008` MRR, `ComplEx` reaches `0.2588 ± 0.0018`, and `Full Model` reaches `0.2100 ± 0.0097`. Within the internal multimodal family, `Full Model` is therefore the strongest multimodal variant, outperforming `Gate-only` (`0.1739 ± 0.0044`), `Early Fusion` (`0.1666 ± 0.0013`), and `Text-only` (`0.1261 ± 0.0043`).
+The combined evidence across RQ1–RQ3 supports a controlled but meaningful conclusion. Under the current OpenBG-IMG protocol, multimodal gain is real but bounded, and a lightweight selective-activation mechanism can exploit that gain more effectively than fixed-expert routing baselines on a routing-compatible basis. The paper therefore contributes both a diagnostic result and a method result: analytically, it clarifies where bounded gain appears; operationally, it shows how that gain can be converted into useful query-level routing.
 
-### 3.2 Interpretation
+At the same time, the current results do not show that multimodal fusion is globally superior to structural modeling in general. Nor do they show that the present gain-threshold router is the final or universally best solution for bounded multimodal gain. The findings also do not imply that the same expert pair, feature set, gain margin, or routing threshold should transfer unchanged to other benchmarks, data splits, or missing-modality patterns. These boundaries are especially important because the strongest claims of this paper are protocol-specific rather than universal: they are established under the current OpenBG-IMG split, filtered ranking, and `direction=both` evaluation.
 
-These official results establish the core tension inherited from the earlier analysis. The most complete multimodal architecture is not the strongest overall model under the current protocol. Instead, the strongest global result comes from the structure-heavy `Residual-only` model, while the classical structural baseline `ComplEx` also remains stronger than `Full Model`. At the same time, `Full Model` consistently improves over the weaker multimodal baselines, which means that multimodal modeling is not useless even though it does not dominate globally.
-
-The official main table therefore supports two conclusions at once. First, multimodal fusion provides real value inside the internal family. Second, stronger structural compensation remains globally preferred under the present protocol. Taken together, these observations motivate the routing experiments: if multimodal gain is real but bounded, perhaps it should be activated selectively rather than kept on everywhere.
-
-## 4. Routing Results Under the Unified Query-Level Line
-
-### 4.1 Main routing comparison
-
-Table Y reports the routing comparison under the unified query-level recomputed line. On this line, the fixed fusion expert `Gate-only` reaches `0.1688` MRR, while the fixed structural expert `Residual-only` reaches `0.2930`. The rule-based router yields `0.2939`, which is only marginally above the fixed structural expert. By contrast, learned routers improve more substantially:
-
-- logistic (`delta=0.01`, `tau=0.7`): `0.3111`
-- XGBoost (`delta=0.01`, `tau=0.7`): `0.3160`
-
-The best learned router is therefore `XGBoost + delta=0.01 + tau=0.7`, with overall MRR `0.3159569`. This result is higher than the fixed `Residual-only` expert (`0.2930494`), higher than the rule-based router (`0.2939469`), and also higher than the original `Full Model` (`0.2100`, reported from the official line for context). Oracle routing reaches `0.3337373`, showing that the routing problem still contains additional exploitable headroom.
-
-### 4.2 Interpretation
-
-The routing table supports the central method claim of the paper. Once the earlier bounded-gain finding is converted into a query-level expert-selection problem, a lightweight router can improve over both fixed experts and over the original always-on multimodal design. Importantly, the rule-based router provides only negligible improvement, whereas learned routing provides a clear gain. This means that the problem cannot be solved well by a simple heuristic such as “use fusion whenever images are available.” Query-level selective activation is useful precisely because the gain boundary is more complex than a single protocol flag.
-
-## 5. Subgroup Evaluation
-
-### 5.1 Why subgroup evaluation remains necessary
-
-Although the routing table shows overall improvement, overall metrics alone do not reveal whether the learned router behaves consistently with the protocol-aware gain structure that motivated the method. We therefore evaluate all routing models over the same three meaningful target-side regimes:
-
-- `head_has_img`
-- `head_no_img`
-- `tail_no_img`
-
-### 5.2 Main subgroup pattern
-
-The subgroup results show a clear and coherent pattern.
-
-For the fixed experts, the contrast remains sharp. `Gate-only` performs best among the fixed endpoints in `head_has_img` (`0.01235`), whereas `Residual-only` dominates the globally stronger `tail_no_img` regime (`0.58325`). `Full Model` lies between them, reflecting the earlier bounded-gain picture.
-
-The learned routers follow the expected selective pattern. As the threshold `tau` increases, fusion coverage declines across all regimes, but the decline is especially consequential in `tail_no_img`, where stronger structural fallback is more reliable. For the strongest learned setting (`xgb`, `delta=0.01`, `tau=0.7`), the subgroup metrics are:
-
-- `head_has_img`: `0.01161`
-- `head_no_img`: `0.01253`
-- `tail_no_img`: `0.62003`
-
-At the same time, subgroup fusion coverage for this setting is:
-
-- `head_has_img`: `0.1501`
-- `head_no_img`: `0.1059`
-- `tail_no_img`: `0.2326`
-
-### 5.3 Interpretation
-
-These results show that the learned router is not behaving randomly or globally. Instead, it becomes more conservative in structure-favorable settings while still preserving a pathway for multimodal activation in the conditions where local gain is more plausible. This is exactly the expected behavior if the router has learned the protocol-aware gain structure rather than a shallow shortcut.
-
-## 6. Threshold Scan
-
-### 6.1 Main threshold trade-off
-
-To understand how routing conservativeness affects performance, we scan inference thresholds `tau`. The XGBoost router shows a clear trade-off between fusion coverage, gain precision, and final MRR:
-
-- `tau=0.1`: MRR `0.2514`, coverage `0.483`, gain precision `0.327`
-- `tau=0.3`: MRR `0.2921`, coverage `0.333`, gain precision `0.452`
-- `tau=0.5`: MRR `0.3084`, coverage `0.252`, gain precision `0.555`
-- `tau=0.7`: MRR `0.3160`, coverage `0.185`, gain precision `0.670`
-- `tau=0.9`: MRR `0.3142`, coverage `0.096`, gain precision `0.846`
-
-The logistic router follows the same qualitative direction, but its entire curve remains below the XGBoost curve.
-
-### 6.2 Interpretation
-
-The threshold scan provides one of the clearest validations of the selective-activation hypothesis. Performance does not improve by activating fusion more aggressively. Instead, MRR rises as the router becomes more selective and filters fusion more cautiously, then plateaus once fusion coverage becomes very small. This means that under the current protocol, multimodal activation is beneficial only when precision is high enough. The best setting does not correspond to maximum fusion usage, but to a balanced threshold at which harmful fusion has been significantly suppressed while some local multimodal benefit is still retained.
-
-## 7. Feature Ablation
-
-### 7.1 Ablation design
-
-To test whether routing success comes only from shallow image-availability cues, we evaluate incremental feature sets `F1` to `F4`.
-
-- `F1`: minimal image-availability signal
-- `F2`: protocol-aware condition features
-- `F3`: protocol-aware + modality-consistency features
-- `F4`: protocol-aware + modality-consistency + expert-confidence features
-
-### 7.2 Main ablation results
-
-The ablation results show a clear hierarchy.
-
-For logistic regression:
-
-- `F1`: MRR `0.1651`
-- `F2`: MRR `0.2333`
-- `F3`: MRR `0.2333`
-- `F4`: MRR `0.2501`
-
-For XGBoost:
-
-- `F1`: MRR `0.1651`
-- `F2`: MRR `0.2306`
-- `F3`: MRR `0.2303`
-- `F4`: MRR `0.2556`
-
-### 7.3 Interpretation
-
-The ablation evidence strongly argues against a trivial explanation of the routing gains. `F1`, which essentially captures only whether the target is image-supported, performs poorly for both models. A large jump appears when protocol-aware condition features are added (`F2`), showing that direction, subgroup structure, and relation-level priors are central. Modality-consistency signals (`F3`) add only limited extra benefit in the present setting. By contrast, the final jump from `F3` to `F4` shows that expert-confidence signals such as `fusion_margin`, `struct_margin`, and `delta_margin` are major contributors to successful routing. The learned router therefore depends on a richer query-level decision boundary than a simple “has image” rule.
-
-## 8. Relation-Group Evaluation
-
-### 8.1 Why relation-group evidence is still included
-
-Relation-group evaluation remains part of the paper because the earlier bounded-gain analysis showed that multimodal usefulness is not determined by target regime alone. Relation characteristics also matter. We therefore retain relation-group evidence in the experiments section as supporting analysis for the selective-activation narrative.
-
-### 8.2 Main findings
-
-Using the focused three-model comparison (`Gate-only`, `Full Model`, `Residual-only`), the grouped ordering remains stable across all three coarse relation groups:
-
-1. `Residual-only`
-2. `Full Model`
-3. `Gate-only`
-
-The grouped MRR values are:
-
-- `visual_relations`: `Gate-only 0.1350`, `Full Model 0.1826`, `Residual-only 0.2691`
-- `weak_visual_relations`: `Gate-only 0.2194`, `Full Model 0.2252`, `Residual-only 0.3197`
-- `ambiguous_material_relations`: `Gate-only 0.1337`, `Full Model 0.1948`, `Residual-only 0.2842`
-
-With the `MIN20` support filter at the relation level, `Full Model` outperforms `Gate-only` on most retained relations, but surpasses `Residual-only` on only a minority of them.
-
-### 8.3 Interpretation
-
-These results do not support a naive claim that “visual relations as a whole favor multimodal models.” Instead, they support the more careful statement that multimodal gain is relation-dependent but still bounded. This makes relation-group evidence a useful supporting bridge between the earlier gain-boundary analysis and the present routing results. It helps justify why query-level selective activation is necessary: relation conditions matter, but not in a sufficiently simple way to be handled by a single coarse rule.
-
-## 9. Overall Experimental Summary
-
-The experiments lead to a coherent overall conclusion.
-
-First, under the official paper protocol, `Residual-only` remains the strongest fixed model overall, while `Full Model` remains the strongest multimodal variant inside the internal family. This preserves the core tension established in the earlier analysis.
-
-Second, under the unified routing line, selective activation is effective. The best learned router (`xgb + delta=0.01 + tau=0.7`) reaches `0.3160` MRR, outperforming the fixed structural expert, the rule-based router, and the original always-on `Full Model`, while still leaving room to Oracle routing.
-
-Third, subgroup, threshold-scan, feature-ablation, and relation-group evidence all support the same interpretation. Multimodal gain is not globally reliable. It is local, protocol-shaped, and query-dependent. Once that bounded-gain structure is made explicit, however, a lightweight router can exploit it through selective activation.
-
-The main message of this section is therefore:
-
-> The experiments do not show that multimodal fusion is universally stronger than structural modeling. They show that under the current OpenBG-IMG protocol, multimodal gain can be used more effectively when activation is made selective rather than always-on.
+A further limitation is the necessary separation between the official model-comparison line and the routing-compatible line. This separation is methodologically justified, because the two lines answer different questions and operate on different aggregation bases, but it also increases interpretive complexity. Likewise, the present routing framework is deliberately narrow: it validates selective activation in a fixed-expert, query-level setting with `Gate-only` and `Residual-only`, which improves interpretability but limits scope. More broadly, however, the results suggest an important direction for future MMKGC research. In settings with incomplete or asymmetric visual support, deciding not only how to fuse modalities, but also when multimodal evidence should be trusted, may be just as important as designing a richer fusion operator.
