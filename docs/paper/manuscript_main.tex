@@ -174,7 +174,7 @@ We define two fixed experts:
 
 This expert pairing is chosen to preserve a clear and interpretable contrast between fusion-oriented and structure-oriented behavior. \texttt{Gate-only} represents relation-aware multimodal fusion without an explicit structural compensation branch. \texttt{Residual-only} represents structure-heavy compensation within the same internal model family. Together, they are the clearest diagnostic endpoints in the current framework and provide a clean basis for selective routing. We do not use \texttt{Full Model} itself as the routed fusion expert in the present formulation, because doing so would blur the interpretation: \texttt{Full Model} already contains a residual path internally. By contrast, routing between \texttt{Gate-only} and \texttt{Residual-only} keeps the comparison interpretable as \textbf{fusion versus structural fallback}.
 
-For a query $q$ and a candidate entity $e$, let $s_f(q,e)$ denote the score from the fusion expert and $s_s(q,e)$ denote the score from the structural expert. A query-level router receives a feature vector $x_q$ and predicts the probability that the fusion expert should be selected:
+For a query $q$ and a candidate entity $e$, let $s_f(q,e)$ denote the score from the fusion expert and $s_s(q,e)$ the score from the structural expert. A query-level router receives a feature vector $x_q$ and predicts the probability that the fusion expert should be selected:
 \[
 p(q)=P(y=1 \mid x_q).
 \]
@@ -420,7 +420,7 @@ $\tau$ & Logistic MRR & Logistic coverage & XGBoost MRR & XGBoost coverage & XGB
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{lcccccc}
 \toprule
-Model & $\delta$ & $\tau$ & MRR & Coverage & Precision & Dev pos. rate \\
+Model & $\delta$ & $\tau$ & MRR & Fusion coverage & Gain precision & Dev positive rate \\
 \midrule
 Logistic & 0.00 & 0.5 & 0.3140 & 0.4976 & 0.8408 & 0.4811 \\
 Logistic & 0.01 & 0.7 & 0.3111 & 0.1788 & 0.6171 & 0.1562 \\
@@ -436,7 +436,7 @@ We further examine sensitivity to the gain margin $\delta$. As shown in Table~\r
 
 \begin{table}[t]
 \centering
-\caption{Grouped XGBoost feature importance under the routing-compatible line. Aggregated gain sums feature-level gain within each family; higher values indicate greater contribution to routing decisions.}
+\caption{Top grouped XGBoost feature families by aggregated gain under the routing-compatible line. Higher values indicate greater contribution to routing decisions.}
 \label{tab:feature_importance_grouped}
 \small
 \begin{tabular}{lcc}
@@ -455,7 +455,7 @@ Feature family & Feature count & Aggregated gain \\
 \end{tabular}
 \end{table}
 
-The grouped XGBoost importance summary in Table~\ref{tab:feature_importance_grouped} further clarifies what drives routing. The strongest feature families include \texttt{relation\_id}, \texttt{direction}, \texttt{target\_regime}, and expert-confidence signals such as \texttt{fusion\_correct\_score} and \texttt{struct\_correct\_score}. By contrast, the simple image-availability indicator \texttt{target\_has\_img} is informative but clearly not dominant. This pattern supports the interpretation that activation cannot be reduced to a shallow modality-availability shortcut; instead, the learned router depends on protocol-aware subgroup conditions, relation context, and branch-confidence cues.
+The grouped XGBoost importance summary in Table~\ref{tab:feature_importance_grouped} further clarifies what drives routing. The strongest feature families include \texttt{relation\_id}, \texttt{direction}, \texttt{target\_regime}, and expert-confidence signals such as \texttt{fusion\_correct\_score} and \texttt{struct\_correct\_score}. By contrast, the simple image-availability indicator \texttt{target\_has\_img} is informative but clearly not dominant. This importance pattern is consistent with the ablation evidence and further suggests that routing depends on subgroup, relation, and confidence cues rather than on image availability alone.
 
 Overall, RQ2 is answered as follows: multimodal evidence should be activated only under a richer query-level decision rule that integrates protocol-aware subgroup conditions, relation context, and expert-confidence signals, rather than by a simple modality-availability shortcut.
 
