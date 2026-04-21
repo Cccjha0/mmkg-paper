@@ -11,8 +11,8 @@ except ImportError as exc:  # pragma: no cover - runtime dependency check
     ) from exc
 
 
-DEFAULT_LOGISTIC_CSV = Path("outputs/router/eval/threshold_scan_logistic_delta_0.01.csv")
-DEFAULT_XGB_CSV = Path("outputs/router/eval/threshold_scan_xgb_delta_0.01.csv")
+DEFAULT_LOGISTIC_CSV = Path("outputs/router/eval/clean/threshold_scan_clean_logistic_delta_0.01_C4.csv")
+DEFAULT_XGB_CSV = Path("outputs/router/eval/clean/threshold_scan_clean_xgb_delta_0.01_C4.csv")
 DEFAULT_PDF = Path("docs/paper/figures/threshold_scan_router.pdf")
 DEFAULT_PNG = Path("docs/paper/figures/threshold_scan_router.png")
 

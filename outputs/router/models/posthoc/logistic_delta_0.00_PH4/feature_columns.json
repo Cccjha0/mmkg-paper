@@ -1,0 +1,10 @@
+[
+  "target_has_img",
+  "direction",
+  "relation_gain_prior",
+  "text_img_cosine",
+  "img_is_missing_replaced",
+  "fusion_margin",
+  "struct_margin",
+  "delta_margin"
+]

@@ -7,7 +7,17 @@ def mark_visual_prior(mean_delta_rr: float, gamma: float) -> int:
     return int(float(mean_delta_rr) > float(gamma))
 
 
-def compute_relation_gain_stats(gate_rows: list[dict], residual_rows: list[dict], gamma: float) -> list[dict]:
+def shrink_mean_delta_rr(mean_delta_rr: float, n_queries: int, k: float = 20.0) -> float:
+    return float(mean_delta_rr) * float(n_queries / (n_queries + k)) if (n_queries + k) else 0.0
+
+
+def compute_relation_gain_stats(
+    gate_rows: list[dict],
+    residual_rows: list[dict],
+    gamma: float,
+    use_shrinkage: bool = False,
+    shrink_k: float = 20.0,
+) -> list[dict]:
     gate_by_id = {row["query_id"]: row for row in gate_rows}
     residual_by_id = {row["query_id"]: row for row in residual_rows}
 
@@ -60,7 +70,10 @@ def compute_relation_gain_stats(gate_rows: list[dict], residual_rows: list[dict]
         n = int(bucket["n_queries"])
         mean_rr_gate = bucket["sum_rr_gate"] / n if n else 0.0
         mean_rr_residual = bucket["sum_rr_residual"] / n if n else 0.0
-        mean_delta_rr = bucket["sum_delta_rr"] / n if n else 0.0
+        raw_mean_delta_rr = bucket["sum_delta_rr"] / n if n else 0.0
+        mean_delta_rr = (
+            shrink_mean_delta_rr(raw_mean_delta_rr, n, shrink_k) if use_shrinkage else raw_mean_delta_rr
+        )
         fusion_win_rate = bucket["fusion_win"] / n if n else 0.0
         struct_win_rate = bucket["struct_win"] / n if n else 0.0
         head_has_img_ratio = bucket["regime_counter"]["head_has_img"] / n if n else 0.0
@@ -73,6 +86,8 @@ def compute_relation_gain_stats(gate_rows: list[dict], residual_rows: list[dict]
                 "mean_rr_gate": mean_rr_gate,
                 "mean_rr_residual": mean_rr_residual,
                 "mean_delta_rr": mean_delta_rr,
+                "mean_delta_rr_raw": raw_mean_delta_rr,
+                "mean_delta_rr_shrunk": shrink_mean_delta_rr(raw_mean_delta_rr, n, shrink_k),
                 "fusion_win_rate": fusion_win_rate,
                 "struct_win_rate": struct_win_rate,
                 "head_has_img_ratio": head_has_img_ratio,
@@ -123,4 +138,3 @@ def summarize_relation_gain_stats(rows: list[dict], gamma: float) -> dict:
             for row in sorted_rows[-10:]
         ],
     }
-

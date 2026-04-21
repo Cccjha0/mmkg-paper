@@ -8,13 +8,13 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from router.feature_utils import (
-    build_feature_rows,
+    build_posthoc_feature_rows,
     infer_cache_dir,
     load_cache_bundle,
 )
 
 
-DEV_COLUMNS = [
+POSTHOC_DEV_COLUMNS = [
     "query_id",
     "split",
     "direction",
@@ -41,7 +41,7 @@ DEV_COLUMNS = [
 ]
 
 
-TEST_COLUMNS = [
+POSTHOC_TEST_COLUMNS = [
     "query_id",
     "split",
     "direction",
@@ -66,7 +66,9 @@ TEST_COLUMNS = [
 
 EVAL_TARGET_COLUMNS = [
     "query_id",
+    "rank_gate",
     "rr_gate",
+    "rank_residual",
     "rr_residual",
     "rr_gain",
     "gain_label_d0",
@@ -79,7 +81,7 @@ EVAL_TARGET_COLUMNS = [
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Build router feature tables with the first-round checklist contract.")
+    parser = argparse.ArgumentParser(description="Build shared eval targets and posthoc contract feature tables.")
     parser.add_argument("--gate-dev", required=True)
     parser.add_argument("--residual-dev", required=True)
     parser.add_argument("--gate-test", required=True)
@@ -183,7 +185,9 @@ def build_eval_targets(rows: list[dict]) -> list[dict]:
         out.append(
             {
                 "query_id": row["query_id"],
+                "rank_gate": int(row["rank_fusion"]),
                 "rr_gate": rr_gate,
+                "rank_residual": int(row["rank_struct"]),
                 "rr_residual": rr_residual,
                 "rr_gain": rr_gain,
                 "gain_label_d0": int(rr_gain > 0.00),
@@ -208,8 +212,20 @@ def main() -> None:
     gate_test_rows = normalize_query_rows(read_table(Path(args.gate_test)), "test")
     residual_test_rows = normalize_query_rows(read_table(Path(args.residual_test)), "test")
 
-    dev_rows_raw = build_feature_rows(gate_dev_rows, residual_dev_rows, prior_map, cache_bundle, label_by_query_id=None)
-    test_rows_raw = build_feature_rows(gate_test_rows, residual_test_rows, prior_map, cache_bundle, label_by_query_id=None)
+    dev_rows_raw = build_posthoc_feature_rows(
+        gate_dev_rows,
+        residual_dev_rows,
+        prior_map,
+        cache_bundle,
+        label_by_query_id=None,
+    )
+    test_rows_raw = build_posthoc_feature_rows(
+        gate_test_rows,
+        residual_test_rows,
+        prior_map,
+        cache_bundle,
+        label_by_query_id=None,
+    )
 
     dev_rows = enrich_rows(dev_rows_raw, include_labels=True)
     test_rows = enrich_rows(test_rows_raw, include_labels=False)
@@ -218,17 +234,17 @@ def main() -> None:
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    dev_path = out_dir / "router_features_dev.parquet"
-    test_path = out_dir / "router_features_test.parquet"
-    eval_path = out_dir / "router_eval_targets_test.parquet"
+    dev_path = out_dir / "router_features_posthoc_dev.parquet"
+    test_path = out_dir / "router_features_posthoc_test.parquet"
+    eval_path = out_dir / "router_eval_targets_shared_test.parquet"
 
-    pd.DataFrame(dev_rows, columns=DEV_COLUMNS).to_parquet(dev_path, index=False)
-    pd.DataFrame(test_rows, columns=TEST_COLUMNS).to_parquet(test_path, index=False)
+    pd.DataFrame(dev_rows, columns=POSTHOC_DEV_COLUMNS).to_parquet(dev_path, index=False)
+    pd.DataFrame(test_rows, columns=POSTHOC_TEST_COLUMNS).to_parquet(test_path, index=False)
     pd.DataFrame(eval_target_rows, columns=EVAL_TARGET_COLUMNS).to_parquet(eval_path, index=False)
 
     print(f"[OK] wrote dev features  -> {dev_path.as_posix()}")
     print(f"[OK] wrote test features -> {test_path.as_posix()}")
-    print(f"[OK] wrote eval targets  -> {eval_path.as_posix()}")
+    print(f"[OK] wrote shared targets -> {eval_path.as_posix()}")
 
 
 if __name__ == "__main__":

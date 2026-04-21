@@ -1,0 +1,11 @@
+[
+  "direction",
+  "relation_id",
+  "relation_gain_prior",
+  "relation_fusion_win_rate",
+  "relation_support",
+  "relation_is_visual_prior",
+  "observed_has_img",
+  "observed_text_img_cosine",
+  "observed_img_missing_replaced"
+]

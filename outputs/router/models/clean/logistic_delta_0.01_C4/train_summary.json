@@ -1,0 +1,53 @@
+{
+  "model_type": "logistic",
+  "router_mode": "clean",
+  "is_query_time_legal": true,
+  "feature_family": "clean",
+  "feature_set": "C4",
+  "delta": 0.01,
+  "delta_tag": "0.01",
+  "n_train": 30000,
+  "positive_rate": 0.15616666666666668,
+  "selected_features": [
+    "direction",
+    "relation_id",
+    "relation_gain_prior",
+    "relation_fusion_win_rate",
+    "relation_support",
+    "relation_is_visual_prior",
+    "observed_has_img",
+    "observed_text_img_cosine",
+    "observed_img_missing_replaced"
+  ],
+  "train_label_name": "gain_label_d001",
+  "train_table": "outputs/router/features/router_train_dev_clean_delta_0.01.csv",
+  "threshold_for_metrics": 0.5,
+  "random_state": 42,
+  "hyperparams": {
+    "C": 1.0,
+    "class_weight": "balanced",
+    "dual": false,
+    "fit_intercept": true,
+    "intercept_scaling": 1,
+    "l1_ratio": null,
+    "max_iter": 2000,
+    "multi_class": "deprecated",
+    "n_jobs": null,
+    "penalty": "l2",
+    "random_state": 42,
+    "solver": "liblinear",
+    "tol": 0.0001,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "train_metrics": {
+    "n_samples": 30000,
+    "positive_rate": 0.15616666666666668,
+    "pred_positive_rate": 0.3497,
+    "auc": 0.720734396550107,
+    "f1": 0.3777016341591987,
+    "precision": 0.2731865408445334,
+    "recall": 0.6117395944503735,
+    "balanced_accuracy": 0.6552673875866326
+  }
+}

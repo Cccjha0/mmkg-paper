@@ -34,7 +34,32 @@ QUERY_EVAL_HEADER = list(QueryEvalRecord.__dataclass_fields__.keys())
 
 
 @dataclass(frozen=True)
-class RouterFeatureRecord:
+class CleanRouterFeatureRecord:
+    query_id: str
+    split: str
+    seed: int
+    direction: str
+    relation_id: int
+    relation_name: str
+    head_id: int
+    tail_id: int
+    observed_entity_id: int
+    observed_has_img: int
+    observed_text_img_cosine: float
+    observed_img_missing_replaced: int
+    relation_gain_prior: float
+    relation_fusion_win_rate: float
+    relation_support: int
+    relation_is_visual_prior: int
+    label_gain: int | None = None
+    delta_threshold: float | None = None
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class PosthocRouterFeatureRecord:
     query_id: str
     split: str
     seed: int
@@ -69,4 +94,9 @@ class RouterFeatureRecord:
         return asdict(self)
 
 
-ROUTER_FEATURE_HEADER = list(RouterFeatureRecord.__dataclass_fields__.keys())
+CLEAN_ROUTER_FEATURE_HEADER = list(CleanRouterFeatureRecord.__dataclass_fields__.keys())
+POSTHOC_ROUTER_FEATURE_HEADER = list(PosthocRouterFeatureRecord.__dataclass_fields__.keys())
+
+# Backward-compatible aliases while the rest of the stack is migrated.
+RouterFeatureRecord = PosthocRouterFeatureRecord
+ROUTER_FEATURE_HEADER = POSTHOC_ROUTER_FEATURE_HEADER

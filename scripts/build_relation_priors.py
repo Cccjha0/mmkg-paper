@@ -18,6 +18,8 @@ OUTPUT_HEADER = [
     "fusion_mean_rr",
     "struct_mean_rr",
     "mean_rr_gain",
+    "mean_rr_gain_raw",
+    "mean_rr_gain_shrunk",
     "fusion_win_rate",
     "struct_win_rate",
     "tie_rate",
@@ -32,6 +34,8 @@ LEGACY_OUTPUT_HEADER = [
     "mean_rr_gate",
     "mean_rr_residual",
     "mean_delta_rr",
+    "mean_delta_rr_raw",
+    "mean_delta_rr_shrunk",
     "fusion_win_rate",
     "struct_win_rate",
     "head_has_img_ratio",
@@ -48,6 +52,8 @@ def parse_args() -> argparse.Namespace:
 
     parser.add_argument("--split", default="dev", choices=["dev"], help="Phase 2 currently uses dev only")
     parser.add_argument("--gamma", type=float, default=0.0, help="visual prior threshold on mean_rr_gain")
+    parser.add_argument("--use-shrinkage", action="store_true", help="Apply shrinkage to mean delta RR before marking priors")
+    parser.add_argument("--shrink-k", type=float, default=20.0, help="Shrinkage denominator constant")
     parser.add_argument("--gate-dir", default="outputs/router/dev")
     parser.add_argument("--residual-dir", default="outputs/router/dev")
     parser.add_argument("--out-dir", default="outputs/router/priors")
@@ -109,6 +115,8 @@ def convert_rows_for_contract(rows: list[dict]) -> list[dict]:
                 "fusion_mean_rr": float(row["mean_rr_gate"]),
                 "struct_mean_rr": float(row["mean_rr_residual"]),
                 "mean_rr_gain": float(row["mean_delta_rr"]),
+                "mean_rr_gain_raw": float(row["mean_delta_rr_raw"]),
+                "mean_rr_gain_shrunk": float(row["mean_delta_rr_shrunk"]),
                 "fusion_win_rate": fusion_win_rate,
                 "struct_win_rate": struct_win_rate,
                 "tie_rate": tie_rate,
@@ -118,16 +126,32 @@ def convert_rows_for_contract(rows: list[dict]) -> list[dict]:
     return out
 
 
-def build_from_contract_inputs(gate_dev: Path, residual_dev: Path, out_path: Path, gamma: float, summary_json: str | None) -> None:
+def build_from_contract_inputs(
+    gate_dev: Path,
+    residual_dev: Path,
+    out_path: Path,
+    gamma: float,
+    summary_json: str | None,
+    use_shrinkage: bool,
+    shrink_k: float,
+) -> None:
     gate_rows = normalize_query_rows(read_table(gate_dev))
     residual_rows = normalize_query_rows(read_table(residual_dev))
-    legacy_rows = compute_relation_gain_stats(gate_rows, residual_rows, gamma)
+    legacy_rows = compute_relation_gain_stats(
+        gate_rows,
+        residual_rows,
+        gamma,
+        use_shrinkage=use_shrinkage,
+        shrink_k=shrink_k,
+    )
     contract_rows = convert_rows_for_contract(legacy_rows)
     write_csv(out_path, contract_rows, OUTPUT_HEADER)
     print(f"[OK] wrote relation priors -> {out_path.as_posix()}")
 
     summary = summarize_relation_gain_stats(legacy_rows, gamma)
     summary["split"] = "dev"
+    summary["use_shrinkage"] = bool(use_shrinkage)
+    summary["shrink_k"] = float(shrink_k)
     summary["source_gate_dev"] = gate_dev.as_posix()
     summary["source_residual_dev"] = residual_dev.as_posix()
     summary_path = Path(summary_json) if summary_json else out_path.with_name(out_path.stem + "_summary.json")
@@ -152,13 +176,21 @@ def build_from_legacy_dirs(args: argparse.Namespace) -> None:
         all_gate_rows.extend(normalize_query_rows(read_table(gate_files[seed])))
         all_residual_rows.extend(normalize_query_rows(read_table(residual_files[seed])))
 
-    rows = compute_relation_gain_stats(all_gate_rows, all_residual_rows, args.gamma)
+    rows = compute_relation_gain_stats(
+        all_gate_rows,
+        all_residual_rows,
+        args.gamma,
+        use_shrinkage=args.use_shrinkage,
+        shrink_k=args.shrink_k,
+    )
     out_path = out_dir / f"relation_gain_stats_gamma_{gamma_tag(args.gamma)}.csv"
     write_csv(out_path, rows, LEGACY_OUTPUT_HEADER)
     print(f"[OK] wrote relation priors -> {out_path.as_posix()}")
 
     summary = summarize_relation_gain_stats(rows, args.gamma)
     summary["split"] = args.split
+    summary["use_shrinkage"] = bool(args.use_shrinkage)
+    summary["shrink_k"] = float(args.shrink_k)
     summary["seeds"] = common_seeds
     summary_path = (
         Path(args.summary_json)
@@ -173,7 +205,15 @@ def main() -> None:
     args = parse_args()
     if args.gate_dev and args.residual_dev:
         out_path = Path(args.out) if args.out else Path("outputs/router/raw/dev_relation_priors.csv")
-        build_from_contract_inputs(Path(args.gate_dev), Path(args.residual_dev), out_path, args.gamma, args.summary_json)
+        build_from_contract_inputs(
+            Path(args.gate_dev),
+            Path(args.residual_dev),
+            out_path,
+            args.gamma,
+            args.summary_json,
+            args.use_shrinkage,
+            args.shrink_k,
+        )
         return
 
     build_from_legacy_dirs(args)

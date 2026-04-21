@@ -9,12 +9,14 @@ import pandas as pd
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from router.constants import ROUTER_MODE_CLEAN, ROUTER_MODE_POSTHOC
 from router.io_utils import read_csv, write_csv, write_json
 from router.metrics import compute_binary_metrics
 from router.router_models import (
-    FEATURE_SETS,
-    RuleBasedRouter,
+    CleanRuleBasedRouter,
+    PosthocRuleBasedRouter,
     compute_feature_importance_rows,
+    get_feature_sets,
     train_logistic_router,
     train_xgb_router,
 )
@@ -29,9 +31,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--train-table", default=None, help="Contract mode: router_features_dev parquet/csv")
     parser.add_argument("--model-type", default=None, choices=["logistic", "xgb"], help="Contract mode only")
     parser.add_argument("--delta", default=None, help="Contract mode delta: 0.00 / 0.01 / 0.02")
-    parser.add_argument("--out-dir", default=None, help="Contract mode output directory")
+    parser.add_argument("--out-dir", default=None, help="Contract mode output directory; defaults to outputs/router/models/<mode>/<model>_delta_<d>_<feature_set>")
 
-    parser.add_argument("--feature-set", default="FULL", help="FULL | F1 | F2 | F3 | F4")
+    parser.add_argument("--router-mode", default=ROUTER_MODE_POSTHOC, choices=[ROUTER_MODE_CLEAN, ROUTER_MODE_POSTHOC])
+    parser.add_argument("--feature-set", default="PH_FULL", help="clean: C1-C4; posthoc: PH1-PH4/PH_FULL")
     parser.add_argument("--random-state", type=int, default=42)
     parser.add_argument("--threshold", type=float, default=0.5, help="classification threshold for train metrics")
 
@@ -57,18 +60,32 @@ def normalize_contract_rows(rows: list[dict], delta_str: str) -> list[dict]:
     normalized = []
     for row in rows:
         out = dict(row)
-        out["label_gain"] = int(row[label_name])
+        if label_name in row:
+            out["label_gain"] = int(row[label_name])
+        elif "label_gain" in row:
+            out["label_gain"] = int(row["label_gain"])
+        else:
+            raise KeyError(f"Missing both {label_name} and label_gain in train row.")
         normalized.append(out)
     return normalized
 
 
-def train_one_model(model_name: str, rows: list[dict], feature_set: str, rule_gamma: float, random_state: int):
+def train_one_model(
+    model_name: str,
+    rows: list[dict],
+    feature_set: str,
+    rule_gamma: float,
+    random_state: int,
+    router_mode: str,
+):
     if model_name == "rule":
-        return RuleBasedRouter(gamma=rule_gamma)
+        if router_mode == ROUTER_MODE_CLEAN:
+            return CleanRuleBasedRouter(gamma=rule_gamma)
+        return PosthocRuleBasedRouter(gamma=rule_gamma)
     if model_name == "logistic":
-        return train_logistic_router(rows, feature_set=feature_set, random_state=random_state)
+        return train_logistic_router(rows, feature_set=feature_set, random_state=random_state, router_mode=router_mode)
     if model_name == "xgb":
-        return train_xgb_router(rows, feature_set=feature_set, random_state=random_state)
+        return train_xgb_router(rows, feature_set=feature_set, random_state=random_state, router_mode=router_mode)
     raise ValueError(f"Unsupported model: {model_name}")
 
 
@@ -91,14 +108,19 @@ def get_hyperparams(artifact) -> dict:
     return {}
 
 
+def resolve_model_out_dir(base_out_dir: Path, router_mode: str, model_type: str, delta_str: str, feature_set: str) -> Path:
+    return base_out_dir / router_mode / f"{model_type}_delta_{delta_str}_{feature_set}"
+
+
 def contract_mode(args: argparse.Namespace) -> None:
-    if args.model_type is None or args.delta is None or args.out_dir is None:
-        raise ValueError("Contract mode requires --train-table, --model-type, --delta, and --out-dir.")
+    if args.model_type is None or args.delta is None:
+        raise ValueError("Contract mode requires --train-table, --model-type, and --delta.")
 
     delta_str = f"{float(args.delta):.2f}"
     if delta_str not in VALID_DELTAS:
         raise ValueError(f"Unsupported delta: {args.delta}")
-    if args.feature_set not in FEATURE_SETS:
+    feature_sets = get_feature_sets(args.router_mode)
+    if args.feature_set not in feature_sets:
         raise ValueError(f"Unsupported feature set: {args.feature_set}")
 
     train_path = Path(args.train_table)
@@ -112,11 +134,18 @@ def contract_mode(args: argparse.Namespace) -> None:
         feature_set=args.feature_set,
         rule_gamma=args.rule_gamma,
         random_state=args.random_state,
+        router_mode=args.router_mode,
     )
     probs, preds = predict_for_rows(artifact, rows, args.threshold)
     metrics = compute_binary_metrics(y_true, preds, probs)
 
-    out_dir = Path(args.out_dir)
+    out_dir = Path(args.out_dir) if args.out_dir else resolve_model_out_dir(
+        Path(args.out_model_dir),
+        args.router_mode,
+        args.model_type,
+        delta_str,
+        args.feature_set,
+    )
     out_dir.mkdir(parents=True, exist_ok=True)
 
     model_path = out_dir / "model.pkl"
@@ -126,12 +155,15 @@ def contract_mode(args: argparse.Namespace) -> None:
         with (out_dir / "vectorizer.pkl").open("wb") as handle:
             pickle.dump(artifact.vectorizer, handle)
 
-    feature_columns = list(FEATURE_SETS[args.feature_set])
+    feature_columns = list(feature_sets[args.feature_set])
     (out_dir / "feature_columns.json").write_text(json.dumps(feature_columns, indent=2), encoding="utf-8")
 
     positive_rate = float(sum(y_true) / len(y_true)) if y_true else 0.0
     summary = {
         "model_type": args.model_type,
+        "router_mode": args.router_mode,
+        "is_query_time_legal": args.router_mode == ROUTER_MODE_CLEAN,
+        "feature_family": args.router_mode,
         "feature_set": args.feature_set,
         "delta": float(delta_str),
         "delta_tag": delta_str,
@@ -154,20 +186,26 @@ def contract_mode(args: argparse.Namespace) -> None:
         print(f"[OK] wrote vectorizer     -> {(out_dir / 'vectorizer.pkl').as_posix()}")
 
 
-def load_train_rows_legacy(base_dir: Path, delta_tag: str) -> list[dict]:
-    path = base_dir / f"router_train_dev_delta_{delta_tag}.csv"
-    if not path.exists():
-        raise FileNotFoundError(f"Missing train feature file: {path}")
-    return read_csv(path)
+def load_train_rows_legacy(base_dir: Path, delta_tag: str, router_mode: str) -> list[dict]:
+    mode_path = base_dir / f"router_train_dev_{router_mode}_delta_{delta_tag}.csv"
+    if mode_path.exists():
+        return read_csv(mode_path)
+
+    legacy_path = base_dir / f"router_train_dev_delta_{delta_tag}.csv"
+    if legacy_path.exists():
+        return read_csv(legacy_path)
+
+    raise FileNotFoundError(f"Missing train feature file: {mode_path}")
 
 
 def legacy_mode(args: argparse.Namespace) -> None:
+    print("[WARN] legacy_mode is deprecated; prefer contract mode with explicit --router-mode.")
     train_feature_dir = Path(args.train_feature_dir)
     out_model_dir = Path(args.out_model_dir)
     out_eval_dir = Path(args.out_eval_dir)
 
     for delta_tag in args.deltas:
-        rows = load_train_rows_legacy(train_feature_dir, delta_tag)
+        rows = load_train_rows_legacy(train_feature_dir, delta_tag, args.router_mode)
         y_true = [int(row["label_gain"]) for row in rows]
 
         metrics_payload = {
@@ -194,6 +232,7 @@ def legacy_mode(args: argparse.Namespace) -> None:
                 feature_set=args.feature_set,
                 rule_gamma=args.rule_gamma,
                 random_state=args.random_state,
+                router_mode=args.router_mode,
             )
             probs, preds = predict_for_rows(artifact, rows, args.threshold)
             metrics_payload["models"][model_name] = compute_binary_metrics(y_true, preds, probs)

@@ -1,0 +1,186 @@
+{
+  "train": {
+    "0.00": {
+      "rows": 30000,
+      "by_seed": {
+        "1": {
+          "rows": 10000,
+          "positive_rate": 0.4883
+        },
+        "2": {
+          "rows": 10000,
+          "positive_rate": 0.4812
+        },
+        "3": {
+          "rows": 10000,
+          "positive_rate": 0.4737
+        }
+      },
+      "missing_rate": {
+        "relation_gain_prior": 0.0,
+        "relation_fusion_win_rate": 0.0,
+        "relation_support": 0.0,
+        "observed_text_img_cosine": 0.0
+      },
+      "numeric_range": {
+        "relation_gain_prior": {
+          "min": -0.31646332214499184,
+          "max": 0.13957026194853062
+        },
+        "relation_fusion_win_rate": {
+          "min": 0.16666666666666666,
+          "max": 1.0
+        },
+        "relation_support": {
+          "min": 6.0,
+          "max": 1668.0
+        },
+        "observed_text_img_cosine": {
+          "min": -0.12790800631046295,
+          "max": 0.16681143641471863
+        }
+      }
+    },
+    "0.01": {
+      "rows": 30000,
+      "by_seed": {
+        "1": {
+          "rows": 10000,
+          "positive_rate": 0.1585
+        },
+        "2": {
+          "rows": 10000,
+          "positive_rate": 0.1564
+        },
+        "3": {
+          "rows": 10000,
+          "positive_rate": 0.1536
+        }
+      },
+      "missing_rate": {
+        "relation_gain_prior": 0.0,
+        "relation_fusion_win_rate": 0.0,
+        "relation_support": 0.0,
+        "observed_text_img_cosine": 0.0
+      },
+      "numeric_range": {
+        "relation_gain_prior": {
+          "min": -0.31646332214499184,
+          "max": 0.13957026194853062
+        },
+        "relation_fusion_win_rate": {
+          "min": 0.16666666666666666,
+          "max": 1.0
+        },
+        "relation_support": {
+          "min": 6.0,
+          "max": 1668.0
+        },
+        "observed_text_img_cosine": {
+          "min": -0.12790800631046295,
+          "max": 0.16681143641471863
+        }
+      }
+    },
+    "0.02": {
+      "rows": 30000,
+      "by_seed": {
+        "1": {
+          "rows": 10000,
+          "positive_rate": 0.1322
+        },
+        "2": {
+          "rows": 10000,
+          "positive_rate": 0.1271
+        },
+        "3": {
+          "rows": 10000,
+          "positive_rate": 0.1279
+        }
+      },
+      "missing_rate": {
+        "relation_gain_prior": 0.0,
+        "relation_fusion_win_rate": 0.0,
+        "relation_support": 0.0,
+        "observed_text_img_cosine": 0.0
+      },
+      "numeric_range": {
+        "relation_gain_prior": {
+          "min": -0.31646332214499184,
+          "max": 0.13957026194853062
+        },
+        "relation_fusion_win_rate": {
+          "min": 0.16666666666666666,
+          "max": 1.0
+        },
+        "relation_support": {
+          "min": 6.0,
+          "max": 1668.0
+        },
+        "observed_text_img_cosine": {
+          "min": -0.12790800631046295,
+          "max": 0.16681143641471863
+        }
+      }
+    }
+  },
+  "test": {
+    "rows": 60000,
+    "by_seed": {
+      "1": {
+        "rows": 20000
+      },
+      "2": {
+        "rows": 20000
+      },
+      "3": {
+        "rows": 20000
+      }
+    },
+    "missing_rate": {
+      "relation_gain_prior": 0.0,
+      "relation_fusion_win_rate": 0.0,
+      "relation_support": 0.0,
+      "observed_text_img_cosine": 0.0
+    },
+    "numeric_range": {
+      "relation_gain_prior": {
+        "min": -0.31646332214499184,
+        "max": 0.13957026194853062
+      },
+      "relation_fusion_win_rate": {
+        "min": 0.0,
+        "max": 1.0
+      },
+      "relation_support": {
+        "min": 0.0,
+        "max": 1668.0
+      },
+      "observed_text_img_cosine": {
+        "min": -0.1609715074300766,
+        "max": 0.15975156426429749
+      }
+    }
+  },
+  "feature_columns": [
+    "relation_gain_prior",
+    "relation_fusion_win_rate",
+    "relation_support",
+    "observed_text_img_cosine"
+  ],
+  "router_mode": "clean",
+  "feature_family": "clean",
+  "is_query_time_legal": true,
+  "cache_dir": "data/cache/openbg_img",
+  "prior_csv": "outputs/router/priors/relation_gain_stats_gamma_0.000.csv",
+  "train_seeds": [
+    1,
+    2,
+    3
+  ],
+  "test_seeds": [
+    1,
+    2,
+    3
+  ]
+}

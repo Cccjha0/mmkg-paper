@@ -6,10 +6,14 @@ import sys
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from router.constants import ROUTER_MODE_CLEAN, ROUTER_MODE_POSTHOC
 from router.io_utils import write_csv
 
 
 MAIN_HEADER = [
+    "router_mode",
+    "feature_set",
+    "is_query_time_legal",
     "model",
     "delta",
     "tau",
@@ -19,9 +23,13 @@ MAIN_HEADER = [
     "hits3",
     "hits10",
     "fusion_coverage",
+    "source_eval_json",
 ]
 
 SUBGROUP_HEADER = [
+    "router_mode",
+    "feature_set",
+    "is_query_time_legal",
     "model",
     "delta",
     "tau",
@@ -32,6 +40,7 @@ SUBGROUP_HEADER = [
     "hits3",
     "hits10",
     "fusion_coverage",
+    "source_eval_json",
 ]
 
 
@@ -43,9 +52,12 @@ def parse_args() -> argparse.Namespace:
     return ap.parse_args()
 
 
-def load_eval_jsons(eval_dir: Path) -> list[dict]:
+def load_eval_jsons(eval_dir: Path, router_mode: str) -> list[dict]:
     payload = []
-    for path in sorted(eval_dir.glob("router_eval_*_delta_*_tau_*.json")):
+    target_dir = eval_dir / router_mode
+    if not target_dir.exists():
+        return payload
+    for path in sorted(target_dir.glob("router_eval_*_delta_*_tau_*.json")):
         data = json.loads(path.read_text(encoding="utf-8"))
         data["_path"] = path.as_posix()
         payload.append(data)
@@ -55,7 +67,11 @@ def load_eval_jsons(eval_dir: Path) -> list[dict]:
 def main() -> None:
     args = parse_args()
     eval_dir = Path(args.eval_dir)
-    payloads = load_eval_jsons(eval_dir)
+
+    payloads = []
+    for mode in [ROUTER_MODE_CLEAN, ROUTER_MODE_POSTHOC]:
+        payloads.extend(load_eval_jsons(eval_dir, mode))
+
     if not payloads:
         raise RuntimeError(f"No router eval json files found under {eval_dir}")
 
@@ -65,6 +81,9 @@ def main() -> None:
         overall = data["overall"]
         main_rows.append(
             {
+                "router_mode": data["router_mode"],
+                "feature_set": data["feature_set"],
+                "is_query_time_legal": data["is_query_time_legal"],
                 "model": data["model"],
                 "delta": data["delta"],
                 "tau": data["tau"],
@@ -74,11 +93,15 @@ def main() -> None:
                 "hits3": overall["hits3"],
                 "hits10": overall["hits10"],
                 "fusion_coverage": overall["fusion_coverage"],
+                "source_eval_json": data["_path"],
             }
         )
         for regime, stats in sorted(data.get("by_regime", {}).items()):
             subgroup_rows.append(
                 {
+                    "router_mode": data["router_mode"],
+                    "feature_set": data["feature_set"],
+                    "is_query_time_legal": data["is_query_time_legal"],
                     "model": data["model"],
                     "delta": data["delta"],
                     "tau": data["tau"],
@@ -89,11 +112,21 @@ def main() -> None:
                     "hits3": stats["hits3"],
                     "hits10": stats["hits10"],
                     "fusion_coverage": stats["fusion_coverage"],
+                    "source_eval_json": data["_path"],
                 }
             )
 
-    main_rows.sort(key=lambda row: (row["delta"], row["model"], float(row["tau"])))
-    subgroup_rows.sort(key=lambda row: (row["delta"], row["model"], float(row["tau"]), row["target_regime"]))
+    main_rows.sort(key=lambda row: (row["router_mode"], row["feature_set"], row["delta"], row["model"], float(row["tau"])))
+    subgroup_rows.sort(
+        key=lambda row: (
+            row["router_mode"],
+            row["feature_set"],
+            row["delta"],
+            row["model"],
+            float(row["tau"]),
+            row["target_regime"],
+        )
+    )
 
     write_csv(args.main_out, main_rows, MAIN_HEADER)
     print(f"[OK] wrote main results  -> {Path(args.main_out).as_posix()}")

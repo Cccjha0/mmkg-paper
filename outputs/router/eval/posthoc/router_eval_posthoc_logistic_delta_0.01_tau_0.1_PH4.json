@@ -1,0 +1,70 @@
+{
+  "overall": {
+    "n_queries": 60000,
+    "mrr": 0.17817793864569006,
+    "hits1": 0.1001,
+    "hits3": 0.2147,
+    "hits10": 0.32721666666666666,
+    "fusion_coverage": 0.9758
+  },
+  "by_regime": {
+    "head_has_img": {
+      "n_queries": 21144,
+      "mrr": 0.012331208419808908,
+      "hits1": 0.002506621263715475,
+      "hits3": 0.00832387438516837,
+      "hits10": 0.024356791524782446,
+      "fusion_coverage": 0.9988649262202043
+    },
+    "head_no_img": {
+      "n_queries": 8856,
+      "mrr": 0.010435934879041478,
+      "hits1": 0.0024841915085817524,
+      "hits3": 0.007904245709123759,
+      "hits10": 0.02077687443541102,
+      "fusion_coverage": 0.9707542908762421
+    },
+    "tail_no_img": {
+      "n_queries": 30000,
+      "mrr": 0.344584153620801,
+      "hits1": 0.1977,
+      "hits3": 0.4212,
+      "hits10": 0.6311333333333333,
+      "fusion_coverage": 0.9610333333333333
+    }
+  },
+  "by_seed": {
+    "1": {
+      "n_queries": 20000,
+      "mrr": 0.17517708462130172,
+      "hits1": 0.0914,
+      "hits3": 0.21785,
+      "hits10": 0.32875,
+      "fusion_coverage": 0.97865
+    },
+    "2": {
+      "n_queries": 20000,
+      "mrr": 0.18055849707821423,
+      "hits1": 0.10415,
+      "hits3": 0.21625,
+      "hits10": 0.32725,
+      "fusion_coverage": 0.9699
+    },
+    "3": {
+      "n_queries": 20000,
+      "mrr": 0.17879823423753288,
+      "hits1": 0.10475,
+      "hits3": 0.21,
+      "hits10": 0.32565,
+      "fusion_coverage": 0.97885
+    }
+  },
+  "seed_mean_mrr": 0.1781779386456829,
+  "seed_std_mrr": 0.0022403087545849027,
+  "router_mode": "posthoc",
+  "model": "logistic",
+  "delta": "0.01",
+  "tau": 0.1,
+  "feature_set": "PH4",
+  "is_query_time_legal": false
+}

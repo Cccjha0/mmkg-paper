@@ -1,0 +1,52 @@
+{
+  "model_type": "logistic",
+  "router_mode": "posthoc",
+  "is_query_time_legal": false,
+  "feature_family": "posthoc",
+  "feature_set": "PH4",
+  "delta": 0.01,
+  "delta_tag": "0.01",
+  "n_train": 30000,
+  "positive_rate": 0.15616666666666668,
+  "selected_features": [
+    "target_has_img",
+    "direction",
+    "relation_gain_prior",
+    "text_img_cosine",
+    "img_is_missing_replaced",
+    "fusion_margin",
+    "struct_margin",
+    "delta_margin"
+  ],
+  "train_label_name": "gain_label_d001",
+  "train_table": "outputs/router/features/router_train_dev_posthoc_delta_0.01.csv",
+  "threshold_for_metrics": 0.5,
+  "random_state": 42,
+  "hyperparams": {
+    "C": 1.0,
+    "class_weight": "balanced",
+    "dual": false,
+    "fit_intercept": true,
+    "intercept_scaling": 1,
+    "l1_ratio": null,
+    "max_iter": 2000,
+    "multi_class": "deprecated",
+    "n_jobs": null,
+    "penalty": "l2",
+    "random_state": 42,
+    "solver": "liblinear",
+    "tol": 0.0001,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "train_metrics": {
+    "n_samples": 30000,
+    "positive_rate": 0.15616666666666668,
+    "pred_positive_rate": 0.4004333333333333,
+    "auc": 0.7209318109430567,
+    "f1": 0.3756138459695772,
+    "precision": 0.26105052859402317,
+    "recall": 0.6693703308431164,
+    "balanced_accuracy": 0.6593543338987456
+  }
+}

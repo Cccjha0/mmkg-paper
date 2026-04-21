@@ -1,0 +1,70 @@
+{
+  "overall": {
+    "n_queries": 60000,
+    "mrr": 0.291400435038011,
+    "hits1": 0.22765,
+    "hits3": 0.33035,
+    "hits10": 0.40846666666666664,
+    "fusion_coverage": 0.0934
+  },
+  "by_regime": {
+    "head_has_img": {
+      "n_queries": 21144,
+      "mrr": 0.004346095195555218,
+      "hits1": 0.0006621263715474839,
+      "hits3": 0.0028376844494892167,
+      "hits10": 0.009175179720015135,
+      "fusion_coverage": 0.050227014755959136
+    },
+    "head_no_img": {
+      "n_queries": 8856,
+      "mrr": 0.008429725513962875,
+      "hits1": 0.0015808491418247517,
+      "hits3": 0.007452574525745257,
+      "hits10": 0.01919602529358627,
+      "fusion_coverage": 0.10873983739837398
+    },
+    "tail_no_img": {
+      "n_queries": 30000,
+      "mrr": 0.5772492872104726,
+      "hits1": 0.45436666666666664,
+      "hits3": 0.6565,
+      "hits10": 0.8048,
+      "fusion_coverage": 0.1193
+    }
+  },
+  "by_seed": {
+    "1": {
+      "n_queries": 20000,
+      "mrr": 0.2904387369273345,
+      "hits1": 0.22665,
+      "hits3": 0.3301,
+      "hits10": 0.4076,
+      "fusion_coverage": 0.0934
+    },
+    "2": {
+      "n_queries": 20000,
+      "mrr": 0.29147278471454924,
+      "hits1": 0.2286,
+      "hits3": 0.3289,
+      "hits10": 0.4079,
+      "fusion_coverage": 0.0934
+    },
+    "3": {
+      "n_queries": 20000,
+      "mrr": 0.2922897834720961,
+      "hits1": 0.2277,
+      "hits3": 0.33205,
+      "hits10": 0.4099,
+      "fusion_coverage": 0.0934
+    }
+  },
+  "seed_mean_mrr": 0.2914004350379933,
+  "seed_std_mrr": 0.0007574163031832935,
+  "router_mode": "clean",
+  "model": "logistic",
+  "delta": "0.01",
+  "tau": 0.7,
+  "feature_set": "C4",
+  "is_query_time_legal": true
+}

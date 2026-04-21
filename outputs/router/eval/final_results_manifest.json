@@ -1,141 +1,53 @@
 {
-  "final_status": "PASS",
-  "canonical_final_outputs": [
-    {
-      "group": "final_table",
-      "name": "main_results_table.csv",
-      "path": "outputs/router/eval/main_results_table.csv",
-      "status": "final"
-    },
-    {
-      "group": "final_table",
-      "name": "main_results_table.md",
-      "path": "outputs/router/eval/main_results_table.md",
-      "status": "final"
-    },
-    {
-      "group": "final_table",
-      "name": "subgroup_results_table.csv",
-      "path": "outputs/router/eval/subgroup_results_table.csv",
-      "status": "final"
-    },
-    {
-      "group": "final_table",
-      "name": "subgroup_results_table.md",
-      "path": "outputs/router/eval/subgroup_results_table.md",
-      "status": "final"
-    },
-    {
-      "group": "final_table",
-      "name": "feature_ablation.csv",
-      "path": "outputs/router/eval/feature_ablation.csv",
-      "status": "final"
-    },
-    {
-      "group": "final_table",
-      "name": "feature_ablation.md",
-      "path": "outputs/router/eval/feature_ablation.md",
-      "status": "final"
-    },
-    {
-      "group": "final_summary",
-      "name": "first_round_takeaways.md",
-      "path": "outputs/router/eval/first_round_takeaways.md",
-      "status": "final"
-    },
-    {
-      "group": "final_figure",
-      "name": "threshold_coverage_mrr.png",
-      "path": "outputs/router/figures/threshold_coverage_mrr.png",
-      "status": "final"
-    },
-    {
-      "group": "final_figure",
-      "name": "router_feature_importance.png",
-      "path": "outputs/router/figures/router_feature_importance.png",
-      "status": "final"
-    },
-    {
-      "group": "final_figure",
-      "name": "selected_fusion_ratio_by_subgroup.png",
-      "path": "outputs/router/figures/selected_fusion_ratio_by_subgroup.png",
-      "status": "final"
-    },
-    {
-      "group": "supporting_input",
-      "name": "threshold_scan_logistic_delta_0.01.csv",
-      "path": "outputs/router/eval/threshold_scan_logistic_delta_0.01.csv",
-      "status": "supporting"
-    },
-    {
-      "group": "supporting_input",
-      "name": "threshold_scan_xgb_delta_0.01.csv",
-      "path": "outputs/router/eval/threshold_scan_xgb_delta_0.01.csv",
-      "status": "supporting"
-    }
-  ],
+  "final_status": "FAIL",
   "checks": {
-    "all_required_files_exist": true,
-    "main_table_has_expected_models": true,
-    "subgroup_table_has_expected_models": true,
-    "all_models_have_three_regimes_in_subgroup": true,
-    "best_learned_is_xgb_delta_0.01_tau_0.7": true,
-    "oracle_beats_best_learned": true,
-    "best_learned_beats_residual_only": true,
-    "best_learned_beats_full_model": true,
-    "learned_beats_rule_based": true,
-    "feature_ablation_has_f1_to_f4_for_logistic_and_xgb": true
+    "all_clean_required_files_exist": true,
+    "all_posthoc_required_files_exist": true,
+    "clean_main_table_has_expected_models": true,
+    "clean_scan_best_model_consistent_with_clean_main_table": false,
+    "clean_feature_ablation_has_C1_to_C4": true,
+    "posthoc_feature_ablation_has_PH1_to_PH4_or_full": true,
+    "no_illegal_features_in_clean_feature_columns": true,
+    "clean_subgroup_has_expected_regimes": true,
+    "posthoc_subgroup_has_expected_regimes": true,
+    "posthoc_best_ge_clean_best": false
   },
-  "key_numbers": {
-    "best_learned_model": "xgb",
-    "best_learned_delta": "0.01",
-    "best_learned_tau": "0.7",
-    "best_learned_mrr": 0.31595694366688554,
-    "oracle_mrr": 0.33373734067328487,
-    "residual_only_mrr": 0.2930494303909519,
-    "full_model_mrr": 0.21,
-    "rule_based_mrr": 0.29394690617851077
-  },
-  "subgroup_coverage": {
-    "Full Model": [
-      "head_has_img",
-      "head_no_img",
-      "tail_no_img"
-    ],
-    "Gate-only": [
-      "head_has_img",
-      "head_no_img",
-      "tail_no_img"
-    ],
-    "Oracle": [
-      "head_has_img",
-      "head_no_img",
-      "tail_no_img"
-    ],
-    "Residual-only": [
-      "head_has_img",
-      "head_no_img",
-      "tail_no_img"
-    ],
-    "Rule-based": [
-      "head_has_img",
-      "head_no_img",
-      "tail_no_img"
-    ],
-    "logistic": [
-      "head_has_img",
-      "head_no_img",
-      "tail_no_img"
-    ],
-    "xgb": [
-      "head_has_img",
-      "head_no_img",
-      "tail_no_img"
-    ]
+  "key_rows": {
+    "clean_best": {
+      "router_mode": "clean",
+      "feature_set": "C4",
+      "is_query_time_legal": "True",
+      "model": "logistic",
+      "delta": "0.01",
+      "tau": "0.9",
+      "n_queries": "60000",
+      "mrr": "0.293863770631994",
+      "hits1": "0.23323333333333332",
+      "hits3": "0.3315166666666667",
+      "hits10": "0.40473333333333333",
+      "fusion_coverage": "0.00465",
+      "source_eval_json": "outputs/router/eval/clean/router_eval_clean_logistic_delta_0.01_tau_0.9_C4.json"
+    },
+    "posthoc_best": {
+      "router_mode": "posthoc",
+      "feature_set": "PH4",
+      "is_query_time_legal": "False",
+      "model": "logistic",
+      "delta": "0.01",
+      "tau": "0.9",
+      "n_queries": "60000",
+      "mrr": "0.2938366817389749",
+      "hits1": "0.23346666666666666",
+      "hits3": "0.3315666666666667",
+      "hits10": "0.40381666666666666",
+      "fusion_coverage": "0.0031333333333333335",
+      "source_eval_json": "outputs/router/eval/posthoc/router_eval_posthoc_logistic_delta_0.01_tau_0.9_PH4.json"
+    }
   },
   "notes": [
-    "Canonical final tables are the markdown/csv files under outputs/router/eval refreshed by scripts/make_router_tables_figures.py.",
-    "Threshold scan csv files are treated as supporting inputs to the final tables/figures, not as standalone final presentation artifacts.",
-    "Raw query_eval, gain_labels, priors, feature tables, trained models, and per-tau routing predictions are intermediate or supporting artifacts rather than final paper-facing outputs."
+    "Main paper should consume clean outputs only.",
+    "Posthoc outputs are analysis-only and may legally use target-aware or confidence-aware fields.",
+    "The legality regression check scans clean model feature_columns.json files for forbidden fields.",
+    "The clean best-model consistency check compares the best learned row in the clean main table against clean threshold scan csvs."
   ]
 }

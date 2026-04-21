@@ -1,0 +1,3 @@
+ROUTER_MODE_CLEAN = "clean"
+ROUTER_MODE_POSTHOC = "posthoc"
+

@@ -11,6 +11,8 @@ from router.io_utils import read_csv, write_csv
 
 
 OUTPUT_HEADER = [
+    "router_mode",
+    "feature_set",
     "model_type",
     "delta",
     "selected_tau",
@@ -35,7 +37,7 @@ def parse_args() -> argparse.Namespace:
 
 def default_scan_files() -> list[Path]:
     base = Path("outputs/router/eval")
-    return sorted(base.glob("threshold_scan_*_delta_*.csv"))
+    return sorted(base.glob("*\\threshold_scan_*_delta_*_*.csv"))
 
 
 def default_label_stats() -> list[Path]:
@@ -43,11 +45,14 @@ def default_label_stats() -> list[Path]:
     return sorted(base.glob("router_train_metrics_delta_*.json"))
 
 
-def parse_model_delta(path: Path) -> tuple[str, str]:
-    match = re.search(r"threshold_scan_(?P<model>[a-z0-9]+)_delta_(?P<delta>[0-9.]+)\.csv$", path.name)
+def parse_scan_stub(path: Path) -> tuple[str, str, str, str]:
+    match = re.search(
+        r"threshold_scan_(?P<router_mode>clean|posthoc)_(?P<model>[a-z0-9]+)_delta_(?P<delta>[0-9.]+)_(?P<feature_set>[A-Za-z0-9_]+)\.csv$",
+        path.name,
+    )
     if not match:
-        raise ValueError(f"Could not parse model/delta from {path.name}")
-    return match.group("model"), match.group("delta")
+        raise ValueError(f"Could not parse scan stub from {path.name}")
+    return match.group("router_mode"), match.group("model"), match.group("delta"), match.group("feature_set")
 
 
 def load_positive_rates(paths: list[Path]) -> dict[str, float]:
@@ -72,7 +77,7 @@ def best_row(rows: list[dict]) -> dict:
 def build_summary_rows(scan_files: list[Path], positive_rates: dict[str, float], oracle_mrr: float | None) -> list[dict]:
     out = []
     for path in scan_files:
-        model_type, delta = parse_model_delta(path)
+        router_mode, model_type, delta, feature_set = parse_scan_stub(path)
         rows = read_csv(path)
         if not rows:
             continue
@@ -86,6 +91,8 @@ def build_summary_rows(scan_files: list[Path], positive_rates: dict[str, float],
 
         out.append(
             {
+                "router_mode": router_mode,
+                "feature_set": feature_set,
                 "model_type": model_type,
                 "delta": delta,
                 "selected_tau": float(picked["tau"]),
@@ -97,7 +104,7 @@ def build_summary_rows(scan_files: list[Path], positive_rates: dict[str, float],
                 "source_file": path.as_posix(),
             }
         )
-    out.sort(key=lambda row: (row["model_type"], float(row["delta"])))
+    out.sort(key=lambda row: (row["router_mode"], row["model_type"], float(row["delta"])))
     return out
 
 
@@ -109,7 +116,7 @@ def build_summary_text(rows: list[dict]) -> str:
         oracle_gap = row["oracle_gap_at_best_tau"]
         oracle_gap_text = f"{float(oracle_gap):.4f}" if oracle_gap != "" else "N/A"
         lines.append(
-            f"- `{row['model_type']}` @ `delta={row['delta']}`: best_tau={float(row['selected_tau']):.1f}, "
+            f"- `{row['router_mode']} / {row['model_type']} / {row['feature_set']}` @ `delta={row['delta']}`: best_tau={float(row['selected_tau']):.1f}, "
             f"best_mrr={float(row['best_mrr']):.4f}, coverage={float(row['fusion_coverage']):.4f}, "
             f"gain_precision={float(row['gain_precision']):.4f}, positive_label_rate_dev={label_rate_text}, "
             f"oracle_gap={oracle_gap_text}"

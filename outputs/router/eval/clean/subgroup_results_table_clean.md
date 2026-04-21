@@ -1,0 +1,62 @@
+| category | router_mode | feature_set | is_query_time_legal | model | delta | tau | target_regime | n_queries | mrr | hits1 | hits3 | hits10 | fusion_coverage | source |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| fixed_or_rule | clean |  |  | Gate-only |  |  | head_has_img | 21144 | 0.012345267952751848 | 0.002506621263715475 | 0.00832387438516837 | 0.024451381006432085 |  | query_eval_or_recomputed |
+| fixed_or_rule | clean |  |  | Gate-only |  |  | head_no_img | 8856 | 0.010434756493304406 | 0.0024841915085817524 | 0.007904245709123759 | 0.02077687443541102 |  | query_eval_or_recomputed |
+| fixed_or_rule | clean |  |  | Gate-only |  |  | tail_no_img | 30000 | 0.3258805048113347 | 0.1713 | 0.4085666666666667 | 0.6265333333333334 |  | query_eval_or_recomputed |
+| fixed_or_rule | clean |  |  | Residual-only |  |  | head_has_img | 21144 | 0.0017347120476002933 | 9.458948164964057e-05 | 0.0004256526674233825 | 0.0026485054861899358 |  | query_eval_or_recomputed |
+| fixed_or_rule | clean |  |  | Residual-only |  |  | head_no_img | 8856 | 0.005519825818191216 | 0.0024841915085817524 | 0.003952122854561879 | 0.008468834688346883 |  | query_eval_or_recomputed |
+| fixed_or_rule | clean |  |  | Residual-only |  |  | tail_no_img | 30000 | 0.5832467831492473 | 0.4648 | 0.6598333333333334 | 0.8017333333333333 |  | query_eval_or_recomputed |
+| fixed_or_rule | clean | rule | True | rule | 0.01 | 0.5 | head_has_img | 21144 | 0.0017347120476002963 | 9.458948164964057e-05 | 0.0004256526674233825 | 0.0026485054861899358 | 0.0 | query_eval_or_recomputed |
+| fixed_or_rule | clean | rule | True | rule | 0.01 | 0.5 | head_no_img | 8856 | 0.00551982581819121 | 0.0024841915085817524 | 0.003952122854561879 | 0.008468834688346883 | 0.0 | query_eval_or_recomputed |
+| fixed_or_rule | clean | rule | True | rule | 0.01 | 0.5 | tail_no_img | 30000 | 0.5857118047909321 | 0.4656666666666667 | 0.6640666666666667 | 0.8061333333333334 | 0.0374 | query_eval_or_recomputed |
+| oracle | clean |  |  | Oracle |  |  | head_has_img | 21144 | 0.01346430050632783 | 0.002601210745365115 | 0.008749527052591752 | 0.02691070752932274 | 0.7482500945894817 | query_eval_or_recomputed |
+| oracle | clean |  |  | Oracle |  |  | head_no_img | 8856 | 0.014427616247505659 | 0.004968383017163505 | 0.010953026196928636 | 0.02676151761517615 | 0.7313685636856369 | query_eval_or_recomputed |
+| oracle | clean |  |  | Oracle |  |  | tail_no_img | 30000 | 0.6537260100334586 | 0.5257333333333334 | 0.7455333333333334 | 0.8813666666666666 | 0.2253 | query_eval_or_recomputed |
+| paper_baseline | clean |  | True | Full Model |  |  | head_has_img | 21144 | 0.006915635977107001 | 0.0007567158531971245 | 0.0038308740068104426 | 0.012249337873628453 |  | query_eval |
+| paper_baseline | clean |  | True | Full Model |  |  | head_no_img | 8856 | 0.012229623607179671 | 0.003952122854561879 | 0.010727190605239386 | 0.024164408310749775 |  | query_eval |
+| paper_baseline | clean |  | True | Full Model |  |  | tail_no_img | 30000 | 0.405239704692723 | 0.22033333333333333 | 0.5237666666666667 | 0.7422666666666666 |  | query_eval |
+| learned_router | clean | C4 | True | logistic | 0.01 | 0.1 | head_has_img | 21144 | 0.012342627928362673 | 0.002506621263715475 | 0.00832387438516837 | 0.024451381006432085 | 0.9994324631101021 | router_eval_json |
+| learned_router | clean | C4 | True | logistic | 0.01 | 0.1 | head_no_img | 8856 | 0.010435520078390902 | 0.0024841915085817524 | 0.007904245709123759 | 0.02077687443541102 | 0.9989837398373984 | router_eval_json |
+| learned_router | clean | C4 | True | logistic | 0.01 | 0.1 | tail_no_img | 30000 | 0.3258805048113348 | 0.1713 | 0.4085666666666667 | 0.6265333333333334 | 1.0 | router_eval_json |
+| learned_router | clean | C4 | True | logistic | 0.01 | 0.3 | head_has_img | 21144 | 0.010666776215073052 | 0.0021282633371169125 | 0.007283390087022323 | 0.021188043889519486 | 0.6021566401816119 | router_eval_json |
+| learned_router | clean | C4 | True | logistic | 0.01 | 0.3 | head_no_img | 8856 | 0.010627793389420569 | 0.0025971093044263776 | 0.008355916892502258 | 0.02168021680216802 | 0.6243224932249323 | router_eval_json |
+| learned_router | clean | C4 | True | logistic | 0.01 | 0.3 | tail_no_img | 30000 | 0.3628497825084783 | 0.21753333333333333 | 0.4419666666666667 | 0.6414666666666666 | 0.9224 | router_eval_json |
+| learned_router | clean | C4 | True | logistic | 0.01 | 0.5 | head_has_img | 21144 | 0.005500612596840664 | 0.0008986000756715854 | 0.003547105561861521 | 0.011398032538781688 | 0.10769012485811577 | router_eval_json |
+| learned_router | clean | C4 | True | logistic | 0.01 | 0.5 | head_no_img | 8856 | 0.009248197226080525 | 0.0019196025293586269 | 0.008017163504968384 | 0.020438121047877147 | 0.1609078590785908 | router_eval_json |
+| learned_router | clean | C4 | True | logistic | 0.01 | 0.5 | tail_no_img | 30000 | 0.4655620454815261 | 0.3408 | 0.5366333333333333 | 0.7025666666666667 | 0.5708 | router_eval_json |
+| learned_router | clean | C4 | True | logistic | 0.01 | 0.7 | head_has_img | 21144 | 0.004346095195555218 | 0.0006621263715474839 | 0.0028376844494892167 | 0.009175179720015135 | 0.050227014755959136 | router_eval_json |
+| learned_router | clean | C4 | True | logistic | 0.01 | 0.7 | head_no_img | 8856 | 0.008429725513962875 | 0.0015808491418247517 | 0.007452574525745257 | 0.01919602529358627 | 0.10873983739837398 | router_eval_json |
+| learned_router | clean | C4 | True | logistic | 0.01 | 0.7 | tail_no_img | 30000 | 0.5772492872104726 | 0.45436666666666664 | 0.6565 | 0.8048 | 0.1193 | router_eval_json |
+| learned_router | clean | C4 | True | logistic | 0.01 | 0.9 | head_has_img | 21144 | 0.0022672646792819507 | 0.00028376844494892167 | 0.001182368520620507 | 0.0037835792659856224 | 0.00340522133938706 | router_eval_json |
+| learned_router | clean | C4 | True | logistic | 0.01 | 0.9 | head_no_img | 8856 | 0.006480459384474607 | 0.002935862691960253 | 0.00508130081300813 | 0.010501355013550135 | 0.00508130081300813 | router_eval_json |
+| learned_router | clean | C4 | True | logistic | 0.01 | 0.9 | tail_no_img | 30000 | 0.5842165415077333 | 0.4654 | 0.6607 | 0.8037 | 0.0054 | router_eval_json |
+| learned_router | clean | C4 | True | xgb | 0.01 | 0.1 | head_has_img | 21144 | 0.012311619102879416 | 0.0024593265228906543 | 0.008276579644343548 | 0.024498675747256907 | 0.9452326901248581 | router_eval_json |
+| learned_router | clean | C4 | True | xgb | 0.01 | 0.1 | head_no_img | 8856 | 0.010435997020691935 | 0.0024841915085817524 | 0.007904245709123759 | 0.02077687443541102 | 0.948509485094851 | router_eval_json |
+| learned_router | clean | C4 | True | xgb | 0.01 | 0.1 | tail_no_img | 30000 | 0.32950270179455604 | 0.17663333333333334 | 0.41083333333333333 | 0.6273333333333333 | 0.9915 | router_eval_json |
+| learned_router | clean | C4 | True | xgb | 0.01 | 0.3 | head_has_img | 21144 | 0.01072294827185103 | 0.0021755580779417327 | 0.007425274309496784 | 0.021188043889519486 | 0.5429909194097616 | router_eval_json |
+| learned_router | clean | C4 | True | xgb | 0.01 | 0.3 | head_no_img | 8856 | 0.01048372574828352 | 0.0024841915085817524 | 0.008242999096657632 | 0.021567299006323398 | 0.5779132791327913 | router_eval_json |
+| learned_router | clean | C4 | True | xgb | 0.01 | 0.3 | tail_no_img | 30000 | 0.3741941911289015 | 0.23436666666666667 | 0.44843333333333335 | 0.6435 | 0.8888 | router_eval_json |
+| learned_router | clean | C4 | True | xgb | 0.01 | 0.5 | head_has_img | 21144 | 0.006481753730703449 | 0.0010404842981460462 | 0.0042092319334090045 | 0.01362088535754824 | 0.1844494892167991 | router_eval_json |
+| learned_router | clean | C4 | True | xgb | 0.01 | 0.5 | head_no_img | 8856 | 0.009339509189595968 | 0.0019196025293586269 | 0.008017163504968384 | 0.02032520325203252 | 0.23306233062330622 | router_eval_json |
+| learned_router | clean | C4 | True | xgb | 0.01 | 0.5 | tail_no_img | 30000 | 0.4724051132268737 | 0.3466 | 0.5454666666666667 | 0.7075333333333333 | 0.568 | router_eval_json |
+| learned_router | clean | C4 | True | xgb | 0.01 | 0.7 | head_has_img | 21144 | 0.004698153407401664 | 0.0007094211123723042 | 0.003026863412788498 | 0.009931895573212259 | 0.06824631101021567 | router_eval_json |
+| learned_router | clean | C4 | True | xgb | 0.01 | 0.7 | head_no_img | 8856 | 0.008600041110177238 | 0.0015808491418247517 | 0.007565492321589882 | 0.019534778681120146 | 0.12330623306233063 | router_eval_json |
+| learned_router | clean | C4 | True | xgb | 0.01 | 0.7 | tail_no_img | 30000 | 0.5756016171798348 | 0.45436666666666664 | 0.6539333333333334 | 0.7991 | 0.1349 | router_eval_json |
+| learned_router | clean | C4 | True | xgb | 0.01 | 0.9 | head_has_img | 21144 | 0.002286330430514164 | 0.00028376844494892167 | 0.001182368520620507 | 0.0038308740068104426 | 0.004256526674233825 | router_eval_json |
+| learned_router | clean | C4 | True | xgb | 0.01 | 0.9 | head_no_img | 8856 | 0.006480459384474607 | 0.002935862691960253 | 0.00508130081300813 | 0.010501355013550135 | 0.00508130081300813 | router_eval_json |
+| learned_router | clean | C4 | True | xgb | 0.01 | 0.9 | tail_no_img | 30000 | 0.5841933044662517 | 0.4654 | 0.6607666666666666 | 0.8036 | 0.0052 | router_eval_json |
+| learned_router | clean | rule | True | rule | 0.01 | 0.1 | head_has_img | 21144 | 0.0017347120476002963 | 9.458948164964057e-05 | 0.0004256526674233825 | 0.0026485054861899358 | 0.0 | router_eval_json |
+| learned_router | clean | rule | True | rule | 0.01 | 0.1 | head_no_img | 8856 | 0.00551982581819121 | 0.0024841915085817524 | 0.003952122854561879 | 0.008468834688346883 | 0.0 | router_eval_json |
+| learned_router | clean | rule | True | rule | 0.01 | 0.1 | tail_no_img | 30000 | 0.5857118047909321 | 0.4656666666666667 | 0.6640666666666667 | 0.8061333333333334 | 0.0374 | router_eval_json |
+| learned_router | clean | rule | True | rule | 0.01 | 0.3 | head_has_img | 21144 | 0.0017347120476002963 | 9.458948164964057e-05 | 0.0004256526674233825 | 0.0026485054861899358 | 0.0 | router_eval_json |
+| learned_router | clean | rule | True | rule | 0.01 | 0.3 | head_no_img | 8856 | 0.00551982581819121 | 0.0024841915085817524 | 0.003952122854561879 | 0.008468834688346883 | 0.0 | router_eval_json |
+| learned_router | clean | rule | True | rule | 0.01 | 0.3 | tail_no_img | 30000 | 0.5857118047909321 | 0.4656666666666667 | 0.6640666666666667 | 0.8061333333333334 | 0.0374 | router_eval_json |
+| learned_router | clean | rule | True | rule | 0.01 | 0.5 | head_has_img | 21144 | 0.0017347120476002963 | 9.458948164964057e-05 | 0.0004256526674233825 | 0.0026485054861899358 | 0.0 | router_eval_json |
+| learned_router | clean | rule | True | rule | 0.01 | 0.5 | head_no_img | 8856 | 0.00551982581819121 | 0.0024841915085817524 | 0.003952122854561879 | 0.008468834688346883 | 0.0 | router_eval_json |
+| learned_router | clean | rule | True | rule | 0.01 | 0.5 | tail_no_img | 30000 | 0.5857118047909321 | 0.4656666666666667 | 0.6640666666666667 | 0.8061333333333334 | 0.0374 | router_eval_json |
+| learned_router | clean | rule | True | rule | 0.01 | 0.7 | head_has_img | 21144 | 0.0017347120476002963 | 9.458948164964057e-05 | 0.0004256526674233825 | 0.0026485054861899358 | 0.0 | router_eval_json |
+| learned_router | clean | rule | True | rule | 0.01 | 0.7 | head_no_img | 8856 | 0.00551982581819121 | 0.0024841915085817524 | 0.003952122854561879 | 0.008468834688346883 | 0.0 | router_eval_json |
+| learned_router | clean | rule | True | rule | 0.01 | 0.7 | tail_no_img | 30000 | 0.5857118047909321 | 0.4656666666666667 | 0.6640666666666667 | 0.8061333333333334 | 0.0374 | router_eval_json |
+| learned_router | clean | rule | True | rule | 0.01 | 0.9 | head_has_img | 21144 | 0.0017347120476002963 | 9.458948164964057e-05 | 0.0004256526674233825 | 0.0026485054861899358 | 0.0 | router_eval_json |
+| learned_router | clean | rule | True | rule | 0.01 | 0.9 | head_no_img | 8856 | 0.00551982581819121 | 0.0024841915085817524 | 0.003952122854561879 | 0.008468834688346883 | 0.0 | router_eval_json |
+| learned_router | clean | rule | True | rule | 0.01 | 0.9 | tail_no_img | 30000 | 0.5857118047909321 | 0.4656666666666667 | 0.6640666666666667 | 0.8061333333333334 | 0.0374 | router_eval_json |
