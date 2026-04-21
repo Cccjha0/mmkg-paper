@@ -412,7 +412,50 @@ $\tau$ & Logistic MRR & Logistic coverage & XGBoost MRR & XGBoost coverage & XGB
 \label{fig:threshold_scan_behavior}
 \end{figure}
 
-We further examine sensitivity to the gain margin $\delta$. The post-hoc delta summary shows that XGBoost with $\delta=0.00$ attains a slightly higher best test MRR than the final $\delta=0.01$ configuration, with 0.3175 versus 0.3160, respectively. However, we do not redefine the paper configuration using that test observation, because router family, $\delta$, and $\tau$ are selected on the development split only. We therefore retain \texttt{XGBoost + $\delta=0.01$ + $\tau=0.7$} as the final paper configuration and interpret the $\delta=0.00$ result as post-hoc sensitivity evidence rather than as a replacement configuration. This choice is also semantically consistent with the method definition: whereas $\delta=0.00$ treats any positive reciprocal-rank difference as gain-positive, $\delta=0.01$ targets a more conservative notion of non-trivial gain.
+\begin{table}[t]
+\centering
+\caption{Delta-scan summary for learned routers on the routing-compatible line. Each row reports the best threshold selected within a given gain-margin setting.}
+\label{tab:delta_scan_summary}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccccc}
+\toprule
+Model & $\delta$ & $\tau$ & MRR & Coverage & Precision & Dev pos. rate \\
+\midrule
+Logistic & 0.00 & 0.5 & 0.3140 & 0.4976 & 0.8408 & 0.4811 \\
+Logistic & 0.01 & 0.7 & 0.3111 & 0.1788 & 0.6171 & 0.1562 \\
+Logistic & 0.02 & 0.7 & 0.3105 & 0.1650 & 0.5633 & 0.1291 \\
+XGBoost & 0.00 & 0.5 & 0.3175 & 0.4933 & 0.8745 & 0.4811 \\
+XGBoost & 0.01 & 0.7 & 0.3160 & 0.1848 & 0.6696 & 0.1562 \\
+XGBoost & 0.02 & 0.7 & 0.3146 & 0.1695 & 0.6019 & 0.1291 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We further examine sensitivity to the gain margin $\delta$. As shown in Table~\ref{tab:delta_scan_summary}, XGBoost with $\delta=0.00$ attains a slightly higher best test MRR than the final $\delta=0.01$ configuration, with 0.3175 versus 0.3160, respectively. However, the latter induces a substantially more conservative development-side label distribution, with a positive-label rate of 0.1562 rather than 0.4811. We therefore do not redefine the paper configuration using the test-side $\delta=0.00$ observation, because router family, $\delta$, and $\tau$ are selected on the development split only. Instead, we retain \texttt{XGBoost + $\delta=0.01$ + $\tau=0.7$} as the final paper configuration and interpret the $\delta=0.00$ result as post-hoc sensitivity evidence rather than as a replacement configuration. This choice is also semantically consistent with the method definition: whereas $\delta=0.00$ treats any positive reciprocal-rank difference as gain-positive, $\delta=0.01$ targets a more conservative notion of non-trivial gain.
+
+\begin{table}[t]
+\centering
+\caption{Grouped XGBoost feature importance under the routing-compatible line. Aggregated gain sums feature-level gain within each family; higher values indicate greater contribution to routing decisions.}
+\label{tab:feature_importance_grouped}
+\small
+\begin{tabular}{lcc}
+\toprule
+Feature family & Feature count & Aggregated gain \\
+\midrule
+\texttt{relation\_id} & 123 & 1079.4977 \\
+\texttt{direction} & 2 & 365.3547 \\
+\texttt{target\_regime} & 3 & 352.3156 \\
+\texttt{fusion\_correct\_score} & 1 & 238.0224 \\
+\texttt{struct\_correct\_score} & 1 & 98.9467 \\
+\texttt{relation\_fusion\_win\_rate} & 1 & 64.5952 \\
+\texttt{target\_has\_img} & 1 & 60.0073 \\
+\texttt{relation\_support} & 1 & 50.1067 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The grouped XGBoost importance summary in Table~\ref{tab:feature_importance_grouped} further clarifies what drives routing. The strongest feature families include \texttt{relation\_id}, \texttt{direction}, \texttt{target\_regime}, and expert-confidence signals such as \texttt{fusion\_correct\_score} and \texttt{struct\_correct\_score}. By contrast, the simple image-availability indicator \texttt{target\_has\_img} is informative but clearly not dominant. This pattern supports the interpretation that activation cannot be reduced to a shallow modality-availability shortcut; instead, the learned router depends on protocol-aware subgroup conditions, relation context, and branch-confidence cues.
 
 Overall, RQ2 is answered as follows: multimodal evidence should be activated only under a richer query-level decision rule that integrates protocol-aware subgroup conditions, relation context, and expert-confidence signals, rather than by a simple modality-availability shortcut.
 
