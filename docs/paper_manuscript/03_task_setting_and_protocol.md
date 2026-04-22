@@ -10,7 +10,7 @@ All experiments in this paper use the current OpenBG-IMG `paper_split`, which is
 
 The most important property of the current `paper_split` is the asymmetry between target position and image availability. On the head side, target entities can still be image-available for a substantial portion of test queries. On the tail side, however, target entities are effectively always `no_img` under the current test distribution. This means that target position is not merely a formal direction choice. Under the present protocol, it is entangled with modality availability.
 
-This asymmetry is central to the paper. It explains why multimodal gain can appear clearly in some local regimes, especially when the prediction target is image-supported, while overall performance can still remain dominated by structure-favorable conditions. In the earlier analysis-oriented version of the paper, this asymmetry motivated a bounded-gain interpretation. In the present gain-threshold version, it also motivates the method itself: if multimodal gain depends on protocol-shaped query conditions, then multimodal activation should be treated as a selective decision rather than a globally uniform default.
+This asymmetry is central to the paper. It explains why multimodal gain can appear clearly in some local regimes, especially when the prediction target is image-supported, while overall performance can still remain dominated by structure-favorable conditions. It also explains why clean routing is difficult: the deployable decision boundary is not formed in a neutral symmetric space, but inside a protocol where head-side and tail-side queries operate under systematically different gain regimes.
 
 All base models are trained under a unified train/dev/test workflow. The development split is used for early stopping and checkpoint selection, and all final paper-facing metrics are reported on the test split. Router training follows the same separation principle at the feature-label level: query-level gain labels and relation priors are constructed from development-side expert outcomes only, and the trained router is then applied to test-side query features without using test labels during training. This development-only selection discipline is important because the paper moves from empirical diagnosis to operational method; final claims should therefore remain grounded in development-side supervision and test-side reporting.
 
@@ -22,50 +22,91 @@ All formal comparisons use filtered ranking metrics on the test set, including M
 
 We do not define `tail_has_img` for the final analysis because it does not meaningfully exist under the current test distribution. This detail is important not only for the bounded-gain diagnosis, but also for the method contribution: the router is not attempting to solve an abstract symmetric multimodal KGC problem. It is attempting to make query-level decisions under this specific three-regime protocol.
 
-The present paper also relies on two complementary evaluation dialects. The first is the **official model-comparison line**, which aggregates completed paper-stage runs through their formal `test_metrics.json` outputs and is used for the seven-model comparison among `Text-only`, `Early Fusion`, `Gate-only`, `Residual-only`, `Full Model`, `ComplEx`, and `TuckER`. The second is the **routing-compatible line**, which is based on query-level exported expert outcomes and recomputed aggregation. This second line is necessary because Oracle routing, rule-based routing, and learned routing all operate on query-level expert predictions. To keep the routing comparison fair, fixed experts inside that comparison are also reported on the same query-level recomputed basis rather than mixed with the official main-result line. These two lines answer different questions and must not be mixed in the same table.
+The present paper also relies on complementary evaluation lines. The first is the **official model-comparison line**, which aggregates completed paper-stage runs through their formal `test_metrics.json` outputs and is used for the seven-model comparison among `Text-only`, `Early Fusion`, `Gate-only`, `Residual-only`, `Full Model`, `ComplEx`, and `TuckER`. The second is the **clean routing line**, which is based on query-level exported expert outcomes and unified recomputation under legal query-time constraints. This line is used for `Gate-only`, `Residual-only`, Oracle routing, the clean rule baseline, naive global-threshold clean routing, structured clean threshold policies, and target-aligned clean supervision. A third line, used only for analysis, is the **post-hoc selector line**, which may use target-aware or confidence-rich signals to study upper-bound-style separability, but is not part of the deployable clean claims. These lines answer different questions and must not be mixed in the same table.
 
-The main message of this protocol section is therefore simple: the conclusions of this paper are inseparable from the current OpenBG-IMG setting. The `paper_split` creates a meaningful but asymmetric missing-visual evaluation space, and this protocol not only reveals that multimodal gain is bounded, but also creates the decision problem that the method is designed to solve.
+The main message of this protocol section is therefore simple: the conclusions of this paper are inseparable from the current OpenBG-IMG setting. The `paper_split` creates a meaningful but asymmetric missing-visual evaluation space, and this protocol not only reveals that multimodal gain is bounded, but also creates the structured clean decision problem that the method is designed to solve.
 
-## 2. Gain-Threshold Routing Framework
+## 2. Clean Routing Formulations for Selective Activation
 
-The previous sections establish a protocol-aware empirical tension. Under the current OpenBG-IMG setting, multimodal gain is visible but not globally reliable. `Full Model` improves over weaker multimodal baselines, yet stronger structural alternatives—especially `Residual-only`, and in the official model-comparison line also `ComplEx`—remain superior at the global level. This means that the key problem is no longer simply how to build a richer multimodal encoder. Instead, the problem becomes whether multimodal fusion should be activated for the current query at all.
+The previous section establishes a protocol-aware empirical tension. Under the current OpenBG-IMG setting, multimodal gain is visible but not globally reliable. `Full Model` improves over weaker multimodal baselines, yet stronger structural alternatives—especially `Residual-only`—remain superior at the global level. This means that the key problem is no longer simply how to build a richer multimodal encoder. Instead, the problem becomes whether multimodal fusion should be activated for the current query at all, and if so, how that decision should be made under clean query-time legality.
 
-We therefore move from always-on multimodal fusion to **gain-aware selective activation**. The central idea is simple: if multimodal gain is conditional rather than uniformly available, then the model should predict when fusion is likely to help and use a stronger structural fallback otherwise. To operationalize this idea, we propose a lightweight **gain-threshold routing** framework that performs query-level expert selection between a fusion expert and a structural expert.
-
-We study link prediction on OpenBG-IMG under the current paper protocol. A query may be written either as `(h, r, ?)` for tail prediction or as `(?, r, t)` for head prediction. Under the present split, target position is entangled with image availability, so multimodal usefulness is not symmetric across the evaluation space. The test space is naturally decomposed into three target-side regimes: `head_has_img`, `head_no_img`, and `tail_no_img`. These regimes are not equally favorable to multimodal fusion. In particular, `head_has_img` is the clearest multimodal-favorable regime, whereas `tail_no_img` remains strongly structure-favorable. The problem can therefore be reframed as follows:
-
-> Given a query `q`, decide whether multimodal fusion is expected to produce sufficient gain over a stronger structural alternative, and activate the corresponding expert accordingly.
-
-This formulation differs from standard multimodal modeling in one important respect. We are not asking the model to use multimodal evidence everywhere. We are asking it to decide **when multimodal evidence is worth using** under a protocol where gain is known to be bounded.
+We therefore move from always-on multimodal fusion to **clean query-level selective activation**. The central idea is simple: if multimodal gain is conditional rather than uniformly available, then the system should predict when fusion is likely to help and use a stronger structural fallback otherwise. To operationalize this idea, we study query-level expert selection between a fusion expert and a structural expert.
 
 We define two fixed experts:
 
 - **Fusion expert:** `Gate-only`
 - **Structural expert:** `Residual-only`
 
-This choice is deliberate. `Gate-only` represents relation-aware multimodal fusion without an explicit structural compensation branch. `Residual-only` represents structure-heavy compensation within the same internal model family. Together, they are the clearest diagnostic endpoints in the current framework and provide a clean basis for selective routing. We do not use `Full Model` itself as the routed fusion expert in the first version of the method. Doing so would make the interpretation less clear, because `Full Model` already contains a residual path internally. By contrast, routing between `Gate-only` and `Residual-only` keeps the competition interpretable as **fusion versus structural fallback**.
+This choice is deliberate. `Gate-only` represents relation-aware multimodal fusion without an explicit structural compensation branch. `Residual-only` represents structure-heavy compensation within the same internal model family. Together, they are the clearest diagnostic endpoints in the current framework and provide a clean basis for selective routing. We do not use `Full Model` itself as the routed fusion expert in the first version of the method, because `Full Model` already contains a residual path internally and would blur the interpretation of the selection problem.
 
-For a query `q` and a candidate entity `e`, let `s_f(q, e)` denote the score from the fusion expert and `s_s(q, e)` denote the score from the structural expert. A query-level router receives a feature vector `x_q` and predicts the probability that the fusion expert should be selected:
+For a query `q` and a candidate entity `e`, let `s_f(q, e)` denote the score from the fusion expert and `s_s(q, e)` denote the score from the structural expert. The operational problem can then be stated as follows:
+
+> Given a query `q`, decide whether multimodal fusion is expected to provide enough gain over the structural expert to justify activation under a clean query-time constraint.
+
+This formulation differs from standard multimodal modeling in one important respect. We are not asking the model to use multimodal evidence everywhere. We are asking it to decide **when multimodal evidence is worth using** under a protocol where gain is known to be bounded.
+
+### 2.1 Clean legality constraint
+
+The key methodological boundary of this paper is that the main deployable routing claims must remain **clean**. A clean router may use only information that is available at query time. In particular, it may use:
+
+- the query direction (`head` or `tail` prediction),
+- relation identity and development-derived relation priors,
+- query-observable modality indicators derived from the observed side of the query,
+- and router outputs computed from these legal inputs.
+
+By contrast, the deployable clean router may **not** use:
+
+- hidden target-side information,
+- target-side image-availability labels,
+- target-aware regimes,
+- correct-target scores,
+- or any other signals that require the true missing entity or post-hoc expert outcomes at inference time.
+
+This distinction is essential. Stronger target-aware or confidence-aware selectors may still be analyzed later as post-hoc tools, but they are not part of the main clean method claims.
+
+### 2.2 Naive global-threshold clean routing
+
+The simplest clean routing formulation uses a learned probability `p(q)` and a single global threshold `\tau`. Let `x_q` denote a clean feature vector available at query time. The router predicts
 
 \[
-p(q) = P(y=1 \mid x_q).
+p(q) = P(y=1 \mid x_q),
 \]
 
-At inference time, we apply a hard threshold `\tau` and define the routing decision as:
+where `y=1` means that the fusion expert should be selected. At inference time, we define
 
 \[
-\alpha(q) = \mathbf{1}[p(q) > \tau].
+\alpha(q) = \mathbf{1}[p(q) > \tau],
 \]
 
-The final candidate score is then
+and the final score becomes
 
 \[
 s_{\text{final}}(q,e) = \alpha(q) s_f(q,e) + (1-\alpha(q)) s_s(q,e).
 \]
 
-This design has two advantages. First, it keeps the experts fixed and changes only the selection mechanism, so any improvement can be attributed to selective activation rather than to added model capacity or end-to-end co-adaptation. Second, it matches the current problem structure well: the goal is not to blend experts softly everywhere, but to activate the multimodal path only when it is sufficiently likely to help.
+This global-threshold formulation is intentionally simple. It serves as a minimal deployable clean baseline rather than the final structured policy proposed by the paper. As shown later in the experiments, this baseline is too coarse to capture the strongly asymmetric gain structure induced by the current protocol.
 
-To train the router, we construct query-level supervision from development-set expert performance. For each query `q`, let `rank_f(q)` be the filtered rank of the correct target entity under the fusion expert and `rank_s(q)` the corresponding rank under the structural expert. We define reciprocal ranks as
+### 2.3 Structured clean threshold policies
+
+The new results of this paper show that the weakness of the naive clean router is not solely due to signal scarcity. It is also caused by policy granularity. Under the present protocol, head-side and tail-side queries operate under different gain regimes, so a single global threshold is too rigid.
+
+We therefore study a stronger family of **structured clean threshold policies**. The most important member is **direction-specific thresholding**, which replaces the single global threshold with two query-direction-dependent thresholds:
+
+\[
+\alpha(q)=
+\begin{cases}
+\mathbf{1}[p(q) > \tau_{head}], & q \text{ is a head-prediction query}, \\
+\mathbf{1}[p(q) > \tau_{tail}], & q \text{ is a tail-prediction query}.
+\end{cases}
+\]
+
+This formulation keeps the router clean, because query direction is always observable at inference time, but it allows the policy to adapt to the asymmetric decision structure induced by the protocol.
+
+We also study optional bucketized thresholding variants, such as relation-prior buckets or query-observable groupings, as supporting structured-policy extensions. These are not all equally strong in practice, but they serve a conceptual purpose: they show that the main limitation of naive clean routing lies in enforcing one globally shared decision boundary over a space that is known to be heterogeneous.
+
+### 2.4 Target-aligned supervision for clean routing
+
+The second major refinement concerns the training target. In the original gain-threshold formulation, supervision is derived from a coarse binary gain label. For each query `q`, let `rank_f(q)` and `rank_s(q)` be the filtered ranks of the correct target entity under the fusion and structural experts, respectively, and define reciprocal ranks as
 
 \[
 RR_f(q) = \frac{1}{rank_f(q)}, \qquad RR_s(q) = \frac{1}{rank_s(q)}.
@@ -77,41 +118,43 @@ The gain difference is then
 \Delta(q) = RR_f(q) - RR_s(q).
 \]
 
-Using this quantity, we define the binary gain label:
+The original binary label is defined as
 
 \[
 y(q) = \mathbf{1}[\Delta(q) > \delta],
 \]
 
-where `\delta` is a gain margin that controls how much positive advantage the fusion expert must demonstrate before the query is labeled as gain-positive. This label should be interpreted carefully. It does **not** mean that the query belongs to a universally multimodal-favorable semantic class. Instead, it means that under the current protocol and current expert pair, the fusion expert yields sufficiently larger reciprocal-rank improvement than the structural expert for this specific query.
+where `\delta` is a gain margin. This label is useful as a first operationalization of bounded gain, but it is also coarse: it collapses different gain magnitudes into the same binary decision class.
 
-The method is intentionally lightweight and controlled. We do not train a large end-to-end mixture-of-experts system, and we do not introduce token-level or representation-level routing. Instead, we show that under the current protocol, bounded multimodal gain can already be operationalized as a query-level selective-activation problem between two fixed and interpretable experts.
+To better align supervision with the actual expert difference, we therefore study stronger clean targets:
 
-## 3. Router Features, Training, and Evaluation Basis
+1. **Binary gain label** as the naive baseline;
+2. **Regression target**, which predicts `\Delta(q)` directly;
+3. **Ordinal gain buckets**, which partition `\Delta(q)` into multiple ordered intervals.
 
-A naive router could easily degenerate into a shallow heuristic such as “use fusion whenever images are available.” To prevent this, we design the router feature space to cover multiple complementary views of the query.
+These target-aligned formulations preserve more information about gain magnitude than the original binary label and therefore provide a stronger basis for clean routing under shallow and uneven decision boundaries.
 
-The first feature group consists of **protocol-aware condition features**, which directly encode the conditions under which multimodal gain is known to vary under the current benchmark. These features include `direction`, `target_has_img`, `target_regime`, `relation_id`, `relation_gain_prior`, `relation_fusion_win_rate`, and `relation_support`. Their role is to let the router represent the empirical reality that multimodal usefulness depends on target position, modality availability, and relation context under the current role-conditioned missing-modality protocol.
+### 2.5 Clean router features
 
-The second feature group consists of **modality-consistency features**, including `text_img_cosine` and `img_is_missing_replaced`. These features describe whether the query appears to have coherent multimodal evidence and whether the image branch is using real visual support or a missing-image replacement vector.
+The clean routing line uses only legal query-time features. These include:
 
-The third feature group consists of **expert-confidence features**, including `fusion_margin`, `struct_margin`, `fusion_correct_score`, `struct_correct_score`, and `delta_margin`. These signals go beyond the question “is fusion plausible?” and address the stronger question “is the fusion expert currently trustworthy enough to prefer over the structural expert?” In the later ablation and interpretability analyses, this confidence-aware information becomes one of the main reasons why learned routing outperforms shallow heuristics.
+- `direction`,
+- `relation_id`,
+- development-derived relation priors such as `relation_gain_prior`, `relation_fusion_win_rate`, `relation_support`, and `relation_is_visual_prior`,
+- and observed-side modality indicators such as `observed_has_img`, `observed_text_img_cosine`, and `observed_img_missing_replaced`.
 
-For ablation, the full feature space is also organized into incremental feature sets:
+These features are intentionally limited. They do not attempt to reconstruct the hidden target, and they do not use target-aware or answer-aware confidence signals. Their purpose is to test how much of bounded multimodal gain can be recovered under a truly deployable query-time constraint.
 
-- `F1`: minimal image-availability signal
-- `F2`: protocol-aware condition features
-- `F3`: protocol-aware + modality-consistency features
-- `F4`: protocol-aware + modality-consistency + expert-confidence features
+## 3. Analysis-Only Post-hoc Selector and Evaluation Basis
 
-This staged organization allows us to test whether routing success comes only from modality availability or from a richer protocol-aware decision boundary.
+In addition to the clean routing line, we retain a stronger post-hoc selector for analysis only. This selector may use target-aware or confidence-rich information that is unavailable to a deployable clean router. Its purpose is not to support the main method claim, but to study offline separability and remaining headroom relative to Oracle-like selection.
 
-We evaluate three classes of routers. The first baseline is a **rule-based router** that selects fusion only when the target has image support and the relation-level gain prior is positive. This baseline represents the strongest simple heuristic interpretation of the bounded-gain diagnosis. The second router is **logistic regression**, which provides a lightweight and interpretable learned decision boundary. The third router is an **XGBoost-based classifier**, which can model nonlinear interactions among protocol-aware, relation-level, modality, and confidence features.
+The evaluation basis follows directly from this distinction. The routing framework is evaluated under a unified query-level recomputed clean line because the router, Oracle selection, and clean rule selection all operate on query-level exported expert outcomes. To keep this comparison fair, fixed experts inside that table are also reported on the same recomputed aggregation rather than mixed with the official main-result summary line. This leads to the complementary evaluation lines described above:
 
-Router training is performed on development-side query-level feature tables constructed from the fixed experts. The supervised target is the gain label defined above. Training uses only development-set data, and the resulting router is then applied to test-side query-level features without seeing test outcomes during training. For the learned routers, we evaluate multiple gain margins `\delta` and multiple routing thresholds `\tau`. This separation is important: `\delta` controls how gain-positive labels are defined during training, whereas `\tau` controls how conservatively the router activates fusion at inference time.
-
-This training protocol is tied directly to the evaluation basis. The routing framework is evaluated under a unified query-level recomputed line because the router, Oracle selection, and rule-based selection all operate on query-level exported expert outcomes. To keep the comparison fair, fixed experts inside the routing table are also reported under the same recomputed aggregation rather than mixed with the official main-result summary line. This leads to the two complementary evaluation dialects described above: the official model-comparison line supports claims about the ranking of the original models under the paper protocol, whereas the routing-compatible line supports claims about selective activation under a shared query-level basis.
+- the **official model-comparison line** supports claims about the ranking of the original models under the paper protocol,
+- the **clean routing line** supports claims about deployable selective activation under legal query-time constraints,
+- and the **post-hoc selector line** supports analysis of stronger offline separability.
 
 The section-level takeaway is therefore as follows:
 
-> Because multimodal gain in the current OpenBG-IMG protocol is conditional rather than globally reliable, we reformulate MMKGC from always-on multimodal fusion to query-level selective activation. The proposed gain-threshold router predicts whether fusion is worth activating and then routes each query between a fusion expert and a structural expert through a hard-threshold decision rule.
+> Because multimodal gain in the current OpenBG-IMG protocol is conditional rather than globally reliable, we reformulate MMKGC from always-on multimodal fusion to clean query-level selective activation. The paper studies not only a naive global-threshold clean baseline, but also stronger structured clean policies and more target-aligned clean supervision, while retaining post-hoc selectors only as analysis tools rather than deployable methods.
