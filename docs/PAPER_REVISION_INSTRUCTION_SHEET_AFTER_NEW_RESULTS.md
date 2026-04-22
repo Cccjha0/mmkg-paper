@@ -420,9 +420,71 @@
 
 ---
 
-# 8. 结果表与图的改写指令
+# 8. 封版前必须补做的统计项
 
-## 8.1 主文主表建议
+## 8.1 必须新增的一条硬性要求
+
+在当前 strongest clean 结果已经从旧的 global-threshold learned router，转移到新的 structured clean policy / regression-style clean router 之后，**必须针对当前最终 strongest clean 方法重跑或重算 significance**，不能继续沿用旧的 `xgb_tau07` 或旧 global-threshold clean baseline 的统计文件。
+
+也就是说，旧 significance 结果最多只能支持：
+
+- `naive global clean learned router` 不如 `clean rule`
+- `clean rule` 相比 `Residual-only` 是否稳定更强
+
+但它们**不能**直接作为下面这些新 strongest claim 的统计依据：
+
+- `direction-specific dual threshold` 稳定优于 `clean rule`
+- `regression-based clean router` 稳定优于 `clean rule`
+- `new strongest clean strategy` 稳定优于 `Residual-only`
+
+## 8.2 建议必须补做的比较组
+
+至少补这三组：
+
+1. `E1 best` vs `clean rule`
+2. `E5 best` vs `clean rule`
+3. `E5 best` vs `Residual-only`
+
+若你想让 clean 主线更完整，可再加：
+
+4. `E1 best` vs `Residual-only`
+5. `E5 best` vs `E1 best`
+
+## 8.3 建议统计口径
+
+优先使用：
+
+- seed-wise mean ± std
+- paired bootstrap 95% CI
+
+若可以，再补：
+
+- paired permutation test / p-value
+
+## 8.4 写作层面的使用规则
+
+只有在至少前两组比较中满足：
+
+- mean delta MRR > 0
+- 且 95% CI 不覆盖 0
+
+时，主文才适合使用更强表述，例如：
+
+> structured clean routing consistently improves over the clean rule baseline.
+
+否则应改用更保守的写法，例如：
+
+> structured clean routing tends to improve over the clean rule baseline.
+
+## 8.5 这一小节的作用
+
+这一步不是附属检查，而是**封版前必须完成的证据更新**。因为在新结果下，论文 strongest clean claim 已经发生变化，如果不更新 significance，主文 strongest claim 与统计证据会失配。
+
+---
+
+# 9. 结果表与图的改写指令
+
+## 9.1 主文主表建议
 
 建议新增或重排成如下主表：
 
@@ -441,7 +503,7 @@
 - structured clean 变强
 - 但仍远低于 Oracle
 
-## 8.2 建议的 supporting table
+## 9.2 建议的 supporting table
 
 ### Table Y. Structured Policy and Supervision Variants
 
@@ -452,7 +514,7 @@
 - calibration (E4)
 - conservative fallback (E8)
 
-## 8.3 推荐图
+## 9.3 推荐图
 
 ### Figure A
 Global threshold vs direction-specific threshold
@@ -465,7 +527,7 @@ Best clean strategy vs Oracle gap
 
 ---
 
-# 9. 必须避免的写法
+# 10. 必须避免的写法
 
 以下表述现在不要再用：
 
@@ -486,7 +548,7 @@ Best clean strategy vs Oracle gap
 
 ---
 
-# 10. 最终建议的一句话主结论
+# 11. 最终建议的一句话主结论
 
 如果整篇文章最后只保留一句最核心的主结论，建议改成：
 
@@ -494,7 +556,7 @@ Best clean strategy vs Oracle gap
 
 ---
 
-# 11. 最后执行顺序建议
+# 12. 最后执行顺序建议
 
 建议你按下面顺序改稿：
 
@@ -509,7 +571,7 @@ Best clean strategy vs Oracle gap
 
 ---
 
-# 12. 一句话总结
+# 13. 一句话总结
 
 这轮新结果要求论文从“clean routing mostly fails”的旧叙事，转向：
 
