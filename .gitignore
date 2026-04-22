@@ -48,6 +48,9 @@ venv/
 # logs
 *.log
 
+# large router query-row exports
+outputs/router/eval/clean/*_query_rows.csv
+
 # OS
 .DS_Store
 Thumbs.db

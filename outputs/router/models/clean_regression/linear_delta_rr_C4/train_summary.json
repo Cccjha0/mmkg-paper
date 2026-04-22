@@ -1,0 +1,30 @@
+{
+  "task": "regression",
+  "router_mode": "clean",
+  "model_type": "linear",
+  "feature_set": "C4",
+  "train_table": "outputs/router/features/router_train_dev_clean_delta_0.01.csv",
+  "gain_label_csvs": [
+    "outputs/router/dev/gain_labels_delta_0.01_seed1.csv",
+    "outputs/router/dev/gain_labels_delta_0.01_seed2.csv",
+    "outputs/router/dev/gain_labels_delta_0.01_seed3.csv"
+  ],
+  "n_train": 30000,
+  "target_field": "delta_rr",
+  "random_state": 42,
+  "delta_rr_mean": -0.12909174297727916,
+  "feature_names": [
+    "direction",
+    "relation_id",
+    "relation_gain_prior",
+    "relation_fusion_win_rate",
+    "relation_support",
+    "relation_is_visual_prior",
+    "observed_has_img",
+    "observed_text_img_cosine",
+    "observed_img_missing_replaced"
+  ],
+  "metadata": {
+    "random_state": 42
+  }
+}

@@ -1,0 +1,2 @@
+comparison,left_label,right_label,n_seeds,n_paired_queries,mean_delta_mrr_seedwise,std_delta_mrr_seedwise,mean_delta_mrr_querywise,bootstrap_ci_low,bootstrap_ci_high
+clean_best_vs_rule,clean_best_learned_xgb_tau07,clean_rule_tau07,3,60000,-0.0035561372932598405,0.00015449322649472568,-0.003556137293259841,-0.0044299927376130355,-0.0027230838855722655

@@ -1,0 +1,19 @@
+{
+  "comparison": "clean_best_vs_residual",
+  "left_label": "clean_best_learned_xgb_tau07",
+  "right_label": "residual_only",
+  "n_seeds": 3,
+  "n_paired_queries": 60000,
+  "mean_delta_mrr_seedwise": -0.0023236264724210373,
+  "std_delta_mrr_seedwise": 0.00034722314663864905,
+  "mean_delta_mrr_querywise": -0.002323626472421038,
+  "bootstrap_ci_95_querywise": {
+    "low": -0.0033430077808083297,
+    "high": -0.0013479362615915886
+  },
+  "seed_level_deltas": [
+    -0.0025723831239690877,
+    -0.0018325930408930916,
+    -0.002565903252400932
+  ]
+}

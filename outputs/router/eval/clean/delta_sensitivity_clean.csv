@@ -1,0 +1,7 @@
+model,delta,best_tau,best_overall_mrr,best_fusion_coverage,best_gain_precision,source_file
+logistic,0.00,0.5,0.29775092341370835,0.5096,0.7415620094191523,outputs/router/eval/clean/threshold_scan_clean_logistic_delta_0.00_C4.csv
+logistic,0.01,0.9,0.293863770631994,0.00465,0.7240143369175627,outputs/router/eval/clean/threshold_scan_clean_logistic_delta_0.01_C4.csv
+logistic,0.02,0.9,0.29349451703238194,0.0064,0.5208333333333334,outputs/router/eval/clean/threshold_scan_clean_logistic_delta_0.02_C4.csv
+xgb,0.00,0.5,0.29827575378941945,0.52215,0.7372721759392257,outputs/router/eval/clean/threshold_scan_clean_xgb_delta_0.00_C4.csv
+xgb,0.01,0.9,0.2938588708819874,0.00485,0.718213058419244,outputs/router/eval/clean/threshold_scan_clean_xgb_delta_0.01_C4.csv
+xgb,0.02,0.9,0.2938459144830665,0.00425,0.6823529411764706,outputs/router/eval/clean/threshold_scan_clean_xgb_delta_0.02_C4.csv

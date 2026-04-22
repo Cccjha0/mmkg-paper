@@ -1,0 +1,2 @@
+comparison,n_paired_queries,residual_only_mrr,clean_mrr,posthoc_mrr,oracle_mrr,recoverable_gap_clean,recoverable_gap_posthoc
+oracle_gap_recovery,60000,0.29304943039096193,0.29072580391854363,0.2928685374331376,0.16883089489063235,0.018705956104370022,0.0014562477096973017

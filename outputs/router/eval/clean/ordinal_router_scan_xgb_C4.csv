@@ -1,0 +1,3 @@
+classifier_type,feature_set,decision_rule,n_queries,overall_mrr,hits1,hits3,hits10,fusion_coverage,gain_precision,head_has_img_mrr,head_no_img_mrr,tail_no_img_mrr,head_has_img_coverage,head_no_img_coverage,tail_no_img_coverage,head_has_img_n_queries,head_no_img_n_queries,tail_no_img_n_queries
+xgb,C4,weak_or_strong_positive,60000,0.2968708249394052,1.0,1.0,1.0,0.52675,0.14345831355798133,0.012139921919923748,0.010294143277741034,0.5821466018140581,0.9409761634506243,0.9383468834688347,0.1133,21144,8856,30000
+xgb,C4,strong_only,60000,0.2950932214037527,1.0,1.0,1.0,0.0407,0.46764946764946763,0.0025175544210296733,0.0073404680566517815,0.5862451642812393,0.009080590238365494,0.05623306233062331,0.0584,21144,8856,30000

@@ -1,0 +1,4 @@
+model,delta,feature_set,calibration,best_tau,best_mrr,best_coverage,best_gain_precision,delta_to_uncalibrated_best,n_train_base,n_train_calibration
+logistic,0.01,C4,none,0.9,0.2936467200021525,0.0062,0.6155913978494624,0.0,24000,6000
+logistic,0.01,C4,platt,0.5,0.2935880386684193,0.00305,0.7213114754098361,-5.868133373315709e-05,24000,6000
+logistic,0.01,C4,isotonic,0.7,0.2938386806206396,0.0041,0.7398373983739838,0.0001919606184871414,24000,6000

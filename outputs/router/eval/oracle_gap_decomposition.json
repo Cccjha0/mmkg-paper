@@ -1,0 +1,12 @@
+{
+  "comparison": "oracle_gap_recovery",
+  "n_paired_queries": 60000,
+  "residual_only_mrr": 0.29304943039096193,
+  "clean_mrr": 0.29072580391854363,
+  "posthoc_mrr": 0.2928685374331376,
+  "oracle_mrr": 0.16883089489063235,
+  "recoverable_gap_clean": 0.018705956104370022,
+  "recoverable_gap_posthoc": 0.0014562477096973017,
+  "clean_label": "clean_xgb_tau07",
+  "posthoc_label": "posthoc_xgb_tau07_PH4"
+}
