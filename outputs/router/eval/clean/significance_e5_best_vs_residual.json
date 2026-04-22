@@ -1,0 +1,19 @@
+{
+  "comparison": "e5_best_vs_residual_only",
+  "left_label": "e5_best_regression_xgb_theta_0.00",
+  "right_label": "residual_only",
+  "n_seeds": 3,
+  "n_paired_queries": 60000,
+  "mean_delta_mrr_seedwise": 0.005132954889045194,
+  "std_delta_mrr_seedwise": 0.00038216792526458103,
+  "mean_delta_mrr_querywise": 0.005132954889045194,
+  "bootstrap_ci_95_querywise": {
+    "low": 0.004438424637630657,
+    "high": 0.005844324951600691
+  },
+  "seed_level_deltas": [
+    0.004710422212841557,
+    0.00563607408015122,
+    0.005052368374142804
+  ]
+}
