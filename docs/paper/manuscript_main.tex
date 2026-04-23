@@ -153,15 +153,16 @@ All formal comparisons use filtered ranking metrics on the test set, including M
 
 \begin{table}[t]
 \centering
-\caption{Two evaluation dialects used in this paper. Rows from these two lines must not be compared as if they came from the same aggregation basis. Throughout the rest of the paper, we refer to these two dialects as the official model-comparison line and the routing-compatible line.}
-\label{tab:evaluation_dialects}
+\caption{Three evaluation lines used in this paper. Rows from these three lines must not be compared as if they came from the same aggregation basis, because they answer different questions under different information conditions.}
+\label{tab:evaluation_lines}
 \small
 \begin{tabular}{p{0.22\textwidth}p{0.28\textwidth}p{0.38\textwidth}}
 \toprule
-Dialect & Aggregation basis & Used for \\
+Evaluation line & Aggregation basis & Used for \\
 \midrule
 Official model-comparison line & formal \texttt{test\_metrics.json} outputs & ranking the original seven-model family under the paper protocol \\
-Routing-compatible line & query-level exported expert outcomes with recomputed aggregation & comparing Oracle, rule-based routing, learned routing, and fixed experts on a shared routing-compatible basis \\
+Clean routing line & query-level exported expert outcomes with recomputed aggregation under legal query-time constraints & comparing \texttt{Gate-only}, \texttt{Residual-only}, Oracle routing, the clean rule baseline, naive global-threshold clean routing, structured clean policies, and target-aligned clean supervision on a shared clean basis \\
+Post-hoc analysis line & query-level exported expert outcomes with target-aware or confidence-rich analysis features & studying stronger offline separability and upper-bound-style selector behavior without using these signals for deployable clean claims \\
 \bottomrule
 \end{tabular}
 \end{table}
