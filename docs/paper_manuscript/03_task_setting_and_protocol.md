@@ -145,7 +145,41 @@ The clean routing line uses only legal query-time features. These include:
 
 These features are intentionally limited. They do not attempt to reconstruct the hidden target, and they do not use target-aware or answer-aware confidence signals. Their purpose is to test how much of bounded multimodal gain can be recovered under a truly deployable query-time constraint.
 
-## 3. Analysis-Only Post-hoc Selector and Evaluation Basis
+## 3. Router Training Details
+
+### 3.1 Query-level feature and label construction
+
+Router training is performed on query-level feature tables constructed from the fixed fusion and structural experts. For every development query `q`, we record the reciprocal ranks produced by the fusion expert and the structural expert, and compute the expert difference:
+
+\[
+\Delta(q)=RR_f(q)-RR_s(q).
+\]
+
+This development-side expert difference is used only to create router supervision. It is not used as a test-time feature. At test time, the router receives only clean query-time features and predicts whether the fusion expert should be activated.
+
+Relation-level priors are also computed from the development split only. For a relation `r`, `relation_gain_prior` denotes the average development-side reciprocal-rank gain of the fusion expert over the structural expert for that relation. `relation_fusion_win_rate` denotes the proportion of development queries for which the fusion expert outperforms the structural expert. `relation_support` records the number of development queries available for that relation, and `relation_is_visual_prior` is a development-derived indicator of whether the relation tends to behave as visually favorable under the clean feature construction. These relation priors are then attached to test queries by relation identity without using test labels or test expert outcomes.
+
+Observed-side modality features are computed only from the known side of the query. For tail prediction `(h,r,?)`, the observed side is the head entity `h`; for head prediction `(?,r,t)`, the observed side is the tail entity `t`. The clean router therefore never uses the hidden target entity, target-side image availability, or target-aware subgroup labels.
+
+### 3.2 Router model families
+
+The clean routing experiments evaluate three families of routing models. The first is the legal clean rule baseline, which activates the fusion expert only under conservative query-observable conditions. The second is naive global-threshold learned routing, where classifiers such as logistic regression and XGBoost output a fusion-selection probability under a single threshold. The third family contains the stronger clean policies studied in the current paper: direction-specific thresholding, optional bucketized thresholding, regression-based gain prediction, and ordinal gain modeling.
+
+For binary routing, the classifier is trained to predict whether `\Delta(q)` exceeds a development-defined gain margin `\delta`. For regression-based routing, the model predicts the scalar target `\Delta(q)` directly, using a standard squared-error regression objective in the implemented regressor family. For ordinal routing, the target is formed by partitioning `\Delta(q)` into ordered gain buckets, and the final routing decision is derived from whether the predicted bucket indicates positive expected fusion gain.
+
+### 3.3 Threshold selection and test protocol
+
+All routing hyperparameters are selected on the development split only. This includes the gain margin `\delta`, the single global threshold `\tau`, direction-specific thresholds `\tau_head` and `\tau_tail`, bucketized thresholds, and the regression decision threshold `\theta`. After these settings are selected, the trained router is applied once to the test split for final reporting.
+
+This protocol is important because the routing task is vulnerable to leakage. The test split is never used to fit the router, construct relation priors, tune thresholds, choose the gain margin, or select the router family. Test labels and test-side expert outcomes are used only after routing decisions have been made, in order to compute filtered ranking metrics and paired significance results.
+
+### 3.4 Bootstrap evaluation
+
+The main significance evidence is computed on the clean routing line using paired query-level bootstrap. For each pair of compared methods, we compute reciprocal-rank differences on the same set of test query instances, resample these paired query outcomes with replacement, and recompute the MRR difference on each bootstrap sample. The reported confidence intervals are taken from the empirical bootstrap distribution of paired `\Delta`MRR.
+
+This paired design matters because all clean routing methods are evaluated on the same test query set. The bootstrap intervals therefore quantify whether one clean policy improves over another under matched query conditions, rather than comparing unrelated aggregate scores.
+
+## 4. Analysis-Only Post-hoc Selector and Evaluation Basis
 
 In addition to the clean routing line, we retain a stronger post-hoc selector for analysis only. This selector may use target-aware or confidence-rich information that is unavailable to a deployable clean router. Its purpose is not to support the main method claim, but to study offline separability and remaining headroom relative to Oracle-like selection.
 
