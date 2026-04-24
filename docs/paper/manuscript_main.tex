@@ -216,7 +216,21 @@ The original binary label is then defined as
 \[
 y(q)=\mathbf{1}[\Delta(q)>\delta].
 \]
-To better align supervision with the actual expert difference, we study stronger clean targets: (1) the original binary gain label as a naive baseline, (2) a regression target that predicts $\Delta(q)$ directly, and (3) ordinal gain buckets that partition $\Delta(q)$ into multiple ordered intervals.
+This label is deployable as a training target because it is constructed from development-side expert outcomes, but it is coarse: it discards the magnitude of the advantage or disadvantage of fusion.
+
+To better align supervision with the actual expert difference, we study stronger clean targets. The regression formulation trains a model to predict a scalar gain estimate
+\[
+\widehat{\Delta}(q) \approx \Delta(q),
+\]
+using the same clean query-time feature vector $x_q$. At inference time, the regression router converts this estimate into a routing decision through a development-selected threshold $\theta$:
+\[
+\alpha_{reg}(q)=\mathbf{1}[\widehat{\Delta}(q)>\theta].
+\]
+The final score is then computed with the same expert-selection rule as before,
+\[
+s_{\text{final}}(q,e)=\alpha_{reg}(q)s_f(q,e)+(1-\alpha_{reg}(q))s_s(q,e).
+\]
+Thus, E5 differs from the naive binary clean router not by using post-hoc information at test time, but by preserving more information about gain magnitude during training. We also evaluate ordinal gain buckets, which partition $\Delta(q)$ into multiple ordered intervals and route according to whether the predicted bucket indicates positive expected fusion gain.
 
 \subsection{Clean Router Features, Training, and Evaluation Basis}
 A naive router could easily degenerate into a shallow heuristic such as ``use fusion whenever the query looks multimodal-friendly.'' To prevent this, we separate three layers of routing evidence. The deployable clean line uses only legal query-time features such as \texttt{direction}, relation identity and development-derived relation priors, and observed-side modality indicators. Stronger target-aware or confidence-rich selectors are retained only as analysis tools for post-hoc separability and are not part of the main clean claims.
@@ -343,7 +357,7 @@ A natural first attempt is a clean learned router with one global threshold $\ta
 
 \begin{table}[t]
 \centering
-\caption{Clean routing comparison under increasing structural strength.}
+\caption{Clean routing comparison under increasing structural strength of the clean policy. The rows are ordered to show the paper's main progression: a fixed structural expert, a simple legal rule, a naive global-threshold learned router, a structured direction-specific threshold policy, a target-aligned regression router, and Oracle routing as the non-deployable upper reference.}
 \label{tab:clean_routing_main}
 \small
 \begin{tabular}{lc}
@@ -359,6 +373,8 @@ Oracle routing & 0.3337 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+The ordering in \cref{tab:clean_routing_main} is intentional rather than merely descriptive: it shows how clean routing changes as the policy becomes structurally stronger, from fixed structural fallback to rule-based activation, naive global learned routing, direction-specific structured thresholding, and finally target-aligned regression routing. The strongest clean improvements in this table are further validated by the paired bootstrap comparisons in \cref{tab:clean_significance}.
 
 Once the clean policy is allowed to use direction-specific thresholds instead of one global threshold, performance increases substantially above the clean rule baseline. The strongest dual-threshold configuration reaches approximately \texttt{0.2974} MRR, improving over the clean rule (\texttt{0.2943}) by about \texttt{+0.00315}. This gain is not only numerically meaningful but also statistically clean: the bootstrap confidence interval for the comparison between the best direction-specific threshold policy and the clean rule is strictly positive, with mean delta MRR \texttt{+0.003154} and 95\% CI [\texttt{+0.002532}, \texttt{+0.003786}].
 
@@ -416,7 +432,7 @@ These gains are statistically well supported. All three reported comparisons are
 
 Ordinal gain modeling also improves over the binary baseline, although it remains below the regression formulation. This pattern is conceptually important. It suggests that preserving gain magnitude information is especially helpful under the current protocol, where the gain boundary is shallow, uneven, and strongly shaped by direction-specific asymmetry.
 
-Probability calibration provides only limited gains relative to the stronger clean results above. This means that the weakness of the original clean router is not primarily a calibration issue. Likewise, delta sensitivity shows that the effectiveness of clean routing depends meaningfully on label definition: more permissive settings are easier, whereas \texttt{$\delta=0.01$} remains substantially harder. This further supports the view that the earlier weak clean result was partly caused by the coarseness of the binary gain label itself rather than by query-time signal scarcity alone.
+Probability calibration provides only limited gains relative to the stronger clean results above. This means that the weakness of the original clean router is not primarily a calibration issue. Delta sensitivity is more informative because it directly tests whether the binary gain label itself is too coarse. As shown in \cref{tab:delta_sensitivity}, the naive global learned router is much stronger under the permissive $\delta=0.00$ label, reaching 0.2978--0.2983 MRR, but drops back to approximately 0.2939 when the harder $\delta=0.01$ margin is imposed. This pattern supports the view that the original clean-routing difficulty is partly a supervision-design problem: $\delta=0.01$ is not just another hyperparameter choice, but a substantially harder clean setting in which the binary label discards useful gain-magnitude information.
 
 Even after structured thresholding and stronger supervision, the best clean strategy remains substantially below Oracle routing in the direct clean-routing comparison. This statement is used as a qualitative boundary on the remaining deployable gap rather than as a separate oracle-gap decomposition estimate. The deployable gap is therefore real, but its interpretation must be refined. It does not arise solely because clean query-time observable signals are useless. Rather, it persists because the recoverable decision boundary remains only partially visible under legal query-time information, even after policy and supervision are improved.
 
@@ -443,6 +459,30 @@ Methodologically, the main lesson of the paper is more specific than in the earl
 The strongest claim of this paper is therefore controlled rather than universal. We do not show that multimodal fusion is globally superior to structural modeling, nor that the present clean router fully solves MMKGC under incomplete visual support. What we do show is narrower and more defensible: under the current OpenBG-IMG protocol, the weakness of clean routing is not solely caused by insufficient query-time observable signals. It also stems from overly coarse global thresholding and binary gain supervision. Once the clean policy is structured more appropriately and trained with a more target-aligned objective, deployable multimodal gain can be recovered more effectively, although a substantial gap to Oracle still remains.
 
 The main contribution of the paper is thus not a universally dominant multimodal architecture, but a protocol-aware transition from bounded-gain diagnosis to stronger structured clean routing. More broadly, this suggests that future MMKGC research should study not only how to fuse modalities more richly, but also how to structure clean selective activation and gain-aware supervision under asymmetric missing-modality protocols.
+
+
+\appendix
+\section{Additional Delta Sensitivity Results}
+\label{app:delta_sensitivity}
+
+\begin{table}[H]
+\centering
+\caption{Delta sensitivity of naive global-threshold clean routing. The table reports the best test MRR selected from the global-threshold scan for each gain margin. The large gap between $\delta=0.00$ and $\delta=0.01/0.02$ supports the claim that the original binary gain-label formulation is a difficult and coarse supervision setting.}
+\label{tab:delta_sensitivity}
+\small
+\begin{tabular}{lccc}
+\toprule
+Model & $\delta$ & Best $\tau$ & Best MRR \\
+\midrule
+Logistic & 0.00 & 0.5 & 0.2978 \\
+Logistic & 0.01 & 0.9 & 0.2939 \\
+Logistic & 0.02 & 0.9 & 0.2935 \\
+XGBoost & 0.00 & 0.5 & 0.2983 \\
+XGBoost & 0.01 & 0.9 & 0.2939 \\
+XGBoost & 0.02 & 0.9 & 0.2938 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \bibliographystyle{plain}
 \bibliography{references}
