@@ -20,7 +20,28 @@ The section must preserve the manuscript's three evaluation lines:
 
 Rows from these lines should not be mixed as if they came from the same aggregation basis.
 
-## 2. RQ1: Where Does Multimodal Gain Appear?
+## 2. Main Clean Routing Evidence Table
+
+The clean routing line should include a compact main table before the detailed RQ2/RQ3 discussion. This table is important because it turns the paper's central clean-routing claim from narrative text into auditable evidence.
+
+| Method | Evaluation line | MRR | Delta vs Clean Rule | Delta vs Residual-only | Paired bootstrap evidence |
+|---|---|---:|---:|---:|---|
+| `Residual-only` | Clean routing line | 0.2930 | -0.0012 | -- | fixed structural expert |
+| `Clean rule` | Clean routing line | 0.2943 | -- | +0.0012 | legal rule baseline |
+| `Naive global clean router` | Clean routing line | 0.2939 | -0.0004 | +0.0008 | does not beat clean rule |
+| `Direction-specific threshold` | Clean routing line | 0.2974 | +0.0032 | +0.0044 | vs clean rule: 95% CI [+0.002532, +0.003786] |
+| `Regression-based clean router` | Clean routing line | 0.2982 | +0.0039 | +0.0051 | vs clean rule: 95% CI [+0.003345, +0.004442]; vs Residual-only: 95% CI [+0.004438, +0.005844] |
+| `Oracle routing` | Oracle / post-hoc upper bound | 0.3337 | +0.0395 | +0.0407 | upper-bound reference only |
+
+The table should be interpreted strictly on the clean routing line. The fixed expert values in this table are routing-compatible recomputed values, not rows copied from the official model-comparison table. Oracle routing is included only to show remaining headroom and should not be described as deployable.
+
+This table supports three key claims:
+
+1. naive global-threshold clean routing is weaker than the legal clean rule;
+2. direction-specific thresholding recovers a clear and statistically supported clean gain;
+3. regression-based gain prediction is the strongest clean strategy but still remains far below Oracle.
+
+## 3. RQ1: Where Does Multimodal Gain Appear?
 
 RQ1 asks whether multimodal gain is globally uniform or concentrated in protocol-shaped local regimes.
 
@@ -38,17 +59,17 @@ The current manuscript's key RQ1 interpretation is:
 
 Relation-group evidence supports the same bounded-gain story. Relation context affects where multimodal evidence is useful, but coarse visual/non-visual grouping alone does not explain the whole result pattern. The paper should therefore avoid the oversimplified claim that all visually named relations automatically favor multimodal models.
 
-## 3. RQ2: Why Does Naive Clean Routing Fail?
+## 4. RQ2: Why Does Naive Clean Routing Fail?
 
 RQ2 asks whether deployable selective activation can be solved by a single global clean threshold.
 
-The current answer is **no**. Naive clean query-time routing with one global threshold does not outperform the simple legal clean rule baseline. This negative result is important because it shows that the weakness of clean routing is not explained solely by insufficient query-time observable signals. The original clean formulation is also too coarse for the asymmetric decision structure induced by the current protocol.
+The current answer is **no**. Naive clean query-time routing with one global threshold reaches `0.2939` MRR and does not outperform the simple legal clean rule baseline at `0.2943` MRR. This negative result is important because it shows that the weakness of clean routing is not explained solely by insufficient query-time observable signals. The original clean formulation is also too coarse for the asymmetric decision structure induced by the current protocol.
 
 The current manuscript's key RQ2 conclusion is:
 
 > The clean decision boundary is not homogeneous. Head-side and tail-side queries require different operating points, so a single global threshold is an inadequate policy structure.
 
-## 4. Structured Clean Thresholding
+## 5. Structured Clean Thresholding
 
 The strongest structured threshold result in the current manuscript is direction-specific thresholding.
 
@@ -64,13 +85,13 @@ Instead of using one threshold `tau`, the policy uses separate thresholds for he
 
 This policy remains clean because query direction is known at inference time.
 
-The current manuscript reports that direction-specific thresholding raises clean routing performance to approximately `0.2974` MRR. This improves over the clean rule baseline and shows that policy granularity matters under the current split.
+Direction-specific thresholding raises clean routing performance to `0.2974` MRR. This improves over the clean rule baseline by approximately `+0.0032` MRR, with a paired bootstrap 95% CI of `[+0.002532, +0.003786]`. This result shows that policy granularity matters under the current split.
 
 The safest wording is:
 
 > Direction-specific thresholding demonstrates that clean routing is not fundamentally exhausted by the failure of the naive global-threshold router. The problem is not merely signal availability; it is also the granularity of the routing policy.
 
-## 5. RQ3: How Should Bounded Gain Be Exploited?
+## 6. RQ3: How Should Bounded Gain Be Exploited?
 
 RQ3 asks how conditional multimodal gain should be operationalized once it is known to be uneven.
 
@@ -90,15 +111,15 @@ The regression router predicts:
 
 using only legal clean query-time features. At test time, the predicted gain is converted into a routing decision through a development-selected threshold.
 
-The current manuscript reports that regression-based gain prediction reaches approximately `0.2982` MRR, making it the strongest clean strategy. It improves over both the clean rule and `Residual-only`, with paired bootstrap confidence intervals strictly above zero.
+Regression-based gain prediction reaches `0.2982` MRR, making it the strongest clean strategy. It improves over the clean rule by approximately `+0.0039` MRR, with 95% CI `[+0.003345, +0.004442]`. It also improves over `Residual-only` by approximately `+0.0051` MRR, with 95% CI `[+0.004438, +0.005844]`.
 
 The safest wording is:
 
 > Target-aligned clean supervision further strengthens deployable routing. The gain is still modest in absolute value, but it is consistent and statistically supported under the clean routing line.
 
-## 6. Remaining Oracle Gap
+## 7. Remaining Oracle Gap
 
-Even the best clean strategy remains below Oracle routing.
+Even the best clean strategy remains below Oracle routing. The strongest clean method reaches `0.2982` MRR, whereas Oracle routing reaches `0.3337` MRR. This leaves a remaining gap of approximately `0.0356` MRR.
 
 This gap should not be described as a failure of the paper. It is part of the paper's controlled claim. It shows that the current clean features recover only part of the separability visible to an Oracle or post-hoc selector.
 
@@ -106,7 +127,7 @@ The correct interpretation is:
 
 > Structured clean routing improves over naive clean routing and fixed clean baselines, but legal query-time information still exposes only part of the multimodal-gain boundary. The remaining Oracle gap marks unresolved deployable headroom.
 
-## 7. Integrated Discussion
+## 8. Integrated Discussion
 
 The combined evidence across RQ1--RQ3 supports the current paper's main argument:
 
@@ -117,7 +138,7 @@ The combined evidence across RQ1--RQ3 supports the current paper's main argument
 5. Regression-based gain prediction improves further by using a more target-aligned supervision form.
 6. A gap to Oracle remains, so the result should be framed as partial deployable recovery rather than complete solution.
 
-## 8. Section-Level Takeaway
+## 9. Section-Level Takeaway
 
 The current experiments section should communicate the following message:
 
