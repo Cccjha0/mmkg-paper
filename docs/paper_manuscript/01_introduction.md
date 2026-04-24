@@ -27,9 +27,18 @@ The experiments follow the same progression. Protocol-aware subgroup and relatio
 
 The paper's claim is therefore controlled: under the current OpenBG-IMG protocol, clean routing fails not only because legal query-time signals are limited, but also because a global threshold and binary gain labels are too coarse. Once the policy is structured more appropriately and trained with a more target-aligned objective, deployable multimodal gain can be recovered more effectively, while the remaining Oracle gap marks unresolved headroom.
 
-In summary, this paper makes the following contributions:
+In summary, this paper makes three linked contributions, each corresponding to a fine-grained problem, a proposed response, and an experimental validation:
+
+| Fine-grained problem | Proposed response | Validation |
+|---|---|---|
+| The current protocol creates role--modality asymmetry. | Protocol-aware bounded-gain diagnosis. | Target-side subgroup and relation-group analysis. |
+| Naive clean routing is too coarse. | Direction-specific structured thresholding. | Clean routing comparison and paired bootstrap evidence. |
+| Binary gain supervision is too coarse. | Regression-based gain prediction. | Strongest clean MRR and paired delta-MRR confidence intervals. |
+
+More specifically, our contributions are:
 
 1. **Protocol-aware bounded-gain diagnosis.** We identify a protocol-aware bounded-gain structure on OpenBG-IMG by showing that role--modality asymmetry entangles target position with image availability, so multimodal benefit remains local rather than globally uniform.
-2. **Negative result on naive clean routing.** We show that naive clean query-time routing based on a single global threshold is insufficient and can underperform a simple legal rule-based selector, indicating that deployable routing cannot be characterized adequately by a coarse global decision boundary.
-3. **Positive result on structured clean routing.** We demonstrate that clean routing is not fundamentally exhausted: direction-specific thresholding and more target-aligned supervision, especially regression-style gain modeling, consistently outperform the clean rule baseline and recover additional deployable gains.
-4. **Remaining deployable gap.** We further show that even these stronger clean strategies remain substantially below Oracle, revealing a persistent gap between deployable separability and oracle-level or post-hoc separability.
+2. **Structured clean routing for selective activation.** We show that naive clean query-time routing with a single global threshold is insufficient, and that direction-specific thresholding provides a stronger clean policy under the asymmetric protocol.
+3. **Target-aligned clean supervision.** We further show that regression-based gain prediction recovers the strongest deployable clean result, outperforming both the clean rule and `Residual-only` with positive paired bootstrap evidence.
+
+These contributions do not imply that clean routing fully closes the gap to Oracle routing. Instead, the remaining Oracle gap is treated as a discussion and limitation result: structured clean routing recovers part of the bounded multimodal gain, while oracle-level separability still marks unresolved deployable headroom.
