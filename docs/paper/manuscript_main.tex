@@ -61,27 +61,25 @@ Under incomplete visual support, however, multimodal usefulness is not uniformly
 
 Our prior analysis already reveals a strong tension under the unified OpenBG-IMG protocol with filtered ranking, \texttt{direction=both}, and three-seed reporting. The strongest overall model is not the most complete multimodal architecture. Instead, \texttt{Residual-only} achieves the best global performance, while \texttt{Full Model} still retains value within the internal multimodal family. This means that multimodal gain exists, but it is uneven across the evaluation space rather than globally reliable.
 
-These observations motivate the total problem addressed in this paper:
+These observations motivate the central problem of this paper:
 
 \begin{quote}
-Under the current OpenBG-IMG protocol, multimodal gain is not globally reliable. How can this bounded gain be understood more precisely and exploited more effectively under clean, deployable routing constraints?
+Under the current OpenBG-IMG protocol, multimodal gain is bounded and protocol-dependent. How can this gain be diagnosed more precisely and exploited more effectively under clean, deployable routing constraints?
 \end{quote}
 
-Rather than treating this as a single undifferentiated question, we decompose it into three progressively narrower research questions.
+We decompose this problem into three research questions.
 
-\textbf{RQ1. Where does multimodal gain actually appear under the current OpenBG-IMG protocol?} This question asks whether multimodal benefit is globally uniform or instead concentrated in specific target-side regimes and relation conditions.
+\textbf{RQ1. Where does multimodal gain actually appear?} We first examine whether multimodal benefit is globally uniform or concentrated in specific target-side regimes and relation conditions.
 
-\textbf{RQ2. Why does naive clean routing fail, and what kind of clean decision structure is actually required?} This question asks whether activation can be decided by a single global threshold or a shallow modality-availability heuristic, or whether it instead requires a more structured policy under protocol-shaped asymmetry.
+\textbf{RQ2. Why does naive clean routing fail?} We then test whether a single global threshold is sufficient for clean selective activation, or whether the protocol requires a more structured decision policy.
 
-\textbf{RQ3. How should bounded multimodal gain be exploited effectively once it is known to be conditional?} This question asks what operational response is appropriate under heterogeneous gain: a naive global clean router, a more structured clean policy, or richer clean supervision aligned with gain magnitude.
+\textbf{RQ3. How should bounded gain be exploited once it is known to be conditional?} Finally, we study whether target-aligned clean supervision can recover more deployable gain than coarse binary routing.
 
-This decomposition also determines the overall logic of the paper. RQ1 is diagnostic: it identifies where bounded multimodal gain appears. RQ2 is structural: it asks what kind of clean decision boundary is needed under asymmetric protocol conditions. RQ3 is operational: it turns bounded gain into a selective-activation mechanism that can be evaluated directly.
+To address these questions, we move from always-on multimodal fusion to query-level selective activation between a fusion expert and a structural expert. We begin with a naive global-threshold clean router as a minimal deployable baseline, then evaluate stronger clean formulations, including direction-specific thresholding and regression-style gain prediction. The method is not intended as a universally stronger multimodal architecture. Instead, it operationalizes the bounded-gain finding and tests how much of that gain can be recovered under legal query-time constraints.
 
-To address these questions, we move from always-on multimodal fusion to clean query-level selective activation between a fusion expert and a structural expert. We begin with a naive global-threshold clean routing formulation as a minimal deployable baseline. We then evaluate stronger clean formulations, especially direction-specific thresholding and more target-aligned supervision such as regression-style gain prediction. The method is not intended as a universally stronger multimodal architecture; rather, it operationalizes the bounded-gain finding under the current OpenBG-IMG setting and tests how much of that gain can actually be recovered under clean query-time constraints.
+The experiments follow the same progression. Protocol-aware subgroup and relation-group analyses show that multimodal gain is local, regime-dependent, and bounded. Clean routing experiments show that a naive global threshold is too coarse, while direction-specific thresholding improves over the clean rule baseline. Target-aligned regression supervision further provides the strongest clean result, although a visible gap to Oracle routing remains.
 
-The experiments are organized accordingly. For RQ1, protocol-aware subgroup and relation-group analyses show that multimodal gain is local, regime-dependent, and bounded. For RQ2, the comparison between a naive global-threshold clean router and structured clean policies shows that the weakness of the original clean formulation comes not only from signal scarcity, but also from overly coarse policy granularity. For RQ3, target-aligned clean supervision further improves over the clean rule baseline, while Oracle routing still leaves visible headroom.
-
-The paper's claim is therefore deliberately scoped. Under the current OpenBG-IMG protocol, the weakness of clean routing is not solely caused by insufficient query-time observable signals. It also stems from overly coarse global thresholding and binary gain supervision. Once the clean policy is structured more appropriately and trained with a more target-aligned objective, deployable multimodal gain can be recovered more effectively, while the remaining distance to Oracle still marks unresolved headroom.
+The paper's claim is therefore controlled: under the current OpenBG-IMG protocol, clean routing fails not only because legal query-time signals are limited, but also because a global threshold and binary gain labels are too coarse. Once the policy is structured more appropriately and trained with a more target-aligned objective, deployable multimodal gain can be recovered more effectively, while the remaining Oracle gap marks unresolved headroom.
 
 In summary, this paper makes the following contributions:
 \begin{enumerate}[leftmargin=1.5em]
@@ -252,7 +250,7 @@ Set & Features \\
 \end{tabular}
 \end{table}
 
-These features are intentionally limited. They do not attempt to reconstruct the hidden target, and they do not use target-aware or answer-aware confidence signals. Their purpose is to test how much of bounded multimodal gain can be recovered under a truly deployable query-time constraint.
+These features are intentionally limited. They do not attempt to reconstruct the hidden target, and they do not use target-aware or answer-aware confidence signals. Their purpose is to test how much of bounded multimodal gain can be recovered under a truly deployable query-time constraint. All relation-level features are development-derived priors rather than test-time labels: they summarize how the relation behaved on development queries and are then transferred to test queries only through relation identity.
 
 We evaluate three clean routing families. The first baseline is a \textbf{clean rule-based router} that activates fusion only under a conservative legal policy derived from query-observable conditions and development-side priors. The second family is \textbf{naive global-threshold clean routing}, where logistic regression and XGBoost provide learned probabilities under one shared threshold. The third family consists of \textbf{stronger clean formulations}, including structured threshold policies and target-aligned clean supervision.
 
@@ -263,30 +261,38 @@ Taken together, these design choices reformulate MMKGC under the current OpenBG-
 \subsection{Router Training Details}
 
 \paragraph{Query-level feature and label construction.}
-Router training is performed on query-level feature tables constructed from the fixed fusion and structural experts. For every development query $q$, we record the reciprocal ranks produced by the fusion expert and the structural expert, and compute the expert difference:
+Router training is performed on query-level feature tables constructed from the fixed fusion and structural experts. For every development query $q$, we record the filtered reciprocal ranks produced by the fusion expert and the structural expert, and compute
 \[
 \Delta(q)=RR_f(q)-RR_s(q).
 \]
-This development-side expert difference is used only to create router supervision. It is not used as a test-time feature. At test time, the router receives only clean query-time features and predicts whether the fusion expert should be activated.
+This development-side expert difference is used only to construct supervision targets. It is not used as a test-time feature. At test time, the router receives only clean query-time features and predicts whether the fusion expert should be activated.
 
-Relation-level priors are also computed from the development split only. For a relation $r$, \texttt{relation\_gain\_prior} denotes the average development-side reciprocal-rank gain of the fusion expert over the structural expert for that relation. \texttt{relation\_fusion\_win\_rate} denotes the proportion of development queries for which the fusion expert outperforms the structural expert. \texttt{relation\_support} records the number of development queries available for that relation, and \texttt{relation\_is\_visual\_prior} is a development-derived indicator of whether the relation tends to behave as visually favorable under the clean feature construction. These relation priors are then attached to test queries by relation identity without using test labels or test expert outcomes.
+Relation-level priors are also computed from development-side expert outcomes only. For a relation $r$, \texttt{relation\_gain\_prior} denotes the mean value of $\Delta(q)$ over development queries with relation $r$. \texttt{relation\_fusion\_win\_rate} denotes the proportion of such development queries for which $RR_f(q)>RR_s(q)$. \texttt{relation\_support} records the number of development queries used to estimate these relation-level statistics. \texttt{relation\_is\_visual\_prior} is a development-derived binary prior indicating whether the relation belongs to a visually favorable relation group or shows positive development-side fusion tendency under the clean feature construction. These priors are attached to test queries only by relation identity and never use test labels or test-side expert outcomes.
 
-Observed-side modality features are computed only from the known side of the query. For tail prediction $(h,r,?)$, the observed side is the head entity $h$; for head prediction $(?,r,t)$, the observed side is the tail entity $t$. The clean router therefore never uses the hidden target entity, target-side image availability, or target-aware subgroup labels.
+Observed-side modality features are computed only from the known side of the query. For tail prediction $(h,r,?)$, the observed side is the head entity $h$; for head prediction $(?,r,t)$, the observed side is the tail entity $t$. Thus, \texttt{observed\_has\_img}, \texttt{observed\_text\_img\_cosine}, and \texttt{observed\_img\_missing\_replaced} describe only the observed entity. The clean router never uses the hidden target entity, target-side image availability, target-aware subgroup labels, or answer-aware expert scores.
 
 \paragraph{Router model families.}
-The clean routing experiments evaluate three families of routing models. The first is the legal clean rule baseline, which activates the fusion expert only under conservative query-observable conditions. The second is naive global-threshold learned routing, where classifiers such as logistic regression and XGBoost output a fusion-selection probability under a single threshold. The third family contains the stronger clean policies studied in this paper: direction-specific thresholding, optional bucketized thresholding, regression-based gain prediction, and ordinal gain modeling.
+We evaluate four router families. First, the legal clean rule baseline activates the fusion expert only under conservative query-observable conditions. Second, binary clean classifiers, including logistic regression and XGBoost classifiers, predict whether $\Delta(q)$ exceeds a gain margin $\delta$ and then apply a threshold to the predicted fusion probability. Third, structured threshold policies reuse the same clean prediction scores but replace a single global threshold with direction-specific or bucket-specific thresholds. Fourth, target-aligned routers replace the binary label with richer supervision, including regression-based gain prediction and ordinal gain buckets.
 
-For binary routing, the classifier is trained to predict whether $\Delta(q)$ exceeds a development-defined gain margin $\delta$. For regression-based routing, the model predicts the scalar target $\Delta(q)$ directly, using a standard squared-error regression objective in the implemented regressor family. For ordinal routing, the target is formed by partitioning $\Delta(q)$ into ordered gain buckets, and the final routing decision is derived from whether the predicted bucket indicates positive expected fusion gain.
+For binary routing, the label is
+\[
+y(q)=\mathbf{1}[\Delta(q)>\delta].
+\]
+For regression-based routing, the target is the scalar gain $\Delta(q)$ itself. The implemented regression router is trained with a squared-error objective, so the model learns $\widehat{\Delta}(q)$ by minimizing prediction error on development-side gain values. At inference time, the regression score is converted into a hard routing decision through a development-selected threshold $\theta$:
+\[
+\alpha_{reg}(q)=\mathbf{1}[\widehat{\Delta}(q)>\theta].
+\]
+For ordinal routing, $\Delta(q)$ is partitioned into ordered gain buckets, and the final selection uses whether the predicted bucket indicates positive expected fusion gain.
 
 \paragraph{Threshold selection and test protocol.}
-All routing hyperparameters are selected on the development split only. This includes the gain margin $\delta$, the single global threshold $\tau$, direction-specific thresholds $\tau_{head}$ and $\tau_{tail}$, bucketized thresholds, and the regression decision threshold $\theta$. After these settings are selected, the trained router is applied once to the test split for final reporting.
+All routing hyperparameters are selected on the development split only. This includes the gain margin $\delta$, the single global threshold $\tau$, direction-specific thresholds $\tau_{head}$ and $\tau_{tail}$, bucket-specific thresholds, ordinal decision rules, and the regression decision threshold $\theta$. Once these choices are fixed, the selected router is applied once to the test split for final reporting.
 
-This protocol is important because the routing task is vulnerable to leakage. The test split is never used to fit the router, construct relation priors, tune thresholds, choose the gain margin, or select the router family. Test labels and test-side expert outcomes are used only after routing decisions have been made, in order to compute filtered ranking metrics and paired significance results.
+The test split is never used to fit the router, construct relation priors, tune thresholds, choose the gain margin, or select the router family. Test labels and test-side expert outcomes are used only after routing decisions have been made, in order to compute filtered ranking metrics and paired significance results.
 
 \paragraph{Bootstrap evaluation.}
-The main significance evidence is computed on the clean routing line using paired query-level bootstrap. For each pair of compared methods, we compute reciprocal-rank differences on the same set of test query instances, resample these paired query outcomes with replacement, and recompute the MRR difference on each bootstrap sample. The reported confidence intervals are taken from the empirical bootstrap distribution of paired $\Delta$MRR.
+The main significance evidence is computed on the clean routing line using paired query-level bootstrap. For each pair of compared policies, we compute reciprocal-rank differences on the same test query instances, resample these paired query outcomes with replacement, and recompute the MRR difference on each bootstrap sample. The reported confidence intervals are taken from the empirical bootstrap distribution of paired $\Delta$MRR.
 
-This paired design matters because all clean routing methods are evaluated on the same test query set. The bootstrap intervals therefore quantify whether one clean policy improves over another under matched query conditions, rather than comparing unrelated aggregate scores.
+This paired design is necessary because all clean routing policies are evaluated on the same query set. The confidence intervals therefore quantify whether one policy improves over another under matched query conditions, rather than comparing unrelated aggregate scores.
 
 \section{Experiments and Discussion}
 \subsection{Experimental Setup}
