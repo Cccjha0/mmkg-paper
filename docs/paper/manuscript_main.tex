@@ -43,13 +43,7 @@ Author Three\textsuperscript{2}
 \end{center}
 
 \begin{abstract}
-Multimodal knowledge graph completion (MMKGC) aims to improve link prediction by incorporating auxiliary modalities such as text and images, yet in product-oriented knowledge graphs visual support is often incomplete and multimodal evidence does not help uniformly. We study this problem on OpenBG-IMG under a unified protocol with filtered ranking, \texttt{direction=both}, and three-seed reporting, and show that the current split induces a role--modality asymmetry: head-side targets may be image-supported, whereas tail-side targets are effectively image-unavailable. This reveals a bounded-gain structure in which multimodal benefit is strongest in image-supported head-side regimes but remains limited at the global level.
-
-We first examine naive clean query-time routing under a single global threshold and find that this formulation does not outperform a simple legal clean rule baseline. This shows that the weakness of clean routing is not explained solely by insufficient query-time observable signals. Instead, the original clean formulation is also too coarse to capture the asymmetric decision structure induced by the protocol.
-
-We therefore evaluate stronger clean routing designs. Direction-specific thresholding raises clean routing performance to 0.2974 MRR, showing that head-side and tail-side queries require different operating points under the current split. More target-aligned clean supervision further strengthens deployable routing: regression-based gain prediction yields the strongest clean result at 0.2982 MRR and consistently improves over both the clean rule and \texttt{Residual-only}, with bootstrap confidence intervals strictly above zero. These findings show that the bottleneck of clean routing lies not only in signal availability, but also in policy granularity and supervision form.
-
-These gains recover only part of the Oracle headroom: the best clean strategy remains below Oracle routing. Overall, the paper provides a protocol-aware transition from bounded-gain diagnosis to stronger structured clean routing. Under the current OpenBG-IMG protocol, deployable multimodal gain can be recovered more effectively once the routing policy is structured appropriately and trained with a more target-aligned objective.
+Multimodal knowledge graph completion (MMKGC) aims to improve link prediction by incorporating auxiliary modalities such as text and images, yet in product-oriented knowledge graphs visual support is often incomplete and multimodal evidence does not help uniformly. We study this problem on OpenBG-IMG under a unified filtered-ranking protocol with \texttt{direction=both} and show that the current split induces role--modality asymmetry: head-side targets may be image-supported, whereas tail-side targets are effectively image-unavailable. This creates a bounded-gain structure in which multimodal benefit is strongest in image-supported head-side regimes but remains limited globally. We first show that naive clean query-time routing with a single global threshold does not outperform a simple legal clean rule baseline, indicating that clean routing is limited not only by query-time signal availability but also by policy granularity. We then evaluate stronger clean routing designs. Direction-specific thresholding raises clean routing performance to 0.2974 MRR. Regression-based gain prediction further improves the clean result to 0.2982 MRR, outperforming both the clean rule and \texttt{Residual-only} with strictly positive paired bootstrap confidence intervals. These gains recover only part of the Oracle headroom: the best clean strategy remains below Oracle routing. Overall, the paper provides a protocol-aware transition from bounded multimodal-gain diagnosis to structured clean selective activation, showing that deployable multimodal gain can be recovered more effectively when the routing policy is structured appropriately and trained with a target-aligned objective.
 \end{abstract}
 
 \textbf{Keywords:} multimodal knowledge graph completion; structured clean routing; target-aligned supervision; incomplete visual modality; protocol-aware evaluation
@@ -81,13 +75,32 @@ The experiments follow the same progression. Protocol-aware subgroup and relatio
 
 The paper's claim is therefore controlled: under the current OpenBG-IMG protocol, clean routing fails not only because legal query-time signals are limited, but also because a global threshold and binary gain labels are too coarse. Once the policy is structured more appropriately and trained with a more target-aligned objective, deployable multimodal gain can be recovered more effectively, while the remaining Oracle gap marks unresolved headroom.
 
-In summary, this paper makes the following contributions:
+In summary, this paper makes three linked contributions, each corresponding to a fine-grained problem, a proposed response, and an experimental validation.
+
+\begin{table}[t]
+\centering
+\caption{Problem--response--validation structure of this paper.}
+\label{tab:problem_response_validation}
+\small
+\begin{tabular}{p{0.30\textwidth}p{0.30\textwidth}p{0.30\textwidth}}
+\toprule
+Fine-grained problem & Proposed response & Validation \\
+\midrule
+The current protocol creates role--modality asymmetry. & Protocol-aware bounded-gain diagnosis. & Target-side subgroup and relation-group analysis. \\
+Naive clean routing is too coarse. & Direction-specific structured thresholding. & Clean routing comparison and paired bootstrap evidence. \\
+Binary gain supervision is too coarse. & Regression-based gain prediction. & Strongest clean MRR and paired $\Delta$MRR confidence intervals. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+More specifically, our contributions are:
 \begin{enumerate}[leftmargin=1.5em]
     \item \textbf{Protocol-aware bounded-gain diagnosis.} We identify a protocol-aware bounded-gain structure on OpenBG-IMG by showing that role--modality asymmetry entangles target position with image availability, so multimodal benefit remains local rather than globally uniform.
-    \item \textbf{Negative result on naive clean routing.} We show that naive clean query-time routing based on a single global threshold is insufficient and can underperform a simple legal rule-based selector, indicating that deployable routing cannot be characterized adequately by a coarse global decision boundary.
-    \item \textbf{Positive result on structured clean routing.} We demonstrate that clean routing is not fundamentally exhausted: direction-specific thresholding consistently outperforms the clean rule baseline, and regression-style gain modeling further provides the strongest clean result, consistently improving over both the clean rule and \texttt{Residual-only}.
-    \item \textbf{Remaining deployable gap.} We further show that even these stronger clean strategies remain substantially below Oracle, revealing a persistent gap between deployable separability and oracle-level or post-hoc separability.
+    \item \textbf{Structured clean routing for selective activation.} We show that naive clean query-time routing with a single global threshold is insufficient, and that direction-specific thresholding provides a stronger clean policy under the asymmetric protocol.
+    \item \textbf{Target-aligned clean supervision.} We further show that regression-based gain prediction recovers the strongest deployable clean result, outperforming both the clean rule and \texttt{Residual-only} with positive paired bootstrap evidence.
 \end{enumerate}
+
+These contributions do not imply that clean routing fully closes the gap to Oracle routing. Instead, the remaining Oracle gap is treated as a discussion and limitation result: structured clean routing recovers part of the bounded multimodal gain, while oracle-level separability still marks unresolved deployable headroom.
 
 \section{Related Work}
 \subsection{MMKGC and Multimodal Fusion}
