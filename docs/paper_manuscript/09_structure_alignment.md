@@ -1,151 +1,81 @@
 # Manuscript Structure Alignment
 
-## 1. Purpose
+## 1. Current Source of Truth
 
-This document aligns the new gain-threshold paper manuscript with the current repository layout and with `docs/paper/manuscript_main.tex`. Its role is to make the drafting flow explicit:
+The current latest manuscript is:
 
-- which manuscript files are now **canonical**
-- which older files should be treated as **retired from the main paper flow**
-- how the final eight-section paper structure maps onto the current repository
-- how `manuscript_main.tex` should be interpreted during the transition
+- `docs/paper/manuscript_main.tex`
 
-This alignment is necessary because the repository currently contains both the earlier analysis-oriented manuscript and the new analysis-driven method version.
+The `docs/paper_manuscript/` directory is now a synchronized support area. It contains section-level notes, migration markers, and retired drafts, but it should not be treated as a separate manuscript that overrides the TeX file.
 
-## 2. Final Target Paper Structure
+## 2. Current Active Paper Structure
 
-The target paper structure is:
+The latest paper structure is:
 
 1. Introduction
 2. Related Work
-3. Task Setting and Protocol
-4. Method: Gain-Threshold Routing for Selective Multimodal Activation
-5. Experiments
-6. Analysis and Discussion
-7. Limitations
-8. Conclusion
+3. Task Setting and Method
+4. Experiments and Discussion
+5. Conclusion
 
-This is the canonical structure for the new gain-threshold version.
+This is the structure used by `docs/paper/manuscript_main.tex`.
 
-## 3. Canonical Manuscript Files (Keep as Mainline)
+## 3. Active Support Files
 
-The following files should now be treated as the **main drafting sources** for the paper:
+The following Markdown files are aligned with the current TeX structure and may be used as support drafts:
 
-| Final Section | Canonical File | Status |
+| Current TeX section | Support file | Status |
 |---|---|---|
-| 1. Introduction | `docs/paper_manuscript/01_introduction.md` | keep |
-| 2. Related Work | `docs/paper_manuscript/02_related_work.md` | keep |
-| 3. Task Setting and Protocol | `docs/paper_manuscript/03_task_setting_and_protocol.md` | keep |
-| 4. Method | `docs/paper_manuscript/04_method_gain_threshold_routing.md` | keep |
-| 5. Experiments | `docs/paper_manuscript/05_experiments.md` | keep |
-| 6. Analysis and Discussion | `docs/paper_manuscript/06_analysis_and_discussion.md` | keep |
-| 7. Limitations | `docs/paper_manuscript/07_limitations.md` | keep |
-| 8. Conclusion | `docs/paper_manuscript/08_conclusion.md` | keep |
+| Introduction | `01_introduction.md` | active support |
+| Related Work | `02_related_work.md` | active support |
+| Task Setting and Method | `03_task_setting_and_protocol.md` | active support |
+| Experiments and Discussion | `05_experiments.md` | active support |
+| Conclusion | `08_conclusion.md` | active support |
 
-These eight files define the new paper and should be used as the source of truth for future editing.
+`04_method_gain_threshold_routing.md` is retained only as a migration marker because its method content has already been integrated into `03_task_setting_and_protocol.md` and the TeX manuscript.
 
-## 4. Older Section Files: Keep or Retire
+## 4. Retired Reference Files
 
-The repository also contains earlier manuscript files from the analysis-oriented version. These should now be handled as follows.
+The following files are retained as writing-history or reference material only:
 
-### 4.1 Keep as supporting reference, but retire from the main manuscript flow
-
-| File | Previous Role | New Role |
-|---|---|---|
-| `docs/paper_manuscript/04_models_and_compared_methods.md` | old Section 4 | supporting reference for model-family wording; retired from main flow |
-| `docs/paper_manuscript/05_main_results.md` | old Section 5 | supporting reference for official seven-model tension; retired from main flow |
-| `docs/paper_manuscript/06_gain_boundary_analysis.md` | old Section 6 | supporting reference for subgroup / relation-group interpretation; retired from main flow |
-| `docs/paper_manuscript/07_behavior_analysis.md` | old Section 7 | supporting reference for branch-level interpretation; retired from main flow |
-| `docs/paper_manuscript/09_discussion_limitations_conclusion.md` | old merged ending | supporting reference only; replaced by new Sections 6, 7, and 8 |
-
-These files should not be deleted yet, because they still contain reusable language and analysis logic. However, they should no longer be treated as the active manuscript sequence.
-
-### 4.2 Keep as evidence and result-source files, not manuscript sections
-
-The following files remain important, but they should be treated as **evidence assets** rather than narrative sections:
-
-- `docs/MAIN_RESULTS_SUMMARY.md`
-- `docs/main_results_summary.json`
-- `docs/RELATION_TYPE_ANALYSIS.md`
-- `outputs/router/eval/main_results_table.md`
-- `outputs/router/eval/subgroup_results_table.md`
-- `outputs/router/eval/feature_ablation.md`
-- `outputs/router/eval/first_round_takeaways.md`
-- `outputs/router/eval/final_results_manifest.md`
-
-These files support the new paper, especially Sections 5 and 6, but they are not part of the main manuscript directory sequence.
-
-## 5. Final Mapping to `manuscript_main.tex`
-
-At the moment, `docs/paper/manuscript_main.tex` still contains the earlier inline manuscript body. It should therefore be understood as a **legacy integrated TeX draft** rather than the final source-of-truth text for the new paper.
-
-During the current transition stage, the correct mapping is:
-
-| `manuscript_main.tex` legacy block | Replace with canonical source |
+| File | Current role |
 |---|---|
-| Introduction | `01_introduction.md` |
-| Related Work | `02_related_work.md` |
-| Task Setting and Protocol | `03_task_setting_and_protocol.md` |
-| Models and Compared Methods | `04_method_gain_threshold_routing.md` |
-| Main Results + Gain-Boundary Analysis | `05_experiments.md` |
-| Behavior Analysis + Discussion | `06_analysis_and_discussion.md` |
-| Discussion, Limitations, and Conclusion | split into `07_limitations.md` and `08_conclusion.md` |
+| `04_models_and_compared_methods.md` | old model-family wording reference |
+| `05_main_results.md` | old official-results wording reference |
+| `06_gain_boundary_analysis.md` | old subgroup / relation-boundary wording reference |
+| `06_analysis_and_discussion.md` | reference-only discussion note; updated to current result line |
+| `07_behavior_analysis.md` | old branch-behavior wording reference |
+| `07_limitations.md` | reference-only limitations note |
+| `08_case_study.md` | old case-study wording reference |
+| `09_discussion_limitations_conclusion.md` | old merged ending reference |
 
-This means that the current TeX file should no longer be read as the authoritative paper body. The authoritative paper body now lives in the Markdown manuscript sequence under `docs/paper_manuscript/`.
+These files should not be used as the active chapter sequence unless they are explicitly rewritten and reintroduced.
 
-## 6. Practical Interpretation of the Transition
+## 5. Current Result Line to Preserve
 
-The manuscript is currently in a **two-layer state**:
+The current manuscript result line is:
 
-### Layer A: Canonical drafting layer
+- the OpenBG-IMG `paper_split` induces role--modality asymmetry;
+- the meaningful target-side regimes are `head_has_img`, `head_no_img`, and `tail_no_img`;
+- naive single-threshold clean routing is insufficient and does not outperform the clean rule baseline;
+- direction-specific thresholding reaches approximately `0.2974` MRR;
+- regression-based gain prediction reaches approximately `0.2982` MRR and is the strongest clean strategy;
+- the strongest clean strategy improves over both the clean rule and `Residual-only` with paired bootstrap support;
+- the strongest clean strategy remains below Oracle routing.
 
-This is the real paper-writing layer and consists of:
+The older `0.3160 MRR / XGBoost + delta=0.01 + tau=0.7` result should not be treated as the current paper claim.
 
-- `01_introduction.md`
-- `02_related_work.md`
-- `03_task_setting_and_protocol.md`
-- `04_method_gain_threshold_routing.md`
-- `05_experiments.md`
-- `06_analysis_and_discussion.md`
-- `07_limitations.md`
-- `08_conclusion.md`
+## 6. Practical Editing Rule
 
-### Layer B: Legacy integrated layer
+For future edits:
 
-This is the old all-in-one TeX paper and the earlier manuscript files. It is still useful for:
+1. update `docs/paper/manuscript_main.tex` first;
+2. update only the relevant Markdown support file afterward;
+3. do not copy content from retired drafts into the TeX manuscript unless it has been checked against the current result line;
+4. keep evaluation lines separated: official model-comparison line, clean routing line, and post-hoc analysis line.
 
-- preserving earlier wording
-- keeping old figure/table placeholders visible
-- maintaining a single compiled document entry point
+## 7. Section-Level Takeaway
 
-But it is no longer the best place to continue substantive writing.
+The repository is now aligned around a single authoritative manuscript:
 
-## 7. Recommended Next Integration Step
-
-The next integration step should be performed in two passes.
-
-### Pass 1: Structural synchronization
-
-- keep `manuscript_main.tex` as the single TeX entry point
-- update its title, running title, and top-level structure note to reflect the new paper identity
-- treat the Markdown manuscript files as canonical section sources
-
-### Pass 2: Content migration
-
-- replace the old inline TeX section bodies one by one with the new section content
-- start from Section 1 and continue in order
-- once a section is migrated, the corresponding older manuscript file should remain only as archived support
-
-## 8. Final Status Judgment
-
-The manuscript is now structurally aligned enough to continue cleanly.
-
-- The new paper structure is defined.
-- The canonical section files are in place.
-- The old section files have identifiable archival roles.
-- The TeX entry point is now understood as a legacy integration layer awaiting staged migration.
-
-## 9. Section-Level Takeaway
-
-The main message of this alignment is:
-
-> The new gain-threshold paper is now defined by the eight-section manuscript sequence under `docs/paper_manuscript/`. Older section files remain as reference material, while `manuscript_main.tex` should be treated as a legacy integrated entry point to be updated gradually rather than as the current source of truth.
+> `docs/paper/manuscript_main.tex` is the latest paper. The Markdown files in `docs/paper_manuscript/` are synchronized support notes and archived drafts, with the current clean-routing result line centered on `0.2974` direction-specific thresholding and `0.2982` regression-based gain prediction.
