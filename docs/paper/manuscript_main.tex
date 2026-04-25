@@ -132,7 +132,26 @@ Against this background, the present work should be understood as an analysis-dr
 \subsection{Task Setting and Protocol}
 We study multimodal knowledge graph completion on OpenBG-IMG under a standard link prediction setting. For a triple $(h, r, t)$, the task is to rank candidate tails for $(h, r, ?)$ and candidate heads for $(?, r, t)$ under filtered ranking. This setting differs from structure-only KGC because entities may additionally have associated text and image information. In principle, these auxiliary modalities can enrich entity representations and improve ranking quality. In practice, however, modality availability is not uniform across entities or query conditions. As a result, the present paper is not only about multimodal representation learning in the abstract. It is also about how the evaluation protocol shapes where multimodal evidence can plausibly matter.
 
-All experiments use the current OpenBG-IMG \texttt{paper\_split}, which is the unified split employed for official model comparison, subgroup analysis, relation-group analysis, and routing evaluation. OpenBG-IMG is derived from the OpenBG business knowledge graph benchmark introduced by Deng et al.~\cite{deng2022openbg}. The most important property of the current \texttt{paper\_split} is the asymmetry between target position and image availability. On the head side, target entities may still be image-available. On the tail side, target entities are effectively always \texttt{no\_img} under the current test distribution.
+All experiments use the current OpenBG-IMG \texttt{paper\_split}, which is the unified split employed for official model comparison, subgroup analysis, relation-group analysis, and routing evaluation. OpenBG-IMG is derived from the OpenBG business knowledge graph benchmark introduced by Deng et al.~\cite{deng2022openbg}.
+
+\begin{table}[t]
+\centering
+\caption{Dataset statistics of the OpenBG-IMG \texttt{paper\_split}.}
+\label{tab:dataset_statistics}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Dataset & \#Entities & \#Relations & \#Train & \#Valid & \#Test & \#Image entities & Image coverage \\
+\midrule
+OpenBG-IMG & 27{,}910 & 136 & 220{,}087 & 5{,}000 & 10{,}000 & 14{,}690 & 52.63\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\Cref{tab:dataset_statistics} summarizes the scale of the OpenBG-IMG \texttt{paper\_split} used in all experiments. The split contains both textual and visual entity information, but image availability is incomplete. This incompleteness is not uniformly distributed across evaluation roles, which motivates the protocol-specific target-side analysis in \Cref{tab:protocol_test_regime_counts}.
+
+The most important property of the current \texttt{paper\_split} is the asymmetry between target position and image availability. On the head side, target entities may still be image-available. On the tail side, target entities are effectively always \texttt{no\_img} under the current test distribution.
 
 \begin{table}[t]
 \centering
