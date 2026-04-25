@@ -328,6 +328,25 @@ The main significance evidence is computed on the clean routing line using paire
 
 This paired design is necessary because all clean routing policies are evaluated on the same query set. The confidence intervals therefore quantify whether one policy improves over another under matched query conditions, rather than comparing unrelated aggregate scores.
 
+\begin{table}[t]
+\centering
+\caption{Clean query-level selective activation procedure.}
+\label{alg:clean_selective_activation}
+\small
+\begin{tabular}{p{0.94\textwidth}}
+\toprule
+\textbf{Input:} query $q$, clean query-time features $x_q$, fusion expert $s_f$, structural expert $s_s$, trained router $g$, and development-selected threshold(s). \\
+\midrule
+1. Construct clean query-time features $x_q$ using only direction, relation-derived development priors, and observed-side modality indicators. \\
+2. Predict a fusion probability $p(q)$ or expected gain $\widehat{\Delta}(q)$ using the trained router $g$. \\
+3. Apply the selected policy: global threshold, direction-specific threshold, bucket-specific threshold, ordinal decision rule, or regression threshold. \\
+4. Set $\alpha(q)=1$ if the fusion expert is selected; otherwise set $\alpha(q)=0$. \\
+5. Score each candidate entity $e$ using $s_{\text{final}}(q,e)=\alpha(q)s_f(q,e)+(1-\alpha(q))s_s(q,e)$. \\
+6. Rank candidates by $s_{\text{final}}(q,e)$ and compute filtered ranking metrics. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \section{Experiments and Discussion}
 \subsection{Experimental Setup}
 All experiments are conducted on the current OpenBG-IMG \texttt{paper\_split} under the unified protocol defined in the previous section. Base-model checkpoints are selected on the development split, and final base-model metrics are reported on the test split using filtered ranking with \texttt{direction=both}. Unless otherwise stated, official main-result metrics are aggregated over three random seeds and reported as mean $\pm$ standard deviation when the source line supports that form.
