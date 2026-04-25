@@ -362,7 +362,7 @@ For readability, we refer to the best direction-specific clean thresholding poli
 \paragraph{Reproducibility.}
 All base-model results are aggregated from formal \texttt{test\_metrics.json} files under a unified filtered-ranking pipeline. We report mean and standard deviation over three random seeds for the official model-comparison line. Router feature tables, threshold scans, clean-routing results, paired bootstrap outputs, and plotting scripts are generated from the same exported query-level expert outcomes. All router thresholds and hyperparameters are selected on the development split only before final test reporting.
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Official model-comparison line on OpenBG-IMG. Results are computed from formal \texttt{test\_metrics.json} outputs and reported as mean $\pm$ standard deviation over three seeds. These rows should not be directly mixed with clean-routing-line rows.}
 \label{tab:official_model_comparison}
@@ -385,7 +385,7 @@ Model & MRR & Hits@1 & Hits@3 & Hits@10 & Notes \\
 
 \Cref{tab:official_model_comparison} shows that the strongest official-line result is achieved by \texttt{Residual-only} under the current OpenBG-IMG paper protocol, while \texttt{Full Model} improves over weaker multimodal variants but does not surpass the structural expert. This behavior is consistent with the protocol-induced dominance of \texttt{tail\_no\_img}: when a large portion of the evaluation space lacks target-side visual support, always-on multimodal fusion may introduce modality noise or dilute the stronger structural regularities captured by the residual branch. This motivates the paper's selective-activation formulation: multimodal evidence can be useful within local regimes, but always-on fusion is not globally reliable under the current protocol.
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Main clean routing comparison on the clean routing line. Fixed experts in this table are recomputed on the routing-compatible query-level basis and should not be mixed with the official model-comparison line. Oracle routing is included only as a post-hoc upper-bound reference and is not a deployable clean method.}
 \label{tab:main_clean_routing}
@@ -453,7 +453,7 @@ Meaningful target-side regimes & \texttt{head\_has\_img}: 7{,}048 (35.24\%), \te
 \subsection{RQ1: Where does multimodal gain appear?}
 RQ1 asks where multimodal gain actually appears under the current OpenBG-IMG protocol. Our starting point is that the benchmark is not a neutral multimodal setting. Under the current paper split, target position is intrinsically entangled with modality availability: head-side targets may still be image-supported, whereas tail-side targets are effectively image-unavailable. As a result, the bidirectional test space is partitioned into three meaningful target-side regimes, namely \texttt{head\_has\_img}, \texttt{head\_no\_img}, and \texttt{tail\_no\_img}, rather than into two symmetric prediction directions alone. Table~\ref{tab:protocol_test_regime_counts} and Figure~\ref{fig:protocol_asymmetry} make this asymmetry explicit and show that \texttt{tail\_no\_img} alone accounts for half of all bidirectional test queries, which already suggests that aggregate performance will be strongly shaped by a globally large structure-favorable region.
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Subgroup MRR by target-side image availability under the current protocol. All cells report mean $\pm$ standard deviation over seeds 1, 2, and 3.}
 \label{tab:subgroup_results}
@@ -472,7 +472,7 @@ Model & \texttt{head\_has\_img} & \texttt{head\_no\_img} & \texttt{tail\_no\_img
 
 The subgroup results confirm that multimodal gain is not uniformly distributed across this evaluation space. The clearest relative multimodal advantage appears in \texttt{head\_has\_img}, where \texttt{Gate-only} outperforms \texttt{Full Model} and \texttt{Residual-only}, although the absolute MRR in this regime remains low. This pattern suggests that image availability alone is not sufficient to guarantee high absolute ranking performance. In the \texttt{head\_has\_img} regime, visual information makes the fusion path relatively more useful, which explains why \texttt{Gate-only} achieves the best ordering within this subgroup. However, the low absolute MRR indicates that these head-side queries remain intrinsically difficult under the current protocol. By contrast, \texttt{tail\_no\_img} contributes half of all bidirectional queries and is strongly structure-favorable, allowing \texttt{Residual-only} to dominate the aggregate metric. Interpreting these subgroup outcomes together with the regime counts helps explain the broader pattern of the paper: multimodal benefit is visible and meaningful, but it is concentrated in a local subset of queries rather than spread uniformly across the benchmark.
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Relation-type grouped MRR under the unified OpenBG-IMG protocol. Relation groups are reported as supporting analysis only. Only relations with at least 20 test queries are retained. All cells report mean $\pm$ standard deviation over seeds 1, 2, and 3.}
 \label{tab:relation_grouped}
