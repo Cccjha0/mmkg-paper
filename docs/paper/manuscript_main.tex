@@ -340,6 +340,29 @@ To answer these questions cleanly, we distinguish among three complementary eval
 
 \begin{table}[t]
 \centering
+\caption{Official model-comparison line on OpenBG-IMG. Results are computed from formal \texttt{test\_metrics.json} outputs and reported as mean $\pm$ standard deviation over three seeds. These rows should not be directly mixed with clean-routing-line rows.}
+\label{tab:official_model_comparison}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lccccc}
+\toprule
+Model & MRR & Hits@1 & Hits@3 & Hits@10 & Notes \\
+\midrule
+\texttt{ComplEx} & 0.2588 $\pm$ 0.0018 & 0.1920 $\pm$ 0.0026 & 0.2946 $\pm$ 0.0012 & 0.3871 $\pm$ 0.0014 & structural \\
+\texttt{TuckER} & 0.0890 $\pm$ 0.0024 & 0.0360 $\pm$ 0.0019 & 0.1054 $\pm$ 0.0042 & 0.1892 $\pm$ 0.0012 & structural \\
+\texttt{Text-only} & 0.1261 $\pm$ 0.0043 & 0.0524 $\pm$ 0.0050 & 0.1499 $\pm$ 0.0036 & 0.2761 $\pm$ 0.0046 & text \\
+\texttt{Early Fusion} & 0.1666 $\pm$ 0.0013 & 0.0905 $\pm$ 0.0008 & 0.1998 $\pm$ 0.0034 & 0.3155 $\pm$ 0.0022 & multimodal \\
+\texttt{Gate-only} & 0.1739 $\pm$ 0.0044 & 0.0946 $\pm$ 0.0108 & 0.2113 $\pm$ 0.0030 & 0.3261 $\pm$ 0.0010 & fusion expert \\
+\texttt{Full Model} & 0.2100 $\pm$ 0.0097 & 0.1167 $\pm$ 0.0107 & 0.2658 $\pm$ 0.0131 & 0.3794 $\pm$ 0.0116 & gate + residual \\
+\texttt{Residual-only} & \textbf{0.2930 $\pm$ 0.0008} & \textbf{0.2328 $\pm$ 0.0003} & \textbf{0.3306 $\pm$ 0.0021} & \textbf{0.4031 $\pm$ 0.0017} & structural expert \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\Cref{tab:official_model_comparison} shows that the strongest official-line result is achieved by \texttt{Residual-only} under the current OpenBG-IMG paper protocol, while \texttt{Full Model} improves over weaker multimodal variants but does not surpass the structural expert. This motivates the paper's selective-activation formulation: multimodal evidence is useful within local regimes, but always-on fusion is not globally reliable under the current protocol.
+
+\begin{table}[t]
+\centering
 \caption{Main clean routing comparison on the clean routing line. Fixed experts in this table are recomputed on the routing-compatible query-level basis and should not be mixed with the official model-comparison line. Oracle routing is included only as a post-hoc upper-bound reference and is not a deployable clean method.}
 \label{tab:main_clean_routing}
 \small
@@ -456,27 +479,6 @@ Taken together, these results answer RQ2. The weakness of the original clean rou
 
 \subsection{RQ3: How should bounded multimodal gain be exploited effectively?}
 RQ3 asks how bounded multimodal gain should be exploited once it is known to be conditional. The official model-comparison line establishes the motivating tension of the paper. Under the formal paper protocol, \texttt{Residual-only} is the strongest overall model, whereas \texttt{Full Model} remains the strongest multimodal variant within the internal family. This means that multimodal modeling is not ineffective, but its benefit is not strong enough to overturn structure-dominant performance at the global level. The benchmark therefore does not simply call for a larger always-on multimodal model. Instead, it presents a setting in which multimodal benefit is real but uneven and therefore unlikely to be handled optimally by one globally shared compromise representation.
-
-\begin{table}[t]
-\centering
-\caption{Official model-comparison line. Results in this table are based on formal \texttt{test\_metrics.json} outputs and are used only to compare the original model family under the paper protocol. They should not be directly mixed with clean-routing-line rows.}
-\label{tab:official_main_results}
-\small
-\setlength{\tabcolsep}{5pt}
-\begin{tabular}{lcccc}
-\toprule
-Model & MRR & Hits@1 & Hits@3 & Hits@10 \\
-\midrule
-\texttt{Residual-only} & 0.2930 $\pm$ 0.0008 & 0.2328 $\pm$ 0.0003 & 0.3306 $\pm$ 0.0021 & 0.4031 $\pm$ 0.0017 \\
-\texttt{ComplEx} & 0.2588 $\pm$ 0.0018 & 0.1920 $\pm$ 0.0026 & 0.2946 $\pm$ 0.0012 & 0.3871 $\pm$ 0.0014 \\
-\texttt{Full Model} & 0.2100 $\pm$ 0.0097 & 0.1167 $\pm$ 0.0107 & 0.2658 $\pm$ 0.0131 & 0.3794 $\pm$ 0.0116 \\
-\texttt{Gate-only} & 0.1739 $\pm$ 0.0044 & 0.0946 $\pm$ 0.0108 & 0.2113 $\pm$ 0.0030 & 0.3261 $\pm$ 0.0010 \\
-\texttt{Early Fusion} & 0.1666 $\pm$ 0.0013 & 0.0905 $\pm$ 0.0008 & 0.1998 $\pm$ 0.0034 & 0.3155 $\pm$ 0.0022 \\
-\texttt{Text-only} & 0.1261 $\pm$ 0.0043 & 0.0524 $\pm$ 0.0050 & 0.1499 $\pm$ 0.0036 & 0.2761 $\pm$ 0.0046 \\
-\texttt{TuckER} & 0.0890 $\pm$ 0.0024 & 0.0360 $\pm$ 0.0019 & 0.1054 $\pm$ 0.0042 & 0.1892 $\pm$ 0.0012 \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 The new clean routing results show that policy structure is only the first part of the story. E1 demonstrates that the routing policy must be structured with enough granularity to respect protocol-shaped asymmetry. E5 then tests the next bottleneck: whether the supervision signal itself is too coarse. Replacing the binary gain label with a more target-aligned regression objective yields a further improvement in clean routing. In particular, the strongest regression-based clean router reaches approximately \texttt{0.2982} MRR, outperforming both the clean rule and the direction-specific threshold policy. This establishes a progression rather than two disconnected observations: structured thresholding shows that the policy boundary must be more granular, while regression-based routing shows that the training target must preserve gain magnitude more faithfully.
 
