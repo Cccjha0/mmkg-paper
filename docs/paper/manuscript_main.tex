@@ -43,7 +43,7 @@ Author Three\textsuperscript{2}
 \end{center}
 
 \begin{abstract}
-Multimodal knowledge graph completion (MMKGC) aims to improve link prediction by incorporating auxiliary modalities such as text and images, yet in product-oriented knowledge graphs visual support is often incomplete and multimodal evidence does not help uniformly. We study this problem on OpenBG-IMG under a unified filtered-ranking protocol with \texttt{direction=both} and show that the current split induces role--modality asymmetry: head-side targets may be image-supported, whereas tail-side targets are effectively image-unavailable. This creates a bounded-gain structure in which multimodal benefit is strongest in image-supported head-side regimes but remains limited globally. We first show that naive clean query-time routing with a single global threshold does not outperform a simple legal clean rule baseline, indicating that clean routing is limited not only by query-time signal availability but also by policy granularity. We then evaluate stronger clean routing designs. Direction-specific thresholding raises clean routing performance to 0.2974 MRR. Regression-based gain prediction further improves the clean result to 0.2982 MRR, outperforming both the clean rule and \texttt{Residual-only} with strictly positive paired bootstrap confidence intervals. These gains recover only part of the Oracle headroom: the best clean strategy remains below Oracle routing. Overall, the paper provides a protocol-aware transition from bounded multimodal-gain diagnosis to structured clean selective activation, showing that deployable multimodal gain can be recovered more effectively when the routing policy is structured appropriately and trained with a target-aligned objective.
+Multimodal knowledge graph completion (MMKGC) aims to improve link prediction by incorporating auxiliary modalities such as text and images, yet in product-oriented knowledge graphs visual support is often incomplete and multimodal evidence does not help uniformly. We study this problem on OpenBG-IMG under a unified filtered-ranking protocol with \texttt{direction=both} and show that the current split induces role--modality asymmetry: head-side targets may be image-supported, whereas tail-side targets are effectively image-unavailable. This creates a bounded-gain structure in which relative multimodal advantage is most visible in image-supported head-side regimes but remains limited globally. We first show that naive clean query-time routing with a single global threshold does not outperform a simple legal clean rule baseline, indicating that clean routing is limited not only by query-time signal availability but also by policy granularity. We then evaluate stronger clean routing designs. Direction-specific thresholding raises clean routing performance to 0.2974 MRR. Regression-based gain prediction further improves the clean result to 0.2982 MRR, outperforming both the clean rule and \texttt{Residual-only} with strictly positive paired bootstrap confidence intervals. These gains recover only part of the Oracle headroom: the best clean strategy remains below Oracle routing. Overall, the paper provides a protocol-aware transition from bounded multimodal-gain diagnosis to structured clean selective activation, showing that deployable multimodal gain can be recovered more effectively when the routing policy is structured appropriately and trained with a target-aligned objective.
 \end{abstract}
 
 \textbf{Keywords:} multimodal knowledge graph completion; selective activation; structured clean routing; incomplete visual support; protocol-aware evaluation
@@ -134,7 +134,7 @@ We study multimodal knowledge graph completion on OpenBG-IMG under a standard li
 
 All experiments use the current OpenBG-IMG \texttt{paper\_split}, which is the unified split employed for official model comparison, subgroup analysis, relation-group analysis, and routing evaluation. OpenBG-IMG is derived from the OpenBG business knowledge graph benchmark introduced by Deng et al.~\cite{deng2022openbg}.
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Dataset statistics of the OpenBG-IMG \texttt{paper\_split}.}
 \label{tab:dataset_statistics}
@@ -364,8 +364,8 @@ All base-model results are aggregated from formal \texttt{test\_metrics.json} fi
 \centering
 \caption{Official model-comparison line on OpenBG-IMG. Results are computed from formal \texttt{test\_metrics.json} outputs and reported as mean $\pm$ standard deviation over three seeds. These rows should not be directly mixed with clean-routing-line rows.}
 \label{tab:official_model_comparison}
-\small
-\setlength{\tabcolsep}{2pt}
+\scriptsize
+\setlength{\tabcolsep}{1.5pt}
 \begin{tabular}{p{0.15\textwidth}ccccp{0.16\textwidth}}
 \toprule
 Model & MRR & Hits@1 & Hits@3 & Hits@10 & Notes \\
@@ -391,7 +391,7 @@ Model & MRR & Hits@1 & Hits@3 & Hits@10 & Notes \\
 \setlength{\tabcolsep}{3pt}
 \begin{tabular}{p{0.26\textwidth}p{0.09\textwidth}p{0.13\textwidth}p{0.13\textwidth}p{0.27\textwidth}}
 \toprule
-Method & MRR & $\Delta$ vs. clean rule & $\Delta$ vs. \texttt{Residual-only} & Evidence \\
+Method & MRR & $\Delta$ vs. rule & $\Delta$ vs. residual & Evidence \\
 \midrule
 \texttt{Residual-only} & 0.2930 & -0.0012 & -- & fixed structural expert \\
 Clean rule & 0.2943 & -- & +0.0012 & legal rule baseline \\
@@ -417,8 +417,8 @@ Variant & Features & Policy & Target & MRR & Interpretation \\
 \midrule
 Clean rule & -- & rule & -- & 0.2943 & legal baseline \\
 Naive learned router & C4 & global threshold & binary gain & 0.2939 & global threshold is insufficient \\
-Direction-specific threshold & C4 & direction-specific & binary gain & 0.2974 & policy granularity helps \\
-Regression clean router & C4 & thresholded gain & scalar $\Delta(q)$ & 0.2982 & target-aligned supervision helps \\
+Direction-specific & C4 & direction-specific & binary gain & 0.2974 & policy granularity helps \\
+Regression router & C4 & thresholded gain & scalar $\Delta(q)$ & 0.2982 & target-aligned supervision helps \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -468,7 +468,7 @@ Model & \texttt{head\_has\_img} & \texttt{head\_no\_img} & \texttt{tail\_no\_img
 \end{tabular}
 \end{table}
 
-The subgroup results confirm that multimodal gain is not uniformly distributed across this evaluation space. In \texttt{head\_has\_img}, the ordering becomes \texttt{Gate-only > Full Model > Residual-only}, which identifies the clearest multimodal-favorable regime under the current protocol. In contrast, \texttt{Residual-only} remains decisively strongest in \texttt{tail\_no\_img}, the regime that is both structurally favorable and globally dominant in support. Interpreting these subgroup outcomes together with the regime counts helps explain the broader pattern of the paper: multimodal benefit is visible and meaningful, but it is concentrated in a local subset of queries rather than spread uniformly across the benchmark.
+The subgroup results confirm that multimodal gain is not uniformly distributed across this evaluation space. The clearest relative multimodal advantage appears in \texttt{head\_has\_img}, where \texttt{Gate-only} outperforms \texttt{Full Model} and \texttt{Residual-only}, although the absolute MRR in this regime remains low. In contrast, \texttt{Residual-only} remains decisively strongest in \texttt{tail\_no\_img}, the regime that is both structurally favorable and globally dominant in support. Interpreting these subgroup outcomes together with the regime counts helps explain the broader pattern of the paper: multimodal benefit is visible and meaningful, but it is concentrated in a local subset of queries rather than spread uniformly across the benchmark.
 
 \begin{table}[t]
 \centering
@@ -553,7 +553,7 @@ Despite these improvements, the best clean strategy remains far below Oracle rou
 
 This also clarifies how the post-hoc analysis line should be interpreted. The post-hoc selector remains useful as an analysis tool because it reveals stronger offline separability than what can be realized in a deployable clean router. Once clean routing is strengthened, the remaining distance to post-hoc or Oracle performance becomes a more precise indicator of how much separability is still hidden from legal query-time observation.
 
-The system-level conclusion is therefore no longer simply that bounded multimodal gain should be routed rather than always switched on. It is more specific: bounded gain should be exploited through \textbf{structured clean routing and more target-aligned clean supervision}, rather than through either always-on multimodal fusion or a naive global-threshold clean selector.
+The system-level conclusion is therefore no longer simply that bounded multimodal gain should be routed rather than always switched on. It is more specific: bounded gain should be exploited through \textbf{structured clean routing and more target-aligned clean supervision}, rather than through either always-on multimodal fusion or a naive global-threshold clean selector. Additional visualization of the clean-routing progression and delta-sensitivity results is provided in \Cref{app:clean_oracle_gap,app:delta_sensitivity}.
 
 \subsection{Integrated Discussion}
 The combined evidence across RQ1--RQ3 supports a more refined conclusion than the earlier paper version. Under the current OpenBG-IMG protocol, multimodal gain is real but bounded, and a lightweight naive clean router is not sufficient to exploit it. However, this weakness should not be interpreted as evidence that deployable clean routing is impossible in principle. Instead, the new results identify two successive bottlenecks. First, the policy boundary is too coarse when a single global threshold is used; direction-specific thresholding shows that policy granularity matters. Second, the original binary gain label is too coarse as a training target; regression-based routing shows that supervision form matters as well. Once the clean policy is structured more appropriately and trained with a more target-aligned objective, deployable routing can recover additional gains beyond both the clean rule and the original global-threshold learned baseline.
@@ -573,7 +573,7 @@ Fourth, the main routing conclusions are based primarily on MRR and paired boots
 \section{Conclusion}
 This paper addresses a protocol-aware question on OpenBG-IMG: not whether multimodal information is useful in the abstract, but whether it yields reliable gain under the current asymmetric missing-visual setting. The answer is that multimodal gain does exist, but it is conditional and non-uniform rather than globally reliable under the present protocol.
 
-Analytically, we show that multimodal gain is real but bounded. The clearest multimodal-favorable regime appears in \texttt{head\_has\_img}, whereas the globally dominant \texttt{tail\_no\_img} regime remains structure-favorable. Relation-group evidence further indicates that multimodal benefit is relation-dependent, but not strong enough to overturn structural dominance at the grouped level.
+Analytically, we show that multimodal gain is real but bounded. The clearest relative multimodal advantage appears in \texttt{head\_has\_img}, although the absolute MRR in this regime remains low, whereas the globally dominant \texttt{tail\_no\_img} regime remains structure-favorable. Relation-group evidence further indicates that multimodal benefit is relation-dependent, but not strong enough to overturn structural dominance at the grouped level.
 
 Methodologically, the main lesson of the paper is more specific than in the earlier version. A naive global-threshold clean router is too weak to exploit bounded multimodal gain effectively. However, clean routing is not fundamentally exhausted. The statistically supported improvements are specific but strong: direction-specific thresholding consistently improves over the clean rule baseline, and the strongest regression-based clean router consistently improves over both the clean rule baseline and \texttt{Residual-only} on the clean line.
 
