@@ -489,7 +489,7 @@ Model & \texttt{visual\_relations} & \texttt{weak\_visual\_relations} & \texttt{
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Retained support for relation-group analysis after minimum-support filtering.}
 \label{tab:relation_group_support}
@@ -505,7 +505,7 @@ Group & \#Relations retained & \#Test queries retained \\
 \end{tabular}
 \end{table}
 
-Relation-group evidence provides a second, but supporting, view of this bounded-gain structure. Across the retained coarse relation groups, the grouped ordering remains \texttt{Residual-only} $>$ \texttt{Full Model} $>$ \texttt{Gate-only}, indicating that relation dependence is real but still bounded. The relation-group results therefore do not show a reversal of the global ordering. Instead, they indicate that relation context modulates the degree of multimodal usefulness while remaining bounded by the protocol-level structure-dominant pattern. \Cref{tab:relation_group_support} further keeps this grouped analysis auditable by reporting retained relation and query support after minimum-support filtering, so that the grouped trends are not driven by a handful of low-support cases. Taken together, these observations answer RQ1: under the current OpenBG-IMG protocol, multimodal gain appears in specific protocol-shaped local regions rather than as a globally reliable property of the benchmark.
+Relation-group evidence provides a second, but supporting, view of this bounded-gain structure. Across the retained coarse relation groups, the grouped ordering remains \texttt{Residual-only} $>$ \texttt{Full Model} $>$ \texttt{Gate-only}, indicating that relation dependence is real but still bounded. The relation-group results therefore do not show a reversal of the global ordering. Instead, they indicate that relation context modulates the degree of multimodal usefulness while remaining bounded by the protocol-level structure-dominant pattern. \Cref{tab:relation_group_support} reports retained relation and query support after minimum-support filtering. This makes the grouped analysis auditable and reduces the risk that the grouped trends are driven by a handful of low-support cases. Taken together, these observations answer RQ1: under the current OpenBG-IMG protocol, multimodal gain appears in specific protocol-shaped local regions rather than as a globally reliable property of the benchmark.
 
 \subsection{RQ2: Why does naive clean routing fail, and what kind of clean decision structure is required?}
 RQ2 asks why multimodal evidence cannot be routed effectively by a naive global-threshold clean selector, and what kind of clean decision structure is actually needed under the current protocol.
