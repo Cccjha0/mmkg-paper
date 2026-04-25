@@ -318,17 +318,7 @@ For regression-based routing, the target is the scalar gain $\Delta(q)$ itself. 
 \]
 For ordinal routing, $\Delta(q)$ is partitioned into ordered gain buckets, and the final selection uses whether the predicted bucket indicates positive expected fusion gain.
 
-\paragraph{Threshold selection and test protocol.}
-All routing hyperparameters are selected on the development split only. This includes the gain margin $\delta$, the single global threshold $\tau$, direction-specific thresholds $\tau_{head}$ and $\tau_{tail}$, bucket-specific thresholds, ordinal decision rules, and the regression decision threshold $\theta$. Once these choices are fixed, the selected router is applied once to the test split for final reporting.
-
-The test split is never used to fit the router, construct relation priors, tune thresholds, choose the gain margin, or select the router family. Test labels and test-side expert outcomes are used only after routing decisions have been made, in order to compute filtered ranking metrics and paired significance results.
-
-\paragraph{Bootstrap evaluation.}
-The main significance evidence is computed on the clean routing line using paired query-level bootstrap. For each pair of compared policies, we compute reciprocal-rank differences on the same test query instances, resample these paired query outcomes with replacement, and recompute the MRR difference on each bootstrap sample. The reported confidence intervals are taken from the empirical bootstrap distribution of paired $\Delta$MRR.
-
-This paired design is necessary because all clean routing policies are evaluated on the same query set. The confidence intervals therefore quantify whether one policy improves over another under matched query conditions, rather than comparing unrelated aggregate scores.
-
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Clean query-level selective activation procedure.}
 \label{alg:clean_selective_activation}
@@ -346,6 +336,16 @@ This paired design is necessary because all clean routing policies are evaluated
 \bottomrule
 \end{tabular}
 \end{table}
+
+\paragraph{Threshold selection and test protocol.}
+All routing hyperparameters are selected on the development split only. This includes the gain margin $\delta$, the single global threshold $\tau$, direction-specific thresholds $\tau_{head}$ and $\tau_{tail}$, bucket-specific thresholds, ordinal decision rules, and the regression decision threshold $\theta$. Once these choices are fixed, the selected router is applied once to the test split for final reporting.
+
+The test split is never used to fit the router, construct relation priors, tune thresholds, choose the gain margin, or select the router family. Test labels and test-side expert outcomes are used only after routing decisions have been made, in order to compute filtered ranking metrics and paired significance results.
+
+\paragraph{Bootstrap evaluation.}
+The main significance evidence is computed on the clean routing line using paired query-level bootstrap. For each pair of compared policies, we compute reciprocal-rank differences on the same test query instances, resample these paired query outcomes with replacement, and recompute the MRR difference on each bootstrap sample. The reported confidence intervals are taken from the empirical bootstrap distribution of paired $\Delta$MRR.
+
+This paired design is necessary because all clean routing policies are evaluated on the same query set. The confidence intervals therefore quantify whether one policy improves over another under matched query conditions, rather than comparing unrelated aggregate scores.
 
 \section{Experiments and Discussion}
 \subsection{Experimental Setup}
@@ -405,7 +405,7 @@ Oracle routing & 0.3337 & +0.0395 & +0.0407 & post-hoc upper bound \\
 
 \noindent\textbf{Interpretation.} \Cref{tab:main_clean_routing} is reported strictly on the clean routing line. The table supports three conclusions. First, naive global-threshold clean routing is weaker than the legal clean rule. Second, direction-specific thresholding recovers a statistically supported clean gain, showing that policy granularity matters. Third, regression-based gain prediction is the strongest clean strategy, but it still remains substantially below Oracle routing.
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Progressive clean-routing ablation on policy structure and supervision target. All rows are evaluated on the clean routing line.}
 \label{tab:router_ablation}
@@ -425,7 +425,7 @@ Regression router & C4 & thresholded gain & scalar $\Delta(q)$ & 0.2982 & target
 
 \Cref{tab:router_ablation} isolates the two main design changes behind the strongest clean results. Keeping the same clean feature family, moving from a global threshold to a direction-specific policy improves the binary clean router, and replacing the binary target with scalar gain prediction improves it further. The ablation therefore supports the interpretation that the clean-routing bottleneck is not only feature availability, but also policy granularity and supervision form.
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Experimental execution setup used in this paper.}
 \label{tab:experiment_setup}
@@ -527,10 +527,10 @@ The new clean routing results show that policy structure is only the first part 
 
 Direction-specific thresholding improves the clean result to 0.2974 MRR, corresponding to a gain of approximately +0.0032 over the clean rule baseline. Regression-based gain prediction further improves the clean result to 0.2982 MRR. Its improvement over the clean rule is +0.0039 MRR with a 95\% paired bootstrap confidence interval of [0.003345, 0.004442]. Its improvement over \texttt{Residual-only} is +0.0051 MRR with a 95\% paired bootstrap confidence interval of [0.004438, 0.005844].
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Clean routing line. Results in this table are recomputed from query-level expert outcomes under legal query-time constraints. Fixed expert rows are routing-compatible recomputed values, not copied from the official model-comparison line.}
-\label{tab:clean_significance}
+\label{tab:clean_bootstrap_evidence}
 \small
 \begin{tabular}{lcc}
 \toprule
@@ -543,17 +543,17 @@ E5 best vs \texttt{Residual-only} & +0.005133 & [ +0.004438, +0.005844 ] \\
 \end{tabular}
 \end{table}
 
-These gains are statistically well supported. All three reported comparisons are evaluated as paired query-level tests on the same shared query set rather than as independent aggregate summaries. The corresponding 95\% confidence intervals are obtained from the empirical bootstrap distribution of query-wise $\Delta$MRR under 2{,}000 paired bootstrap resamples with replacement. These results support the strongest clean claims made in this paper with matched statistical evidence: direction-specific thresholding consistently improves over the clean rule baseline, and the regression-based clean router consistently improves over both the clean rule and \texttt{Residual-only}.
+\Cref{tab:clean_bootstrap_evidence} reports the paired bootstrap evidence for the strongest clean-routing comparisons. These gains are statistically well supported. All three reported comparisons are evaluated as paired query-level tests on the same shared query set rather than as independent aggregate summaries. The corresponding 95\% confidence intervals are obtained from the empirical bootstrap distribution of query-wise $\Delta$MRR under 2{,}000 paired bootstrap resamples with replacement. These results support the strongest clean claims made in this paper with matched statistical evidence: direction-specific thresholding consistently improves over the clean rule baseline, and the regression-based clean router consistently improves over both the clean rule and \texttt{Residual-only}.
 
 Ordinal gain modeling also improves over the binary baseline, although it remains below the regression formulation. This pattern is conceptually important. It suggests that preserving gain magnitude information is especially helpful under the current protocol, where the gain boundary is shallow, uneven, and strongly shaped by direction-specific asymmetry.
 
-Probability calibration provides only limited gains relative to the stronger clean results above. This means that the weakness of the original clean router is not primarily a calibration issue. Delta sensitivity is more informative because it directly tests whether the binary gain label itself is too coarse. As shown in \cref{tab:delta_sensitivity}, the naive global learned router is much stronger under the permissive $\delta=0.00$ label, reaching 0.2978--0.2983 MRR, but drops back to approximately 0.2939 when the harder $\delta=0.01$ margin is imposed. This pattern supports the view that the original clean-routing difficulty is partly a supervision-design problem: $\delta=0.01$ is not just another hyperparameter choice, but a substantially harder clean setting in which the binary label discards useful gain-magnitude information.
+Probability calibration provides only limited gains relative to the stronger clean results above. This means that the weakness of the original clean router is not primarily a calibration issue. Delta sensitivity is more informative because it directly tests whether the binary gain label itself is too coarse. As shown in \Cref{tab:delta_sensitivity}, the naive global learned router is much stronger under the permissive $\delta=0.00$ label, reaching 0.2978--0.2983 MRR, but drops back to approximately 0.2939 when the harder $\delta=0.01$ margin is imposed. This pattern supports the view that the original clean-routing difficulty is partly a supervision-design problem: $\delta=0.01$ is not just another hyperparameter choice, but a substantially harder clean setting in which the binary label discards useful gain-magnitude information.
 
 Despite these improvements, the best clean strategy remains far below Oracle routing. The strongest clean method reaches 0.2982 MRR, whereas Oracle routing reaches 0.3337 MRR, leaving approximately 0.0356 MRR of unresolved deployable headroom. This remaining gap supports the paper's controlled claim: structured clean routing recovers part, but not all, of the separability visible under oracle-style selection.
 
 This also clarifies how the post-hoc analysis line should be interpreted. The post-hoc selector remains useful as an analysis tool because it reveals stronger offline separability than what can be realized in a deployable clean router. Once clean routing is strengthened, the remaining distance to post-hoc or Oracle performance becomes a more precise indicator of how much separability is still hidden from legal query-time observation.
 
-The system-level conclusion is therefore no longer simply that bounded multimodal gain should be routed rather than always switched on. It is more specific: bounded gain should be exploited through \textbf{structured clean routing and more target-aligned clean supervision}, rather than through either always-on multimodal fusion or a naive global-threshold clean selector. Additional visualization of the clean-routing progression and delta-sensitivity results is provided in \Cref{app:clean_oracle_gap,app:delta_sensitivity}.
+The system-level conclusion is therefore no longer simply that bounded multimodal gain should be routed rather than always switched on. It is more specific: bounded gain should be exploited through \textbf{structured clean routing and more target-aligned clean supervision}, rather than through either always-on multimodal fusion or a naive global-threshold clean selector. Additional visualization of the clean-routing progression and delta-sensitivity results is provided in Appendix~\ref{app:clean_oracle_gap} and Appendix~\ref{app:delta_sensitivity}.
 
 \subsection{Integrated Discussion}
 The combined evidence across RQ1--RQ3 supports a more refined conclusion than the earlier paper version. Under the current OpenBG-IMG protocol, multimodal gain is real but bounded, and a lightweight naive clean router is not sufficient to exploit it. However, this weakness should not be interpreted as evidence that deployable clean routing is impossible in principle. Instead, the new results identify two successive bottlenecks. First, the policy boundary is too coarse when a single global threshold is used; direction-specific thresholding shows that policy granularity matters. Second, the original binary gain label is too coarse as a training target; regression-based routing shows that supervision form matters as well. Once the clean policy is structured more appropriately and trained with a more target-aligned objective, deployable routing can recover additional gains beyond both the clean rule and the original global-threshold learned baseline.
