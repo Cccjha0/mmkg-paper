@@ -21,7 +21,7 @@
 \setlength{\parskip}{0.5em}
 \setlength{\parindent}{0pt}
 
-\title{Protocol-Aware Selective Activation for Multimodal Knowledge Graph Completion under Incomplete Visual Modality}
+\title{Protocol-Aware Selective Activation for Multimodal Knowledge Graph Completion under Incomplete Visual Support}
 \author{
 Author One\textsuperscript{1} \and
 Author Two\textsuperscript{1} \and
@@ -357,6 +357,9 @@ This section is organized around three research questions. \textbf{RQ1} asks whe
 
 To answer these questions cleanly, we distinguish among three complementary evaluation lines. The \textbf{official model-comparison line} is used for the seven-model comparison among \texttt{Text-only}, \texttt{Early Fusion}, \texttt{Gate-only}, \texttt{Residual-only}, \texttt{Full Model}, \texttt{ComplEx}, and \texttt{TuckER}. The \textbf{clean routing line} is based on query-level exported expert predictions and unified recomputation under legal query-time constraints, and is used for \texttt{Gate-only}, \texttt{Residual-only}, Oracle routing, the clean rule baseline, naive global-threshold clean routing, structured threshold policies, and target-aligned clean supervision. The \textbf{post-hoc analysis line} is retained only for stronger offline separability analysis and upper-bound-style comparisons; it is not part of the deployable clean claim.
 
+\paragraph{Reproducibility.}
+All base-model results are aggregated from formal \texttt{test\_metrics.json} files under a unified filtered-ranking pipeline. We report mean and standard deviation over three random seeds for the official model-comparison line. Router feature tables, threshold scans, clean-routing results, paired bootstrap outputs, and plotting scripts are generated from the same exported query-level expert outcomes. All router thresholds and hyperparameters are selected on the development split only before final test reporting.
+
 \begin{table}[t]
 \centering
 \caption{Official model-comparison line on OpenBG-IMG. Results are computed from formal \texttt{test\_metrics.json} outputs and reported as mean $\pm$ standard deviation over three seeds. These rows should not be directly mixed with clean-routing-line rows.}
@@ -400,6 +403,25 @@ Oracle routing & 0.3337 & +0.0395 & +0.0407 & post-hoc upper bound \\
 \end{table}
 
 \noindent\textbf{Interpretation.} \Cref{tab:main_clean_routing} is reported strictly on the clean routing line. The table supports three conclusions. First, naive global-threshold clean routing is weaker than the legal clean rule. Second, direction-specific thresholding recovers a statistically supported clean gain, showing that policy granularity matters. Third, regression-based gain prediction is the strongest clean strategy, but it still remains substantially below Oracle routing.
+
+\begin{table}[t]
+\centering
+\caption{Progressive clean-routing ablation on policy structure and supervision target. All rows are evaluated on the clean routing line.}
+\label{tab:router_ablation}
+\small
+\begin{tabular}{p{0.22\textwidth}p{0.11\textwidth}p{0.19\textwidth}p{0.18\textwidth}cp{0.18\textwidth}}
+\toprule
+Variant & Features & Policy & Target & MRR & Interpretation \\
+\midrule
+Clean rule & -- & rule & -- & 0.2943 & legal baseline \\
+Naive learned router & C4 & global threshold & binary gain & 0.2939 & global threshold is insufficient \\
+Direction-specific threshold & C4 & direction-specific & binary gain & 0.2974 & policy granularity helps \\
+Regression clean router & C4 & thresholded gain & scalar $\Delta(q)$ & 0.2982 & target-aligned supervision helps \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\Cref{tab:router_ablation} isolates the two main design changes behind the strongest clean results. Keeping the same clean feature family, moving from a global threshold to a direction-specific policy improves the binary clean router, and replacing the binary target with scalar gain prediction improves it further. The ablation therefore supports the interpretation that the clean-routing bottleneck is not only feature availability, but also policy granularity and supervision form.
 
 \begin{table}[t]
 \centering
@@ -531,14 +553,20 @@ This also clarifies how the post-hoc analysis line should be interpreted. The po
 
 The system-level conclusion is therefore no longer simply that bounded multimodal gain should be routed rather than always switched on. It is more specific: bounded gain should be exploited through \textbf{structured clean routing and more target-aligned clean supervision}, rather than through either always-on multimodal fusion or a naive global-threshold clean selector.
 
-\subsection{Integrated Discussion and Limitations}
+\subsection{Integrated Discussion}
 The combined evidence across RQ1--RQ3 supports a more refined conclusion than the earlier paper version. Under the current OpenBG-IMG protocol, multimodal gain is real but bounded, and a lightweight naive clean router is not sufficient to exploit it. However, this weakness should not be interpreted as evidence that deployable clean routing is impossible in principle. Instead, the new results identify two successive bottlenecks. First, the policy boundary is too coarse when a single global threshold is used; direction-specific thresholding shows that policy granularity matters. Second, the original binary gain label is too coarse as a training target; regression-based routing shows that supervision form matters as well. Once the clean policy is structured more appropriately and trained with a more target-aligned objective, deployable routing can recover additional gains beyond both the clean rule and the original global-threshold learned baseline.
 
-The results should still be interpreted within the current OpenBG-IMG protocol. The thresholds, gain margins, and supervision targets are empirical operating choices for this split rather than transfer rules for other benchmarks or missing-modality patterns; the gap to Oracle further indicates that deployable routing only partially recovers the available headroom.
-
-A further limitation is that some auxiliary supporting analyses remain less stable than the main MRR-based clean results. In particular, the separate oracle-gap decomposition export and some hit-based routing summaries require further verification, so they are not used as primary quantitative evidence in the present manuscript. For this reason, the strongest claims of the paper are grounded primarily in the protocol diagnosis, direct MRR-based clean-routing comparisons, and the updated paired-bootstrap comparisons for the strongest clean policies.
-
 More broadly, however, the results suggest an important direction for future MMKGC research. In settings with incomplete or asymmetric visual support, deciding not only how to fuse modalities, but also how to structure the clean routing policy and how to define gain-aware supervision, may be just as important as designing a richer fusion operator.
+
+\subsection{Limitations and Threats to Validity}
+
+First, the conclusions are protocol-aware rather than universal. The role--modality asymmetry analyzed in this paper is induced by the current OpenBG-IMG \texttt{paper\_split}; different splits or datasets with more balanced target-side image availability may produce different gain boundaries. The thresholds, gain margins, and supervision targets should therefore be interpreted as empirical operating choices for this split rather than as transfer rules for other benchmarks or missing-modality patterns.
+
+Second, the clean router is intentionally restricted to legal query-time features. This makes the routing policy deployable, but it also limits separability. The remaining gap to Oracle routing indicates that some expert-selection information is not visible under the current clean feature set, even after policy structure and supervision form are improved.
+
+Third, the routing framework uses a fixed pair of experts, \texttt{Gate-only} and \texttt{Residual-only}. This design makes the analysis interpretable and keeps the clean-routing comparison controlled, but it does not exhaust the possible expert set. Future work could explore additional multimodal and structural experts, soft routing, or end-to-end expert-router training.
+
+Fourth, the main routing conclusions are based primarily on MRR and paired bootstrap delta-MRR. Hit-based routing exports are treated as auxiliary rather than final evidence, and the separate oracle-gap decomposition export requires further verification before it should be treated as final quantitative evidence. For this reason, the strongest claims of the paper are grounded primarily in the protocol diagnosis, direct MRR-based clean-routing comparisons, and the updated paired-bootstrap comparisons for the strongest clean policies.
 
 \section{Conclusion}
 This paper addresses a protocol-aware question on OpenBG-IMG: not whether multimodal information is useful in the abstract, but whether it yields reliable gain under the current asymmetric missing-visual setting. The answer is that multimodal gain does exist, but it is conditional and non-uniform rather than globally reliable under the present protocol.
