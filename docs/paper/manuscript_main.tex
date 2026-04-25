@@ -28,7 +28,7 @@ Author Two\textsuperscript{1} \and
 Author Three\textsuperscript{2}
 }
 \date{}
-\newcommand{\runningtitle}{Structured Clean Routing on OpenBG-IMG}
+\newcommand{\runningtitle}{Protocol-Aware Selective Activation}
 
 \begin{document}
 
@@ -46,7 +46,7 @@ Author Three\textsuperscript{2}
 Multimodal knowledge graph completion (MMKGC) aims to improve link prediction by incorporating auxiliary modalities such as text and images, yet in product-oriented knowledge graphs visual support is often incomplete and multimodal evidence does not help uniformly. We study this problem on OpenBG-IMG under a unified filtered-ranking protocol with \texttt{direction=both} and show that the current split induces role--modality asymmetry: head-side targets may be image-supported, whereas tail-side targets are effectively image-unavailable. This creates a bounded-gain structure in which multimodal benefit is strongest in image-supported head-side regimes but remains limited globally. We first show that naive clean query-time routing with a single global threshold does not outperform a simple legal clean rule baseline, indicating that clean routing is limited not only by query-time signal availability but also by policy granularity. We then evaluate stronger clean routing designs. Direction-specific thresholding raises clean routing performance to 0.2974 MRR. Regression-based gain prediction further improves the clean result to 0.2982 MRR, outperforming both the clean rule and \texttt{Residual-only} with strictly positive paired bootstrap confidence intervals. These gains recover only part of the Oracle headroom: the best clean strategy remains below Oracle routing. Overall, the paper provides a protocol-aware transition from bounded multimodal-gain diagnosis to structured clean selective activation, showing that deployable multimodal gain can be recovered more effectively when the routing policy is structured appropriately and trained with a target-aligned objective.
 \end{abstract}
 
-\textbf{Keywords:} multimodal knowledge graph completion; structured clean routing; target-aligned supervision; incomplete visual modality; protocol-aware evaluation
+\textbf{Keywords:} multimodal knowledge graph completion; selective activation; structured clean routing; incomplete visual support; protocol-aware evaluation
 
 \section{Introduction}
 Knowledge graph completion (KGC) aims to infer missing facts from observed triples. In multimodal knowledge graph completion (MMKGC), auxiliary modalities such as text and images can enrich entity representations beyond pure graph structure~\cite{trouillon2016complex,dettmers2018conve,sun2019rotate,liu2019mmkg,xie2017ikrl,mousselly2018multimodal,pezeshkpour2018mkbe}. In product-oriented knowledge graphs, this naturally creates the expectation that multimodal models should outperform structure-only alternatives.
@@ -77,7 +77,7 @@ The paper's claim is therefore controlled: under the current OpenBG-IMG protocol
 
 In summary, this paper makes three linked contributions, each corresponding to a fine-grained problem, a proposed response, and an experimental validation.
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Problem--response--validation structure of this paper.}
 \label{tab:problem_response_validation}
@@ -365,8 +365,8 @@ All base-model results are aggregated from formal \texttt{test\_metrics.json} fi
 \caption{Official model-comparison line on OpenBG-IMG. Results are computed from formal \texttt{test\_metrics.json} outputs and reported as mean $\pm$ standard deviation over three seeds. These rows should not be directly mixed with clean-routing-line rows.}
 \label{tab:official_model_comparison}
 \small
-\setlength{\tabcolsep}{3pt}
-\begin{tabular}{lccccc}
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{p{0.15\textwidth}ccccp{0.16\textwidth}}
 \toprule
 Model & MRR & Hits@1 & Hits@3 & Hits@10 & Notes \\
 \midrule
@@ -388,6 +388,7 @@ Model & MRR & Hits@1 & Hits@3 & Hits@10 & Notes \\
 \caption{Main clean routing comparison on the clean routing line. Fixed experts in this table are recomputed on the routing-compatible query-level basis and should not be mixed with the official model-comparison line. Oracle routing is included only as a post-hoc upper-bound reference and is not a deployable clean method.}
 \label{tab:main_clean_routing}
 \small
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{p{0.26\textwidth}p{0.09\textwidth}p{0.13\textwidth}p{0.13\textwidth}p{0.27\textwidth}}
 \toprule
 Method & MRR & $\Delta$ vs. clean rule & $\Delta$ vs. \texttt{Residual-only} & Evidence \\
@@ -409,7 +410,8 @@ Oracle routing & 0.3337 & +0.0395 & +0.0407 & post-hoc upper bound \\
 \caption{Progressive clean-routing ablation on policy structure and supervision target. All rows are evaluated on the clean routing line.}
 \label{tab:router_ablation}
 \small
-\begin{tabular}{p{0.22\textwidth}p{0.11\textwidth}p{0.19\textwidth}p{0.18\textwidth}cp{0.18\textwidth}}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{0.20\textwidth}p{0.09\textwidth}p{0.17\textwidth}p{0.16\textwidth}cp{0.18\textwidth}}
 \toprule
 Variant & Features & Policy & Target & MRR & Interpretation \\
 \midrule
@@ -566,7 +568,7 @@ Second, the clean router is intentionally restricted to legal query-time feature
 
 Third, the routing framework uses a fixed pair of experts, \texttt{Gate-only} and \texttt{Residual-only}. This design makes the analysis interpretable and keeps the clean-routing comparison controlled, but it does not exhaust the possible expert set. Future work could explore additional multimodal and structural experts, soft routing, or end-to-end expert-router training.
 
-Fourth, the main routing conclusions are based primarily on MRR and paired bootstrap delta-MRR. Hit-based routing exports are treated as auxiliary rather than final evidence, and the separate oracle-gap decomposition export requires further verification before it should be treated as final quantitative evidence. For this reason, the strongest claims of the paper are grounded primarily in the protocol diagnosis, direct MRR-based clean-routing comparisons, and the updated paired-bootstrap comparisons for the strongest clean policies.
+Fourth, the main routing conclusions are based primarily on MRR and paired bootstrap delta-MRR. Hit-based routing exports are treated as auxiliary rather than final evidence, and the separate oracle-gap decomposition is treated only as auxiliary analysis rather than as primary quantitative evidence. For this reason, the strongest claims of the paper are grounded primarily in the protocol diagnosis, direct MRR-based clean-routing comparisons, and the updated paired-bootstrap comparisons for the strongest clean policies.
 
 \section{Conclusion}
 This paper addresses a protocol-aware question on OpenBG-IMG: not whether multimodal information is useful in the abstract, but whether it yields reliable gain under the current asymmetric missing-visual setting. The answer is that multimodal gain does exist, but it is conditional and non-uniform rather than globally reliable under the present protocol.
