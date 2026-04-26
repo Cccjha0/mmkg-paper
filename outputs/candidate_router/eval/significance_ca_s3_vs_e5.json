@@ -1,6 +1,6 @@
 {
-  "comparison": "CA-S3 full-ranking vs E5 regression clean router",
-  "left_label": "CA-S3 candidate-aware full-ranking",
+  "comparison": "CA-S3 clean + score-aware full-ranking vs E5 regression clean router",
+  "left_label": "CA-S3 clean + score-aware full-ranking",
   "right_label": "E5 regression clean router",
   "candidate_column": "mixed_rr",
   "baseline_column": "rr_regression_clean_router",
@@ -20,8 +20,8 @@
   "bootstrap_samples": 2000,
   "bootstrap_seed": 42,
   "bootstrap_ci_95_querywise": {
-    "low": 0.013226834252475858,
-    "high": 0.0173719487630052
+    "low": 0.013221068358722993,
+    "high": 0.017378634060158243
   },
   "seed_level_deltas": [
     0.01637282651028489,

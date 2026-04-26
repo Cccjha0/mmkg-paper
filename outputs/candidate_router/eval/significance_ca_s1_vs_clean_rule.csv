@@ -1,0 +1,2 @@
+comparison,left_label,right_label,n_seeds,n_paired_queries,candidate_mrr,baseline_mrr,mean_delta_mrr_seedwise,std_delta_mrr_seedwise,mean_delta_mrr_querywise,bootstrap_ci_low,bootstrap_ci_high
+CA-S1 clean candidate full-ranking vs Clean rule,CA-S1 clean candidate full-ranking,Clean rule,3,60000,0.25030751836949583,0.29428194121179074,-0.04397442284229486,0.006143500711197821,-0.043974422842294865,-0.04647461294612607,-0.04168387432214295

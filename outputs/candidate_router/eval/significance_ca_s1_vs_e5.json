@@ -1,0 +1,31 @@
+{
+  "comparison": "CA-S1 clean candidate full-ranking vs E5 regression clean router",
+  "left_label": "CA-S1 clean candidate full-ranking",
+  "right_label": "E5 regression clean router",
+  "candidate_column": "mixed_rr",
+  "baseline_column": "rr_regression_clean_router",
+  "candidate_query_rows": [
+    "outputs/candidate_router/eval/ca_s1_full_ranking_seed1_query_rows.csv",
+    "outputs/candidate_router/eval/ca_s1_full_ranking_seed2_query_rows.csv",
+    "outputs/candidate_router/eval/ca_s1_full_ranking_seed3_query_rows.csv"
+  ],
+  "baseline_query_rows": "outputs/router/eval/clean/baseline_locked_query_rows.csv",
+  "n_seeds": 3,
+  "n_paired_queries": 60000,
+  "candidate_mrr": 0.25030751836949583,
+  "baseline_mrr": 0.29818238527999713,
+  "mean_delta_mrr_querywise": -0.047874866910501246,
+  "mean_delta_mrr_seedwise": -0.04787486691050125,
+  "std_delta_mrr_seedwise": 0.006389364568968605,
+  "bootstrap_samples": 2000,
+  "bootstrap_seed": 42,
+  "bootstrap_ci_95_querywise": {
+    "low": -0.050307313361344676,
+    "high": -0.045545393027736476
+  },
+  "seed_level_deltas": [
+    -0.04059427945131005,
+    -0.050481350076215736,
+    -0.05254897120397797
+  ]
+}

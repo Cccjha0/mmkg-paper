@@ -1,0 +1,2 @@
+comparison,left_label,right_label,n_seeds,n_paired_queries,candidate_mrr,baseline_mrr,mean_delta_mrr_seedwise,std_delta_mrr_seedwise,mean_delta_mrr_querywise,bootstrap_ci_low,bootstrap_ci_high
+CA-S2 score-aware full-ranking vs Direction-specific threshold,CA-S2 score-aware full-ranking,Direction-specific threshold,3,60000,0.3141515602453915,0.29743590499632216,0.01671565524906933,0.001293542058286003,0.01671565524906933,0.014657665290291472,0.018804867480455047

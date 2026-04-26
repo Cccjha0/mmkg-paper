@@ -1,5 +1,8 @@
-Comparison,Baseline MRR,CA-S3 MRR,Delta MRR,95% bootstrap CI,Paired queries
-vs Residual-only,0.2930,0.3135,+0.0204,"[+0.0184, +0.0225]",60000
-vs Clean rule,0.2943,0.3135,+0.0192,"[+0.0172, +0.0213]",60000
-vs Direction-specific threshold,0.2974,0.3135,+0.0160,"[+0.0139, +0.0181]",60000
-vs E5 regression clean router,0.2982,0.3135,+0.0153,"[+0.0132, +0.0174]",60000
+Comparison,Baseline MRR,Candidate MRR,Delta MRR,95% bootstrap CI,Paired queries
+CA-S1 vs Residual-only,0.2930,0.2503,-0.0427,"[-0.0452, -0.0404]",60000
+CA-S1 vs E5 regression clean router,0.2982,0.2503,-0.0479,"[-0.0503, -0.0455]",60000
+CA-S2 vs Residual-only,0.2930,0.3142,+0.0211,"[+0.0191, +0.0232]",60000
+CA-S2 vs E5 regression clean router,0.2982,0.3142,+0.0160,"[+0.0139, +0.0181]",60000
+CA-S3 clean + vs Residual-only,0.2930,0.3135,+0.0204,"[+0.0184, +0.0226]",60000
+CA-S3 clean + vs E5 regression clean router,0.2982,0.3135,+0.0153,"[+0.0132, +0.0174]",60000
+CA-S2 vs CA-S3 clean +,0.3135,0.3142,+0.0007,"[-0.0002, +0.0014]",60000

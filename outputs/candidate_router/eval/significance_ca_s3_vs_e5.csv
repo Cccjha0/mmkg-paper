@@ -1,2 +1,2 @@
 comparison,left_label,right_label,n_seeds,n_paired_queries,candidate_mrr,baseline_mrr,mean_delta_mrr_seedwise,std_delta_mrr_seedwise,mean_delta_mrr_querywise,bootstrap_ci_low,bootstrap_ci_high
-CA-S3 full-ranking vs E5 regression clean router,CA-S3 candidate-aware full-ranking,E5 regression clean router,3,60000,0.313480591917793,0.29818238527999713,0.015298206637795866,0.0011505857050890522,0.015298206637795866,0.013226834252475858,0.0173719487630052
+CA-S3 clean + score-aware full-ranking vs E5 regression clean router,CA-S3 clean + score-aware full-ranking,E5 regression clean router,3,60000,0.313480591917793,0.29818238527999713,0.015298206637795866,0.0011505857050890522,0.015298206637795866,0.013221068358722993,0.017378634060158243

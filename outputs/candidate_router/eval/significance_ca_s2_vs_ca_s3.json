@@ -1,0 +1,31 @@
+{
+  "comparison": "CA-S2 score-aware full-ranking vs CA-S3 clean + score-aware full-ranking",
+  "left_label": "CA-S2 score-aware full-ranking",
+  "right_label": "CA-S3 clean + score-aware full-ranking",
+  "candidate_column": "mixed_rr",
+  "baseline_column": "mixed_rr",
+  "candidate_query_rows": [
+    "outputs/candidate_router/eval/ca_s2_full_ranking_seed1_query_rows.csv",
+    "outputs/candidate_router/eval/ca_s2_full_ranking_seed2_query_rows.csv",
+    "outputs/candidate_router/eval/ca_s2_full_ranking_seed3_query_rows.csv"
+  ],
+  "baseline_query_rows": "outputs/candidate_router/eval/ca_s3_full_ranking_seed1_query_rows.csv;outputs/candidate_router/eval/ca_s3_full_ranking_seed2_query_rows.csv;outputs/candidate_router/eval/ca_s3_full_ranking_seed3_query_rows.csv",
+  "n_seeds": 3,
+  "n_paired_queries": 60000,
+  "candidate_mrr": 0.3141515602453915,
+  "baseline_mrr": 0.313480591917793,
+  "mean_delta_mrr_querywise": 0.0006709683275985069,
+  "mean_delta_mrr_seedwise": 0.0006709683275985067,
+  "std_delta_mrr_seedwise": 0.0006150964712962005,
+  "bootstrap_samples": 2000,
+  "bootstrap_seed": 42,
+  "bootstrap_ci_95_querywise": {
+    "low": -0.00016356649339906994,
+    "high": 0.0014398435447716042
+  },
+  "seed_level_deltas": [
+    0.0013643404979042338,
+    0.0004575861961948923,
+    0.00019097828869639425
+  ]
+}

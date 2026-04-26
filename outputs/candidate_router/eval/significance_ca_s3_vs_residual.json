@@ -1,6 +1,6 @@
 {
-  "comparison": "CA-S3 full-ranking vs Residual-only",
-  "left_label": "CA-S3 candidate-aware full-ranking",
+  "comparison": "CA-S3 clean + score-aware full-ranking vs Residual-only",
+  "left_label": "CA-S3 clean + score-aware full-ranking",
   "right_label": "Residual-only",
   "candidate_column": "mixed_rr",
   "baseline_column": "rr_residual",
@@ -20,8 +20,8 @@
   "bootstrap_samples": 2000,
   "bootstrap_seed": 42,
   "bootstrap_ci_95_querywise": {
-    "low": 0.01841777480741158,
-    "high": 0.02254626679524479
+    "low": 0.01843018752485891,
+    "high": 0.022574610041953887
   },
   "seed_level_deltas": [
     0.021083248723126443,

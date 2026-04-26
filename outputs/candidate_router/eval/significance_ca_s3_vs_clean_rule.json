@@ -1,6 +1,6 @@
 {
-  "comparison": "CA-S3 full-ranking vs Clean rule",
-  "left_label": "CA-S3 candidate-aware full-ranking",
+  "comparison": "CA-S3 clean + score-aware full-ranking vs Clean rule",
+  "left_label": "CA-S3 clean + score-aware full-ranking",
   "right_label": "Clean rule",
   "candidate_column": "mixed_rr",
   "baseline_column": "rr_clean_rule",
@@ -20,8 +20,8 @@
   "bootstrap_samples": 2000,
   "bootstrap_seed": 42,
   "bootstrap_ci_95_querywise": {
-    "low": 0.0171609069943587,
-    "high": 0.021280396729448526
+    "low": 0.017175254591931713,
+    "high": 0.021268452176490066
   },
   "seed_level_deltas": [
     0.019969592826189143,

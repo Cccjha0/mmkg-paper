@@ -1,0 +1,2 @@
+comparison,left_label,right_label,n_seeds,n_paired_queries,candidate_mrr,baseline_mrr,mean_delta_mrr_seedwise,std_delta_mrr_seedwise,mean_delta_mrr_querywise,bootstrap_ci_low,bootstrap_ci_high
+CA-S1 clean candidate full-ranking vs E5 regression clean router,CA-S1 clean candidate full-ranking,E5 regression clean router,3,60000,0.25030751836949583,0.29818238527999713,-0.04787486691050125,0.006389364568968605,-0.047874866910501246,-0.050307313361344676,-0.045545393027736476

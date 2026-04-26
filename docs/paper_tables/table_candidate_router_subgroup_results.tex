@@ -1,15 +1,21 @@
 \begin{table}[t]
 \centering
 \small
-\caption{CA-S3 full-ranking results by target-side regime.}
+\caption{Candidate-aware full-ranking results by target-side regime.}
 \label{tab:candidate_router_subgroup_results}
-\begin{tabular}{p{0.18\textwidth}ccccc}
+\begin{tabular}{p{0.18\textwidth}p{0.14\textwidth}ccccc}
 \toprule
-Regime & Count/seed & Gate MRR & Residual MRR & CA-S3 MRR & Delta vs Residual \\
+Method & Regime & Count/seed & Gate MRR & Residual MRR & Method MRR & Delta vs Residual \\
 \midrule
-head\_has\_img & 7048 & 0.0134 & 0.0017 $\pm$ 0.0001 & 0.0034 $\pm$ 0.0002 & +0.0017 $\pm$ 0.0001 \\
-head\_no\_img & 2952 & 0.0123 & 0.0055 $\pm$ 0.0003 & 0.0079 $\pm$ 0.0007 & +0.0024 $\pm$ 0.0004 \\
-tail\_no\_img & 10000 & 0.3945 & 0.5832 $\pm$ 0.0015 & 0.6222 $\pm$ 0.0016 & +0.0389 $\pm$ 0.0013 \\
+CA-S1 clean candidate & head\_has\_img & 7048 & 0.0134 & 0.0017 $\pm$ 0.0001 & 0.0052 $\pm$ 0.0004 & +0.0034 $\pm$ 0.0003 \\
+CA-S1 clean candidate & head\_no\_img & 2952 & 0.0123 & 0.0055 $\pm$ 0.0003 & 0.0180 $\pm$ 0.0013 & +0.0125 $\pm$ 0.0015 \\
+CA-S1 clean candidate & tail\_no\_img & 10000 & 0.3945 & 0.5832 $\pm$ 0.0015 & 0.4917 $\pm$ 0.0103 & -0.0916 $\pm$ 0.0116 \\
+CA-S2 score-aware & head\_has\_img & 7048 & 0.0134 & 0.0017 $\pm$ 0.0001 & 0.0032 $\pm$ 0.0002 & +0.0015 $\pm$ 0.0001 \\
+CA-S2 score-aware & head\_no\_img & 2952 & 0.0123 & 0.0055 $\pm$ 0.0003 & 0.0081 $\pm$ 0.0004 & +0.0026 $\pm$ 0.0003 \\
+CA-S2 score-aware & tail\_no\_img & 10000 & 0.3945 & 0.5832 $\pm$ 0.0015 & 0.6236 $\pm$ 0.0019 & +0.0404 $\pm$ 0.0025 \\
+CA-S3 clean + score & head\_has\_img & 7048 & 0.0134 & 0.0017 $\pm$ 0.0001 & 0.0034 $\pm$ 0.0002 & +0.0017 $\pm$ 0.0001 \\
+CA-S3 clean + score & head\_no\_img & 2952 & 0.0123 & 0.0055 $\pm$ 0.0003 & 0.0079 $\pm$ 0.0007 & +0.0024 $\pm$ 0.0004 \\
+CA-S3 clean + score & tail\_no\_img & 10000 & 0.3945 & 0.5832 $\pm$ 0.0015 & 0.6222 $\pm$ 0.0016 & +0.0389 $\pm$ 0.0013 \\
 \bottomrule
 \end{tabular}
 \vspace{0.4ex}\caption*{\footnotesize The overall gain is primarily driven by the tail-side regime, while head-side gains remain small in absolute MRR.}

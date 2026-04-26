@@ -1,0 +1,2 @@
+comparison,left_label,right_label,n_seeds,n_paired_queries,candidate_mrr,baseline_mrr,mean_delta_mrr_seedwise,std_delta_mrr_seedwise,mean_delta_mrr_querywise,bootstrap_ci_low,bootstrap_ci_high
+CA-S2 score-aware full-ranking vs CA-S3 clean + score-aware full-ranking,CA-S2 score-aware full-ranking,CA-S3 clean + score-aware full-ranking,3,60000,0.3141515602453915,0.313480591917793,0.0006709683275985067,0.0006150964712962005,0.0006709683275985069,-0.00016356649339906994,0.0014398435447716042

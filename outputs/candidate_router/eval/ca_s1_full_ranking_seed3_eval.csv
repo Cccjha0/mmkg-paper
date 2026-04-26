@@ -1,0 +1,2 @@
+model,scope,feature_set,loss,full_ranking_mrr,full_ranking_hits1,full_ranking_hits3,full_ranking_hits10,gate_full_mrr,residual_full_mrr,delta_vs_gate_full,delta_vs_residual_full,count,mean_target_alpha,mean_alpha
+ca_s1_clean_soft_pairwise,overall,CA-S1,pairwise,0.24644179031662097,0.17945,0.2843,0.37885,0.2019532591552367,0.2939383933332889,0.044488531161384265,-0.04749660301666794,20000,0.25704929270466287,0.38114540469194763
