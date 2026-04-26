@@ -1,0 +1,3 @@
+model,scope,feature_set,loss,full_ranking_mrr,full_ranking_hits1,full_ranking_hits3,full_ranking_hits10,gate_full_mrr,residual_full_mrr,delta_vs_gate_full,delta_vs_residual_full,count,mean_target_alpha,mean_alpha
+ca_s3_full_soft_pairwise,head_has_img,CA-S3,pairwise,7.859781498074354e-05,0.0,0.0,0.0,0.01694915254237288,7.815552950371239e-05,-0.01687055472739214,4.4228547703115443e-07,1,1.025524743518745e-36,0.00583995133638382
+ca_s3_full_soft_pairwise,tail_no_img,CA-S3,pairwise,1.0,1.0,1.0,1.0,0.3333333333333333,0.3333333333333333,0.6666666666666667,0.6666666666666667,1,0.3357822895050049,0.03814646974205971
