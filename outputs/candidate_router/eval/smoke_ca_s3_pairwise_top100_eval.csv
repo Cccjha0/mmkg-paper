@@ -1,0 +1,2 @@
+model,scope,feature_set,loss,candidate_topk_rerank_mrr,candidate_topk_hits1,candidate_topk_hits3,candidate_topk_hits10,gate_topk_mrr,residual_topk_mrr,delta_vs_gate_topk,delta_vs_residual_topk,count,mean_target_alpha,mean_alpha
+ca_s3_full_soft_pairwise,overall,CA-S3,pairwise,0.0338593950264829,0.0033333333333333335,0.02,0.05333333333333334,0.014775526729911616,0.006810063230482784,0.019083868296571285,0.027049331796000116,300,0.006666666678462102,0.472287351389726
