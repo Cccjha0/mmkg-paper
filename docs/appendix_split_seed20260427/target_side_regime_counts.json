@@ -1,0 +1,24 @@
+{
+  "split": "appendix_split_seed20260427",
+  "split_dir": "data/datasets/openbg_img/appendix_split_seed20260427",
+  "test_file": "data/datasets/openbg_img/appendix_split_seed20260427/OpenBG-IMG_paper_test.tsv",
+  "has_img": "data/cache/openbg_img/has_img.pt",
+  "num_test_triples": 10000,
+  "num_bidirectional_queries": 20000,
+  "counts": {
+    "head_has_img": 7018,
+    "head_no_img": 2982,
+    "tail_has_img": 0,
+    "tail_no_img": 10000
+  },
+  "bidirectional_ratios": {
+    "head_has_img": 0.3509,
+    "head_no_img": 0.1491,
+    "tail_has_img": 0.0,
+    "tail_no_img": 0.5
+  },
+  "side_ratios": {
+    "head_has_img_within_head_queries": 0.7018,
+    "tail_has_img_within_tail_queries": 0.0
+  }
+}

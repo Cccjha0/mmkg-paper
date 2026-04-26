@@ -1,0 +1,21 @@
+{
+  "dataset": "OpenBG-IMG",
+  "split": "appendix_split_seed20260427",
+  "num_entities": 27910,
+  "num_relations": 136,
+  "num_train_triples": 220087,
+  "num_valid_triples": 5000,
+  "num_test_triples": 10000,
+  "num_image_entities": 14690,
+  "image_coverage_percent": 52.633464707989965,
+  "split_unique_entities": 27909,
+  "split_unique_relations": 136,
+  "sources": {
+    "entities": "data\\datasets\\openbg_img\\raw\\OpenBG-IMG_entity2text.tsv",
+    "relations": "data\\datasets\\openbg_img\\raw\\OpenBG-IMG_relation2text.tsv",
+    "train": "data\\datasets\\openbg_img\\appendix_split_seed20260427\\OpenBG-IMG_paper_train.tsv",
+    "valid": "data\\datasets\\openbg_img\\appendix_split_seed20260427\\OpenBG-IMG_paper_dev.tsv",
+    "test": "data\\datasets\\openbg_img\\appendix_split_seed20260427\\OpenBG-IMG_paper_test.tsv",
+    "has_img": "data\\cache\\openbg_img\\has_img.pt"
+  }
+}

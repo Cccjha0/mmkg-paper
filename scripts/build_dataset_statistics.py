@@ -58,12 +58,19 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Build OpenBG-IMG paper split dataset statistics.")
     parser.add_argument("--dataset-root", type=Path, default=Path("data/datasets/openbg_img"))
     parser.add_argument("--cache-root", type=Path, default=Path("data/cache/openbg_img"))
+    parser.add_argument(
+        "--split-dir",
+        type=Path,
+        default=None,
+        help="Directory containing OpenBG-IMG_paper_train/dev/test.tsv. Defaults to dataset-root/paper_split.",
+    )
+    parser.add_argument("--split-name", default="paper_split")
     parser.add_argument("--json-out", type=Path, default=Path("docs/dataset_statistics.json"))
     parser.add_argument("--tex-out", type=Path, default=Path("docs/paper_tables/table_dataset_statistics.tex"))
     args = parser.parse_args()
 
     raw_root = args.dataset_root / "raw"
-    split_root = args.dataset_root / "paper_split"
+    split_root = args.split_dir if args.split_dir is not None else args.dataset_root / "paper_split"
 
     entity_path = raw_root / "OpenBG-IMG_entity2text.tsv"
     relation_path = raw_root / "OpenBG-IMG_relation2text.tsv"
@@ -91,7 +98,7 @@ def main() -> None:
 
     stats = {
         "dataset": "OpenBG-IMG",
-        "split": "paper_split",
+        "split": args.split_name,
         "num_entities": num_entities,
         "num_relations": num_relations,
         "num_train_triples": len(train_triples),
@@ -115,17 +122,20 @@ def main() -> None:
     args.tex_out.parent.mkdir(parents=True, exist_ok=True)
     args.json_out.write_text(json.dumps(stats, indent=2) + "\n", encoding="utf-8")
 
+    split_caption = args.split_name.replace("_", "\\_")
+    table_label = "tab:dataset_statistics" if args.split_name == "paper_split" else f"tab:dataset_statistics_{args.split_name}"
+    dataset_label = "OpenBG-IMG" if args.split_name == "paper_split" else f"OpenBG-IMG ({split_caption})"
     tex = f"""\\begin{{table}}[t]
 \\centering
-\\caption{{Dataset statistics of the OpenBG-IMG \\texttt{{paper\\_split}}.}}
-\\label{{tab:dataset_statistics}}
+\\caption{{Dataset statistics of the OpenBG-IMG \\texttt{{{split_caption}}}.}}
+\\label{{{table_label}}}
 \\small
 \\setlength{{\\tabcolsep}}{{4pt}}
 \\begin{{tabular}}{{lrrrrrrr}}
 \\toprule
 Dataset & \\#Entities & \\#Relations & \\#Train & \\#Valid & \\#Test & \\#Image entities & Image coverage \\\\
 \\midrule
-OpenBG-IMG & {format_latex_int(num_entities)} & {format_latex_int(num_relations)} & {format_latex_int(len(train_triples))} & {format_latex_int(len(valid_triples))} & {format_latex_int(len(test_triples))} & {format_latex_int(image_entities)} & {image_coverage:.2f}\\% \\\\
+{dataset_label} & {format_latex_int(num_entities)} & {format_latex_int(num_relations)} & {format_latex_int(len(train_triples))} & {format_latex_int(len(valid_triples))} & {format_latex_int(len(test_triples))} & {format_latex_int(image_entities)} & {image_coverage:.2f}\\% \\\\
 \\bottomrule
 \\end{{tabular}}
 \\end{{table}}
