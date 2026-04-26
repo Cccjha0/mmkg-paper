@@ -1,0 +1,31 @@
+{
+  "comparison": "CA-S3 full-ranking vs Direction-specific threshold",
+  "left_label": "CA-S3 candidate-aware full-ranking",
+  "right_label": "Direction-specific threshold",
+  "candidate_column": "mixed_rr",
+  "baseline_column": "rr_direction_specific_threshold",
+  "candidate_query_rows": [
+    "outputs/candidate_router/eval/ca_s3_full_ranking_seed1_query_rows.csv",
+    "outputs/candidate_router/eval/ca_s3_full_ranking_seed2_query_rows.csv",
+    "outputs/candidate_router/eval/ca_s3_full_ranking_seed3_query_rows.csv"
+  ],
+  "baseline_query_rows": "outputs/router/eval/clean/baseline_locked_query_rows.csv",
+  "n_seeds": 3,
+  "n_paired_queries": 60000,
+  "candidate_mrr": 0.313480591917793,
+  "baseline_mrr": 0.29743590499632216,
+  "mean_delta_mrr_querywise": 0.016044686921470822,
+  "mean_delta_mrr_seedwise": 0.016044686921470822,
+  "std_delta_mrr_seedwise": 0.0008444545833300915,
+  "bootstrap_samples": 2000,
+  "bootstrap_seed": 42,
+  "bootstrap_ci_95_querywise": {
+    "low": 0.013949094413808802,
+    "high": 0.01814997181940103
+  },
+  "seed_level_deltas": [
+    0.01675288065195155,
+    0.015110116307135772,
+    0.016271063805325146
+  ]
+}

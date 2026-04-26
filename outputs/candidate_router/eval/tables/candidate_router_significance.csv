@@ -1,0 +1,5 @@
+Comparison,Baseline MRR,CA-S3 MRR,Delta MRR,95% bootstrap CI,Paired queries
+vs Residual-only,0.2930,0.3135,+0.0204,"[+0.0184, +0.0225]",60000
+vs Clean rule,0.2943,0.3135,+0.0192,"[+0.0172, +0.0213]",60000
+vs Direction-specific threshold,0.2974,0.3135,+0.0160,"[+0.0139, +0.0181]",60000
+vs E5 regression clean router,0.2982,0.3135,+0.0153,"[+0.0132, +0.0174]",60000
