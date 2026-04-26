@@ -47,7 +47,7 @@ Author Three\textsuperscript{2}
 Multimodal knowledge graph completion (MMKGC) aims to improve link prediction by incorporating auxiliary modalities such as text and images, yet in product-oriented knowledge graphs visual support is often incomplete and multimodal evidence does not help uniformly. We study this problem on OpenBG-IMG under a unified filtered-ranking protocol with \texttt{direction=both} and show that the current split induces role--modality asymmetry: head-side targets may be image-supported, whereas tail-side targets are effectively image-unavailable. This creates a bounded-gain structure in which relative multimodal advantage is most visible in image-supported head-side regimes but remains limited globally. We first show that strict query-level clean routing with metadata-only query-time signals recovers only modest gain: direction-specific thresholding reaches 0.2974 MRR, and regression-based gain prediction reaches 0.2982 MRR with positive paired bootstrap evidence. We then show that this limitation is not the end of selective activation. A score-aware candidate-level router that uses non-answer-aware expert score signals reaches 0.3142 $\pm$ 0.0010 MRR, outperforming the strongest query-level clean router by +0.0160 MRR with 95\% confidence interval [+0.0139, +0.0181] and recovering 51.9\% of the Oracle headroom. The remaining gap to Oracle routing shows that deployable selective activation is still incomplete, but the main bottleneck is now sharper: strict query-level metadata is too coarse, whereas candidate-level expert score patterns expose substantially more usable routing signal.
 \end{abstract}
 
-\textbf{Keywords:} multimodal knowledge graph completion; selective activation; structured clean routing; incomplete visual support; protocol-aware evaluation
+\textbf{Keywords:} multimodal knowledge graph completion; selective activation; score-aware routing; candidate-level routing; incomplete visual support; protocol-aware evaluation
 
 \section{Introduction}
 Knowledge graph completion (KGC) aims to infer missing facts from observed triples. In multimodal knowledge graph completion (MMKGC), auxiliary modalities such as text and images can enrich entity representations beyond pure graph structure~\cite{trouillon2016complex,dettmers2018conve,sun2019rotate,liu2019mmkg,xie2017ikrl,mousselly2018multimodal,pezeshkpour2018mkbe}. In product-oriented knowledge graphs, this naturally creates the expectation that multimodal models should outperform structure-only alternatives.
@@ -59,14 +59,14 @@ Our prior analysis already reveals a strong tension under the unified OpenBG-IMG
 These observations motivate the central problem of this paper:
 
 \begin{quote}
-Under the current OpenBG-IMG protocol, multimodal gain is bounded and protocol-dependent. How can this gain be diagnosed more precisely and exploited more effectively under clean, deployable routing constraints?
+Under the current OpenBG-IMG protocol, multimodal gain is bounded and protocol-dependent. How can this gain be diagnosed more precisely and exploited more effectively under deployable selective-activation constraints?
 \end{quote}
 
 We decompose this problem into four research questions.
 
 \textbf{RQ1. Where does multimodal gain actually appear?} We first examine whether multimodal benefit is globally uniform or concentrated in specific target-side regimes and relation conditions.
 
-\textbf{RQ2. Why does naive clean routing fail?} We then test whether a single global threshold is sufficient for clean selective activation, or whether the protocol requires a more structured decision policy.
+\textbf{RQ2. Why does naive strict query-level clean routing fail?} We then test whether a single global threshold is sufficient for clean selective activation, or whether the protocol requires a more structured decision policy.
 
 \textbf{RQ3. How far can structured query-level clean routing go?} We study whether target-aligned clean supervision can recover more deployable gain than coarse binary routing under strict metadata-only query-level constraints.
 
@@ -100,7 +100,7 @@ Query-level metadata remains insufficient. & Score-aware candidate-level soft ro
 More specifically, our contributions are:
 \begin{enumerate}[leftmargin=1.5em]
     \item \textbf{Protocol-aware bounded-gain diagnosis.} We identify a protocol-aware bounded-gain structure on OpenBG-IMG by showing that role--modality asymmetry entangles target position with image availability, so multimodal benefit remains local rather than globally uniform.
-    \item \textbf{Structured clean routing for selective activation.} We show that naive clean query-time routing with a single global threshold is insufficient, and that direction-specific thresholding provides a stronger clean policy under the asymmetric protocol.
+    \item \textbf{Structured strict query-level clean routing.} We show that naive clean query-time routing with a single global threshold is insufficient, and that direction-specific thresholding provides a stronger clean policy under the asymmetric protocol.
     \item \textbf{Target-aligned strict clean supervision.} We further show that regression-based gain prediction recovers the strongest strict query-level clean result, but its gain remains modest relative to Oracle routing.
     \item \textbf{Score-aware candidate-level selective activation.} We introduce candidate-level soft routing using non-answer-aware expert score signals and show that it recovers substantially more Oracle headroom than strict query-level clean routing.
 \end{enumerate}
@@ -535,7 +535,7 @@ Group & \#Relations retained & \#Test queries retained \\
 
 Relation-group evidence provides a second, but supporting, view of this bounded-gain structure. Across the retained coarse relation groups, the grouped ordering remains \texttt{Residual-only} $>$ \texttt{Full Model} $>$ \texttt{Gate-only}, indicating that relation dependence is real but still bounded. The relation-group results therefore do not show a reversal of the global ordering. Instead, they indicate that relation context modulates the degree of multimodal usefulness while remaining bounded by the protocol-level structure-dominant pattern. \Cref{tab:relation_group_support} reports retained relation and query support after minimum-support filtering. This makes the grouped analysis auditable and reduces the risk that the grouped trends are driven by a handful of low-support cases. Taken together, these observations answer RQ1: under the current OpenBG-IMG protocol, multimodal gain appears in specific protocol-shaped local regions rather than as a globally reliable property of the benchmark.
 
-\subsection{RQ2: Why does naive clean routing fail, and what kind of clean decision structure is required?}
+\subsection{RQ2: Why does naive strict query-level clean routing fail, and what kind of clean decision structure is required?}
 RQ2 asks why multimodal evidence cannot be routed effectively by a naive global-threshold clean selector, and what kind of clean decision structure is actually needed under the current protocol.
 
 A natural first attempt is a clean learned router with one global threshold $\tau$. However, \Cref{tab:main_clean_routing} shows that this formulation is too weak. The naive global clean router reaches 0.2939 MRR, below the clean rule baseline at 0.2943 MRR. This means that the main difficulty of deployable routing is not merely classifier capacity. Rather, it lies in the mismatch between a single global decision boundary and the asymmetric gain structure induced by the protocol.
