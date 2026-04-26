@@ -200,9 +200,9 @@ All formal comparisons use filtered ranking metrics on the test set, including M
 Evaluation line & Aggregation basis & Used for \\
 \midrule
 Official model-comparison line & formal \texttt{test\_metrics.json} outputs & ranking the original seven-model family under the paper protocol \\
-Strict query-level clean line & query-level exported expert outcomes with recomputed aggregation under legal metadata-only query-time constraints & comparing \texttt{Gate-only}, \texttt{Residual-only}, Oracle routing, the clean rule baseline, naive global-threshold clean routing, structured clean policies, and target-aligned clean supervision on a shared clean basis \\
+Strict query-level clean line & query-level exported expert outcomes with recomputed aggregation under legal metadata-only query-time constraints & comparing \texttt{Gate-only}, \texttt{Residual-only}, the clean rule baseline, naive global-threshold clean routing, structured clean policies, and target-aligned clean supervision on a shared clean basis \\
 Score-aware candidate line & candidate-level expert score exports with full filtered-ranking recomputation & evaluating CA-S1/CA-S2/CA-S3 candidate-level soft routers that are non-answer-aware but may use expert score, rank, confidence, and disagreement signals \\
-Oracle/post-hoc analysis line & query-level or candidate-level outcomes with answer-aware analysis features & studying upper-bound-style separability without treating these signals as deployable routing evidence \\
+Oracle/post-hoc analysis line & query-level or candidate-level outcomes with answer-aware analysis features & studying Oracle routing and other upper-bound-style separability analyses without treating these signals as deployable routing evidence \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -379,7 +379,7 @@ This paired design is necessary because all routing policies in a compared line 
 \subsection{Experimental Setup}
 All experiments are conducted on the current OpenBG-IMG \texttt{paper\_split} under the unified protocol defined in the previous section. Base-model checkpoints are selected on the development split, and final base-model metrics are reported on the test split using filtered ranking with \texttt{direction=both}. Unless otherwise stated, official main-result metrics are aggregated over three random seeds and reported as mean $\pm$ standard deviation when the source line supports that form.
 
-For the strongest clean-policy comparisons, we additionally report paired significance evidence on the clean routing line. Each comparison is defined on the same shared set of test queries and is evaluated both seed-wise and query-wise. In particular, the main significance results use a \emph{paired query-level bootstrap}: for each compared pair of clean policies, the query-level reciprocal-rank differences are computed on the same 60{,}000 paired query instances, 2{,}000 bootstrap samples are then drawn by resampling these paired query outcomes with replacement, and the difference in MRR is recomputed for each resample. The reported 95\% confidence interval is taken from the empirical query-wise bootstrap distribution of $\Delta$MRR induced by these 2{,}000 paired resamples. Seed-wise mean and standard deviation are reported as complementary summaries rather than as replacements for the paired query-level test.
+For the strongest routing comparisons, including both strict query-level clean routing and score-aware candidate-level routing, we report paired query-level bootstrap significance evidence. Each comparison is defined on the same shared set of test queries and is evaluated both seed-wise and query-wise. In particular, the main significance results use a \emph{paired query-level bootstrap}: for each compared pair of routing policies, the query-level reciprocal-rank differences are computed on the same 60{,}000 paired query instances, 2{,}000 bootstrap samples are then drawn by resampling these paired query outcomes with replacement, and the difference in MRR is recomputed for each resample. The reported 95\% confidence interval is taken from the empirical query-wise bootstrap distribution of $\Delta$MRR induced by these 2{,}000 paired resamples. Seed-wise mean and standard deviation are reported as complementary summaries rather than as replacements for the paired query-level test.
 
 This section is organized around four research questions. \textbf{RQ1} asks where multimodal gain actually appears under the current protocol. \textbf{RQ2} asks why naive clean routing fails and what kind of clean decision structure is actually required. \textbf{RQ3} asks how far structured query-level clean routing can go once bounded gain is known to be conditional. \textbf{RQ4} asks whether candidate-level score-aware routing can recover more deployable gain.
 
@@ -590,13 +590,13 @@ RQ4 asks whether the limitation of strict query-level clean routing is caused by
 
 \begin{table}[t]
 \centering
-\small
+\scriptsize
 \caption{Main selective activation results on OpenBG-IMG. E5 is the strongest strict query-level clean router, while CA-S1/CA-S2/CA-S3 are candidate-level routers evaluated by full filtered ranking over three seeds.}
 \label{tab:candidate_router_main_results}
-\setlength{\tabcolsep}{3pt}
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{p{0.24\textwidth}p{0.10\textwidth}p{0.13\textwidth}p{0.10\textwidth}p{0.11\textwidth}p{0.09\textwidth}p{0.10\textwidth}}
 \toprule
-Method & Routing level & Feature type & MRR & Delta vs Residual & Delta vs E5 & Oracle gap recovered \\
+Method & Routing level & Feature type & MRR & $\Delta$ Residual & $\Delta$ E5 & Oracle recovery \\
 \midrule
 Residual-only & fixed & structural & 0.2930 & 0.0000 & -0.0051 & 0.0\% \\
 Clean rule & query & strict clean & 0.2943 & +0.0012 & -0.0039 & 3.0\% \\
