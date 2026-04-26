@@ -12,7 +12,7 @@
 \usepackage{multirow}
 \usepackage{array}
 \usepackage{amsmath,amssymb}
-\usepackage[hypertexnames=false]{hyperref}
+\usepackage[hidelinks,hypertexnames=false]{hyperref}
 \usepackage[nameinlink,noabbrev]{cleveref}
 \usepackage{enumitem}
 \usepackage{float}
@@ -160,7 +160,7 @@ OpenBG-IMG & 27{,}910 & 136 & 220{,}087 & 5{,}000 & 10{,}000 & 14{,}690 & 52.63\
 
 The most important property of the current \texttt{paper\_split} is the asymmetry between target position and image availability. On the head side, target entities may still be image-available. On the tail side, target entities are effectively always \texttt{no\_img} under the current test distribution.
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Test-time target-side regime counts under the current OpenBG-IMG \texttt{paper\_split}. Percentages are computed over all 20{,}000 bidirectional query instances.}
 \label{tab:protocol_test_regime_counts}
@@ -591,25 +591,24 @@ RQ4 asks whether the limitation of strict query-level clean routing is caused by
 \begin{table}[t]
 \centering
 \small
-\caption{Candidate-aware full-ranking router results on OpenBG-IMG. All candidate-aware variants are evaluated by full filtered ranking over three seeds.}
+\caption{Main selective activation results on OpenBG-IMG. E5 is the strongest strict query-level clean router, while CA-S1/CA-S2/CA-S3 are candidate-level routers evaluated by full filtered ranking over three seeds.}
 \label{tab:candidate_router_main_results}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{p{0.20\textwidth}p{0.10\textwidth}p{0.13\textwidth}p{0.14\textwidth}ccccccc}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{0.24\textwidth}p{0.10\textwidth}p{0.13\textwidth}p{0.10\textwidth}p{0.11\textwidth}p{0.09\textwidth}p{0.10\textwidth}}
 \toprule
-Method & Routing level & Feature type & Objective & MRR & Hits@1 & Hits@3 & Hits@10 & Delta vs Residual & Delta vs E5 & Oracle gap recovered \\
+Method & Routing level & Feature type & MRR & Delta vs Residual & Delta vs E5 & Oracle gap recovered \\
 \midrule
-Residual-only & fixed & structural & none & 0.2930 & 0.2328 & 0.3306 & 0.4031 & 0.0000 & -0.0051 & 0.0\% \\
-Clean rule & query & strict clean & rule & 0.2943 & 0.2332 & 0.3328 & 0.4052 & +0.0012 & -0.0039 & 3.0\% \\
-Direction-specific threshold & query & strict clean & threshold & 0.2974 & 0.2338 & 0.3342 & 0.4125 & +0.0044 & -0.0007 & 10.8\% \\
-Regression-based clean router & query & strict clean & delta-RR regression & 0.2982 & 0.2331 & 0.3361 & 0.4151 & +0.0051 & 0.0000 & 12.6\% \\
-CA-S1 clean candidate & candidate & clean candidate & pairwise ranking & 0.2503 $\pm$ 0.0054 & 0.1838 $\pm$ 0.0064 & 0.2864 $\pm$ 0.0052 & 0.3828 $\pm$ 0.0036 & -0.0427 & -0.0479 & -105.0\% \\
-CA-S2 score-aware & candidate & score-aware & pairwise ranking & 0.3142 $\pm$ 0.0010 & 0.2538 $\pm$ 0.0008 & 0.3603 $\pm$ 0.0016 & 0.4190 $\pm$ 0.0029 & +0.0211 & +0.0160 & 51.9\% \\
-CA-S3 clean + score & candidate & clean + score-aware & pairwise ranking & 0.3135 $\pm$ 0.0010 & 0.2535 $\pm$ 0.0011 & 0.3584 $\pm$ 0.0021 & 0.4180 $\pm$ 0.0028 & +0.0204 & +0.0153 & 50.2\% \\
-Oracle routing & oracle & answer-aware & post-hoc max & 0.3337 & 0.2645 & 0.3775 & 0.4541 & +0.0407 & +0.0356 & 100.0\% \\
+Residual-only & fixed & structural & 0.2930 & 0.0000 & -0.0051 & 0.0\% \\
+Clean rule & query & strict clean & 0.2943 & +0.0012 & -0.0039 & 3.0\% \\
+Direction-specific threshold & query & strict clean & 0.2974 & +0.0044 & -0.0007 & 10.8\% \\
+Regression-based clean router & query & strict clean & 0.2982 & +0.0051 & 0.0000 & 12.6\% \\
+CA-S1 clean candidate & candidate & clean candidate & 0.2503 $\pm$ 0.0054 & -0.0427 & -0.0479 & -105.0\% \\
+CA-S2 score-aware & candidate & score-aware & 0.3142 $\pm$ 0.0010 & +0.0211 & +0.0160 & 51.9\% \\
+CA-S3 clean + score & candidate & clean + score-aware & 0.3135 $\pm$ 0.0010 & +0.0204 & +0.0153 & 50.2\% \\
+Oracle routing & oracle & answer-aware & 0.3337 & +0.0407 & +0.0356 & 100.0\% \\
 \bottomrule
 \end{tabular}
-}
-\vspace{0.4ex}\caption*{\footnotesize E5 denotes the regression-based clean router. Oracle routing is answer-aware and is shown only as an upper bound. CA-S2 and CA-S3 show that score-aware features are the dominant source of improvement.}
+\vspace{0.4ex}\caption*{\footnotesize E5 denotes the regression-based clean router. Oracle routing is answer-aware and is shown only as an upper bound. Hits metrics are omitted from this main table to emphasize the MRR-based selective-activation conclusion.}
 \end{table}
 
 \Cref{tab:candidate_router_main_results} shows that candidate-level score-aware routing substantially changes the strength of the result. CA-S1, which uses clean candidate metadata without score-aware features, performs poorly overall at 0.2503 MRR. This negative result is important: static candidate modality information alone is not enough to decide expert usefulness and can be globally harmful. By contrast, CA-S2 reaches 0.3142 $\pm$ 0.0010 MRR, outperforming the strongest strict query-level clean router E5 by +0.0160 MRR and recovering 51.9\% of the Oracle headroom. CA-S3, which adds clean candidate metadata to the score-aware feature set, reaches 0.3135 $\pm$ 0.0010 MRR. Thus the main improvement comes from score-aware expert behavior rather than from static candidate modality metadata.
@@ -639,76 +638,9 @@ CA-S2 vs CA-S3 clean + & 0.3135 & 0.3142 & +0.0007 & [-0.0002, +0.0014] & 60000 
 
 \Cref{tab:candidate_router_significance} confirms that the CA-S2 and CA-S3 improvements over both \texttt{Residual-only} and E5 are statistically supported under paired query-level bootstrap. CA-S2 improves over E5 by +0.0160 MRR with 95\% CI [+0.0139, +0.0181], and CA-S3 improves over E5 by +0.0153 MRR with 95\% CI [+0.0132, +0.0174]. The direct CA-S2 versus CA-S3 comparison is small and not statistically decisive because its confidence interval crosses zero. We therefore treat CA-S2 as the numerically strongest and more parsimonious score-aware candidate router, while describing CA-S2 and CA-S3 as similarly strong score-aware variants rather than claiming that CA-S2 reliably dominates CA-S3.
 
-\begin{table}[t]
-\centering
-\small
-\caption{Candidate-aware full-ranking results by target-side regime.}
-\label{tab:candidate_router_subgroup_results}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{p{0.18\textwidth}p{0.14\textwidth}ccccc}
-\toprule
-Method & Regime & Count/seed & Gate MRR & Residual MRR & Method MRR & Delta vs Residual \\
-\midrule
-CA-S1 clean candidate & head\_has\_img & 7048 & 0.0134 & 0.0017 $\pm$ 0.0001 & 0.0052 $\pm$ 0.0004 & +0.0034 $\pm$ 0.0003 \\
-CA-S1 clean candidate & head\_no\_img & 2952 & 0.0123 & 0.0055 $\pm$ 0.0003 & 0.0180 $\pm$ 0.0013 & +0.0125 $\pm$ 0.0015 \\
-CA-S1 clean candidate & tail\_no\_img & 10000 & 0.3945 & 0.5832 $\pm$ 0.0015 & 0.4917 $\pm$ 0.0103 & -0.0916 $\pm$ 0.0116 \\
-CA-S2 score-aware & head\_has\_img & 7048 & 0.0134 & 0.0017 $\pm$ 0.0001 & 0.0032 $\pm$ 0.0002 & +0.0015 $\pm$ 0.0001 \\
-CA-S2 score-aware & head\_no\_img & 2952 & 0.0123 & 0.0055 $\pm$ 0.0003 & 0.0081 $\pm$ 0.0004 & +0.0026 $\pm$ 0.0003 \\
-CA-S2 score-aware & tail\_no\_img & 10000 & 0.3945 & 0.5832 $\pm$ 0.0015 & 0.6236 $\pm$ 0.0019 & +0.0404 $\pm$ 0.0025 \\
-CA-S3 clean + score & head\_has\_img & 7048 & 0.0134 & 0.0017 $\pm$ 0.0001 & 0.0034 $\pm$ 0.0002 & +0.0017 $\pm$ 0.0001 \\
-CA-S3 clean + score & head\_no\_img & 2952 & 0.0123 & 0.0055 $\pm$ 0.0003 & 0.0079 $\pm$ 0.0007 & +0.0024 $\pm$ 0.0004 \\
-CA-S3 clean + score & tail\_no\_img & 10000 & 0.3945 & 0.5832 $\pm$ 0.0015 & 0.6222 $\pm$ 0.0016 & +0.0389 $\pm$ 0.0013 \\
-\bottomrule
-\end{tabular}
-}
-\vspace{0.4ex}\caption*{\footnotesize The overall gain is primarily driven by the tail-side regime, while head-side gains remain small in absolute MRR.}
-\end{table}
-
 \Cref{tab:candidate_router_subgroup_results} explains where the candidate-level gain comes from. CA-S1 helps the two head-side regimes but severely degrades the dominant \texttt{tail\_no\_img} regime, producing a large global loss. In contrast, CA-S2 and CA-S3 improve mainly in \texttt{tail\_no\_img}, with gains of +0.0404 and +0.0389 MRR over \texttt{Residual-only}, respectively. This shifts the mechanism explanation away from image availability alone. The strongest candidate routers do not simply activate fusion where images are present; they use expert score patterns to make sparse corrections in the globally dominant structure-favorable region.
 
-\begin{table}[t]
-\centering
-\small
-\caption{Overall alpha behavior of candidate-aware full-ranking routers.}
-\label{tab:candidate_router_alpha_overall}
-\begin{tabular}{p{0.22\textwidth}cccc}
-\toprule
-Method & Mean alpha & Target alpha & Target/mean alpha & MRR gain vs Residual \\
-\midrule
-CA-S1 clean candidate & 0.3811 $\pm$ 0.0000 & 0.2570 $\pm$ 0.0000 & 0.6744 & -0.0427 $\pm$ 0.0061 \\
-CA-S2 score-aware & 0.0470 $\pm$ 0.0001 & 0.1964 $\pm$ 0.0084 & 4.1768 & +0.0211 $\pm$ 0.0012 \\
-CA-S3 clean + score & 0.0480 $\pm$ 0.0004 & 0.2016 $\pm$ 0.0085 & 4.1997 & +0.0204 $\pm$ 0.0007 \\
-\bottomrule
-\end{tabular}
-\vspace{0.4ex}\caption*{\footnotesize The target/mean alpha ratio summarizes how selectively the router raises fusion weight on the correct entity.}
-\end{table}
-
-\begin{table}[t]
-\centering
-\small
-\caption{Alpha behavior of candidate-aware full-ranking routers by target-side regime.}
-\label{tab:candidate_router_alpha_behavior}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{p{0.17\textwidth}p{0.13\textwidth}ccccc}
-\toprule
-Method & Regime & Mean alpha & Target alpha & Target/mean alpha & MRR gain vs Residual & MRR delta vs Gate \\
-\midrule
-CA-S1 clean candidate & head\_has\_img & 0.1317 $\pm$ 0.0000 & 0.0379 $\pm$ 0.0000 & 0.2877 & +0.0034 $\pm$ 0.0003 & -0.0082 \\
-CA-S1 clean candidate & head\_no\_img & 0.1350 $\pm$ 0.0000 & 0.2855 $\pm$ 0.0000 & 2.1152 & +0.0125 $\pm$ 0.0015 & +0.0057 \\
-CA-S1 clean candidate & tail\_no\_img & 0.6296 $\pm$ 0.0000 & 0.4031 $\pm$ 0.0000 & 0.6402 & -0.0916 $\pm$ 0.0116 & +0.0971 \\
-CA-S2 score-aware & head\_has\_img & 0.0912 $\pm$ 0.0000 & 0.0114 $\pm$ 0.0011 & 0.1252 & +0.0015 $\pm$ 0.0001 & -0.0102 \\
-CA-S2 score-aware & head\_no\_img & 0.0827 $\pm$ 0.0000 & 0.0202 $\pm$ 0.0003 & 0.2446 & +0.0026 $\pm$ 0.0003 & -0.0041 \\
-CA-S2 score-aware & tail\_no\_img & 0.0054 $\pm$ 0.0001 & 0.3788 $\pm$ 0.0176 & 70.5009 & +0.0404 $\pm$ 0.0025 & +0.2291 \\
-CA-S3 clean + score & head\_has\_img & 0.0915 $\pm$ 0.0001 & 0.0137 $\pm$ 0.0012 & 0.1501 & +0.0017 $\pm$ 0.0001 & -0.0099 \\
-CA-S3 clean + score & head\_no\_img & 0.0830 $\pm$ 0.0001 & 0.0218 $\pm$ 0.0008 & 0.2623 & +0.0024 $\pm$ 0.0004 & -0.0043 \\
-CA-S3 clean + score & tail\_no\_img & 0.0070 $\pm$ 0.0008 & 0.3871 $\pm$ 0.0179 & 55.0089 & +0.0389 $\pm$ 0.0013 & +0.2277 \\
-\bottomrule
-\end{tabular}
-}
-\vspace{0.4ex}\caption*{\footnotesize Mean alpha averages the router weight over all ranked candidates, whereas target alpha is the weight assigned to the correct entity. Values show that score-aware routers remain mostly structural over the candidate set but assign larger fusion weight to target candidates.}
-\end{table}
-
-\Cref{tab:candidate_router_alpha_overall,tab:candidate_router_alpha_behavior} provide diagnostic evidence for this sparse-correction behavior. Overall, CA-S2 has mean alpha 0.0470 but target alpha 0.1964, while CA-S3 has mean alpha 0.0480 but target alpha 0.2016. In \texttt{tail\_no\_img}, the separation is even sharper: CA-S2 has mean alpha 0.0054 but target alpha 0.3788, and CA-S3 has mean alpha 0.0070 but target alpha 0.3871. Target alpha is computed only after evaluation to diagnose behavior; it is not a router feature. The pattern suggests that score-aware candidate routing does not broadly switch the system to fusion. Instead, it keeps most candidate weights structural while assigning much higher fusion weight to the correct target candidates in diagnostic analysis, especially in the regime where global multimodal activation would be risky.
+\Cref{tab:candidate_router_alpha_overall,tab:candidate_router_alpha_behavior} provide diagnostic evidence for this sparse-correction behavior. Overall, CA-S2 has mean alpha 0.0470 but target alpha 0.1964, while CA-S3 has mean alpha 0.0480 but target alpha 0.2016. In \texttt{tail\_no\_img}, the separation is even sharper: CA-S2 has mean alpha 0.0054 but target alpha 0.3788, and CA-S3 has mean alpha 0.0070 but target alpha 0.3871. Target alpha is computed only after evaluation to diagnose behavior; it is not a router feature. Full subgroup and alpha diagnostics are provided in Appendix~\ref{app:candidate_router_diagnostics}. The pattern suggests that score-aware candidate routing does not broadly switch the system to fusion. Instead, it keeps most candidate weights structural while assigning much higher fusion weight to the correct target candidates in diagnostic analysis, especially in the regime where global multimodal activation would be risky.
 
 \subsection{Integrated Discussion}
 The combined evidence across RQ1--RQ4 supports a more refined conclusion than the earlier paper version. Under the current OpenBG-IMG protocol, multimodal gain is real but bounded, and a lightweight naive clean router is not sufficient to exploit it. However, this weakness should not be interpreted as evidence that deployable selective activation is impossible in principle. Instead, the results identify three successive bottlenecks. First, the policy boundary is too coarse when a single global threshold is used; direction-specific thresholding shows that policy granularity matters. Second, the original binary gain label is too coarse as a training target; regression-based routing shows that supervision form matters as well. Third, strict query-level metadata remains too coarse even after these improvements; candidate-level score-aware routing shows that expert score patterns provide substantially stronger non-answer-aware signals.
@@ -775,6 +707,76 @@ XGBoost & 0.01 & 0.9 & 0.2939 \\
 XGBoost & 0.02 & 0.9 & 0.2938 \\
 \bottomrule
 \end{tabular}
+\end{table}
+
+\section{Candidate-level Router Diagnostics}
+\label{app:candidate_router_diagnostics}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Candidate-aware full-ranking results by target-side regime.}
+\label{tab:candidate_router_subgroup_results}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{p{0.18\textwidth}p{0.14\textwidth}ccccc}
+\toprule
+Method & Regime & Count/seed & Gate MRR & Residual MRR & Method MRR & Delta vs Residual \\
+\midrule
+CA-S1 clean candidate & head\_has\_img & 7048 & 0.0134 & 0.0017 $\pm$ 0.0001 & 0.0052 $\pm$ 0.0004 & +0.0034 $\pm$ 0.0003 \\
+CA-S1 clean candidate & head\_no\_img & 2952 & 0.0123 & 0.0055 $\pm$ 0.0003 & 0.0180 $\pm$ 0.0013 & +0.0125 $\pm$ 0.0015 \\
+CA-S1 clean candidate & tail\_no\_img & 10000 & 0.3945 & 0.5832 $\pm$ 0.0015 & 0.4917 $\pm$ 0.0103 & -0.0916 $\pm$ 0.0116 \\
+CA-S2 score-aware & head\_has\_img & 7048 & 0.0134 & 0.0017 $\pm$ 0.0001 & 0.0032 $\pm$ 0.0002 & +0.0015 $\pm$ 0.0001 \\
+CA-S2 score-aware & head\_no\_img & 2952 & 0.0123 & 0.0055 $\pm$ 0.0003 & 0.0081 $\pm$ 0.0004 & +0.0026 $\pm$ 0.0003 \\
+CA-S2 score-aware & tail\_no\_img & 10000 & 0.3945 & 0.5832 $\pm$ 0.0015 & 0.6236 $\pm$ 0.0019 & +0.0404 $\pm$ 0.0025 \\
+CA-S3 clean + score & head\_has\_img & 7048 & 0.0134 & 0.0017 $\pm$ 0.0001 & 0.0034 $\pm$ 0.0002 & +0.0017 $\pm$ 0.0001 \\
+CA-S3 clean + score & head\_no\_img & 2952 & 0.0123 & 0.0055 $\pm$ 0.0003 & 0.0079 $\pm$ 0.0007 & +0.0024 $\pm$ 0.0004 \\
+CA-S3 clean + score & tail\_no\_img & 10000 & 0.3945 & 0.5832 $\pm$ 0.0015 & 0.6222 $\pm$ 0.0016 & +0.0389 $\pm$ 0.0013 \\
+\bottomrule
+\end{tabular}
+}
+\vspace{0.4ex}\caption*{\footnotesize The overall gain is primarily driven by the tail-side regime, while head-side gains remain small in absolute MRR.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Overall alpha behavior of candidate-aware full-ranking routers.}
+\label{tab:candidate_router_alpha_overall}
+\begin{tabular}{p{0.22\textwidth}cccc}
+\toprule
+Method & Mean alpha & Target alpha & Target/mean alpha & MRR gain vs Residual \\
+\midrule
+CA-S1 clean candidate & 0.3811 $\pm$ 0.0000 & 0.2570 $\pm$ 0.0000 & 0.6744 & -0.0427 $\pm$ 0.0061 \\
+CA-S2 score-aware & 0.0470 $\pm$ 0.0001 & 0.1964 $\pm$ 0.0084 & 4.1768 & +0.0211 $\pm$ 0.0012 \\
+CA-S3 clean + score & 0.0480 $\pm$ 0.0004 & 0.2016 $\pm$ 0.0085 & 4.1997 & +0.0204 $\pm$ 0.0007 \\
+\bottomrule
+\end{tabular}
+\vspace{0.4ex}\caption*{\footnotesize The target/mean alpha ratio summarizes how selectively the router raises fusion weight on the correct entity.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Alpha behavior of candidate-aware full-ranking routers by target-side regime.}
+\label{tab:candidate_router_alpha_behavior}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{p{0.17\textwidth}p{0.13\textwidth}ccccc}
+\toprule
+Method & Regime & Mean alpha & Target alpha & Target/mean alpha & MRR gain vs Residual & MRR delta vs Gate \\
+\midrule
+CA-S1 clean candidate & head\_has\_img & 0.1317 $\pm$ 0.0000 & 0.0379 $\pm$ 0.0000 & 0.2877 & +0.0034 $\pm$ 0.0003 & -0.0082 \\
+CA-S1 clean candidate & head\_no\_img & 0.1350 $\pm$ 0.0000 & 0.2855 $\pm$ 0.0000 & 2.1152 & +0.0125 $\pm$ 0.0015 & +0.0057 \\
+CA-S1 clean candidate & tail\_no\_img & 0.6296 $\pm$ 0.0000 & 0.4031 $\pm$ 0.0000 & 0.6402 & -0.0916 $\pm$ 0.0116 & +0.0971 \\
+CA-S2 score-aware & head\_has\_img & 0.0912 $\pm$ 0.0000 & 0.0114 $\pm$ 0.0011 & 0.1252 & +0.0015 $\pm$ 0.0001 & -0.0102 \\
+CA-S2 score-aware & head\_no\_img & 0.0827 $\pm$ 0.0000 & 0.0202 $\pm$ 0.0003 & 0.2446 & +0.0026 $\pm$ 0.0003 & -0.0041 \\
+CA-S2 score-aware & tail\_no\_img & 0.0054 $\pm$ 0.0001 & 0.3788 $\pm$ 0.0176 & 70.5009 & +0.0404 $\pm$ 0.0025 & +0.2291 \\
+CA-S3 clean + score & head\_has\_img & 0.0915 $\pm$ 0.0001 & 0.0137 $\pm$ 0.0012 & 0.1501 & +0.0017 $\pm$ 0.0001 & -0.0099 \\
+CA-S3 clean + score & head\_no\_img & 0.0830 $\pm$ 0.0001 & 0.0218 $\pm$ 0.0008 & 0.2623 & +0.0024 $\pm$ 0.0004 & -0.0043 \\
+CA-S3 clean + score & tail\_no\_img & 0.0070 $\pm$ 0.0008 & 0.3871 $\pm$ 0.0179 & 55.0089 & +0.0389 $\pm$ 0.0013 & +0.2277 \\
+\bottomrule
+\end{tabular}
+}
+\vspace{0.4ex}\caption*{\footnotesize Mean alpha averages the router weight over all ranked candidates, whereas target alpha is the weight assigned to the correct entity. Values show that score-aware routers remain mostly structural over the candidate set but assign larger fusion weight to target candidates.}
 \end{table}
 
 \bibliographystyle{plain}
