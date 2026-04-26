@@ -1,0 +1,88 @@
+{
+  "dev": {
+    "rows": 5781007,
+    "queries": 30000,
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "target_rows": 30000,
+    "avg_candidates_per_query": 192.70023333333333,
+    "target_regime_counts": {
+      "head_has_img": 2074786,
+      "head_no_img": 881303,
+      "tail_no_img": 2824918
+    },
+    "missing_values_in_deployable_features": {
+      "direction": 0,
+      "relation_id": 0,
+      "relation_gain_prior": 0,
+      "relation_fusion_win_rate": 0,
+      "relation_support": 0,
+      "relation_is_visual_prior": 0,
+      "observed_has_img": 0,
+      "observed_text_img_cosine": 0,
+      "observed_img_missing_replaced": 0,
+      "candidate_has_img": 0,
+      "candidate_text_img_cosine": 0,
+      "candidate_img_missing_replaced": 0,
+      "candidate_text_norm": 0,
+      "candidate_img_norm": 0,
+      "candidate_is_observed_entity": 0,
+      "score_gate": 0,
+      "score_residual": 0,
+      "score_diff": 0,
+      "score_mean": 0,
+      "score_abs_diff": 0,
+      "score_max": 0,
+      "gate_rank_in_union": 0,
+      "residual_rank_in_union": 0,
+      "in_gate_topk": 0,
+      "in_residual_topk": 0
+    }
+  },
+  "test": {
+    "rows": 11561410,
+    "queries": 60000,
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "target_rows": 60000,
+    "avg_candidates_per_query": 192.69016666666667,
+    "target_regime_counts": {
+      "head_has_img": 4170799,
+      "head_no_img": 1742607,
+      "tail_no_img": 5648004
+    },
+    "missing_values_in_deployable_features": {
+      "direction": 0,
+      "relation_id": 0,
+      "relation_gain_prior": 0,
+      "relation_fusion_win_rate": 0,
+      "relation_support": 0,
+      "relation_is_visual_prior": 0,
+      "observed_has_img": 0,
+      "observed_text_img_cosine": 0,
+      "observed_img_missing_replaced": 0,
+      "candidate_has_img": 0,
+      "candidate_text_img_cosine": 0,
+      "candidate_img_missing_replaced": 0,
+      "candidate_text_norm": 0,
+      "candidate_img_norm": 0,
+      "candidate_is_observed_entity": 0,
+      "score_gate": 0,
+      "score_residual": 0,
+      "score_diff": 0,
+      "score_mean": 0,
+      "score_abs_diff": 0,
+      "score_max": 0,
+      "gate_rank_in_union": 0,
+      "residual_rank_in_union": 0,
+      "in_gate_topk": 0,
+      "in_residual_topk": 0
+    }
+  }
+}

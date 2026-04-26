@@ -1,0 +1,13 @@
+{
+  "split": "test",
+  "seed": 1,
+  "direction": "both",
+  "top_k": 100,
+  "include_target": true,
+  "n_rows": 3851342,
+  "n_queries": 20000,
+  "avg_candidates_per_query": 192.5671,
+  "gate_run_dir": "ml\\artifacts\\outputs\\openbg_img_gate_only\\20260327_173820_seed1",
+  "residual_run_dir": "ml\\artifacts\\outputs\\openbg_img_residual_only\\20260326_171401_seed1",
+  "device": "cuda"
+}

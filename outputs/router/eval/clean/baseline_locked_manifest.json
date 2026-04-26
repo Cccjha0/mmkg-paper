@@ -1,0 +1,40 @@
+{
+  "dataset": "OpenBG-IMG paper_split",
+  "evaluation": "filtered ranking",
+  "direction": "both",
+  "experts": [
+    "Gate-only",
+    "Residual-only"
+  ],
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "n_queries": 60000,
+  "tolerance": 0.0005,
+  "residual_mrr": 0.2930494303909519,
+  "clean_rule_mrr": 0.29428194121179074,
+  "naive_global_clean_router_mrr": 0.2938637706319794,
+  "direction_specific_mrr": 0.29743590499632216,
+  "regression_clean_router_mrr": 0.29818238527999713,
+  "oracle_mrr": 0.33373734067328487,
+  "input_files": {
+    "clean_rule": "outputs/router/routing/clean/test_router_predictions_clean_rule_delta_0.01_tau_0.5_rule.csv",
+    "naive_global_clean_router": "outputs/router/routing/clean/test_router_predictions_clean_logistic_delta_0.01_tau_0.9_C4.csv",
+    "direction_specific_threshold": "outputs/router/eval/clean/dual_threshold_scan_clean_logistic_delta_0.01_C4_query_rows.csv",
+    "regression_clean_router": "outputs/router/eval/clean/regression_router_scan_xgb_C4_query_rows.csv"
+  },
+  "selected_configs": {
+    "clean_rule": "delta=0.01|tau=0.5|rule",
+    "naive_global_clean_router": "logistic|delta=0.01|tau=0.9|C4",
+    "direction_specific_threshold": "logistic|delta=0.01|C4|tau_head=0.3|tau_tail=0.9",
+    "regression_clean_router": "xgb|C4|theta=0.00",
+    "oracle": "per-query max(rr_gate, rr_residual); not query-time legal"
+  },
+  "outputs": {
+    "summary": "outputs/router/eval/clean/baseline_locked_summary.csv",
+    "query_rows": "outputs/router/eval/clean/baseline_locked_query_rows.csv",
+    "manifest": "outputs/router/eval/clean/baseline_locked_manifest.json"
+  }
+}

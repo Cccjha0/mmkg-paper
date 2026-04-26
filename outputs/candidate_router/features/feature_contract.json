@@ -1,0 +1,140 @@
+{
+  "strict_clean_features": [
+    "direction",
+    "relation_id",
+    "relation_gain_prior",
+    "relation_fusion_win_rate",
+    "relation_support",
+    "relation_is_visual_prior",
+    "observed_has_img",
+    "observed_text_img_cosine",
+    "observed_img_missing_replaced",
+    "candidate_has_img",
+    "candidate_text_img_cosine",
+    "candidate_img_missing_replaced",
+    "candidate_text_norm",
+    "candidate_img_norm",
+    "candidate_is_observed_entity"
+  ],
+  "score_aware_features": [
+    "score_gate",
+    "score_residual",
+    "score_diff",
+    "score_mean",
+    "score_abs_diff",
+    "score_max",
+    "gate_rank_in_union",
+    "residual_rank_in_union",
+    "in_gate_topk",
+    "in_residual_topk"
+  ],
+  "metadata_and_label_columns": [
+    "query_id",
+    "seed",
+    "split",
+    "head_id",
+    "tail_id",
+    "observed_entity_id",
+    "candidate_entity_id",
+    "target_entity_id",
+    "is_target",
+    "target_regime"
+  ],
+  "forbidden_features": [
+    "is_target",
+    "target_entity_id",
+    "target_has_img",
+    "target_regime",
+    "rank_gate",
+    "rank_residual",
+    "rr_gate",
+    "rr_residual",
+    "rr_gain",
+    "fusion_correct_score",
+    "struct_correct_score",
+    "correct_score"
+  ],
+  "feature_sets": {
+    "CA-S1": [
+      "direction",
+      "relation_id",
+      "relation_gain_prior",
+      "relation_fusion_win_rate",
+      "relation_support",
+      "relation_is_visual_prior",
+      "observed_has_img",
+      "observed_text_img_cosine",
+      "observed_img_missing_replaced",
+      "candidate_has_img",
+      "candidate_text_img_cosine",
+      "candidate_img_missing_replaced",
+      "candidate_text_norm",
+      "candidate_img_norm",
+      "candidate_is_observed_entity"
+    ],
+    "CA-S2": [
+      "direction",
+      "relation_id",
+      "relation_gain_prior",
+      "relation_fusion_win_rate",
+      "relation_support",
+      "relation_is_visual_prior",
+      "score_gate",
+      "score_residual",
+      "score_diff",
+      "score_mean",
+      "score_abs_diff",
+      "score_max",
+      "gate_rank_in_union",
+      "residual_rank_in_union",
+      "in_gate_topk",
+      "in_residual_topk"
+    ],
+    "CA-S3": [
+      "direction",
+      "relation_id",
+      "relation_gain_prior",
+      "relation_fusion_win_rate",
+      "relation_support",
+      "relation_is_visual_prior",
+      "observed_has_img",
+      "observed_text_img_cosine",
+      "observed_img_missing_replaced",
+      "candidate_has_img",
+      "candidate_text_img_cosine",
+      "candidate_img_missing_replaced",
+      "candidate_text_norm",
+      "candidate_img_norm",
+      "candidate_is_observed_entity",
+      "score_gate",
+      "score_residual",
+      "score_diff",
+      "score_mean",
+      "score_abs_diff",
+      "score_max",
+      "gate_rank_in_union",
+      "residual_rank_in_union",
+      "in_gate_topk",
+      "in_residual_topk"
+    ]
+  },
+  "sources": {
+    "dev_scores": [
+      "outputs/candidate_router/scores/dev_seed1_top100.parquet",
+      "outputs/candidate_router/scores/dev_seed2_top100.parquet",
+      "outputs/candidate_router/scores/dev_seed3_top100.parquet"
+    ],
+    "test_scores": [
+      "outputs/candidate_router/scores/test_seed1_top100.parquet",
+      "outputs/candidate_router/scores/test_seed2_top100.parquet",
+      "outputs/candidate_router/scores/test_seed3_top100.parquet"
+    ],
+    "relation_priors": "outputs/router/raw/dev_relation_priors.csv",
+    "cache_dir": "data/cache/openbg_img",
+    "top_k": 100
+  },
+  "leakage_check": {
+    "forbidden_in_deployable_features": [],
+    "note": "Forbidden columns may appear only as metadata, labels, evaluation fields, or post-hoc analysis fields."
+  }
+}

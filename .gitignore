@@ -50,6 +50,8 @@ venv/
 
 # large router query-row exports
 outputs/router/eval/clean/*_query_rows.csv
+outputs/candidate_router/scores/*.parquet
+outputs/candidate_router/features/*.parquet
 
 # OS
 .DS_Store

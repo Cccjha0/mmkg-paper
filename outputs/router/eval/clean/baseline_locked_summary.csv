@@ -1,0 +1,7 @@
+method,role,is_query_time_legal,n_queries,mrr,hits1,hits3,hits10,fusion_coverage,source
+Residual-only,fixed structural expert,True,60000,0.2930494303909519,0.2328,0.33065,0.40305,,baseline_locked_query_rows.csv
+Clean rule,legal rule baseline,True,60000,0.29428194121179074,0.23323333333333332,0.33276666666666666,0.40525,0.0187,outputs/router/routing/clean/test_router_predictions_clean_rule_delta_0.01_tau_0.5_rule.csv
+Naive global clean router,global-threshold learned router,True,60000,0.2938637706319794,0.23323333333333332,0.3315166666666667,0.40473333333333333,0.00465,outputs/router/routing/clean/test_router_predictions_clean_logistic_delta_0.01_tau_0.9_C4.csv
+Direction-specific threshold,structured clean policy,True,60000,0.29743590499632216,0.23383333333333334,0.33415,0.41251666666666664,0.30705,outputs/router/eval/clean/dual_threshold_scan_clean_logistic_delta_0.01_C4_query_rows.csv#tau_head=0.3|tau_tail=0.9
+Regression-based clean router,strongest current clean router,True,60000,0.29818238527999713,0.23311666666666667,0.3361,0.41513333333333335,0.4581,outputs/router/eval/clean/regression_router_scan_xgb_C4_query_rows.csv#theta=0.00
+Oracle routing,post-hoc upper bound,False,60000,0.33373734067328487,0.2645166666666667,0.3774666666666667,0.45411666666666667,0.48428333333333334,"max(rr_gate, rr_residual) recomputed from locked query rows"
