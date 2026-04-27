@@ -52,6 +52,10 @@ venv/
 outputs/router/eval/clean/*_query_rows.csv
 outputs/candidate_router/scores/*.parquet
 outputs/candidate_router/features/*.parquet
+outputs/appendix_seed20260427/candidate_router/scores/*.parquet
+outputs/appendix_seed20260427/candidate_router/features/*.parquet
+outputs/appendix_seed20260427/router/shared_targets/*.parquet
+outputs/appendix_seed20260427/router/shared_targets_*/*.parquet
 
 # OS
 .DS_Store
