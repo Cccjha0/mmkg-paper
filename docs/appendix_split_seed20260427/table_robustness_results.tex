@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering
+\caption{Appendix robustness results on the OpenBG-IMG \texttt{appendix\_split\_seed20260427}. The split is used only as a robustness check.}
+\label{tab:appendix_split_robustness_results}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llcrrr}
+\toprule
+Method & Level & Feature type & MRR & $\Delta$ Residual & $\Delta$ E5 \\
+\midrule
+Residual-only & fixed & structural & 0.2944 $\pm$ 0.0008 & -- & -- \\
+Gate-only & fixed & fusion & 0.1718 $\pm$ 0.0032 & -0.1226 & -- \\
+E5 regression clean router & query & strict clean & 0.2992 & 0.0048 & -- \\
+CA-S2 score-aware candidate router & candidate & score-aware & 0.3134 $\pm$ 0.0015 & 0.0190 & 0.0142 \\
+\bottomrule
+\end{tabular}
+\end{table}

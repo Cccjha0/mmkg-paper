@@ -1,0 +1,145 @@
+{
+  "split": "appendix_split_seed20260427",
+  "purpose": "appendix robustness check only",
+  "models": {
+    "Residual-only": {
+      "level": "fixed",
+      "feature_type": "structural",
+      "mrr": 0.2943773805199027,
+      "mrr_std": 0.000822694320627983,
+      "hits1": 0.23465,
+      "hits3": 0.33186666666666664,
+      "hits10": 0.4036,
+      "seed_results": [
+        {
+          "seed": 1,
+          "n_queries": 20000,
+          "mrr": 0.2935618028270816,
+          "hits1": 0.2341,
+          "hits3": 0.3311,
+          "hits10": 0.40305
+        },
+        {
+          "seed": 2,
+          "n_queries": 20000,
+          "mrr": 0.29520701141663896,
+          "hits1": 0.2362,
+          "hits3": 0.3327,
+          "hits10": 0.4018
+        },
+        {
+          "seed": 3,
+          "n_queries": 20000,
+          "mrr": 0.29436332731598747,
+          "hits1": 0.23365,
+          "hits3": 0.3318,
+          "hits10": 0.40595
+        }
+      ]
+    },
+    "Gate-only": {
+      "level": "fixed",
+      "feature_type": "fusion",
+      "mrr": 0.17182692989121673,
+      "mrr_std": 0.00320763551041313,
+      "hits1": 0.09141666666666666,
+      "hits3": 0.20911666666666665,
+      "hits10": 0.326,
+      "delta_vs_residual": -0.12255045062868597,
+      "seed_results": [
+        {
+          "seed": 1,
+          "n_queries": 20000,
+          "mrr": 0.16827623860852556,
+          "hits1": 0.08445,
+          "hits3": 0.2096,
+          "hits10": 0.32295
+        },
+        {
+          "seed": 2,
+          "n_queries": 20000,
+          "mrr": 0.1726893849975424,
+          "hits1": 0.09445,
+          "hits3": 0.2082,
+          "hits10": 0.32475
+        },
+        {
+          "seed": 3,
+          "n_queries": 20000,
+          "mrr": 0.17451516606758224,
+          "hits1": 0.09535,
+          "hits3": 0.20955,
+          "hits10": 0.3303
+        }
+      ]
+    },
+    "E5 regression clean router": {
+      "level": "query",
+      "feature_type": "strict clean",
+      "mrr": 0.2991593895050357,
+      "delta_vs_residual": 0.0047820089851329795,
+      "delta_vs_e5": null,
+      "source_file": "outputs/appendix_seed20260427/router/eval/e5_xgb_c4_eval.csv"
+    },
+    "CA-S2 score-aware candidate router": {
+      "level": "candidate",
+      "feature_type": "score-aware",
+      "mrr": 0.3134000547197688,
+      "mrr_std": 0.0015366655242784607,
+      "hits1": 0.25466666666666665,
+      "hits3": 0.3572,
+      "hits10": 0.41245,
+      "delta_vs_residual": 0.019022674199866085,
+      "delta_vs_e5": 0.014240665214733106,
+      "seed_results": [
+        {
+          "seed": 1,
+          "n_queries": 20000,
+          "mrr": 0.3151279400350862,
+          "hits1": 0.256,
+          "hits3": 0.3586,
+          "hits10": 0.41585,
+          "delta_vs_residual": 0.0215661372080045,
+          "delta_vs_gate": 0.1096471439478821,
+          "mean_target_alpha": 0.3717293577861859,
+          "mean_alpha": 0.0779668762678295
+        },
+        {
+          "seed": 2,
+          "n_queries": 20000,
+          "mrr": 0.3121866121531847,
+          "hits1": 0.25345,
+          "hits3": 0.3547,
+          "hits10": 0.41265,
+          "delta_vs_residual": 0.0169796007365456,
+          "delta_vs_gate": 0.112645568317287,
+          "mean_target_alpha": 0.3735347723845979,
+          "mean_alpha": 0.0785917238634981
+        },
+        {
+          "seed": 3,
+          "n_queries": 20000,
+          "mrr": 0.3128856119710355,
+          "hits1": 0.25455,
+          "hits3": 0.3583,
+          "hits10": 0.40885,
+          "delta_vs_residual": 0.018522284655048,
+          "delta_vs_gate": 0.1108454704170644,
+          "mean_target_alpha": 0.3187070324284606,
+          "mean_alpha": 0.0701094118021574
+        }
+      ]
+    }
+  },
+  "trend_check": {
+    "role_modality_asymmetry_holds": true,
+    "residual_above_gate_overall": true,
+    "e5_modest_gain_over_residual": true,
+    "ca_s2_above_e5": true
+  },
+  "notes": [
+    "The appendix split is used only as a robustness check and was selected by split statistics, not model results.",
+    "E5 is reported by MRR only because the exported clean-router query rows encode rank_final as zero in this run; MRR is read from rr_final/overall_mrr.",
+    "Large candidate-score and feature parquet intermediates are intentionally not committed."
+  ]
+}
