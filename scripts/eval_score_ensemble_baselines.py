@@ -18,7 +18,6 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts.eval_candidate_soft_router_full import (
-    metric_bundle,
     score_full_matrix,
     target_ids_for_direction,
     target_ranks_and_rr,
@@ -34,6 +33,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--score-dir", default="outputs/candidate_router/scores")
     parser.add_argument("--output-dir", default="outputs/score_ensemble/eval")
     parser.add_argument("--paper-table-dir", default="docs/paper_tables")
+    parser.add_argument(
+        "--paper-figures-dir",
+        default="docs/paper/figures",
+        help="Optional mirror location for LaTeX table inputs used directly by docs/paper/manuscript_main.tex.",
+    )
     parser.add_argument("--split", default="test", choices=["test"], help="Final reporting split.")
     parser.add_argument("--selection-split", default="dev", choices=["dev"], help="Split used for alpha selection.")
     parser.add_argument(
@@ -45,6 +49,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--chunk-size", type=int, default=None)
     parser.add_argument("--query-batch-size", type=int, default=None)
     parser.add_argument("--max-queries", type=int, default=None)
+    parser.add_argument(
+        "--relation-min-support",
+        type=int,
+        default=20,
+        help="Minimum dev queries required before selecting a relation-specific alpha; lower-support relations fall back to global alpha.",
+    )
     parser.add_argument("--baseline-summary", default="outputs/router/eval/clean/baseline_locked_summary.csv")
     parser.add_argument("--candidate-main-results", default="outputs/candidate_router/eval/tables/candidate_router_main_results.csv")
     return parser.parse_args()
@@ -141,14 +151,18 @@ def evaluate_split(
     query_model=None,
     selected_global_alpha: float | None = None,
     selected_direction_alpha: dict[str, float] | None = None,
+    selected_relation_alpha: dict[int, float] | None = None,
+    selected_relation_fallback_alpha: float | None = None,
 ) -> dict:
     alpha_rr: dict[float, list[float]] = {alpha: [] for alpha in alphas}
     alpha_direction_rr: dict[str, dict[float, list[float]]] = {
         "head": {alpha: [] for alpha in alphas},
         "tail": {alpha: [] for alpha in alphas},
     }
+    alpha_relation_rr: dict[int, dict[float, list[float]]] = defaultdict(lambda: {alpha: [] for alpha in alphas})
     global_rows: list[dict] = []
     direction_rows: list[dict] = []
+    relation_rows: list[dict] = []
     query_rows: list[dict] = []
     feature_rows: list[np.ndarray] = []
     labels: list[int] = []
@@ -193,6 +207,8 @@ def evaluate_split(
                     rr = eval_mixed_rr(gate_scores, residual_scores, target_ids, alpha)
                     alpha_rr[alpha].extend(rr)
                     alpha_direction_rr[direction][alpha].extend(rr)
+                    for relation_id, value in zip(q_cpu[:, 1].tolist(), rr):
+                        alpha_relation_rr[int(relation_id)][alpha].append(value)
 
                 if selected_global_alpha is not None:
                     rr = eval_mixed_rr(gate_scores, residual_scores, target_ids, selected_global_alpha)
@@ -200,6 +216,19 @@ def evaluate_split(
                 if selected_direction_alpha is not None:
                     rr = eval_mixed_rr(gate_scores, residual_scores, target_ids, selected_direction_alpha[direction])
                     direction_rows.extend({"mixed_rr": value} for value in rr)
+                if selected_relation_alpha is not None:
+                    fallback_alpha = selected_relation_fallback_alpha
+                    if fallback_alpha is None:
+                        fallback_alpha = selected_global_alpha if selected_global_alpha is not None else 0.0
+                    relation_alpha = np.array(
+                        [
+                            selected_relation_alpha.get(int(relation_id), float(fallback_alpha))
+                            for relation_id in q_cpu[:, 1].tolist()
+                        ],
+                        dtype=np.float32,
+                    )
+                    rr = eval_mixed_rr(gate_scores, residual_scores, target_ids, relation_alpha)
+                    relation_rows.extend({"mixed_rr": value} for value in rr)
                 if query_model is not None:
                     pred_alpha = query_model.predict_proba(feats)[:, 1].astype(np.float32)
                     rr = eval_mixed_rr(gate_scores, residual_scores, target_ids, pred_alpha)
@@ -208,8 +237,10 @@ def evaluate_split(
     return {
         "alpha_rr": alpha_rr,
         "alpha_direction_rr": alpha_direction_rr,
+        "alpha_relation_rr": {relation_id: dict(alpha_map) for relation_id, alpha_map in alpha_relation_rr.items()},
         "global_rows": global_rows,
         "direction_rows": direction_rows,
+        "relation_rows": relation_rows,
         "query_rows": query_rows,
         "features": np.concatenate(feature_rows, axis=0) if feature_rows else np.empty((0, 0), dtype=np.float32),
         "labels": np.array(labels, dtype=np.int64),
@@ -219,6 +250,44 @@ def evaluate_split(
 def best_alpha(alpha_rr: dict[float, list[float]]) -> tuple[float, float]:
     scored = [(alpha, float(np.mean(rr)) if rr else 0.0) for alpha, rr in alpha_rr.items()]
     return max(scored, key=lambda item: (item[1], -item[0]))
+
+
+def select_relation_alphas(
+    alpha_relation_rr: dict[int, dict[float, list[float]]],
+    *,
+    fallback_alpha: float,
+    min_support: int,
+) -> tuple[dict[int, float], dict]:
+    selected: dict[int, float] = {}
+    summary_rows = []
+    for relation_id, alpha_map in sorted(alpha_relation_rr.items()):
+        support = max((len(values) for values in alpha_map.values()), default=0)
+        if support >= min_support:
+            alpha, dev_mrr = best_alpha(alpha_map)
+            used_fallback = False
+        else:
+            alpha = fallback_alpha
+            dev_mrr = float(np.mean(alpha_map.get(fallback_alpha, []))) if alpha_map.get(fallback_alpha) else 0.0
+            used_fallback = True
+        selected[int(relation_id)] = float(alpha)
+        summary_rows.append(
+            {
+                "relation_id": int(relation_id),
+                "support": int(support),
+                "alpha": float(alpha),
+                "dev_mrr": float(dev_mrr),
+                "used_fallback": bool(used_fallback),
+            }
+        )
+    summary = {
+        "min_support": int(min_support),
+        "fallback_alpha": float(fallback_alpha),
+        "n_relations": len(summary_rows),
+        "n_relation_specific": sum(1 for row in summary_rows if not row["used_fallback"]),
+        "n_fallback": sum(1 for row in summary_rows if row["used_fallback"]),
+        "relations": summary_rows,
+    }
+    return selected, summary
 
 
 def rows_to_metrics(rows: list[dict]) -> dict:
@@ -311,7 +380,7 @@ def write_latex_table(path: Path, rows: list[dict], refs: dict) -> None:
         r"\begin{table}[t]",
         r"\centering",
         r"\small",
-        r"\caption{Simple score-ensemble baselines compared with CA-S2. Ensemble baselines use fixed Gate-only and Residual-only scores, select their policies on the development split, and are evaluated on the test split.}",
+        r"\caption{Simple score-ensemble baselines compared with CA-S2 under full filtered ranking. Ensemble baselines use fixed Gate-only and Residual-only scores, select their policies on the development split, and are evaluated on the test split.}",
         r"\label{tab:score_ensemble_baselines}",
         r"\setlength{\tabcolsep}{4pt}",
         r"\begin{tabular}{p{0.30\textwidth}p{0.12\textwidth}p{0.13\textwidth}ccc}",
@@ -325,7 +394,7 @@ def write_latex_table(path: Path, rows: list[dict], refs: dict) -> None:
         [
             r"\bottomrule",
             r"\end{tabular}",
-            r"\vspace{0.4ex}\caption*{\footnotesize The baselines test whether CA-S2 can be explained by fixed or query-level score averaging alone.}",
+            r"\vspace{0.4ex}\caption*{\footnotesize The baselines test whether CA-S2 can be explained by fixed, direction-specific, relation-specific, or query-level score averaging alone.}",
             r"\end{table}",
         ]
     )
@@ -355,6 +424,11 @@ def main() -> None:
     global_alpha, global_dev_mrr = best_alpha(dev["alpha_rr"])
     head_alpha, head_dev_mrr = best_alpha(dev["alpha_direction_rr"]["head"])
     tail_alpha, tail_dev_mrr = best_alpha(dev["alpha_direction_rr"]["tail"])
+    relation_alpha, relation_summary = select_relation_alphas(
+        dev["alpha_relation_rr"],
+        fallback_alpha=global_alpha,
+        min_support=args.relation_min_support,
+    )
 
     query_model = make_pipeline(
         StandardScaler(),
@@ -366,7 +440,8 @@ def main() -> None:
         "[INFO] selected policies: "
         f"global alpha={global_alpha:.2f} dev_mrr={global_dev_mrr:.4f}; "
         f"head alpha={head_alpha:.2f} dev_mrr={head_dev_mrr:.4f}; "
-        f"tail alpha={tail_alpha:.2f} dev_mrr={tail_dev_mrr:.4f}"
+        f"tail alpha={tail_alpha:.2f} dev_mrr={tail_dev_mrr:.4f}; "
+        f"relation-specific={relation_summary['n_relation_specific']} fallback={relation_summary['n_fallback']}"
     )
     print("[INFO] evaluating test split")
     test = evaluate_split(
@@ -380,6 +455,8 @@ def main() -> None:
         query_model=query_model,
         selected_global_alpha=global_alpha,
         selected_direction_alpha={"head": head_alpha, "tail": tail_alpha},
+        selected_relation_alpha=relation_alpha,
+        selected_relation_fallback_alpha=global_alpha,
     )
 
     rows = [
@@ -398,6 +475,14 @@ def main() -> None:
             rows_to_metrics(test["direction_rows"]),
             refs,
             f"head/tail alphas selected independently on dev MRR ({head_dev_mrr:.4f}/{tail_dev_mrr:.4f})",
+        ),
+        result_row(
+            "Relation-specific score interpolation",
+            "relation",
+            f"per-relation alpha; fallback alpha={global_alpha:.2f}; min_support={args.relation_min_support}",
+            rows_to_metrics(test["relation_rows"]),
+            refs,
+            f"relation alphas selected on dev MRR; {relation_summary['n_relation_specific']} relations selected, {relation_summary['n_fallback']} used fallback",
         ),
         result_row(
             "Query-level soft score weighting",
@@ -420,6 +505,7 @@ def main() -> None:
                     "head_dev_mrr": head_dev_mrr,
                     "tail_alpha": tail_alpha,
                     "tail_dev_mrr": tail_dev_mrr,
+                    "relation": relation_summary,
                     "alpha_grid": alphas,
                 },
                 "reference_metrics": refs,
@@ -435,11 +521,17 @@ def main() -> None:
     for col in ["mrr", "hits1", "hits3", "hits10", "delta_vs_residual", "delta_vs_e5", "delta_vs_ca_s2"]:
         md_frame[col] = md_frame[col].map(lambda value: f"{float(value):.4f}")
     (output_dir / "score_ensemble_baselines.md").write_text(markdown_table(md_frame) + "\n", encoding="utf-8")
-    write_latex_table(Path(args.paper_table_dir) / "table_score_ensemble_baselines.tex", rows, refs)
+    paper_table_path = Path(args.paper_table_dir) / "table_score_ensemble_baselines.tex"
+    write_latex_table(paper_table_path, rows, refs)
+    paper_figures_path = Path(args.paper_figures_dir) / "table_score_ensemble_baselines.tex"
+    if paper_figures_path != paper_table_path:
+        write_latex_table(paper_figures_path, rows, refs)
     print(f"[OK] wrote {output_dir / 'score_ensemble_baselines.csv'}")
     print(f"[OK] wrote {output_dir / 'score_ensemble_baselines.json'}")
     print(f"[OK] wrote {output_dir / 'score_ensemble_baselines.md'}")
-    print(f"[OK] wrote {Path(args.paper_table_dir) / 'table_score_ensemble_baselines.tex'}")
+    print(f"[OK] wrote {paper_table_path}")
+    if paper_figures_path != paper_table_path:
+        print(f"[OK] wrote {paper_figures_path}")
 
 
 if __name__ == "__main__":
