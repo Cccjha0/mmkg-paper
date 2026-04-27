@@ -1,12 +1,904 @@
 {
-  "basis": "top100_candidate_set",
   "selection": {
-    "global_alpha": 0.7,
-    "global_dev_mrr": 0.4808299186729792,
-    "head_alpha": 1.0,
-    "head_dev_mrr": 0.3449680500755089,
+    "global_alpha": 0.05,
+    "global_dev_mrr": 0.34314527090792807,
+    "head_alpha": 0.25,
+    "head_dev_mrr": 0.0125316182351048,
     "tail_alpha": 0.05,
-    "tail_dev_mrr": 0.6757386373652909
+    "tail_dev_mrr": 0.6755220551908196,
+    "relation": {
+      "min_support": 20,
+      "fallback_alpha": 0.05,
+      "n_relations": 123,
+      "n_relation_specific": 83,
+      "n_fallback": 40,
+      "relations": [
+        {
+          "relation_id": 0,
+          "support": 828,
+          "alpha": 0.05,
+          "dev_mrr": 0.3436835766822699,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 2,
+          "support": 30,
+          "alpha": 0.0,
+          "dev_mrr": 0.501904260348855,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 3,
+          "support": 720,
+          "alpha": 0.1,
+          "dev_mrr": 0.2829666309847145,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 5,
+          "support": 30,
+          "alpha": 0.05,
+          "dev_mrr": 0.21896216460896514,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 6,
+          "support": 372,
+          "alpha": 0.05,
+          "dev_mrr": 0.2418942802828234,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 8,
+          "support": 1434,
+          "alpha": 0.15,
+          "dev_mrr": 0.19201936543242606,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 9,
+          "support": 360,
+          "alpha": 0.05,
+          "dev_mrr": 0.3703666877455222,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 10,
+          "support": 972,
+          "alpha": 0.1,
+          "dev_mrr": 0.388542730897132,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 11,
+          "support": 120,
+          "alpha": 0.05,
+          "dev_mrr": 0.4381214076673842,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 12,
+          "support": 120,
+          "alpha": 0.15,
+          "dev_mrr": 0.43944740530456683,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 13,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.3446428571428572,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 14,
+          "support": 24,
+          "alpha": 0.0,
+          "dev_mrr": 0.2515147977732678,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 15,
+          "support": 18,
+          "alpha": 0.05,
+          "dev_mrr": 0.05015042553051311,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 16,
+          "support": 342,
+          "alpha": 0.1,
+          "dev_mrr": 0.15064875132100677,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 18,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.009569009479705539,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 19,
+          "support": 558,
+          "alpha": 0.05,
+          "dev_mrr": 0.27539982842677285,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 20,
+          "support": 72,
+          "alpha": 0.05,
+          "dev_mrr": 0.3104269567656387,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 21,
+          "support": 18,
+          "alpha": 0.05,
+          "dev_mrr": 0.07069677671745975,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 22,
+          "support": 210,
+          "alpha": 0.05,
+          "dev_mrr": 0.2707282994596876,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 24,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.0004144440332738471,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 25,
+          "support": 48,
+          "alpha": 0.05,
+          "dev_mrr": 0.1576393583105535,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 26,
+          "support": 12,
+          "alpha": 0.05,
+          "dev_mrr": 0.25068218044845997,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 27,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.5115829346092504,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 28,
+          "support": 318,
+          "alpha": 0.05,
+          "dev_mrr": 0.46988794653605925,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 29,
+          "support": 78,
+          "alpha": 0.05,
+          "dev_mrr": 0.2956593566416402,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 30,
+          "support": 12,
+          "alpha": 0.05,
+          "dev_mrr": 0.09947649906186201,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 31,
+          "support": 324,
+          "alpha": 0.05,
+          "dev_mrr": 0.38343383137320103,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 32,
+          "support": 684,
+          "alpha": 0.1,
+          "dev_mrr": 0.37814250792240417,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 33,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.042408806471306466,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 34,
+          "support": 36,
+          "alpha": 0.05,
+          "dev_mrr": 0.30827372446690415,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 35,
+          "support": 102,
+          "alpha": 0.05,
+          "dev_mrr": 0.2082819722014331,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 36,
+          "support": 162,
+          "alpha": 0.1,
+          "dev_mrr": 0.4125574979549147,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 37,
+          "support": 12,
+          "alpha": 0.05,
+          "dev_mrr": 0.0009608041287308879,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 38,
+          "support": 510,
+          "alpha": 0.1,
+          "dev_mrr": 0.36527650201312295,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 39,
+          "support": 60,
+          "alpha": 0.05,
+          "dev_mrr": 0.08603600530426138,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 40,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.500477256538181,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 41,
+          "support": 42,
+          "alpha": 0.05,
+          "dev_mrr": 0.20184932881537476,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 42,
+          "support": 12,
+          "alpha": 0.05,
+          "dev_mrr": 0.004421112252886167,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 43,
+          "support": 1026,
+          "alpha": 0.05,
+          "dev_mrr": 0.25046506414868946,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 44,
+          "support": 156,
+          "alpha": 0.05,
+          "dev_mrr": 0.42979812581280613,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 45,
+          "support": 1272,
+          "alpha": 0.2,
+          "dev_mrr": 0.33838191193263695,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 46,
+          "support": 126,
+          "alpha": 0.05,
+          "dev_mrr": 0.4408262264405531,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 47,
+          "support": 48,
+          "alpha": 0.05,
+          "dev_mrr": 0.44184248453286057,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 48,
+          "support": 690,
+          "alpha": 0.1,
+          "dev_mrr": 0.21497149536099258,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 49,
+          "support": 138,
+          "alpha": 0.05,
+          "dev_mrr": 0.29741969333469254,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 50,
+          "support": 12,
+          "alpha": 0.05,
+          "dev_mrr": 0.1364617144477722,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 51,
+          "support": 12,
+          "alpha": 0.05,
+          "dev_mrr": 0.27020005745751136,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 52,
+          "support": 126,
+          "alpha": 0.05,
+          "dev_mrr": 0.16490183017669097,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 53,
+          "support": 36,
+          "alpha": 0.05,
+          "dev_mrr": 0.34170980382474897,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 54,
+          "support": 48,
+          "alpha": 0.05,
+          "dev_mrr": 0.1403642438159151,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 55,
+          "support": 12,
+          "alpha": 0.05,
+          "dev_mrr": 0.43350909502831286,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 56,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.12985798298298298,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 57,
+          "support": 18,
+          "alpha": 0.05,
+          "dev_mrr": 0.23054919662222317,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 59,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.002153315624375532,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 61,
+          "support": 126,
+          "alpha": 0.1,
+          "dev_mrr": 0.39289081862330083,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 62,
+          "support": 192,
+          "alpha": 0.1,
+          "dev_mrr": 0.34274251635602665,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 63,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.08467742512014063,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 64,
+          "support": 162,
+          "alpha": 0.05,
+          "dev_mrr": 0.39599649144144666,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 65,
+          "support": 318,
+          "alpha": 0.1,
+          "dev_mrr": 0.40052790556017653,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 66,
+          "support": 396,
+          "alpha": 0.05,
+          "dev_mrr": 0.4558300807653166,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 68,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.0012280862328878405,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 69,
+          "support": 138,
+          "alpha": 0.0,
+          "dev_mrr": 0.2481619015974604,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 70,
+          "support": 48,
+          "alpha": 0.0,
+          "dev_mrr": 0.3752049678643892,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 71,
+          "support": 90,
+          "alpha": 0.05,
+          "dev_mrr": 0.2940667297972329,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 72,
+          "support": 78,
+          "alpha": 0.1,
+          "dev_mrr": 0.45812924257858273,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 73,
+          "support": 24,
+          "alpha": 0.05,
+          "dev_mrr": 0.180472306712396,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 74,
+          "support": 12,
+          "alpha": 0.05,
+          "dev_mrr": 0.003626572730883744,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 77,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.11246829020801623,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 78,
+          "support": 1332,
+          "alpha": 0.05,
+          "dev_mrr": 0.4063236776445747,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 79,
+          "support": 36,
+          "alpha": 0.4,
+          "dev_mrr": 0.3635323907276079,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 80,
+          "support": 408,
+          "alpha": 0.05,
+          "dev_mrr": 0.29406307585982816,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 81,
+          "support": 36,
+          "alpha": 0.3,
+          "dev_mrr": 0.4357095435983463,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 82,
+          "support": 1056,
+          "alpha": 0.1,
+          "dev_mrr": 0.2687731075462647,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 85,
+          "support": 12,
+          "alpha": 0.05,
+          "dev_mrr": 0.5357638888888889,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 86,
+          "support": 1536,
+          "alpha": 0.05,
+          "dev_mrr": 0.2748551822715369,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 87,
+          "support": 12,
+          "alpha": 0.05,
+          "dev_mrr": 0.01877908059757011,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 88,
+          "support": 1128,
+          "alpha": 0.1,
+          "dev_mrr": 0.3765028725967924,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 89,
+          "support": 66,
+          "alpha": 0.15,
+          "dev_mrr": 0.3238543997534408,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 90,
+          "support": 474,
+          "alpha": 0.05,
+          "dev_mrr": 0.3121430942315728,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 91,
+          "support": 120,
+          "alpha": 0.05,
+          "dev_mrr": 0.17667746505385054,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 92,
+          "support": 1062,
+          "alpha": 0.1,
+          "dev_mrr": 0.43171323289306623,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 93,
+          "support": 48,
+          "alpha": 0.05,
+          "dev_mrr": 0.19076017910509746,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 94,
+          "support": 396,
+          "alpha": 0.05,
+          "dev_mrr": 0.307271643735194,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 95,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.12238911303591077,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 96,
+          "support": 1602,
+          "alpha": 0.6,
+          "dev_mrr": 0.4647055265675193,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 97,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.16813919795556612,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 98,
+          "support": 204,
+          "alpha": 0.15,
+          "dev_mrr": 0.4777133684513356,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 99,
+          "support": 54,
+          "alpha": 0.05,
+          "dev_mrr": 0.39531318271509686,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 100,
+          "support": 54,
+          "alpha": 0.1,
+          "dev_mrr": 0.1942590169630499,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 101,
+          "support": 150,
+          "alpha": 0.05,
+          "dev_mrr": 0.42181275344003777,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 102,
+          "support": 120,
+          "alpha": 0.05,
+          "dev_mrr": 0.4011280742501428,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 103,
+          "support": 234,
+          "alpha": 0.05,
+          "dev_mrr": 0.5049920876174435,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 104,
+          "support": 96,
+          "alpha": 0.0,
+          "dev_mrr": 0.3104333918694779,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 105,
+          "support": 60,
+          "alpha": 0.05,
+          "dev_mrr": 0.37570144703059377,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 106,
+          "support": 702,
+          "alpha": 0.05,
+          "dev_mrr": 0.4337678269408879,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 107,
+          "support": 390,
+          "alpha": 0.05,
+          "dev_mrr": 0.4099581227219008,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 108,
+          "support": 18,
+          "alpha": 0.05,
+          "dev_mrr": 0.15232823560616582,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 109,
+          "support": 402,
+          "alpha": 0.05,
+          "dev_mrr": 0.3515722215983249,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 110,
+          "support": 18,
+          "alpha": 0.05,
+          "dev_mrr": 0.3344342186516379,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 112,
+          "support": 138,
+          "alpha": 0.05,
+          "dev_mrr": 0.4371571111016267,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 113,
+          "support": 360,
+          "alpha": 0.05,
+          "dev_mrr": 0.4203289485895709,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 114,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.0016455370460956716,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 115,
+          "support": 354,
+          "alpha": 0.0,
+          "dev_mrr": 0.4487109422350488,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 116,
+          "support": 570,
+          "alpha": 0.05,
+          "dev_mrr": 0.41889741120897844,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 117,
+          "support": 330,
+          "alpha": 0.1,
+          "dev_mrr": 0.3622834172224033,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 118,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.07671067185868728,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 119,
+          "support": 96,
+          "alpha": 0.05,
+          "dev_mrr": 0.4166946444640203,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 120,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.01537198460804585,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 121,
+          "support": 24,
+          "alpha": 0.3,
+          "dev_mrr": 0.04768968862829309,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 122,
+          "support": 12,
+          "alpha": 0.05,
+          "dev_mrr": 0.11296653290246457,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 123,
+          "support": 180,
+          "alpha": 0.1,
+          "dev_mrr": 0.3155506086339002,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 124,
+          "support": 96,
+          "alpha": 0.0,
+          "dev_mrr": 0.45163020973819973,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 125,
+          "support": 18,
+          "alpha": 0.05,
+          "dev_mrr": 0.4645563123137155,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 126,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.13136817068050674,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 127,
+          "support": 12,
+          "alpha": 0.05,
+          "dev_mrr": 0.0972859064494403,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 128,
+          "support": 18,
+          "alpha": 0.05,
+          "dev_mrr": 0.253194834427,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 129,
+          "support": 12,
+          "alpha": 0.05,
+          "dev_mrr": 0.02238653661936922,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 130,
+          "support": 1668,
+          "alpha": 0.05,
+          "dev_mrr": 0.4321762320020228,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 131,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.19196304694147284,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 132,
+          "support": 42,
+          "alpha": 0.05,
+          "dev_mrr": 0.42412285445495695,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 133,
+          "support": 18,
+          "alpha": 0.05,
+          "dev_mrr": 0.22940345819849295,
+          "used_fallback": true
+        },
+        {
+          "relation_id": 134,
+          "support": 168,
+          "alpha": 0.15,
+          "dev_mrr": 0.4295352920014273,
+          "used_fallback": false
+        },
+        {
+          "relation_id": 135,
+          "support": 6,
+          "alpha": 0.05,
+          "dev_mrr": 0.0579007700871105,
+          "used_fallback": true
+        }
+      ]
+    },
+    "alpha_grid": [
+      0.0,
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      1.0
+    ]
   },
   "reference_metrics": {
     "residual": 0.2930494303909519,
@@ -17,47 +909,62 @@
     {
       "method": "Global score interpolation",
       "level": "ensemble",
-      "granularity": "top100 global",
+      "granularity": "global",
       "selected_on": "dev",
-      "alpha_policy": "alpha=0.70",
-      "mrr": 0.22055103141790297,
-      "hits1": 0.15366666666666667,
-      "hits3": 0.24266666666666667,
-      "hits10": 0.34326666666666666,
-      "delta_vs_residual": -0.07249839897304891,
-      "delta_vs_e5": -0.0776313538620941,
-      "delta_vs_ca_s2": -0.09364896858209701,
-      "notes": "top100 candidate-set sanity; dev MRR=0.4808"
+      "alpha_policy": "alpha=0.05",
+      "mrr": 0.3408300567146645,
+      "hits1": 0.2820166666666667,
+      "hits3": 0.37761666666666666,
+      "hits10": 0.4453,
+      "delta_vs_residual": 0.047780626323712605,
+      "delta_vs_e5": 0.04264767143466741,
+      "delta_vs_ca_s2": 0.026630056714664507,
+      "notes": "alpha selected by dev MRR (0.3431)"
     },
     {
       "method": "Direction-specific score interpolation",
       "level": "ensemble",
-      "granularity": "top100 direction",
+      "granularity": "direction",
       "selected_on": "dev",
-      "alpha_policy": "alpha_head=1.00; alpha_tail=0.05",
-      "mrr": 0.34493137398711626,
-      "hits1": 0.2825166666666667,
-      "hits3": 0.37845,
-      "hits10": 0.44698333333333334,
-      "delta_vs_residual": 0.05188194359616438,
-      "delta_vs_e5": 0.04674898870711919,
-      "delta_vs_ca_s2": 0.030731373987116284,
-      "notes": "top100 candidate-set sanity; dev head/tail MRR=0.3450/0.6757"
+      "alpha_policy": "alpha_head=0.25; alpha_tail=0.05",
+      "mrr": 0.3420704740129778,
+      "hits1": 0.2825666666666667,
+      "hits3": 0.3785,
+      "hits10": 0.4471333333333333,
+      "delta_vs_residual": 0.04902104362202592,
+      "delta_vs_e5": 0.04388808873298072,
+      "delta_vs_ca_s2": 0.02787047401297782,
+      "notes": "head/tail alphas selected independently on dev MRR (0.0125/0.6755)"
+    },
+    {
+      "method": "Relation-specific score interpolation",
+      "level": "ensemble",
+      "granularity": "relation",
+      "selected_on": "dev",
+      "alpha_policy": "per-relation alpha; fallback alpha=0.05; min_support=20",
+      "mrr": 0.34275518848507935,
+      "hits1": 0.28355,
+      "hits3": 0.3802,
+      "hits10": 0.4469166666666667,
+      "delta_vs_residual": 0.04970575809412747,
+      "delta_vs_e5": 0.04457280320508228,
+      "delta_vs_ca_s2": 0.028555188485079375,
+      "notes": "relation alphas selected on dev MRR; 83 relations selected, 40 used fallback"
     },
     {
       "method": "Query-level soft score weighting",
       "level": "ensemble",
-      "granularity": "top100 query",
+      "granularity": "query",
       "selected_on": "dev",
       "alpha_policy": "logistic p(Gate beats Residual) from score-distribution features",
-      "mrr": 0.30712986073979315,
-      "hits1": 0.2457,
-      "hits3": 0.33573333333333333,
-      "hits10": 0.4115,
-      "delta_vs_residual": 0.014080430348841266,
-      "delta_vs_e5": 0.008947475459796073,
-      "delta_vs_ca_s2": -0.007070139260206831,
-      "notes": "top100 candidate-set sanity; query-level soft alpha trained on dev-only expert wins"
+      "mrr": 0.3054593207898315,
+      "hits1": 0.24861666666666668,
+      "hits3": 0.3353333333333333,
+      "hits10": 0.40875,
+      "delta_vs_residual": 0.01240989039887963,
+      "delta_vs_e5": 0.007276935509834437,
+      "delta_vs_ca_s2": -0.008740679210168467,
+      "notes": "query-level soft alpha uses non-answer-aware score-distribution features; labels are dev-only expert wins"
     }
   ]
 }

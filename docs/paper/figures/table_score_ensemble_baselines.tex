@@ -1,18 +1,19 @@
 \begin{table}[t]
 \centering
 \small
-\caption{Simple score-ensemble sanity baselines compared with CA-S2. Ensemble baselines use exported top-100 candidate score sets, select policies on development data, and are reported as candidate-set sanity checks rather than official full-ranking replacements.}
+\caption{Simple score-ensemble baselines compared with CA-S2 under full filtered ranking. Ensemble baselines use fixed Gate-only and Residual-only scores, select their policies on the development split, and are evaluated on the test split.}
 \label{tab:score_ensemble_baselines}
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{p{0.30\textwidth}p{0.12\textwidth}p{0.13\textwidth}ccc}
 \toprule
 Method & Level & Granularity & MRR & Delta vs E5 & Delta vs CA-S2 \\
 \midrule
-Global score interpolation & ensemble & top100 global & 0.2206 & -0.0776 & -0.0936 \\
-Direction-specific score interpolation & ensemble & top100 direction & 0.3449 & +0.0467 & +0.0307 \\
-Query-level soft score weighting & ensemble & top100 query & 0.3071 & +0.0089 & -0.0071 \\
+Global score interpolation & ensemble & global & 0.3408 & +0.0426 & +0.0266 \\
+Direction-specific score interpolation & ensemble & direction & 0.3421 & +0.0439 & +0.0279 \\
+Relation-specific score interpolation & ensemble & relation & 0.3428 & +0.0446 & +0.0286 \\
+Query-level soft score weighting & ensemble & query & 0.3055 & +0.0073 & -0.0087 \\
 CA-S2 score-aware candidate router & router & candidate & 0.3142 & +0.0160 & -- \\
 \bottomrule
 \end{tabular}
-\vspace{0.4ex}\caption*{\footnotesize The ensemble rows are bounded sanity checks on the exported top-100 candidate sets; CA-S2 is the official full-ranking result.}
+\vspace{0.4ex}\caption*{\footnotesize The baselines test whether CA-S2 can be explained by fixed, direction-specific, relation-specific, or query-level score averaging alone.}
 \end{table}
