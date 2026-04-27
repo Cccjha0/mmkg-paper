@@ -1,0 +1,63 @@
+{
+  "basis": "top100_candidate_set",
+  "selection": {
+    "global_alpha": 0.7,
+    "global_dev_mrr": 0.4808299186729792,
+    "head_alpha": 1.0,
+    "head_dev_mrr": 0.3449680500755089,
+    "tail_alpha": 0.05,
+    "tail_dev_mrr": 0.6757386373652909
+  },
+  "reference_metrics": {
+    "residual": 0.2930494303909519,
+    "e5": 0.2981823852799971,
+    "ca_s2": 0.3142
+  },
+  "rows": [
+    {
+      "method": "Global score interpolation",
+      "level": "ensemble",
+      "granularity": "top100 global",
+      "selected_on": "dev",
+      "alpha_policy": "alpha=0.70",
+      "mrr": 0.22055103141790297,
+      "hits1": 0.15366666666666667,
+      "hits3": 0.24266666666666667,
+      "hits10": 0.34326666666666666,
+      "delta_vs_residual": -0.07249839897304891,
+      "delta_vs_e5": -0.0776313538620941,
+      "delta_vs_ca_s2": -0.09364896858209701,
+      "notes": "top100 candidate-set sanity; dev MRR=0.4808"
+    },
+    {
+      "method": "Direction-specific score interpolation",
+      "level": "ensemble",
+      "granularity": "top100 direction",
+      "selected_on": "dev",
+      "alpha_policy": "alpha_head=1.00; alpha_tail=0.05",
+      "mrr": 0.34493137398711626,
+      "hits1": 0.2825166666666667,
+      "hits3": 0.37845,
+      "hits10": 0.44698333333333334,
+      "delta_vs_residual": 0.05188194359616438,
+      "delta_vs_e5": 0.04674898870711919,
+      "delta_vs_ca_s2": 0.030731373987116284,
+      "notes": "top100 candidate-set sanity; dev head/tail MRR=0.3450/0.6757"
+    },
+    {
+      "method": "Query-level soft score weighting",
+      "level": "ensemble",
+      "granularity": "top100 query",
+      "selected_on": "dev",
+      "alpha_policy": "logistic p(Gate beats Residual) from score-distribution features",
+      "mrr": 0.30712986073979315,
+      "hits1": 0.2457,
+      "hits3": 0.33573333333333333,
+      "hits10": 0.4115,
+      "delta_vs_residual": 0.014080430348841266,
+      "delta_vs_e5": 0.008947475459796073,
+      "delta_vs_ca_s2": -0.007070139260206831,
+      "notes": "top100 candidate-set sanity; query-level soft alpha trained on dev-only expert wins"
+    }
+  ]
+}
