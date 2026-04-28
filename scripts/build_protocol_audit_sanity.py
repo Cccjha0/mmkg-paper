@@ -54,7 +54,7 @@ def fmt(value: float) -> str:
 
 def write_degree_table(path: Path, rows: list[dict]) -> None:
     lines = [
-        r"\begin{table}[t]",
+        r"\begin{table}[H]",
         r"\centering",
         r"\small",
         r"\caption{Training-graph degree by test-time target-side regime. Entity degree is computed only from training triples.}",

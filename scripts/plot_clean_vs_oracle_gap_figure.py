@@ -19,7 +19,7 @@ METHODS = [
     "Naive global\nclean",
     "Direction-specific\nthreshold",
     "Regression\nclean",
-    "Oracle",
+    "Hard-selection\nOracle",
 ]
 
 
@@ -85,7 +85,7 @@ def build_figure() -> plt.Figure:
         marker="D",
         s=36,
         color="#d62728",
-        label="Oracle upper bound",
+        label="Hard-selection Oracle",
         zorder=3,
     )
 

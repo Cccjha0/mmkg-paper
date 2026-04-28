@@ -70,7 +70,7 @@ def write_tex(summary: dict[str, object], path: Path, split_name: str) -> None:
     split_caption = split_name.replace("_", "\\_")
     tex = f"""\\begin{{table}}[t]
 \\centering
-\\caption{{Target-side image-availability regimes for the OpenBG-IMG \\texttt{{{split_caption}}} test set.}}
+\\caption{{Target-side regimes on the \\texttt{{{split_caption}}} test set.}}
 \\label{{tab:target_side_regime_counts_{split_name}}}
 \\small
 \\begin{{tabular}}{{lrr}}

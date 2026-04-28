@@ -1,12 +1,12 @@
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \small
-\caption{Simple score-ensemble baselines compared with CA-S2 under full filtered ranking. Ensemble baselines use fixed Gate-only and Residual-only scores, select their policies on the development split, and are evaluated on the test split.}
+\caption{Full-ranking score-aware expert-combination baselines. Ensemble baselines use fixed \texttt{Gate-only} and \texttt{Residual-only} scores, select interpolation policies on the development split, and are evaluated on the test split. CA-S2 is included as the learned candidate-level score-aware router for comparison.}
 \label{tab:score_ensemble_baselines}
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{p{0.30\textwidth}p{0.12\textwidth}p{0.13\textwidth}ccc}
 \toprule
-Method & Level & Granularity & MRR & Delta vs E5 & Delta vs CA-S2 \\
+Method & Level & Granularity & MRR & $\Delta$ vs E5 & $\Delta$ vs CA-S2 \\
 \midrule
 Global score interpolation & ensemble & global & 0.3408 & +0.0426 & +0.0266 \\
 Direction-specific score interpolation & ensemble & direction & 0.3421 & +0.0439 & +0.0279 \\
@@ -15,5 +15,6 @@ Query-level soft score weighting & ensemble & query & 0.3055 & +0.0073 & -0.0087
 CA-S2 score-aware candidate router & router & candidate & 0.3142 & +0.0160 & -- \\
 \bottomrule
 \end{tabular}
-\vspace{0.4ex}\caption*{\footnotesize The baselines test whether CA-S2 can be explained by fixed, direction-specific, relation-specific, or query-level score averaging alone.}
+\vspace{0.4ex}
+\caption*{\footnotesize These results show that the strongest deployable score-aware gains come from exposing fixed-expert score-combination information itself. CA-S2 should therefore be interpreted as a learned score-aware routing implementation, not as the uniquely strongest score-aware combiner. Because the interpolation rows are deterministic combinations of fixed expert score exports, they are reported as full-ranking score-combination baselines rather than as newly trained router variants. The CA-S2 row is copied from the learned candidate-router full-ranking result in Table~\ref{tab:candidate_router_main_results} and is used only as a reference point.}
 \end{table}
