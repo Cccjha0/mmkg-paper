@@ -632,7 +632,7 @@ RQ4 asks whether the limitation of strict query-level clean routing is caused by
 \caption{Main learned candidate-router results on OpenBG-IMG. E5 is the strongest strict query-level clean router, while CA-S1/CA-S2/CA-S3 are candidate-level routers evaluated by full filtered ranking over three seeds.}
 \label{tab:candidate_router_main_results}
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{p{0.24\textwidth}p{0.10\textwidth}p{0.13\textwidth}p{0.10\textwidth}p{0.11\textwidth}p{0.09\textwidth}p{0.10\textwidth}}
+\begin{tabular}{p{0.25\textwidth}p{0.09\textwidth}p{0.13\textwidth}cccp{0.15\textwidth}}
 \toprule
 Method & Routing level & Feature type & MRR & $\Delta$ Residual & $\Delta$ E5 & Hard-selection Oracle recovery \\
 \midrule
@@ -640,9 +640,9 @@ Residual-only & fixed & structural & 0.2930 & 0.0000 & -0.0051 & 0.0\% \\
 Clean rule & query & strict clean & 0.2943 & +0.0012 & -0.0039 & 3.0\% \\
 Direction-specific threshold & query & strict clean & 0.2974 & +0.0044 & -0.0007 & 10.8\% \\
 Regression-based clean router & query & strict clean & 0.2982 & +0.0051 & 0.0000 & 12.6\% \\
-CA-S1 clean candidate & candidate & clean candidate & 0.2503 $\pm$ 0.0054 & -0.0427 & -0.0479 & -105.0\% \\
-CA-S2 score-aware & candidate & score-aware & 0.3142 $\pm$ 0.0010 & +0.0211 & +0.0160 & 51.9\% \\
-CA-S3 clean + score & candidate & clean + score-aware & 0.3135 $\pm$ 0.0010 & +0.0204 & +0.0153 & 50.2\% \\
+CA-S1 clean candidate & candidate & clean candidate & \mbox{0.2503 $\pm$ 0.0054} & -0.0427 & -0.0479 & -105.0\% \\
+CA-S2 score-aware & candidate & score-aware & \mbox{0.3142 $\pm$ 0.0010} & +0.0211 & +0.0160 & 51.9\% \\
+CA-S3 clean + score & candidate & clean + score-aware & \mbox{0.3135 $\pm$ 0.0010} & +0.0204 & +0.0153 & 50.2\% \\
 Hard-selection Oracle routing & oracle & answer-aware & 0.3337 & +0.0407 & +0.0356 & 100.0\% \\
 \bottomrule
 \end{tabular}
@@ -867,7 +867,7 @@ The model-level robustness check preserves the same qualitative trend as the mai
 
 These results should not be interpreted as showing exact split-invariant numerical performance. Instead, they provide appendix-level evidence that the central qualitative pattern remains stable under another valid split construction.
 
-\bibliographystyle{plain}
+\bibliographystyle{unsrt}
 \bibliography{references}
 
 \end{document}
