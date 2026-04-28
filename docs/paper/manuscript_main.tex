@@ -44,68 +44,32 @@ Author Three\textsuperscript{2}
 \end{center}
 
 \begin{abstract}
-Multimodal knowledge graph completion (MMKGC) aims to improve link prediction by incorporating auxiliary modalities such as text and images, yet in product-oriented knowledge graphs visual support is often incomplete and multimodal evidence does not help uniformly. We study this problem on OpenBG-IMG under a unified filtered-ranking protocol with \texttt{direction=both} and show that the current split induces role--modality asymmetry: head-side targets may be image-supported, whereas tail-side targets are effectively image-unavailable. This creates a bounded-gain structure in which relative fusion preference is most visible in image-supported head-side regimes, although this does not imply high absolute solvability and the global gain remains bounded. We first show that strict metadata-only query-level clean routing recovers only modest gain: direction-specific thresholding reaches 0.2974 MRR, and regression-based gain prediction reaches 0.2982 MRR with positive paired bootstrap evidence. We then show that this limitation is not the end of deployable expert combination. Once fixed-expert score information is exposed, score-aware non-answer-aware combination becomes substantially stronger: a learned candidate-level router reaches 0.3142 $\pm$ 0.0010 MRR, while simple full-ranking score interpolation reaches up to 0.3428 MRR. These results sharpen the main bottleneck: strict query-level metadata is too coarse, whereas fixed-expert score patterns expose much more usable deployable signal. The strongest gain does not require a more complex router; rather, it shows that the key boundary is whether score-aware expert-combination information is available without leaking answer-aware target information.
+Multimodal knowledge graph completion (MMKGC) aims to improve link prediction by incorporating auxiliary textual and visual evidence, yet in product-oriented knowledge graphs visual support is often incomplete and uneven. This paper studies OpenBG-IMG under a unified filtered-ranking protocol and shows that the current split induces a protocol-defined role--modality asymmetry: head-side targets may be image-supported, whereas tail-side targets are effectively image-unavailable. As a result, multimodal gain is not globally reliable, but local and bounded under the current evaluation protocol. To exploit this bounded gain, we study selective activation between a fusion expert and a structural expert under two deployable information boundaries: strict metadata-only query-level routing and score-aware non-answer-aware expert combination. Experiments show that strict clean routing recovers only modest gain, with regression-based clean routing reaching 0.2982 MRR. In contrast, exposing fixed-expert score patterns substantially improves recoverable gain: a learned candidate-level score-aware router reaches 0.3142 MRR, while simple full-ranking score interpolation reaches up to 0.3428 MRR. These results indicate that the main bottleneck is not merely router complexity, but the deployable information boundary under which expert combination is performed.
 \end{abstract}
 
 \textbf{Keywords:} multimodal knowledge graph completion; score-aware expert combination; selective activation; score interpolation; incomplete visual support; protocol-aware evaluation
 
 \section{Introduction}
-Knowledge graph completion (KGC) aims to infer missing facts from observed triples. In multimodal knowledge graph completion (MMKGC), auxiliary modalities such as text and images can enrich entity representations beyond pure graph structure~\cite{trouillon2016complex,dettmers2018conve,sun2019rotate,liu2019mmkg,xie2017ikrl,mousselly2018multimodal,pezeshkpour2018mkbe}. In product-oriented knowledge graphs, this naturally creates the expectation that multimodal models should outperform structure-only alternatives.
+Knowledge graph completion (KGC) aims to infer missing facts from observed triples. Multimodal knowledge graph completion (MMKGC) extends this setting by using textual and visual evidence to enrich entity representations beyond graph structure~\cite{trouillon2016complex,dettmers2018conve,sun2019rotate,liu2019mmkg,xie2017ikrl,mousselly2018multimodal,pezeshkpour2018mkbe}. In product-oriented knowledge graphs, images are naturally expected to help because many entities have visually meaningful attributes.
 
-Under incomplete visual support, however, multimodal usefulness is not uniformly available. This issue is especially important in OpenBG-IMG, a multimodal benchmark derived from the OpenBG business knowledge graph~\cite{deng2022openbg}, under the current paper protocol, where target position is entangled with modality availability: head-side targets may still be image-supported, whereas tail-side targets are effectively image-unavailable. The protocol therefore induces a role--modality asymmetry rather than a neutral multimodal setting. Under such a protocol-shaped missing-modality setting, the core issue is no longer simply how to fuse more modalities, but whether multimodal evidence yields reliable gain at all, and if so, how that gain should be used.
+However, visual support in product-oriented KGs is often incomplete and uneven. Under the current OpenBG-IMG \texttt{paper\_split}, this incompleteness is not merely random missingness. Target position is entangled with modality availability: head-side targets may still be image-supported, whereas tail-side targets are effectively image-unavailable. The protocol therefore creates a role--modality asymmetry in which multimodal gain cannot be assumed to be globally reliable.
 
-Our prior analysis already reveals a strong tension under the unified OpenBG-IMG protocol with filtered ranking, \texttt{direction=both}, and three-seed reporting. The strongest overall model is not the most complete multimodal architecture. Instead, \texttt{Residual-only} achieves the best global performance, while \texttt{Full Model} still retains value within the internal multimodal family. This means that multimodal gain exists, but it is uneven across the evaluation space rather than globally reliable.
+This asymmetry changes the main research question. Rather than asking only how to build a stronger fusion module, this paper asks when multimodal evidence should be activated under deployable information constraints. We first diagnose where multimodal gain actually appears, then compare two selective-activation boundaries. The first is strict metadata-only query-level routing, where decisions must be made from legal query-time metadata. The second is score-aware non-answer-aware expert combination, where both fixed experts are scored first and the combiner may use their score, rank, confidence, and disagreement patterns without observing the hidden answer.
 
-These observations motivate the central problem of this paper:
+Our experiments follow this progression. Under the unified OpenBG-IMG protocol with filtered ranking and \texttt{direction=both}, \texttt{Residual-only} is the strongest internal-family baseline, while fusion-oriented variants retain value only in local protocol-shaped regimes. Strict clean routing can recover statistically supported but modest gain: direction-specific thresholding reaches 0.2974 MRR, and regression-based clean routing reaches 0.2982 MRR. Once non-answer-aware fixed-expert score patterns are available, recoverable gain becomes substantially larger: CA-S2 reaches 0.3142 MRR, and simple full-ranking score interpolation reaches up to 0.3428 MRR.
 
-\begin{quote}
-Under the current OpenBG-IMG protocol, multimodal gain is bounded and protocol-dependent. How can this gain be diagnosed more precisely and exploited more effectively under deployable selective-activation constraints?
-\end{quote}
+The paper's claim is therefore controlled. We do not claim to propose a universally stronger MMKGC architecture. Instead, we provide a protocol-aware analysis and selective expert-combination framework for MMKGC under incomplete visual support. The results show that the main bottleneck is not only router architecture complexity, but the deployable information boundary under which expert combination is performed.
 
-We decompose this problem into four research questions.
+We organize the empirical analysis around three research questions. \textbf{RQ1} asks whether multimodal gain is globally reliable under the OpenBG-IMG protocol. \textbf{RQ2} asks how much bounded gain strict metadata-only routing can recover. \textbf{RQ3} asks whether score-aware non-answer-aware expert combination recovers substantially more deployable gain.
 
-\textbf{RQ1. Where does multimodal gain actually appear?} We first examine whether multimodal benefit is globally uniform or concentrated in specific target-side regimes and relation conditions.
-
-\textbf{RQ2. Why does naive strict query-level clean routing fail?} We then test whether a single global threshold is sufficient for clean selective activation, or whether the protocol requires a more structured decision policy.
-
-\textbf{RQ3. How far can structured query-level clean routing go?} We study whether target-aligned clean supervision can recover more deployable gain than coarse binary routing under strict metadata-only query-level constraints.
-
-\textbf{RQ4. Can score-aware expert combination recover more deployable gain?} Finally, we move beyond strict metadata-only query-level routing and allow deployable non-answer-aware access to fixed-expert score patterns. We test both learned candidate-level routing and simple full-ranking score interpolation to determine whether the main bottleneck is router complexity or the score-aware information boundary itself.
-
-To address these questions, we move from always-on multimodal fusion to selective activation between a fusion expert and a structural expert. We begin with strict query-level clean routing as a minimal metadata-only deployable setting, then evaluate stronger clean formulations, including direction-specific thresholding and regression-style gain prediction. We then add a score-aware expert-combination line that remains non-answer-aware but can use expert score, confidence, and disagreement signals computed for candidates after both fixed experts are run. The method is not intended as a universally stronger multimodal architecture. Instead, it operationalizes the bounded-gain finding and tests how much of that gain can be recovered once the combiner is allowed to observe finer deployable expert behavior.
-
-The experiments follow the same progression. Protocol-aware subgroup and relation-group analyses show that multimodal gain is local, regime-dependent, and bounded. Clean routing experiments show that a naive global threshold is too coarse, while direction-specific thresholding improves over the clean rule baseline. Target-aligned regression supervision further provides the strongest strict query-level clean result. Score-aware expert combination then recovers substantially more gain than strict clean routing. A learned candidate-level router, CA-S2, reaches 0.3142 MRR and remains statistically comparable to the combined clean-plus-score variant CA-S3. More importantly, simple full-ranking score interpolation reaches up to 0.3428 MRR, showing that the key source of recoverable gain is not necessarily router complexity, but access to non-answer-aware fixed-expert score patterns.
-
-The paper's claim is therefore controlled: under the current OpenBG-IMG protocol, strict query-level clean routing fails not only because legal query-time signals are limited, but also because a global threshold and binary gain labels are too coarse. Once the policy is structured more appropriately and trained with a more target-aligned objective, modest clean gain can be recovered. Larger deployable gain requires moving beyond metadata-only query features to score-aware non-answer-aware expert combination. The strongest results further show that a complex learned router is not strictly necessary: simple score interpolation can outperform the learned CA-S2 router, indicating that the primary bottleneck is the information boundary rather than router architecture complexity.
-
-In summary, this paper makes four linked contributions, each corresponding to a fine-grained problem, a proposed response, and an experimental validation.
-
-\begin{table}[H]
-\centering
-\caption{Problem--response--validation structure of this paper.}
-\label{tab:problem_response_validation}
-\small
-\begin{tabular}{p{0.30\textwidth}p{0.30\textwidth}p{0.30\textwidth}}
-\toprule
-Fine-grained problem & Proposed response & Validation \\
-\midrule
-The current protocol creates role--modality asymmetry. & Protocol-aware bounded-gain diagnosis. & Target-side subgroup and relation-group analysis. \\
-Naive query-level clean routing is too coarse. & Direction-specific structured thresholding. & Clean routing comparison and paired bootstrap evidence. \\
-Binary gain supervision is too coarse. & Regression-based gain prediction. & Strongest clean MRR and paired $\Delta$MRR confidence intervals. \\
-Query-level metadata remains insufficient. & Score-aware non-answer-aware expert combination. & CA-S2 reaches 0.3142 MRR, while full-ranking score interpolation reaches up to 0.3428 MRR. \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-More specifically, our contributions are:
+This paper makes three contributions:
 \begin{enumerate}[leftmargin=1.5em]
-    \item \textbf{Protocol-aware bounded-gain diagnosis.} We identify a protocol-aware bounded-gain structure on OpenBG-IMG by showing that role--modality asymmetry entangles target position with image availability, so multimodal benefit remains local rather than globally uniform.
-    \item \textbf{Structured strict query-level clean routing.} We show that naive clean query-time routing with a single global threshold is insufficient, and that direction-specific thresholding provides a stronger clean policy under the asymmetric protocol.
-    \item \textbf{Target-aligned strict clean supervision.} We further show that regression-based gain prediction recovers the strongest strict query-level clean result, but its gain remains modest relative to hard-selection Oracle routing.
-    \item \textbf{Score-aware expert combination under deployable information boundaries.} We show that exposing non-answer-aware fixed-expert score information substantially changes the recoverable-gain boundary. CA-S2 demonstrates that learned candidate-level score-aware routing improves over strict metadata-only clean routing, while simple full-ranking score interpolation further reveals that much of the gain comes from score-aware expert combination itself rather than router complexity.
+    \item \textbf{Protocol-aware bounded-gain diagnosis.} We show that the current OpenBG-IMG protocol induces role--modality asymmetry, which makes multimodal gain local and bounded rather than globally reliable.
+    \item \textbf{Selective activation under strict clean information boundaries.} We evaluate whether bounded multimodal gain can be recovered using only legal metadata available at query time, and show that direction-specific thresholding and regression-based gain prediction provide statistically supported but modest improvements.
+    \item \textbf{Score-aware expert combination under non-answer-aware constraints.} We show that fixed-expert score patterns expose substantially stronger deployable signal than strict query-level metadata. Learned candidate-level routing improves over strict clean routing, while simple score interpolation further indicates that the main bottleneck lies in the information boundary rather than router complexity alone.
 \end{enumerate}
 
-These contributions do not imply that deployable routing fully closes every diagnostic gap. Instead, strict clean routing recovers part of the bounded multimodal gain, score-aware expert combination recovers substantially more, and answer-aware Oracle analyses remain diagnostic references rather than deployable evidence. Since score interpolation can create rankings not identical to either fixed expert, the hard-selection Oracle should not be interpreted as an upper bound for score-level combination.
+These contributions do not imply that deployable routing fully closes every diagnostic gap. Strict clean routing recovers part of the bounded multimodal gain, score-aware expert combination recovers substantially more, and answer-aware Oracle analyses remain diagnostic references rather than deployable evidence. Since score interpolation can create rankings not identical to either fixed expert, the hard-selection Oracle should not be interpreted as an upper bound for score-level combination.
 
 \section{Related Work}
 \subsection{MMKGC and Multimodal Fusion}
@@ -131,40 +95,32 @@ Unlike large-scale mixture-of-experts systems that route among many experts for 
 
 The new score-aware expert-combination line adds a second deployable but less restrictive setting. It is related to score-based ensembling, confidence-aware model combination, and learning-to-rank reranking with multiple scorers, because the combiner can observe expert score patterns for candidate entities after the fixed experts have been evaluated. Unlike generic ensemble or MoE systems, however, our score-aware line is motivated by a protocol-aware bounded-gain diagnosis and is evaluated under an explicit separation between strict metadata-only clean routing, score-aware non-answer-aware combination, and Oracle answer-aware routing.
 
-Strong structural baselines are therefore not incidental comparison points in our setting, but part of the explanation itself. Under the current OpenBG-IMG protocol, \texttt{ComplEx} remains a competitive structural anchor and \texttt{Residual-only} is the strongest model within our internal family, whereas \texttt{TuckER} does not emerge as competitive under the present split. This matters because the key empirical tension in our paper is not between multimodal models and weak references, but between local multimodal gains and globally stronger structure-dominant alternatives.
+Strong structural baselines are therefore not incidental comparison points in our setting, but part of the explanation itself. Under the current OpenBG-IMG protocol, \texttt{ComplEx} remains a competitive structural anchor and \texttt{Residual-only} is the strongest model within our internal family, whereas \texttt{TuckER} does not emerge as competitive under the present split. This matters because the key empirical tension in our paper is not between multimodal models and weak references, but between local multimodal gains and structure-dominant alternatives at the aggregate level.
 
-Against this background, the present work should be understood as an analysis-driven method paper. It is not primarily a new-fusion paper, because our main claim is not that a proposed multimodal architecture is globally strongest. It is not primarily a generic missing-modality method paper, because our goal is not to introduce a universal robustness algorithm. Instead, we begin from a protocol-aware diagnosis: under the current OpenBG-IMG setting, multimodal gain is real but bounded, and its usefulness depends on target position, image availability, relation context, and branch competition. We then extend this diagnosis into selective activation under explicit information boundaries, moving from strict metadata-only query-level routing to score-aware non-answer-aware expert combination.
+Against this background, the present work is an analysis-driven method paper rather than a new-fusion or universal missing-modality paper. We begin from a protocol-aware diagnosis that multimodal gain is real but bounded under the current OpenBG-IMG setting, then extend this diagnosis into selective activation under explicit information boundaries.
 
-\section{Task Setting and Method}
-\subsection{Task Setting and Protocol}
-We study multimodal knowledge graph completion on OpenBG-IMG under a standard link prediction setting. For a triple $(h, r, t)$, the task is to rank candidate tails for $(h, r, ?)$ and candidate heads for $(?, r, t)$ under filtered ranking. This setting differs from structure-only KGC because entities may additionally have associated text and image information. In principle, these auxiliary modalities can enrich entity representations and improve ranking quality. In practice, however, modality availability is not uniform across entities or query conditions. As a result, the present paper is not only about multimodal representation learning in the abstract. It is also about how the evaluation protocol shapes where multimodal evidence can plausibly matter.
+\section{Problem Formulation and Methodology}
+\subsection{Problem Definition and OpenBG-IMG Protocol}
+We study multimodal knowledge graph completion on OpenBG-IMG under standard filtered link prediction. For a triple $(h, r, t)$, the task is to rank candidate tails for $(h, r, ?)$ and candidate heads for $(?, r, t)$. Because entities may have text and image information but modality availability is uneven, the setting is not only about multimodal representation learning; it is also about how the evaluation protocol shapes where multimodal evidence can matter.
 
 All experiments use the current OpenBG-IMG \texttt{paper\_split}, which is the unified split employed for official model comparison, subgroup analysis, relation-group analysis, and routing evaluation. OpenBG-IMG is derived from the OpenBG business knowledge graph benchmark introduced by Deng et al.~\cite{deng2022openbg}.
 
 \begin{table}[H]
 \centering
-\caption{Dataset statistics of the OpenBG-IMG \texttt{paper\_split}.}
+\caption{OpenBG-IMG \texttt{paper\_split} statistics and target-side regimes. Regime percentages are computed over all 20{,}000 bidirectional query instances.}
 \label{tab:dataset_statistics}
-\small
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{lrrrrrrr}
-\toprule
-Dataset & \#Entities & \#Relations & \#Train & \#Valid & \#Test & \#Image entities & Image coverage \\
-\midrule
-OpenBG-IMG & 27{,}910 & 136 & 220{,}087 & 5{,}000 & 10{,}000 & 14{,}690 & 52.63\% \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\Cref{tab:dataset_statistics} summarizes the scale of the OpenBG-IMG \texttt{paper\_split} used in all experiments. The split contains both textual and visual entity information, but image availability is incomplete. This incompleteness is not uniformly distributed across evaluation roles, which motivates the protocol-specific target-side analysis in \Cref{tab:protocol_test_regime_counts}.
-
-The most important property of the current \texttt{paper\_split} is the asymmetry between target position and image availability. On the head side, target entities may still be image-available. On the tail side, target entities are effectively always \texttt{no\_img} under the current test distribution.
-
-\begin{table}[H]
-\centering
-\caption{Test-time target-side regime counts under the current OpenBG-IMG \texttt{paper\_split}. Percentages are computed over all 20{,}000 bidirectional query instances.}
 \label{tab:protocol_test_regime_counts}
 \small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+\#Entities & \#Relations & \#Train & \#Valid & \#Test & \#Image entities & Image coverage \\
+\midrule
+27{,}910 & 136 & 220{,}087 & 5{,}000 & 10{,}000 & 14{,}690 & 52.63\% \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.6em}
 \begin{tabular}{lcc}
 \toprule
 Regime & Query count & Proportion \\
@@ -177,6 +133,8 @@ Regime & Query count & Proportion \\
 \end{tabular}
 \end{table}
 
+\Cref{tab:dataset_statistics} summarizes both the split scale and the protocol-defining target-side regimes. The most important property of the current \texttt{paper\_split} is the asymmetry between target position and image availability: head-side targets may still be image-available, whereas tail-side targets are effectively always \texttt{no\_img} under the current test distribution.
+
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/Figure1.pdf}
@@ -186,9 +144,7 @@ Regime & Query count & Proportion \\
 
 This asymmetry motivates both the diagnostic and methodological perspectives of the present study. It explains why bounded multimodal gain emerges under the current protocol and why multimodal activation should be treated as a selective decision rather than a globally uniform default.
 
-All base models are trained under a unified train/dev/test workflow. The development split is used for early stopping and checkpoint selection, and all final reported metrics are evaluated on the test split. Router training follows the same separation principle at the feature-label level: query-level gain labels and relation priors are constructed from development-side expert outcomes only, and the trained router is then applied to test-side query features without using test labels during training. The router family, gain margin $\delta$, and routing threshold $\tau$ are selected on the development split only; the test split is used once for final reporting of the selected configuration.
-
-All formal comparisons use filtered ranking metrics on the test set, including MRR, Hits@1, Hits@3, and Hits@10. All main experiments reported in this paper use \texttt{direction=both}, so both head prediction and tail prediction are included in evaluation. Because several auxiliary hit-based routing exports are not treated as final evidence, the strongest routing claims in this paper are grounded primarily in MRR-based full-ranking comparisons and, where applicable, paired bootstrap-supported delta-MRR results; Hits metrics are retained for the official base-model comparison line where they come from the formal test-metric outputs. Because the current \texttt{paper\_split} is asymmetric, subgroup analysis is also defined in a protocol-aware way. Rather than assuming that both directions contain both image-supported and image-missing targets, the present paper analyzes the only three meaningful target-side regimes under the current test distribution: \texttt{head\_has\_img}, \texttt{head\_no\_img}, and \texttt{tail\_no\_img}. We do not define \texttt{tail\_has\_img} for the final analysis because it does not meaningfully exist under the current test distribution.
+All base models follow a unified train/dev/test workflow. The development split is used for checkpoint and router selection, including gain margins and thresholds; the test split is used once for final reporting. All formal comparisons use filtered ranking with \texttt{direction=both}. Because the current \texttt{paper\_split} is asymmetric, subgroup analysis focuses on the only meaningful target-side regimes: \texttt{head\_has\_img}, \texttt{head\_no\_img}, and \texttt{tail\_no\_img}.
 
 \begin{table}[t]
 \centering
@@ -207,9 +163,12 @@ Oracle/post-hoc analysis line & query-level or candidate-level outcomes with ans
 \end{tabular}
 \end{table}
 
-The present paper therefore relies on four complementary evaluation lines. The official model-comparison line establishes the ranking of the original models under the paper protocol. The strict query-level clean line establishes how far metadata-only selective activation can go when all decisions must be made from legal query-time features. The score-aware expert-combination line tests a stronger deployable setting in which both fixed experts are first scored over candidates and the combiner may use non-answer-aware score-distribution, rank, confidence, and disagreement signals. The Oracle/post-hoc line is used only for diagnostic analysis. These lines answer different questions and must not be mixed as if they shared the same information condition.
+These lines answer different questions and must not be mixed as if they shared the same information condition. The official line ranks the original models, the strict clean line tests metadata-only selective activation, the score-aware line tests non-answer-aware expert-score combination, and the Oracle/post-hoc line is diagnostic only.
 
-\subsection{Query-level Clean Routing Formulations for Selective Activation}
+\subsection{Protocol-Aware Bounded-Gain Diagnosis}
+The protocol asymmetry above is the basis for our bounded-gain diagnosis. Under the current OpenBG-IMG split, target-side image availability differs by prediction role, so multimodal evidence is not available under a symmetric bidirectional regime. This means that always-on fusion may help in local image-supported regions while still harming or diluting performance in the globally dominant structure-favorable region. The experiments in \Cref{tab:official_model_comparison,tab:subgroup_results} quantify this pattern; here we use it to motivate selective activation.
+
+\subsection{Strict Query-Level Clean Routing}
 The previous sections establish a protocol-aware empirical tension. Under the current OpenBG-IMG setting, multimodal gain is visible but not globally reliable. \texttt{Full Model} improves over weaker multimodal baselines, yet stronger structural alternatives---especially \texttt{Residual-only}, and in the official model-comparison line also \texttt{ComplEx}---remain superior at the global level. This shifts the central problem away from merely constructing a richer multimodal encoder. Instead, the problem becomes whether multimodal fusion should be activated for the current query at all, and if so, how that decision should be made under clean query-time legality.
 
 We therefore move from always-on multimodal fusion to \textbf{clean query-level selective activation}. The central idea is simple: if multimodal gain is conditional rather than uniformly available, then the system should predict when fusion is likely to help and use a stronger structural fallback otherwise. To operationalize this idea, we study query-level expert selection between a fusion expert and a structural expert.
@@ -220,9 +179,9 @@ We define two fixed experts:
     \item \textbf{Structural expert:} \texttt{Residual-only}
 \end{itemize}
 
-This choice is deliberate. \texttt{Gate-only} represents relation-aware multimodal fusion without an explicit structural compensation branch. \texttt{Residual-only} represents structure-heavy compensation within the same internal model family. Together, they are the clearest diagnostic endpoints in the current framework and provide a clean basis for selective routing.
+This choice is deliberate: \texttt{Gate-only} represents relation-aware multimodal fusion, while \texttt{Residual-only} represents structure-heavy compensation within the same internal model family.
 
-\paragraph{Clean legality constraint.} For the strict query-level clean line, the key methodological boundary is clean query-time legality. A clean router may use only information that is available before candidate scoring, including query direction, relation identity and development-derived relation priors, and query-observable modality indicators from the observed side of the query. By contrast, the deployable clean router may not use hidden target-side information, target-side image labels, target-aware regimes, correct-target scores, or any other signals that require the true missing entity or post-hoc expert outcomes at inference time.
+\paragraph{Clean legality constraint.} For the strict query-level clean line, the key methodological boundary is clean query-time legality. Strict clean routing may use only information that is available before candidate scoring, including query direction, relation identity and development-derived relation priors, and query-observable modality indicators from the observed side of the query. By contrast, the deployable strict clean setting may not use hidden target-side information, target-side image labels, target-aware regimes, correct-target scores, or any other signals that require the true missing entity or post-hoc expert outcomes at inference time.
 
 \paragraph{Naive global-threshold clean routing.} The simplest clean routing formulation uses a learned probability $p(q)$ and a single global threshold $\tau$. Let $x_q$ denote a clean feature vector available at query time. The router predicts
 \[
@@ -246,7 +205,7 @@ This formulation serves as a minimal deployable clean baseline rather than the s
 \mathbf{1}[p(q)>\tau_{tail}], & q \text{ is a tail-prediction query}.
 \end{cases}
 \]
-We also study optional bucketized thresholding variants, such as relation-prior buckets or query-observable groupings, as supporting structured-policy extensions.
+Optional bucketized thresholding variants are treated only as supporting structured-policy extensions.
 
 \paragraph{Target-aligned supervision for clean routing.} The second major refinement concerns the training target. In the original gain-threshold formulation, supervision is derived from a coarse binary gain label. For each query $q$, let $RR_f(q)$ and $RR_s(q)$ denote the reciprocal ranks of the correct target under the fusion and structural experts. The gain difference is
 \[
@@ -270,33 +229,10 @@ The final score is then computed with the same expert-selection rule as before,
 \[
 s_{\text{final}}(q,e)=\alpha_{reg}(q)s_f(q,e)+(1-\alpha_{reg}(q))s_s(q,e).
 \]
-Thus, E5 differs from the naive binary clean router not by using post-hoc information at test time, but by preserving more information about gain magnitude during training. We also evaluate ordinal gain buckets, which partition $\Delta(q)$ into multiple ordered intervals and route according to whether the predicted bucket indicates positive expected fusion gain.
+Thus, E5 differs from the naive binary clean router not by using post-hoc test-time information, but by preserving gain magnitude during training. Ordinal gain buckets are evaluated only as supporting ablations.
 
-\subsection{Clean Router Features, Training, and Evaluation Basis}
-A naive router could easily degenerate into a shallow heuristic such as ``use fusion whenever the query looks multimodal-friendly.'' To prevent this, we separate three layers of routing evidence. The deployable clean line uses only legal query-time features such as \texttt{direction}, relation identity and development-derived relation priors, and observed-side modality indicators. Stronger target-aware or confidence-rich selectors are retained only as analysis tools for post-hoc separability and are not part of the main clean claims.
-
-\begin{table}[t]
-\centering
-\caption{Clean router feature families used in the deployable routing line.}
-\label{tab:clean_router_feature_sets}
-\small
-\begin{tabular}{p{0.10\textwidth}p{0.78\textwidth}}
-\toprule
-Set & Features \\
-\midrule
-\texttt{C1} & \texttt{direction} \\
-\texttt{C2} & \texttt{direction}, \texttt{relation\_gain\_prior}, \texttt{relation\_fusion\_win\_rate}, \texttt{relation\_support}, \texttt{relation\_is\_visual\_prior} \\
-\texttt{C3} & \texttt{C2} + \texttt{observed\_has\_img}, \texttt{observed\_text\_img\_cosine}, \texttt{observed\_img\_missing\_replaced} \\
-\texttt{C4} & \texttt{C3} + \texttt{relation\_id} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-These features are intentionally limited. They do not attempt to reconstruct the hidden target, and they do not use target-aware or answer-aware confidence signals. Their purpose is to test how much of bounded multimodal gain can be recovered under a truly deployable query-time constraint. All relation-level features are development-derived priors rather than test-time labels: they summarize how the relation behaved on development queries and are then transferred to test queries only through relation identity.
-
-We evaluate three clean routing families. The first baseline is a \textbf{clean rule-based router} that activates fusion only under a conservative legal policy derived from query-observable conditions and development-side priors. The second family is \textbf{naive global-threshold clean routing}, where logistic regression and XGBoost provide learned probabilities under one shared threshold. The third family consists of \textbf{stronger clean formulations}, including structured threshold policies and target-aligned clean supervision.
-
-Router training is performed on development-side query-level feature tables constructed from the fixed experts. Training uses only development-set data, and the resulting router is then applied to test-side clean query features without seeing test outcomes during training. For the clean line, gain-margin settings $\delta$ and routing thresholds are selected on the development split only; the test split is used once for final reporting of the selected configuration.
+\paragraph{Clean router features and training.}
+The deployable clean line uses only legal query-time features: direction, relation identity, development-derived relation priors, and observed-side modality indicators. It does not use hidden targets, target-aware subgroup labels, answer-aware confidence signals, or test-side expert outcomes during training. We compare a conservative clean rule, naive global-threshold routing, and stronger clean formulations based on structured thresholds and target-aligned supervision.
 
 Taken together, these design choices reformulate MMKGC under the current OpenBG-IMG protocol from always-on multimodal fusion to strict query-level selective activation. The paper therefore studies not only a naive global-threshold clean baseline, but also stronger structured clean policies and more target-aligned clean supervision. In the results, E5 is treated as the strongest strict metadata-only clean router, not as the final upper limit of deployable selective activation.
 
@@ -356,77 +292,43 @@ Candidate routers are trained with a ranking-aligned pairwise objective. For a p
 \]
 Training uses hard candidate sets derived from the fixed experts for efficiency, including high-ranked negatives from the fusion and structural expert lists. Final CA-S1/CA-S2/CA-S3 reporting, however, uses full filtered ranking over all candidate entities rather than top-$K$ reranking, so the reported candidate-router results remain comparable as full-ranking test metrics.
 
-\subsection{Router Training Details}
+\subsection{Information Boundaries and Training Protocol}
 
-\paragraph{Query-level feature and label construction.}
-Router training is performed on query-level feature tables constructed from the fixed fusion and structural experts. For every development query $q$, we record the filtered reciprocal ranks produced by the fusion expert and the structural expert, and compute
+\paragraph{Clean router supervision.}
+Router training uses development-side query-level feature tables constructed from the fixed fusion and structural experts. For every development query $q$, we record the filtered reciprocal ranks produced by the fusion expert and the structural expert, and compute
 \[
 \Delta(q)=RR_f(q)-RR_s(q).
 \]
-This development-side expert difference is used only to construct supervision targets. It is not used as a test-time feature. At test time, the router receives only clean query-time features and predicts whether the fusion expert should be activated.
+This development-side expert difference is used only to construct supervision targets, not as a test-time feature. Clean query features include direction, relation-level priors estimated from development outcomes, and modality indicators from the observed side of the query. For tail prediction $(h,r,?)$, the observed side is $h$; for head prediction $(?,r,t)$, the observed side is $t$. Strict clean routing never uses the hidden target entity, target-side image availability, target-aware subgroup labels, test labels, or answer-aware expert scores.
 
-Relation-level priors are also computed from development-side expert outcomes only. For a relation $r$, \texttt{relation\_gain\_prior} is computed as the mean development-side value of $\Delta(q)$ over queries with relation $r$, \texttt{relation\_fusion\_win\_rate} is the proportion of such queries for which $RR_f(q)>RR_s(q)$, and \texttt{relation\_support} is the number of development queries used to estimate these statistics. \texttt{relation\_is\_visual\_prior} is a development-derived binary prior indicating whether the relation belongs to a visually favorable relation group or shows positive development-side fusion tendency under the clean feature construction. These priors are attached to test queries only by relation identity and never use test labels or test-side expert outcomes.
-
-Observed-side modality features are computed only from the known side of the query. For tail prediction $(h,r,?)$, the observed side is the head entity $h$; for head prediction $(?,r,t)$, the observed side is the tail entity $t$. Thus, \texttt{observed\_has\_img}, \texttt{observed\_text\_img\_cosine}, and \texttt{observed\_img\_missing\_replaced} describe only the observed entity. The clean router never uses the hidden target entity, target-side image availability, target-aware subgroup labels, or answer-aware expert scores.
-
-\paragraph{Router and combination families.}
-We evaluate six routing or combination families. First, the legal clean rule baseline activates the fusion expert only under conservative query-observable conditions. Second, binary clean classifiers, including logistic regression and XGBoost classifiers, predict whether $\Delta(q)$ exceeds a gain margin $\delta$ and then apply a threshold to the predicted fusion probability. Third, structured threshold policies reuse the same clean prediction scores but replace a single global threshold with direction-specific or bucket-specific thresholds. Fourth, target-aligned query-level routers replace the binary label with richer supervision, including regression-based gain prediction and ordinal gain buckets. Fifth, simple score-interpolation baselines combine the fixed fusion and structural expert scores using global, direction-specific, or relation-specific weights selected on the development split. Sixth, learned candidate-level score-aware routers learn $\alpha(q,e)$ over candidate entities using pairwise ranking supervision and non-answer-aware expert score features.
-
-For binary routing, the label is
+For binary clean routing, the label is
 \[
 y(q)=\mathbf{1}[\Delta(q)>\delta].
 \]
-For regression-based routing, the target is the scalar gain $\Delta(q)$ itself. The implemented regression router is trained with a squared-error objective, so the model learns $\widehat{\Delta}(q)$ by minimizing prediction error on development-side gain values. At inference time, the regression score is converted into a hard routing decision through a development-selected threshold $\theta$:
+For regression-based routing, the target is the scalar gain $\Delta(q)$ itself. At inference time, the regression score is converted into a hard routing decision through a development-selected threshold $\theta$:
 \[
 \alpha_{reg}(q)=\mathbf{1}[\widehat{\Delta}(q)>\theta].
 \]
-For ordinal routing, $\Delta(q)$ is partitioned into ordered gain buckets, and the final selection uses whether the predicted bucket indicates positive expected fusion gain.
 
-\begin{table}[H]
-\centering
-\caption{Clean query-level selective activation procedure.}
-\label{alg:clean_selective_activation}
-\small
-\begin{tabular}{p{0.94\textwidth}}
-\toprule
-\textbf{Input:} query $q$, clean query-time features $x_q$, fusion expert $s_f$, structural expert $s_s$, trained router $g$, and development-selected threshold(s). \\
-\midrule
-1. Construct clean query-time features $x_q$ using only direction, relation-derived development priors, and observed-side modality indicators. \\
-2. Predict a fusion probability $p(q)$ or expected gain $\widehat{\Delta}(q)$ using the trained router $g$. \\
-3. Apply the selected policy: global threshold, direction-specific threshold, bucket-specific threshold, ordinal decision rule, or regression threshold. \\
-4. Set $\alpha(q)=1$ if the fusion expert is selected; otherwise set $\alpha(q)=0$. \\
-5. Score each candidate entity $e$ using $s_{\text{final}}(q,e)=\alpha(q)s_f(q,e)+(1-\alpha(q))s_s(q,e)$. \\
-6. Rank candidates by $s_{\text{final}}(q,e)$ and compute filtered ranking metrics. \\
-\bottomrule
-\end{tabular}
-\end{table}
+At test time, strict clean routing constructs $x_q$ from legal query-time features, predicts either a fusion probability or expected gain, applies the development-selected policy threshold, and then ranks candidates with the selected expert score. This procedure is intentionally simple because the scientific question is how much bounded gain can be recovered from metadata-only observability, not whether a complex router can be engineered under hidden target access.
 
-\paragraph{Threshold selection and test protocol.}
-All routing hyperparameters are selected on the development split only. This includes the gain margin $\delta$, the single global threshold $\tau$, direction-specific thresholds $\tau_{head}$ and $\tau_{tail}$, bucket-specific thresholds, ordinal decision rules, and the regression decision threshold $\theta$. Once these choices are fixed, the selected router is applied once to the test split for final reporting.
+\paragraph{Model selection and significance.}
+All routing hyperparameters are selected on the development split only, including gain margins, thresholds, and interpolation weights. Once these choices are fixed, the selected policy is applied once to the test split for final reporting. The main significance evidence uses paired query-level bootstrap over matched reciprocal-rank differences, so confidence intervals compare policies on the same query instances rather than as unrelated aggregate scores.
 
-The test split is never used to fit the router, construct relation priors, tune thresholds, choose the gain margin, or select the router family. Test labels and test-side expert outcomes are used only after routing decisions have been made, in order to compute filtered ranking metrics and paired significance results.
-
-\paragraph{Bootstrap evaluation.}
-The main significance evidence is computed on the clean routing line using paired query-level bootstrap. For each pair of compared policies, we compute reciprocal-rank differences on the same test query instances, resample these paired query outcomes with replacement, and recompute the MRR difference on each bootstrap sample. The reported confidence intervals are taken from the empirical bootstrap distribution of paired $\Delta$MRR.
-
-This paired design is necessary because all routing policies in a compared line are evaluated on the same query set. The confidence intervals therefore quantify whether one policy improves over another under matched query conditions, rather than comparing unrelated aggregate scores.
-
-\section{Experiments and Discussion}
+\section{Experiments}
 \subsection{Experimental Setup}
 All experiments are conducted on the current OpenBG-IMG \texttt{paper\_split} under the unified protocol defined in the previous section. Base-model checkpoints are selected on the development split, and final base-model metrics are reported on the test split using filtered ranking with \texttt{direction=both}. Unless otherwise stated, official main-result metrics are aggregated over three random seeds and reported as mean $\pm$ standard deviation when the source line supports that form.
 
-In addition to the main \texttt{paper\_split} results, we report an appendix-only robustness check on an alternative relation-stratified and coverage-protected split, denoted \texttt{appendix\_split\_seed20260427}. This additional split is not used to replace the main evaluation basis; it only tests whether the qualitative role--modality asymmetry and routing trend remain stable under another valid split construction.
+We also report an appendix-only robustness check on a relation-stratified and coverage-protected split, denoted \texttt{appendix\_split\_seed20260427}. For routing comparisons, paired bootstrap evidence is computed over matched query-level reciprocal-rank differences. Score-interpolation baselines are deterministic full-ranking combinations of fixed expert scores selected on the development split.
 
-For the strict query-level clean routing comparisons and the learned candidate-level router comparisons, we report paired query-level bootstrap significance evidence. The simple score-interpolation baselines are reported as deterministic full-ranking combinations of fixed expert score exports selected on the development split. Each bootstrap comparison is defined on the same shared set of test queries and is evaluated both seed-wise and query-wise. In particular, the main significance results use a \emph{paired query-level bootstrap}: for each compared pair of routing policies, the query-level reciprocal-rank differences are computed on the same 60{,}000 paired query instances, 2{,}000 bootstrap samples are then drawn by resampling these paired query outcomes with replacement, and the difference in MRR is recomputed for each resample. The reported 95\% confidence interval is taken from the empirical query-wise bootstrap distribution of $\Delta$MRR induced by these 2{,}000 paired resamples. Seed-wise mean and standard deviation are reported as complementary summaries rather than as replacements for the paired query-level test.
-
-This section is organized around four research questions. \textbf{RQ1} asks where multimodal gain actually appears under the current protocol. \textbf{RQ2} asks why naive clean routing fails and what kind of clean decision structure is actually required. \textbf{RQ3} asks how far structured query-level clean routing can go once bounded gain is known to be conditional. \textbf{RQ4} asks whether score-aware expert combination can recover more deployable gain.
+This section is organized around three research questions. \textbf{RQ1} asks whether multimodal gain is globally reliable under the current protocol. \textbf{RQ2} asks how much bounded gain strict metadata-only routing can recover once clean policy structure and supervision form are improved. \textbf{RQ3} asks whether score-aware non-answer-aware expert combination recovers substantially more deployable gain.
 
 To answer these questions cleanly, we distinguish among four complementary evaluation lines. The \textbf{official model-comparison line} is used for the seven-model comparison among \texttt{Text-only}, \texttt{Early Fusion}, \texttt{Gate-only}, \texttt{Residual-only}, \texttt{Full Model}, \texttt{ComplEx}, and \texttt{TuckER}. The \textbf{strict query-level clean routing line} is based on query-level exported expert predictions and unified recomputation under legal metadata-only query-time constraints. The \textbf{score-aware expert-combination line} is based on fixed-expert score exports and full filtered-ranking recomputation for score interpolation and CA-S1/CA-S2/CA-S3. The \textbf{Oracle/post-hoc analysis line} is retained only for stronger offline separability analysis and hard-selection upper-bound-style comparisons; it is not part of the deployable claim.
 
 For readability, we refer to the best direction-specific clean thresholding policy as \textbf{E1} and the best regression-based clean router as \textbf{E5} in the following discussion. E1 represents the strongest structured-threshold clean policy, whereas E5 represents the strongest target-aligned clean-supervision policy.
 
 \paragraph{Reproducibility.}
-All base-model results are aggregated from formal \texttt{test\_metrics.json} files under a unified filtered-ranking pipeline. We report mean and standard deviation over three random seeds for the official model-comparison line. Router feature tables, threshold scans, clean-routing results, paired bootstrap outputs, and plotting scripts are generated from the same exported query-level expert outcomes. All router thresholds and hyperparameters are selected on the development split only before final test reporting.
+Official model-comparison results are aggregated from formal \texttt{test\_metrics.json} files over three seeds. Router thresholds and hyperparameters are selected on the development split before final test reporting.
 
 \begin{table}[H]
 \centering
@@ -453,71 +355,30 @@ Model & MRR & Hits@1 & Hits@3 & Hits@10 & Notes \\
 
 \begin{table}[H]
 \centering
-\caption{Main clean routing comparison on the clean routing line. Fixed experts in this table are recomputed on the routing-compatible query-level basis and should not be mixed with the official model-comparison line. Hard-selection Oracle routing is included only as a post-hoc upper-bound reference for hard expert selection and is not a deployable clean method.}
+\caption{Strict query-level clean routing results. Fixed experts in this table are recomputed on the routing-compatible query-level basis and should not be mixed with the official model-comparison line. Hard-selection Oracle routing is included only as a post-hoc reference for hard expert selection and is not a deployable clean method.}
 \label{tab:main_clean_routing}
-\small
-\setlength{\tabcolsep}{3pt}
-\begin{tabular}{p{0.26\textwidth}p{0.09\textwidth}p{0.13\textwidth}p{0.13\textwidth}p{0.27\textwidth}}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{p{0.22\textwidth}p{0.18\textwidth}p{0.08\textwidth}p{0.10\textwidth}p{0.11\textwidth}p{0.24\textwidth}}
 \toprule
-Method & MRR & $\Delta$ vs. rule & $\Delta$ vs. residual & Evidence \\
+Method & Policy / target & MRR & $\Delta$ vs. rule & $\Delta$ vs. residual & Evidence / interpretation \\
 \midrule
-\texttt{Residual-only} & 0.2930 & -0.0012 & -- & fixed structural expert \\
-Clean rule & 0.2943 & -- & +0.0012 & legal rule baseline \\
-Naive global clean router & 0.2939 & -0.0004 & +0.0008 & does not beat clean rule \\
-Direction-specific threshold & 0.2974 & +0.0032 & +0.0044 & CI vs. rule: [0.002532, 0.003786] \\
-Regression-based clean router & \textbf{0.2982} & \textbf{+0.0039} & \textbf{+0.0051} & CI vs. rule: [0.003345, 0.004442]; CI vs. residual: [0.004438, 0.005844] \\
-Hard-selection Oracle routing & 0.3337 & +0.0395 & +0.0407 & post-hoc hard-selection upper bound \\
+\texttt{Residual-only} & fixed structural & 0.2930 & -0.0012 & -- & structural anchor \\
+Clean rule & legal rule & 0.2943 & -- & +0.0012 & conservative legal baseline \\
+Naive global clean router & global threshold / binary gain & 0.2939 & -0.0004 & +0.0008 & global threshold is too coarse \\
+Direction-specific threshold & direction thresholds / binary gain & 0.2974 & +0.0032 & +0.0044 & policy granularity helps; CI vs. rule: [0.002532, 0.003786] \\
+Regression-based clean router & thresholded scalar gain & \textbf{0.2982} & \textbf{+0.0039} & \textbf{+0.0051} & strongest strict clean; CI vs. rule: [0.003345, 0.004442] \\
+Hard-selection Oracle routing & answer-aware selection & 0.3337 & +0.0395 & +0.0407 & diagnostic hard-selection headroom \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\noindent\textbf{Interpretation.} \Cref{tab:main_clean_routing} is reported strictly on the clean routing line. The table supports three conclusions. First, naive global-threshold clean routing is weaker than the legal clean rule. Second, direction-specific thresholding recovers a statistically supported clean gain, showing that policy granularity matters. Third, regression-based gain prediction is the strongest clean strategy, but it still remains substantially below hard-selection Oracle routing.
+\noindent\textbf{Interpretation.} \Cref{tab:main_clean_routing} is reported strictly on the clean routing line and combines the main comparison, policy ablation, and paired-bootstrap evidence. It shows that naive global-threshold clean routing is weaker than the legal clean rule, direction-specific thresholding recovers a statistically supported gain, and regression-based gain prediction is the strongest strict clean strategy. However, even the best strict clean result remains far below answer-aware hard-selection Oracle routing.
 
-\begin{table}[H]
-\centering
-\caption{Progressive clean-routing ablation on policy structure and supervision target. All rows are evaluated on the clean routing line.}
-\label{tab:router_ablation}
-\small
-\setlength{\tabcolsep}{3pt}
-\begin{tabular}{p{0.20\textwidth}p{0.09\textwidth}p{0.17\textwidth}p{0.16\textwidth}cp{0.18\textwidth}}
-\toprule
-Variant & Features & Policy & Target & MRR & Interpretation \\
-\midrule
-Clean rule & -- & rule & -- & 0.2943 & legal baseline \\
-Naive learned router & C4 & global threshold & binary gain & 0.2939 & global threshold is insufficient \\
-Direction-specific & C4 & direction-specific & binary gain & 0.2974 & policy granularity helps \\
-Regression router & C4 & thresholded gain & scalar $\Delta(q)$ & 0.2982 & target-aligned supervision helps \\
-\bottomrule
-\end{tabular}
-\end{table}
+All router families, gain margins, thresholds, and interpolation weights are selected on the development split only. Final reporting uses filtered ranking on the test split with \texttt{direction=both}; paired bootstrap evidence is computed on matched query-level reciprocal-rank differences.
 
-\Cref{tab:router_ablation} isolates the two main design changes behind the strongest clean results. Keeping the same clean feature family, moving from a global threshold to a direction-specific policy improves the binary clean router, and replacing the binary target with scalar gain prediction improves it further. The ablation therefore supports the interpretation that the clean-routing bottleneck is not only feature availability, but also policy granularity and supervision form.
-
-\begin{table}[H]
-\centering
-\caption{Experimental execution setup used in this paper.}
-\label{tab:experiment_setup}
-\small
-\begin{tabular}{p{0.34\textwidth}p{0.58\textwidth}}
-\toprule
-Item & Value \\
-\midrule
-Base-model checkpoint selection & \texttt{best.ckpt} chosen on the development split \\
-Official final reporting & filtered ranking on the test split with \texttt{direction=both} \\
-Official summary statistics & mean $\pm$ standard deviation over three seeds \\
-Strongest clean significance basis & paired query-level bootstrap on 60{,}000 shared query instances with 2{,}000 resamples; seed-wise deltas reported separately \\
-Clean router training source & development-side clean feature tables from fixed experts \\
-Clean router inference source & test-side query-level exported expert outcomes under legal query-time constraints \\
-Router model selection & clean policy family, $\delta$, and thresholds selected on the development split only \\
-Gain-margin scan & $\delta \in \{0.00, 0.01, 0.02\}$ \\
-Threshold scan & global or structured thresholds selected on development only \\
-Meaningful target-side regimes & \texttt{head\_has\_img}: 7{,}048 (35.24\%), \texttt{head\_no\_img}: 2{,}952 (14.76\%), \texttt{tail\_no\_img}: 10{,}000 (50.00\%) \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{RQ1: Where does multimodal gain appear?}
-RQ1 asks where multimodal gain actually appears under the current OpenBG-IMG protocol. Our starting point is that the benchmark is not a neutral multimodal setting. Under the current paper split, target position is intrinsically entangled with modality availability: head-side targets may still be image-supported, whereas tail-side targets are effectively image-unavailable. As a result, the bidirectional test space is partitioned into three meaningful target-side regimes, namely \texttt{head\_has\_img}, \texttt{head\_no\_img}, and \texttt{tail\_no\_img}, rather than into two symmetric prediction directions alone. Table~\ref{tab:protocol_test_regime_counts} and Figure~\ref{fig:protocol_asymmetry} make this asymmetry explicit and show that \texttt{tail\_no\_img} alone accounts for half of all bidirectional test queries, which already suggests that aggregate performance will be strongly shaped by a globally large structure-favorable region.
+\subsection{RQ1: Is multimodal gain globally reliable?}
+RQ1 asks whether multimodal gain is globally reliable under the current OpenBG-IMG protocol. Our starting point is that the benchmark is not a neutral multimodal setting. Under the current paper split, target position is intrinsically entangled with modality availability: head-side targets may still be image-supported, whereas tail-side targets are effectively image-unavailable. As a result, the bidirectional test space is partitioned into three meaningful target-side regimes, namely \texttt{head\_has\_img}, \texttt{head\_no\_img}, and \texttt{tail\_no\_img}, rather than into two symmetric prediction directions alone. Table~\ref{tab:protocol_test_regime_counts} and Figure~\ref{fig:protocol_asymmetry} make this asymmetry explicit and show that \texttt{tail\_no\_img} alone accounts for half of all bidirectional test queries, which already suggests that aggregate performance will be strongly shaped by a globally large structure-favorable region.
 
 \begin{table}[H]
 \centering
@@ -536,174 +397,59 @@ Model & \texttt{head\_has\_img} & \texttt{head\_no\_img} & \texttt{tail\_no\_img
 \end{tabular}
 \end{table}
 
-The subgroup results confirm that multimodal gain is not uniformly distributed across this evaluation space. The clearest relative fusion preference appears in \texttt{head\_has\_img}, where \texttt{Gate-only} outperforms \texttt{Full Model} and \texttt{Residual-only}, although the absolute MRR in this regime remains low. This pattern suggests that image availability alone is not sufficient to guarantee high absolute ranking performance. In the \texttt{head\_has\_img} regime, visual information makes the fusion path relatively more useful, which explains why \texttt{Gate-only} achieves the best ordering within this subgroup. Thus, \texttt{head\_has\_img} should be interpreted as a regime with relative fusion preference rather than as a regime that is easy to solve in absolute terms. However, the low absolute MRR indicates that these head-side queries remain intrinsically difficult under the current protocol. By contrast, \texttt{tail\_no\_img} contributes half of all bidirectional queries and is strongly structure-favorable, allowing \texttt{Residual-only} to dominate the aggregate metric. Interpreting these subgroup outcomes together with the regime counts helps explain the broader pattern of the paper: multimodal benefit is visible and meaningful, but it is concentrated in a local subset of queries rather than spread uniformly across the benchmark.
+The subgroup results confirm that multimodal gain is not uniformly distributed. The clearest relative fusion preference appears in \texttt{head\_has\_img}, where \texttt{Gate-only} outperforms \texttt{Full Model} and \texttt{Residual-only}, although the absolute MRR remains low. By contrast, \texttt{tail\_no\_img} contributes half of all bidirectional queries and is strongly structure-favorable, allowing \texttt{Residual-only} to dominate the aggregate metric. Multimodal gain is therefore visible but local, not uniformly spread across the benchmark.
 
-\begin{table}[H]
-\centering
-\caption{Relation-type grouped MRR under the unified OpenBG-IMG protocol. Relation groups are reported as supporting analysis only. Only relations with at least 20 test queries are retained. All cells report mean $\pm$ standard deviation over seeds 1, 2, and 3.}
-\label{tab:relation_grouped}
-\small
-\setlength{\tabcolsep}{5pt}
-\begin{tabular}{lccc}
-\toprule
-Model & \texttt{visual\_relations} & \texttt{weak\_visual\_relations} & \texttt{ambiguous\_material\_relations} \\
-\midrule
-\texttt{Residual-only} & 0.2691 $\pm$ 0.0011 & 0.3197 $\pm$ 0.0010 & 0.2842 $\pm$ 0.0028 \\
-\texttt{Full Model} & 0.1826 $\pm$ 0.0071 & 0.2252 $\pm$ 0.0154 & 0.1948 $\pm$ 0.0201 \\
-\texttt{Gate-only} & 0.1350 $\pm$ 0.0068 & 0.2194 $\pm$ 0.0073 & 0.1337 $\pm$ 0.0083 \\
-\bottomrule
-\end{tabular}
-\end{table}
+Appendix~\ref{app:protocol_sanity} provides a relation-group check with minimum-support filtering. It preserves the same qualitative ordering, indicating that relation context modulates multimodal usefulness but does not overturn the protocol-level structure-dominant pattern. Taken together, these observations answer RQ1: under the current OpenBG-IMG protocol, multimodal gain appears in specific protocol-shaped local regions rather than as a globally reliable property of the benchmark.
 
-\begin{table}[H]
-\centering
-\caption{Retained support for relation-group analysis after minimum-support filtering.}
-\label{tab:relation_group_support}
-\small
-\begin{tabular}{lcc}
-\toprule
-Group & \#Relations retained & \#Test queries retained \\
-\midrule
-\texttt{visual\_relations} & 24 & 3{,}804 \\
-\texttt{weak\_visual\_relations} & 18 & 3{,}304 \\
-\texttt{ambiguous\_material\_relations} & 9 & 1{,}150 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\subsection{RQ2: How much bounded gain can strict metadata-only routing recover?}
+RQ2 asks how much bounded multimodal gain can be recovered under strict metadata-only query-level routing. \Cref{tab:main_clean_routing} shows that a naive learned router with one global threshold is too weak: it reaches 0.2939 MRR, below the clean rule baseline at 0.2943 MRR. Once the policy uses direction-specific thresholds, performance rises to 0.2974 MRR, with a strictly positive paired-bootstrap confidence interval against the clean rule. This isolates the first clean-routing bottleneck: the decision boundary must respect the role-asymmetric protocol rather than using one global operating point.
 
-Relation-group evidence provides a second, but supporting, view of this bounded-gain structure. Across the retained coarse relation groups, the grouped ordering remains \texttt{Residual-only} $>$ \texttt{Full Model} $>$ \texttt{Gate-only}, indicating that relation dependence is real but still bounded. The relation-group results therefore do not show a reversal of the global ordering. Instead, they indicate that relation context modulates the degree of multimodal usefulness while remaining bounded by the protocol-level structure-dominant pattern. \Cref{tab:relation_group_support} reports retained relation and query support after minimum-support filtering. This makes the grouped analysis auditable and reduces the risk that the grouped trends are driven by a handful of low-support cases. Taken together, these observations answer RQ1: under the current OpenBG-IMG protocol, multimodal gain appears in specific protocol-shaped local regions rather than as a globally reliable property of the benchmark.
+The next bottleneck is supervision form. Replacing the binary gain label with scalar gain prediction further improves the clean result to 0.2982 MRR. Ordinal gain modeling and delta-sensitivity results, reported in Appendix~\ref{app:delta_sensitivity}, support the same interpretation: preserving gain magnitude information is helpful under this shallow and asymmetric gain boundary. Despite these improvements, the best strict clean strategy remains far below hard-selection Oracle routing at 0.3337 MRR, leaving about 0.0356 MRR of unresolved hard-selection headroom.
 
-\subsection{RQ2: Why does naive strict query-level clean routing fail, and what kind of clean decision structure is required?}
-RQ2 asks why multimodal evidence cannot be routed effectively by a naive global-threshold clean selector, and what kind of clean decision structure is actually needed under the current protocol.
+The RQ2 conclusion is therefore deliberately bounded. Structured clean routing and more target-aligned clean supervision recover reliable but modest gains under strict metadata-only query-level constraints. E5 is the strongest strict clean result, but the remaining gap to hard-selection Oracle routing indicates that query-level metadata alone still hides much of the hard-selection expert signal. Additional visualization of this gap is provided in Appendix~\ref{app:clean_oracle_gap}.
 
-A natural first attempt is a clean learned router with one global threshold $\tau$. However, \Cref{tab:main_clean_routing} shows that this formulation is too weak. The naive global clean router reaches 0.2939 MRR, below the clean rule baseline at 0.2943 MRR. This means that the main difficulty of deployable routing is not merely classifier capacity. Rather, it lies in the mismatch between a single global decision boundary and the asymmetric gain structure induced by the protocol.
-
-Once the clean policy is allowed to use direction-specific thresholds instead of one global threshold, performance increases substantially above the clean rule baseline. The strongest dual-threshold configuration reaches approximately \texttt{0.2974} MRR, improving over the clean rule (\texttt{0.2943}) by about \texttt{+0.00315}. This gain is not only numerically meaningful but also statistically clean: the bootstrap confidence interval for the comparison between the best direction-specific threshold policy and the clean rule is strictly positive, with mean delta MRR \texttt{+0.003154} and 95\% CI [\texttt{+0.002532}, \texttt{+0.003786}].
-
-This result isolates the first bottleneck of the original clean router: \emph{policy granularity}. E1 does not require a new supervision target or a new expert pair; it changes the decision rule from a single global threshold to direction-specific operating points. The improvement therefore shows that the clean signal was not entirely absent, but that the original global policy was too coarse to use it effectively.
-
-The strongest operating point is also highly interpretable. The best thresholds are strongly asymmetric, with a permissive head-side threshold and a conservative tail-side threshold, confirming that global thresholding is too coarse for the current protocol. Under the current split, head-side and tail-side queries do not operate under one homogeneous gain regime, so the routing policy should not be forced to do so either. This improvement also comes with a more activation-aggressive profile: the best direction-specific policy activates fusion for about \texttt{30.7\%} of test queries, compared with only about \texttt{1.9\%} for the clean rule baseline. Thus E1 should be interpreted not as a free low-coverage gain, but as evidence that higher clean MRR requires a more appropriately structured activation policy.
-
-Additional structured-policy variants reinforce the same conclusion. Relation-prior bucket thresholding and the hybrid prior-first strategy both improve over the clean rule, but only modestly. Their role is therefore not to replace direction-specific thresholding as the strongest clean policy, but to show that policy granularity is genuinely part of the problem. By contrast, extremely conservative fallback policies do not recover the main gains. This negative result is also informative: it shows that the key issue is not simply to activate fusion less often, but to activate it under the right structural granularity.
-
-Taken together, these results answer RQ2. The weakness of the original clean router does not mean that clean deployable routing is hopeless. Instead, it shows that the clean decision boundary is highly asymmetric and cannot be captured adequately by a single global threshold.
-
-\subsection{RQ3: How far can structured query-level clean routing go?}
-RQ3 asks how far strict query-level clean routing can go once bounded multimodal gain is known to be conditional. The official model-comparison line establishes the motivating tension of the paper. Under the formal paper protocol, \texttt{Residual-only} is the strongest overall model, whereas \texttt{Full Model} remains the strongest multimodal variant within the internal family. This means that multimodal modeling is not ineffective, but its benefit is not strong enough to overturn structure-dominant performance at the global level. The benchmark therefore does not simply call for a larger always-on multimodal model. Instead, it presents a setting in which multimodal benefit is real but uneven and therefore unlikely to be handled optimally by one globally shared compromise representation.
-
-The new clean routing results show that policy structure is only the first part of the story. E1 demonstrates that the routing policy must be structured with enough granularity to respect protocol-shaped asymmetry. E5 then tests the next bottleneck: whether the supervision signal itself is too coarse. Replacing the binary gain label with a more target-aligned regression objective yields a further improvement in clean routing. In particular, the strongest regression-based clean router reaches approximately \texttt{0.2982} MRR, outperforming both the clean rule and the direction-specific threshold policy. This establishes a progression rather than two disconnected observations: structured thresholding shows that the policy boundary must be more granular, while regression-based routing shows that the training target must preserve gain magnitude more faithfully.
-
-Direction-specific thresholding improves the clean result to 0.2974 MRR, corresponding to a gain of approximately +0.0032 over the clean rule baseline. Regression-based gain prediction further improves the clean result to 0.2982 MRR. Its improvement over the clean rule is +0.0039 MRR with a 95\% paired bootstrap confidence interval of [0.003345, 0.004442]. Its improvement over \texttt{Residual-only} is +0.0051 MRR with a 95\% paired bootstrap confidence interval of [0.004438, 0.005844].
-
-\begin{table}[H]
-\centering
-\caption{Clean routing line. Results in this table are recomputed from query-level expert outcomes under legal query-time constraints. Fixed expert rows are routing-compatible recomputed values, not copied from the official model-comparison line.}
-\label{tab:clean_bootstrap_evidence}
-\small
-\begin{tabular}{lcc}
-\toprule
-Comparison & Mean $\Delta$MRR & 95\% bootstrap CI \\
-\midrule
-E1 best vs clean rule & +0.003154 & [ +0.002532, +0.003786 ] \\
-E5 best vs clean rule & +0.003900 & [ +0.003345, +0.004442 ] \\
-E5 best vs \texttt{Residual-only} & +0.005133 & [ +0.004438, +0.005844 ] \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\Cref{tab:clean_bootstrap_evidence} reports the paired bootstrap evidence for the strongest clean-routing comparisons. These gains are statistically well supported. All three reported comparisons are evaluated as paired query-level tests on the same shared query set rather than as independent aggregate summaries. The corresponding 95\% confidence intervals are obtained from the empirical bootstrap distribution of query-wise $\Delta$MRR under 2{,}000 paired bootstrap resamples with replacement. These results support the strongest clean claims made in this paper with matched statistical evidence: direction-specific thresholding consistently improves over the clean rule baseline, and the regression-based clean router consistently improves over both the clean rule and \texttt{Residual-only}.
-
-Ordinal gain modeling also improves over the binary baseline, although it remains below the regression formulation. This pattern is conceptually important. It suggests that preserving gain magnitude information is especially helpful under the current protocol, where the gain boundary is shallow, uneven, and strongly shaped by direction-specific asymmetry.
-
-Probability calibration provides only limited gains relative to the stronger clean results above. This means that the weakness of the original clean router is not primarily a calibration issue. Delta sensitivity is more informative because it directly tests whether the binary gain label itself is too coarse. As shown in \Cref{tab:delta_sensitivity}, the naive global learned router is much stronger under the permissive $\delta=0.00$ label, reaching 0.2978--0.2983 MRR, but drops back to approximately 0.2939 when the harder $\delta=0.01$ margin is imposed. This pattern supports the view that the original clean-routing difficulty is partly a supervision-design problem: $\delta=0.01$ is not just another hyperparameter choice, but a substantially harder clean setting in which the binary label discards useful gain-magnitude information.
-
-Despite these improvements, the best clean strategy remains far below hard-selection Oracle routing. The strongest clean method reaches 0.2982 MRR, whereas hard-selection Oracle routing reaches 0.3337 MRR, leaving approximately 0.0356 MRR of unresolved hard-selection headroom. This remaining gap supports the paper's controlled claim: structured clean routing recovers part, but not all, of the separability visible under hard-selection oracle-style selection.
-
-This also clarifies how the post-hoc analysis line should be interpreted. The post-hoc selector remains useful as an analysis tool because it reveals stronger offline separability than what can be realized in a deployable clean router. Once clean routing is strengthened, the remaining distance to post-hoc or Oracle performance becomes a more precise indicator of how much separability is still hidden from legal query-time observation.
-
-The RQ3 conclusion is therefore deliberately bounded. Structured clean routing and more target-aligned clean supervision recover reliable but modest gains under strict metadata-only query-level constraints. E5 is the strongest strict clean result, but the remaining gap to hard-selection Oracle routing indicates that query-level metadata alone still hides much of the hard-selection expert signal. Additional visualization of the clean-routing progression and delta-sensitivity results is provided in Appendix~\ref{app:clean_oracle_gap} and Appendix~\ref{app:delta_sensitivity}.
-
-\subsection{RQ4: Can score-aware expert combination recover more deployable gain?}
-RQ4 asks whether the limitation of strict query-level clean routing is caused by the selective-activation idea itself, or by the coarseness of metadata-only query-level signals. The score-aware expert-combination line answers this question by allowing deployable non-answer-aware access to fixed-expert score patterns after both experts have scored the candidate set. This line includes both learned candidate-level routers and simple score-interpolation baselines, so it tests whether recoverable gain depends on router complexity or on the availability of score-aware expert-combination information.
+\subsection{RQ3: Does score-aware combination recover more gain?}
+RQ3 asks whether the limitation of strict query-level clean routing is caused by the selective-activation idea itself, or by the coarseness of metadata-only query-level signals. The score-aware expert-combination line answers this question by allowing deployable non-answer-aware access to fixed-expert score patterns after both experts have scored the candidate set. This line includes both learned candidate-level routers and simple score-interpolation baselines, so it tests whether recoverable gain depends on router complexity or on the availability of score-aware expert-combination information.
 
 \begin{table}[t]
 \centering
 \scriptsize
-\caption{Main learned candidate-router results on OpenBG-IMG. E5 is the strongest strict query-level clean router, while CA-S1/CA-S2/CA-S3 are candidate-level routers evaluated by full filtered ranking over three seeds.}
+\caption{Score-aware expert-combination results on OpenBG-IMG. E5 is the strongest strict query-level clean router. CA-S1/CA-S2/CA-S3 are learned candidate-level routers, while interpolation rows are deterministic full-ranking combinations of fixed expert scores selected on the development split.}
 \label{tab:candidate_router_main_results}
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{p{0.25\textwidth}p{0.09\textwidth}p{0.13\textwidth}cccp{0.15\textwidth}}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{0.27\textwidth}p{0.11\textwidth}p{0.15\textwidth}ccp{0.20\textwidth}}
 \toprule
-Method & Routing level & Feature type & MRR & $\Delta$ Residual & $\Delta$ E5 & Hard-selection Oracle recovery \\
+Method & Level & Information type & MRR & $\Delta$ vs. E5 & Interpretation \\
 \midrule
-Residual-only & fixed & structural & 0.2930 & 0.0000 & -0.0051 & 0.0\% \\
-Clean rule & query & strict clean & 0.2943 & +0.0012 & -0.0039 & 3.0\% \\
-Direction-specific threshold & query & strict clean & 0.2974 & +0.0044 & -0.0007 & 10.8\% \\
-Regression-based clean router & query & strict clean & 0.2982 & +0.0051 & 0.0000 & 12.6\% \\
-CA-S1 clean candidate & candidate & clean candidate & \mbox{0.2503 $\pm$ 0.0054} & -0.0427 & -0.0479 & -105.0\% \\
-CA-S2 score-aware & candidate & score-aware & \mbox{0.3142 $\pm$ 0.0010} & +0.0211 & +0.0160 & 51.9\% \\
-CA-S3 clean + score & candidate & clean + score-aware & \mbox{0.3135 $\pm$ 0.0010} & +0.0204 & +0.0153 & 50.2\% \\
-Hard-selection Oracle routing & oracle & answer-aware & 0.3337 & +0.0407 & +0.0356 & 100.0\% \\
+Residual-only & fixed & structural & 0.2930 & -0.0051 & structural anchor \\
+E5 regression clean router & query & strict clean & 0.2982 & 0.0000 & strongest metadata-only clean result \\
+CA-S1 clean candidate & candidate & clean candidate & \mbox{0.2503 $\pm$ 0.0054} & -0.0479 & static candidate metadata is insufficient \\
+CA-S2 score-aware & candidate & score-aware & \mbox{0.3142 $\pm$ 0.0010} & +0.0160 & strongest learned score-aware router \\
+CA-S3 clean + score & candidate & clean + score-aware & \mbox{0.3135 $\pm$ 0.0010} & +0.0153 & close to CA-S2; metadata adds little \\
+Global score interpolation & ensemble & score interpolation & 0.3408 & +0.0426 & simple score combination is stronger \\
+Direction-specific interpolation & ensemble & score interpolation & 0.3421 & +0.0439 & direction granularity helps modestly \\
+Relation-specific interpolation & ensemble & score interpolation & \textbf{0.3428} & \textbf{+0.0446} & strongest score-aware combination \\
 \bottomrule
 \end{tabular}
-\vspace{0.4ex}\caption*{\footnotesize E5 denotes the regression-based clean router. Oracle routing is answer-aware and is shown only as an upper bound for hard expert selection, not for score-level interpolation. Negative recovery indicates that the method performs below the \texttt{Residual-only} anchor under this hard-selection headroom normalization. Hits metrics are omitted from this main table to emphasize the MRR-based selective-activation conclusion.}
+\vspace{0.4ex}\caption*{\footnotesize Interpolation rows are not bounded by hard-selection Oracle routing because they create mixed score rankings rather than choosing one fixed expert ranking. Hits metrics are omitted to emphasize the MRR-based selective-activation conclusion.}
 \end{table}
 
-\Cref{tab:candidate_router_main_results} shows that learned candidate-level score-aware routing substantially changes the strength of the result. CA-S1, which uses clean candidate metadata without score-aware features, performs poorly overall at 0.2503 MRR. This negative result is important: static candidate modality information alone is not enough to decide expert usefulness and can be globally harmful. By contrast, CA-S2 reaches 0.3142 $\pm$ 0.0010 MRR, outperforming the strongest strict query-level clean router E5 by +0.0160 MRR and recovering 51.9\% of the hard-selection Oracle headroom. CA-S3, which adds clean candidate metadata to the score-aware feature set, reaches 0.3135 $\pm$ 0.0010 MRR. Thus the learned-router improvement comes from score-aware expert behavior rather than from static candidate modality metadata.
+\Cref{tab:candidate_router_main_results} shows that learned candidate-level score-aware routing substantially changes the strength of the result. CA-S1, which uses clean candidate metadata without score-aware features, performs poorly overall at 0.2503 MRR, showing that static candidate modality information alone is insufficient. By contrast, CA-S2 reaches 0.3142 $\pm$ 0.0010 MRR, outperforming the strongest strict query-level clean router E5 by +0.0160 MRR. CA-S3 reaches 0.3135 $\pm$ 0.0010 MRR, and the direct CA-S2 versus CA-S3 comparison is not statistically decisive. We therefore treat them as similarly strong learned score-aware variants rather than claiming that CA-S2 reliably dominates CA-S3.
 
-\begin{table}[t]
-\centering
-\small
-\caption{Paired bootstrap significance for candidate-aware full-ranking routers.}
-\label{tab:candidate_router_significance}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{p{0.30\textwidth}cccp{0.22\textwidth}c}
-\toprule
-Comparison & Baseline MRR & Candidate MRR & Delta MRR & 95\% bootstrap CI & Paired queries \\
-\midrule
-CA-S1 vs Residual-only & 0.2930 & 0.2503 & -0.0427 & [-0.0452, -0.0404] & 60000 \\
-CA-S1 vs E5 regression clean router & 0.2982 & 0.2503 & -0.0479 & [-0.0503, -0.0455] & 60000 \\
-CA-S2 vs Residual-only & 0.2930 & 0.3142 & +0.0211 & [+0.0191, +0.0232] & 60000 \\
-CA-S2 vs E5 regression clean router & 0.2982 & 0.3142 & +0.0160 & [+0.0139, +0.0181] & 60000 \\
-CA-S3 clean + vs Residual-only & 0.2930 & 0.3135 & +0.0204 & [+0.0184, +0.0226] & 60000 \\
-CA-S3 clean + vs E5 regression clean router & 0.2982 & 0.3135 & +0.0153 & [+0.0132, +0.0174] & 60000 \\
-CA-S2 vs CA-S3 clean + & 0.3135 & 0.3142 & +0.0007 & [-0.0002, +0.0014] & 60000 \\
-\bottomrule
-\end{tabular}
-}
-\vspace{0.4ex}\caption*{\footnotesize Confidence intervals use 2,000 paired bootstrap resamples over matched query-level reciprocal-rank deltas.}
-\end{table}
+\Cref{tab:candidate_router_subgroup_results} explains where the candidate-level gain comes from. CA-S1 helps the two head-side regimes but severely degrades the dominant \texttt{tail\_no\_img} regime, while CA-S2 and CA-S3 improve mainly in \texttt{tail\_no\_img}. Full subgroup and alpha diagnostics are provided in Appendix~\ref{app:candidate_router_diagnostics}; the key point is that score-aware routers behave like sparse candidate-level correction mechanisms rather than image-availability switches.
 
-\Cref{tab:candidate_router_significance} confirms that the CA-S2 and CA-S3 improvements over both \texttt{Residual-only} and E5 are statistically supported under paired query-level bootstrap. CA-S2 improves over E5 by +0.0160 MRR with 95\% CI [+0.0139, +0.0181], and CA-S3 improves over E5 by +0.0153 MRR with 95\% CI [+0.0132, +0.0174]. The direct CA-S2 versus CA-S3 comparison is small and not statistically decisive because its confidence interval crosses zero. We therefore treat CA-S2 as the numerically strongest and more parsimonious learned candidate-level router, while describing CA-S2 and CA-S3 as similarly strong learned score-aware variants rather than claiming that CA-S2 reliably dominates CA-S3.
-
-\Cref{tab:candidate_router_subgroup_results} explains where the candidate-level gain comes from. CA-S1 helps the two head-side regimes but severely degrades the dominant \texttt{tail\_no\_img} regime, producing a large global loss. In contrast, CA-S2 and CA-S3 improve mainly in \texttt{tail\_no\_img}, with gains of +0.0404 and +0.0389 MRR over \texttt{Residual-only}, respectively. This shifts the mechanism explanation away from image availability alone. The strongest candidate routers do not simply activate fusion where images are present; they use expert score patterns to make sparse corrections in the globally dominant structure-favorable region.
-
-\Cref{tab:candidate_router_alpha_overall,tab:candidate_router_alpha_behavior} provide diagnostic evidence for this sparse-correction behavior. Overall, CA-S2 has mean alpha 0.0470 but target alpha 0.1964, while CA-S3 has mean alpha 0.0480 but target alpha 0.2016. In \texttt{tail\_no\_img}, the separation is even sharper: CA-S2 has mean alpha 0.0054 but target alpha 0.3788, and CA-S3 has mean alpha 0.0070 but target alpha 0.3871. Target alpha is computed only after evaluation to diagnose behavior; it is not a router feature. Full subgroup and alpha diagnostics are provided in Appendix~\ref{app:candidate_router_diagnostics}. The pattern suggests that learned score-aware candidate routing does not broadly switch the system to fusion. Instead, it keeps most candidate weights structural while assigning much higher fusion weight to the correct target candidates in diagnostic analysis, especially in the regime where global multimodal activation would be risky.
-
-This means that the best deployable gain does not come from blindly activating fusion whenever images are available. Instead, CA-S2 behaves as a sparse candidate-level correction mechanism: most candidate scores remain structure-dominant, while fusion influence increases selectively for candidates whose fixed-expert score patterns indicate potential benefit.
-
-The learned candidate routers show that moving beyond strict metadata-only clean routing is beneficial. However, they are not the end of the story. To test whether the gain is due to candidate-level router complexity or to the availability of fixed-expert score information itself, we further evaluate simple full-ranking score-interpolation baselines using the same Gate-only and Residual-only expert scores. Their policies are selected on the development split and evaluated on the test split under full filtered ranking.
-
-\input{figures/table_score_ensemble_baselines.tex}
-
-\Cref{tab:score_ensemble_baselines} shows that simple score interpolation is not merely a weak sanity baseline. Global interpolation already reaches 0.3408 MRR, direction-specific interpolation reaches 0.3421 MRR, and relation-specific interpolation reaches 0.3428 MRR, all outperforming CA-S2. This result changes the interpretation of RQ4. CA-S2 remains useful as a learned candidate-level implementation showing that score-aware routing is much stronger than strict clean query-level routing. Nevertheless, the strongest evidence indicates that much of the recoverable gain comes from the fixed-expert score-combination basis itself rather than from a more complex learned router.
+Simple full-ranking score interpolation using the same Gate-only and Residual-only expert scores reaches 0.3408--0.3428 MRR, outperforming CA-S2. This result changes the interpretation of RQ3. CA-S2 remains useful as a learned candidate-level implementation, but the strongest evidence indicates that much of the recoverable gain comes from the fixed-expert score-combination basis itself rather than from a more complex learned router.
 
 This does not contradict the hard-selection Oracle routing result. The Oracle row is a hard-selection upper bound for query-level expert selection between the two fixed experts. Score interpolation creates a new mixed ranking that is not identical to either expert ranking, and therefore it is not bounded by the hard-selection Oracle.
 
 \subsection{Integrated Discussion}
-The combined evidence across RQ1--RQ4 supports a more refined conclusion than the earlier paper version. Under the current OpenBG-IMG protocol, multimodal gain is real but bounded, and a lightweight naive clean router is not sufficient to exploit it. However, this weakness should not be interpreted as evidence that deployable selective activation is impossible in principle. Instead, the results identify three successive bottlenecks. First, the policy boundary is too coarse when a single global threshold is used; direction-specific thresholding shows that policy granularity matters. Second, the original binary gain label is too coarse as a training target; regression-based routing shows that supervision form matters as well. Third, strict query-level metadata remains too coarse even after these improvements; score-aware expert combination shows that fixed-expert score patterns provide substantially stronger non-answer-aware signals.
+The combined evidence across RQ1--RQ3 supports a single conclusion. Under the current OpenBG-IMG protocol, multimodal gain is real but bounded, and strict metadata-only query-level routing can recover only a modest part of it. The clean-routing line identifies two local bottlenecks: a single global threshold is too coarse, and binary gain supervision discards useful gain-magnitude information. Direction-specific thresholding and regression-based routing address these issues, but they do not expose candidate-level expert behavior.
 
-This distinction also clarifies what each routing line proves. E5 shows that strict metadata-only query-level routing is statistically reliable but modest. CA-S1 shows that static candidate metadata alone is insufficient, because it severely damages the dominant \texttt{tail\_no\_img} regime. CA-S2 and CA-S3 show that learned score-aware candidate-level routing is much stronger than strict clean routing. The full-ranking interpolation results further sharpen this conclusion: global, direction-specific, and relation-specific score interpolation outperform CA-S2, indicating that the dominant source of recoverable gain is not the complexity of the learned router, but the availability of fixed-expert score-combination information.
+The score-aware line changes that boundary. CA-S1 shows that static candidate metadata alone is insufficient, whereas CA-S2 and CA-S3 show that learned score-aware candidate-level routing is much stronger than strict clean routing. The full-ranking interpolation results sharpen the conclusion further: simple global, direction-specific, and relation-specific score interpolation outperform CA-S2, indicating that the dominant source of recoverable gain is the availability of fixed-expert score-combination information rather than learned-router complexity alone.
 
-This mechanism also changes how the bounded-gain diagnosis should be read. The key finding is not simply that multimodal evidence helps whenever target-side images exist. Rather, image-supported head-side targets reveal relative fusion preference, while the strongest deployable improvement is obtained once non-answer-aware fixed-expert score-combination information is available.
+The key finding is therefore not that multimodal evidence helps whenever target-side images exist. Image-supported head-side targets reveal relative fusion preference, but the strongest deployable improvement appears once non-answer-aware fixed-expert score patterns are available. In incomplete or asymmetric visual-support settings, deciding what deployable expert-confidence information to expose may be as important as designing a richer fusion operator.
 
-In this sense, CA-S2 provides an interpretable learned route into the score-aware setting, while the interpolation baselines reveal that a simple combination rule can be even more effective once the information boundary is relaxed from metadata-only to score-aware.
-
-The main bottleneck is not simply how to design a stronger router, but which deployable information boundary the router or combiner is allowed to access: metadata-only query features recover only modest gain, whereas non-answer-aware fixed-expert score patterns enable substantially stronger expert combination, even with simple interpolation.
-
-More broadly, the results suggest an important direction for future MMKGC research. In settings with incomplete or asymmetric visual support, deciding not only how to fuse modalities, but also at what granularity to activate experts and what deployable expert-confidence signals to expose, may be just as important as designing a richer fusion operator.
-
-\subsection{Limitations and Threats to Validity}
+\subsection{Limitations}
 
 First, the conclusions are protocol-aware rather than universal. The role--modality asymmetry analyzed in this paper is induced by the current OpenBG-IMG \texttt{paper\_split}; different splits or datasets with more balanced target-side image availability may produce different gain boundaries. The thresholds, gain margins, and supervision targets should therefore be interpreted as empirical operating choices for this split rather than as transfer rules for other benchmarks or missing-modality patterns.
 
@@ -715,24 +461,16 @@ Third, score-aware expert combination has a higher deployability cost than stric
 
 Fourth, the full-ranking score-interpolation baselines show that CA-S2 is not the uniquely strongest score-aware combiner. This is a clarifying limitation of the learned-router component rather than a contradiction of the main analysis. The result indicates that once fixed-expert score information is available, simple interpolation can recover more gain than the learned candidate-level router. Therefore, the strongest claim of the paper is about the score-aware information boundary and expert-combination basis, not about the architectural superiority of CA-S2.
 
-Fifth, the candidate routers are trained with top-$K$ hard candidate sets for efficiency, while final reporting uses full filtered ranking over all entities. This distinction is important for reproducibility and prevents top-$K$ reranking results from being confused with the final full-ranking evidence.
+Fifth, the routing framework uses a fixed pair of experts, \texttt{Gate-only} and \texttt{Residual-only}. This design makes the analysis interpretable and keeps the comparison controlled, but it does not exhaust the possible expert set. Future work could explore additional multimodal and structural experts, stronger candidate-level feature families, or end-to-end expert-router training.
 
-Sixth, the routing framework uses a fixed pair of experts, \texttt{Gate-only} and \texttt{Residual-only}. This design makes the analysis interpretable and keeps the comparison controlled, but it does not exhaust the possible expert set. Future work could explore additional multimodal and structural experts, stronger candidate-level feature families, or end-to-end expert-router training.
-
-Seventh, the main routing conclusions are based primarily on MRR-based full-ranking comparisons and, where applicable, paired bootstrap delta-MRR. Hit-based routing exports are treated as auxiliary rather than final evidence, and the separate oracle-gap decomposition is treated only as auxiliary analysis rather than as primary quantitative evidence. For this reason, the strongest claims of the paper are grounded primarily in the protocol diagnosis, direct MRR-based routing comparisons, deterministic score-combination baselines, and paired-bootstrap comparisons for strict clean and learned candidate-level router policies.
+Finally, the main routing conclusions are based primarily on MRR-based full-ranking comparisons and, where applicable, paired bootstrap delta-MRR. Hit-based routing exports and oracle-gap decompositions are treated as auxiliary rather than primary evidence.
 
 \section{Conclusion}
-This paper addresses a protocol-aware question on OpenBG-IMG: not whether multimodal information is useful in the abstract, but whether it yields reliable gain under the current asymmetric missing-visual setting. The answer is that multimodal gain does exist, but it is conditional and non-uniform rather than globally reliable under the present protocol.
+This paper addresses a protocol-aware question on OpenBG-IMG: not whether multimodal information is useful in the abstract, but whether it yields reliable gain under the current asymmetric missing-visual setting. We show that multimodal gain is real but local and bounded. The clearest relative fusion preference appears in \texttt{head\_has\_img}, whereas the globally dominant \texttt{tail\_no\_img} regime remains structure-favorable.
 
-Analytically, we show that multimodal gain is real but bounded. The clearest relative fusion preference appears in \texttt{head\_has\_img}, although the absolute MRR in this regime remains low, whereas the globally dominant \texttt{tail\_no\_img} regime remains structure-favorable. Relation-group evidence further indicates that multimodal benefit is relation-dependent, but not strong enough to overturn structural dominance at the grouped level.
+Strict metadata-only query-level routing recovers only modest gain. Direction-specific thresholding and regression-based gain prediction improve over naive clean routing, but query-level metadata still hides much of the recoverable expert signal. Once non-answer-aware fixed-expert score patterns are exposed, deployable expert combination becomes much stronger: CA-S2 reaches 0.3142 MRR, and simple full-ranking score interpolation reaches up to 0.3428 MRR.
 
-Methodologically, the main lesson is that strict metadata-only query-level routing is too weak to exploit bounded multimodal gain effectively, but selective activation is not exhausted. Direction-specific thresholding and regression-based gain prediction recover modest but statistically reliable clean gains. Once fixed-expert score information is exposed, however, deployable expert combination becomes much stronger. CA-S2 reaches 0.3142 MRR and improves substantially over E5, but simple full-ranking score interpolation reaches up to 0.3428 MRR. This shows that the strongest deployable gain comes from score-aware expert-combination information itself rather than from the complexity of the learned router.
-
-An appendix-only robustness check on an alternative split further supports the qualitative conclusion: the role--modality asymmetry remains present, strict query-level clean routing still provides only modest gain, and moving beyond metadata-only clean routing to score-aware expert use remains beneficial.
-
-The final message is therefore focused: under the current OpenBG-IMG protocol, the weakness of strict query-level clean routing is not solely caused by insufficient model capacity. It also stems from overly coarse global thresholding, binary gain supervision, and metadata-only query-level observability. Once routing is moved beyond metadata-only signals and allowed to use non-answer-aware fixed-expert score patterns, deployable multimodal gain can be recovered much more effectively. The unexpectedly strong score-interpolation baselines further show that future work should not only design more complex routers, but also study simple, stable, and well-calibrated expert-combination rules under explicit information boundaries.
-
-The main contribution of the paper is this transition from bounded-gain diagnosis to stronger expert combination under explicit information boundaries. More broadly, the results suggest that future MMKGC research should study not only how to fuse modalities more richly, but also how to structure simple, stable, and deployable expert-combination rules under asymmetric missing-modality protocols.
+The final message is therefore focused. Under the current OpenBG-IMG protocol, the main bottleneck is not merely router complexity, but the deployable information boundary under which expert combination is performed. Future MMKGC work under incomplete visual support should study not only how to fuse modalities more richly, but also how to structure simple, stable, and deployable expert-combination rules under explicit information boundaries.
 
 
 \appendix
@@ -814,34 +552,46 @@ CA-S3 clean + score & 0.0480 $\pm$ 0.0004 & 0.2016 $\pm$ 0.0085 & 4.1997 & +0.02
 \vspace{0.4ex}\caption*{\footnotesize The target/mean alpha ratio summarizes how selectively the router raises fusion weight on the correct entity.}
 \end{table}
 
-\begin{table}[H]
-\centering
-\small
-\caption{Alpha behavior of candidate-aware full-ranking routers by target-side regime.}
-\label{tab:candidate_router_alpha_behavior}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{p{0.17\textwidth}p{0.13\textwidth}ccccc}
-\toprule
-Method & Regime & Mean alpha & Target alpha & Target/mean alpha & MRR gain vs Residual & MRR delta vs Gate \\
-\midrule
-CA-S1 clean candidate & head\_has\_img & 0.1317 $\pm$ 0.0000 & 0.0379 $\pm$ 0.0000 & 0.2877 & +0.0034 $\pm$ 0.0003 & -0.0082 \\
-CA-S1 clean candidate & head\_no\_img & 0.1350 $\pm$ 0.0000 & 0.2855 $\pm$ 0.0000 & 2.1152 & +0.0125 $\pm$ 0.0015 & +0.0057 \\
-CA-S1 clean candidate & tail\_no\_img & 0.6296 $\pm$ 0.0000 & 0.4031 $\pm$ 0.0000 & 0.6402 & -0.0916 $\pm$ 0.0116 & +0.0971 \\
-CA-S2 score-aware & head\_has\_img & 0.0912 $\pm$ 0.0000 & 0.0114 $\pm$ 0.0011 & 0.1252 & +0.0015 $\pm$ 0.0001 & -0.0102 \\
-CA-S2 score-aware & head\_no\_img & 0.0827 $\pm$ 0.0000 & 0.0202 $\pm$ 0.0003 & 0.2446 & +0.0026 $\pm$ 0.0003 & -0.0041 \\
-CA-S2 score-aware & tail\_no\_img & 0.0054 $\pm$ 0.0001 & 0.3788 $\pm$ 0.0176 & 70.5009 & +0.0404 $\pm$ 0.0025 & +0.2291 \\
-CA-S3 clean + score & head\_has\_img & 0.0915 $\pm$ 0.0001 & 0.0137 $\pm$ 0.0012 & 0.1501 & +0.0017 $\pm$ 0.0001 & -0.0099 \\
-CA-S3 clean + score & head\_no\_img & 0.0830 $\pm$ 0.0001 & 0.0218 $\pm$ 0.0008 & 0.2623 & +0.0024 $\pm$ 0.0004 & -0.0043 \\
-CA-S3 clean + score & tail\_no\_img & 0.0070 $\pm$ 0.0008 & 0.3871 $\pm$ 0.0179 & 55.0089 & +0.0389 $\pm$ 0.0013 & +0.2277 \\
-\bottomrule
-\end{tabular}
-}
-\vspace{0.4ex}\caption*{\footnotesize Mean alpha averages the router weight over all ranked candidates, whereas target alpha is the weight assigned to the correct entity. Values show that score-aware routers remain mostly structural over the candidate set but assign larger fusion weight to target candidates.}
-\end{table}
+The omitted regime-level alpha table follows the same qualitative pattern as the subgroup MRR table: score-aware routers remain mostly structural over the candidate set while assigning larger fusion weight to target candidates, especially in the dominant \texttt{tail\_no\_img} regime.
 
 \clearpage
 \section{Additional Protocol Sanity Checks}
 \label{app:protocol_sanity}
+
+Relation-group evidence provides a supporting view of the bounded-gain structure. Only relations with at least 20 test queries are retained.
+
+\begin{table}[H]
+\centering
+\caption{Relation-type grouped MRR under the unified OpenBG-IMG protocol. All cells report mean $\pm$ standard deviation over seeds 1, 2, and 3.}
+\label{tab:relation_grouped}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lccc}
+\toprule
+Model & \texttt{visual\_relations} & \texttt{weak\_visual\_relations} & \texttt{ambiguous\_material\_relations} \\
+\midrule
+\texttt{Residual-only} & 0.2691 $\pm$ 0.0011 & 0.3197 $\pm$ 0.0010 & 0.2842 $\pm$ 0.0028 \\
+\texttt{Full Model} & 0.1826 $\pm$ 0.0071 & 0.2252 $\pm$ 0.0154 & 0.1948 $\pm$ 0.0201 \\
+\texttt{Gate-only} & 0.1350 $\pm$ 0.0068 & 0.2194 $\pm$ 0.0073 & 0.1337 $\pm$ 0.0083 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Retained support for relation-group analysis after minimum-support filtering.}
+\label{tab:relation_group_support}
+\small
+\begin{tabular}{lcc}
+\toprule
+Group & \#Relations retained & \#Test queries retained \\
+\midrule
+\texttt{visual\_relations} & 24 & 3{,}804 \\
+\texttt{weak\_visual\_relations} & 18 & 3{,}304 \\
+\texttt{ambiguous\_material\_relations} & 9 & 1{,}150 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 We add a lightweight degree-based sanity check to examine whether the target-side role--modality pattern is reducible to an unexamined degree artifact. Entity degree is computed only from the training graph, using the number of train triples in which an entity appears as head or tail. The results are reported by test-time target-side regime.
 
@@ -853,19 +603,7 @@ The table shows that the dominant \texttt{tail\_no\_img} regime is also much hig
 \section{Additional Split Robustness Check}
 \label{app:additional_split_robustness}
 
-To test whether the main conclusion depends on a single random split, we construct an additional relation-stratified and coverage-protected split, denoted \texttt{appendix\_split\_seed20260427}. This split is used only as an appendix robustness check. It does not replace the main \texttt{paper\_split}, and it is not used for the official model-comparison line.
-
-The additional split keeps the same scale as the main evaluation split: 27{,}910 entities, 136 relations, 220{,}087 training triples, 5{,}000 validation triples, and 10{,}000 test triples. The image coverage also remains unchanged at 52.63\% because the entity set and image metadata are shared.
-
-\input{figures/table_target_side_regime_counts_appendix_split_seed20260427.tex}
-
-The target-side regime counts show that the same role--modality asymmetry remains present. Head-side targets are partially image-available, with 7{,}018 \texttt{head\_has\_img} and 2{,}982 \texttt{head\_no\_img} query instances, whereas tail-side targets remain image-unavailable, with 0 \texttt{tail\_has\_img} and 10{,}000 \texttt{tail\_no\_img} query instances. This supports the interpretation that the role--modality asymmetry is not an artifact of only the main \texttt{paper\_split}.
-
-\input{figures/table_robustness_results_appendix_split_seed20260427.tex}
-
-The model-level robustness check preserves the same qualitative trend as the main experiments. \texttt{Residual-only} remains much stronger than \texttt{Gate-only} at the global level, confirming that always-on multimodal fusion is not globally reliable under the asymmetric protocol. The E5 regression clean router improves only modestly over \texttt{Residual-only}, while CA-S2 learned score-aware candidate routing remains clearly stronger than E5. Therefore, the additional split supports the paper's controlled claim that strict query-level clean routing recovers limited deployable gain, whereas score-aware non-answer-aware expert information exposes substantially more usable routing signal.
-
-These results should not be interpreted as showing exact split-invariant numerical performance. Instead, they provide appendix-level evidence that the central qualitative pattern remains stable under another valid split construction.
+An additional relation-stratified and coverage-protected split, \texttt{appendix\_split\_seed20260427}, preserves the same qualitative trend: the role--modality asymmetry remains present, strict clean routing improves only modestly over \texttt{Residual-only}, and CA-S2 remains substantially stronger than E5. We therefore treat this split as robustness evidence for the main qualitative claim rather than as a replacement for the primary \texttt{paper\_split}.
 
 \bibliographystyle{unsrt}
 \bibliography{references}
