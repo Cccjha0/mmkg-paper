@@ -1,0 +1,9 @@
+item,detail
+Bootstrap target,Matched reciprocal-rank differences for each comparison
+Bootstrap unit,query; three seed-specific records are averaged per original query before resampling
+Number of units,"20,000 original bidirectional test queries"
+Resamples,"10,000 paired bootstrap resamples per comparison"
+Interval,2.5th and 97.5th percentiles of bootstrapped mean differences
+Random seeds,"42, 43, 44, 45"
+Implementation,scripts/run_score_aware_bootstrap_ci.py
+Reported file,docs/paper_tables/table_score_aware_bootstrap_ci.tex

@@ -1,0 +1,21 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{Hyperparameter and training configuration summary.}
+\label{tab:supp_hyperparameter_training_config}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{0.13\textwidth}p{0.20\textwidth}p{0.20\textwidth}p{0.30\textwidth}p{0.12\textwidth}}
+\toprule
+Component & Data & Model/features & Key hyperparameters & Selection/evaluation \\
+\midrule
+Fixed KGC experts & OpenBG-IMG paper\_split train/dev/test; seeds 1/2/3 & ComplEx, TuckER, Text-only, Early fusion, Gate-only, Residual-only, Full model & d=256; batch=4096; neg=10; adv\_temperature=2.0; 200-500 epochs; lr by model (ComplEx: 0.001; TuckER: 0.001; Text-only: 0.0003; Early fusion: 0.001; Gate-only: 0.0003; Residual-only: 0.0001; Full model: 0.0004) & best checkpoint on dev; filtered bidirectional test ranking \\
+Clean binary routers & outputs/router/features/router\_train\_dev\_clean\_delta\_0.01.csv; n=30,000 & C4 legal features; logistic and XGB & delta in {0.00, 0.01, 0.02}; tau grid {0.1,0.3,0.5,0.7,0.9}; XGB: 300 trees, depth 4, lr 0.05, subsample/colsample 0.8, random\_state 42 & locked clean test rows; query-time legal features only \\
+Ordinal/scalar clean routers & outputs/router/features/router\_train\_dev\_clean\_delta\_0.01.csv; n=30,000 & C4 legal features; ordinal XGB and delta-RR XGB regression & ordinal bins [-0.01, 0.0, 0.01]; regression target delta\_rr; random\_state 42 & test policies selected from locked clean evaluation outputs \\
+Candidate-level CA-S2 router & outputs/candidate\_router/features/candidate\_router\_dev\_top100.parquet; train pairs=540,000 & score/rank CA-S2 features; pairwise loss & top-100 candidates; negatives/query=20; hard ratio=2:2:1; epochs=30; batch=2048; lr=0.001; wd=1e-05; seed=42 & full-ranking CA-S2 evaluation on test seeds \\
+Score interpolation & dev split for alpha selection; test split for final reporting & fixed Gate-only and Residual-only score spaces & alpha grid 0.00:0.05:1.00; relation min support=20; fallback=global alpha & alpha selected by dev MRR; global/direction/relation policies reported on test \\
+Bootstrap CIs & score\_aware\_per\_query\_rr\_seed\_averaged.csv & matched reciprocal-rank differences & 10,000 paired resamples; query-level seed-averaged unit; seeds 42-45 & 95\% percentile confidence intervals \\
+\bottomrule
+\end{tabular}
+\vspace{0.4ex}
+\caption*{\footnotesize \textit{Note:} Fixed-expert hyperparameters are read from the locked seed-1 merged configs for the reported runs; the seed value itself is varied over 1/2/3. Router and candidate-router settings are read from their saved training summaries/configs.}
+\end{table*}

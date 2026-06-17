@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\small
+\caption{Per-seed fixed-expert model comparison on the test split.}
+\label{tab:supp_per_seed_model_comparison}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lccccc}
+\toprule
+Seed & Gate-only & Full Model & Residual-only & $\Delta$ Res.-Full & Best model \\
+\midrule
+1 & 0.1663 & 0.2227 & \textbf{0.2924} & +0.0697 & Residual-only \\
+2 & 0.1701 & 0.1911 & \textbf{0.2928} & +0.1017 & Residual-only \\
+3 & 0.1701 & 0.2068 & \textbf{0.2939} & +0.0871 & Residual-only \\
+Mean & 0.1688 & 0.2069 & \textbf{0.2930} & +0.0862 & Residual-only \\
+\bottomrule
+\end{tabular}
+\vspace{0.4ex}
+\caption*{\footnotesize \textit{Note:} Each seed row averages 20,000 bidirectional test queries. The mean row is an unweighted mean over the three seed-specific MRR values.}
+\end{table}

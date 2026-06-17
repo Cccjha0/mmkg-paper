@@ -1,0 +1,10 @@
+seed,model,n_queries,mrr,hits1,hits3,hits10,source
+1,Full Model,20000,0.22268557146832718,0.13195,0.2778,0.3842,outputs\router\test\full_model_query_eval_seed1.csv
+1,Gate-only,20000,0.16627183436077736,0.0784,0.21245,0.3269,outputs\router\test\gate_only_query_eval_seed1.csv
+1,Residual-only,20000,0.29242142256264964,0.23265,0.33,0.4023,outputs\router\test\residual_only_query_eval_seed1.csv
+2,Full Model,20000,0.19108356560939044,0.09385,0.24725,0.3647,outputs\router\test\full_model_query_eval_seed2.csv
+2,Gate-only,20000,0.1701220348554915,0.0894,0.2091,0.3246,outputs\router\test\gate_only_query_eval_seed2.csv
+2,Residual-only,20000,0.29278847546375,0.23315,0.329,0.4019,outputs\router\test\residual_only_query_eval_seed2.csv
+3,Full Model,20000,0.20681690764958388,0.10725,0.2694,0.38815,outputs\router\test\full_model_query_eval_seed3.csv
+3,Gate-only,20000,0.1700988154556114,0.0929,0.2036,0.32335,outputs\router\test\gate_only_query_eval_seed3.csv
+3,Residual-only,20000,0.2939383931464561,0.2326,0.33295,0.40495,outputs\router\test\residual_only_query_eval_seed3.csv

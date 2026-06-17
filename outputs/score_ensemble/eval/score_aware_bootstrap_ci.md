@@ -1,0 +1,6 @@
+| comparison                                               | method_a           | method_b         | delta_mrr | ci_low  | ci_high | n_queries | n_bootstrap | seed | bootstrap_unit | interpretation                    |
+| -------------------------------------------------------- | ------------------ | ---------------- | --------- | ------- | ------- | --------- | ----------- | ---- | -------------- | --------------------------------- |
+| Relation-specific interpolation vs. E5                   | rr_relation_interp | rr_e5            | +0.0446   | +0.0421 | +0.0471 | 20000     | 10000       | 42   | query          | score-aware > strict clean        |
+| Relation-specific interpolation vs. CA-S2                | rr_relation_interp | rr_ca_s2         | +0.0286   | +0.0265 | +0.0307 | 20000     | 10000       | 43   | query          | interpolation > learned router    |
+| Global interpolation vs. CA-S2                           | rr_global_interp   | rr_ca_s2         | +0.0267   | +0.0246 | +0.0288 | 20000     | 10000       | 44   | query          | simple score mix > learned router |
+| Relation-specific interpolation vs. Global interpolation | rr_relation_interp | rr_global_interp | +0.0019   | +0.0008 | +0.0031 | 20000     | 10000       | 45   | query          | relation refinement effect        |

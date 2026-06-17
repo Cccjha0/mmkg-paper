@@ -1,0 +1,5 @@
+comparison,method_a,method_b,delta_mrr,ci_low,ci_high,n_queries,n_bootstrap,seed,bootstrap_unit,interpretation
+Relation-specific interpolation vs. E5,rr_relation_interp,rr_e5,0.04457280327039603,0.042107433114446015,0.04711648065796366,20000,10000,42,query,score-aware > strict clean
+Relation-specific interpolation vs. CA-S2,rr_relation_interp,rr_ca_s2,0.028603628305001655,0.02647994482970792,0.0307289188932211,20000,10000,43,query,interpolation > learned router
+Global interpolation vs. CA-S2,rr_global_interp,rr_ca_s2,0.02667850720811151,0.024553398987810972,0.028807870511685863,20000,10000,44,query,simple score mix > learned router
+Relation-specific interpolation vs. Global interpolation,rr_relation_interp,rr_global_interp,0.001925121096890146,0.0007583341260969863,0.00310161378798192,20000,10000,45,query,relation refinement effect

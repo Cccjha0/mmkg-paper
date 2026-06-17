@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering
+\small
+\caption{Bootstrap implementation details for score-aware comparisons.}
+\label{tab:supp_bootstrap_implementation}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{0.25\textwidth}p{0.62\textwidth}}
+\toprule
+Item & Detail \\
+\midrule
+Bootstrap target & Matched reciprocal-rank differences for each comparison \\
+Bootstrap unit & query; three seed-specific records are averaged per original query before resampling \\
+Number of units & 20,000 original bidirectional test queries \\
+Resamples & 10,000 paired bootstrap resamples per comparison \\
+Interval & 2.5th and 97.5th percentiles of bootstrapped mean differences \\
+Random seeds & 42, 43, 44, 45 \\
+Implementation & scripts/run\_score\_aware\_bootstrap\_ci.py \\
+Reported file & docs/paper\_tables/table\_score\_aware\_bootstrap\_ci.tex \\
+\bottomrule
+\end{tabular}
+\vspace{0.4ex}
+\caption*{\footnotesize \textit{Note:} The paired design preserves matched query-level differences between two methods before resampling, so the interval measures uncertainty in the mean MRR difference rather than uncertainty in two independent MRR estimates.}
+\end{table}
