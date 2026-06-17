@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\small
+\caption{Degree-bucket sanity check for fixed experts.}
+\label{tab:degree_bucket_sanity_check}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{0.10\textwidth}rp{0.19\textwidth}ccccp{0.25\textwidth}}
+\toprule
+Degree bucket & \#Queries & Dominant regime & Residual-only & Full Model & Gate-only & $\Delta$ Res.-Full & Interpretation \\
+\midrule
+0-1 & 98 & tail\_no\_img (86.7\%) & 0.0010 & 0.0787 & \textbf{0.0829} & -0.0777 & small sparse bucket; non-structural experts are stronger \\
+2-5 & 938 & head\_has\_img (49.9\%) & 0.0017 & \textbf{0.0359} & 0.0283 & -0.0343 & low-degree mixed bucket favors the full model \\
+6-20 & 9,433 & head\_has\_img (69.2\%) & 0.0025 & \textbf{0.0169} & 0.0164 & -0.0144 & head-dominated bucket; all experts remain weak \\
+$>$20 & 9,531 & tail\_no\_img (98.3\%) & \textbf{0.6123} & 0.4130 & 0.3344 & +0.1993 & high-degree tail-side queries drive the structural advantage \\
+\bottomrule
+\end{tabular}
+\vspace{0.4ex}
+\caption*{\footnotesize \textit{Note:} Degree is the undirected count of training triples in which the target entity appears. MRR is averaged over three seed-specific evaluations; \#Queries reports the corresponding number of test queries per seed. The buckets expose the strong coupling between target degree and prediction-side regime: low- and mid-degree buckets are mostly head-side queries, whereas the highest-degree bucket is almost entirely tail-side.}
+\end{table}

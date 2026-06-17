@@ -1,0 +1,5 @@
+degree_bucket,n_seed_queries,n_unique_test_queries,mean_degree,dominant_regime,dominant_regime_share,residual_only_mrr,full_model_mrr,gate_only_mrr,delta_residual_vs_full,best_model,interpretation
+0-1,294,98,1.0,tail_no_img,0.8673469387755102,0.0009642134771165595,0.0786891232940201,0.08287219824859808,-0.07772490981690354,Gate-only,small sparse bucket; non-structural experts are stronger
+2-5,2814,938,3.920042643923241,head_has_img,0.4989339019189765,0.001676023698472684,0.03594493033872956,0.02831387194693114,-0.03426890664025688,Full Model,low-degree mixed bucket favors the full model
+6-20,28299,9433,11.292801865790311,head_has_img,0.6917205554966607,0.0024990738548583006,0.016904138295508405,0.01639771654714024,-0.014405064440650105,Full Model,head-dominated bucket; all experts remain weak
+>20,28593,9531,3325.6934214667926,tail_no_img,0.9827929912915748,0.6122912853841396,0.41300552753120734,0.33440964749856017,0.19928575785293223,Residual-only,high-degree tail-side queries drive the structural advantage
