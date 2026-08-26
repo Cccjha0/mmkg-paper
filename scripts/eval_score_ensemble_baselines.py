@@ -4,6 +4,7 @@ import argparse
 import csv
 import json
 import sys
+import time
 from collections import defaultdict
 from pathlib import Path
 
@@ -22,8 +23,9 @@ from scripts.eval_candidate_soft_router_full import (
     target_ids_for_direction,
     target_ranks_and_rr,
 )
-from scripts.export_candidate_scores import build_filtered_indexes, load_run, load_split_triples, resolve_device
+from scripts.export_candidate_scores import build_filtered_indexes, load_split_triples, resolve_device, target_regime
 from scripts.build_candidate_router_paper_tables import markdown_table
+from ml.training.src.models.build_model import build_model
 
 
 def parse_args() -> argparse.Namespace:
@@ -57,6 +59,20 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--baseline-summary", default="outputs/router/eval/clean/baseline_locked_summary.csv")
     parser.add_argument("--candidate-main-results", default="outputs/candidate_router/eval/tables/candidate_router_main_results.csv")
+    parser.add_argument(
+        "--checkpoint-dir",
+        default=None,
+        help="Directory for per-seed/direction score-ensemble checkpoints. Defaults to <output-dir>/checkpoints.",
+    )
+    parser.add_argument("--no-resume", action="store_true", help="Ignore existing per-seed/direction checkpoints.")
+    parser.add_argument("--no-checkpoint", action="store_true", help="Do not write per-seed/direction checkpoints.")
+    parser.add_argument(
+        "--progress-every",
+        type=int,
+        default=25,
+        help="Print progress every N query batches while scoring. Use 0 to print only section start/end messages.",
+    )
+    parser.add_argument("--quiet-progress", action="store_true", help="Disable detailed progress output.")
     return parser.parse_args()
 
 
@@ -82,6 +98,55 @@ def load_run_pairs(score_dir: Path, split: str) -> list[dict]:
     if not pairs:
         raise FileNotFoundError(f"No {split} score summaries found in {score_dir}")
     return sorted(pairs, key=lambda row: row["seed"])
+
+
+def resolve_run_dir(raw_path: str | Path) -> Path:
+    text = str(raw_path).strip().replace("\\", "/")
+    path = Path(text)
+    if not path.is_absolute():
+        path = Path.cwd() / path
+    return path.resolve()
+
+
+def read_run_config(run_dir: str | Path) -> dict:
+    path = resolve_run_dir(run_dir) / "config_merged.json"
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except OSError as exc:
+        raise OSError(f"Could not read run config at {path!r}") from exc
+
+
+def resolve_workspace_path(raw_path: str | Path) -> str:
+    path = Path(str(raw_path).strip().replace("\\", "/"))
+    if not path.is_absolute():
+        path = Path.cwd() / path
+    return str(path.resolve())
+
+
+def absolutize_dataset_paths(cfg: dict) -> dict:
+    dataset = cfg.get("dataset", {})
+    for key in ("train", "dev", "test", "cache_dir"):
+        if key in dataset:
+            dataset[key] = resolve_workspace_path(dataset[key])
+    return cfg
+
+
+def load_run_stable(run_dir: str | Path, device: str):
+    run_dir = resolve_run_dir(run_dir)
+    cfg_path = run_dir / "config_merged.json"
+    ckpt_path = run_dir / "best.ckpt"
+    if not cfg_path.exists():
+        raise FileNotFoundError(cfg_path)
+    if not ckpt_path.exists():
+        raise FileNotFoundError(ckpt_path)
+    cfg = absolutize_dataset_paths(json.loads(cfg_path.read_text(encoding="utf-8")))
+    cfg.setdefault("system", {})["device"] = device
+    model, num_entities = build_model(cfg)
+    state = torch.load(str(ckpt_path.resolve()), map_location=device)
+    model.load_state_dict(state)
+    model = model.to(device)
+    model.eval()
+    return cfg, model, num_entities
 
 
 def safe_scores(scores: torch.Tensor) -> torch.Tensor:
@@ -139,6 +204,28 @@ def eval_mixed_rr(gate_scores: torch.Tensor, residual_scores: torch.Tensor, targ
     return rr
 
 
+def eval_mixed_ranks_and_rr(
+    gate_scores: torch.Tensor,
+    residual_scores: torch.Tensor,
+    target_ids: torch.Tensor,
+    alpha: float | np.ndarray,
+) -> tuple[list[int], list[float]]:
+    gate_safe = safe_scores(gate_scores)
+    residual_safe = safe_scores(residual_scores)
+    if isinstance(alpha, np.ndarray):
+        alpha_t = torch.tensor(alpha, dtype=gate_safe.dtype).view(-1, 1)
+    else:
+        alpha_t = torch.full((gate_safe.size(0), 1), float(alpha), dtype=gate_safe.dtype)
+    mixed = alpha_t * gate_safe + (1.0 - alpha_t) * residual_safe
+    both_filtered = (~torch.isfinite(gate_scores)) & (~torch.isfinite(residual_scores))
+    mixed[both_filtered] = float("-inf")
+    return target_ranks_and_rr(mixed, target_ids)
+
+
+def alpha_column(alpha: float) -> str:
+    return f"rr_alpha_{alpha:.2f}".replace(".", "_")
+
+
 def evaluate_split(
     *,
     run_pairs: list[dict],
@@ -153,6 +240,11 @@ def evaluate_split(
     selected_direction_alpha: dict[str, float] | None = None,
     selected_relation_alpha: dict[int, float] | None = None,
     selected_relation_fallback_alpha: float | None = None,
+    progress_every: int = 25,
+    quiet_progress: bool = False,
+    checkpoint_dir: Path | None = None,
+    resume: bool = True,
+    write_checkpoints: bool = True,
 ) -> dict:
     alpha_rr: dict[float, list[float]] = {alpha: [] for alpha in alphas}
     alpha_direction_rr: dict[str, dict[float, list[float]]] = {
@@ -164,14 +256,97 @@ def evaluate_split(
     direction_rows: list[dict] = []
     relation_rows: list[dict] = []
     query_rows: list[dict] = []
+    selected_policy_rows: list[dict] = []
     feature_rows: list[np.ndarray] = []
     labels: list[int] = []
+    started_at = time.time()
+    total_batches = 0
+    total_queries = 0
+    pair_work: list[tuple[dict, int, int, list[str], int]] = []
 
     for pair in run_pairs:
-        gate_cfg_raw = json.loads((Path(pair["gate_run_dir"]) / "config_merged.json").read_text(encoding="utf-8"))
+        gate_cfg_for_count = read_run_config(pair["gate_run_dir"])
+        triples_for_count = load_split_triples(gate_cfg_for_count, split)
+        ev_cfg_for_count = gate_cfg_for_count.get("evaluation", {})
+        query_batch_size = int(query_batch_size_arg or ev_cfg_for_count.get("query_batch_size", 8))
+        directions = ["head", "tail"]
+        max_queries_per_direction = None if max_queries is None else max(1, max_queries // len(directions))
+        n_direction_queries = len(triples_for_count[:max_queries_per_direction] if max_queries_per_direction else triples_for_count)
+        n_pair_batches = len(directions) * ((n_direction_queries + query_batch_size - 1) // query_batch_size)
+        pair_work.append((pair, query_batch_size, n_direction_queries, directions, n_pair_batches))
+        total_batches += n_pair_batches
+        total_queries += len(directions) * n_direction_queries
+
+    completed_batches = 0
+    completed_queries = 0
+
+    def fmt_duration(seconds: float) -> str:
+        seconds = max(0, int(round(seconds)))
+        h, rem = divmod(seconds, 3600)
+        m, s = divmod(rem, 60)
+        if h:
+            return f"{h:d}h{m:02d}m{s:02d}s"
+        if m:
+            return f"{m:d}m{s:02d}s"
+        return f"{s:d}s"
+
+    def progress_line(seed: int, direction: str, q_end: int, n_direction_queries: int, force: bool = False) -> None:
+        if quiet_progress:
+            return
+        if not force and progress_every <= 0:
+            return
+        if not force and completed_batches % progress_every != 0:
+            return
+        elapsed = time.time() - started_at
+        frac = completed_batches / max(total_batches, 1)
+        eta = elapsed * (1.0 / frac - 1.0) if frac > 0 else 0.0
+        print(
+            f"[PROGRESS] {split} {completed_batches}/{total_batches} batches "
+            f"({frac * 100:5.1f}%) queries={completed_queries}/{total_queries} "
+            f"seed={seed} direction={direction} direction_q={q_end}/{n_direction_queries} "
+            f"elapsed={fmt_duration(elapsed)} eta={fmt_duration(eta)}",
+            flush=True,
+        )
+
+    def checkpoint_path(seed: int, direction: str) -> Path | None:
+        if checkpoint_dir is None or selected_global_alpha is None:
+            return None
+        key = "full" if max_queries is None else f"max{max_queries}"
+        return checkpoint_dir / key / f"{split}_seed{seed}_{direction}_score_ensemble_query_rows.csv"
+
+    def ingest_selected_rows(rows: list[dict]) -> None:
+        selected_policy_rows.extend(rows)
+        for row in rows:
+            rr_global = float(row["rr_global_interp"])
+            rr_direction = float(row["rr_direction_interp"])
+            rr_relation = float(row["rr_relation_interp"])
+            global_rows.append({"mixed_rr": rr_global})
+            direction_rows.append({"mixed_rr": rr_direction})
+            relation_rows.append({"mixed_rr": rr_relation})
+            if "rr_query_soft" in row and str(row["rr_query_soft"]) != "":
+                query_rows.append({"mixed_rr": float(row["rr_query_soft"]), "alpha": float(row.get("alpha_query_soft", 0.0))})
+            relation_id = int(row["relation_id"])
+            direction = str(row["direction"])
+            for alpha in alphas:
+                value = float(row[alpha_column(alpha)])
+                alpha_rr[alpha].append(value)
+                alpha_direction_rr[direction][alpha].append(value)
+                alpha_relation_rr[relation_id][alpha].append(value)
+
+    if not quiet_progress:
+        print(
+            f"[PROGRESS] {split} starting: {len(run_pairs)} seeds, {total_queries} direction-queries, "
+            f"{total_batches} batches",
+            flush=True,
+    )
+
+    for pair, query_batch_size, _n_direction_queries, directions, _n_pair_batches in pair_work:
+        gate_cfg_raw = read_run_config(pair["gate_run_dir"])
         device = resolve_device(device_arg, gate_cfg_raw.get("system", {}).get("device", "cuda"))
-        gate_cfg, gate_model, gate_num_entities = load_run(pair["gate_run_dir"], device)
-        residual_cfg, residual_model, residual_num_entities = load_run(pair["residual_run_dir"], device)
+        gate_run_dir = resolve_run_dir(pair["gate_run_dir"])
+        residual_run_dir = resolve_run_dir(pair["residual_run_dir"])
+        gate_cfg, gate_model, gate_num_entities = load_run_stable(gate_run_dir, device)
+        residual_cfg, residual_model, residual_num_entities = load_run_stable(residual_run_dir, device)
         if gate_num_entities != residual_num_entities:
             raise RuntimeError("Gate and Residual entity counts differ.")
         seed = int(gate_cfg.get("system", {}).get("seed", pair["seed"]))
@@ -179,16 +354,32 @@ def evaluate_split(
             raise RuntimeError(f"Seed mismatch for pair {pair}")
         triples = load_split_triples(gate_cfg, split)
         true_tails_idx, true_heads_idx = build_filtered_indexes(gate_cfg)
+        has_img = getattr(gate_model, "has_img", None)
+        if has_img is None:
+            raise RuntimeError("Gate model does not expose has_img.")
+        has_img = has_img.detach().cpu().to(dtype=torch.bool)
         ev_cfg = gate_cfg.get("evaluation", {})
         chunk_size = int(chunk_size_arg or ev_cfg.get("chunk_size", 4096))
-        query_batch_size = int(query_batch_size_arg or ev_cfg.get("query_batch_size", 8))
-        directions = ["head", "tail"]
         max_queries_per_direction = None if max_queries is None else max(1, max_queries // len(directions))
 
         for direction in directions:
             true_index = true_tails_idx if direction == "tail" else true_heads_idx
             triples_eval = triples[:max_queries_per_direction] if max_queries_per_direction else triples
             triples_t = torch.tensor(triples_eval, dtype=torch.long)
+            n_direction_queries = int(triples_t.size(0))
+            ckpt_path = checkpoint_path(seed, direction)
+            if resume and ckpt_path is not None and ckpt_path.exists():
+                frame = pd.read_csv(ckpt_path)
+                cached_rows = frame.to_dict(orient="records")
+                ingest_selected_rows(cached_rows)
+                cached_batches = (n_direction_queries + query_batch_size - 1) // query_batch_size
+                completed_batches += cached_batches
+                completed_queries += n_direction_queries
+                if not quiet_progress:
+                    print(f"[PROGRESS] {split} seed={seed} direction={direction} resumed from {ckpt_path}", flush=True)
+                progress_line(seed, direction, n_direction_queries, n_direction_queries, force=True)
+                continue
+            direction_selected_rows: list[dict] = []
             for q_start in range(0, triples_t.size(0), query_batch_size):
                 q_end = min(triples_t.size(0), q_start + query_batch_size)
                 q_cpu = triples_t[q_start:q_end]
@@ -203,19 +394,32 @@ def evaluate_split(
                 feature_rows.append(feats)
                 labels.extend([int(g > r) for g, r in zip(gate_rr, residual_rr)])
 
+                alpha_rr_by_value: dict[float, list[float]] = {}
                 for alpha in alphas:
                     rr = eval_mixed_rr(gate_scores, residual_scores, target_ids, alpha)
+                    alpha_rr_by_value[alpha] = rr
                     alpha_rr[alpha].extend(rr)
                     alpha_direction_rr[direction][alpha].extend(rr)
                     for relation_id, value in zip(q_cpu[:, 1].tolist(), rr):
                         alpha_relation_rr[int(relation_id)][alpha].append(value)
 
+                global_rank: list[int] | None = None
+                global_rr: list[float] | None = None
+                direction_rank: list[int] | None = None
+                direction_rr: list[float] | None = None
+                relation_rank: list[int] | None = None
+                relation_rr: list[float] | None = None
+                relation_alpha: np.ndarray | None = None
+                query_soft_rr: list[float] | None = None
+                query_soft_alpha: np.ndarray | None = None
                 if selected_global_alpha is not None:
-                    rr = eval_mixed_rr(gate_scores, residual_scores, target_ids, selected_global_alpha)
-                    global_rows.extend({"mixed_rr": value} for value in rr)
+                    global_rank, global_rr = eval_mixed_ranks_and_rr(gate_scores, residual_scores, target_ids, selected_global_alpha)
+                    global_rows.extend({"mixed_rr": value} for value in global_rr)
                 if selected_direction_alpha is not None:
-                    rr = eval_mixed_rr(gate_scores, residual_scores, target_ids, selected_direction_alpha[direction])
-                    direction_rows.extend({"mixed_rr": value} for value in rr)
+                    direction_rank, direction_rr = eval_mixed_ranks_and_rr(
+                        gate_scores, residual_scores, target_ids, selected_direction_alpha[direction]
+                    )
+                    direction_rows.extend({"mixed_rr": value} for value in direction_rr)
                 if selected_relation_alpha is not None:
                     fallback_alpha = selected_relation_fallback_alpha
                     if fallback_alpha is None:
@@ -227,13 +431,61 @@ def evaluate_split(
                         ],
                         dtype=np.float32,
                     )
-                    rr = eval_mixed_rr(gate_scores, residual_scores, target_ids, relation_alpha)
-                    relation_rows.extend({"mixed_rr": value} for value in rr)
+                    relation_rank, relation_rr = eval_mixed_ranks_and_rr(gate_scores, residual_scores, target_ids, relation_alpha)
+                    relation_rows.extend({"mixed_rr": value} for value in relation_rr)
                 if query_model is not None:
-                    pred_alpha = query_model.predict_proba(feats)[:, 1].astype(np.float32)
-                    rr = eval_mixed_rr(gate_scores, residual_scores, target_ids, pred_alpha)
-                    query_rows.extend({"mixed_rr": value, "alpha": float(a)} for value, a in zip(rr, pred_alpha))
+                    query_soft_alpha = query_model.predict_proba(feats)[:, 1].astype(np.float32)
+                    query_soft_rr = eval_mixed_rr(gate_scores, residual_scores, target_ids, query_soft_alpha)
+                    query_rows.extend({"mixed_rr": value, "alpha": float(a)} for value, a in zip(query_soft_rr, query_soft_alpha))
 
+                if selected_global_alpha is not None:
+                    if global_rank is None or global_rr is None or direction_rank is None or direction_rr is None:
+                        raise RuntimeError("Selected interpolation rows were requested but selected ranks/RR are missing.")
+                    if relation_rank is None or relation_rr is None or relation_alpha is None:
+                        raise RuntimeError("Relation-specific interpolation rows were requested but relation ranks/RR are missing.")
+                    for j in range(q_cpu.size(0)):
+                        h_id = int(q_cpu[j, 0].item())
+                        r_id = int(q_cpu[j, 1].item())
+                        t_id = int(q_cpu[j, 2].item())
+                        target_id = int(target_ids[j].item())
+                        target_has_img = bool(has_img[target_id].item())
+                        row = {
+                            "query_id": f"{split}|{seed}|{direction}|r={r_id}|h={h_id}|t={t_id}|target={target_id}",
+                            "split": split,
+                            "seed": seed,
+                            "direction": direction,
+                            "relation_id": r_id,
+                            "head_id": h_id,
+                            "tail_id": t_id,
+                            "target_entity_id": target_id,
+                            "target_regime": target_regime(direction, target_has_img),
+                            "rr_gate": float(gate_rr[j]),
+                            "rr_residual": float(residual_rr[j]),
+                            "rr_global_interp": float(global_rr[j]),
+                            "rr_direction_interp": float(direction_rr[j]),
+                            "rr_relation_interp": float(relation_rr[j]),
+                            "rank_global_interp": int(global_rank[j]),
+                            "rank_direction_interp": int(direction_rank[j]),
+                            "rank_relation_interp": int(relation_rank[j]),
+                            "alpha_global": float(selected_global_alpha),
+                            "alpha_direction": float(selected_direction_alpha[direction]) if selected_direction_alpha else float("nan"),
+                            "alpha_relation": float(relation_alpha[j]),
+                        }
+                        if query_soft_rr is not None and query_soft_alpha is not None:
+                            row["rr_query_soft"] = float(query_soft_rr[j])
+                            row["alpha_query_soft"] = float(query_soft_alpha[j])
+                        for alpha, rr_values in alpha_rr_by_value.items():
+                            row[alpha_column(alpha)] = float(rr_values[j])
+                        direction_selected_rows.append(row)
+                completed_batches += 1
+                completed_queries += int(q_end - q_start)
+                progress_line(seed, direction, q_end, n_direction_queries)
+            if ckpt_path is not None:
+                selected_policy_rows.extend(direction_selected_rows)
+                if write_checkpoints:
+                    write_csv_rows(ckpt_path, direction_selected_rows)
+
+    progress_line(seed if run_pairs else -1, "done", total_queries, total_queries, force=True)
     return {
         "alpha_rr": alpha_rr,
         "alpha_direction_rr": alpha_direction_rr,
@@ -242,6 +494,7 @@ def evaluate_split(
         "direction_rows": direction_rows,
         "relation_rows": relation_rows,
         "query_rows": query_rows,
+        "selected_policy_rows": selected_policy_rows,
         "features": np.concatenate(feature_rows, axis=0) if feature_rows else np.empty((0, 0), dtype=np.float32),
         "labels": np.array(labels, dtype=np.int64),
     }
@@ -401,10 +654,87 @@ def write_latex_table(path: Path, rows: list[dict], refs: dict) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def alpha_curve_rows(split: str, payload: dict) -> list[dict]:
+    rows: list[dict] = []
+    for scope, alpha_map in [
+        ("global", payload["alpha_rr"]),
+        ("head", payload["alpha_direction_rr"]["head"]),
+        ("tail", payload["alpha_direction_rr"]["tail"]),
+    ]:
+        for alpha, rr_values in sorted(alpha_map.items()):
+            rows.append(
+                {
+                    "split": split,
+                    "scope": scope,
+                    "alpha": float(alpha),
+                    "mrr": float(np.mean(rr_values)) if rr_values else 0.0,
+                    "n_queries": int(len(rr_values)),
+                }
+            )
+    return rows
+
+
+def write_alpha_curve_outputs(output_dir: Path, paper_figures_dir: Path, rows: list[dict]) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    curve_csv = output_dir / "score_ensemble_alpha_curve.csv"
+    write_csv_rows(curve_csv, rows)
+
+    frame = pd.DataFrame(rows)
+    md_frame = frame.copy()
+    md_frame["alpha"] = md_frame["alpha"].map(lambda value: f"{float(value):.2f}")
+    md_frame["mrr"] = md_frame["mrr"].map(lambda value: f"{float(value):.4f}")
+    (output_dir / "score_ensemble_alpha_curve.md").write_text(markdown_table(md_frame) + "\n", encoding="utf-8")
+
+    best_rows = []
+    for (split, scope), bucket in frame.groupby(["split", "scope"], sort=True):
+        best = bucket.sort_values(["mrr", "alpha"], ascending=[False, True]).iloc[0]
+        best_rows.append(
+            {
+                "split": split,
+                "scope": scope,
+                "best_alpha": float(best["alpha"]),
+                "best_mrr": float(best["mrr"]),
+                "n_queries": int(best["n_queries"]),
+            }
+        )
+    best_frame = pd.DataFrame(best_rows)
+    write_csv_rows(output_dir / "score_ensemble_alpha_curve_best.csv", best_rows)
+    best_md = best_frame.copy()
+    best_md["best_alpha"] = best_md["best_alpha"].map(lambda value: f"{float(value):.2f}")
+    best_md["best_mrr"] = best_md["best_mrr"].map(lambda value: f"{float(value):.4f}")
+    (output_dir / "score_ensemble_alpha_curve_best.md").write_text(markdown_table(best_md) + "\n", encoding="utf-8")
+
+    try:
+        import matplotlib.pyplot as plt
+    except Exception as exc:  # pragma: no cover - optional plotting dependency
+        print(f"[WARN] skipped alpha curve plots because matplotlib is unavailable: {exc}")
+        return
+
+    paper_figures_dir.mkdir(parents=True, exist_ok=True)
+    for split in sorted(frame["split"].unique()):
+        split_frame = frame[frame["split"].eq(split)]
+        fig, ax = plt.subplots(figsize=(5.2, 3.2))
+        for scope, style in [("global", "-o"), ("head", "-s"), ("tail", "-^")]:
+            series = split_frame[split_frame["scope"].eq(scope)].sort_values("alpha")
+            ax.plot(series["alpha"], series["mrr"], style, linewidth=1.4, markersize=3.2, label=scope)
+        ax.set_xlabel("Interpolation weight alpha for Gate-only")
+        ax.set_ylabel(f"{split} MRR")
+        ax.set_title(f"Score interpolation alpha sweep ({split})")
+        ax.grid(True, linewidth=0.4, alpha=0.35)
+        ax.legend(frameon=False, fontsize=8)
+        fig.tight_layout()
+        png_path = paper_figures_dir / f"score_interpolation_alpha_curve_{split}.png"
+        pdf_path = paper_figures_dir / f"score_interpolation_alpha_curve_{split}.pdf"
+        fig.savefig(png_path, dpi=220)
+        fig.savefig(pdf_path)
+        plt.close(fig)
+
+
 def main() -> None:
     args = parse_args()
     score_dir = Path(args.score_dir)
     output_dir = Path(args.output_dir)
+    checkpoint_dir = Path(args.checkpoint_dir) if args.checkpoint_dir else output_dir / "checkpoints"
     alphas = parse_alpha_grid(args.alphas)
     refs = load_reference_metrics(Path(args.baseline_summary), Path(args.candidate_main_results))
 
@@ -420,6 +750,11 @@ def main() -> None:
         chunk_size_arg=args.chunk_size,
         query_batch_size_arg=args.query_batch_size,
         max_queries=args.max_queries,
+        progress_every=args.progress_every,
+        quiet_progress=args.quiet_progress,
+        checkpoint_dir=checkpoint_dir,
+        resume=not args.no_resume,
+        write_checkpoints=not args.no_checkpoint,
     )
     global_alpha, global_dev_mrr = best_alpha(dev["alpha_rr"])
     head_alpha, head_dev_mrr = best_alpha(dev["alpha_direction_rr"]["head"])
@@ -457,7 +792,14 @@ def main() -> None:
         selected_direction_alpha={"head": head_alpha, "tail": tail_alpha},
         selected_relation_alpha=relation_alpha,
         selected_relation_fallback_alpha=global_alpha,
+        progress_every=args.progress_every,
+        quiet_progress=args.quiet_progress,
+        checkpoint_dir=checkpoint_dir,
+        resume=not args.no_resume,
+        write_checkpoints=not args.no_checkpoint,
     )
+
+    curve_rows = alpha_curve_rows(args.selection_split, dev) + alpha_curve_rows(args.split, test)
 
     rows = [
         result_row(
@@ -495,6 +837,8 @@ def main() -> None:
     ]
 
     write_csv_rows(output_dir / "score_ensemble_baselines.csv", rows)
+    if test["selected_policy_rows"]:
+        write_csv_rows(output_dir / "score_ensemble_selected_query_rows.csv", test["selected_policy_rows"])
     (output_dir / "score_ensemble_baselines.json").write_text(
         json.dumps(
             {
@@ -508,6 +852,7 @@ def main() -> None:
                     "relation": relation_summary,
                     "alpha_grid": alphas,
                 },
+                "alpha_curves": curve_rows,
                 "reference_metrics": refs,
                 "rows": rows,
             },
@@ -526,9 +871,13 @@ def main() -> None:
     paper_figures_path = Path(args.paper_figures_dir) / "table_score_ensemble_baselines.tex"
     if paper_figures_path != paper_table_path:
         write_latex_table(paper_figures_path, rows, refs)
+    write_alpha_curve_outputs(output_dir, Path(args.paper_figures_dir), curve_rows)
     print(f"[OK] wrote {output_dir / 'score_ensemble_baselines.csv'}")
+    if test["selected_policy_rows"]:
+        print(f"[OK] wrote {output_dir / 'score_ensemble_selected_query_rows.csv'}")
     print(f"[OK] wrote {output_dir / 'score_ensemble_baselines.json'}")
     print(f"[OK] wrote {output_dir / 'score_ensemble_baselines.md'}")
+    print(f"[OK] wrote {output_dir / 'score_ensemble_alpha_curve.csv'}")
     print(f"[OK] wrote {paper_table_path}")
     if paper_figures_path != paper_table_path:
         print(f"[OK] wrote {paper_figures_path}")
