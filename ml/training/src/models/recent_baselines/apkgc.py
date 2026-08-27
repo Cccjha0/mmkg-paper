@@ -237,8 +237,15 @@ class OpenBGAPKGC(DirectionalScoringMixin, nn.Module):
             noisy[noise_mask] = (1.0 - self.mask_ratio) * selected + self.mask_ratio * sampled
         return noisy
 
+    @torch.no_grad()
     def update_noise(self) -> None:
-        """Create APKGC's epoch-level noise snapshots while the model is training."""
+        """Create graph-free epoch noise snapshots while the model is training.
+
+        The upstream APKGC implementation constructs these tensors from
+        ``.data``.  They are stochastic inputs fixed for the epoch, not model
+        parameters; retaining their graph would make the second batch attempt
+        to backpropagate through the first batch's freed graph.
+        """
         self._epoch_img_noise = self._add_noise_to_embeddings(self.img_filled, self.img_mean, self.img_std)
         self._epoch_text_noise = self._add_noise_to_embeddings(self.text_feat, self.text_mean, self.text_std)
         entity_weights = self.ent_embeddings.weight
