@@ -39,6 +39,27 @@ def _load_openbg_img_features(cache_dir: str, cache_format: str) -> tuple[torch.
 def build_model(cfg: dict):
     model_name = cfg["model"]["name"]
 
+    if model_name == "openbg_img_adamf_mat":
+        from ml.training.src.models.recent_baselines.adamf_mat import OpenBGAdaMFMAT
+
+        cache_dir = cfg["dataset"]["cache_dir"]
+        cache_format = cfg["dataset"].get("cache_format", "raw")
+        text_feat, img_feat, has_img = _load_openbg_img_features(cache_dir, cache_format)
+        mcfg = cfg["model"]
+        num_entities = text_feat.shape[0]
+        print("[BuildModel] building recent baseline: AdaMF-MAT")
+        model = OpenBGAdaMFMAT(
+            text_feat=text_feat,
+            img_feat=img_feat,
+            has_img=has_img,
+            num_entities=num_entities,
+            num_relations=mcfg["num_relations"],
+            d=mcfg.get("dim", 128),
+            margin=mcfg.get("margin", 6.0),
+            epsilon=mcfg.get("epsilon", 2.0),
+        )
+        return model, num_entities
+
     if model_name == "openbg_img_native":
         from ml.training.src.models.recent_baselines.native import OpenBGNativE
 

@@ -1,0 +1,39 @@
+# AdaMF-MAT official MKG-W script anchor; selection remains DEV ONLY.
+dataset:
+  name: openbg_img
+  train: data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_train.tsv
+  dev: data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_dev.tsv
+  test: data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_test.tsv
+  cache_dir: data/cache/openbg_img
+  cache_format: raw
+
+model:
+  name: openbg_img_adamf_mat
+  num_relations: 136
+  dim: 200
+  margin: 12.0
+  epsilon: 2.0
+
+training:
+  engine: adversarial
+  sampler: bernoulli_filtered
+  batch_size: 1024
+  neg_ratio: 128
+  lr: 0.00002
+  generator_lr: 0.0001
+  # The released MKG-W/MKG-Y scripts explicitly pass mu=0. A non-zero MAT
+  # weight must be declared as a separate DEV-only tuning configuration.
+  mu: 0.0
+  adv_temperature: 2.0
+  regularization_weight: 0.0
+  generator_noise_dim: 64
+  generator_hidden_dim: 512
+  epochs: 1000
+  early_stop_patience: 10
+
+evaluation:
+  chunk_size: 4096
+  query_batch_size: 32
+
+output:
+  exp_name: openbg_img_adamf_mat

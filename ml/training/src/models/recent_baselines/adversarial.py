@@ -61,6 +61,69 @@ class CombinedGenerator(nn.Module):
         return torch.chunk(generated, chunks=2, dim=-1)
 
 
+class _SingleModalityGenerator(nn.Module):
+    """AdaMF-MAT generator for one projected modality."""
+
+    def __init__(
+        self,
+        *,
+        noise_dim: int,
+        structure_dim: int,
+        modality_dim: int,
+        hidden_dim: int = 512,
+    ) -> None:
+        super().__init__()
+        if min(noise_dim, structure_dim, modality_dim, hidden_dim) <= 0:
+            raise ValueError("Generator dimensions must be positive.")
+        self.noise_dim = noise_dim
+        self.generator_model = nn.Sequential(
+            nn.Linear(noise_dim + structure_dim, hidden_dim),
+            nn.LeakyReLU(),
+            nn.Linear(hidden_dim, modality_dim),
+        )
+
+    def forward(self, structural: torch.Tensor) -> torch.Tensor:
+        noise = torch.randn(
+            (*structural.shape[:-1], self.noise_dim),
+            device=structural.device,
+            dtype=structural.dtype,
+        )
+        return self.generator_model(torch.cat((noise, structural), dim=-1))
+
+
+class MultiGenerator(nn.Module):
+    """AdaMF-MAT's independent visual and textual generators.
+
+    This ports the official ``MultiGenerator`` while allocating random noise on
+    the input tensor's device instead of hard-coding CUDA.
+    """
+
+    def __init__(
+        self,
+        *,
+        noise_dim: int,
+        structure_dim: int,
+        modality_dim: int,
+        hidden_dim: int = 512,
+    ) -> None:
+        super().__init__()
+        self.visual_generator = _SingleModalityGenerator(
+            noise_dim=noise_dim,
+            structure_dim=structure_dim,
+            modality_dim=modality_dim,
+            hidden_dim=hidden_dim,
+        )
+        self.text_generator = _SingleModalityGenerator(
+            noise_dim=noise_dim,
+            structure_dim=structure_dim,
+            modality_dim=modality_dim,
+            hidden_dim=hidden_dim,
+        )
+
+    def forward(self, structural: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        return self.visual_generator(structural), self.text_generator(structural)
+
+
 def gradient_penalty(
     score_fn: Callable[[torch.Tensor, torch.Tensor, torch.Tensor], torch.Tensor],
     real_embeddings: Sequence[torch.Tensor],

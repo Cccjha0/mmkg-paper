@@ -2,7 +2,7 @@
 
 These adapters reuse the established artifact, dev-checkpoint, and evaluation
 path from :class:`TrainerYAML`, but make each non-standard loss contract
-explicit.  Concrete baselines are added in later milestones.
+explicit.
 """
 
 from __future__ import annotations
@@ -17,6 +17,7 @@ from ml.training.src.data.sampler_recent import (
 from ml.training.src.data.build_true_facts import build_true_facts
 from ml.training.src.models.recent_baselines.adversarial import (
     CombinedGenerator,
+    MultiGenerator,
     generator_gradient_norm,
     gradient_penalty,
 )
@@ -56,7 +57,7 @@ class RecentTrainerBase(TrainerYAML):
         if loss_method is None:
             raise TypeError(
                 f"{self.__class__.__name__} requires model.{self.loss_method_name}(pos, neg). "
-                "No concrete recent baseline is implemented in M1.1."
+                "The selected model does not implement this engine contract."
             )
         if neg is None:
             raise RuntimeError(f"{self.__class__.__name__} requires sampled negative triples.")
@@ -64,31 +65,27 @@ class RecentTrainerBase(TrainerYAML):
 
 
 class AdversarialTrainer(RecentTrainerBase):
-    """Engine for models implementing ``adversarial_loss(pos, neg)``."""
-
-    loss_method_name = "adversarial_loss"
-
-
-class AdversarialGPTrainer(RecentTrainerBase):
-    """NativE-style model/discriminator plus generator training engine."""
+    """AdaMF-MAT's two-optimizer modality-adversarial training engine."""
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         if not hasattr(self.model, "dim_e"):
-            raise TypeError("AdversarialGPTrainer requires a model exposing dim_e.")
+            raise TypeError(f"{self.__class__.__name__} requires a model exposing dim_e.")
         tr = self.cfg["training"]
-        self.generator = CombinedGenerator(
-            noise_dim=int(tr.get("generator_noise_dim", 64)),
+        self.generator = self._build_generator(tr).to(self.device)
+        self.generator_lr = float(tr.get("generator_lr", 1e-4))
+        self.generator_optim = torch.optim.Adam(self.generator.parameters(), lr=self.generator_lr)
+        self.mu = float(tr.get("mu", 0.0))
+        self.adv_temperature = float(tr.get("adv_temperature", 2.0))
+        self.regularization_weight = float(tr.get("regularization_weight", 0.0))
+
+    def _build_generator(self, training_cfg: dict) -> torch.nn.Module:
+        return MultiGenerator(
+            noise_dim=int(training_cfg.get("generator_noise_dim", 64)),
             structure_dim=int(self.model.dim_e),
             modality_dim=int(self.model.dim_e),
-            hidden_dim=int(tr.get("generator_hidden_dim", 512)),
-        ).to(self.device)
-        self.generator_lr = float(tr.get("generator_lr", 1e-3))
-        self.generator_optim = torch.optim.Adam(self.generator.parameters(), lr=self.generator_lr)
-        self.mu = float(tr.get("mu", 1e-4))
-        self.adv_temperature = float(tr.get("adv_temperature", 2.0))
-        self.regularization_weight = float(tr.get("regularization_weight", 1e-5))
-        self.gradient_penalty_coefficient = float(tr.get("gradient_penalty_coefficient", 0.1))
+            hidden_dim=int(training_cfg.get("generator_hidden_dim", 512)),
+        )
 
     def _self_adversarial_sigmoid_loss(
         self,
@@ -103,6 +100,132 @@ class AdversarialGPTrainer(RecentTrainerBase):
             F.logsigmoid(positive_score).mean()
             + (weights * F.logsigmoid(-negative_score)).sum(dim=-1).mean()
         ) / 2.0
+
+    def _official_adv_mix_sigmoid_loss(
+        self,
+        positive_score: torch.Tensor,
+        negative_score: torch.Tensor,
+    ) -> torch.Tensor:
+        """Port SigmoidLoss as used on real/fake scores by AdvMixTrainer.
+
+        The official code applies its adversarial softmax across the complete
+        positive batch for each fake-score vector, rather than treating each
+        real/fake pair as an independent one-negative group.
+        """
+        weights = F.softmax(negative_score * self.adv_temperature, dim=-1).detach()
+        return -(
+            F.logsigmoid(positive_score).mean()
+            + (weights * F.logsigmoid(-negative_score)).sum(dim=-1).mean()
+        ) / 2.0
+
+    @staticmethod
+    def _set_model_requires_grad(model: torch.nn.Module, enabled: bool) -> None:
+        for parameter in model.parameters():
+            parameter.requires_grad_(enabled)
+
+    @torch.no_grad()
+    def _detached_generated_modalities(
+        self,
+        pos: torch.LongTensor,
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+        h_ids, _, t_ids = pos.unbind(dim=1)
+        h_structural = self.model.get_batch_ent_embs(h_ids)
+        t_structural = self.model.get_batch_ent_embs(t_ids)
+        fake_h_visual, fake_h_text = self.generator(h_structural)
+        fake_t_visual, fake_t_text = self.generator(t_structural)
+        return fake_h_visual, fake_t_visual, fake_h_text, fake_t_text
+
+    def _generator_structures(
+        self,
+        pos: torch.LongTensor,
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        h_ids, _, t_ids = pos.unbind(dim=1)
+        with torch.no_grad():
+            head = self.model.get_batch_ent_embs(h_ids).detach()
+            tail = self.model.get_batch_ent_embs(t_ids).detach()
+        return head, tail
+
+    def _train_step(self, pos: torch.LongTensor, neg: torch.LongTensor | None) -> dict[str, float]:
+        if neg is None:
+            raise RuntimeError("AdversarialTrainer requires negative triples.")
+
+        # Model/discriminator step: ordinary KGC loss plus AdaMF-MAT's three
+        # real-vs-fake SigmoidLoss terms.
+        self.optim.zero_grad(set_to_none=True)
+        positive_score = self.model.score(pos)
+        negative_score = self.model.score(neg)
+        kgc_loss = self._self_adversarial_sigmoid_loss(positive_score, negative_score)
+        if self.regularization_weight:
+            kgc_loss = kgc_loss + self.regularization_weight * self.model.regularization(pos)
+
+        fake_modalities = self._detached_generated_modalities(pos)
+        fake_scores = self.model.fake_scores(
+            pos,
+            fake_head_visual=fake_modalities[0],
+            fake_tail_visual=fake_modalities[1],
+            fake_head_text=fake_modalities[2],
+            fake_tail_text=fake_modalities[3],
+        )
+        adversarial_loss = sum(
+            self._official_adv_mix_sigmoid_loss(positive_score, fake_score)
+            for fake_score in fake_scores
+        )
+        model_loss = kgc_loss + self.mu * adversarial_loss
+        model_loss.backward()
+        grad_stats = self._compute_grad_group_stats()
+        self.optim.step()
+
+        # Generator step: generated scores are treated as positives and the
+        # real positive-triple score as the negative target, matching upstream.
+        self.generator.train()
+        self.generator_optim.zero_grad(set_to_none=True)
+        h_structural, t_structural = self._generator_structures(pos)
+        fake_h_visual, fake_h_text = self.generator(h_structural)
+        fake_t_visual, fake_t_text = self.generator(t_structural)
+        self._set_model_requires_grad(self.model, False)
+        try:
+            generator_scores = self.model.fake_scores(
+                pos,
+                fake_head_visual=fake_h_visual,
+                fake_tail_visual=fake_t_visual,
+                fake_head_text=fake_h_text,
+                fake_tail_text=fake_t_text,
+            )
+            generator_loss = sum(
+                self._official_adv_mix_sigmoid_loss(fake_score, positive_score.detach())
+                for fake_score in generator_scores
+            )
+            generator_loss.backward()
+        finally:
+            self._set_model_requires_grad(self.model, True)
+        generator_grad = generator_gradient_norm(self.generator)
+        self.generator_optim.step()
+
+        return {
+            "loss": float(model_loss.detach().item()),
+            "kgc_loss": float(kgc_loss.detach().item()),
+            "adversarial_loss": float(adversarial_loss.detach().item()),
+            "generator_loss": float(generator_loss.detach().item()),
+            "generator_grad_norm": generator_grad,
+            **grad_stats,
+        }
+
+
+class AdversarialGPTrainer(AdversarialTrainer):
+    """NativE-style model/discriminator plus generator training engine."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        tr = self.cfg["training"]
+        self.gradient_penalty_coefficient = float(tr.get("gradient_penalty_coefficient", 0.1))
+
+    def _build_generator(self, training_cfg: dict) -> torch.nn.Module:
+        return CombinedGenerator(
+            noise_dim=int(training_cfg.get("generator_noise_dim", 64)),
+            structure_dim=int(self.model.dim_e),
+            modality_dim=int(self.model.dim_e),
+            hidden_dim=int(training_cfg.get("generator_hidden_dim", 512)),
+        )
 
     @torch.no_grad()
     def _detached_generated_modalities(
@@ -125,11 +248,6 @@ class AdversarialGPTrainer(RecentTrainerBase):
             head = tuple(value.detach() for value in self.model.get_batch_ent_multimodal_embs(h_ids))
             tail = tuple(value.detach() for value in self.model.get_batch_ent_multimodal_embs(t_ids))
         return head, tail
-
-    @staticmethod
-    def _set_model_requires_grad(model: torch.nn.Module, enabled: bool) -> None:
-        for parameter in model.parameters():
-            parameter.requires_grad_(enabled)
 
     def _train_step(self, pos: torch.LongTensor, neg: torch.LongTensor | None) -> dict[str, float]:
         if neg is None:
