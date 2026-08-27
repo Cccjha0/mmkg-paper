@@ -18,13 +18,15 @@ def _cfg(root, engine):
 
 
 def _build(engine):
+    model = torch.nn.Linear(1, 1)
+    model.dim_e = 2
     with (
         patch("ml.training.src.train.trainer_yaml.make_run_dir", return_value="dispatch-test-run"),
         patch("ml.training.src.train.trainer_yaml.save_json"),
         patch("ml.training.src.train.trainer_yaml.copy_file"),
     ):
         return build_trainer(
-            model=torch.nn.Linear(1, 1),
+            model=model,
             train_triples=[(0, 0, 1)],
             dev_triples=[(0, 0, 1)],
             test_triples=[(0, 0, 1)],

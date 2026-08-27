@@ -8,12 +8,18 @@ explicit.  Concrete baselines are added in later milestones.
 from __future__ import annotations
 
 import torch
+import torch.nn.functional as F
 
 from ml.training.src.data.sampler_recent import (
     bernoulli_filtered_negative_sample,
     build_relation_statistics,
 )
 from ml.training.src.data.build_true_facts import build_true_facts
+from ml.training.src.models.recent_baselines.adversarial import (
+    CombinedGenerator,
+    generator_gradient_norm,
+    gradient_penalty,
+)
 from ml.training.src.train.trainer_yaml import TrainerYAML
 
 
@@ -64,9 +70,139 @@ class AdversarialTrainer(RecentTrainerBase):
 
 
 class AdversarialGPTrainer(RecentTrainerBase):
-    """Engine for models implementing ``adversarial_gp_loss(pos, neg)``."""
+    """NativE-style model/discriminator plus generator training engine."""
 
-    loss_method_name = "adversarial_gp_loss"
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        if not hasattr(self.model, "dim_e"):
+            raise TypeError("AdversarialGPTrainer requires a model exposing dim_e.")
+        tr = self.cfg["training"]
+        self.generator = CombinedGenerator(
+            noise_dim=int(tr.get("generator_noise_dim", 64)),
+            structure_dim=int(self.model.dim_e),
+            modality_dim=int(self.model.dim_e),
+            hidden_dim=int(tr.get("generator_hidden_dim", 512)),
+        ).to(self.device)
+        self.generator_lr = float(tr.get("generator_lr", 1e-3))
+        self.generator_optim = torch.optim.Adam(self.generator.parameters(), lr=self.generator_lr)
+        self.mu = float(tr.get("mu", 1e-4))
+        self.adv_temperature = float(tr.get("adv_temperature", 2.0))
+        self.regularization_weight = float(tr.get("regularization_weight", 1e-5))
+        self.gradient_penalty_coefficient = float(tr.get("gradient_penalty_coefficient", 0.1))
+
+    def _self_adversarial_sigmoid_loss(
+        self,
+        positive_score: torch.Tensor,
+        negative_score: torch.Tensor,
+    ) -> torch.Tensor:
+        if negative_score.numel() % positive_score.numel() != 0:
+            raise ValueError("Negative score count must be an integer multiple of positive score count.")
+        negative_score = negative_score.view(positive_score.numel(), -1)
+        weights = F.softmax(negative_score * self.adv_temperature, dim=-1).detach()
+        return -(
+            F.logsigmoid(positive_score).mean()
+            + (weights * F.logsigmoid(-negative_score)).sum(dim=-1).mean()
+        ) / 2.0
+
+    @torch.no_grad()
+    def _detached_generated_modalities(
+        self,
+        pos: torch.LongTensor,
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+        h_ids, _, t_ids = pos.unbind(dim=1)
+        h_structural, h_visual, h_text = self.model.get_batch_ent_multimodal_embs(h_ids)
+        t_structural, t_visual, t_text = self.model.get_batch_ent_multimodal_embs(t_ids)
+        fake_h_visual, fake_h_text = self.generator(h_structural, h_visual, h_text)
+        fake_t_visual, fake_t_text = self.generator(t_structural, t_visual, t_text)
+        return fake_h_visual, fake_t_visual, fake_h_text, fake_t_text
+
+    def _generator_inputs(
+        self,
+        pos: torch.LongTensor,
+    ) -> tuple[tuple[torch.Tensor, torch.Tensor, torch.Tensor], tuple[torch.Tensor, torch.Tensor, torch.Tensor]]:
+        h_ids, _, t_ids = pos.unbind(dim=1)
+        with torch.no_grad():
+            head = tuple(value.detach() for value in self.model.get_batch_ent_multimodal_embs(h_ids))
+            tail = tuple(value.detach() for value in self.model.get_batch_ent_multimodal_embs(t_ids))
+        return head, tail
+
+    @staticmethod
+    def _set_model_requires_grad(model: torch.nn.Module, enabled: bool) -> None:
+        for parameter in model.parameters():
+            parameter.requires_grad_(enabled)
+
+    def _train_step(self, pos: torch.LongTensor, neg: torch.LongTensor | None) -> dict[str, float]:
+        if neg is None:
+            raise RuntimeError("AdversarialGPTrainer requires negative triples.")
+
+        # Model/discriminator step: KGC + real/fake Wasserstein term + GP.
+        self.optim.zero_grad(set_to_none=True)
+        positive_score, real_embeddings = self.model.score_and_embeddings(pos)
+        negative_score = self.model.score(neg)
+        kgc_loss = self._self_adversarial_sigmoid_loss(positive_score, negative_score)
+        if self.regularization_weight:
+            kgc_loss = kgc_loss + self.regularization_weight * self.model.regularization(pos)
+
+        fake_modalities = self._detached_generated_modalities(pos)
+        fake_scores, fake_embeddings = self.model.fake_scores_and_embeddings(
+            pos,
+            fake_head_visual=fake_modalities[0],
+            fake_tail_visual=fake_modalities[1],
+            fake_head_text=fake_modalities[2],
+            fake_tail_text=fake_modalities[3],
+        )
+        adversarial_loss = sum(
+            -positive_score.mean() + fake_score.mean()
+            for fake_score in fake_scores
+        )
+        gp = gradient_penalty(
+            self.model.score_from_embeddings,
+            real_embeddings,
+            fake_embeddings,
+            coefficient=self.gradient_penalty_coefficient,
+        )
+        if not bool(torch.isfinite(gp)):
+            raise FloatingPointError("NativE gradient penalty became non-finite.")
+        model_loss = kgc_loss + self.mu * (adversarial_loss + gp)
+        model_loss.backward()
+        grad_stats = self._compute_grad_group_stats()
+        self.optim.step()
+
+        # Generator step: freeze KGC parameters but retain gradients through
+        # the KGC operations into generated modality embeddings.
+        self.generator.train()
+        self.generator_optim.zero_grad(set_to_none=True)
+        head_inputs, tail_inputs = self._generator_inputs(pos)
+        fake_h_visual, fake_h_text = self.generator(*head_inputs)
+        fake_t_visual, fake_t_text = self.generator(*tail_inputs)
+        self._set_model_requires_grad(self.model, False)
+        try:
+            generator_scores, _ = self.model.fake_scores_and_embeddings(
+                pos,
+                fake_head_visual=fake_h_visual,
+                fake_tail_visual=fake_t_visual,
+                fake_head_text=fake_h_text,
+                fake_tail_text=fake_t_text,
+            )
+            generator_loss = sum(
+                (self.model.margin - score).mean()
+                for score in generator_scores
+            ) / len(generator_scores)
+            generator_loss.backward()
+        finally:
+            self._set_model_requires_grad(self.model, True)
+        generator_grad = generator_gradient_norm(self.generator)
+        self.generator_optim.step()
+
+        return {
+            "loss": float(model_loss.detach().item()),
+            "kgc_loss": float(kgc_loss.detach().item()),
+            "adversarial_loss": float(adversarial_loss.detach().item()),
+            "generator_loss": float(generator_loss.detach().item()),
+            "gradient_penalty": float(gp.detach().item()),
+            "generator_grad_norm": generator_grad,
+            **grad_stats,
+        }
 
 
 class OneVsAllTrainer(TrainerYAML):

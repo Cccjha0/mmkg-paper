@@ -1,4 +1,4 @@
-# APKGC official-default starting point; all tuning remains DEV ONLY.
+# APKGC official MKG-W Mformer_hd_mean script anchor; selection remains DEV ONLY.
 dataset:
   name: openbg_img
   train: data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_train.tsv
@@ -11,10 +11,10 @@ model:
   name: openbg_img_apkgc
   num_relations: 136
   dim: 128
-  margin: 6.0
+  margin: 12.0
   epsilon: 2.0
   num_hidden_layers: 1
-  num_attention_heads: 1
+  num_attention_heads: 2
   joint_way: Mformer_hd_mean
   num_proj: 1
   # The supplied upstream runner enables APKGC noise and uses these values.
@@ -29,11 +29,11 @@ model:
 training:
   engine: standard
   sampler: bernoulli_filtered
-  lr: 0.001
-  batch_size: 512
-  neg_ratio: 1
+  lr: 0.0001
+  batch_size: 1024
+  neg_ratio: 32
   adv_temperature: 2.0
-  epochs: 1000
+  epochs: 8000
   early_stop_patience: 10
 
 evaluation:

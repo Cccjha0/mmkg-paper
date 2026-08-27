@@ -108,6 +108,19 @@ class TrainerYAML:
             raise RuntimeError("The standard trainer requires sampled negative triples.")
         return self.model(pos, neg)
 
+    def _train_step(self, pos: torch.LongTensor, neg: torch.LongTensor | None) -> dict[str, float]:
+        """Run one optimizer step and return scalar diagnostics.
+
+        Recent multi-optimizer engines override this hook.  The standard path
+        retains its original model(pos, neg), backward, and Adam semantics.
+        """
+        loss = self._compute_loss(pos, neg)
+        self.optim.zero_grad()
+        loss.backward()
+        grad_stats = self._compute_grad_group_stats()
+        self.optim.step()
+        return {"loss": float(loss.item()), **grad_stats}
+
     def _on_epoch_start(self, epoch: int) -> None:
         """Optional model hook; legacy models do not implement it."""
         on_epoch_start = getattr(self.model, "on_epoch_start", None)
@@ -243,7 +256,7 @@ class TrainerYAML:
             self._on_epoch_start(epoch)
 
             perm = torch.randperm(train_tensor.size(0))
-            total_loss = 0.0
+            epoch_totals: dict[str, float] = {}
             steps = 0
             epoch_grad_stats = {
                 "grad_residual": 0.0,
@@ -256,17 +269,28 @@ class TrainerYAML:
                 pos = train_tensor[idx].to(self.device)
                 neg = self._sample_negatives(pos)
 
-                loss = self._compute_loss(pos, neg)
-                self.optim.zero_grad()
-                loss.backward()
-                epoch_grad_stats = self._compute_grad_group_stats()
-                self.optim.step()
-
-                total_loss += float(loss.item())
+                step_stats = self._train_step(pos, neg)
+                for key, value in step_stats.items():
+                    if key.startswith("grad_"):
+                        continue
+                    epoch_totals[key] = epoch_totals.get(key, 0.0) + float(value)
+                epoch_grad_stats = {
+                    key: float(step_stats.get(key, 0.0))
+                    for key in epoch_grad_stats
+                }
                 steps += 1
 
-            avg_loss = total_loss / max(1, steps)
-            print(f"[Train] epoch={epoch} avg_loss={avg_loss:.6f}")
+            epoch_averages = {
+                key: value / max(1, steps)
+                for key, value in epoch_totals.items()
+            }
+            avg_loss = epoch_averages.get("loss", 0.0)
+            detail = " ".join(
+                f"{key}={value:.6f}"
+                for key, value in epoch_averages.items()
+                if key != "loss"
+            )
+            print(f"[Train] epoch={epoch} avg_loss={avg_loss:.6f}" + (f" {detail}" if detail else ""))
 
             # eval
             if epoch % self.eval_every == 0:
@@ -292,6 +316,7 @@ class TrainerYAML:
                     "hits@3": metrics["hits@3"],
                     "hits@10": metrics["hits@10"],
                 }
+                row.update({key: value for key, value in epoch_averages.items() if key != "loss"})
 
                 # gate stats (only for models that support it, e.g., Gated Fusion)
                 gate_stats = self._compute_gate_stats(sample_size=5000)
@@ -305,6 +330,8 @@ class TrainerYAML:
                     row,
                     header_order=[
                         "epoch", "avg_loss", "mrr", "hits@1", "hits@3", "hits@10",
+                        "kgc_loss", "adversarial_loss", "generator_loss", "gradient_penalty",
+                        "generator_grad_norm",
                         "grad_residual", "grad_fusion", "grad_projection",
                         "residual_scale_value", "mix_w_fusion", "mix_w_residual",
                         "g_mean_all", "g_std_all",
