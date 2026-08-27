@@ -13,6 +13,11 @@ from ml.training.src.data.tsv_reader import read_allow_2or3
 from ml.training.src.data.build_true_facts import build_true_facts
 from ml.training.src.models.build_model import build_model
 from ml.training.src.train.trainer_yaml import TrainerYAML
+from ml.training.src.train.trainer_recent import (
+    AdversarialGPTrainer,
+    AdversarialTrainer,
+    OneVsAllTrainer,
+)
 
 
 def resolve_device(requested: str) -> str:
@@ -45,6 +50,33 @@ def resolve_device(requested: str) -> str:
     if torch.backends.mps.is_available():
         return "mps"
     return "cpu"
+
+
+def build_trainer(*, model, train_triples, dev_triples, test_triples, num_entities, true_tails, true_heads, cfg):
+    """Dispatch to a training engine without changing legacy defaults."""
+    engine = cfg["training"].get("engine", "standard").lower()
+    trainer_kwargs = {
+        "model": model,
+        "train_triples": train_triples,
+        "dev_triples": dev_triples,
+        "test_triples": test_triples,
+        "num_entities": num_entities,
+        "true_tails": true_tails,
+        "true_heads": true_heads,
+        "cfg": cfg,
+    }
+    if engine == "standard":
+        return TrainerYAML(**trainer_kwargs)
+    if engine == "adversarial":
+        return AdversarialTrainer(**trainer_kwargs)
+    if engine == "adversarial_gp":
+        return AdversarialGPTrainer(**trainer_kwargs)
+    if engine == "one_vs_all":
+        return OneVsAllTrainer(**trainer_kwargs)
+    raise ValueError(
+        f"Unsupported training.engine={engine!r}. "
+        "Expected one of: standard, adversarial, adversarial_gp, one_vs_all."
+    )
 
 
 def main():
@@ -99,7 +131,7 @@ def main():
     model = model.to(device)
 
     # run trainer
-    trainer = TrainerYAML(
+    trainer = build_trainer(
         model=model,
         train_triples=train3,
         dev_triples=dev3,

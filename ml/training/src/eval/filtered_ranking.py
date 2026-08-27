@@ -1,6 +1,22 @@
 import torch
 
 
+def _score_tail(model, triples: torch.LongTensor) -> torch.Tensor:
+    """Score tail-prediction triples, with a legacy ``score`` fallback."""
+    score_tail = getattr(model, "score_tail", None)
+    if score_tail is not None:
+        return score_tail(triples)
+    return model.score(triples)
+
+
+def _score_head(model, triples: torch.LongTensor) -> torch.Tensor:
+    """Score head-prediction triples, with a legacy ``score`` fallback."""
+    score_head = getattr(model, "score_head", None)
+    if score_head is not None:
+        return score_head(triples)
+    return model.score(triples)
+
+
 def _metrics_from_ranks(ranks: torch.Tensor, ks=(1, 3, 10)) -> dict:
     ranks = ranks.to(dtype=torch.long).detach().cpu()
     count = int(ranks.numel())
@@ -107,7 +123,7 @@ def _filtered_tail_ranking_eval(
         t = q[:, 2].to(device)
         t_cpu = q[:, 2]
 
-        target_scores = model.score(torch.stack([h, r, t], dim=1))
+        target_scores = _score_tail(model, torch.stack([h, r, t], dim=1))
         target = target_scores.unsqueeze(1)
 
         filt_excl_list = []
@@ -130,7 +146,7 @@ def _filtered_tail_ranking_eval(
             t_g = cand.unsqueeze(0).expand(bq, c)
             batch = torch.stack([h_g.reshape(-1), r_g.reshape(-1), t_g.reshape(-1)], dim=1)
 
-            scores = model.score(batch).view(bq, c)
+            scores = _score_tail(model, batch).view(bq, c)
 
             row_chunks = []
             col_chunks = []
@@ -204,7 +220,7 @@ def _filtered_head_ranking_eval(
         t = q[:, 2].to(device)
         h_cpu = q[:, 0]
 
-        target_scores = model.score(torch.stack([h, r, t], dim=1))
+        target_scores = _score_head(model, torch.stack([h, r, t], dim=1))
         target = target_scores.unsqueeze(1)
 
         filt_excl_list = []
@@ -227,7 +243,7 @@ def _filtered_head_ranking_eval(
             t_g = t.unsqueeze(1).expand(bq, c)
             batch = torch.stack([h_g.reshape(-1), r_g.reshape(-1), t_g.reshape(-1)], dim=1)
 
-            scores = model.score(batch).view(bq, c)
+            scores = _score_head(model, batch).view(bq, c)
 
             row_chunks = []
             col_chunks = []

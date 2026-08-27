@@ -5,6 +5,11 @@ import torch.nn.functional as F
 from tqdm import tqdm
 
 from ml.training.src.data.sampler import negative_sample
+from ml.training.src.data.build_true_facts import build_true_facts
+from ml.training.src.data.sampler_recent import (
+    bernoulli_filtered_negative_sample,
+    build_relation_statistics,
+)
 from ml.training.src.eval.filtered_ranking import (
     filtered_ranking_eval,
     prepare_true_heads_index,
@@ -40,6 +45,17 @@ class TrainerYAML:
         self.lr = tr.get("lr", 1e-3)
         self.batch_size = tr.get("batch_size", 1024)
         self.neg_ratio = tr.get("neg_ratio", 10)
+        self.sampler_name = tr.get("sampler", "uniform").lower()
+        if self.sampler_name not in {"uniform", "bernoulli_filtered"}:
+            raise ValueError(
+                f"Unsupported training.sampler={self.sampler_name!r}. "
+                "Expected 'uniform' or 'bernoulli_filtered'."
+            )
+        if self.sampler_name == "bernoulli_filtered":
+            # Sampling must only use training facts.  The all-split truth maps
+            # supplied to this trainer remain exclusively for filtered eval.
+            self.train_true_tails, self.train_true_heads = build_true_facts(train_triples)
+            self.relation_stats = build_relation_statistics(train_triples)
         self.fusion_warmup_epochs = tr.get("fusion_warmup_epochs", 0)
         self.residual_warmup_epochs = tr.get("residual_warmup_epochs", 0)
         self.epochs = tr.get("epochs", 200)
@@ -72,6 +88,31 @@ class TrainerYAML:
 
         self.optim = torch.optim.Adam(self.model.parameters(), lr=self.lr)
         self.base_use_fusion = getattr(self.model, "use_fusion", None)
+
+    def _sample_negatives(self, pos: torch.LongTensor) -> torch.LongTensor:
+        """Use legacy sampling by default, or explicit recent-baseline sampling."""
+        if self.sampler_name == "bernoulli_filtered":
+            return bernoulli_filtered_negative_sample(
+                pos=pos,
+                num_entities=self.num_entities,
+                true_heads=self.train_true_heads,
+                true_tails=self.train_true_tails,
+                relation_stats=self.relation_stats,
+                neg_ratio=self.neg_ratio,
+            )
+        return negative_sample(pos, num_entities=self.num_entities, neg_ratio=self.neg_ratio)
+
+    def _compute_loss(self, pos: torch.LongTensor, neg: torch.LongTensor | None) -> torch.Tensor:
+        """Legacy model-loss contract used only by the standard engine."""
+        if neg is None:
+            raise RuntimeError("The standard trainer requires sampled negative triples.")
+        return self.model(pos, neg)
+
+    def _on_epoch_start(self, epoch: int) -> None:
+        """Optional model hook; legacy models do not implement it."""
+        on_epoch_start = getattr(self.model, "on_epoch_start", None)
+        if on_epoch_start is not None:
+            on_epoch_start(epoch)
 
     @staticmethod
     def _grad_norm_sq(param: torch.nn.Parameter) -> float:
@@ -199,6 +240,7 @@ class TrainerYAML:
                     print(f"[Train] residual_phase={phase} epoch={epoch}")
 
             self.model.train()
+            self._on_epoch_start(epoch)
 
             perm = torch.randperm(train_tensor.size(0))
             total_loss = 0.0
@@ -212,9 +254,9 @@ class TrainerYAML:
             for i in tqdm(range(0, train_tensor.size(0), self.batch_size), desc=f"epoch {epoch}"):
                 idx = perm[i : i + self.batch_size]
                 pos = train_tensor[idx].to(self.device)
-                neg = negative_sample(pos, num_entities=self.num_entities, neg_ratio=self.neg_ratio)
+                neg = self._sample_negatives(pos)
 
-                loss = self.model(pos, neg)
+                loss = self._compute_loss(pos, neg)
                 self.optim.zero_grad()
                 loss.backward()
                 epoch_grad_stats = self._compute_grad_group_stats()

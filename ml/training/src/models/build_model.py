@@ -39,6 +39,40 @@ def _load_openbg_img_features(cache_dir: str, cache_format: str) -> tuple[torch.
 def build_model(cfg: dict):
     model_name = cfg["model"]["name"]
 
+    if model_name == "openbg_img_apkgc":
+        from ml.training.src.models.recent_baselines.apkgc import OpenBGAPKGC
+
+        cache_dir = cfg["dataset"]["cache_dir"]
+        cache_format = cfg["dataset"].get("cache_format", "raw")
+        text_feat, img_feat, has_img = _load_openbg_img_features(cache_dir, cache_format)
+        mcfg = cfg["model"]
+        tr = cfg["training"]
+        num_entities = text_feat.shape[0]
+        print("[BuildModel] building recent baseline: APKGC")
+        model = OpenBGAPKGC(
+            text_feat=text_feat,
+            img_feat=img_feat,
+            has_img=has_img,
+            num_entities=num_entities,
+            num_relations=mcfg["num_relations"],
+            d=mcfg.get("dim", 128),
+            margin=mcfg.get("margin", 6.0),
+            epsilon=mcfg.get("epsilon", 2.0),
+            num_hidden_layers=mcfg.get("num_hidden_layers", 1),
+            num_attention_heads=mcfg.get("num_attention_heads", 1),
+            joint_way=mcfg.get("joint_way", "Mformer_hd_mean"),
+            num_proj=mcfg.get("num_proj", 1),
+            add_noise=mcfg.get("add_noise", False),
+            noise_update=mcfg.get("noise_update", "epoch"),
+            noise_ratio=mcfg.get("noise_ratio", 0.2),
+            mask_ratio=mcfg.get("mask_ratio", 0.7),
+            adv_temperature=tr.get("adv_temperature", 2.0),
+            attention_dropout=mcfg.get("attention_dropout", 0.1),
+            use_intermediate=mcfg.get("use_intermediate", False),
+            intermediate_size=mcfg.get("intermediate_size"),
+        )
+        return model, num_entities
+
     if model_name == "openbg_img_tucker":
         from ml.training.src.models.structure_baselines import StructureTuckERLP
 

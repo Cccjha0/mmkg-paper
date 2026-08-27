@@ -6,6 +6,7 @@ embedding:
   d: 256
 
 training:
+  engine: standard
   lr: 0.001
   batch_size: 512
   neg_ratio: 2
