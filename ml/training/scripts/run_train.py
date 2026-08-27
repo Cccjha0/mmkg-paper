@@ -84,9 +84,32 @@ def main():
     ap.add_argument("--config", required=True,
                     help="path to experiment yaml, e.g., ml/configs/openbg_img_gate_only.yaml")
     ap.add_argument("--common", default="ml/configs/common.yaml", help="path to common yaml")
+    ap.add_argument(
+        "--profile-steps",
+        type=int,
+        default=None,
+        help="profile this many training batches, print a [Perf] summary, then stop before evaluation",
+    )
+    ap.add_argument(
+        "--profile-warmup-steps",
+        type=int,
+        default=2,
+        help="unmeasured warmup batches used with --profile-steps (default: 2)",
+    )
     args = ap.parse_args()
 
     cfg = load_config(args.config, args.common)
+    if args.profile_steps is not None:
+        if args.profile_steps <= 0 or args.profile_warmup_steps < 0:
+            ap.error("--profile-steps must be positive and --profile-warmup-steps non-negative")
+        cfg["training"].update(
+            {
+                "profile_timing": True,
+                "profile_steps": args.profile_steps,
+                "profile_warmup_steps": args.profile_warmup_steps,
+                "profile_stop_after": True,
+            }
+        )
 
     # seed
     seed = cfg["system"].get("seed", 1)

@@ -55,24 +55,38 @@ def _lookup_head_probabilities(
     return torch.tensor(values, dtype=torch.float32, device=relation_ids.device)
 
 
-def _draw_filtered_entity(
+def _filter_candidate_batch(
+    candidates: torch.LongTensor,
     *,
     forbidden: set[int],
     num_entities: int,
-    device: torch.device,
     max_attempts: int,
-) -> int:
+) -> torch.LongTensor:
+    """Reject known answers for one query using batched random draws.
+
+    Set membership remains on CPU, but random candidates are generated a whole
+    query group at a time instead of issuing one ``torch.randint`` call per
+    negative triple.
+    """
+    if candidates.numel() == 0:
+        return candidates
     if len(forbidden) >= num_entities:
         raise ValueError("Cannot draw a filtered negative: every entity is a known true answer for this query.")
-    for _ in range(max_attempts):
-        candidate = int(torch.randint(num_entities, (1,), device=device).item())
-        if candidate not in forbidden:
-            return candidate
-    # Deterministic fallback guarantees a valid negative despite unlucky draws.
-    for candidate in range(num_entities):
-        if candidate not in forbidden:
-            return candidate
-    raise AssertionError("Checked non-saturated forbidden set but found no valid negative.")
+
+    result = candidates
+    for attempt in range(max_attempts):
+        invalid = torch.tensor(
+            [candidate in forbidden for candidate in result.tolist()],
+            dtype=torch.bool,
+        )
+        if not bool(invalid.any()):
+            return result
+        if attempt + 1 < max_attempts:
+            result[invalid] = torch.randint(num_entities, (int(invalid.sum().item()),))
+
+    fallback = next(candidate for candidate in range(num_entities) if candidate not in forbidden)
+    result[invalid] = fallback
+    return result
 
 
 def bernoulli_filtered_negative_sample(
@@ -98,27 +112,41 @@ def bernoulli_filtered_negative_sample(
     if neg_ratio <= 0:
         raise ValueError("neg_ratio must be positive.")
 
-    # Filtering uses Python sets keyed by integer ids.  Keep that work on CPU
-    # in one batch to avoid a GPU synchronization for every sampled triple.
-    neg_cpu = pos.detach().cpu().repeat_interleave(neg_ratio, dim=0).clone()
-    head_probabilities = _lookup_head_probabilities(neg_cpu[:, 1], relation_stats)
-    corrupt_head = torch.rand(neg_cpu.shape[0]) < head_probabilities
-    device = torch.device("cpu")
+    source_device = pos.device
+    # The trainer now calls this sampler before H2D. ``copy=False`` therefore
+    # avoids the former GPU -> CPU round trip while keeping direct GPU callers
+    # backward compatible.
+    pos_cpu = pos.detach().to(device="cpu", copy=False)
+    triples = pos_cpu.tolist()
+    head_probabilities = _lookup_head_probabilities(pos_cpu[:, 1], relation_stats)
+    corrupt_head = torch.rand((pos_cpu.shape[0], neg_ratio)) < head_probabilities.unsqueeze(1)
+    candidates = torch.randint(num_entities, (pos_cpu.shape[0], neg_ratio))
+    negatives = pos_cpu.unsqueeze(1).expand(-1, neg_ratio, -1).clone()
+    empty: set[int] = set()
 
-    for row_index in range(neg_cpu.shape[0]):
-        h, r, t = (int(value) for value in neg_cpu[row_index].tolist())
-        if bool(corrupt_head[row_index].item()):
-            neg_cpu[row_index, 0] = _draw_filtered_entity(
-                forbidden=set(true_heads.get((r, t), set())),
+    # One Python iteration per positive triple (not per generated negative).
+    # The potentially large neg_ratio dimension is handled in batches. This
+    # preserves the sampling distribution, although batching changes the exact
+    # random-number draw order relative to the former serial implementation.
+    for row_index, (h, r, t) in enumerate(triples):
+        head_mask = corrupt_head[row_index]
+        tail_mask = ~head_mask
+        if bool(head_mask.any()):
+            forbidden_heads = true_heads.get((r, t), empty)
+            negatives[row_index, head_mask, 0] = _filter_candidate_batch(
+                candidates[row_index, head_mask],
+                forbidden=forbidden_heads,
                 num_entities=num_entities,
-                device=device,
                 max_attempts=max_attempts,
             )
-        else:
-            neg_cpu[row_index, 2] = _draw_filtered_entity(
-                forbidden=set(true_tails.get((h, r), set())),
+        if bool(tail_mask.any()):
+            forbidden_tails = true_tails.get((h, r), empty)
+            negatives[row_index, tail_mask, 2] = _filter_candidate_batch(
+                candidates[row_index, tail_mask],
+                forbidden=forbidden_tails,
                 num_entities=num_entities,
-                device=device,
                 max_attempts=max_attempts,
             )
-    return neg_cpu.to(device=pos.device)
+
+    neg_cpu = negatives.reshape(-1, 3)
+    return neg_cpu.to(device=source_device)

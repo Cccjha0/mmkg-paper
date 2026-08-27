@@ -1,5 +1,6 @@
 import os
 import math
+import time
 import torch
 import torch.nn.functional as F
 from tqdm import tqdm
@@ -61,6 +62,14 @@ class TrainerYAML:
         self.epochs = tr.get("epochs", 200)
         self.eval_every = tr.get("eval_every", 5)
         self.patience = tr.get("early_stop_patience", 10)
+        self.device_type = torch.device(self.device).type
+        self.pin_memory = bool(tr.get("pin_memory", self.device_type == "cuda"))
+        self.profile_timing = bool(tr.get("profile_timing", False))
+        self.profile_warmup_steps = int(tr.get("profile_warmup_steps", 2))
+        self.profile_steps = int(tr.get("profile_steps", 20))
+        self.profile_stop_after = bool(tr.get("profile_stop_after", False))
+        if self.profile_warmup_steps < 0 or self.profile_steps <= 0:
+            raise ValueError("profile_warmup_steps must be non-negative and profile_steps must be positive.")
 
         self.dev_eval_limit = ev.get("dev_eval_limit", len(dev_triples))
         self.test_eval_limit = ev.get("test_eval_limit", len(test_triples))
@@ -88,6 +97,34 @@ class TrainerYAML:
 
         self.optim = torch.optim.Adam(self.model.parameters(), lr=self.lr)
         self.base_use_fusion = getattr(self.model, "use_fusion", None)
+
+    def _profile_cuda_synchronize(self) -> None:
+        """Synchronize only for explicitly enabled CUDA timing diagnostics."""
+        if self.profile_timing and self.device_type == "cuda":
+            torch.cuda.synchronize(torch.device(self.device))
+
+    def _to_device(self, tensor: torch.Tensor) -> torch.Tensor:
+        """Transfer a CPU batch with optional pinned-memory async H2D."""
+        if tensor.device.type != "cpu" or self.device_type == "cpu":
+            return tensor.to(self.device)
+        non_blocking = False
+        if self.pin_memory and self.device_type == "cuda":
+            if not tensor.is_pinned():
+                tensor = tensor.pin_memory()
+            non_blocking = True
+        return tensor.to(self.device, non_blocking=non_blocking)
+
+    @staticmethod
+    def _print_perf_summary(totals: dict[str, float], measured_steps: int, warmup_steps: int) -> None:
+        if measured_steps <= 0:
+            print("[Perf] no batches were measured")
+            return
+        averages_ms = {key: 1000.0 * value / measured_steps for key, value in totals.items()}
+        total_ms = sum(averages_ms.values())
+        print(f"[Perf] measured_batches={measured_steps} warmup_batches={warmup_steps}")
+        for key in ("batch_indexing", "negative_sampling", "h2d_transfer", "gpu_step"):
+            share = 100.0 * averages_ms[key] / total_ms if total_ms > 0 else 0.0
+            print(f"[Perf] {key:<18} = {averages_ms[key]:9.3f} ms ({share:5.1f}%)")
 
     def _sample_negatives(self, pos: torch.LongTensor) -> torch.LongTensor:
         """Use legacy sampling by default, or explicit recent-baseline sampling."""
@@ -232,6 +269,15 @@ class TrainerYAML:
     def train(self):
         best_mrr = -1.0
         bad_epochs = 0
+        global_step = 0
+        profile_measured_steps = 0
+        profile_stopped_early = False
+        profile_totals = {
+            "batch_indexing": 0.0,
+            "negative_sampling": 0.0,
+            "h2d_transfer": 0.0,
+            "gpu_step": 0.0,
+        }
 
         train_tensor = torch.tensor(self.train_triples, dtype=torch.long)
         dev_tensor = torch.tensor(self.dev_triples[: self.dev_eval_limit], dtype=torch.long)
@@ -265,11 +311,62 @@ class TrainerYAML:
             }
 
             for i in tqdm(range(0, train_tensor.size(0), self.batch_size), desc=f"epoch {epoch}"):
+                should_measure = (
+                    self.profile_timing
+                    and global_step >= self.profile_warmup_steps
+                    and profile_measured_steps < self.profile_steps
+                )
+                if should_measure:
+                    self._profile_cuda_synchronize()
+                indexing_start = time.perf_counter()
                 idx = perm[i : i + self.batch_size]
-                pos = train_tensor[idx].to(self.device)
-                neg = self._sample_negatives(pos)
+                pos_cpu = train_tensor[idx]
+                indexing_elapsed = time.perf_counter() - indexing_start
 
+                # Recent baselines sample on CPU before H2D. This removes the
+                # former positive CPU -> GPU -> CPU round trip. Legacy uniform
+                # sampling stays on its original device/RNG path.
+                if self.sampler_name == "bernoulli_filtered":
+                    sampling_start = time.perf_counter()
+                    neg_cpu = self._sample_negatives(pos_cpu)
+                    sampling_elapsed = time.perf_counter() - sampling_start
+
+                    transfer_start = time.perf_counter()
+                    pos = self._to_device(pos_cpu)
+                    neg = self._to_device(neg_cpu)
+                    if should_measure:
+                        self._profile_cuda_synchronize()
+                    transfer_elapsed = time.perf_counter() - transfer_start
+                else:
+                    transfer_start = time.perf_counter()
+                    pos = self._to_device(pos_cpu)
+                    if should_measure:
+                        self._profile_cuda_synchronize()
+                    transfer_elapsed = time.perf_counter() - transfer_start
+
+                    if should_measure:
+                        self._profile_cuda_synchronize()
+                    sampling_start = time.perf_counter()
+                    neg = self._sample_negatives(pos)
+                    if should_measure:
+                        self._profile_cuda_synchronize()
+                    sampling_elapsed = time.perf_counter() - sampling_start
+
+                if should_measure:
+                    self._profile_cuda_synchronize()
+                gpu_step_start = time.perf_counter()
                 step_stats = self._train_step(pos, neg)
+                if should_measure:
+                    self._profile_cuda_synchronize()
+                gpu_step_elapsed = time.perf_counter() - gpu_step_start
+
+                if should_measure:
+                    profile_totals["batch_indexing"] += indexing_elapsed
+                    profile_totals["negative_sampling"] += sampling_elapsed
+                    profile_totals["h2d_transfer"] += transfer_elapsed
+                    profile_totals["gpu_step"] += gpu_step_elapsed
+                    profile_measured_steps += 1
+                global_step += 1
                 for key, value in step_stats.items():
                     if key.startswith("grad_"):
                         continue
@@ -279,6 +376,13 @@ class TrainerYAML:
                     for key in epoch_grad_stats
                 }
                 steps += 1
+                if (
+                    self.profile_timing
+                    and self.profile_stop_after
+                    and profile_measured_steps >= self.profile_steps
+                ):
+                    profile_stopped_early = True
+                    break
 
             epoch_averages = {
                 key: value / max(1, steps)
@@ -291,6 +395,9 @@ class TrainerYAML:
                 if key != "loss"
             )
             print(f"[Train] epoch={epoch} avg_loss={avg_loss:.6f}" + (f" {detail}" if detail else ""))
+
+            if profile_stopped_early:
+                break
 
             # eval
             if epoch % self.eval_every == 0:
@@ -367,8 +474,17 @@ class TrainerYAML:
                         print("[EarlyStop] triggered.")
                         break
 
+        if self.profile_timing:
+            self._print_perf_summary(
+                profile_totals,
+                profile_measured_steps,
+                min(global_step, self.profile_warmup_steps),
+            )
+
         test_metrics = None
-        if os.path.exists(self.ckpt_path) and test_tensor.numel() > 0:
+        if profile_stopped_early:
+            print("[Test] skipped: profiling run stopped after the requested measured batches.")
+        elif os.path.exists(self.ckpt_path) and test_tensor.numel() > 0:
             state = torch.load(self.ckpt_path, map_location=self.device)
             self.model.load_state_dict(state)
             self.model.eval()
