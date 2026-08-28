@@ -117,6 +117,39 @@ class TrainerYAML:
         if self.profile_timing and self.device_type == "cuda":
             torch.cuda.synchronize(torch.device(self.device))
 
+    def _eval_cuda_synchronize(self) -> None:
+        """Close CUDA's asynchronous timing window at evaluation boundaries."""
+        if self.device_type == "cuda":
+            torch.cuda.synchronize(torch.device(self.device))
+
+    def _run_filtered_eval(self, triples: torch.LongTensor, split: str) -> dict:
+        """Run the unchanged evaluator and report end-to-end wall-clock time."""
+        self._eval_cuda_synchronize()
+        started_at = time.perf_counter()
+        metrics = filtered_ranking_eval(
+            model=self.model,
+            triples=triples,
+            true_tails=self.true_tails_index,
+            true_heads=self.true_heads_index,
+            num_entities=self.num_entities,
+            chunk_size=self.chunk_size,
+            query_batch_size=self.query_batch_size,
+            device=self.device,
+            ks=(1, 3, 10),
+            direction=self.eval_direction,
+            entity_has_img=self.entity_has_img,
+        )
+        self._eval_cuda_synchronize()
+        elapsed = time.perf_counter() - started_at
+        triple_count = int(triples.shape[0])
+        throughput = triple_count / elapsed if elapsed > 0.0 else float("inf")
+        print(
+            f"[EvalPerf] split={split} triples={triple_count} "
+            f"direction={self.eval_direction} elapsed={elapsed:.3f}s "
+            f"throughput={throughput:.2f} triples/s"
+        )
+        return metrics
+
     def _to_device(self, tensor: torch.Tensor) -> torch.Tensor:
         """Transfer a CPU batch with optional pinned-memory async H2D."""
         if tensor.device.type != "cpu" or self.device_type == "cpu":
@@ -420,19 +453,7 @@ class TrainerYAML:
             # eval
             if epoch % self.eval_every == 0:
                 self.model.eval()
-                metrics = filtered_ranking_eval(
-                    model=self.model,
-                    triples=dev_tensor,
-                    true_tails=self.true_tails_index,
-                    true_heads=self.true_heads_index,
-                    num_entities=self.num_entities,
-                    chunk_size=self.chunk_size,
-                    query_batch_size=self.query_batch_size,
-                    device=self.device,
-                    ks=(1, 3, 10),
-                    direction=self.eval_direction,
-                    entity_has_img=self.entity_has_img,
-                )
+                metrics = self._run_filtered_eval(dev_tensor, split="dev")
                 row = {
                     "epoch": epoch,
                     "avg_loss": avg_loss,
@@ -508,19 +529,7 @@ class TrainerYAML:
             state = torch.load(self.ckpt_path, map_location=self.device)
             self.model.load_state_dict(state)
             self.model.eval()
-            test_metrics = filtered_ranking_eval(
-                model=self.model,
-                triples=test_tensor,
-                true_tails=self.true_tails_index,
-                true_heads=self.true_heads_index,
-                num_entities=self.num_entities,
-                chunk_size=self.chunk_size,
-                query_batch_size=self.query_batch_size,
-                device=self.device,
-                ks=(1, 3, 10),
-                direction=self.eval_direction,
-                entity_has_img=self.entity_has_img,
-            )
+            test_metrics = self._run_filtered_eval(test_tensor, split="test")
             save_json(self.test_metrics_json, test_metrics)
             print("[Test] " + " ".join([f"{k}={v:.6f}" for k, v in test_metrics.items()]))
             print(f"[Test] saved -> {self.test_metrics_json}")
