@@ -390,6 +390,12 @@ def filtered_ranking_eval(
     direction = direction.lower()
     if direction not in {"tail", "head", "both"}:
         raise ValueError(f"Unsupported evaluation direction: {direction}")
+    model.eval()
+    prepare_eval_cache = getattr(model, "prepare_eval_cache", None)
+    if prepare_eval_cache is not None:
+        # Cache only deterministic clean entity representations. Rebuilding
+        # here also prevents a stale cache after loading the best checkpoint.
+        prepare_eval_cache()
     device_obj = torch.device(device)
     prepared_tensors = _prepare_eval_tensors(triples, num_entities, entity_has_img, device_obj)
     if direction == "tail":

@@ -4,7 +4,7 @@
 
 This document is the binding protocol for adding recent baseline models to the
 OpenBG-IMG comparison.  It applies to every newly added baseline, including
-MoMoK, APKGC, NativE, and any later model.  A result that does not satisfy this
+MoMoK, APKGC, NativE, M-Hyper, and any later model.  A result that does not satisfy this
 protocol must be labelled exploratory and must not be used as a formal
 comparison result.
 

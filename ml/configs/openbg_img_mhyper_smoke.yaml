@@ -1,0 +1,40 @@
+# Diagnostic-only configuration. It is not a formal result configuration.
+dataset:
+  name: openbg_img
+  train: data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_train.tsv
+  dev: data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_dev.tsv
+  test: data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_test.tsv
+  cache_dir: data/cache/openbg_img
+  cache_format: raw
+
+model:
+  name: openbg_img_mhyper
+  num_relations: 136
+  rank: 128
+  init_size: 0.001
+  noise_preserve_ratio: 0.2
+  pca_init: true
+  pca_fit_scope: train_entities
+  faithful_upstream_reconstruction: true
+
+training:
+  engine: one_vs_all
+  sampler: none
+  optimizer: adagrad
+  lr: 0.1
+  batch_size: 32
+  wn3_weight: 0.005
+  epochs: 1
+  eval_every: 1
+  early_stop_patience: 2
+
+evaluation:
+  dev_eval_limit: 32
+  test_eval_limit: 0
+  chunk_size: 1024
+  query_batch_size: 4
+  direction: both
+  run_test: false
+
+output:
+  exp_name: openbg_img_mhyper_smoke

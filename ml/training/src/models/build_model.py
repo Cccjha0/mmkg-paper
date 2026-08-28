@@ -39,6 +39,33 @@ def _load_openbg_img_features(cache_dir: str, cache_format: str) -> tuple[torch.
 def build_model(cfg: dict):
     model_name = cfg["model"]["name"]
 
+    if model_name == "openbg_img_mhyper":
+        from ml.training.src.models.recent_baselines.mhyper import OpenBGMHyper
+
+        cache_dir = cfg["dataset"]["cache_dir"]
+        cache_format = cfg["dataset"].get("cache_format", "raw")
+        text_feat, img_feat, has_img = _load_openbg_img_features(cache_dir, cache_format)
+        mcfg = cfg["model"]
+        tr = cfg["training"]
+        num_entities = text_feat.shape[0]
+        print("[BuildModel] building recent baseline: M-Hyper")
+        model = OpenBGMHyper(
+            text_feat=text_feat,
+            img_feat=img_feat,
+            has_img=has_img,
+            num_entities=num_entities,
+            num_relations=mcfg["num_relations"],
+            rank=mcfg.get("rank", 128),
+            init_size=mcfg.get("init_size", 0.001),
+            noise_preserve_ratio=mcfg.get("noise_preserve_ratio", 0.2),
+            wn3_weight=tr.get("wn3_weight", 0.005),
+            pca_init=mcfg.get("pca_init", True),
+            pca_fit_scope=mcfg.get("pca_fit_scope", "train_entities"),
+            pca_random_state=cfg.get("system", {}).get("seed"),
+            faithful_upstream_reconstruction=mcfg.get("faithful_upstream_reconstruction", True),
+        )
+        return model, num_entities
+
     if model_name == "openbg_img_adamf_mat":
         from ml.training.src.models.recent_baselines.adamf_mat import OpenBGAdaMFMAT
 

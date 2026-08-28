@@ -13,6 +13,10 @@ MODEL_LABEL_OVERRIDES = {
     "openbg_img_gate_only": "Gate-only",
     "openbg_img_residual_only": "Residual-only",
     "openbg_img_gated_vec_res_rel": "Full Model",
+    "openbg_img_apkgc": "APKGC",
+    "openbg_img_native": "NativE",
+    "openbg_img_adamf_mat": "AdaMF-MAT",
+    "openbg_img_mhyper": "M-Hyper",
 }
 
 

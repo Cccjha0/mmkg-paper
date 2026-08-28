@@ -1,0 +1,40 @@
+# M-Hyper official MKG-W/MKG-Y/DB15K command anchor adapted to OpenBG-IMG.
+# Model selection and the single final test follow the unified DEV-only protocol.
+dataset:
+  name: openbg_img
+  train: data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_train.tsv
+  dev: data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_dev.tsv
+  test: data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_test.tsv
+  cache_dir: data/cache/openbg_img
+  cache_format: raw
+
+model:
+  name: openbg_img_mhyper
+  num_relations: 136
+  rank: 128
+  init_size: 0.001
+  noise_preserve_ratio: 0.2
+  pca_init: true
+  pca_fit_scope: train_entities
+  faithful_upstream_reconstruction: true
+
+training:
+  engine: one_vs_all
+  sampler: none
+  optimizer: adagrad
+  lr: 0.1
+  batch_size: 1000
+  wn3_weight: 0.005
+  epochs: 200
+  eval_every: 5
+  # Upstream completes all 200 epochs and keeps the best validation checkpoint.
+  early_stop_patience: null
+
+evaluation:
+  chunk_size: 1024
+  query_batch_size: 8
+  direction: both
+  run_test: true
+
+output:
+  exp_name: openbg_img_mhyper

@@ -330,6 +330,36 @@ class OneVsAllTrainer(TrainerYAML):
     therefore this engine intentionally never calls either negative sampler.
     """
 
+    def __init__(
+        self,
+        model,
+        train_triples,
+        dev_triples,
+        test_triples,
+        num_entities,
+        true_tails,
+        true_heads,
+        cfg: dict,
+    ) -> None:
+        prepare_training = getattr(model, "prepare_training", None)
+        if prepare_training is not None:
+            # PCA/other data-dependent initialization may inspect training
+            # entities only; it runs before reciprocal triples are appended.
+            prepare_training(train_triples)
+        augment = getattr(model, "augment_train_triples", None)
+        if augment is not None:
+            train_triples = augment(train_triples)
+        super().__init__(
+            model=model,
+            train_triples=train_triples,
+            dev_triples=dev_triples,
+            test_triples=test_triples,
+            num_entities=num_entities,
+            true_tails=true_tails,
+            true_heads=true_heads,
+            cfg=cfg,
+        )
+
     def _sample_negatives(self, pos: torch.LongTensor) -> None:
         return None
 
@@ -338,6 +368,6 @@ class OneVsAllTrainer(TrainerYAML):
         if loss_method is None:
             raise TypeError(
                 "OneVsAllTrainer requires model.one_vs_all_loss(pos). "
-                "No concrete recent baseline is implemented in M1.1."
+                "The selected model does not implement this engine contract."
             )
         return loss_method(pos)

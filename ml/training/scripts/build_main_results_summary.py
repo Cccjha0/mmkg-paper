@@ -13,10 +13,17 @@ MODEL_LABEL_OVERRIDES = {
     "openbg_img_gate_only": "Gate-only",
     "openbg_img_residual_only": "Residual-only",
     "openbg_img_gated_vec_res_rel": "Full Model",
+    "openbg_img_apkgc": "APKGC",
+    "openbg_img_native": "NativE",
+    "openbg_img_adamf_mat": "AdaMF-MAT",
+    "openbg_img_mhyper": "M-Hyper",
 }
 
 METRIC_KEYS = ["mrr", "hits@1", "hits@3", "hits@10", "tail_mrr", "head_mrr"]
-PRIMARY_ORDER = ["ComplEx", "TuckER", "Text-only", "Early Fusion", "Gate-only", "Full Model", "Residual-only"]
+PRIMARY_ORDER = [
+    "ComplEx", "TuckER", "Text-only", "Early Fusion", "Gate-only", "Residual-only",
+    "APKGC", "NativE", "AdaMF-MAT", "M-Hyper", "Full Model",
+]
 
 
 def load_json(path: Path) -> dict:

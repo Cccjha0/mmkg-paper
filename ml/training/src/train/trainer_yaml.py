@@ -47,10 +47,10 @@ class TrainerYAML:
         self.batch_size = tr.get("batch_size", 1024)
         self.neg_ratio = tr.get("neg_ratio", 10)
         self.sampler_name = tr.get("sampler", "uniform").lower()
-        if self.sampler_name not in {"uniform", "bernoulli_filtered"}:
+        if self.sampler_name not in {"uniform", "bernoulli_filtered", "none"}:
             raise ValueError(
                 f"Unsupported training.sampler={self.sampler_name!r}. "
-                "Expected 'uniform' or 'bernoulli_filtered'."
+                "Expected 'uniform', 'bernoulli_filtered', or 'none'."
             )
         if self.sampler_name == "bernoulli_filtered":
             # Sampling must only use training facts.  The all-split truth maps
@@ -61,7 +61,8 @@ class TrainerYAML:
         self.residual_warmup_epochs = tr.get("residual_warmup_epochs", 0)
         self.epochs = tr.get("epochs", 200)
         self.eval_every = tr.get("eval_every", 5)
-        self.patience = tr.get("early_stop_patience", 10)
+        patience = tr.get("early_stop_patience", 10)
+        self.patience = None if patience is None else int(patience)
         self.device_type = torch.device(self.device).type
         self.pin_memory = bool(tr.get("pin_memory", self.device_type == "cuda"))
         self.profile_timing = bool(tr.get("profile_timing", False))
@@ -76,6 +77,7 @@ class TrainerYAML:
         self.chunk_size = ev.get("chunk_size", 10000)
         self.query_batch_size = ev.get("query_batch_size", 1)
         self.eval_direction = ev.get("direction", "both")
+        self.run_test = bool(ev.get("run_test", True))
 
         seed = cfg["system"].get("seed", 1)
         root_dir = out.get("root_dir", "ml/artifacts/outputs")
@@ -95,8 +97,20 @@ class TrainerYAML:
         self.ckpt_path = os.path.join(self.run_dir, "best.ckpt")
         self.test_metrics_json = os.path.join(self.run_dir, "test_metrics.json")
 
-        self.optim = torch.optim.Adam(self.model.parameters(), lr=self.lr)
+        self.optimizer_name = str(tr.get("optimizer", "adam")).lower()
+        self.optim = self._build_optimizer()
         self.base_use_fusion = getattr(self.model, "use_fusion", None)
+
+    def _build_optimizer(self) -> torch.optim.Optimizer:
+        """Build the configured optimizer while preserving Adam as the default."""
+        parameters = self.model.parameters()
+        if self.optimizer_name == "adam":
+            return torch.optim.Adam(parameters, lr=self.lr)
+        if self.optimizer_name == "adagrad":
+            return torch.optim.Adagrad(parameters, lr=self.lr)
+        raise ValueError(
+            f"Unsupported training.optimizer={self.optimizer_name!r}. Expected 'adam' or 'adagrad'."
+        )
 
     def _profile_cuda_synchronize(self) -> None:
         """Synchronize only for explicitly enabled CUDA timing diagnostics."""
@@ -126,8 +140,10 @@ class TrainerYAML:
             share = 100.0 * averages_ms[key] / total_ms if total_ms > 0 else 0.0
             print(f"[Perf] {key:<18} = {averages_ms[key]:9.3f} ms ({share:5.1f}%)")
 
-    def _sample_negatives(self, pos: torch.LongTensor) -> torch.LongTensor:
+    def _sample_negatives(self, pos: torch.LongTensor) -> torch.LongTensor | None:
         """Use legacy sampling by default, or explicit recent-baseline sampling."""
+        if self.sampler_name == "none":
+            return None
         if self.sampler_name == "bernoulli_filtered":
             return bernoulli_filtered_negative_sample(
                 pos=pos,
@@ -169,6 +185,8 @@ class TrainerYAML:
         if param.grad is None:
             return 0.0
         g = param.grad.detach()
+        if g.is_sparse:
+            g = g.coalesce().values()
         return float(torch.sum(g * g).item())
 
     def _compute_grad_group_stats(self) -> dict:
@@ -470,7 +488,7 @@ class TrainerYAML:
                     print(f"[CKPT] saved best -> {self.ckpt_path}")
                 else:
                     bad_epochs += 1
-                    if bad_epochs >= self.patience:
+                    if self.patience is not None and bad_epochs >= self.patience:
                         print("[EarlyStop] triggered.")
                         break
 
@@ -484,6 +502,8 @@ class TrainerYAML:
         test_metrics = None
         if profile_stopped_early:
             print("[Test] skipped: profiling run stopped after the requested measured batches.")
+        elif not self.run_test:
+            print("[Test] skipped: evaluation.run_test=false (Dev-only configuration selection).")
         elif os.path.exists(self.ckpt_path) and test_tensor.numel() > 0:
             state = torch.load(self.ckpt_path, map_location=self.device)
             self.model.load_state_dict(state)
