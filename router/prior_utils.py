@@ -7,8 +7,19 @@ def mark_visual_prior(mean_delta_rr: float, gamma: float) -> int:
     return int(float(mean_delta_rr) > float(gamma))
 
 
-def shrink_mean_delta_rr(mean_delta_rr: float, n_queries: int, k: float = 20.0) -> float:
-    return float(mean_delta_rr) * float(n_queries / (n_queries + k)) if (n_queries + k) else 0.0
+def shrink_mean_delta_rr(
+    mean_delta_rr: float,
+    n_queries: int,
+    k: float = 20.0,
+    global_mean_delta_rr: float = 0.0,
+) -> float:
+    denominator = float(n_queries) + float(k)
+    if denominator == 0.0:
+        return float(global_mean_delta_rr)
+    return float(
+        float(n_queries) / denominator * float(mean_delta_rr)
+        + float(k) / denominator * float(global_mean_delta_rr)
+    )
 
 
 def compute_relation_gain_stats(
@@ -17,6 +28,7 @@ def compute_relation_gain_stats(
     gamma: float,
     use_shrinkage: bool = False,
     shrink_k: float = 20.0,
+    shrink_toward_global: bool = False,
 ) -> list[dict]:
     gate_by_id = {row["query_id"]: row for row in gate_rows}
     residual_by_id = {row["query_id"]: row for row in residual_rows}
@@ -72,6 +84,14 @@ def compute_relation_gain_stats(
         elif rr_residual > rr_gate:
             bucket["struct_win"] += 1
 
+    total_queries = sum(int(bucket["n_queries"]) for bucket in buckets.values())
+    global_mean_delta_rr = (
+        sum(float(bucket["sum_delta_rr"]) for bucket in buckets.values()) / total_queries
+        if total_queries
+        else 0.0
+    )
+    shrinkage_target = global_mean_delta_rr if shrink_toward_global else 0.0
+
     rows: list[dict] = []
     for relation_id in sorted(buckets):
         bucket = buckets[relation_id]
@@ -80,7 +100,9 @@ def compute_relation_gain_stats(
         mean_rr_residual = bucket["sum_rr_residual"] / n if n else 0.0
         raw_mean_delta_rr = bucket["sum_delta_rr"] / n if n else 0.0
         mean_delta_rr = (
-            shrink_mean_delta_rr(raw_mean_delta_rr, n, shrink_k) if use_shrinkage else raw_mean_delta_rr
+            shrink_mean_delta_rr(raw_mean_delta_rr, n, shrink_k, shrinkage_target)
+            if use_shrinkage
+            else raw_mean_delta_rr
         )
         fusion_win_rate = bucket["fusion_win"] / n if n else 0.0
         struct_win_rate = bucket["struct_win"] / n if n else 0.0
@@ -100,7 +122,13 @@ def compute_relation_gain_stats(
                 "mean_rr_residual": mean_rr_residual,
                 "mean_delta_rr": mean_delta_rr,
                 "mean_delta_rr_raw": raw_mean_delta_rr,
-                "mean_delta_rr_shrunk": shrink_mean_delta_rr(raw_mean_delta_rr, n, shrink_k),
+                "mean_delta_rr_shrunk": shrink_mean_delta_rr(
+                    raw_mean_delta_rr,
+                    n,
+                    shrink_k,
+                    shrinkage_target,
+                ),
+                "shrinkage_target": shrinkage_target,
                 "fusion_win_rate": fusion_win_rate,
                 "struct_win_rate": struct_win_rate,
                 "head_has_img_ratio": head_has_img_ratio,

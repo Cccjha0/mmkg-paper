@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -85,6 +86,11 @@ def load_relation_prior_map(rows: list[dict]) -> dict[int, dict]:
             "relation_support": int(row["n_queries"]),
             "relation_is_visual_prior": int(row.get("is_visual_prior", prior_flag)),
             "relation_is_fusion_prior": int(prior_flag),
+            "head_gain_prior": float(row.get("head_gain_prior", 0.0)),
+            "tail_gain_prior": float(row.get("tail_gain_prior", 0.0)),
+            "head_support": int(row.get("head_support", 0)),
+            "tail_support": int(row.get("tail_support", 0)),
+            "relation_train_frequency": int(row.get("relation_train_frequency", 0)),
         }
     return out
 
@@ -182,8 +188,23 @@ def _default_prior(relation_id: int, relation_prior_map: dict[int, dict]) -> dic
             "relation_support": 0,
             "relation_is_visual_prior": 0,
             "relation_is_fusion_prior": 0,
+            "head_gain_prior": 0.0,
+            "tail_gain_prior": 0.0,
+            "head_support": 0,
+            "tail_support": 0,
+            "relation_train_frequency": 0,
         },
     )
+
+
+def _optional_indexed_value(values, index: int, default: float = 0.0) -> float:
+    if values is None:
+        return float(default)
+    if isinstance(values, torch.Tensor):
+        return float(values[index].item())
+    if isinstance(values, dict):
+        return float(values.get(index, values.get(str(index), default)))
+    return float(values[index])
 
 
 def build_clean_feature_rows(
@@ -279,7 +300,19 @@ def build_general_clean_feature_rows(
             label_gain=int(label_row["label_gain"]) if label_row is not None else None,
             delta_threshold=float(label_row["delta_threshold"]) if label_row is not None else None,
         )
-        rows.append(record.to_dict())
+        payload = record.to_dict()
+        direction = str(gate["direction"])
+        observed_degree = _optional_indexed_value(cache_bundle.get("entity_degree"), entity_id)
+        relation_frequency = float(prior.get("relation_train_frequency", 0))
+        payload.update(
+            {
+                "relation_direction_gain_prior": float(prior.get(f"{direction}_gain_prior", 0.0)),
+                "relation_direction_support": int(prior.get(f"{direction}_support", 0)),
+                "observed_log_degree": math.log1p(max(0.0, observed_degree)),
+                "relation_log_frequency": math.log1p(max(0.0, relation_frequency)),
+            }
+        )
+        rows.append(payload)
     return rows
 
 
@@ -407,6 +440,10 @@ def summarize_general_clean_feature_rows(train_rows_by_delta: dict[str, list[dic
         "observed_modality_count",
         "observed_text_img_cosine",
         "observed_text_img_cosine_valid",
+        "relation_direction_gain_prior",
+        "relation_direction_support",
+        "observed_log_degree",
+        "relation_log_frequency",
     ]
     return _summarize_feature_rows_impl(train_rows_by_delta, test_rows, numeric_cols)
 

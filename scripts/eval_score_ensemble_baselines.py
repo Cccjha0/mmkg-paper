@@ -33,6 +33,11 @@ from scripts.export_candidate_scores import (
 from scripts.build_candidate_router_paper_tables import markdown_table
 from ml.training.src.models.build_model import build_model
 from ml.training.src.data.dataset_spec import MMKG_GENERAL_V1, OPENBG_LEGACY_V1
+from router.score_combination import (
+    canonical_score_normalization,
+    combine_expert_scores,
+    shrink_relation_alpha,
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -50,6 +55,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--split", default="test", choices=["test"], help="Final reporting split.")
     parser.add_argument("--selection-split", default="dev", choices=["dev"], help="Split used for alpha selection.")
     parser.add_argument(
+        "--selection-only",
+        action="store_true",
+        help="Evaluate and lock policies on DEV without loading or reporting test artifacts.",
+    )
+    parser.add_argument(
         "--alphas",
         default="0.0,0.05,0.10,0.15,0.20,0.25,0.30,0.35,0.40,0.45,0.50,0.55,0.60,0.65,0.70,0.75,0.80,0.85,0.90,0.95,1.0",
     )
@@ -63,6 +73,18 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=20,
         help="Minimum dev queries required before selecting a relation-specific alpha; lower-support relations fall back to global alpha.",
+    )
+    parser.add_argument(
+        "--score-normalization",
+        default="none",
+        choices=["none", "query_zscore", "rank", "rank_based"],
+        help="Answer-agnostic per-query expert score normalization before interpolation.",
+    )
+    parser.add_argument(
+        "--relation-shrinkage-lambda",
+        type=float,
+        default=0.0,
+        help="General-protocol shrinkage of relation alpha toward global alpha (validation-selected).",
     )
     parser.add_argument("--baseline-summary", default="outputs/router/eval/clean/baseline_locked_summary.csv")
     parser.add_argument("--candidate-main-results", default="outputs/candidate_router/eval/tables/candidate_router_main_results.csv")
@@ -228,16 +250,32 @@ def query_features(
     return features.detach().cpu().numpy().astype(np.float32)
 
 
-def eval_mixed_rr(gate_scores: torch.Tensor, residual_scores: torch.Tensor, target_ids: torch.Tensor, alpha: float | np.ndarray) -> list[float]:
-    gate_safe = safe_scores(gate_scores)
-    residual_safe = safe_scores(residual_scores)
-    if isinstance(alpha, np.ndarray):
-        alpha_t = torch.tensor(alpha, dtype=gate_safe.dtype).view(-1, 1)
+def eval_mixed_rr(
+    gate_scores: torch.Tensor,
+    residual_scores: torch.Tensor,
+    target_ids: torch.Tensor,
+    alpha: float | np.ndarray,
+    score_normalization: str = "none",
+) -> list[float]:
+    if canonical_score_normalization(score_normalization) == "none":
+        gate_safe = safe_scores(gate_scores)
+        residual_safe = safe_scores(residual_scores)
+        alpha_value = torch.as_tensor(alpha, dtype=gate_safe.dtype, device=gate_safe.device)
+        if alpha_value.ndim == 0:
+            alpha_value = alpha_value.expand(gate_safe.size(0)).unsqueeze(1)
+        else:
+            alpha_value = alpha_value.view(-1, 1)
+        mixed = alpha_value * gate_safe + (1.0 - alpha_value) * residual_safe
+        both_filtered = (~torch.isfinite(gate_scores)) & (~torch.isfinite(residual_scores))
+        mixed[both_filtered] = float("-inf")
     else:
-        alpha_t = torch.full((gate_safe.size(0), 1), float(alpha), dtype=gate_safe.dtype)
-    mixed = alpha_t * gate_safe + (1.0 - alpha_t) * residual_safe
-    both_filtered = (~torch.isfinite(gate_scores)) & (~torch.isfinite(residual_scores))
-    mixed[both_filtered] = float("-inf")
+        alpha_value = torch.as_tensor(alpha, dtype=gate_scores.dtype, device=gate_scores.device)
+        mixed = combine_expert_scores(
+            gate_scores,
+            residual_scores,
+            alpha_value,
+            normalization=score_normalization,
+        )
     _, rr = target_ranks_and_rr(mixed, target_ids)
     return rr
 
@@ -247,16 +285,27 @@ def eval_mixed_ranks_and_rr(
     residual_scores: torch.Tensor,
     target_ids: torch.Tensor,
     alpha: float | np.ndarray,
+    score_normalization: str = "none",
 ) -> tuple[list[int], list[float]]:
-    gate_safe = safe_scores(gate_scores)
-    residual_safe = safe_scores(residual_scores)
-    if isinstance(alpha, np.ndarray):
-        alpha_t = torch.tensor(alpha, dtype=gate_safe.dtype).view(-1, 1)
+    if canonical_score_normalization(score_normalization) == "none":
+        gate_safe = safe_scores(gate_scores)
+        residual_safe = safe_scores(residual_scores)
+        alpha_value = torch.as_tensor(alpha, dtype=gate_safe.dtype, device=gate_safe.device)
+        if alpha_value.ndim == 0:
+            alpha_value = alpha_value.expand(gate_safe.size(0)).unsqueeze(1)
+        else:
+            alpha_value = alpha_value.view(-1, 1)
+        mixed = alpha_value * gate_safe + (1.0 - alpha_value) * residual_safe
+        both_filtered = (~torch.isfinite(gate_scores)) & (~torch.isfinite(residual_scores))
+        mixed[both_filtered] = float("-inf")
     else:
-        alpha_t = torch.full((gate_safe.size(0), 1), float(alpha), dtype=gate_safe.dtype)
-    mixed = alpha_t * gate_safe + (1.0 - alpha_t) * residual_safe
-    both_filtered = (~torch.isfinite(gate_scores)) & (~torch.isfinite(residual_scores))
-    mixed[both_filtered] = float("-inf")
+        alpha_value = torch.as_tensor(alpha, dtype=gate_scores.dtype, device=gate_scores.device)
+        mixed = combine_expert_scores(
+            gate_scores,
+            residual_scores,
+            alpha_value,
+            normalization=score_normalization,
+        )
     return target_ranks_and_rr(mixed, target_ids)
 
 
@@ -283,7 +332,9 @@ def evaluate_split(
     checkpoint_dir: Path | None = None,
     resume: bool = True,
     write_checkpoints: bool = True,
+    score_normalization: str = "none",
 ) -> dict:
+    score_normalization = canonical_score_normalization(score_normalization)
     alpha_rr: dict[float, list[float]] = {alpha: [] for alpha in alphas}
     alpha_direction_rr: dict[str, dict[float, list[float]]] = {
         "head": {alpha: [] for alpha in alphas},
@@ -352,7 +403,10 @@ def evaluate_split(
         if checkpoint_dir is None or selected_global_alpha is None:
             return None
         key = "full" if max_queries is None else f"max{max_queries}"
-        return checkpoint_dir / key / f"{split}_seed{seed}_{direction}_score_ensemble_query_rows.csv"
+        base = checkpoint_dir / key
+        if score_normalization != "none":
+            base = base / score_normalization
+        return base / f"{split}_seed{seed}_{direction}_score_ensemble_query_rows.csv"
 
     def ingest_selected_rows(rows: list[dict]) -> None:
         selected_policy_rows.extend(rows)
@@ -413,15 +467,17 @@ def evaluate_split(
             raise RuntimeError("Gate model does not expose has_img.")
         has_img = has_img.detach().cpu().to(dtype=torch.bool)
         residual_has_img = getattr(residual_model, "has_img", None)
-        if residual_has_img is None or not torch.equal(has_img, residual_has_img.detach().cpu().bool()):
+        if residual_has_img is not None and not torch.equal(has_img, residual_has_img.detach().cpu().bool()):
             raise RuntimeError("Gate and Residual image-availability masks differ.")
+        if protocol_version == OPENBG_LEGACY_V1 and residual_has_img is None:
+            raise RuntimeError("Legacy Residual model does not expose has_img.")
         has_text = getattr(gate_model, "has_text", None)
         if protocol_version == MMKG_GENERAL_V1 and has_text is None:
             raise RuntimeError("General Gate model does not expose has_text.")
         has_text = has_text.detach().cpu().bool() if has_text is not None else None
         residual_has_text = getattr(residual_model, "has_text", None)
-        if protocol_version == MMKG_GENERAL_V1:
-            if residual_has_text is None or not torch.equal(has_text, residual_has_text.detach().cpu().bool()):
+        if protocol_version == MMKG_GENERAL_V1 and residual_has_text is not None:
+            if not torch.equal(has_text, residual_has_text.detach().cpu().bool()):
                 raise RuntimeError("Gate and Residual text-availability masks differ.")
         ev_cfg = gate_cfg.get("evaluation", {})
         chunk_size = int(chunk_size_arg or ev_cfg.get("chunk_size", 4096))
@@ -475,7 +531,13 @@ def evaluate_split(
 
                 alpha_rr_by_value: dict[float, list[float]] = {}
                 for alpha in alphas:
-                    rr = eval_mixed_rr(gate_scores, residual_scores, target_ids, alpha)
+                    rr = eval_mixed_rr(
+                        gate_scores,
+                        residual_scores,
+                        target_ids,
+                        alpha,
+                        score_normalization=score_normalization,
+                    )
                     alpha_rr_by_value[alpha] = rr
                     alpha_rr[alpha].extend(rr)
                     alpha_direction_rr[direction][alpha].extend(rr)
@@ -492,11 +554,21 @@ def evaluate_split(
                 query_soft_rr: list[float] | None = None
                 query_soft_alpha: np.ndarray | None = None
                 if selected_global_alpha is not None:
-                    global_rank, global_rr = eval_mixed_ranks_and_rr(gate_scores, residual_scores, target_ids, selected_global_alpha)
+                    global_rank, global_rr = eval_mixed_ranks_and_rr(
+                        gate_scores,
+                        residual_scores,
+                        target_ids,
+                        selected_global_alpha,
+                        score_normalization=score_normalization,
+                    )
                     global_rows.extend({"mixed_rr": value} for value in global_rr)
                 if selected_direction_alpha is not None:
                     direction_rank, direction_rr = eval_mixed_ranks_and_rr(
-                        gate_scores, residual_scores, target_ids, selected_direction_alpha[direction]
+                        gate_scores,
+                        residual_scores,
+                        target_ids,
+                        selected_direction_alpha[direction],
+                        score_normalization=score_normalization,
                     )
                     direction_rows.extend({"mixed_rr": value} for value in direction_rr)
                 if selected_relation_alpha is not None:
@@ -510,11 +582,23 @@ def evaluate_split(
                         ],
                         dtype=np.float32,
                     )
-                    relation_rank, relation_rr = eval_mixed_ranks_and_rr(gate_scores, residual_scores, target_ids, relation_alpha)
+                    relation_rank, relation_rr = eval_mixed_ranks_and_rr(
+                        gate_scores,
+                        residual_scores,
+                        target_ids,
+                        relation_alpha,
+                        score_normalization=score_normalization,
+                    )
                     relation_rows.extend({"mixed_rr": value} for value in relation_rr)
                 if query_model is not None:
                     query_soft_alpha = query_model.predict_proba(feats)[:, 1].astype(np.float32)
-                    query_soft_rr = eval_mixed_rr(gate_scores, residual_scores, target_ids, query_soft_alpha)
+                    query_soft_rr = eval_mixed_rr(
+                        gate_scores,
+                        residual_scores,
+                        target_ids,
+                        query_soft_alpha,
+                        score_normalization=score_normalization,
+                    )
                     query_rows.extend({"mixed_rr": value, "alpha": float(a)} for value, a in zip(query_soft_rr, query_soft_alpha))
 
                 if selected_global_alpha is not None:
@@ -599,15 +683,23 @@ def select_relation_alphas(
     *,
     fallback_alpha: float,
     min_support: int,
+    shrinkage_lambda: float = 0.0,
 ) -> tuple[dict[int, float], dict]:
     selected: dict[int, float] = {}
     summary_rows = []
     for relation_id, alpha_map in sorted(alpha_relation_rr.items()):
         support = max((len(values) for values in alpha_map.values()), default=0)
         if support >= min_support:
-            alpha, dev_mrr = best_alpha(alpha_map)
+            raw_alpha, dev_mrr = best_alpha(alpha_map)
+            alpha = shrink_relation_alpha(
+                raw_alpha,
+                support=support,
+                global_alpha=fallback_alpha,
+                shrinkage_lambda=shrinkage_lambda,
+            )
             used_fallback = False
         else:
+            raw_alpha = fallback_alpha
             alpha = fallback_alpha
             dev_mrr = float(np.mean(alpha_map.get(fallback_alpha, []))) if alpha_map.get(fallback_alpha) else 0.0
             used_fallback = True
@@ -616,6 +708,7 @@ def select_relation_alphas(
             {
                 "relation_id": int(relation_id),
                 "support": int(support),
+                "raw_alpha": float(raw_alpha),
                 "alpha": float(alpha),
                 "dev_mrr": float(dev_mrr),
                 "used_fallback": bool(used_fallback),
@@ -624,6 +717,7 @@ def select_relation_alphas(
     summary = {
         "min_support": int(min_support),
         "fallback_alpha": float(fallback_alpha),
+        "shrinkage_lambda": float(shrinkage_lambda),
         "n_relations": len(summary_rows),
         "n_relation_specific": sum(1 for row in summary_rows if not row["used_fallback"]),
         "n_fallback": sum(1 for row in summary_rows if row["used_fallback"]),
@@ -827,12 +921,17 @@ def main() -> None:
     output_dir = Path(args.output_dir)
     checkpoint_dir = Path(args.checkpoint_dir) if args.checkpoint_dir else output_dir / "checkpoints"
     alphas = parse_alpha_grid(args.alphas)
+    score_normalization = canonical_score_normalization(args.score_normalization)
+    if args.relation_shrinkage_lambda < 0.0:
+        raise ValueError("--relation-shrinkage-lambda must be non-negative.")
     dev_pairs = load_run_pairs(score_dir, args.selection_split)
-    test_pairs = load_run_pairs(score_dir, args.split)
+    test_pairs = [] if args.selection_only else load_run_pairs(score_dir, args.split)
     dataset_name, protocol_version = validate_run_pair_metadata(dev_pairs, test_pairs)
+    if protocol_version == OPENBG_LEGACY_V1 and args.relation_shrinkage_lambda != 0.0:
+        raise ValueError("Relation-alpha shrinkage is general-protocol only; OpenBG legacy must use lambda=0.")
     refs = (
         load_reference_metrics(Path(args.baseline_summary), Path(args.candidate_main_results))
-        if protocol_version == OPENBG_LEGACY_V1
+        if protocol_version == OPENBG_LEGACY_V1 and not args.selection_only
         else None
     )
 
@@ -850,6 +949,7 @@ def main() -> None:
         checkpoint_dir=checkpoint_dir,
         resume=not args.no_resume,
         write_checkpoints=not args.no_checkpoint,
+        score_normalization=score_normalization,
     )
     global_alpha, global_dev_mrr = best_alpha(dev["alpha_rr"])
     head_alpha, head_dev_mrr = best_alpha(dev["alpha_direction_rr"]["head"])
@@ -858,7 +958,37 @@ def main() -> None:
         dev["alpha_relation_rr"],
         fallback_alpha=global_alpha,
         min_support=args.relation_min_support,
+        shrinkage_lambda=args.relation_shrinkage_lambda,
     )
+
+    if args.selection_only:
+        output_dir.mkdir(parents=True, exist_ok=True)
+        selection_payload = {
+            "dataset": dataset_name,
+            "protocol_version": protocol_version,
+            "selection_split": args.selection_split,
+            "score_normalization": score_normalization,
+            "global_alpha": global_alpha,
+            "global_dev_mrr": global_dev_mrr,
+            "head_alpha": head_alpha,
+            "head_dev_mrr": head_dev_mrr,
+            "tail_alpha": tail_alpha,
+            "tail_dev_mrr": tail_dev_mrr,
+            "relation": relation_summary,
+            "alpha_grid": alphas,
+        }
+        (output_dir / "score_ensemble_validation_selection.json").write_text(
+            json.dumps(selection_payload, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        write_alpha_curve_outputs(
+            output_dir,
+            output_dir / "figures",
+            alpha_curve_rows(args.selection_split, dev),
+        )
+        print(f"[OK] wrote {output_dir / 'score_ensemble_validation_selection.json'}")
+        print("[INFO] selection-only mode: no test artifacts were loaded or evaluated")
+        return
 
     query_model = make_pipeline(
         StandardScaler(),
@@ -892,6 +1022,7 @@ def main() -> None:
         checkpoint_dir=checkpoint_dir,
         resume=not args.no_resume,
         write_checkpoints=not args.no_checkpoint,
+        score_normalization=score_normalization,
     )
     if refs is None:
         selected_rows = test["selected_policy_rows"]
@@ -910,7 +1041,7 @@ def main() -> None:
             f"alpha={global_alpha:.2f}",
             rows_to_metrics(test["global_rows"]),
             refs,
-            f"alpha selected by dev MRR ({global_dev_mrr:.4f})",
+            f"alpha selected by dev MRR ({global_dev_mrr:.4f}); normalization={score_normalization}",
         ),
         result_row(
             "Direction-specific score interpolation",
@@ -918,15 +1049,15 @@ def main() -> None:
             f"alpha_head={head_alpha:.2f}; alpha_tail={tail_alpha:.2f}",
             rows_to_metrics(test["direction_rows"]),
             refs,
-            f"head/tail alphas selected independently on dev MRR ({head_dev_mrr:.4f}/{tail_dev_mrr:.4f})",
+            f"head/tail alphas selected independently on dev MRR ({head_dev_mrr:.4f}/{tail_dev_mrr:.4f}); normalization={score_normalization}",
         ),
         result_row(
             "Relation-specific score interpolation",
             "relation",
-            f"per-relation alpha; fallback alpha={global_alpha:.2f}; min_support={args.relation_min_support}",
+            f"per-relation alpha; fallback alpha={global_alpha:.2f}; min_support={args.relation_min_support}; shrinkage_lambda={args.relation_shrinkage_lambda:g}",
             rows_to_metrics(test["relation_rows"]),
             refs,
-            f"relation alphas selected on dev MRR; {relation_summary['n_relation_specific']} relations selected, {relation_summary['n_fallback']} used fallback",
+            f"relation alphas selected on dev MRR; {relation_summary['n_relation_specific']} relations selected, {relation_summary['n_fallback']} used fallback; normalization={score_normalization}",
         ),
         result_row(
             "Query-level soft score weighting",
@@ -945,6 +1076,7 @@ def main() -> None:
         json.dumps(
             {
                 "selection": {
+                    "score_normalization": score_normalization,
                     "global_alpha": global_alpha,
                     "global_dev_mrr": global_dev_mrr,
                     "head_alpha": head_alpha,

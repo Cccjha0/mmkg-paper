@@ -187,6 +187,7 @@ def build_from_contract_inputs(
     raw_gate_rows = read_table(gate_dev)
     raw_residual_rows = read_table(residual_dev)
     dataset_metadata = validate_dataset_local(raw_gate_rows, raw_residual_rows)
+    general_protocol = dataset_metadata.get("protocol_version") == "mmkg_general_v1"
     gate_rows = normalize_query_rows(raw_gate_rows)
     residual_rows = normalize_query_rows(raw_residual_rows)
     legacy_rows = compute_relation_gain_stats(
@@ -195,8 +196,8 @@ def build_from_contract_inputs(
         gamma,
         use_shrinkage=use_shrinkage,
         shrink_k=shrink_k,
+        shrink_toward_global=general_protocol,
     )
-    general_protocol = dataset_metadata.get("protocol_version") == "mmkg_general_v1"
     contract_rows = convert_rows_for_contract(legacy_rows, general_protocol=general_protocol)
     write_csv(out_path, contract_rows, GENERAL_OUTPUT_HEADER if general_protocol else OUTPUT_HEADER)
     print(f"[OK] wrote relation priors -> {out_path.as_posix()}")
@@ -207,6 +208,7 @@ def build_from_contract_inputs(
     summary["split"] = "dev"
     summary["use_shrinkage"] = bool(use_shrinkage)
     summary["shrink_k"] = float(shrink_k)
+    summary["shrinkage_target"] = "global_dev_mean" if general_protocol else "zero_legacy"
     summary["source_gate_dev"] = gate_dev.as_posix()
     summary["source_residual_dev"] = residual_dev.as_posix()
     summary.update(dataset_metadata)
@@ -239,15 +241,16 @@ def build_from_legacy_dirs(args: argparse.Namespace) -> None:
         all_gate_rows.extend(normalize_query_rows(raw_gate))
         all_residual_rows.extend(normalize_query_rows(raw_residual))
 
+    general_protocol = dataset_metadata.get("protocol_version") == "mmkg_general_v1"
     rows = compute_relation_gain_stats(
         all_gate_rows,
         all_residual_rows,
         args.gamma,
         use_shrinkage=args.use_shrinkage,
         shrink_k=args.shrink_k,
+        shrink_toward_global=general_protocol,
     )
     out_path = out_dir / f"relation_gain_stats_gamma_{gamma_tag(args.gamma)}.csv"
-    general_protocol = dataset_metadata.get("protocol_version") == "mmkg_general_v1"
     header = GENERAL_RELATION_OUTPUT_HEADER if general_protocol else LEGACY_OUTPUT_HEADER
     write_csv(out_path, [{key: row[key] for key in header} for row in rows], header)
     print(f"[OK] wrote relation priors -> {out_path.as_posix()}")
@@ -258,6 +261,7 @@ def build_from_legacy_dirs(args: argparse.Namespace) -> None:
     summary["split"] = args.split
     summary["use_shrinkage"] = bool(args.use_shrinkage)
     summary["shrink_k"] = float(args.shrink_k)
+    summary["shrinkage_target"] = "global_dev_mean" if general_protocol else "zero_legacy"
     summary["seeds"] = common_seeds
     summary.update(dataset_metadata)
     summary_path = (

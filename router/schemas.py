@@ -85,6 +85,10 @@ class GeneralCleanRouterFeatureRecord:
     relation_fusion_win_rate: float
     relation_support: int
     relation_is_fusion_prior: int
+    relation_direction_gain_prior: float = 0.0
+    relation_direction_support: int = 0
+    observed_log_degree: float = 0.0
+    relation_log_frequency: float = 0.0
     label_gain: int | None = None
     delta_threshold: float | None = None
 

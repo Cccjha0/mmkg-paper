@@ -70,6 +70,54 @@ def build_model(cfg: dict, dataset_bundle: DatasetBundle | None = None):
         else None
     )
 
+    if model_name == "mmkg_structural_v2":
+        if dataset_bundle is None or protocol_version != MMKG_GENERAL_V1:
+            raise ValueError("mmkg_structural_v2 requires a mmkg_general_v1 dataset bundle.")
+        from ml.training.src.models.general_mmkg.structural_expert import MMKGStructuralExpertLP
+
+        mcfg = cfg["model"]
+        tr = cfg["training"]
+        print("[BuildModel] building general-v2 expert: Structural")
+        model = MMKGStructuralExpertLP(
+            num_entities=dataset_bundle.num_entities,
+            num_relations=mcfg["num_relations"],
+            d=cfg["embedding"]["d"],
+            neg_ratio=tr.get("neg_ratio", 10),
+            adv_temperature=tr.get("adv_temperature", 1.0),
+            entity_l2_weight=tr.get("entity_l2_weight", 1e-6),
+            structural_scale_init=tr.get("structural_scale_init", -2.0),
+            structural_scale_l2_weight=tr.get("structural_scale_l2_weight", 1e-4),
+        )
+        return model, dataset_bundle.num_entities
+
+    if model_name == "mmkg_gate_only_v2":
+        if dataset_bundle is None or protocol_version != MMKG_GENERAL_V1:
+            raise ValueError("mmkg_gate_only_v2 requires a mmkg_general_v1 dataset bundle.")
+        from ml.training.src.models.general_mmkg.availability_fusion import (
+            MMKGAvailabilityAwareFusionLP,
+        )
+
+        features = dataset_bundle.features
+        mcfg = cfg["model"]
+        tr = cfg["training"]
+        print("[BuildModel] building general-v2 expert: Availability-aware Fusion")
+        model = MMKGAvailabilityAwareFusionLP(
+            text_feat=features.text_features,
+            img_feat=features.image_features,
+            has_text=features.has_text,
+            has_img=features.has_img,
+            num_relations=mcfg["num_relations"],
+            d=cfg["embedding"]["d"],
+            use_layernorm=mcfg.get("use_layernorm", True),
+            neg_ratio=tr.get("neg_ratio", 10),
+            adv_temperature=tr.get("adv_temperature", 1.0),
+            text_dropout=tr.get("text_dropout", 0.0),
+            img_dropout=tr.get("img_dropout", 0.0),
+            gate_reg_weight=tr.get("gate_reg_weight", 1e-3),
+            gate_reg_target=tr.get("gate_reg_target", 0.5),
+        )
+        return model, dataset_bundle.num_entities
+
     if model_name == "openbg_img_mhyper":
         from ml.training.src.models.recent_baselines.mhyper import OpenBGMHyper
 

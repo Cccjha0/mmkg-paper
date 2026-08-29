@@ -64,6 +64,23 @@ CLEAN_FEATURE_SETS: dict[str, list[str]] = {
         "observed_text_img_cosine",
         "observed_text_img_cosine_valid",
     ],
+    # Optional general-v2 context scaffold.  Builders emit neutral zeros until
+    # dataset-local TRAIN graph counts and DEV relation-direction priors are
+    # supplied; raw relation ids remain excluded.
+    "G4": [
+        "direction",
+        "relation_gain_prior",
+        "relation_fusion_win_rate",
+        "relation_support",
+        "relation_is_fusion_prior",
+        "relation_direction_gain_prior",
+        "relation_direction_support",
+        "observed_has_text",
+        "observed_has_img",
+        "observed_modality_count",
+        "observed_log_degree",
+        "relation_log_frequency",
+    ],
 }
 
 POSTHOC_FEATURE_SETS: dict[str, list[str]] = {

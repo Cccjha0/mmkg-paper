@@ -7,6 +7,7 @@ import torch
 
 from router.feature_utils import load_general_cache_bundle
 from router.router_models import CleanRuleBasedRouter
+from router.router_models import CLEAN_FEATURE_SETS
 
 
 def _write_general_cache(path: Path, *, shared: bool) -> None:
@@ -56,3 +57,21 @@ def test_legacy_rule_keeps_frozen_image_gate() -> None:
     router = CleanRuleBasedRouter(gamma=0.0)
     assert router.predict_from_rows([{"observed_has_img": 0, "relation_gain_prior": 0.1}]) == [0]
     assert router.predict_from_rows([{"observed_has_img": 1, "relation_gain_prior": 0.1}]) == [1]
+
+
+def test_general_clean_profiles_exclude_answer_and_target_leakage() -> None:
+    forbidden = {
+        "target_has_text",
+        "target_has_img",
+        "target_regime",
+        "target_entity_id",
+        "correct_score",
+        "rr",
+        "reciprocal_rank",
+        "rank_fusion",
+        "rank_struct",
+    }
+    for profile in ("G1", "G2", "G3", "G4"):
+        features = set(CLEAN_FEATURE_SETS[profile])
+        assert features.isdisjoint(forbidden)
+        assert "relation_id" not in features

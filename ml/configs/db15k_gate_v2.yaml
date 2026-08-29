@@ -1,0 +1,38 @@
+# Generalized-v2 DEV-only anchor. Tune all non-frozen values on validation only.
+dataset:
+  name: db15k
+  loader: openke_mmkg
+  processed_dir: data/datasets/db15k/processed
+
+protocol:
+  version: mmkg_general_v1
+  split: official
+  modality_policy: explicit_independent_availability
+  evaluation: filtered_bidirectional
+
+model:
+  name: mmkg_gate_only_v2
+  num_relations: 279
+  use_layernorm: true
+
+training:
+  termination_policy: dev_early_stop
+  lr: 0.0003
+  text_dropout: 0.1
+  img_dropout: 0.1
+  gate_reg_weight: 0.001
+  gate_reg_target: 0.5
+  epochs: 200
+  eval_every: 5
+  early_stop_patience: 10
+
+evaluation:
+  dev_eval_limit: null
+  filtered: true
+  direction: both
+  chunk_size: 4096
+  query_batch_size: 32
+  run_test: false
+
+output:
+  exp_name: db15k_gate_v2

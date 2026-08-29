@@ -380,15 +380,17 @@ def main() -> None:
     if gate_dataset != residual_dataset:
         raise RuntimeError("Gate and Residual datasets differ.")
     residual_has_img = getattr(residual_model, "has_img", None)
-    if residual_has_img is None or not torch.equal(has_img, residual_has_img.detach().cpu().bool()):
+    if residual_has_img is not None and not torch.equal(has_img, residual_has_img.detach().cpu().bool()):
         raise RuntimeError("Gate and Residual image-availability masks differ.")
+    if protocol_version == OPENBG_LEGACY_V1 and residual_has_img is None:
+        raise RuntimeError("Legacy Residual model does not expose has_img.")
     has_text = getattr(gate_model, "has_text", None)
     if protocol_version == MMKG_GENERAL_V1 and has_text is None:
         raise RuntimeError("General Gate model does not expose has_text.")
     has_text = has_text.detach().cpu().bool() if has_text is not None else None
     residual_has_text = getattr(residual_model, "has_text", None)
-    if protocol_version == MMKG_GENERAL_V1:
-        if residual_has_text is None or not torch.equal(has_text, residual_has_text.detach().cpu().bool()):
+    if protocol_version == MMKG_GENERAL_V1 and residual_has_text is not None:
+        if not torch.equal(has_text, residual_has_text.detach().cpu().bool()):
             raise RuntimeError("Gate and Residual text-availability masks differ.")
 
     directions = ["head", "tail"] if args.direction == "both" else [args.direction]

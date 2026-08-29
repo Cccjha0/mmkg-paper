@@ -107,6 +107,8 @@ The canonical tensors remain unchanged across methods, while missing-modality ha
 | APKGC | Gaussian replacement computed from observed rows, following the released model |
 | M-Hyper | absent projected and independent modality paths are zero-masked; modality PCA fits observed train-visible rows only |
 | ComplEx | structural-only; masks are used only for evaluation diagnostics |
+| General-v2 Fusion (`mmkg_gate_only_v2`) | explicit masked text/image weights; single available modality gets weight 1; T0V0 uses an explicit learned fallback; independent text/image dropout changes availability only during training |
+| General-v2 Structural (`mmkg_structural_v2`) | pure learned entity structure plus ComplEx relation scoring; no text/image tensors or availability masks are constructor inputs or state-dict entries |
 
 The unified evaluator ranks over every mapped entity, filters all other known positives from train+valid+test, evaluates head and tail prediction, uses the existing strict-`>` tie rule, and reports the equal-direction average. This is the same evaluator used by every method; external paper numbers are not mixed into the main comparison.
 
@@ -158,6 +160,8 @@ The clean profile contains only direction, dataset-local validation priors and o
 
 Train general clean routers with `--feature-set G1`, `G2`, or `G3`; frozen OpenBG experiments continue using `C1`–`C4`.
 
+`G4` is an optional general-v2 context scaffold. It adds relation×direction DEV-prior fields plus TRAIN-only observed-degree/relation-frequency fields. Missing optional inputs are neutral zeros. Raw relation IDs, target masks, correct-target scores and outcome ranks remain forbidden. Do not enable G4 in a reported experiment until the dataset-local TRAIN/DEV statistic builders and their provenance have been locked.
+
 For score-aware combination, first export dev and test candidate scores into a dataset-specific directory, then select alpha on dev and apply the locked selection to test:
 
 ```bash
@@ -169,12 +173,67 @@ python scripts/export_candidate_scores.py --gate-run-dir <mkg_w_gate_run> \
 
 python scripts/eval_score_ensemble_baselines.py \
   --score-dir outputs/mkg_w/candidate_router/scores \
-  --output-dir outputs/mkg_w/score_ensemble/eval
+  --output-dir outputs/mkg_w/score_ensemble/eval \
+  --selection-only \
+  --score-normalization query_zscore \
+  --relation-shrinkage-lambda 20
 ```
 
 For `mmkg_general_v1`, this command validates that every dev/test summary belongs to one dataset and one `top_k`, reports deltas against that dataset's Residual-only scores, and keeps plots under the dataset-specific output directory. Summary discovery no longer assumes `top100`; the JSON `top_k` field is authoritative. It never reads or overwrites the frozen OpenBG E5/CA-S2 paper artifacts.
 
-## 5. Verification commands (server)
+## 5. Generalized-v2 DEV-first funnel
+
+The v2 aliases exist only under `mmkg_general_v1`. They do not replace `mmkg_gate_only`, `mmkg_residual_only`, or any `openbg_img_*` alias. All checked-in v2 configs keep `evaluation.run_test: false`.
+
+One-seed fixed-expert commands (run on the training server, not a low-compute workstation):
+
+```bash
+# DB15K
+python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --config ml/configs/db15k_complex.yaml
+python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --config ml/configs/db15k_gate_only.yaml
+python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --config ml/configs/db15k_gate_v2.yaml
+python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --config ml/configs/db15k_structural_v2.yaml
+
+# MKG-W
+python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --config ml/configs/mkg_w_complex.yaml
+python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --config ml/configs/mkg_w_gate_only.yaml
+python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --config ml/configs/mkg_w_gate_v2.yaml
+python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --config ml/configs/mkg_w_structural_v2.yaml
+```
+
+Export DEV query outcomes for each v2 pair and compute fixed-strategy complementarity:
+
+```bash
+python scripts/export_query_eval.py --expert fusion_v2 --run-dir <dataset_gate_v2_run> --split dev \
+  --out outputs/<dataset>/v2/router/dev/fusion_v2_query_eval_seed1.csv
+python scripts/export_query_eval.py --expert structural_v2 --run-dir <dataset_structural_v2_run> --split dev \
+  --out outputs/<dataset>/v2/router/dev/structural_v2_query_eval_seed1.csv
+python scripts/analyze_general_expert_complementarity.py \
+  --fusion outputs/<dataset>/v2/router/dev/fusion_v2_query_eval_seed1.csv \
+  --structural outputs/<dataset>/v2/router/dev/structural_v2_query_eval_seed1.csv \
+  --split dev --out-dir outputs/<dataset>/v2/complementarity/dev
+```
+
+The analysis reports fusion/structural wins, ties, mean delta RR, both fixed MRRs, hard-selection Oracle MRR, Oracle headroom, direction, the eight target-side modality regimes, relation, and relation-support buckets. Target masks are post-hoc reporting fields only.
+
+Export candidate scores into the same dataset-local directory, then compare normalization and alpha policies without retraining either expert:
+
+```bash
+python scripts/export_candidate_scores.py --gate-run-dir <dataset_gate_v2_run> \
+  --residual-run-dir <dataset_structural_v2_run> --split dev --direction both --top-k 100 \
+  --out-csv outputs/<dataset>/v2/scores/dev_seed1_top100.csv \
+  --summary-json outputs/<dataset>/v2/scores/dev_seed1_top100_summary.json
+
+python scripts/eval_score_ensemble_baselines.py \
+  --score-dir outputs/<dataset>/v2/scores \
+  --output-dir outputs/<dataset>/v2/score_ensemble/query_zscore \
+  --selection-only --score-normalization query_zscore \
+  --relation-shrinkage-lambda 20
+```
+
+Repeat the last command with `none` and `rank_based`. Use `--relation-shrinkage-lambda 0` for unshrunk relation alpha. Nonzero lambda is rejected for `openbg_legacy_v1`. `--selection-only` never loads test summaries. Once every choice is frozen on validation, export final test scores and rerun without `--selection-only`; test is only for locked reporting.
+
+## 6. Verification commands (server)
 
 The following suite includes model/evaluator tests and should run on the server, not the local low-compute machine:
 
@@ -186,6 +245,16 @@ python -m pytest ml/training/tests/test_dataset_bundle_contract.py \
   ml/training/tests/test_general_protocol_toy.py \
   ml/training/tests/test_apkgc_epoch_noise.py \
   ml/training/tests/test_openbg_legacy_checkpoint_contract.py
+```
+
+The generalized-v2 additions are covered by:
+
+```bash
+python -m pytest ml/training/tests/test_general_v2_models.py \
+  ml/training/tests/test_score_combination_v2.py \
+  ml/training/tests/test_general_router_contract.py \
+  ml/training/tests/test_general_protocol_toy.py \
+  ml/training/tests/test_protocol_isolation.py
 ```
 
 The OpenBG lock has two levels. This read-only check validates the already-exported seed-1 metrics and query artifacts without loading models:

@@ -67,6 +67,8 @@ def infer_expert_name(cfg: dict, requested: str) -> str:
         "mmkg_gate_only": "gate_only",
         "mmkg_residual_only": "residual_only",
         "mmkg_gate_residual": "full_model",
+        "mmkg_gate_only_v2": "fusion_v2",
+        "mmkg_structural_v2": "structural_v2",
     }
     return mapping.get(model_name, requested.lower())
 
@@ -276,7 +278,11 @@ def export_query_eval(cfg: dict, ckpt_path: Path, expert_name: str, split: str, 
 
     has_img = getattr(model, "has_img", None)
     if has_img is None:
-        raise RuntimeError("Model does not expose the canonical has_img mask.")
+        if dataset_bundle.protocol_version != MMKG_GENERAL_V1:
+            raise RuntimeError("Legacy model does not expose the canonical has_img mask.")
+        # A pure general-v2 structural expert must not register modality masks;
+        # target masks are dataset metadata used only for post-hoc reporting.
+        has_img = dataset_bundle.features.has_img
     has_img_cpu = has_img.detach().cpu()
     protocol_version = dataset_bundle.protocol_version
     has_text_cpu = dataset_bundle.features.has_text.detach().cpu()
