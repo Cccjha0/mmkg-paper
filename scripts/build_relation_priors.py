@@ -25,6 +25,8 @@ OUTPUT_HEADER = [
     "is_visual_prior",
 ]
 
+GENERAL_OUTPUT_HEADER = [*OUTPUT_HEADER[:-1], "is_fusion_prior"]
+
 
 LEGACY_OUTPUT_HEADER = [
     "relation_id",
@@ -42,6 +44,25 @@ LEGACY_OUTPUT_HEADER = [
     "is_visual_prior",
 ]
 
+GENERAL_RELATION_OUTPUT_HEADER = [
+    "relation_id",
+    "relation_name",
+    "n_queries",
+    "mean_rr_gate",
+    "mean_rr_residual",
+    "mean_delta_rr",
+    "mean_delta_rr_raw",
+    "mean_delta_rr_shrunk",
+    "fusion_win_rate",
+    "struct_win_rate",
+    *[
+        f"{direction}_{tag}_ratio"
+        for direction in ("head", "tail")
+        for tag in ("T0V0", "T0V1", "T1V0", "T1V1")
+    ],
+    "is_fusion_prior",
+]
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build dev-only relation priors for router features.")
@@ -50,7 +71,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--out", default=None, help="Output CSV path for the checklist contract")
 
     parser.add_argument("--split", default="dev", choices=["dev"], help="Phase 2 currently uses dev only")
-    parser.add_argument("--gamma", type=float, default=0.0, help="visual prior threshold on mean_rr_gain")
+    parser.add_argument("--gamma", type=float, default=0.0, help="fusion-gain prior threshold on mean_rr_gain")
     parser.add_argument("--use-shrinkage", action="store_true", help="Apply shrinkage to mean delta RR before marking priors")
     parser.add_argument("--shrink-k", type=float, default=20.0, help="Shrinkage denominator constant")
     parser.add_argument("--gate-dir", default="outputs/router/dev")
@@ -121,15 +142,14 @@ def validate_dataset_local(gate_rows: list[dict], residual_rows: list[dict]) -> 
     return metadata
 
 
-def convert_rows_for_contract(rows: list[dict]) -> list[dict]:
+def convert_rows_for_contract(rows: list[dict], *, general_protocol: bool = False) -> list[dict]:
     out = []
     for row in rows:
         support = int(row["n_queries"])
         fusion_win_rate = float(row["fusion_win_rate"])
         struct_win_rate = float(row["struct_win_rate"])
         tie_rate = max(0.0, 1.0 - fusion_win_rate - struct_win_rate)
-        out.append(
-            {
+        record = {
                 "relation_id": int(row["relation_id"]),
                 "support": support,
                 "fusion_mean_rr": float(row["mean_rr_gate"]),
@@ -140,9 +160,18 @@ def convert_rows_for_contract(rows: list[dict]) -> list[dict]:
                 "fusion_win_rate": fusion_win_rate,
                 "struct_win_rate": struct_win_rate,
                 "tie_rate": tie_rate,
-                "is_visual_prior": int(row["is_visual_prior"]),
-            }
-        )
+        }
+        record["is_fusion_prior" if general_protocol else "is_visual_prior"] = int(row["is_visual_prior"])
+        out.append(record)
+    return out
+
+
+def generalize_summary_names(summary: dict) -> dict:
+    out = dict(summary)
+    if "n_visual_prior" in out:
+        out["n_fusion_prior"] = out.pop("n_visual_prior")
+    if "visual_prior_rate" in out:
+        out["fusion_prior_rate"] = out.pop("visual_prior_rate")
     return out
 
 
@@ -167,11 +196,14 @@ def build_from_contract_inputs(
         use_shrinkage=use_shrinkage,
         shrink_k=shrink_k,
     )
-    contract_rows = convert_rows_for_contract(legacy_rows)
-    write_csv(out_path, contract_rows, OUTPUT_HEADER)
+    general_protocol = dataset_metadata.get("protocol_version") == "mmkg_general_v1"
+    contract_rows = convert_rows_for_contract(legacy_rows, general_protocol=general_protocol)
+    write_csv(out_path, contract_rows, GENERAL_OUTPUT_HEADER if general_protocol else OUTPUT_HEADER)
     print(f"[OK] wrote relation priors -> {out_path.as_posix()}")
 
     summary = summarize_relation_gain_stats(legacy_rows, gamma)
+    if general_protocol:
+        summary = generalize_summary_names(summary)
     summary["split"] = "dev"
     summary["use_shrinkage"] = bool(use_shrinkage)
     summary["shrink_k"] = float(shrink_k)
@@ -215,10 +247,14 @@ def build_from_legacy_dirs(args: argparse.Namespace) -> None:
         shrink_k=args.shrink_k,
     )
     out_path = out_dir / f"relation_gain_stats_gamma_{gamma_tag(args.gamma)}.csv"
-    write_csv(out_path, rows, LEGACY_OUTPUT_HEADER)
+    general_protocol = dataset_metadata.get("protocol_version") == "mmkg_general_v1"
+    header = GENERAL_RELATION_OUTPUT_HEADER if general_protocol else LEGACY_OUTPUT_HEADER
+    write_csv(out_path, [{key: row[key] for key in header} for row in rows], header)
     print(f"[OK] wrote relation priors -> {out_path.as_posix()}")
 
     summary = summarize_relation_gain_stats(rows, args.gamma)
+    if general_protocol:
+        summary = generalize_summary_names(summary)
     summary["split"] = args.split
     summary["use_shrinkage"] = bool(args.use_shrinkage)
     summary["shrink_k"] = float(args.shrink_k)

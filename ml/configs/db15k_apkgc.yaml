@@ -27,12 +27,16 @@ model:
   attention_dropout: 0.1
   use_intermediate: false
 training:
+  termination_policy: dev_early_stop
   sampler: bernoulli_filtered
   lr: 0.0001
   batch_size: 1024
   neg_ratio: 32
   epochs: 8000
+  eval_every: 5
+  early_stop_patience: 10
 evaluation:
+  dev_eval_limit: null
   filtered: true
   direction: both
   chunk_size: 4096

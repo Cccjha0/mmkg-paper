@@ -84,7 +84,7 @@ class GeneralCleanRouterFeatureRecord:
     relation_gain_prior: float
     relation_fusion_win_rate: float
     relation_support: int
-    relation_is_visual_prior: int
+    relation_is_fusion_prior: int
     label_gain: int | None = None
     delta_threshold: float | None = None
 

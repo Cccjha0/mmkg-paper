@@ -50,14 +50,14 @@ CLEAN_FEATURE_SETS: dict[str, list[str]] = {
         "relation_gain_prior",
         "relation_fusion_win_rate",
         "relation_support",
-        "relation_is_visual_prior",
+        "relation_is_fusion_prior",
     ],
     "G3": [
         "direction",
         "relation_gain_prior",
         "relation_fusion_win_rate",
         "relation_support",
-        "relation_is_visual_prior",
+        "relation_is_fusion_prior",
         "observed_has_text",
         "observed_has_img",
         "observed_modality_count",
@@ -123,6 +123,7 @@ def cast_feature_value(key: str, value: str | int | float | None) -> Any:
         "target_has_img",
         "img_is_missing_replaced",
         "relation_is_visual_prior",
+        "relation_is_fusion_prior",
         "observed_has_img",
         "observed_img_missing_replaced",
         "observed_has_text",
@@ -151,7 +152,14 @@ class CleanRuleBasedRouter:
     def predict_proba_from_rows(self, rows: list[dict]) -> list[float]:
         probs = []
         for row in rows:
-            use_fusion = int(row["observed_has_img"]) == 1 and float(row["relation_gain_prior"]) > float(self.gamma)
+            if "observed_has_text" in row:
+                # General protocol: text and visual availability are symmetric.
+                # Only observed-side masks are legal at query time.
+                modality_available = int(row.get("observed_modality_count", 0)) > 0
+            else:
+                # Frozen OpenBG clean-rule behavior.
+                modality_available = int(row["observed_has_img"]) == 1
+            use_fusion = modality_available and float(row["relation_gain_prior"]) > float(self.gamma)
             probs.append(1.0 if use_fusion else 0.0)
         return probs
 

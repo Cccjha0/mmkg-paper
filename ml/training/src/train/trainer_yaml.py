@@ -5,6 +5,7 @@ import torch
 import torch.nn.functional as F
 from tqdm import tqdm
 
+from ml.training.src.data.dataset_spec import MMKG_GENERAL_V1, OPENBG_LEGACY_V1
 from ml.training.src.data.sampler import negative_sample
 from ml.training.src.data.build_true_facts import build_true_facts
 from ml.training.src.data.sampler_recent import (
@@ -74,6 +75,18 @@ class TrainerYAML:
         self.eval_every = tr.get("eval_every", 5)
         patience = tr.get("early_stop_patience", 10)
         self.patience = None if patience is None else int(patience)
+        self.protocol_version = cfg.get("protocol", {}).get("version", OPENBG_LEGACY_V1)
+        self.termination_policy = tr.get("termination_policy")
+        if self.protocol_version == MMKG_GENERAL_V1:
+            if self.termination_policy not in {"dev_early_stop", "fixed_budget"}:
+                raise ValueError(
+                    "mmkg_general_v1 requires training.termination_policy to be "
+                    "'dev_early_stop' or 'fixed_budget'."
+                )
+            if self.termination_policy == "fixed_budget" and self.patience is not None:
+                raise ValueError("fixed_budget requires training.early_stop_patience: null")
+            if self.termination_policy == "dev_early_stop" and self.patience is None:
+                raise ValueError("dev_early_stop requires a finite training.early_stop_patience")
         self.device_type = torch.device(self.device).type
         self.pin_memory = bool(tr.get("pin_memory", self.device_type == "cuda"))
         self.profile_timing = bool(tr.get("profile_timing", False))
@@ -83,8 +96,14 @@ class TrainerYAML:
         if self.profile_warmup_steps < 0 or self.profile_steps <= 0:
             raise ValueError("profile_warmup_steps must be non-negative and profile_steps must be positive.")
 
-        self.dev_eval_limit = ev.get("dev_eval_limit", len(dev_triples))
-        self.test_eval_limit = ev.get("test_eval_limit", len(test_triples))
+        raw_dev_limit = ev.get("dev_eval_limit", len(dev_triples))
+        raw_test_limit = ev.get("test_eval_limit", len(test_triples))
+        self.dev_eval_limit = len(dev_triples) if raw_dev_limit is None else min(int(raw_dev_limit), len(dev_triples))
+        self.test_eval_limit = (
+            len(test_triples) if raw_test_limit is None else min(int(raw_test_limit), len(test_triples))
+        )
+        if self.dev_eval_limit <= 0:
+            raise ValueError("evaluation.dev_eval_limit must select at least one validation triple")
         self.chunk_size = ev.get("chunk_size", 10000)
         self.query_batch_size = ev.get("query_batch_size", 1)
         self.eval_direction = ev.get("direction", "both")
@@ -111,6 +130,12 @@ class TrainerYAML:
         self.optimizer_name = str(tr.get("optimizer", "adam")).lower()
         self.optim = self._build_optimizer()
         self.base_use_fusion = getattr(self.model, "use_fusion", None)
+        print(
+            f"[Selection] protocol={self.protocol_version} "
+            f"dev_queries={self.dev_eval_limit}/{len(self.dev_triples)} "
+            f"termination={self.termination_policy or 'legacy_default'} "
+            f"patience={self.patience}"
+        )
 
     def _build_optimizer(self) -> torch.optim.Optimizer:
         """Build the configured optimizer while preserving Adam as the default."""
@@ -238,11 +263,17 @@ class TrainerYAML:
         residual_sq = 0.0
         fusion_sq = 0.0
         projection_sq = 0.0
+        missing_text_sq = 0.0
+        missing_image_sq = 0.0
 
         for name, param in self.model.named_parameters():
             sq = self._grad_norm_sq(param)
             if sq <= 0.0:
                 continue
+            if name.endswith("t_missing"):
+                missing_text_sq += sq
+            if name.endswith("v_missing"):
+                missing_image_sq += sq
 
             if name.startswith("entity_residual") or name == "residual_scale":
                 residual_sq += sq
@@ -250,6 +281,7 @@ class TrainerYAML:
                 name.startswith("fusion")
                 or name.startswith("t_adapter")
                 or name.startswith("v_adapter")
+                or name.startswith("t_missing")
                 or name.startswith("v_missing")
             ):
                 fusion_sq += sq
@@ -260,6 +292,8 @@ class TrainerYAML:
             "grad_residual": math.sqrt(residual_sq),
             "grad_fusion": math.sqrt(fusion_sq),
             "grad_projection": math.sqrt(projection_sq),
+            "grad_missing_text": math.sqrt(missing_text_sq),
+            "grad_missing_image": math.sqrt(missing_image_sq),
         }
 
     def _compute_scalar_stats(self) -> dict:
@@ -371,6 +405,8 @@ class TrainerYAML:
                 "grad_residual": 0.0,
                 "grad_fusion": 0.0,
                 "grad_projection": 0.0,
+                "grad_missing_text": 0.0,
+                "grad_missing_image": 0.0,
             }
 
             for i in tqdm(range(0, train_tensor.size(0), self.batch_size), desc=f"epoch {epoch}"):
@@ -491,6 +527,7 @@ class TrainerYAML:
                         "kgc_loss", "adversarial_loss", "generator_loss", "gradient_penalty",
                         "generator_grad_norm",
                         "grad_residual", "grad_fusion", "grad_projection",
+                        "grad_missing_text", "grad_missing_image",
                         "residual_scale_value", "mix_w_fusion", "mix_w_residual",
                         "g_mean_all", "g_std_all",
                         "g_mean_img", "g_std_img",
@@ -504,7 +541,9 @@ class TrainerYAML:
                     "[Diag] "
                     f"grad_residual={epoch_grad_stats['grad_residual']:.6f} "
                     f"grad_fusion={epoch_grad_stats['grad_fusion']:.6f} "
-                    f"grad_projection={epoch_grad_stats['grad_projection']:.6f}"
+                    f"grad_projection={epoch_grad_stats['grad_projection']:.6f} "
+                    f"grad_missing_text={epoch_grad_stats['grad_missing_text']:.6f} "
+                    f"grad_missing_image={epoch_grad_stats['grad_missing_image']:.6f}"
                 )
                 if hasattr(self.model, "residual_scale"):
                     print(f"[Diag] residual_scale = {scalar_stats['residual_scale_value']:.6f}")

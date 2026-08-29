@@ -41,6 +41,10 @@ def load_general_cache_bundle(processed_dir: str | Path) -> dict:
     if not dataset:
         raise ValueError("Canonical dataset manifest is missing a non-empty dataset name.")
     features = load_processed_feature_bundle(processed_dir)
+    similarity = manifest.get("cross_modal_similarity", {})
+    cosine_enabled = bool(similarity.get("shared_embedding_space", False)) and similarity.get("type") == "cosine"
+    if cosine_enabled and features.text_features.size(1) != features.image_features.size(1):
+        raise ValueError("Manifest declares a shared cosine space, but text/image feature dimensions differ.")
     return {
         "cache_dir": processed_dir.as_posix(),
         "dataset": dataset,
@@ -49,6 +53,7 @@ def load_general_cache_bundle(processed_dir: str | Path) -> dict:
         "img_feat": features.image_features,
         "has_text": features.has_text,
         "has_img": features.has_img,
+        "cross_modal_cosine_enabled": cosine_enabled,
     }
 
 
@@ -73,11 +78,13 @@ def load_relation_prior_map(rows: list[dict]) -> dict[int, dict]:
     out: dict[int, dict] = {}
     for row in rows:
         relation_id = int(row["relation_id"])
+        prior_flag = row.get("is_fusion_prior", row.get("is_visual_prior", 0))
         out[relation_id] = {
             "relation_gain_prior": float(row["mean_delta_rr"]),
             "relation_fusion_win_rate": float(row["fusion_win_rate"]),
             "relation_support": int(row["n_queries"]),
-            "relation_is_visual_prior": int(row["is_visual_prior"]),
+            "relation_is_visual_prior": int(row.get("is_visual_prior", prior_flag)),
+            "relation_is_fusion_prior": int(prior_flag),
         }
     return out
 
@@ -174,6 +181,7 @@ def _default_prior(relation_id: int, relation_prior_map: dict[int, dict]) -> dic
             "relation_fusion_win_rate": 0.0,
             "relation_support": 0,
             "relation_is_visual_prior": 0,
+            "relation_is_fusion_prior": 0,
         },
     )
 
@@ -247,8 +255,7 @@ def build_general_clean_feature_rows(
                 )
         has_text = bool(cache_bundle["has_text"][entity_id].item())
         has_img = bool(cache_bundle["has_img"][entity_id].item())
-        same_dim = cache_bundle["text_feat"].size(1) == cache_bundle["img_feat"].size(1)
-        cosine_valid = has_text and has_img and same_dim
+        cosine_valid = has_text and has_img and bool(cache_bundle.get("cross_modal_cosine_enabled", False))
         cosine = cosine_for_entity(cache_bundle, entity_id) if cosine_valid else 0.0
         record = GeneralCleanRouterFeatureRecord(
             query_id=str(gate["query_id"]),
@@ -268,7 +275,7 @@ def build_general_clean_feature_rows(
             relation_gain_prior=float(prior["relation_gain_prior"]),
             relation_fusion_win_rate=float(prior["relation_fusion_win_rate"]),
             relation_support=int(prior["relation_support"]),
-            relation_is_visual_prior=int(prior["relation_is_visual_prior"]),
+            relation_is_fusion_prior=int(prior["relation_is_fusion_prior"]),
             label_gain=int(label_row["label_gain"]) if label_row is not None else None,
             delta_threshold=float(label_row["delta_threshold"]) if label_row is not None else None,
         )
@@ -394,6 +401,7 @@ def summarize_general_clean_feature_rows(train_rows_by_delta: dict[str, list[dic
         "relation_gain_prior",
         "relation_fusion_win_rate",
         "relation_support",
+        "relation_is_fusion_prior",
         "observed_has_text",
         "observed_has_img",
         "observed_modality_count",

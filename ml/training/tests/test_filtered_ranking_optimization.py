@@ -119,3 +119,7 @@ def test_dense_and_sparse_paths_preserve_bidirectional_subgroup_metrics():
     with patch.object(ranking, "_DENSE_FILTER_MASK_MAX_BYTES", 0):
         sparse_metrics = ranking.filtered_ranking_eval(**kwargs)
     assert dense_metrics == sparse_metrics
+    assert dense_metrics["has_img_mrr"] == 0.5 * (
+        dense_metrics["tail_has_img_mrr"] + dense_metrics["head_has_img_mrr"]
+    )
+    assert "direction_balanced_has_img_mrr" not in dense_metrics

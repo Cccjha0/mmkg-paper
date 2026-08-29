@@ -12,8 +12,13 @@ model:
   name: mmkg_complex
   num_relations: 169
 training:
+  termination_policy: dev_early_stop
   lr: 0.001
+  epochs: 200
+  eval_every: 5
+  early_stop_patience: 10
 evaluation:
+  dev_eval_limit: null
   filtered: true
   direction: both
   chunk_size: 4096

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -86,8 +87,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Build candidate-aware router feature tables from exported candidate scores."
     )
-    parser.add_argument("--dev-scores", nargs="+", default=["outputs/candidate_router/scores/dev_seed*_top100.parquet"])
-    parser.add_argument("--test-scores", nargs="+", default=["outputs/candidate_router/scores/test_seed*_top100.parquet"])
+    parser.add_argument("--dev-scores", nargs="+", default=["outputs/candidate_router/scores/dev_seed*_top*.parquet"])
+    parser.add_argument("--test-scores", nargs="+", default=["outputs/candidate_router/scores/test_seed*_top*.parquet"])
     parser.add_argument("--relation-priors", default="outputs/router/raw/dev_relation_priors.csv")
     parser.add_argument("--cache-dir", default="data/cache/openbg_img")
     parser.add_argument("--out-dir", default="outputs/candidate_router/features")
@@ -110,6 +111,19 @@ def expand_inputs(patterns: list[str]) -> list[Path]:
     if not unique:
         raise FileNotFoundError(f"No input files matched: {patterns}")
     return unique
+
+
+def validate_input_top_k(files: list[Path], expected_top_k: int, split: str) -> None:
+    parsed = {
+        int(match.group(1))
+        for path in files
+        if (match := re.search(r"_top(\d+)\.parquet$", path.name)) is not None
+    }
+    if parsed != {expected_top_k}:
+        raise ValueError(
+            f"{split} score artifacts must all match --top-k={expected_top_k}; "
+            f"found filename tags={sorted(parsed)}"
+        )
 
 
 def load_relation_priors(path: Path) -> pd.DataFrame:
@@ -348,14 +362,16 @@ def main() -> None:
     args = parse_args()
     dev_files = expand_inputs(args.dev_scores)
     test_files = expand_inputs(args.test_scores)
+    validate_input_top_k(dev_files, args.top_k, "dev")
+    validate_input_top_k(test_files, args.top_k, "test")
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     relation_priors = load_relation_priors(Path(args.relation_priors))
     entity_features = build_entity_feature_arrays(args.cache_dir)
 
-    dev_path = out_dir / "candidate_router_dev_top100.parquet"
-    test_path = out_dir / "candidate_router_test_top100.parquet"
+    dev_path = out_dir / f"candidate_router_dev_top{args.top_k}.parquet"
+    test_path = out_dir / f"candidate_router_test_top{args.top_k}.parquet"
     contract_path = out_dir / "feature_contract.json"
     summary_path = out_dir / "candidate_router_feature_summary.json"
 

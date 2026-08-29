@@ -516,32 +516,55 @@ def filtered_ranking_eval(
         out[key] = 0.5 * (tail_metrics[key] + head_metrics[key])
     out["tail_mrr"] = tail_metrics["mrr"]
     out["head_mrr"] = head_metrics["mrr"]
+    general_modality_subgroups = entity_has_text is not None and entity_has_img is not None
     if entity_has_img is not None:
         out["tail_has_img_count"] = tail_metrics.get("tail_has_img_count", 0)
         out["tail_no_img_count"] = tail_metrics.get("tail_no_img_count", 0)
         out["head_has_img_count"] = head_metrics.get("head_has_img_count", 0)
         out["head_no_img_count"] = head_metrics.get("head_no_img_count", 0)
+        if general_modality_subgroups:
+            out["has_img_count"] = out["tail_has_img_count"] + out["head_has_img_count"]
+            out["no_img_count"] = out["tail_no_img_count"] + out["head_no_img_count"]
         for suffix in ["mrr", "hits@1", "hits@3", "hits@10"]:
-            out[f"has_img_{suffix}"] = 0.5 * (
-                tail_metrics.get(f"tail_has_img_{suffix}", 0.0) + head_metrics.get(f"head_has_img_{suffix}", 0.0)
-            )
-            out[f"no_img_{suffix}"] = 0.5 * (
-                tail_metrics.get(f"tail_no_img_{suffix}", 0.0) + head_metrics.get(f"head_no_img_{suffix}", 0.0)
-            )
+            tail_has_img = tail_metrics.get(f"tail_has_img_{suffix}", 0.0)
+            head_has_img = head_metrics.get(f"head_has_img_{suffix}", 0.0)
+            tail_no_img = tail_metrics.get(f"tail_no_img_{suffix}", 0.0)
+            head_no_img = head_metrics.get(f"head_no_img_{suffix}", 0.0)
+            if general_modality_subgroups:
+                has_count = out["has_img_count"]
+                no_count = out["no_img_count"]
+                out[f"has_img_{suffix}"] = (
+                    out["tail_has_img_count"] * tail_has_img + out["head_has_img_count"] * head_has_img
+                ) / has_count if has_count else 0.0
+                out[f"no_img_{suffix}"] = (
+                    out["tail_no_img_count"] * tail_no_img + out["head_no_img_count"] * head_no_img
+                ) / no_count if no_count else 0.0
+                out[f"direction_balanced_has_img_{suffix}"] = 0.5 * (tail_has_img + head_has_img)
+                out[f"direction_balanced_no_img_{suffix}"] = 0.5 * (tail_no_img + head_no_img)
+            else:
+                # Frozen OpenBG legacy semantics: these published diagnostics
+                # remain the equal head/tail average used by existing results.
+                out[f"has_img_{suffix}"] = 0.5 * (tail_has_img + head_has_img)
+                out[f"no_img_{suffix}"] = 0.5 * (tail_no_img + head_no_img)
             out[f"tail_has_img_{suffix}"] = tail_metrics.get(f"tail_has_img_{suffix}", 0.0)
             out[f"tail_no_img_{suffix}"] = tail_metrics.get(f"tail_no_img_{suffix}", 0.0)
             out[f"head_has_img_{suffix}"] = head_metrics.get(f"head_has_img_{suffix}", 0.0)
             out[f"head_no_img_{suffix}"] = head_metrics.get(f"head_no_img_{suffix}", 0.0)
-    if entity_has_text is not None and entity_has_img is not None:
+    if general_modality_subgroups:
         for text_flag in (0, 1):
             for img_flag in (0, 1):
                 tag = f"T{text_flag}V{img_flag}"
                 out[f"tail_{tag}_count"] = tail_metrics.get(f"tail_{tag}_count", 0)
                 out[f"head_{tag}_count"] = head_metrics.get(f"head_{tag}_count", 0)
+                out[f"{tag}_count"] = out[f"tail_{tag}_count"] + out[f"head_{tag}_count"]
                 for suffix in ["mrr", "hits@1", "hits@3", "hits@10"]:
                     tail_value = tail_metrics.get(f"tail_{tag}_{suffix}", 0.0)
                     head_value = head_metrics.get(f"head_{tag}_{suffix}", 0.0)
                     out[f"tail_{tag}_{suffix}"] = tail_value
                     out[f"head_{tag}_{suffix}"] = head_value
-                    out[f"{tag}_{suffix}"] = 0.5 * (tail_value + head_value)
+                    count = out[f"{tag}_count"]
+                    out[f"{tag}_{suffix}"] = (
+                        out[f"tail_{tag}_count"] * tail_value + out[f"head_{tag}_count"] * head_value
+                    ) / count if count else 0.0
+                    out[f"direction_balanced_{tag}_{suffix}"] = 0.5 * (tail_value + head_value)
     return out

@@ -44,8 +44,23 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--text-pooling", default="mean", choices=["mean"])
     parser.add_argument("--image-pooling", default="mean", choices=["mean"])
     parser.add_argument("--source-version", default="official OpenKE benchmark files (repository external mirror)")
+    parser.add_argument(
+        "--source-lock",
+        type=Path,
+        default=Path("docs/EXTERNAL_SOURCES_LOCK.json"),
+        help="Pinned source manifest. Every selected raw input is verified by size and SHA256.",
+    )
     parser.add_argument("--text-encoder", default="unknown (upstream HDF5 metadata not provided)")
     parser.add_argument("--image-encoder", default="BEIT_16-224 (from supplied filename)")
+    parser.add_argument(
+        "--cross-modal-space",
+        choices=["independent", "shared"],
+        default="independent",
+        help=(
+            "Declare whether text/image vectors share one semantically aligned coordinate space. "
+            "Cosine router features are disabled unless 'shared' is explicitly selected."
+        ),
+    )
     parser.add_argument("--audit-only", action="store_true", help="Validate and print a report without writing tensors.")
     return parser.parse_args()
 
@@ -70,6 +85,57 @@ def sha256_array(value: np.ndarray) -> str:
     digest.update(json.dumps(list(contiguous.shape), separators=(",", ":")).encode("ascii"))
     digest.update(contiguous.tobytes(order="C"))
     return digest.hexdigest()
+
+
+def verify_source_lock(args: argparse.Namespace) -> dict:
+    lock_path = args.source_lock
+    if not lock_path.exists():
+        raise FileNotFoundError(f"Pinned external source lock is missing: {lock_path}")
+    lock = json.loads(lock_path.read_text(encoding="utf-8"))
+    dataset_lock = lock.get("datasets", {}).get(args.dataset)
+    if not isinstance(dataset_lock, dict):
+        raise ValueError(f"Source lock has no dataset entry for {args.dataset!r}")
+
+    selected = {
+        "entity2id": args.benchmark_dir / "entity2id.txt",
+        "relation2id": args.benchmark_dir / "relation2id.txt",
+        "train": args.benchmark_dir / OPENKE_FILES["train"],
+        "valid": args.benchmark_dir / OPENKE_FILES["valid"],
+        "test": args.benchmark_dir / OPENKE_FILES["test"],
+        "text_h5": args.text_h5,
+        "image_h5": args.image_h5,
+    }
+    if args.dataset == "mkg_w":
+        selected["feature_key_map"] = args.feature_key_map
+    elif args.db15k_same_as is not None:
+        selected["same_as"] = args.db15k_same_as
+
+    verified: dict[str, dict] = {}
+    for role, path in selected.items():
+        if path is None:
+            raise ValueError(f"Pinned source role {role!r} was not supplied")
+        expected = dataset_lock.get("files", {}).get(role)
+        if not isinstance(expected, dict):
+            raise ValueError(f"Source lock has no file entry for {args.dataset}.{role}")
+        actual_size = path.stat().st_size
+        actual_sha = sha256_file(path)
+        if actual_size != int(expected["bytes"]) or actual_sha != str(expected["sha256"]):
+            raise ValueError(
+                f"Pinned source mismatch for {role}: {path}; "
+                f"expected bytes={expected['bytes']} sha256={expected['sha256']}, "
+                f"got bytes={actual_size} sha256={actual_sha}"
+            )
+        verified[role] = {"path": str(path), "bytes": actual_size, "sha256": actual_sha}
+    repository_name = dataset_lock.get("source_repository")
+    repository = lock.get("repositories", {}).get(repository_name)
+    if not isinstance(repository, dict):
+        raise ValueError(f"Source lock has no repository entry for {repository_name!r}")
+    return {
+        "lock_path": str(lock_path),
+        "lock_sha256": sha256_file(lock_path),
+        "source_repository": {"name": repository_name, **repository},
+        "verified_files": verified,
+    }
 
 
 def read_openke_mapping(path: Path, kind: str) -> tuple[dict[str, int], int]:
@@ -208,7 +274,7 @@ def build_key_resolvers(
     return text_key, image_key, metadata
 
 
-def inspect_hdf5(path: Path) -> tuple[set[str], int, dict[str, int]]:
+def inspect_hdf5(path: Path) -> tuple[set[str], int, dict[str, int], dict]:
     try:
         import h5py
     except ImportError as exc:
@@ -218,15 +284,43 @@ def inspect_hdf5(path: Path) -> tuple[set[str], int, dict[str, int]]:
         if not keys:
             raise ValueError(f"HDF5 file contains no root datasets: {path}")
         dimensions: dict[str, int] = {}
-        for key in keys:
+        total_values = 0
+        nonfinite_values = 0
+        nonfinite_keys: list[str] = []
+        finite_min: float | None = None
+        finite_max: float | None = None
+        for key in sorted(keys):
             dataset = handle[key]
             if dataset.ndim != 2 or dataset.shape[0] < 1:
                 raise ValueError(f"{path}:{key}: expected a non-empty [K, D] dataset")
             dimensions[key] = int(dataset.shape[1])
+            for start in range(0, int(dataset.shape[0]), 1024):
+                values = np.asarray(dataset[start : start + 1024])
+                total_values += int(values.size)
+                finite = np.isfinite(values)
+                bad = int(values.size - finite.sum())
+                if bad:
+                    nonfinite_values += bad
+                    if len(nonfinite_keys) < 20:
+                        nonfinite_keys.append(key)
+                if bool(finite.any()):
+                    chunk = values[finite]
+                    chunk_min = float(chunk.min())
+                    chunk_max = float(chunk.max())
+                    finite_min = chunk_min if finite_min is None else min(finite_min, chunk_min)
+                    finite_max = chunk_max if finite_max is None else max(finite_max, chunk_max)
         unique_dims = set(dimensions.values())
         if len(unique_dims) != 1:
             raise ValueError(f"{path}: inconsistent feature dimensions: {sorted(unique_dims)}")
-        return keys, unique_dims.pop(), dimensions
+        numeric_health = {
+            "total_values": total_values,
+            "nonfinite_values": nonfinite_values,
+            "nonfinite_key_examples": nonfinite_keys,
+            "finite_min": finite_min,
+            "finite_max": finite_max,
+            "all_finite": nonfinite_values == 0,
+        }
+        return keys, unique_dims.pop(), dimensions, numeric_health
 
 
 def build_alignment(
@@ -278,6 +372,7 @@ def write_triples(path: Path, triples: list[tuple[int, int, int]]) -> None:
 
 def main() -> None:
     args = parse_args()
+    source_lock = verify_source_lock(args)
     benchmark = args.benchmark_dir
     entity2id, num_entities = read_openke_mapping(benchmark / "entity2id.txt", "entity")
     relation2id, num_relations = read_openke_mapping(benchmark / "relation2id.txt", "relation")
@@ -292,8 +387,8 @@ def main() -> None:
         name: read_openke_triples(benchmark / filename, num_entities, num_relations)
         for name, filename in OPENKE_FILES.items()
     }
-    text_keys, text_dim, _ = inspect_hdf5(args.text_h5)
-    image_keys, image_dim, _ = inspect_hdf5(args.image_h5)
+    text_keys, text_dim, _, text_health = inspect_hdf5(args.text_h5)
+    image_keys, image_dim, _, image_health = inspect_hdf5(args.image_h5)
     text_resolver, image_resolver, resolver_metadata = build_key_resolvers(args, image_h5_keys=image_keys)
     aligned_text, missing_text = build_alignment(entity2id, text_keys, text_resolver, "text")
     aligned_image, missing_image = build_alignment(entity2id, image_keys, image_resolver, "image")
@@ -308,7 +403,7 @@ def main() -> None:
 
     audit = {
         "dataset": args.dataset,
-        "status": "pass",
+        "status": "pass" if text_health["all_finite"] and image_health["all_finite"] else "fail",
         "counts": {
             "entities": num_entities,
             "relations": num_relations,
@@ -324,6 +419,7 @@ def main() -> None:
                 "coverage": aligned_text_count / num_entities,
                 "dimension": text_dim,
                 "pooling": args.text_pooling,
+                "numeric_health": text_health,
                 "entities_with_multiple_keys": sum(keys is not None and len(keys) > 1 for keys in aligned_text),
                 "shared_keys": sum(len(keys or []) for keys in aligned_text)
                 - len({key for keys in aligned_text if keys for key in keys}),
@@ -335,6 +431,7 @@ def main() -> None:
                 "coverage": aligned_image_count / num_entities,
                 "dimension": image_dim,
                 "pooling": args.image_pooling,
+                "numeric_health": image_health,
                 "entities_with_multiple_keys": sum(keys is not None and len(keys) > 1 for keys in aligned_image),
                 "shared_keys": sum(len(keys or []) for keys in aligned_image)
                 - len({key for keys in aligned_image if keys for key in keys}),
@@ -342,8 +439,13 @@ def main() -> None:
         },
         "missing_examples": {"text": missing_text[:20], "image": missing_image[:20]},
         "alignment": resolver_metadata,
+        "source_lock": source_lock,
     }
     print(json.dumps(audit, ensure_ascii=False, indent=2))
+    if audit["status"] != "pass":
+        args.output_dir.mkdir(parents=True, exist_ok=True)
+        write_json(args.output_dir / "audit_report.json", audit)
+        raise ValueError("HDF5 numeric audit failed: NaN or Inf values were found")
     if args.audit_only:
         args.output_dir.mkdir(parents=True, exist_ok=True)
         write_json(args.output_dir / "audit_report.json", audit)
@@ -384,6 +486,11 @@ def main() -> None:
                 "sha256": sha256_file(args.image_h5),
                 "encoder": args.image_encoder,
             },
+        },
+        "cross_modal_similarity": {
+            "type": "cosine" if args.cross_modal_space == "shared" else "none",
+            "shared_embedding_space": args.cross_modal_space == "shared",
+            "declaration": "explicit_preprocessing_argument",
         },
         "hashes": {
             "entity_mapping": sha256_json(entity2id),

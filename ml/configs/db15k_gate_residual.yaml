@@ -16,12 +16,16 @@ model:
   use_layernorm: true
   use_normalized_mix: true
 training:
+  termination_policy: dev_early_stop
   lr: 0.0004
   img_dropout: 0.2
   gate_reg_weight: 0.001
   gate_reg_target: 0.3
   early_stop_patience: 15
+  epochs: 200
+  eval_every: 5
 evaluation:
+  dev_eval_limit: null
   filtered: true
   direction: both
   chunk_size: 4096

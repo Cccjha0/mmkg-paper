@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "repositories": {
+    "native": {
+      "url": "https://github.com/zjukg/NATIVE.git",
+      "commit": "c72291c3d571b36c754897935d21718aa4568fe7"
+    },
+    "adamf_mat": {
+      "url": "https://github.com/zjukg/AdaMF-MAT.git",
+      "commit": "50930e9b28aed57133bedfc281391185ac9b68a4"
+    },
+    "apkgc": {
+      "url": "https://github.com/HubuKG/APKGC.git",
+      "commit": "94748863e4c86dc43f27ccf89bcbe79b74b4ef5b"
+    },
+    "mhyper": {
+      "url": "https://github.com/zjukg/M-Hyper.git",
+      "commit": "cb390b6a54e08a6ac76d664cf2c2f6e1ff13ff76"
+    }
+  },
+  "datasets": {
+    "mkg_w": {
+      "source_repository": "native",
+      "files": {
+        "entity2id": {"bytes": 687265, "sha256": "fb45af79a8ef99b50406f8744855993950b0968306f3615a07ab8379ed0dc3b9"},
+        "relation2id": {"bytes": 6826, "sha256": "fdbe3725b027b4e6d3d136e7a3f32aa31698b499e447919dc473d71c6b9f1092"},
+        "train": {"bytes": 451029, "sha256": "162472571a7dce5eae63bd84204a700eef8383c4aaba14f235286b951772d24d"},
+        "valid": {"bytes": 57236, "sha256": "6663fda7fd976447000999c16a3e7faf1f7f12e9a59eeda060f16fdff22e2073"},
+        "test": {"bytes": 57029, "sha256": "aa1206dd573739452fb28d092afe4ce09c14dc8b78a24e1f3991c2672604d2f1"},
+        "text_h5": {"bytes": 78853653, "sha256": "9e4815cdd660e00fe85e4ad0f2a671b28f7e158b651c4d43fffe2ca07888c987"},
+        "image_h5": {"bytes": 554792032, "sha256": "20c87f77f552da78a613cd3ed56649b0c175c4e205c69b278dce686ba0a7dec1"},
+        "feature_key_map": {"bytes": 834296, "sha256": "7b4c3cf816ef31352e391ac4f634f219c74fa9db5ea4487ca576500cf726920c"}
+      }
+    },
+    "db15k": {
+      "source_repository": "native",
+      "files": {
+        "entity2id": {"bytes": 687334, "sha256": "7f316dc359c55292bc7d616f00409093db27e054d50f35bb478b660e0fcdd769"},
+        "relation2id": {"bytes": 12871, "sha256": "053c946194d79046afe6d17ceeb7f20e103900da6759830decf4ffd3c14eeb3a"},
+        "train": {"bytes": 1109531, "sha256": "5ce5372a0775e68f6b15ac42326a7cc65313883a3d9d3a3ebda1ef7ace299809"},
+        "valid": {"bytes": 137607, "sha256": "d3353283d7ff2aa36a3c0494a57f78ebff922ebedd0c1fcd9bf537ffc0ed97de"},
+        "test": {"bytes": 138595, "sha256": "b6ac229c242ea31eb9f442d8dce4054ff17fd64aecc8344f73fb04636fccc157"},
+        "text_h5": {"bytes": 84013072, "sha256": "b7519b90a55624fb78d2e946bad9fde210650e7789931bea3d9e662001ac547a"},
+        "image_h5": {"bytes": 551681896, "sha256": "6063ab03c5041d3d74099811dd417f62732b43aa53269bd7d167e0bc16734961"},
+        "same_as": {"bytes": 875463, "sha256": "329f13f5834eff712ab7fcaa214407d3f48bcaa9b6c48e5fcae632994e070141"}
+      }
+    }
+  }
+}

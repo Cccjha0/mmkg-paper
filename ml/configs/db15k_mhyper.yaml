@@ -20,14 +20,18 @@ model:
   pca_fit_scope: train_entities
   faithful_upstream_reconstruction: true
 training:
+  termination_policy: fixed_budget
   engine: one_vs_all
   sampler: none
   optimizer: adagrad
   lr: 0.1
   batch_size: 1000
   wn3_weight: 0.005
+  epochs: 200
+  eval_every: 5
   early_stop_patience: null
 evaluation:
+  dev_eval_limit: null
   filtered: true
   direction: both
   chunk_size: 4096

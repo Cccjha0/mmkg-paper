@@ -92,8 +92,12 @@ def parse_alpha_grid(text: str) -> list[float]:
 
 def load_run_pairs(score_dir: Path, split: str) -> list[dict]:
     pairs = []
-    for path in sorted(score_dir.glob(f"{split}_seed*_top100_summary.json")):
+    for path in sorted(score_dir.glob(f"{split}_seed*_summary.json")):
         payload = json.loads(path.read_text(encoding="utf-8"))
+        required = {"seed", "top_k", "gate_run_dir", "residual_run_dir"}
+        missing = sorted(required - set(payload))
+        if missing:
+            continue
         pairs.append(
             {
                 "seed": int(payload["seed"]),
@@ -102,6 +106,7 @@ def load_run_pairs(score_dir: Path, split: str) -> list[dict]:
                 "summary_path": str(path),
                 "dataset": str(payload.get("dataset", "openbg_img")),
                 "protocol_version": str(payload.get("protocol_version", OPENBG_LEGACY_V1)),
+                "top_k": int(payload["top_k"]),
             }
         )
     if not pairs:
@@ -113,11 +118,21 @@ def validate_run_pair_metadata(dev_pairs: list[dict], test_pairs: list[dict]) ->
     combined = [*dev_pairs, *test_pairs]
     datasets = {str(pair["dataset"]) for pair in combined}
     protocols = {str(pair["protocol_version"]) for pair in combined}
+    top_ks = {int(pair["top_k"]) for pair in combined}
     if len(datasets) != 1 or len(protocols) != 1:
         raise RuntimeError(
             f"Score summaries cannot mix datasets/protocols: datasets={sorted(datasets)}, "
             f"protocols={sorted(protocols)}"
         )
+    if len(top_ks) != 1:
+        raise RuntimeError(f"Score summaries cannot mix top_k values: {sorted(top_ks)}")
+    for split_name, pairs in (("dev", dev_pairs), ("test", test_pairs)):
+        seeds = [int(pair["seed"]) for pair in pairs]
+        if len(seeds) != len(set(seeds)):
+            raise RuntimeError(
+                f"Duplicate {split_name} summaries for one or more seeds. "
+                "Keep exactly one top_k artifact per seed in score-dir."
+            )
     protocol = next(iter(protocols))
     if protocol not in {OPENBG_LEGACY_V1, MMKG_GENERAL_V1}:
         raise RuntimeError(f"Unsupported score-summary protocol: {protocol!r}")

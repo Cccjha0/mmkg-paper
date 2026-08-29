@@ -4,6 +4,8 @@ from pathlib import Path
 
 import yaml
 
+from ml.training.src.utils.config import load_config
+
 
 ROOT = Path(__file__).resolve().parents[3]
 
@@ -51,4 +53,20 @@ def test_all_external_starting_configs_are_dev_only() -> None:
             "native",
             "residual_only",
         ):
-            assert _config(f"{dataset}_{model}")["evaluation"]["run_test"] is False
+            cfg = _config(f"{dataset}_{model}")
+            assert cfg["evaluation"]["run_test"] is False
+            assert cfg["evaluation"]["dev_eval_limit"] is None
+            policy = cfg["training"]["termination_policy"]
+            assert policy in {"dev_early_stop", "fixed_budget"}
+            if policy == "fixed_budget":
+                assert cfg["training"]["early_stop_patience"] is None
+            else:
+                assert int(cfg["training"]["early_stop_patience"]) > 0
+
+
+def test_general_config_cannot_inherit_openbg_dev_cap() -> None:
+    cfg = load_config(
+        str(ROOT / "ml/configs/db15k_native.yaml"),
+        str(ROOT / "ml/configs/common_seed1.yaml"),
+    )
+    assert cfg["evaluation"]["dev_eval_limit"] is None

@@ -20,7 +20,7 @@ manifest.json
 audit_report.json
 ```
 
-An all-zero feature row never determines missingness. The masks come from explicit entity-to-HDF5-key alignment. The preprocessor rejects duplicate/non-contiguous mappings, invalid triple IDs, ambiguous feature-key reuse, missing crosswalks, and inconsistent HDF5 dimensions.
+An all-zero feature row never determines missingness. The masks come from explicit entity-to-HDF5-key alignment. The preprocessor rejects duplicate/non-contiguous mappings, invalid triple IDs, ambiguous feature-key reuse, missing crosswalks, inconsistent HDF5 dimensions, and any NaN/Inf value. Every raw input is checked against `docs/EXTERNAL_SOURCES_LOCK.json` before preprocessing.
 
 ## 1. Prepare MKG-W first
 
@@ -40,10 +40,11 @@ python ml/training/scripts/preprocess_external_mmkg.py \
   --text-h5 data/datasets/MKG_W_description_sentences.h5 \
   --image-h5 data/datasets/MKG_W_img_BEIT_16-224.h5 \
   --feature-key-map data/datasets/mkg_w/raw/feature_key_map.tsv \
+  --cross-modal-space independent \
   --output-dir data/datasets/mkg_w/processed
 ```
 
-Use `--audit-only` on the preprocessing command to inspect counts, dimensions and coverage without writing `.pt` tensors. Review both `feature_key_map.tsv.report.json` and `audit_report.json` before training.
+Use `--audit-only` on the preprocessing command to inspect counts, dimensions, coverage, finite ranges and NaN/Inf counts without writing `.pt` tensors. Review both `feature_key_map.tsv.report.json` and `audit_report.json` before training. Cross-modal cosine is disabled by default; `shared` is legal only when the two feature files are explicitly documented as one aligned embedding space.
 
 ## 2. Prepare DB15K after MKG-W validation
 
@@ -60,14 +61,17 @@ python ml/training/scripts/preprocess_external_mmkg.py \
   --text-h5 data/datasets/MMKB_description_sentences.h5 \
   --image-h5 data/datasets/MMKB_img_BEIT_16-224.h5 \
   --db15k-same-as data/datasets/db15k/raw/DB15K_SameAsLink.txt \
+  --cross-modal-space independent \
   --output-dir data/datasets/db15k/processed
 ```
 
-The manifest records official split counts, mapping/split hashes, HDF5 hashes, dimensions, mean pooling and native text/image coverage.
+The manifest records the pinned source lock, official split counts, mapping/split hashes, HDF5 hashes, dimensions, numeric-health audit, mean pooling and native text/image coverage. The dataset loader revalidates canonical mapping, split and feature hashes at training time.
 
 ## 3. Server training commands
 
 Do not use the smoke configs as evidence. Run each seed with the corresponding common seed config. Examples for MKG-W:
+
+All `mmkg_general_v1` configs explicitly use the complete official validation split. `termination_policy: dev_early_stop` and `termination_policy: fixed_budget` control only when training ends; best-checkpoint selection remains DEV ONLY in both cases.
 
 ```bash
 python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --config ml/configs/mkg_w_gate_only.yaml
@@ -159,6 +163,7 @@ For score-aware combination, first export dev and test candidate scores into a d
 ```bash
 python scripts/export_candidate_scores.py --gate-run-dir <mkg_w_gate_run> \
   --residual-run-dir <mkg_w_residual_run> --split dev --direction both \
+  --top-k 100 \
   --out-csv outputs/mkg_w/candidate_router/scores/dev_seed1_top100.csv \
   --summary-json outputs/mkg_w/candidate_router/scores/dev_seed1_top100_summary.json
 
@@ -167,7 +172,7 @@ python scripts/eval_score_ensemble_baselines.py \
   --output-dir outputs/mkg_w/score_ensemble/eval
 ```
 
-For `mmkg_general_v1`, this command validates that every dev/test summary belongs to one dataset, reports deltas against that dataset's Residual-only scores, and keeps plots under the dataset-specific output directory. It never reads or overwrites the frozen OpenBG E5/CA-S2 paper artifacts.
+For `mmkg_general_v1`, this command validates that every dev/test summary belongs to one dataset and one `top_k`, reports deltas against that dataset's Residual-only scores, and keeps plots under the dataset-specific output directory. Summary discovery no longer assumes `top100`; the JSON `top_k` field is authoritative. It never reads or overwrites the frozen OpenBG E5/CA-S2 paper artifacts.
 
 ## 5. Verification commands (server)
 
@@ -187,6 +192,13 @@ The OpenBG lock has two levels. This read-only check validates the already-expor
 
 ```bash
 python ml/training/scripts/verify_openbg_legacy_regression.py
+```
+
+The release checkpoint gate also verifies immutable checkpoint sizes/SHA256 values and strict state-dict loading. Missing external checkpoints are a hard failure in that job:
+
+```bash
+REQUIRE_OPENBG_LEGACY_CHECKPOINTS=1 python -m pytest \
+  ml/training/tests/test_openbg_legacy_checkpoint_contract.py
 ```
 
 For a full checkpoint regression, re-export Gate-only, Residual-only and Full/Ours with the old configs and compare them to `ml/training/tests/fixtures/openbg_legacy_regression_v1.json`. The legacy profile keeps the original split, cache files, `has_img`, target regimes, router columns, raw-relation score-aware feature order and checkpoint keys.

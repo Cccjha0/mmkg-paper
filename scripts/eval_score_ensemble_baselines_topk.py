@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -31,6 +32,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--baseline-summary", default="outputs/router/eval/clean/baseline_locked_summary.csv")
     parser.add_argument("--candidate-main-results", default="outputs/candidate_router/eval/tables/candidate_router_main_results.csv")
+    parser.add_argument("--top-k", type=int, default=None, help="Select one exported top-k value; infer if unambiguous.")
     return parser.parse_args()
 
 
@@ -38,11 +40,22 @@ def parse_alpha_grid(text: str) -> list[float]:
     return [float(part.strip()) for part in text.split(",") if part.strip()]
 
 
-def parquet_paths(score_dir: Path, split: str) -> list[Path]:
-    paths = sorted(score_dir.glob(f"{split}_seed*_top100.parquet"))
+def parquet_paths(score_dir: Path, split: str, requested_top_k: int | None = None) -> tuple[list[Path], int]:
+    candidates = sorted(score_dir.glob(f"{split}_seed*_top*.parquet"))
+    parsed: list[tuple[Path, int]] = []
+    for path in candidates:
+        match = re.search(r"_top(\d+)\.parquet$", path.name)
+        if match:
+            parsed.append((path, int(match.group(1))))
+    if requested_top_k is not None:
+        parsed = [item for item in parsed if item[1] == requested_top_k]
+    top_ks = {top_k for _path, top_k in parsed}
+    if len(top_ks) > 1:
+        raise RuntimeError(f"Multiple top_k artifacts found for {split}: {sorted(top_ks)}; pass --top-k.")
+    paths = [path for path, _top_k in parsed]
     if not paths:
         raise FileNotFoundError(f"No {split} parquet files found in {score_dir}")
-    return paths
+    return paths, next(iter(top_ks))
 
 
 def score_frame(df: pd.DataFrame, alpha: float | np.ndarray) -> pd.DataFrame:
@@ -106,12 +119,13 @@ def load_reference_metrics(baseline_summary: Path, candidate_main: Path) -> dict
     }
 
 
-def select_policies(score_dir: Path, alphas: list[float]) -> tuple[dict, object]:
+def select_policies(score_dir: Path, alphas: list[float], requested_top_k: int | None) -> tuple[dict, object, int]:
     alpha_rr = {alpha: [] for alpha in alphas}
     direction_rr = {"head": {alpha: [] for alpha in alphas}, "tail": {alpha: [] for alpha in alphas}}
     feature_blocks = []
     label_blocks = []
-    for path in parquet_paths(score_dir, "dev"):
+    dev_paths, top_k = parquet_paths(score_dir, "dev", requested_top_k)
+    for path in dev_paths:
         print(f"[INFO] dev selection from {path}")
         df = pd.read_parquet(path)
         gate_rows = score_frame(df, 1.0).set_index("query_id")
@@ -141,7 +155,7 @@ def select_policies(score_dir: Path, alphas: list[float]) -> tuple[dict, object]
         "head_dev_mrr": best_head[1],
         "tail_alpha": best_tail[0],
         "tail_dev_mrr": best_tail[1],
-    }, model
+    }, model, top_k
 
 
 def feature_columns() -> list[str]:
@@ -160,9 +174,12 @@ def feature_columns() -> list[str]:
     ]
 
 
-def evaluate_test(score_dir: Path, selection: dict, query_model) -> dict[str, pd.DataFrame]:
+def evaluate_test(score_dir: Path, selection: dict, query_model, top_k: int) -> dict[str, pd.DataFrame]:
     outputs = {"global": [], "direction": [], "query": []}
-    for path in parquet_paths(score_dir, "test"):
+    test_paths, test_top_k = parquet_paths(score_dir, "test", top_k)
+    if test_top_k != top_k:
+        raise RuntimeError(f"DEV top_k={top_k} does not match test top_k={test_top_k}")
+    for path in test_paths:
         print(f"[INFO] test evaluation from {path}")
         df = pd.read_parquet(path)
         outputs["global"].append(score_frame(df, float(selection["global_alpha"])))
@@ -211,12 +228,12 @@ def fmt_delta(value: float) -> str:
     return f"{value:+.4f}"
 
 
-def write_latex_table(path: Path, rows: list[dict], refs: dict) -> None:
+def write_latex_table(path: Path, rows: list[dict], refs: dict, top_k: int) -> None:
     lines = [
         r"\begin{table}[t]",
         r"\centering",
         r"\small",
-        r"\caption{Simple score-ensemble sanity baselines compared with CA-S2. Ensemble baselines use exported top-100 candidate score sets, select policies on development data, and are reported as candidate-set sanity checks rather than official full-ranking replacements.}",
+        rf"\caption{{Simple score-ensemble sanity baselines compared with CA-S2. Ensemble baselines use exported top-{top_k} candidate score sets, select policies on development data, and are reported as candidate-set sanity checks rather than official full-ranking replacements.}}",
         r"\label{tab:score_ensemble_baselines}",
         r"\setlength{\tabcolsep}{4pt}",
         r"\begin{tabular}{p{0.30\textwidth}p{0.12\textwidth}p{0.13\textwidth}ccc}",
@@ -237,7 +254,7 @@ def write_latex_table(path: Path, rows: list[dict], refs: dict) -> None:
         [
             r"\bottomrule",
             r"\end{tabular}",
-            r"\vspace{0.4ex}\caption*{\footnotesize The ensemble rows are bounded sanity checks on the exported top-100 candidate sets; CA-S2 is the official full-ranking result.}",
+            rf"\vspace{{0.4ex}}\caption*{{\footnotesize The ensemble rows are bounded sanity checks on the exported top-{top_k} candidate sets; CA-S2 is the official full-ranking result.}}",
             r"\end{table}",
         ]
     )
@@ -251,37 +268,38 @@ def main() -> None:
     output_dir = Path(args.output_dir)
     refs = load_reference_metrics(Path(args.baseline_summary), Path(args.candidate_main_results))
     alphas = parse_alpha_grid(args.alphas)
-    selection, query_model = select_policies(score_dir, alphas)
-    test = evaluate_test(score_dir, selection, query_model)
+    selection, query_model, top_k = select_policies(score_dir, alphas, args.top_k)
+    test = evaluate_test(score_dir, selection, query_model, top_k)
+    top_tag = f"top{top_k}"
     rows = [
         result_row(
             "Global score interpolation",
-            "top100 global",
+            f"{top_tag} global",
             f"alpha={selection['global_alpha']:.2f}",
             metrics(test["global"]),
             refs,
-            f"top100 candidate-set sanity; dev MRR={selection['global_dev_mrr']:.4f}",
+            f"{top_tag} candidate-set sanity; dev MRR={selection['global_dev_mrr']:.4f}",
         ),
         result_row(
             "Direction-specific score interpolation",
-            "top100 direction",
+            f"{top_tag} direction",
             f"alpha_head={selection['head_alpha']:.2f}; alpha_tail={selection['tail_alpha']:.2f}",
             metrics(test["direction"]),
             refs,
-            f"top100 candidate-set sanity; dev head/tail MRR={selection['head_dev_mrr']:.4f}/{selection['tail_dev_mrr']:.4f}",
+            f"{top_tag} candidate-set sanity; dev head/tail MRR={selection['head_dev_mrr']:.4f}/{selection['tail_dev_mrr']:.4f}",
         ),
         result_row(
             "Query-level soft score weighting",
-            "top100 query",
+            f"{top_tag} query",
             "logistic p(Gate beats Residual) from score-distribution features",
             metrics(test["query"]),
             refs,
-            "top100 candidate-set sanity; query-level soft alpha trained on dev-only expert wins",
+            f"{top_tag} candidate-set sanity; query-level soft alpha trained on dev-only expert wins",
         ),
     ]
     write_csv_rows(output_dir / "score_ensemble_baselines.csv", rows)
     (output_dir / "score_ensemble_baselines.json").write_text(
-        json.dumps({"basis": "top100_candidate_set", "selection": selection, "reference_metrics": refs, "rows": rows}, indent=2)
+        json.dumps({"basis": f"{top_tag}_candidate_set", "top_k": top_k, "selection": selection, "reference_metrics": refs, "rows": rows}, indent=2)
         + "\n",
         encoding="utf-8",
     )
@@ -289,7 +307,7 @@ def main() -> None:
     for col in ["mrr", "hits1", "hits3", "hits10", "delta_vs_residual", "delta_vs_e5", "delta_vs_ca_s2"]:
         md_frame[col] = md_frame[col].map(lambda value: f"{float(value):.4f}")
     (output_dir / "score_ensemble_baselines.md").write_text(markdown_table(md_frame) + "\n", encoding="utf-8")
-    write_latex_table(Path(args.paper_table_dir) / "table_score_ensemble_baselines.tex", rows, refs)
+    write_latex_table(Path(args.paper_table_dir) / "table_score_ensemble_baselines.tex", rows, refs, top_k)
     print(f"[OK] wrote {output_dir / 'score_ensemble_baselines.csv'}")
     print(f"[OK] wrote {output_dir / 'score_ensemble_baselines.json'}")
     print(f"[OK] wrote {output_dir / 'score_ensemble_baselines.md'}")

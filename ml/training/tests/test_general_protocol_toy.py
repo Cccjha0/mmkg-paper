@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import torch
+import pytest
 
 from ml.training.src.data.build_true_facts import build_true_facts
 from ml.training.src.data.dataset_spec import MMKG_GENERAL_V1
@@ -70,3 +71,43 @@ def test_general_mhyper_masks_both_projected_and_independent_missing_modalities(
     assert structure.shape == (4, 2)
     assert torch.count_nonzero(image[~has_img]).item() == 0
     assert torch.count_nonzero(text[~has_text]).item() == 0
+
+
+def test_general_subgroup_both_is_query_weighted_without_changing_overall_both() -> None:
+    has_text = torch.tensor([True, True, True])
+    has_img = torch.tensor([True, False, False])
+    model = OpenBGImgGateResidualLP(
+        text_feat=torch.randn(3, 3),
+        img_feat=torch.randn(3, 5),
+        has_text=has_text,
+        has_img=has_img,
+        protocol_version=MMKG_GENERAL_V1,
+        num_relations=1,
+        d=4,
+    )
+    triples = torch.tensor([(0, 0, 1), (0, 0, 2), (1, 0, 0)], dtype=torch.long)
+    true_tails, true_heads = build_true_facts([tuple(row) for row in triples.tolist()])
+    metrics = filtered_ranking_eval(
+        model=model,
+        triples=triples,
+        true_tails=true_tails,
+        true_heads=true_heads,
+        num_entities=3,
+        chunk_size=2,
+        query_batch_size=2,
+        device="cpu",
+        direction="both",
+        entity_has_text=has_text,
+        entity_has_img=has_img,
+    )
+    assert metrics["tail_T1V1_count"] == 1
+    assert metrics["head_T1V1_count"] == 2
+    expected_pooled = (
+        metrics["tail_T1V1_count"] * metrics["tail_T1V1_mrr"]
+        + metrics["head_T1V1_count"] * metrics["head_T1V1_mrr"]
+    ) / metrics["T1V1_count"]
+    assert metrics["T1V1_mrr"] == pytest.approx(expected_pooled)
+    assert metrics["direction_balanced_T1V1_mrr"] == pytest.approx(
+        0.5 * (metrics["tail_T1V1_mrr"] + metrics["head_T1V1_mrr"])
+    )
+    assert metrics["mrr"] == pytest.approx(0.5 * (metrics["tail_mrr"] + metrics["head_mrr"]))

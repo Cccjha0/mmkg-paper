@@ -208,7 +208,13 @@ def build_feature_matrix(
             value = np.full((bq, c), 1.0 if direction == "tail" else 0.0, dtype=np.float32)
         elif name == "relation_id":
             value = np.broadcast_to(relation_ids.reshape(bq, 1), (bq, c)).astype(np.float32)
-        elif name in {"relation_gain_prior", "relation_fusion_win_rate", "relation_support", "relation_is_visual_prior"}:
+        elif name in {
+            "relation_gain_prior",
+            "relation_fusion_win_rate",
+            "relation_support",
+            "relation_is_visual_prior",
+            "relation_is_fusion_prior",
+        }:
             value = np.array([prior[name] for prior in prior_values], dtype=np.float32)
             value = np.broadcast_to(value.reshape(bq, 1), (bq, c)).astype(np.float32)
         elif name == "observed_has_img":

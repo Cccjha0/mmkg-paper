@@ -86,6 +86,11 @@ def compute_relation_gain_stats(
         struct_win_rate = bucket["struct_win"] / n if n else 0.0
         head_has_img_ratio = bucket["regime_counter"]["head_has_img"] / n if n else 0.0
         tail_no_img_ratio = bucket["regime_counter"]["tail_no_img"] / n if n else 0.0
+        general_regime_ratios = {
+            f"{direction}_{tag}_ratio": bucket["regime_counter"][f"{direction}_{tag}"] / n if n else 0.0
+            for direction in ("head", "tail")
+            for tag in ("T0V0", "T0V1", "T1V0", "T1V1")
+        }
         rows.append(
             {
                 "relation_id": relation_id,
@@ -101,6 +106,8 @@ def compute_relation_gain_stats(
                 "head_has_img_ratio": head_has_img_ratio,
                 "tail_no_img_ratio": tail_no_img_ratio,
                 "is_visual_prior": mark_visual_prior(mean_delta_rr, gamma),
+                "is_fusion_prior": mark_visual_prior(mean_delta_rr, gamma),
+                **general_regime_ratios,
             }
         )
     return rows

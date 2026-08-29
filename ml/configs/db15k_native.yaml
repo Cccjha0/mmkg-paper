@@ -17,6 +17,7 @@ model:
   margin: 12.0
   epsilon: 2.0
 training:
+  termination_policy: dev_early_stop
   engine: adversarial_gp
   sampler: bernoulli_filtered
   batch_size: 1024
@@ -29,7 +30,10 @@ training:
   generator_noise_dim: 64
   generator_hidden_dim: 512
   epochs: 1000
+  eval_every: 5
+  early_stop_patience: 10
 evaluation:
+  dev_eval_limit: null
   filtered: true
   direction: both
   chunk_size: 4096

@@ -2,8 +2,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import numpy as np
+import pytest
+
 from ml.training.scripts.preprocess_external_mmkg import (
     build_alignment,
+    inspect_hdf5,
     read_openke_mapping,
     read_openke_triples,
 )
@@ -38,3 +42,16 @@ def test_explicit_feature_alignment_can_share_a_key() -> None:
     )
     assert aligned == [["shared"], ["shared"]]
     assert missing == []
+
+
+def test_hdf5_numeric_audit_reports_nonfinite_values(tmp_path: Path) -> None:
+    h5py = pytest.importorskip("h5py")
+    path = tmp_path / "features.h5"
+    with h5py.File(path, "w") as handle:
+        handle.create_dataset("healthy", data=np.asarray([[1.0, 2.0]], dtype=np.float32))
+        handle.create_dataset("broken", data=np.asarray([[np.nan, np.inf]], dtype=np.float32))
+    _keys, dimension, _dimensions, health = inspect_hdf5(path)
+    assert dimension == 2
+    assert health["all_finite"] is False
+    assert health["nonfinite_values"] == 2
+    assert "broken" in health["nonfinite_key_examples"]
