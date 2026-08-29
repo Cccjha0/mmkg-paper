@@ -4,6 +4,7 @@ import torch.nn.functional as F
 
 from ml.training.src.models.decoders.complex import ComplEx
 from ml.training.src.models.fusion.gated import RelAwareGatedFusion
+from ml.training.src.data.dataset_spec import MMKG_GENERAL_V1, OPENBG_LEGACY_V1
 
 
 class BaseOpenBGImgLP(nn.Module):
@@ -17,6 +18,8 @@ class BaseOpenBGImgLP(nn.Module):
         neg_ratio: int = 10,
         adv_temperature: float = 1.0,
         img_dropout: float = 0.0,
+        has_text: torch.Tensor | None = None,
+        protocol_version: str = OPENBG_LEGACY_V1,
     ):
         super().__init__()
         self.d = int(d)
@@ -24,6 +27,7 @@ class BaseOpenBGImgLP(nn.Module):
         self.neg_ratio = int(neg_ratio)
         self.adv_temperature = float(adv_temperature)
         self.img_dropout = float(img_dropout)
+        self.protocol_version = str(protocol_version)
 
         text_in_dim = int(text_feat.shape[1])
         img_in_dim = int(img_feat.shape[1])
@@ -31,6 +35,19 @@ class BaseOpenBGImgLP(nn.Module):
         self.register_buffer("text_feat", text_feat)
         self.register_buffer("img_feat", img_feat)
         self.register_buffer("has_img", has_img)
+
+        # Keep the legacy state_dict byte-for-byte compatible: the text mask
+        # and missing-text parameter exist only under the general protocol.
+        if self.protocol_version == MMKG_GENERAL_V1:
+            if has_text is None or int(has_text.numel()) != int(text_feat.shape[0]):
+                raise ValueError("mmkg_general_v1 requires one has_text indicator per entity.")
+            self.register_buffer("has_text", has_text.detach().bool().clone())
+            self.t_missing = nn.Parameter(torch.zeros(d))
+            nn.init.normal_(self.t_missing, mean=0.0, std=0.02)
+        elif self.protocol_version == OPENBG_LEGACY_V1:
+            self.has_text = None
+        else:
+            raise ValueError(f"Unsupported protocol version: {self.protocol_version!r}")
 
         self.text_proj = nn.Identity() if text_in_dim == d else nn.Linear(text_in_dim, d)
         self.img_proj = nn.Identity() if img_in_dim == d else nn.Linear(img_in_dim, d)
@@ -41,7 +58,11 @@ class BaseOpenBGImgLP(nn.Module):
         self.decoder = ComplEx(num_relations=num_relations, d=d)
 
     def _entity_text(self, eids: torch.Tensor) -> torch.Tensor:
-        return self.text_proj(self.text_feat[eids])
+        text = self.text_proj(self.text_feat[eids])
+        if self.protocol_version == MMKG_GENERAL_V1:
+            mask = self.has_text[eids].unsqueeze(-1)
+            text = torch.where(mask, text, self.t_missing.unsqueeze(0).expand_as(text))
+        return text
 
     def _entity_image(self, eids: torch.Tensor) -> torch.Tensor:
         v = self.img_proj(self.img_feat[eids])
@@ -109,6 +130,8 @@ class OpenBGImgGateOnlyLP(BaseOpenBGImgLP):
         img_dropout: float = 0.0,
         gate_reg_weight: float = 1e-3,
         gate_reg_target: float = 0.5,
+        has_text: torch.Tensor | None = None,
+        protocol_version: str = OPENBG_LEGACY_V1,
     ):
         super().__init__(
             text_feat=text_feat,
@@ -119,6 +142,8 @@ class OpenBGImgGateOnlyLP(BaseOpenBGImgLP):
             neg_ratio=neg_ratio,
             adv_temperature=adv_temperature,
             img_dropout=img_dropout,
+            has_text=has_text,
+            protocol_version=protocol_version,
         )
         self.use_fusion = True
         self.use_residual = False
@@ -159,6 +184,8 @@ class OpenBGImgTextOnlyLP(BaseOpenBGImgLP):
         neg_ratio: int = 10,
         adv_temperature: float = 1.0,
         img_dropout: float = 0.0,
+        has_text: torch.Tensor | None = None,
+        protocol_version: str = OPENBG_LEGACY_V1,
     ):
         super().__init__(
             text_feat=text_feat,
@@ -169,6 +196,8 @@ class OpenBGImgTextOnlyLP(BaseOpenBGImgLP):
             neg_ratio=neg_ratio,
             adv_temperature=adv_temperature,
             img_dropout=img_dropout,
+            has_text=has_text,
+            protocol_version=protocol_version,
         )
         self.use_fusion = False
         self.use_residual = False
@@ -197,6 +226,8 @@ class OpenBGImgResidualOnlyLP(BaseOpenBGImgLP):
         residual_scale_init: float = -2.0,
         residual_l2_weight: float = 1e-6,
         residual_scale_l2_weight: float = 1e-4,
+        has_text: torch.Tensor | None = None,
+        protocol_version: str = OPENBG_LEGACY_V1,
     ):
         super().__init__(
             text_feat=text_feat,
@@ -207,6 +238,8 @@ class OpenBGImgResidualOnlyLP(BaseOpenBGImgLP):
             neg_ratio=neg_ratio,
             adv_temperature=adv_temperature,
             img_dropout=img_dropout,
+            has_text=has_text,
+            protocol_version=protocol_version,
         )
         self.use_fusion = False
         self.use_residual = True
@@ -249,6 +282,8 @@ class OpenBGImgGateResidualLP(OpenBGImgGateOnlyLP):
         residual_scale_init: float = -2.0,
         residual_l2_weight: float = 1e-6,
         residual_scale_l2_weight: float = 1e-4,
+        has_text: torch.Tensor | None = None,
+        protocol_version: str = OPENBG_LEGACY_V1,
     ):
         super().__init__(
             text_feat=text_feat,
@@ -262,6 +297,8 @@ class OpenBGImgGateResidualLP(OpenBGImgGateOnlyLP):
             img_dropout=img_dropout,
             gate_reg_weight=gate_reg_weight,
             gate_reg_target=gate_reg_target,
+            has_text=has_text,
+            protocol_version=protocol_version,
         )
         self.use_residual = True
         self.enable_residual = True
@@ -327,6 +364,11 @@ class OpenBGImgGatedLP(OpenBGImgGateResidualLP):
         use_normalized_mix: bool = False,
         gate_reg_weight: float = 1e-3,
         gate_reg_target: float = 0.5,
+        residual_scale_init: float = -2.0,
+        residual_l2_weight: float = 1e-6,
+        residual_scale_l2_weight: float = 1e-4,
+        has_text: torch.Tensor | None = None,
+        protocol_version: str = OPENBG_LEGACY_V1,
     ):
         if use_fusion and use_residual:
             return OpenBGImgGateResidualLP(
@@ -342,6 +384,11 @@ class OpenBGImgGatedLP(OpenBGImgGateResidualLP):
                 use_normalized_mix=use_normalized_mix,
                 gate_reg_weight=gate_reg_weight,
                 gate_reg_target=gate_reg_target,
+                residual_scale_init=residual_scale_init,
+                residual_l2_weight=residual_l2_weight,
+                residual_scale_l2_weight=residual_scale_l2_weight,
+                has_text=has_text,
+                protocol_version=protocol_version,
             )
         if use_fusion and not use_residual:
             return OpenBGImgGateOnlyLP(
@@ -356,6 +403,8 @@ class OpenBGImgGatedLP(OpenBGImgGateResidualLP):
                 img_dropout=img_dropout,
                 gate_reg_weight=gate_reg_weight,
                 gate_reg_target=gate_reg_target,
+                has_text=has_text,
+                protocol_version=protocol_version,
             )
         if (not use_fusion) and use_residual:
             return OpenBGImgResidualOnlyLP(
@@ -367,5 +416,10 @@ class OpenBGImgGatedLP(OpenBGImgGateResidualLP):
                 neg_ratio=neg_ratio,
                 adv_temperature=adv_temperature,
                 img_dropout=img_dropout,
+                residual_scale_init=residual_scale_init,
+                residual_l2_weight=residual_l2_weight,
+                residual_scale_l2_weight=residual_scale_l2_weight,
+                has_text=has_text,
+                protocol_version=protocol_version,
             )
         raise ValueError("At least one of use_fusion/use_residual must be True.")

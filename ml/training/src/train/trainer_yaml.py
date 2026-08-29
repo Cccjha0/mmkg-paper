@@ -32,6 +32,17 @@ class TrainerYAML:
         self.true_heads_index = prepare_true_heads_index(true_heads)
         self.cfg = cfg
         self.entity_has_img = getattr(model, "has_img", None)
+        self.entity_has_text = getattr(model, "has_text", None)
+        processed_dir = cfg.get("dataset", {}).get("processed_dir")
+        if processed_dir:
+            if self.entity_has_img is None:
+                general_img_mask = os.path.join(processed_dir, "has_img.pt")
+                if os.path.exists(general_img_mask):
+                    self.entity_has_img = torch.load(general_img_mask, map_location="cpu")
+            if self.entity_has_text is None:
+                general_text_mask = os.path.join(processed_dir, "has_text.pt")
+                if os.path.exists(general_text_mask):
+                    self.entity_has_text = torch.load(general_text_mask, map_location="cpu")
         if self.entity_has_img is None:
             cache_dir = cfg.get("dataset", {}).get("cache_dir")
             has_img_path = os.path.join(cache_dir, "has_img.pt") if cache_dir else None
@@ -138,6 +149,7 @@ class TrainerYAML:
             ks=(1, 3, 10),
             direction=self.eval_direction,
             entity_has_img=self.entity_has_img,
+            entity_has_text=self.entity_has_text,
         )
         self._eval_cuda_synchronize()
         elapsed = time.perf_counter() - started_at

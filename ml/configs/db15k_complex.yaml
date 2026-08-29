@@ -1,0 +1,23 @@
+# Structural shared-protocol anchor.
+dataset:
+  name: db15k
+  loader: openke_mmkg
+  processed_dir: data/datasets/db15k/processed
+protocol:
+  version: mmkg_general_v1
+  split: official
+  modality_policy: native_text_visual_availability
+  evaluation: filtered_bidirectional
+model:
+  name: mmkg_complex
+  num_relations: 279
+training:
+  lr: 0.001
+evaluation:
+  filtered: true
+  direction: both
+  chunk_size: 4096
+  query_batch_size: 32
+  run_test: false
+output:
+  exp_name: db15k_complex

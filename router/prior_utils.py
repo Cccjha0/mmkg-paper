@@ -20,6 +20,8 @@ def compute_relation_gain_stats(
 ) -> list[dict]:
     gate_by_id = {row["query_id"]: row for row in gate_rows}
     residual_by_id = {row["query_id"]: row for row in residual_rows}
+    if len(gate_by_id) != len(gate_rows) or len(residual_by_id) != len(residual_rows):
+        raise RuntimeError("Duplicate query_id detected in gate or residual query rows.")
 
     gate_ids = set(gate_by_id)
     residual_ids = set(residual_by_id)
@@ -46,6 +48,12 @@ def compute_relation_gain_stats(
     for query_id in sorted(gate_ids):
         gate = gate_by_id[query_id]
         residual = residual_by_id[query_id]
+        for field in ("relation_id", "target_regime"):
+            if str(gate[field]) != str(residual[field]):
+                raise RuntimeError(
+                    f"Expert mismatch for query_id={query_id}: "
+                    f"{field} gate={gate[field]!r}, residual={residual[field]!r}."
+                )
         relation_id = int(gate["relation_id"])
         rr_gate = float(gate["rr"])
         rr_residual = float(residual["rr"])

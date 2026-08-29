@@ -9,7 +9,8 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from ml.training.src.data.build_true_facts import build_true_facts
-from ml.training.src.data.tsv_reader import read_allow_2or3
+from ml.training.src.data.dataset_loader import load_dataset_bundle
+from ml.training.src.data.dataset_spec import MMKG_GENERAL_V1, OPENBG_LEGACY_V1
 from ml.training.src.eval.filtered_ranking import prepare_true_heads_index, prepare_true_tails_index
 from ml.training.src.models.build_model import build_model
 from ml.training.src.utils.config import load_config
@@ -63,6 +64,9 @@ def infer_expert_name(cfg: dict, requested: str) -> str:
         "openbg_img_gate_only": "gate_only",
         "openbg_img_residual_only": "residual_only",
         "openbg_img_gated_vec_res_rel": "full_model",
+        "mmkg_gate_only": "gate_only",
+        "mmkg_residual_only": "residual_only",
+        "mmkg_gate_residual": "full_model",
     }
     return mapping.get(model_name, requested.lower())
 
@@ -88,7 +92,9 @@ def load_cfg_and_ckpt(args: argparse.Namespace) -> tuple[dict, Path]:
     return cfg, ckpt_path
 
 
-def relation_name(rel_id: int) -> str:
+def relation_name(rel_id: int, id2relation: dict[int, str] | None = None) -> str:
+    if id2relation is not None:
+        return id2relation[rel_id]
     return f"rel_{rel_id:04d}"
 
 
@@ -97,19 +103,14 @@ def make_query_id(split: str, seed: int, direction: str, relation_id: int, head_
 
 
 def target_regime(direction: str, target_has_img: bool) -> str:
+    """Frozen OpenBG legacy target-regime definition."""
     if direction == "head":
         return "head_has_img" if target_has_img else "head_no_img"
     return "tail_no_img"
 
 
-def build_filtered_facts(cfg: dict) -> tuple[list[tuple[int, int, int]], dict, dict]:
-    train3, _, bad_train = read_allow_2or3(cfg["dataset"]["train"])
-    dev3, _, bad_dev = read_allow_2or3(cfg["dataset"]["dev"])
-    test3, _, bad_test = read_allow_2or3(cfg["dataset"]["test"])
-    if bad_train or bad_dev or bad_test:
-        print(f"[WARN] malformed lines skipped: train={bad_train}, dev={bad_dev}, test={bad_test}")
-    true_tails, true_heads = build_true_facts(train3 + dev3 + test3)
-    return {"dev": dev3, "test": test3}[args.split], prepare_true_tails_index(true_tails), prepare_true_heads_index(true_heads)
+def general_target_regime(direction: str, target_has_text: bool, target_has_img: bool) -> str:
+    return f"{direction}_T{int(target_has_text)}V{int(target_has_img)}"
 
 
 def filtered_direction_details(
@@ -233,20 +234,19 @@ def filtered_direction_details(
 
 @torch.inference_mode()
 def export_query_eval(cfg: dict, ckpt_path: Path, expert_name: str, split: str, out_path: str, seed: int, device: str, chunk_size: int, query_batch_size: int, summary_json: str | None) -> None:
-    triples3, _, bad = read_allow_2or3(cfg["dataset"][split])
-    if bad:
-        print(f"[WARN] malformed {split} lines skipped: {bad}")
+    dataset_bundle = load_dataset_bundle(cfg)
+    triples3 = dataset_bundle.valid_triples if split == "dev" else dataset_bundle.test_triples
     if not triples3:
         raise RuntimeError(f"No labeled 3-column triples found for split={split}")
 
-    train3, _, _ = read_allow_2or3(cfg["dataset"]["train"])
-    dev3, _, _ = read_allow_2or3(cfg["dataset"]["dev"])
-    test3, _, _ = read_allow_2or3(cfg["dataset"]["test"])
+    train3 = dataset_bundle.train_triples
+    dev3 = dataset_bundle.valid_triples
+    test3 = dataset_bundle.test_triples
     true_tails, true_heads = build_true_facts(train3 + dev3 + test3)
     true_tails_idx = prepare_true_tails_index(true_tails)
     true_heads_idx = prepare_true_heads_index(true_heads)
 
-    model, num_entities = build_model(cfg)
+    model, num_entities = build_model(cfg, dataset_bundle=dataset_bundle)
     state = torch.load(ckpt_path, map_location=device)
     model.load_state_dict(state)
     model = model.to(device)
@@ -276,17 +276,25 @@ def export_query_eval(cfg: dict, ckpt_path: Path, expert_name: str, split: str, 
 
     has_img = getattr(model, "has_img", None)
     if has_img is None:
-        raise RuntimeError("Model does not expose has_img; query export expects OpenBG-IMG models.")
+        raise RuntimeError("Model does not expose the canonical has_img mask.")
     has_img_cpu = has_img.detach().cpu()
+    protocol_version = dataset_bundle.protocol_version
+    has_text_cpu = dataset_bundle.features.has_text.detach().cpu()
+    id2relation = {relation_id: token for token, relation_id in dataset_bundle.relation2id.items()}
 
-    records: list[QueryEvalRecord] = []
+    rows: list[dict] = []
     for raw in tail_rows + head_rows:
         target_has_img = bool(has_img_cpu[raw["target_entity_id"]].item())
+        target_has_text = bool(has_text_cpu[raw["target_entity_id"]].item())
         rank = raw["rank"]
         top1 = raw["top1_score"]
         top2 = raw["top2_score"]
-        records.append(
-            QueryEvalRecord(
+        regime = (
+            target_regime(raw["direction"], target_has_img)
+            if protocol_version == OPENBG_LEGACY_V1
+            else general_target_regime(raw["direction"], target_has_text, target_has_img)
+        )
+        row = QueryEvalRecord(
                 query_id=make_query_id(
                     split=split,
                     seed=seed,
@@ -299,13 +307,13 @@ def export_query_eval(cfg: dict, ckpt_path: Path, expert_name: str, split: str, 
                 split=split,
                 direction=raw["direction"],
                 relation_id=raw["relation_id"],
-                relation_name=relation_name(raw["relation_id"]),
+                relation_name=relation_name(raw["relation_id"], id2relation),
                 head_id=raw["head_id"],
                 tail_id=raw["tail_id"],
                 target_entity_id=raw["target_entity_id"],
                 target_position=raw["direction"],
                 target_has_img=int(target_has_img),
-                target_regime=target_regime(raw["direction"], target_has_img),
+                target_regime=regime,
                 expert_name=expert_name,
                 rank=rank,
                 rr=float(1.0 / rank),
@@ -317,17 +325,29 @@ def export_query_eval(cfg: dict, ckpt_path: Path, expert_name: str, split: str, 
                 score_margin=float(top1 - top2),
                 correct_score=raw["correct_score"],
                 seed=seed,
-            )
-        )
+            ).to_dict()
+        if protocol_version == MMKG_GENERAL_V1:
+            row["dataset"] = dataset_bundle.name
+            row["protocol_version"] = protocol_version
+            row["target_has_text"] = int(target_has_text)
+            row["target_modality_count"] = int(target_has_text) + int(target_has_img)
+        rows.append(row)
 
-    rows = [record.to_dict() for record in records]
     rows.sort(key=lambda item: (item["direction"], item["relation_id"], item["head_id"], item["tail_id"], item["target_entity_id"]))
-    write_csv(out_path, rows, QUERY_EVAL_HEADER)
+    header = list(QUERY_EVAL_HEADER)
+    if protocol_version == MMKG_GENERAL_V1:
+        header = ["dataset", "protocol_version", *header]
+        target_img_index = header.index("target_has_img")
+        header.insert(target_img_index, "target_has_text")
+        header.insert(target_img_index + 2, "target_modality_count")
+    write_csv(out_path, rows, header)
 
     summary = {
         "expert_name": expert_name,
         "split": split,
         "seed": seed,
+        "dataset": dataset_bundle.name,
+        "protocol_version": protocol_version,
         "n_rows": len(rows),
         "direction_counts": {
             "head": sum(1 for row in rows if row["direction"] == "head"),

@@ -34,7 +34,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--out-dir", default=None, help="Contract mode output directory; defaults to outputs/router/models/<mode>/<model>_delta_<d>_<feature_set>")
 
     parser.add_argument("--router-mode", default=ROUTER_MODE_POSTHOC, choices=[ROUTER_MODE_CLEAN, ROUTER_MODE_POSTHOC])
-    parser.add_argument("--feature-set", default="PH_FULL", help="clean: C1-C4; posthoc: PH1-PH4/PH_FULL")
+    parser.add_argument("--feature-set", default="PH_FULL", help="clean: legacy C1-C4 or general G1-G3; posthoc: PH1-PH4/PH_FULL")
     parser.add_argument("--random-state", type=int, default=42)
     parser.add_argument("--threshold", type=float, default=0.5, help="classification threshold for train metrics")
 

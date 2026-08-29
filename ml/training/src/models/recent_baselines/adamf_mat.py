@@ -25,6 +25,7 @@ class OpenBGAdaMFMAT(DirectionalScoringMixin, nn.Module):
         text_feat: torch.Tensor,
         img_feat: torch.Tensor,
         has_img: torch.Tensor,
+        has_text: torch.Tensor | None = None,
         num_entities: int,
         num_relations: int,
         d: int = 128,
@@ -50,6 +51,12 @@ class OpenBGAdaMFMAT(DirectionalScoringMixin, nn.Module):
         self.register_buffer("text_feat", text_feat.detach().clone().float())
         self.register_buffer("img_feat", img_feat.detach().clone().float())
         self.register_buffer("has_img", has_img.detach().clone().to(dtype=torch.bool))
+        if has_text is not None:
+            if has_text.numel() != num_entities:
+                raise ValueError("has_text length must equal num_entities.")
+            self.register_buffer("has_text", has_text.detach().clone().bool())
+        else:
+            self.has_text = None
 
         self.ent_embeddings = nn.Embedding(num_entities, self.dim_e)
         self.rel_embeddings = nn.Embedding(num_relations, self.dim_r)
@@ -92,11 +99,12 @@ class OpenBGAdaMFMAT(DirectionalScoringMixin, nn.Module):
         self,
         entity_ids: torch.LongTensor,
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-        return (
-            self.ent_embeddings(entity_ids),
-            self.img_proj(self.img_feat[entity_ids]),
-            self.text_proj(self.text_feat[entity_ids]),
-        )
+        visual = self.img_proj(self.img_feat[entity_ids])
+        text = self.text_proj(self.text_feat[entity_ids])
+        if self.has_text is not None:
+            visual = visual * self.has_img[entity_ids].unsqueeze(-1)
+            text = text * self.has_text[entity_ids].unsqueeze(-1)
+        return self.ent_embeddings(entity_ids), visual, text
 
     def score_from_embeddings(
         self,

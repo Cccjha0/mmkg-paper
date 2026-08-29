@@ -123,7 +123,7 @@ class APKGCAttentionLayer(nn.Module):
 class OpenBGAPKGC(DirectionalScoringMixin, nn.Module):
     """APKGC on the fixed OpenBG-IMG raw feature caches.
 
-    The model follows the upstream default Mformer mean-fusion path.  Missing
+    The model follows the upstream Mformer mean/graph fusion paths.  Missing
     images are sampled once from the valid-image Gaussian, as in APKGC, while
     ``img_feat`` itself remains the unchanged, shared raw cache.
     """
@@ -134,6 +134,7 @@ class OpenBGAPKGC(DirectionalScoringMixin, nn.Module):
         text_feat: torch.Tensor,
         img_feat: torch.Tensor,
         has_img: torch.Tensor,
+        has_text: torch.Tensor | None = None,
         num_entities: int,
         num_relations: int,
         d: int = 128,
@@ -163,8 +164,8 @@ class OpenBGAPKGC(DirectionalScoringMixin, nn.Module):
             raise ValueError("num_proj must be 1 or 2.")
         if noise_update not in {"epoch", "step"}:
             raise ValueError("noise_update must be 'epoch' or 'step'.")
-        if "Mformer" not in joint_way or "mean" not in joint_way:
-            raise ValueError("M1.2 supports APKGC's Mformer mean-fusion path only.")
+        if "Mformer" not in joint_way or not any(mode in joint_way for mode in ("mean", "graph")):
+            raise ValueError("APKGC supports the official Mformer mean and graph fusion paths.")
 
         self.d = d
         self.dim_e = 2 * d
@@ -176,19 +177,36 @@ class OpenBGAPKGC(DirectionalScoringMixin, nn.Module):
         self.register_buffer("text_feat", text_feat.detach().clone().float())
         self.register_buffer("img_feat", img_feat.detach().clone().float())
         self.register_buffer("has_img", has_img.detach().clone().to(dtype=torch.bool))
+        if has_text is not None:
+            if has_text.numel() != num_entities:
+                raise ValueError("has_text length must equal num_entities.")
+            self.register_buffer("has_text", has_text.detach().clone().bool())
+        else:
+            self.has_text = None
         valid_img = self.img_feat[self.has_img]
         if valid_img.numel() == 0:
             raise ValueError("APKGC requires at least one entity with an image feature.")
         self.register_buffer("img_mean", valid_img.mean(dim=0))
         self.register_buffer("img_std", valid_img.std(dim=0))
-        self.register_buffer("text_mean", self.text_feat.mean(dim=0))
-        self.register_buffer("text_std", self.text_feat.std(dim=0))
+        text_stats_source = self.text_feat[self.has_text] if self.has_text is not None else self.text_feat
+        if text_stats_source.numel() == 0:
+            raise ValueError("APKGC requires at least one entity with a text feature.")
+        self.register_buffer("text_mean", text_stats_source.mean(dim=0))
+        self.register_buffer("text_std", text_stats_source.std(dim=0))
 
         img_filled = self.img_feat.clone()
         missing = ~self.has_img
         if bool(missing.any()):
             img_filled[missing] = self.img_mean + self.img_std * torch.randn_like(img_filled[missing])
         self.register_buffer("img_filled", img_filled)
+        if self.has_text is not None:
+            text_filled = self.text_feat.clone()
+            text_missing = ~self.has_text
+            if bool(text_missing.any()):
+                text_filled[text_missing] = self.text_mean + self.text_std * torch.randn_like(text_filled[text_missing])
+            self.register_buffer("text_filled", text_filled)
+        else:
+            self.text_filled = self.text_feat
 
         self.ent_embeddings = nn.Embedding(num_entities, self.dim_e)
         self.rel_embeddings = nn.Embedding(num_relations, d)
@@ -247,7 +265,7 @@ class OpenBGAPKGC(DirectionalScoringMixin, nn.Module):
         to backpropagate through the first batch's freed graph.
         """
         self._epoch_img_noise = self._add_noise_to_embeddings(self.img_filled, self.img_mean, self.img_std)
-        self._epoch_text_noise = self._add_noise_to_embeddings(self.text_feat, self.text_mean, self.text_std)
+        self._epoch_text_noise = self._add_noise_to_embeddings(self.text_filled, self.text_mean, self.text_std)
         entity_weights = self.ent_embeddings.weight
         entity_mean = entity_weights.detach().mean(dim=0)
         entity_std = entity_weights.detach().std(dim=0)
@@ -261,7 +279,7 @@ class OpenBGAPKGC(DirectionalScoringMixin, nn.Module):
     def _entity_modalities(self, entity_ids: torch.LongTensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         structural = self.ent_embeddings(entity_ids)
         image = self.img_filled[entity_ids]
-        text = self.text_feat[entity_ids]
+        text = self.text_filled[entity_ids]
         if not (self.training and self.add_noise):
             return structural, image, text
 
@@ -301,6 +319,8 @@ class OpenBGAPKGC(DirectionalScoringMixin, nn.Module):
         hidden_states = torch.tanh(torch.stack((structural, image, text), dim=1))
         for layer in self.fusion_layer:
             hidden_states, _ = layer(hidden_states)
+        if "graph" in self.joint_way:
+            return hidden_states[:, 0, :]
         return hidden_states.mean(dim=1)
 
     def score(self, triples: torch.LongTensor) -> torch.Tensor:

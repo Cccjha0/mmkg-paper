@@ -9,7 +9,7 @@ if __package__ in (None, ""):
 
 from ml.training.src.utils.config import load_config
 from ml.training.src.utils.seed import set_seed
-from ml.training.src.data.tsv_reader import read_allow_2or3
+from ml.training.src.data.dataset_loader import load_dataset_bundle
 from ml.training.src.data.build_true_facts import build_true_facts
 from ml.training.src.models.build_model import build_model
 from ml.training.src.train.trainer_yaml import TrainerYAML
@@ -120,37 +120,39 @@ def main():
     device = resolve_device(cfg["system"].get("device", "cuda"))
     cfg["system"]["device"] = device
 
-    # load triples
-    train_path = cfg["dataset"]["train"]
-    dev_path = cfg["dataset"]["dev"]
-    test_path = cfg["dataset"]["test"]
-
-    train3, _, bad_train = read_allow_2or3(train_path)
-    dev3, _, bad_dev = read_allow_2or3(dev_path)
-    test3, test2, bad_test = read_allow_2or3(test_path)
-
-    if bad_train or bad_dev or bad_test:
-        print(f"[WARN] malformed lines skipped: train={bad_train}, dev={bad_dev}, test={bad_test}")
+    # The loader owns format-specific parsing and feature/entity alignment.
+    dataset_bundle = load_dataset_bundle(cfg)
+    # Persist the exact processed-data audit metadata beside every run via the
+    # existing merged-config snapshot written by TrainerYAML.
+    cfg["_dataset_manifest"] = dataset_bundle.manifest
+    train3 = dataset_bundle.train_triples
+    dev3 = dataset_bundle.valid_triples
+    test3 = dataset_bundle.test_triples
 
     if len(train3) == 0 or len(dev3) == 0:
         raise RuntimeError("Train/Dev must contain 3-column triples for training/evaluation.")
 
     has_labeled_test = len(test3) > 0
-    has_query_only_test = len(test2) > 0 and len(test3) == 0
+    has_query_only_test = bool(dataset_bundle.manifest.get("query_only_test", False))
     if not has_labeled_test and not has_query_only_test:
         raise RuntimeError("Test file must contain either 3-column triples or 2-column query pairs.")
 
     if has_labeled_test:
         print(f"train triples: {len(train3)} | dev triples: {len(dev3)} | test triples: {len(test3)}")
     else:
-        print(f"train triples: {len(train3)} | dev triples: {len(dev3)} | test queries: {len(test2)}")
+        query_count = int(dataset_bundle.manifest.get("query_only_test_count", 0))
+        print(f"train triples: {len(train3)} | dev triples: {len(dev3)} | test queries: {query_count}")
         print("[WARN] test file is query-only (2 columns); final test ranking metrics will be skipped.")
 
     # build filtered facts. Only labeled triples can contribute to filtered ranking facts.
     true_tails, true_heads = build_true_facts(train3 + dev3 + test3)
 
     # build model from config
-    model, num_entities = build_model(cfg)
+    model, num_entities = build_model(cfg, dataset_bundle=dataset_bundle)
+    if num_entities != dataset_bundle.num_entities:
+        raise RuntimeError(
+            f"Model/data entity count mismatch: model={num_entities}, data={dataset_bundle.num_entities}"
+        )
     model = model.to(device)
 
     # run trainer

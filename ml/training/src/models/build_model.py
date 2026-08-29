@@ -1,5 +1,8 @@
 import torch
 
+from ml.training.src.data.dataset_spec import DatasetBundle, MMKG_GENERAL_V1, OPENBG_LEGACY_V1
+from ml.training.src.data.feature_bundle import load_openbg_feature_bundle
+
 
 def _load_cache_tensor(cache_dir: str, candidates: list[str]) -> tuple[torch.Tensor, str]:
     for name in candidates:
@@ -12,39 +15,67 @@ def _load_cache_tensor(cache_dir: str, candidates: list[str]) -> tuple[torch.Ten
 
 
 def _load_openbg_img_features(cache_dir: str, cache_format: str) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-    cache_format = (cache_format or "legacy").lower()
-
-    if cache_format == "legacy":
-        text_feat, _ = _load_cache_tensor(cache_dir, ["text_emb.pt"])
-        img_feat, _ = _load_cache_tensor(cache_dir, ["img_emb.pt"])
-    elif cache_format == "raw":
-        text_feat, _ = _load_cache_tensor(cache_dir, ["text_feat_raw.pt"])
-        img_feat, _ = _load_cache_tensor(cache_dir, ["img_feat_raw.pt", "img_emb_raw.pt"])
-    elif cache_format == "auto":
-        try:
-            text_feat, text_name = _load_cache_tensor(cache_dir, ["text_feat_raw.pt"])
-            img_feat, img_name = _load_cache_tensor(cache_dir, ["img_feat_raw.pt", "img_emb_raw.pt"])
-            print(f"[BuildModel] using raw caches: text={text_name}, image={img_name}")
-        except FileNotFoundError:
-            text_feat, _ = _load_cache_tensor(cache_dir, ["text_emb.pt"])
-            img_feat, _ = _load_cache_tensor(cache_dir, ["img_emb.pt"])
-            print("[BuildModel] raw caches unavailable, falling back to legacy projected caches")
-    else:
-        raise ValueError(f"Unsupported dataset.cache_format: {cache_format}")
-
-    has_img, _ = _load_cache_tensor(cache_dir, ["has_img.pt"])
-    return text_feat.float(), img_feat.float(), has_img
+    bundle = load_openbg_feature_bundle(cache_dir, cache_format)
+    return bundle.text_features, bundle.image_features, bundle.has_img
 
 
-def build_model(cfg: dict):
-    model_name = cfg["model"]["name"]
+def build_model(cfg: dict, dataset_bundle: DatasetBundle | None = None):
+    requested_model_name = cfg["model"]["name"]
+    aliases = {
+        "mmkg_mhyper": "openbg_img_mhyper",
+        "mmkg_adamf_mat": "openbg_img_adamf_mat",
+        "mmkg_native": "openbg_img_native",
+        "mmkg_apkgc": "openbg_img_apkgc",
+        "mmkg_tucker": "openbg_img_tucker",
+        "mmkg_complex": "openbg_img_complex",
+        "mmkg_text_only": "openbg_img_text_only",
+        "mmkg_gate_only": "openbg_img_gate_only",
+        "mmkg_residual_only": "openbg_img_residual_only",
+        "mmkg_gate_residual": "openbg_img_gate_residual",
+    }
+    model_name = aliases.get(requested_model_name, requested_model_name)
+    protocol_version = cfg.get("protocol", {}).get("version", OPENBG_LEGACY_V1)
+    if requested_model_name.startswith("mmkg_") and protocol_version != MMKG_GENERAL_V1:
+        raise ValueError("Generic mmkg_* model names require protocol.version=mmkg_general_v1")
+    if dataset_bundle is None and protocol_version == MMKG_GENERAL_V1:
+        from ml.training.src.data.dataset_loader import load_dataset_bundle
+
+        dataset_bundle = load_dataset_bundle(cfg)
+
+    def feature_inputs(cache_format: str):
+        if dataset_bundle is not None:
+            features = dataset_bundle.features
+            return features.text_features, features.image_features, features.has_img
+        cache_dir = cfg["dataset"].get("cache_dir")
+        if not cache_dir:
+            raise ValueError("Legacy model construction requires dataset.cache_dir.")
+        return _load_openbg_img_features(cache_dir, cache_format)
+
+    def entity_count(cache_format: str = "auto") -> int:
+        if dataset_bundle is not None:
+            return dataset_bundle.num_entities
+        text_feat, _, _ = feature_inputs(cache_format)
+        return int(text_feat.shape[0])
+
+    if dataset_bundle is not None:
+        configured_relations = int(cfg["model"]["num_relations"])
+        if configured_relations != dataset_bundle.num_relations:
+            raise ValueError(
+                "model.num_relations does not match the dataset manifest: "
+                f"{configured_relations} != {dataset_bundle.num_relations}"
+            )
+    general_has_text = (
+        dataset_bundle.features.has_text
+        if dataset_bundle is not None and protocol_version == MMKG_GENERAL_V1
+        else None
+    )
 
     if model_name == "openbg_img_mhyper":
         from ml.training.src.models.recent_baselines.mhyper import OpenBGMHyper
 
-        cache_dir = cfg["dataset"]["cache_dir"]
+        cache_dir = cfg["dataset"].get("cache_dir", "")
         cache_format = cfg["dataset"].get("cache_format", "raw")
-        text_feat, img_feat, has_img = _load_openbg_img_features(cache_dir, cache_format)
+        text_feat, img_feat, has_img = feature_inputs(cache_format)
         mcfg = cfg["model"]
         tr = cfg["training"]
         num_entities = text_feat.shape[0]
@@ -53,6 +84,7 @@ def build_model(cfg: dict):
             text_feat=text_feat,
             img_feat=img_feat,
             has_img=has_img,
+            has_text=general_has_text,
             num_entities=num_entities,
             num_relations=mcfg["num_relations"],
             rank=mcfg.get("rank", 128),
@@ -69,9 +101,9 @@ def build_model(cfg: dict):
     if model_name == "openbg_img_adamf_mat":
         from ml.training.src.models.recent_baselines.adamf_mat import OpenBGAdaMFMAT
 
-        cache_dir = cfg["dataset"]["cache_dir"]
+        cache_dir = cfg["dataset"].get("cache_dir", "")
         cache_format = cfg["dataset"].get("cache_format", "raw")
-        text_feat, img_feat, has_img = _load_openbg_img_features(cache_dir, cache_format)
+        text_feat, img_feat, has_img = feature_inputs(cache_format)
         mcfg = cfg["model"]
         num_entities = text_feat.shape[0]
         print("[BuildModel] building recent baseline: AdaMF-MAT")
@@ -79,6 +111,7 @@ def build_model(cfg: dict):
             text_feat=text_feat,
             img_feat=img_feat,
             has_img=has_img,
+            has_text=general_has_text,
             num_entities=num_entities,
             num_relations=mcfg["num_relations"],
             d=mcfg.get("dim", 128),
@@ -90,9 +123,9 @@ def build_model(cfg: dict):
     if model_name == "openbg_img_native":
         from ml.training.src.models.recent_baselines.native import OpenBGNativE
 
-        cache_dir = cfg["dataset"]["cache_dir"]
+        cache_dir = cfg["dataset"].get("cache_dir", "")
         cache_format = cfg["dataset"].get("cache_format", "raw")
-        text_feat, img_feat, has_img = _load_openbg_img_features(cache_dir, cache_format)
+        text_feat, img_feat, has_img = feature_inputs(cache_format)
         mcfg = cfg["model"]
         num_entities = text_feat.shape[0]
         print("[BuildModel] building recent baseline: NativE")
@@ -100,6 +133,7 @@ def build_model(cfg: dict):
             text_feat=text_feat,
             img_feat=img_feat,
             has_img=has_img,
+            has_text=general_has_text,
             num_entities=num_entities,
             num_relations=mcfg["num_relations"],
             d=mcfg.get("dim", 128),
@@ -111,9 +145,9 @@ def build_model(cfg: dict):
     if model_name == "openbg_img_apkgc":
         from ml.training.src.models.recent_baselines.apkgc import OpenBGAPKGC
 
-        cache_dir = cfg["dataset"]["cache_dir"]
+        cache_dir = cfg["dataset"].get("cache_dir", "")
         cache_format = cfg["dataset"].get("cache_format", "raw")
-        text_feat, img_feat, has_img = _load_openbg_img_features(cache_dir, cache_format)
+        text_feat, img_feat, has_img = feature_inputs(cache_format)
         mcfg = cfg["model"]
         tr = cfg["training"]
         num_entities = text_feat.shape[0]
@@ -122,6 +156,7 @@ def build_model(cfg: dict):
             text_feat=text_feat,
             img_feat=img_feat,
             has_img=has_img,
+            has_text=general_has_text,
             num_entities=num_entities,
             num_relations=mcfg["num_relations"],
             d=mcfg.get("dim", 128),
@@ -145,7 +180,7 @@ def build_model(cfg: dict):
     if model_name == "openbg_img_tucker":
         from ml.training.src.models.structure_baselines import StructureTuckERLP
 
-        cache_dir = cfg["dataset"]["cache_dir"]
+        cache_dir = cfg["dataset"].get("cache_dir", "")
         cache_format = cfg["dataset"].get("cache_format", "auto")
         d = cfg["embedding"]["d"]
         tr = cfg["training"]
@@ -156,8 +191,7 @@ def build_model(cfg: dict):
         relation_l2_weight = tr.get("relation_l2_weight", 1e-6)
         core_l2_weight = tr.get("core_l2_weight", 1e-6)
 
-        text_feat, _, _ = _load_openbg_img_features(cache_dir, cache_format)
-        num_entities = text_feat.shape[0]
+        num_entities = entity_count(cache_format)
 
         print("[BuildModel] building explicit model: TuckER")
         model = StructureTuckERLP(
@@ -175,7 +209,7 @@ def build_model(cfg: dict):
     if model_name == "openbg_img_complex":
         from ml.training.src.models.structure_baselines import StructureComplExLP
 
-        cache_dir = cfg["dataset"]["cache_dir"]
+        cache_dir = cfg["dataset"].get("cache_dir", "")
         cache_format = cfg["dataset"].get("cache_format", "auto")
         d = cfg["embedding"]["d"]
         tr = cfg["training"]
@@ -184,8 +218,7 @@ def build_model(cfg: dict):
         adv_temperature = tr.get("adv_temperature", 1.0)
         entity_l2_weight = tr.get("entity_l2_weight", 1e-6)
 
-        text_feat, _, _ = _load_openbg_img_features(cache_dir, cache_format)
-        num_entities = text_feat.shape[0]
+        num_entities = entity_count(cache_format)
 
         print("[BuildModel] building explicit model: ComplEx")
         model = StructureComplExLP(
@@ -212,7 +245,7 @@ def build_model(cfg: dict):
             OpenBGImgResidualOnlyLP,
             OpenBGImgTextOnlyLP,
         )
-        cache_dir = cfg["dataset"]["cache_dir"]
+        cache_dir = cfg["dataset"].get("cache_dir", "")
         cache_format = cfg["dataset"].get("cache_format", "legacy")
         d = cfg["embedding"]["d"]
         tr = cfg["training"]
@@ -230,7 +263,8 @@ def build_model(cfg: dict):
         residual_l2_weight = tr.get("residual_l2_weight", 1e-6)
         residual_scale_l2_weight = tr.get("residual_scale_l2_weight", 1e-4)
 
-        text_feat, img_feat, has_img = _load_openbg_img_features(cache_dir, cache_format)
+        text_feat, img_feat, has_img = feature_inputs(cache_format)
+        has_text = general_has_text
 
         if model_name == "openbg_img_text_only":
             print("[BuildModel] building explicit model: Text-Only")
@@ -243,6 +277,8 @@ def build_model(cfg: dict):
                 neg_ratio=neg_ratio,
                 adv_temperature=adv_temperature,
                 img_dropout=img_dropout,
+                has_text=has_text,
+                protocol_version=protocol_version,
             )
         elif model_name == "openbg_img_gate_only":
             print("[BuildModel] building explicit model: Gate-Only")
@@ -258,6 +294,8 @@ def build_model(cfg: dict):
                 img_dropout=img_dropout,
                 gate_reg_weight=gate_reg_weight,
                 gate_reg_target=gate_reg_target,
+                has_text=has_text,
+                protocol_version=protocol_version,
             )
         elif model_name == "openbg_img_residual_only":
             print("[BuildModel] building explicit model: Residual-Only")
@@ -273,6 +311,8 @@ def build_model(cfg: dict):
                 residual_scale_init=residual_scale_init,
                 residual_l2_weight=residual_l2_weight,
                 residual_scale_l2_weight=residual_scale_l2_weight,
+                has_text=has_text,
+                protocol_version=protocol_version,
             )
         elif model_name == "openbg_img_gate_residual":
             print("[BuildModel] building explicit model: Gate+Residual")
@@ -292,6 +332,8 @@ def build_model(cfg: dict):
                 residual_scale_init=residual_scale_init,
                 residual_l2_weight=residual_l2_weight,
                 residual_scale_l2_weight=residual_scale_l2_weight,
+                has_text=has_text,
+                protocol_version=protocol_version,
             )
         else:
             print(
@@ -317,6 +359,8 @@ def build_model(cfg: dict):
                 residual_scale_init=residual_scale_init,
                 residual_l2_weight=residual_l2_weight,
                 residual_scale_l2_weight=residual_scale_l2_weight,
+                has_text=has_text,
+                protocol_version=protocol_version,
             )
         num_entities = text_feat.shape[0]
         return model, num_entities
@@ -371,4 +415,4 @@ def build_model(cfg: dict):
         )
         return model, num_entities
 
-    raise ValueError(f"Unknown model.name: {model_name}")
+    raise ValueError(f"Unknown model.name: {requested_model_name}")

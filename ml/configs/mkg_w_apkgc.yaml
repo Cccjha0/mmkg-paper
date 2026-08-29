@@ -1,0 +1,43 @@
+# General-protocol config. Hyperparameters are starting anchors; tune on validation only.
+dataset:
+  name: mkg_w
+  loader: openke_mmkg
+  processed_dir: data/datasets/mkg_w/processed
+
+protocol:
+  version: mmkg_general_v1
+  split: official
+  modality_policy: native_text_visual_availability
+  evaluation: filtered_bidirectional
+
+model:
+  name: mmkg_apkgc
+  num_relations: 169
+  dim: 128
+  margin: 12.0
+  epsilon: 2.0
+  num_hidden_layers: 1
+  num_attention_heads: 2
+  joint_way: Mformer_hd_mean
+  num_proj: 1
+  add_noise: true
+  noise_update: epoch
+  noise_ratio: 0.2
+  mask_ratio: 0.7
+  attention_dropout: 0.1
+  use_intermediate: false
+training:
+  sampler: bernoulli_filtered
+  lr: 0.0001
+  batch_size: 1024
+  neg_ratio: 32
+  epochs: 8000
+evaluation:
+  filtered: true
+  direction: both
+  chunk_size: 4096
+  query_batch_size: 32
+  run_test: false
+
+output:
+  exp_name: mkg_w_apkgc

@@ -1,0 +1,40 @@
+# General-protocol config. Hyperparameters are starting anchors; tune on validation only.
+dataset:
+  name: mkg_w
+  loader: openke_mmkg
+  processed_dir: data/datasets/mkg_w/processed
+
+protocol:
+  version: mmkg_general_v1
+  split: official
+  modality_policy: native_text_visual_availability
+  evaluation: filtered_bidirectional
+
+model:
+  name: mmkg_native
+  num_relations: 169
+  dim: 250
+  margin: 4.0
+  epsilon: 2.0
+training:
+  engine: adversarial_gp
+  sampler: bernoulli_filtered
+  batch_size: 1024
+  neg_ratio: 128
+  lr: 0.0001
+  generator_lr: 0.0001
+  mu: 0.0001
+  regularization_weight: 0.00001
+  gradient_penalty_coefficient: 0.1
+  generator_noise_dim: 64
+  generator_hidden_dim: 512
+  epochs: 1000
+evaluation:
+  filtered: true
+  direction: both
+  chunk_size: 4096
+  query_batch_size: 32
+  run_test: false
+
+output:
+  exp_name: mkg_w_native

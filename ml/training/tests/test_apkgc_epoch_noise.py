@@ -28,3 +28,22 @@ def test_epoch_noise_snapshot_can_train_across_multiple_batches():
         loss = model(positive, negative)
         loss.backward()
         optimizer.step()
+
+
+def test_db15k_official_graph_fusion_path_scores_triples():
+    model = OpenBGAPKGC(
+        text_feat=torch.randn(4, 3),
+        img_feat=torch.randn(4, 2),
+        has_img=torch.tensor([True, True, False, False]),
+        has_text=torch.tensor([True, False, True, False]),
+        num_entities=4,
+        num_relations=1,
+        d=2,
+        num_proj=2,
+        joint_way="Mformer_hd_graph",
+        num_attention_heads=2,
+    )
+    triples = torch.tensor([[0, 0, 1], [2, 0, 3]], dtype=torch.long)
+    scores = model.score(triples)
+    assert scores.shape == (2,)
+    assert torch.isfinite(scores).all()

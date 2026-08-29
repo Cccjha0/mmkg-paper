@@ -41,6 +41,29 @@ CLEAN_FEATURE_SETS: dict[str, list[str]] = {
         "observed_text_img_cosine",
         "observed_img_missing_replaced",
     ],
+    # Dataset-general clean profiles.  They do not alter frozen C1-C4 and do
+    # not include raw relation ids; dataset-local relation statistics carry
+    # the interpretable relation signal.
+    "G1": ["direction"],
+    "G2": [
+        "direction",
+        "relation_gain_prior",
+        "relation_fusion_win_rate",
+        "relation_support",
+        "relation_is_visual_prior",
+    ],
+    "G3": [
+        "direction",
+        "relation_gain_prior",
+        "relation_fusion_win_rate",
+        "relation_support",
+        "relation_is_visual_prior",
+        "observed_has_text",
+        "observed_has_img",
+        "observed_modality_count",
+        "observed_text_img_cosine",
+        "observed_text_img_cosine_valid",
+    ],
 }
 
 POSTHOC_FEATURE_SETS: dict[str, list[str]] = {
@@ -102,6 +125,9 @@ def cast_feature_value(key: str, value: str | int | float | None) -> Any:
         "relation_is_visual_prior",
         "observed_has_img",
         "observed_img_missing_replaced",
+        "observed_has_text",
+        "observed_modality_count",
+        "observed_text_img_cosine_valid",
     }:
         return int(value)
     return float(value)

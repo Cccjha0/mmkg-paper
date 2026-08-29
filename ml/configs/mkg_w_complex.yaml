@@ -1,0 +1,23 @@
+# Structural shared-protocol anchor.
+dataset:
+  name: mkg_w
+  loader: openke_mmkg
+  processed_dir: data/datasets/mkg_w/processed
+protocol:
+  version: mmkg_general_v1
+  split: official
+  modality_policy: native_text_visual_availability
+  evaluation: filtered_bidirectional
+model:
+  name: mmkg_complex
+  num_relations: 169
+training:
+  lr: 0.001
+evaluation:
+  filtered: true
+  direction: both
+  chunk_size: 4096
+  query_batch_size: 32
+  run_test: false
+output:
+  exp_name: mkg_w_complex

@@ -1,0 +1,30 @@
+{
+  "protocol": "openbg_legacy_v1",
+  "note": "Frozen seed-1 artifacts captured before multi-dataset generalization.",
+  "models": {
+    "gate_only": {
+      "run_dir": "ml/artifacts/outputs/openbg_img_gate_only/20260329_202546_seed1",
+      "query_eval": "outputs/router/test/gate_only_query_eval_seed1.csv",
+      "query_rows": 20000,
+      "query_sha256": "b50afcf887dba23d5d5d7d99221da3f9d6fa1ecee506aa3b6a9e17bad7920a73",
+      "rank_vector_sha256": "a8843e7fcea98ef8349ff0a8d76d48eaabb022be8b89bcfcd1b0206f8086a44f",
+      "metrics": {"mrr": 0.17025793669745326, "hits@1": 0.08415000350214541, "hits@3": 0.21480000205338, "hits@10": 0.32700000144541264}
+    },
+    "residual_only": {
+      "run_dir": "ml/artifacts/outputs/openbg_img_residual_only/20260329_202016_seed1",
+      "query_eval": "outputs/router/test/residual_only_query_eval_seed1.csv",
+      "query_rows": 20000,
+      "query_sha256": "df94bade632e5f24cf5c834bbb452f49bd45692bca742c8a7ddaf94b08cf0bd9",
+      "rank_vector_sha256": "e4971024d504be8f558f63fdfeb2f1319fb2c8b0f12821604241a398a1e3f71d",
+      "metrics": {"mrr": 0.2924214337253943, "hits@1": 0.23264999670209363, "hits@3": 0.32999998633749783, "hits@10": 0.4023000141605735}
+    },
+    "full_model": {
+      "run_dir": "ml/artifacts/outputs/openbg_img_gated_vec_res_rel/20260329_205816_seed1",
+      "query_eval": "outputs/router/test/full_model_query_eval_seed1.csv",
+      "query_rows": 20000,
+      "query_sha256": "cdfa761f5809d1ec54f929d8884fe42151ab48736af7f1eb9b2a711b9dd0cf74",
+      "rank_vector_sha256": "68f4eae4d28018c9c8739f3a276ba25c536cd0fe49b8d5dfcfa98586b7655e62",
+      "metrics": {"mrr": 0.22041242010891438, "hits@1": 0.12910000456031412, "hits@3": 0.27674999739974737, "hits@10": 0.3839499973692}
+    }
+  }
+}

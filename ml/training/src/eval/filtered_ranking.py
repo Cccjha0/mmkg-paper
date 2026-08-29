@@ -64,6 +64,29 @@ def _split_metrics_from_ranks(ranks: torch.Tensor, mask: torch.Tensor, prefix: s
     return out
 
 
+def _modality_metrics_from_ranks(
+    ranks: torch.Tensor,
+    has_text: torch.Tensor,
+    has_img: torch.Tensor,
+    prefix: str,
+    ks=(1, 3, 10),
+) -> dict:
+    """Return target-side T/V availability subgroups for the general protocol."""
+    ranks = ranks.detach().cpu()
+    has_text = has_text.detach().cpu().bool()
+    has_img = has_img.detach().cpu().bool()
+    out: dict[str, float | int] = {}
+    for text_flag in (0, 1):
+        for img_flag in (0, 1):
+            mask = (has_text == bool(text_flag)) & (has_img == bool(img_flag))
+            metrics = _metrics_from_ranks(ranks[mask], ks=ks)
+            tag = f"{prefix}_T{text_flag}V{img_flag}"
+            out[f"{tag}_count"] = metrics.pop("count")
+            for key, value in metrics.items():
+                out[f"{tag}_{key}"] = value
+    return out
+
+
 def _prepare_index(mapping: dict) -> dict:
     """
     Convert filtering map to sorted CPU LongTensor values once.
@@ -96,14 +119,16 @@ def _prepare_eval_tensors(
         triples: torch.LongTensor,
         num_entities: int,
         entity_has_img: torch.Tensor | None,
+        entity_has_text: torch.Tensor | None,
         device: torch.device,
-) -> tuple[torch.LongTensor, torch.LongTensor, torch.LongTensor, torch.Tensor | None]:
+) -> tuple[torch.LongTensor, torch.LongTensor, torch.LongTensor, torch.Tensor | None, torch.Tensor | None]:
     """Move immutable evaluation tensors once for both ranking directions."""
     triples_cpu = triples.detach().cpu()
     triples_gpu = triples_cpu.to(device)
     all_entities = torch.arange(num_entities, dtype=torch.long, device=device)
     entity_has_img_cpu = entity_has_img.detach().cpu() if entity_has_img is not None else None
-    return triples_cpu, triples_gpu, all_entities, entity_has_img_cpu
+    entity_has_text_cpu = entity_has_text.detach().cpu() if entity_has_text is not None else None
+    return triples_cpu, triples_gpu, all_entities, entity_has_img_cpu, entity_has_text_cpu
 
 
 def _build_dense_filter_mask(
@@ -184,6 +209,7 @@ def _filtered_tail_ranking_eval(
         device: str = "cuda",
         ks=(1, 3, 10),
         entity_has_img: torch.Tensor | None = None,
+        entity_has_text: torch.Tensor | None = None,
         _prepared_tensors=None,
 ):
     model.eval()
@@ -191,10 +217,11 @@ def _filtered_tail_ranking_eval(
 
     all_ranks = []
     all_target_has_img = []
+    all_target_has_text = []
 
     if _prepared_tensors is None:
-        _prepared_tensors = _prepare_eval_tensors(triples, num_entities, entity_has_img, device)
-    triples_cpu, triples_gpu, all_entities, entity_has_img_cpu = _prepared_tensors
+        _prepared_tensors = _prepare_eval_tensors(triples, num_entities, entity_has_img, entity_has_text, device)
+    triples_cpu, triples_gpu, all_entities, entity_has_img_cpu, entity_has_text_cpu = _prepared_tensors
 
     if len(true_tails) > 0 and isinstance(next(iter(true_tails.values())), torch.Tensor):
         true_tails_t = true_tails
@@ -260,12 +287,24 @@ def _filtered_tail_ranking_eval(
         all_ranks.append(rank_tail.detach().cpu())
         if entity_has_img_cpu is not None:
             all_target_has_img.append(entity_has_img_cpu[t_cpu])
+        if entity_has_text_cpu is not None:
+            all_target_has_text.append(entity_has_text_cpu[t_cpu])
 
     rank_tail_all = torch.cat(all_ranks, dim=0) if all_ranks else torch.empty(0, dtype=torch.long)
     out = _metrics_from_ranks(rank_tail_all, ks=ks)
     if entity_has_img is not None and all_target_has_img:
         target_has_img_all = torch.cat(all_target_has_img, dim=0)
         out.update(_split_metrics_from_ranks(rank_tail_all, target_has_img_all, prefix="tail", ks=ks))
+    if entity_has_text is not None and entity_has_img is not None and all_target_has_text and all_target_has_img:
+        out.update(
+            _modality_metrics_from_ranks(
+                rank_tail_all,
+                torch.cat(all_target_has_text, dim=0),
+                torch.cat(all_target_has_img, dim=0),
+                prefix="tail",
+                ks=ks,
+            )
+        )
     return out
 
 
@@ -280,6 +319,7 @@ def _filtered_head_ranking_eval(
         device: str = "cuda",
         ks=(1, 3, 10),
         entity_has_img: torch.Tensor | None = None,
+        entity_has_text: torch.Tensor | None = None,
         _prepared_tensors=None,
 ):
     model.eval()
@@ -287,10 +327,11 @@ def _filtered_head_ranking_eval(
 
     all_ranks = []
     all_target_has_img = []
+    all_target_has_text = []
 
     if _prepared_tensors is None:
-        _prepared_tensors = _prepare_eval_tensors(triples, num_entities, entity_has_img, device)
-    triples_cpu, triples_gpu, all_entities, entity_has_img_cpu = _prepared_tensors
+        _prepared_tensors = _prepare_eval_tensors(triples, num_entities, entity_has_img, entity_has_text, device)
+    triples_cpu, triples_gpu, all_entities, entity_has_img_cpu, entity_has_text_cpu = _prepared_tensors
 
     if len(true_heads) > 0 and isinstance(next(iter(true_heads.values())), torch.Tensor):
         true_heads_t = true_heads
@@ -356,12 +397,24 @@ def _filtered_head_ranking_eval(
         all_ranks.append(rank_head.detach().cpu())
         if entity_has_img_cpu is not None:
             all_target_has_img.append(entity_has_img_cpu[h_cpu])
+        if entity_has_text_cpu is not None:
+            all_target_has_text.append(entity_has_text_cpu[h_cpu])
 
     rank_head_all = torch.cat(all_ranks, dim=0) if all_ranks else torch.empty(0, dtype=torch.long)
     out = _metrics_from_ranks(rank_head_all, ks=ks)
     if entity_has_img is not None and all_target_has_img:
         target_has_img_all = torch.cat(all_target_has_img, dim=0)
         out.update(_split_metrics_from_ranks(rank_head_all, target_has_img_all, prefix="head", ks=ks))
+    if entity_has_text is not None and entity_has_img is not None and all_target_has_text and all_target_has_img:
+        out.update(
+            _modality_metrics_from_ranks(
+                rank_head_all,
+                torch.cat(all_target_has_text, dim=0),
+                torch.cat(all_target_has_img, dim=0),
+                prefix="head",
+                ks=ks,
+            )
+        )
     return out
 
 
@@ -378,6 +431,7 @@ def filtered_ranking_eval(
         ks=(1, 3, 10),
         direction: str = "both",
         entity_has_img: torch.Tensor | None = None,
+        entity_has_text: torch.Tensor | None = None,
 ):
     """
     model.score(triples) -> scores (higher is better)
@@ -397,7 +451,7 @@ def filtered_ranking_eval(
         # here also prevents a stale cache after loading the best checkpoint.
         prepare_eval_cache()
     device_obj = torch.device(device)
-    prepared_tensors = _prepare_eval_tensors(triples, num_entities, entity_has_img, device_obj)
+    prepared_tensors = _prepare_eval_tensors(triples, num_entities, entity_has_img, entity_has_text, device_obj)
     if direction == "tail":
         return _filtered_tail_ranking_eval(
             model=model,
@@ -409,6 +463,7 @@ def filtered_ranking_eval(
             device=device,
             ks=ks,
             entity_has_img=entity_has_img,
+            entity_has_text=entity_has_text,
             _prepared_tensors=prepared_tensors,
         )
     if direction == "head":
@@ -422,6 +477,7 @@ def filtered_ranking_eval(
             device=device,
             ks=ks,
             entity_has_img=entity_has_img,
+            entity_has_text=entity_has_text,
             _prepared_tensors=prepared_tensors,
         )
     tail_metrics = _filtered_tail_ranking_eval(
@@ -434,6 +490,7 @@ def filtered_ranking_eval(
         device=device,
         ks=ks,
         entity_has_img=entity_has_img,
+        entity_has_text=entity_has_text,
         _prepared_tensors=prepared_tensors,
     )
     head_metrics = _filtered_head_ranking_eval(
@@ -446,6 +503,7 @@ def filtered_ranking_eval(
         device=device,
         ks=ks,
         entity_has_img=entity_has_img,
+        entity_has_text=entity_has_text,
         _prepared_tensors=prepared_tensors,
     )
 
@@ -474,4 +532,16 @@ def filtered_ranking_eval(
             out[f"tail_no_img_{suffix}"] = tail_metrics.get(f"tail_no_img_{suffix}", 0.0)
             out[f"head_has_img_{suffix}"] = head_metrics.get(f"head_has_img_{suffix}", 0.0)
             out[f"head_no_img_{suffix}"] = head_metrics.get(f"head_no_img_{suffix}", 0.0)
+    if entity_has_text is not None and entity_has_img is not None:
+        for text_flag in (0, 1):
+            for img_flag in (0, 1):
+                tag = f"T{text_flag}V{img_flag}"
+                out[f"tail_{tag}_count"] = tail_metrics.get(f"tail_{tag}_count", 0)
+                out[f"head_{tag}_count"] = head_metrics.get(f"head_{tag}_count", 0)
+                for suffix in ["mrr", "hits@1", "hits@3", "hits@10"]:
+                    tail_value = tail_metrics.get(f"tail_{tag}_{suffix}", 0.0)
+                    head_value = head_metrics.get(f"head_{tag}_{suffix}", 0.0)
+                    out[f"tail_{tag}_{suffix}"] = tail_value
+                    out[f"head_{tag}_{suffix}"] = head_value
+                    out[f"{tag}_{suffix}"] = 0.5 * (tail_value + head_value)
     return out

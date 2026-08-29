@@ -1,4 +1,5 @@
 import argparse
+import json
 from pathlib import Path
 import sys
 
@@ -8,15 +9,19 @@ if __package__ in (None, ""):
 from router.constants import ROUTER_MODE_CLEAN, ROUTER_MODE_POSTHOC
 from router.feature_utils import (
     build_clean_feature_rows,
+    build_general_clean_feature_rows,
     build_posthoc_feature_rows,
     infer_cache_dir,
     load_cache_bundle,
+    load_general_cache_bundle,
     load_relation_prior_map,
     summarize_clean_feature_rows,
+    summarize_general_clean_feature_rows,
     summarize_posthoc_feature_rows,
 )
 from router.io_utils import read_csv, write_csv, write_json
-from router.schemas import CLEAN_ROUTER_FEATURE_HEADER, POSTHOC_ROUTER_FEATURE_HEADER
+from router.schemas import CLEAN_ROUTER_FEATURE_HEADER, GENERAL_CLEAN_ROUTER_FEATURE_HEADER, POSTHOC_ROUTER_FEATURE_HEADER
+from ml.training.src.data.dataset_spec import MMKG_GENERAL_V1, OPENBG_LEGACY_V1
 
 
 def parse_args() -> argparse.Namespace:
@@ -31,6 +36,8 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--residual-test-dir", default="outputs/router/test")
     ap.add_argument("--prior-csv", default="outputs/router/priors/relation_gain_stats_gamma_0.000.csv")
     ap.add_argument("--cache-dir", default=None)
+    ap.add_argument("--processed-dir", default=None, help="Canonical dataset directory for mmkg_general_v1.")
+    ap.add_argument("--protocol-version", choices=[OPENBG_LEGACY_V1, MMKG_GENERAL_V1], default=OPENBG_LEGACY_V1)
     ap.add_argument("--run-dir", default="ml/artifacts/outputs/openbg_img_gate_only/20260327_173820_seed1")
     ap.add_argument("--out-dir", default="outputs/router/features")
     ap.add_argument("--summary-json", default=None)
@@ -67,16 +74,44 @@ def find_seed_files(base_dir: Path, pattern: str) -> dict[int, Path]:
 
 
 def load_label_map(path: Path) -> dict[str, dict]:
-    return {row["query_id"]: row for row in read_csv(path)}
+    rows = read_csv(path)
+    out = {row["query_id"]: row for row in rows}
+    if len(out) != len(rows):
+        raise RuntimeError(f"Duplicate query_id detected in gain labels: {path}")
+    return out
+
+
+def validate_general_prior(prior_csv: Path, cache_bundle: dict) -> None:
+    summary_path = prior_csv.with_name(prior_csv.stem + "_summary.json")
+    if not summary_path.exists():
+        raise FileNotFoundError(
+            f"General router requires the dataset-local relation-prior summary: {summary_path}"
+        )
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    expected = {
+        "dataset": cache_bundle["dataset"],
+        "protocol_version": cache_bundle["protocol_version"],
+    }
+    actual = {field: summary.get(field) for field in expected}
+    if actual != expected:
+        raise RuntimeError(f"Relation-prior metadata mismatch: expected={expected}, actual={actual}")
 
 
 def main() -> None:
     args = parse_args()
     out_dir = Path(args.out_dir)
 
-    cache_dir = infer_cache_dir(args.cache_dir, args.run_dir)
-    cache_bundle = load_cache_bundle(cache_dir)
-    prior_map = load_relation_prior_map(read_csv(args.prior_csv))
+    if args.protocol_version == MMKG_GENERAL_V1:
+        if not args.processed_dir:
+            raise ValueError("--processed-dir is required for mmkg_general_v1")
+        cache_bundle = load_general_cache_bundle(args.processed_dir)
+    else:
+        cache_dir = infer_cache_dir(args.cache_dir, args.run_dir)
+        cache_bundle = load_cache_bundle(cache_dir)
+    prior_csv = Path(args.prior_csv)
+    if args.protocol_version == MMKG_GENERAL_V1:
+        validate_general_prior(prior_csv, cache_bundle)
+    prior_map = load_relation_prior_map(read_csv(prior_csv))
 
     gate_dev_files = find_seed_files(Path(args.gate_dev_dir), "gate_only_query_eval_seed*.csv")
     residual_dev_files = find_seed_files(Path(args.residual_dev_dir), "residual_only_query_eval_seed*.csv")
@@ -91,10 +126,17 @@ def main() -> None:
         raise RuntimeError("No overlapping test query_eval seed files found.")
 
     if args.router_mode == ROUTER_MODE_CLEAN:
-        build_rows_fn = build_clean_feature_rows
-        summary_fn = summarize_clean_feature_rows
-        feature_header = CLEAN_ROUTER_FEATURE_HEADER
+        if args.protocol_version == MMKG_GENERAL_V1:
+            build_rows_fn = build_general_clean_feature_rows
+            summary_fn = summarize_general_clean_feature_rows
+            feature_header = GENERAL_CLEAN_ROUTER_FEATURE_HEADER
+        else:
+            build_rows_fn = build_clean_feature_rows
+            summary_fn = summarize_clean_feature_rows
+            feature_header = CLEAN_ROUTER_FEATURE_HEADER
     else:
+        if args.protocol_version == MMKG_GENERAL_V1:
+            raise ValueError("mmkg_general_v1 only supports the query-time legal clean router.")
         build_rows_fn = build_posthoc_feature_rows
         summary_fn = summarize_posthoc_feature_rows
         feature_header = POSTHOC_ROUTER_FEATURE_HEADER
@@ -111,6 +153,12 @@ def main() -> None:
             gate_rows = read_csv(gate_dev_files[seed])
             residual_rows = read_csv(residual_dev_files[seed])
             label_map = load_label_map(label_files[seed])
+            query_ids = {row["query_id"] for row in gate_rows}
+            if set(label_map) != query_ids:
+                raise RuntimeError(
+                    f"Gain labels do not match dev queries for seed={seed}, delta={delta_tag}: "
+                    f"labels={len(label_map)}, queries={len(query_ids)}"
+                )
             rows = build_rows_fn(gate_rows, residual_rows, prior_map, cache_bundle, label_by_query_id=label_map)
             all_rows.extend(rows)
 
@@ -136,6 +184,9 @@ def main() -> None:
     summary["router_mode"] = args.router_mode
     summary["feature_family"] = args.router_mode
     summary["is_query_time_legal"] = args.router_mode == ROUTER_MODE_CLEAN
+    summary["protocol_version"] = args.protocol_version
+    if args.protocol_version == MMKG_GENERAL_V1:
+        summary["dataset"] = cache_bundle["dataset"]
     summary["cache_dir"] = cache_bundle["cache_dir"]
     summary["prior_csv"] = str(Path(args.prior_csv).as_posix())
     summary["train_seeds"] = common_dev_seeds

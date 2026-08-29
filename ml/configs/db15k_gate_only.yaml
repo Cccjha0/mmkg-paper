@@ -1,0 +1,28 @@
+# General-protocol config. Hyperparameters are starting anchors; tune on validation only.
+dataset:
+  name: db15k
+  loader: openke_mmkg
+  processed_dir: data/datasets/db15k/processed
+
+protocol:
+  version: mmkg_general_v1
+  split: official
+  modality_policy: native_text_visual_availability
+  evaluation: filtered_bidirectional
+
+model:
+  name: mmkg_gate_only
+  num_relations: 279
+  use_layernorm: true
+training:
+  lr: 0.0003
+  img_dropout: 0.2
+evaluation:
+  filtered: true
+  direction: both
+  chunk_size: 4096
+  query_batch_size: 32
+  run_test: false
+
+output:
+  exp_name: db15k_gate_only

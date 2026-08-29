@@ -12,6 +12,8 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from ml.training.src.data.build_true_facts import build_true_facts
+from ml.training.src.data.dataset_loader import load_dataset_bundle
+from ml.training.src.data.dataset_spec import MMKG_GENERAL_V1, OPENBG_LEGACY_V1
 from ml.training.src.data.tsv_reader import read_allow_2or3
 from ml.training.src.eval.filtered_ranking import prepare_true_heads_index, prepare_true_tails_index
 from ml.training.src.models.build_model import build_model
@@ -69,7 +71,8 @@ def load_run(run_dir: str | Path, device: str):
         raise FileNotFoundError(ckpt_path)
     cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
     cfg.setdefault("system", {})["device"] = device
-    model, num_entities = build_model(cfg)
+    bundle = load_dataset_bundle(cfg)
+    model, num_entities = build_model(cfg, dataset_bundle=bundle)
     state = torch.load(ckpt_path, map_location=device)
     model.load_state_dict(state)
     model = model.to(device)
@@ -82,12 +85,23 @@ def make_query_id(split: str, seed: int, direction: str, relation_id: int, head_
 
 
 def target_regime(direction: str, target_has_img: bool) -> str:
+    """Frozen OpenBG target regime."""
     if direction == "head":
         return "head_has_img" if target_has_img else "head_no_img"
     return "tail_no_img"
 
 
+def general_target_regime(direction: str, target_has_text: bool, target_has_img: bool) -> str:
+    return f"{direction}_T{int(target_has_text)}V{int(target_has_img)}"
+
+
 def build_filtered_indexes(cfg: dict):
+    if cfg.get("protocol", {}).get("version") == MMKG_GENERAL_V1:
+        bundle = load_dataset_bundle(cfg)
+        true_tails, true_heads = build_true_facts(
+            bundle.train_triples + bundle.valid_triples + bundle.test_triples
+        )
+        return prepare_true_tails_index(true_tails), prepare_true_heads_index(true_heads)
     train3, _, bad_train = read_allow_2or3(cfg["dataset"]["train"])
     dev3, _, bad_dev = read_allow_2or3(cfg["dataset"]["dev"])
     test3, _, bad_test = read_allow_2or3(cfg["dataset"]["test"])
@@ -98,6 +112,12 @@ def build_filtered_indexes(cfg: dict):
 
 
 def load_split_triples(cfg: dict, split: str) -> list[tuple[int, int, int]]:
+    if cfg.get("protocol", {}).get("version") == MMKG_GENERAL_V1:
+        bundle = load_dataset_bundle(cfg)
+        rows = bundle.valid_triples if split in {"dev", "valid"} else bundle.test_triples
+        if not rows:
+            raise RuntimeError(f"No labeled triples found for split={split}")
+        return rows
     triples3, _, bad = read_allow_2or3(cfg["dataset"][split])
     if bad:
         print(f"[WARN] malformed {split} lines skipped: {bad}")
@@ -177,6 +197,9 @@ def export_direction(
     chunk_size: int,
     query_batch_size: int,
     has_img: torch.Tensor,
+    has_text: torch.Tensor | None = None,
+    protocol_version: str = OPENBG_LEGACY_V1,
+    dataset_name: str = "openbg_img",
 ) -> list[dict]:
     triples_t = torch.tensor(triples, dtype=torch.long)
     all_entities = torch.arange(num_entities, dtype=torch.long)
@@ -251,13 +274,13 @@ def export_direction(
             gate_rank = {int(e): idx + 1 for idx, e in enumerate(top_gate_entities_cpu[j].tolist())}
             residual_rank = {int(e): idx + 1 for idx, e in enumerate(top_res_entities_cpu[j].tolist())}
             target_has_img = bool(has_img[target_id].item())
+            target_has_text = bool(has_text[target_id].item()) if has_text is not None else True
             query_id = make_query_id(split, seed, direction, r_id, h_id, t_id, target_id)
 
             for local_idx, candidate_id in enumerate(ordered_candidates):
                 score_gate = float(gate_candidate_scores[local_idx].item())
                 score_residual = float(residual_candidate_scores[local_idx].item())
-                rows.append(
-                    {
+                row = {
                         "query_id": query_id,
                         "seed": seed,
                         "split": split,
@@ -278,9 +301,18 @@ def export_direction(
                         "score_max": max(score_gate, score_residual),
                         "in_gate_topk": int(candidate_id in gate_rank),
                         "in_residual_topk": int(candidate_id in residual_rank),
-                        "target_regime": target_regime(direction, target_has_img),
+                        "target_regime": (
+                            target_regime(direction, target_has_img)
+                            if protocol_version == OPENBG_LEGACY_V1
+                            else general_target_regime(direction, target_has_text, target_has_img)
+                        ),
                     }
-                )
+                if protocol_version == MMKG_GENERAL_V1:
+                    row["dataset"] = dataset_name
+                    row["protocol_version"] = protocol_version
+                    row["target_has_text"] = int(target_has_text)
+                    row["target_has_img"] = int(target_has_img)
+                rows.append(row)
     return rows
 
 
@@ -339,6 +371,25 @@ def main() -> None:
     if has_img is None:
         raise RuntimeError("Gate model does not expose has_img.")
     has_img = has_img.detach().cpu().to(dtype=torch.bool)
+    protocol_version = str(gate_cfg.get("protocol", {}).get("version", OPENBG_LEGACY_V1))
+    residual_protocol = str(residual_cfg.get("protocol", {}).get("version", OPENBG_LEGACY_V1))
+    if protocol_version != residual_protocol:
+        raise RuntimeError("Gate and Residual protocol versions differ.")
+    gate_dataset = str(gate_cfg.get("dataset", {}).get("name", "openbg_img"))
+    residual_dataset = str(residual_cfg.get("dataset", {}).get("name", "openbg_img"))
+    if gate_dataset != residual_dataset:
+        raise RuntimeError("Gate and Residual datasets differ.")
+    residual_has_img = getattr(residual_model, "has_img", None)
+    if residual_has_img is None or not torch.equal(has_img, residual_has_img.detach().cpu().bool()):
+        raise RuntimeError("Gate and Residual image-availability masks differ.")
+    has_text = getattr(gate_model, "has_text", None)
+    if protocol_version == MMKG_GENERAL_V1 and has_text is None:
+        raise RuntimeError("General Gate model does not expose has_text.")
+    has_text = has_text.detach().cpu().bool() if has_text is not None else None
+    residual_has_text = getattr(residual_model, "has_text", None)
+    if protocol_version == MMKG_GENERAL_V1:
+        if residual_has_text is None or not torch.equal(has_text, residual_has_text.detach().cpu().bool()):
+            raise RuntimeError("Gate and Residual text-availability masks differ.")
 
     directions = ["head", "tail"] if args.direction == "both" else [args.direction]
     rows: list[dict] = []
@@ -360,6 +411,9 @@ def main() -> None:
                 chunk_size=chunk_size,
                 query_batch_size=query_batch_size,
                 has_img=has_img,
+                has_text=has_text,
+                protocol_version=protocol_version,
+                dataset_name=gate_dataset,
             )
         )
 
@@ -382,6 +436,8 @@ def main() -> None:
             "gate_run_dir": str(args.gate_run_dir),
             "residual_run_dir": str(args.residual_run_dir),
             "device": device,
+            "dataset": gate_cfg.get("dataset", {}).get("name"),
+            "protocol_version": protocol_version,
         }
         out_path.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print(f"[OK] wrote summary -> {out_path}")

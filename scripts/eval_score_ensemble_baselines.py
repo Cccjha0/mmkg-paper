@@ -23,9 +23,16 @@ from scripts.eval_candidate_soft_router_full import (
     target_ids_for_direction,
     target_ranks_and_rr,
 )
-from scripts.export_candidate_scores import build_filtered_indexes, load_split_triples, resolve_device, target_regime
+from scripts.export_candidate_scores import (
+    build_filtered_indexes,
+    general_target_regime,
+    load_split_triples,
+    resolve_device,
+    target_regime,
+)
 from scripts.build_candidate_router_paper_tables import markdown_table
 from ml.training.src.models.build_model import build_model
+from ml.training.src.data.dataset_spec import MMKG_GENERAL_V1, OPENBG_LEGACY_V1
 
 
 def parse_args() -> argparse.Namespace:
@@ -93,11 +100,28 @@ def load_run_pairs(score_dir: Path, split: str) -> list[dict]:
                 "gate_run_dir": payload["gate_run_dir"],
                 "residual_run_dir": payload["residual_run_dir"],
                 "summary_path": str(path),
+                "dataset": str(payload.get("dataset", "openbg_img")),
+                "protocol_version": str(payload.get("protocol_version", OPENBG_LEGACY_V1)),
             }
         )
     if not pairs:
         raise FileNotFoundError(f"No {split} score summaries found in {score_dir}")
     return sorted(pairs, key=lambda row: row["seed"])
+
+
+def validate_run_pair_metadata(dev_pairs: list[dict], test_pairs: list[dict]) -> tuple[str, str]:
+    combined = [*dev_pairs, *test_pairs]
+    datasets = {str(pair["dataset"]) for pair in combined}
+    protocols = {str(pair["protocol_version"]) for pair in combined}
+    if len(datasets) != 1 or len(protocols) != 1:
+        raise RuntimeError(
+            f"Score summaries cannot mix datasets/protocols: datasets={sorted(datasets)}, "
+            f"protocols={sorted(protocols)}"
+        )
+    protocol = next(iter(protocols))
+    if protocol not in {OPENBG_LEGACY_V1, MMKG_GENERAL_V1}:
+        raise RuntimeError(f"Unsupported score-summary protocol: {protocol!r}")
+    return next(iter(datasets)), protocol
 
 
 def resolve_run_dir(raw_path: str | Path) -> Path:
@@ -125,7 +149,7 @@ def resolve_workspace_path(raw_path: str | Path) -> str:
 
 def absolutize_dataset_paths(cfg: dict) -> dict:
     dataset = cfg.get("dataset", {})
-    for key in ("train", "dev", "test", "cache_dir"):
+    for key in ("train", "dev", "test", "cache_dir", "processed_dir"):
         if key in dataset:
             dataset[key] = resolve_workspace_path(dataset[key])
     return cfg
@@ -156,7 +180,13 @@ def safe_scores(scores: torch.Tensor) -> torch.Tensor:
     return torch.nan_to_num(scores, nan=low, posinf=high, neginf=low)
 
 
-def query_features(gate_scores: torch.Tensor, residual_scores: torch.Tensor, direction: str, relations: torch.Tensor) -> np.ndarray:
+def query_features(
+    gate_scores: torch.Tensor,
+    residual_scores: torch.Tensor,
+    direction: str,
+    relations: torch.Tensor,
+    protocol_version: str = OPENBG_LEGACY_V1,
+) -> np.ndarray:
     def stats(scores: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         safe = safe_scores(scores)
         top = torch.topk(safe, k=min(5, safe.size(1)), dim=1).values
@@ -168,25 +198,18 @@ def query_features(gate_scores: torch.Tensor, residual_scores: torch.Tensor, dir
     r1, r5, rm, rs = stats(residual_scores)
     direction_tail = torch.full_like(g1, 1.0 if direction == "tail" else 0.0)
     rel = relations.to(dtype=torch.float32)
-    features = torch.stack(
-        [
-            direction_tail,
-            rel,
-            g1,
-            g5,
-            gm,
-            gs,
-            r1,
-            r5,
-            rm,
-            rs,
-            g1 - r1,
-            g5 - r5,
-            gm - rm,
-            gs - rs,
-        ],
-        dim=1,
-    )
+    score_features = [g1, g5, gm, gs, r1, r5, rm, rs, g1 - r1, g5 - r5, gm - rm, gs - rs]
+    if protocol_version == OPENBG_LEGACY_V1:
+        # Frozen C4 input order.  Raw relation id is retained only so existing
+        # OpenBG artifacts and saved score-aware models remain reproducible.
+        columns = [direction_tail, rel, *score_features]
+    elif protocol_version == MMKG_GENERAL_V1:
+        # Relation ids are categorical identifiers, not ordinal measurements.
+        # Dataset-local relation priors can be joined by the caller separately.
+        columns = [direction_tail, *score_features]
+    else:
+        raise ValueError(f"Unsupported protocol version: {protocol_version}")
+    features = torch.stack(columns, dim=1)
     return features.detach().cpu().numpy().astype(np.float32)
 
 
@@ -259,6 +282,8 @@ def evaluate_split(
     selected_policy_rows: list[dict] = []
     feature_rows: list[np.ndarray] = []
     labels: list[int] = []
+    evaluation_dataset: str | None = None
+    evaluation_protocol: str | None = None
     started_at = time.time()
     total_batches = 0
     total_queries = 0
@@ -347,6 +372,20 @@ def evaluate_split(
         residual_run_dir = resolve_run_dir(pair["residual_run_dir"])
         gate_cfg, gate_model, gate_num_entities = load_run_stable(gate_run_dir, device)
         residual_cfg, residual_model, residual_num_entities = load_run_stable(residual_run_dir, device)
+        protocol_version = str(gate_cfg.get("protocol", {}).get("version", OPENBG_LEGACY_V1))
+        residual_protocol = str(residual_cfg.get("protocol", {}).get("version", OPENBG_LEGACY_V1))
+        if protocol_version != residual_protocol:
+            raise RuntimeError("Gate and Residual protocol versions differ.")
+        dataset_name = str(gate_cfg.get("dataset", {}).get("name", "openbg_img"))
+        residual_dataset = str(residual_cfg.get("dataset", {}).get("name", "openbg_img"))
+        if dataset_name != residual_dataset:
+            raise RuntimeError("Gate and Residual datasets differ.")
+        if evaluation_dataset is not None and (dataset_name, protocol_version) != (
+            evaluation_dataset,
+            evaluation_protocol,
+        ):
+            raise RuntimeError("Score-aware alpha/model fitting cannot mix datasets or protocol versions.")
+        evaluation_dataset, evaluation_protocol = dataset_name, protocol_version
         if gate_num_entities != residual_num_entities:
             raise RuntimeError("Gate and Residual entity counts differ.")
         seed = int(gate_cfg.get("system", {}).get("seed", pair["seed"]))
@@ -358,6 +397,17 @@ def evaluate_split(
         if has_img is None:
             raise RuntimeError("Gate model does not expose has_img.")
         has_img = has_img.detach().cpu().to(dtype=torch.bool)
+        residual_has_img = getattr(residual_model, "has_img", None)
+        if residual_has_img is None or not torch.equal(has_img, residual_has_img.detach().cpu().bool()):
+            raise RuntimeError("Gate and Residual image-availability masks differ.")
+        has_text = getattr(gate_model, "has_text", None)
+        if protocol_version == MMKG_GENERAL_V1 and has_text is None:
+            raise RuntimeError("General Gate model does not expose has_text.")
+        has_text = has_text.detach().cpu().bool() if has_text is not None else None
+        residual_has_text = getattr(residual_model, "has_text", None)
+        if protocol_version == MMKG_GENERAL_V1:
+            if residual_has_text is None or not torch.equal(has_text, residual_has_text.detach().cpu().bool()):
+                raise RuntimeError("Gate and Residual text-availability masks differ.")
         ev_cfg = gate_cfg.get("evaluation", {})
         chunk_size = int(chunk_size_arg or ev_cfg.get("chunk_size", 4096))
         max_queries_per_direction = None if max_queries is None else max(1, max_queries // len(directions))
@@ -371,6 +421,14 @@ def evaluate_split(
             if resume and ckpt_path is not None and ckpt_path.exists():
                 frame = pd.read_csv(ckpt_path)
                 cached_rows = frame.to_dict(orient="records")
+                if protocol_version == MMKG_GENERAL_V1:
+                    cached_datasets = {str(row.get("dataset", "")) for row in cached_rows}
+                    cached_protocols = {str(row.get("protocol_version", "")) for row in cached_rows}
+                    if cached_datasets != {dataset_name} or cached_protocols != {protocol_version}:
+                        raise RuntimeError(
+                            f"Cached score-ensemble rows do not match {dataset_name}/{protocol_version}: "
+                            f"datasets={sorted(cached_datasets)}, protocols={sorted(cached_protocols)}"
+                        )
                 ingest_selected_rows(cached_rows)
                 cached_batches = (n_direction_queries + query_batch_size - 1) // query_batch_size
                 completed_batches += cached_batches
@@ -390,7 +448,13 @@ def evaluate_split(
                 target_ids = target_ids_for_direction(q_cpu, direction)
                 _, gate_rr = target_ranks_and_rr(gate_scores, target_ids)
                 _, residual_rr = target_ranks_and_rr(residual_scores, target_ids)
-                feats = query_features(gate_scores, residual_scores, direction, q_cpu[:, 1])
+                feats = query_features(
+                    gate_scores,
+                    residual_scores,
+                    direction,
+                    q_cpu[:, 1],
+                    protocol_version=protocol_version,
+                )
                 feature_rows.append(feats)
                 labels.extend([int(g > r) for g, r in zip(gate_rr, residual_rr)])
 
@@ -449,6 +513,7 @@ def evaluate_split(
                         t_id = int(q_cpu[j, 2].item())
                         target_id = int(target_ids[j].item())
                         target_has_img = bool(has_img[target_id].item())
+                        target_has_text = bool(has_text[target_id].item()) if has_text is not None else True
                         row = {
                             "query_id": f"{split}|{seed}|{direction}|r={r_id}|h={h_id}|t={t_id}|target={target_id}",
                             "split": split,
@@ -458,7 +523,11 @@ def evaluate_split(
                             "head_id": h_id,
                             "tail_id": t_id,
                             "target_entity_id": target_id,
-                            "target_regime": target_regime(direction, target_has_img),
+                            "target_regime": (
+                                target_regime(direction, target_has_img)
+                                if protocol_version == OPENBG_LEGACY_V1
+                                else general_target_regime(direction, target_has_text, target_has_img)
+                            ),
                             "rr_gate": float(gate_rr[j]),
                             "rr_residual": float(residual_rr[j]),
                             "rr_global_interp": float(global_rr[j]),
@@ -471,6 +540,11 @@ def evaluate_split(
                             "alpha_direction": float(selected_direction_alpha[direction]) if selected_direction_alpha else float("nan"),
                             "alpha_relation": float(relation_alpha[j]),
                         }
+                        if protocol_version == MMKG_GENERAL_V1:
+                            row["dataset"] = dataset_name
+                            row["protocol_version"] = protocol_version
+                            row["target_has_text"] = int(target_has_text)
+                            row["target_has_img"] = int(target_has_img)
                         if query_soft_rr is not None and query_soft_alpha is not None:
                             row["rr_query_soft"] = float(query_soft_rr[j])
                             row["alpha_query_soft"] = float(query_soft_alpha[j])
@@ -571,7 +645,7 @@ def load_reference_metrics(baseline_summary: Path, candidate_main: Path) -> dict
 
 def result_row(method: str, granularity: str, alpha_policy: str, metrics: dict, refs: dict, notes: str) -> dict:
     mrr = float(metrics["mrr"])
-    return {
+    row = {
         "method": method,
         "level": "ensemble",
         "granularity": granularity,
@@ -582,10 +656,12 @@ def result_row(method: str, granularity: str, alpha_policy: str, metrics: dict, 
         "hits3": float(metrics["hits3"]),
         "hits10": float(metrics["hits10"]),
         "delta_vs_residual": mrr - refs["residual"],
-        "delta_vs_e5": mrr - refs["e5"],
-        "delta_vs_ca_s2": mrr - refs["ca_s2"],
         "notes": notes,
     }
+    if "e5" in refs and "ca_s2" in refs:
+        row["delta_vs_e5"] = mrr - refs["e5"]
+        row["delta_vs_ca_s2"] = mrr - refs["ca_s2"]
+    return row
 
 
 def write_csv_rows(path: Path, rows: list[dict]) -> None:
@@ -736,10 +812,14 @@ def main() -> None:
     output_dir = Path(args.output_dir)
     checkpoint_dir = Path(args.checkpoint_dir) if args.checkpoint_dir else output_dir / "checkpoints"
     alphas = parse_alpha_grid(args.alphas)
-    refs = load_reference_metrics(Path(args.baseline_summary), Path(args.candidate_main_results))
-
     dev_pairs = load_run_pairs(score_dir, args.selection_split)
     test_pairs = load_run_pairs(score_dir, args.split)
+    dataset_name, protocol_version = validate_run_pair_metadata(dev_pairs, test_pairs)
+    refs = (
+        load_reference_metrics(Path(args.baseline_summary), Path(args.candidate_main_results))
+        if protocol_version == OPENBG_LEGACY_V1
+        else None
+    )
 
     print("[INFO] evaluating development split for policy selection")
     dev = evaluate_split(
@@ -798,6 +878,13 @@ def main() -> None:
         resume=not args.no_resume,
         write_checkpoints=not args.no_checkpoint,
     )
+    if refs is None:
+        selected_rows = test["selected_policy_rows"]
+        if not selected_rows:
+            raise RuntimeError("General score analysis produced no selected query rows.")
+        refs = {
+            "residual": float(np.mean([float(row["rr_residual"]) for row in selected_rows])),
+        }
 
     curve_rows = alpha_curve_rows(args.selection_split, dev) + alpha_curve_rows(args.split, test)
 
@@ -854,6 +941,8 @@ def main() -> None:
                 },
                 "alpha_curves": curve_rows,
                 "reference_metrics": refs,
+                "dataset": dataset_name,
+                "protocol_version": protocol_version,
                 "rows": rows,
             },
             indent=2,
@@ -863,23 +952,40 @@ def main() -> None:
     )
 
     md_frame = pd.DataFrame(rows)
-    for col in ["mrr", "hits1", "hits3", "hits10", "delta_vs_residual", "delta_vs_e5", "delta_vs_ca_s2"]:
+    for col in [
+        "mrr",
+        "hits1",
+        "hits3",
+        "hits10",
+        "delta_vs_residual",
+        "delta_vs_e5",
+        "delta_vs_ca_s2",
+    ]:
+        if col not in md_frame:
+            continue
         md_frame[col] = md_frame[col].map(lambda value: f"{float(value):.4f}")
     (output_dir / "score_ensemble_baselines.md").write_text(markdown_table(md_frame) + "\n", encoding="utf-8")
-    paper_table_path = Path(args.paper_table_dir) / "table_score_ensemble_baselines.tex"
-    write_latex_table(paper_table_path, rows, refs)
-    paper_figures_path = Path(args.paper_figures_dir) / "table_score_ensemble_baselines.tex"
-    if paper_figures_path != paper_table_path:
-        write_latex_table(paper_figures_path, rows, refs)
-    write_alpha_curve_outputs(output_dir, Path(args.paper_figures_dir), curve_rows)
+    if protocol_version == OPENBG_LEGACY_V1:
+        paper_table_path = Path(args.paper_table_dir) / "table_score_ensemble_baselines.tex"
+        write_latex_table(paper_table_path, rows, refs)
+        paper_figures_path = Path(args.paper_figures_dir) / "table_score_ensemble_baselines.tex"
+        if paper_figures_path != paper_table_path:
+            write_latex_table(paper_figures_path, rows, refs)
+        alpha_figure_dir = Path(args.paper_figures_dir)
+    else:
+        paper_table_path = None
+        paper_figures_path = None
+        alpha_figure_dir = output_dir / "figures"
+    write_alpha_curve_outputs(output_dir, alpha_figure_dir, curve_rows)
     print(f"[OK] wrote {output_dir / 'score_ensemble_baselines.csv'}")
     if test["selected_policy_rows"]:
         print(f"[OK] wrote {output_dir / 'score_ensemble_selected_query_rows.csv'}")
     print(f"[OK] wrote {output_dir / 'score_ensemble_baselines.json'}")
     print(f"[OK] wrote {output_dir / 'score_ensemble_baselines.md'}")
     print(f"[OK] wrote {output_dir / 'score_ensemble_alpha_curve.csv'}")
-    print(f"[OK] wrote {paper_table_path}")
-    if paper_figures_path != paper_table_path:
+    if paper_table_path is not None:
+        print(f"[OK] wrote {paper_table_path}")
+    if paper_figures_path is not None and paper_figures_path != paper_table_path:
         print(f"[OK] wrote {paper_figures_path}")
 
 

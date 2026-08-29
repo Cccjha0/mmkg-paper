@@ -7,10 +7,13 @@ from pathlib import Path
 import torch
 import torch.nn.functional as F
 
-from router.schemas import CleanRouterFeatureRecord, PosthocRouterFeatureRecord
+from ml.training.src.data.dataset_spec import MMKG_GENERAL_V1
+from ml.training.src.data.feature_bundle import load_processed_feature_bundle
+from router.schemas import CleanRouterFeatureRecord, GeneralCleanRouterFeatureRecord, PosthocRouterFeatureRecord
 
 
 def load_cache_bundle(cache_dir: str | Path) -> dict:
+    """Load the frozen OpenBG cache contract (legacy default)."""
     cache_dir = Path(cache_dir)
     text_feat = torch.load(cache_dir / "text_emb.pt", map_location="cpu").float()
     img_feat = torch.load(cache_dir / "img_emb.pt", map_location="cpu").float()
@@ -20,6 +23,32 @@ def load_cache_bundle(cache_dir: str | Path) -> dict:
         "text_feat": text_feat,
         "img_feat": img_feat,
         "has_img": has_img,
+    }
+
+
+def load_general_cache_bundle(processed_dir: str | Path) -> dict:
+    """Load canonical features and independent availability masks."""
+    processed_dir = Path(processed_dir)
+    manifest_path = processed_dir / "manifest.json"
+    if not manifest_path.exists():
+        raise FileNotFoundError(f"Missing canonical dataset manifest: {manifest_path}")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("protocol") != MMKG_GENERAL_V1:
+        raise ValueError(
+            f"Expected manifest protocol {MMKG_GENERAL_V1!r}, got {manifest.get('protocol')!r}."
+        )
+    dataset = str(manifest.get("dataset", "")).strip()
+    if not dataset:
+        raise ValueError("Canonical dataset manifest is missing a non-empty dataset name.")
+    features = load_processed_feature_bundle(processed_dir)
+    return {
+        "cache_dir": processed_dir.as_posix(),
+        "dataset": dataset,
+        "protocol_version": MMKG_GENERAL_V1,
+        "text_feat": features.text_features,
+        "img_feat": features.image_features,
+        "has_text": features.has_text,
+        "has_img": features.has_img,
     }
 
 
@@ -93,6 +122,8 @@ def observed_has_img_flag(cache_bundle: dict, entity_id: int) -> int:
 def _merge_query_eval_pair(gate_rows: list[dict], residual_rows: list[dict]) -> list[tuple[dict, dict]]:
     gate_by_id = {row["query_id"]: row for row in gate_rows}
     residual_by_id = {row["query_id"]: row for row in residual_rows}
+    if len(gate_by_id) != len(gate_rows) or len(residual_by_id) != len(residual_rows):
+        raise RuntimeError("Duplicate query_id detected in gate or residual query rows.")
     gate_ids = set(gate_by_id)
     residual_ids = set(residual_by_id)
     if gate_ids != residual_ids:
@@ -102,6 +133,37 @@ def _merge_query_eval_pair(gate_rows: list[dict], residual_rows: list[dict]) -> 
             f"query_id mismatch between experts: missing_in_gate={missing_in_gate}, missing_in_residual={missing_in_residual}"
         )
     return [(gate_by_id[qid], residual_by_id[qid]) for qid in sorted(gate_ids)]
+
+
+def _require_single_metadata(rows: list[dict], field: str, expert: str) -> str:
+    values = {str(row.get(field, "")).strip() for row in rows}
+    if len(values) != 1 or "" in values:
+        raise RuntimeError(f"{expert} query rows must contain exactly one non-empty {field}: {sorted(values)}")
+    return next(iter(values))
+
+
+def _validate_general_sources(
+    gate_rows: list[dict],
+    residual_rows: list[dict],
+    cache_bundle: dict,
+) -> tuple[str, str]:
+    gate_dataset = _require_single_metadata(gate_rows, "dataset", "gate")
+    residual_dataset = _require_single_metadata(residual_rows, "dataset", "residual")
+    gate_protocol = _require_single_metadata(gate_rows, "protocol_version", "gate")
+    residual_protocol = _require_single_metadata(residual_rows, "protocol_version", "residual")
+    cache_dataset = str(cache_bundle.get("dataset", "")).strip()
+    cache_protocol = str(cache_bundle.get("protocol_version", "")).strip()
+    if gate_dataset != residual_dataset or gate_dataset != cache_dataset:
+        raise RuntimeError(
+            "General router sources must use one dataset: "
+            f"gate={gate_dataset!r}, residual={residual_dataset!r}, cache={cache_dataset!r}."
+        )
+    if gate_protocol != residual_protocol or gate_protocol != cache_protocol or gate_protocol != MMKG_GENERAL_V1:
+        raise RuntimeError(
+            "General router sources must use mmkg_general_v1: "
+            f"gate={gate_protocol!r}, residual={residual_protocol!r}, cache={cache_protocol!r}."
+        )
+    return gate_dataset, gate_protocol
 
 
 def _default_prior(relation_id: int, relation_prior_map: dict[int, dict]) -> dict:
@@ -143,6 +205,66 @@ def build_clean_feature_rows(
             observed_has_img=observed_has_img_flag(cache_bundle, observed_entity_id),
             observed_text_img_cosine=cosine_for_observed_entity(cache_bundle, observed_entity_id),
             observed_img_missing_replaced=missing_replaced_flag_for_observed_entity(cache_bundle, observed_entity_id),
+            relation_gain_prior=float(prior["relation_gain_prior"]),
+            relation_fusion_win_rate=float(prior["relation_fusion_win_rate"]),
+            relation_support=int(prior["relation_support"]),
+            relation_is_visual_prior=int(prior["relation_is_visual_prior"]),
+            label_gain=int(label_row["label_gain"]) if label_row is not None else None,
+            delta_threshold=float(label_row["delta_threshold"]) if label_row is not None else None,
+        )
+        rows.append(record.to_dict())
+    return rows
+
+
+def build_general_clean_feature_rows(
+    gate_rows: list[dict],
+    residual_rows: list[dict],
+    relation_prior_map: dict[int, dict],
+    cache_bundle: dict,
+    label_by_query_id: dict[str, dict] | None = None,
+) -> list[dict]:
+    """Build legal router inputs without leaking target modality masks."""
+    dataset, protocol_version = _validate_general_sources(gate_rows, residual_rows, cache_bundle)
+    rows: list[dict] = []
+    for gate, residual in _merge_query_eval_pair(gate_rows, residual_rows):
+        for field in ("split", "seed", "direction", "relation_id", "head_id", "tail_id"):
+            if str(gate[field]) != str(residual[field]):
+                raise RuntimeError(
+                    f"General router expert mismatch for query_id={gate['query_id']}: "
+                    f"{field} gate={gate[field]!r}, residual={residual[field]!r}."
+                )
+        relation_id = int(gate["relation_id"])
+        entity_id = get_observed_entity_id(gate)
+        prior = _default_prior(relation_id, relation_prior_map)
+        label_row = label_by_query_id.get(gate["query_id"]) if label_by_query_id is not None else None
+        if label_row is not None:
+            label_dataset = str(label_row.get("dataset", "")).strip()
+            label_protocol = str(label_row.get("protocol_version", "")).strip()
+            if label_dataset != dataset or label_protocol != protocol_version:
+                raise RuntimeError(
+                    f"Gain label metadata mismatch for query_id={gate['query_id']}: "
+                    f"dataset={label_dataset!r}, protocol={label_protocol!r}."
+                )
+        has_text = bool(cache_bundle["has_text"][entity_id].item())
+        has_img = bool(cache_bundle["has_img"][entity_id].item())
+        same_dim = cache_bundle["text_feat"].size(1) == cache_bundle["img_feat"].size(1)
+        cosine_valid = has_text and has_img and same_dim
+        cosine = cosine_for_entity(cache_bundle, entity_id) if cosine_valid else 0.0
+        record = GeneralCleanRouterFeatureRecord(
+            query_id=str(gate["query_id"]),
+            split=str(gate["split"]),
+            seed=int(gate["seed"]),
+            direction=str(gate["direction"]),
+            relation_id=relation_id,
+            relation_name=str(gate["relation_name"]),
+            head_id=int(gate["head_id"]),
+            tail_id=int(gate["tail_id"]),
+            observed_entity_id=entity_id,
+            observed_has_text=int(has_text),
+            observed_has_img=int(has_img),
+            observed_modality_count=int(has_text) + int(has_img),
+            observed_text_img_cosine=cosine,
+            observed_text_img_cosine_valid=int(cosine_valid),
             relation_gain_prior=float(prior["relation_gain_prior"]),
             relation_fusion_win_rate=float(prior["relation_fusion_win_rate"]),
             relation_support=int(prior["relation_support"]),
@@ -263,6 +385,20 @@ def summarize_clean_feature_rows(train_rows_by_delta: dict[str, list[dict]], tes
         "relation_fusion_win_rate",
         "relation_support",
         "observed_text_img_cosine",
+    ]
+    return _summarize_feature_rows_impl(train_rows_by_delta, test_rows, numeric_cols)
+
+
+def summarize_general_clean_feature_rows(train_rows_by_delta: dict[str, list[dict]], test_rows: list[dict]) -> dict:
+    numeric_cols = [
+        "relation_gain_prior",
+        "relation_fusion_win_rate",
+        "relation_support",
+        "observed_has_text",
+        "observed_has_img",
+        "observed_modality_count",
+        "observed_text_img_cosine",
+        "observed_text_img_cosine_valid",
     ]
     return _summarize_feature_rows_impl(train_rows_by_delta, test_rows, numeric_cols)
 

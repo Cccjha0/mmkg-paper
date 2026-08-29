@@ -1,5 +1,4 @@
 import argparse
-import json
 from pathlib import Path
 import sys
 
@@ -101,6 +100,27 @@ def normalize_query_rows(rows: list[dict]) -> list[dict]:
     return out
 
 
+def validate_dataset_local(gate_rows: list[dict], residual_rows: list[dict]) -> dict[str, str]:
+    """Reject accidental cross-dataset priors when general exports carry metadata."""
+    for expert, rows in (("gate", gate_rows), ("residual", residual_rows)):
+        splits = {str(row.get("split", "")) for row in rows}
+        if splits != {"dev"}:
+            raise RuntimeError(f"Relation priors are validation-only; {expert} rows contain splits={sorted(splits)}")
+    metadata: dict[str, str] = {}
+    for field in ("dataset", "protocol_version"):
+        gate_values = {str(row[field]) for row in gate_rows if row.get(field) not in (None, "")}
+        residual_values = {str(row[field]) for row in residual_rows if row.get(field) not in (None, "")}
+        if not gate_values and not residual_values:
+            continue  # Frozen legacy CSVs predate these columns.
+        if len(gate_values) != 1 or gate_values != residual_values:
+            raise RuntimeError(
+                f"Relation priors must be dataset-local: {field} gate={sorted(gate_values)} "
+                f"residual={sorted(residual_values)}"
+            )
+        metadata[field] = next(iter(gate_values))
+    return metadata
+
+
 def convert_rows_for_contract(rows: list[dict]) -> list[dict]:
     out = []
     for row in rows:
@@ -135,8 +155,11 @@ def build_from_contract_inputs(
     use_shrinkage: bool,
     shrink_k: float,
 ) -> None:
-    gate_rows = normalize_query_rows(read_table(gate_dev))
-    residual_rows = normalize_query_rows(read_table(residual_dev))
+    raw_gate_rows = read_table(gate_dev)
+    raw_residual_rows = read_table(residual_dev)
+    dataset_metadata = validate_dataset_local(raw_gate_rows, raw_residual_rows)
+    gate_rows = normalize_query_rows(raw_gate_rows)
+    residual_rows = normalize_query_rows(raw_residual_rows)
     legacy_rows = compute_relation_gain_stats(
         gate_rows,
         residual_rows,
@@ -154,6 +177,7 @@ def build_from_contract_inputs(
     summary["shrink_k"] = float(shrink_k)
     summary["source_gate_dev"] = gate_dev.as_posix()
     summary["source_residual_dev"] = residual_dev.as_posix()
+    summary.update(dataset_metadata)
     summary_path = Path(summary_json) if summary_json else out_path.with_name(out_path.stem + "_summary.json")
     write_json(summary_path, summary)
     print(f"[OK] wrote summary         -> {summary_path.as_posix()}")
@@ -172,9 +196,16 @@ def build_from_legacy_dirs(args: argparse.Namespace) -> None:
 
     all_gate_rows: list[dict] = []
     all_residual_rows: list[dict] = []
+    dataset_metadata: dict[str, str] = {}
     for seed in common_seeds:
-        all_gate_rows.extend(normalize_query_rows(read_table(gate_files[seed])))
-        all_residual_rows.extend(normalize_query_rows(read_table(residual_files[seed])))
+        raw_gate = read_table(gate_files[seed])
+        raw_residual = read_table(residual_files[seed])
+        seed_metadata = validate_dataset_local(raw_gate, raw_residual)
+        if dataset_metadata and seed_metadata != dataset_metadata:
+            raise RuntimeError("Relation prior seeds contain different dataset/protocol metadata.")
+        dataset_metadata = dataset_metadata or seed_metadata
+        all_gate_rows.extend(normalize_query_rows(raw_gate))
+        all_residual_rows.extend(normalize_query_rows(raw_residual))
 
     rows = compute_relation_gain_stats(
         all_gate_rows,
@@ -192,6 +223,7 @@ def build_from_legacy_dirs(args: argparse.Namespace) -> None:
     summary["use_shrinkage"] = bool(args.use_shrinkage)
     summary["shrink_k"] = float(args.shrink_k)
     summary["seeds"] = common_seeds
+    summary.update(dataset_metadata)
     summary_path = (
         Path(args.summary_json)
         if args.summary_json

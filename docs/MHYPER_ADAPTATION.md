@@ -55,6 +55,11 @@ The following adaptations are required by the locked OpenBG baseline protocol:
    adapter fits image and text PCA only on entity IDs visible as a head or tail
    in the training split, then transforms all entity rows. The fitted entity
    IDs are recorded as `model.pca_fit_entity_ids` for auditing.
+   Under `mmkg_general_v1`, each modality fit is further restricted to
+   train-visible entities whose explicit modality mask is true; the two exact
+   subsets are exposed as `pca_fit_image_entity_ids` and
+   `pca_fit_text_entity_ids`. Missing projected and independent modality paths
+   are masked, while the frozen OpenBG path remains unchanged.
 3. Training triples are augmented with `(t, r + R, h)` only inside the
    one-vs-all training engine. The original 136 relations remain the evaluator
    interface; head candidates are scored through reciprocal relations.

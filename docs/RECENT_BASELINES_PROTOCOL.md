@@ -33,11 +33,12 @@ fixed inputs are allowed when they are part of the model implementation.
 
 For every entity without an image, `img_feat_raw.pt` contains the zero raw
 embedding and `has_img.pt` is the authoritative missing-image indicator.  No
-model may replace missing images with a different raw feature, silently drop
-the entity, or derive availability from another source.  A model that has an
-explicit missingness mechanism must use `has_img.pt`; a model without such a
-mechanism still receives the same zero embedding.  The adapter's handling of
-these two inputs must be recorded for each baseline.
+adapter may rewrite the shared cache, silently drop the entity, or derive
+availability from another source.  A released model's own internal missing-
+modality mechanism (for example APKGC's Gaussian replacement) is permitted
+only when it is driven by `has_img.pt` and does not mutate the shared raw cache;
+otherwise the model receives the same zero embedding.  The adapter's exact
+handling of these two inputs must be recorded for each baseline.
 
 No additional image collection, text corpus, pretrained feature cache, or
 transductive feature fitting on dev/test entities is permitted unless it is
@@ -137,8 +138,8 @@ amendment to this document before the affected formal experiment is run.
 Before publishing a result, confirm all of the following:
 
 1. The run used the exact `paper_split` files and the three fixed caches.
-2. Missing images remained zero raw embeddings and used the shared indicator
-   when the model supports missingness input.
+2. Missing images remained zero in the shared raw cache; any official internal
+   replacement used the shared indicator and was documented.
 3. Both filtered head and filtered tail rankings were computed by the current
    evaluator, with equal-weight aggregation.
 4. All selection and tuning decisions used dev results only.

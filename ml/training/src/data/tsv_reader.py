@@ -38,3 +38,21 @@ def read_allow_2or3(path: str):
                 # print(f"[WARN] {path}:{ln} cols={len(parts)} {repr(line)}")
 
     return triples3, queries2, bad
+
+
+def read_integer_triples(path: str):
+    """Read canonical ``head<TAB>relation<TAB>tail`` integer triples."""
+    triples = []
+    with open(path, "r", encoding="utf-8") as handle:
+        for line_number, line in enumerate(handle, start=1):
+            stripped = line.strip()
+            if not stripped:
+                continue
+            parts = stripped.split("\t")
+            if len(parts) != 3:
+                raise ValueError(f"{path}:{line_number}: expected exactly three tab-separated columns")
+            try:
+                triples.append(tuple(int(value) for value in parts))
+            except ValueError as exc:
+                raise ValueError(f"{path}:{line_number}: non-integer canonical triple") from exc
+    return triples

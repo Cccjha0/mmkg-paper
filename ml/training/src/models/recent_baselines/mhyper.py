@@ -143,6 +143,7 @@ class OpenBGMHyper(ReciprocalHeadScoringMixin, nn.Module):
         text_feat: torch.Tensor,
         img_feat: torch.Tensor,
         has_img: torch.Tensor,
+        has_text: torch.Tensor | None = None,
         num_entities: int,
         num_relations: int,
         rank: int = 128,
@@ -181,10 +182,18 @@ class OpenBGMHyper(ReciprocalHeadScoringMixin, nn.Module):
         self.register_buffer("text_feat", text_feat.detach().float().clone())
         self.register_buffer("img_feat", img_feat.detach().float().clone())
         self.register_buffer("has_img", has_img.detach().bool().clone())
+        if has_text is not None:
+            if has_text.numel() != num_entities:
+                raise ValueError("has_text must contain one indicator per entity.")
+            self.register_buffer("has_text", has_text.detach().bool().clone())
+        else:
+            self.has_text = None
         self.register_buffer("inverse_relation_ids", build_inverse_relation_ids(num_relations))
         # Audit-only runtime metadata. It is deliberately excluded from the
         # checkpoint because its dynamic shape would prevent strict reloads.
         self.register_buffer("pca_fit_entity_ids", torch.empty(0, dtype=torch.long), persistent=False)
+        self.register_buffer("pca_fit_image_entity_ids", torch.empty(0, dtype=torch.long), persistent=False)
+        self.register_buffer("pca_fit_text_entity_ids", torch.empty(0, dtype=torch.long), persistent=False)
 
         self.all = nn.Embedding(num_entities, 2 * rank, sparse=True)
         self.structure = nn.Embedding(num_entities, 2 * rank, sparse=True)
@@ -206,16 +215,41 @@ class OpenBGMHyper(ReciprocalHeadScoringMixin, nn.Module):
         self.register_buffer("stru_mean", self.stru.weight.detach().mean(dim=0, keepdim=True) * init_size)
         self.register_buffer("stru_std", self.stru.weight.detach().std(dim=0, keepdim=True) * init_size)
         scaled_img, scaled_text = self._scaled_features()
-        self.register_buffer("img_mean", scaled_img.mean(dim=0, keepdim=True))
-        self.register_buffer("img_std", scaled_img.std(dim=0, keepdim=True))
-        self.register_buffer("text_mean", scaled_text.mean(dim=0, keepdim=True))
-        self.register_buffer("text_std", scaled_text.std(dim=0, keepdim=True))
+        if self.has_text is not None:
+            valid_img = scaled_img[self.has_img]
+            valid_text = scaled_text[self.has_text]
+            if valid_img.shape[0] < 2 or valid_text.shape[0] < 2:
+                raise ValueError("General M-Hyper requires at least two observed entities per modality.")
+        else:
+            valid_img, valid_text = scaled_img, scaled_text
+        self.register_buffer("img_mean", valid_img.mean(dim=0, keepdim=True))
+        self.register_buffer("img_std", valid_img.std(dim=0, keepdim=True))
+        self.register_buffer("text_mean", valid_text.mean(dim=0, keepdim=True))
+        self.register_buffer("text_std", valid_text.std(dim=0, keepdim=True))
 
         self._training_prepared = not self.pca_init
         self._eval_cache: dict[str, torch.Tensor] | None = None
 
     def _scaled_features(self) -> tuple[torch.Tensor, torch.Tensor]:
         return self.img_feat * self.init_size, self.text_feat * self.init_size
+
+    def _apply_general_masks(
+        self, projected_image: torch.Tensor, projected_text: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        if self.has_text is None:
+            return projected_image, projected_text
+        return (
+            projected_image * self.has_img.unsqueeze(-1),
+            projected_text * self.has_text.unsqueeze(-1),
+        )
+
+    def _independent_modalities(self) -> tuple[torch.Tensor, torch.Tensor]:
+        if self.has_text is None:
+            return self.img.weight, self.text.weight
+        return (
+            self.img.weight * self.has_img.unsqueeze(-1),
+            self.text.weight * self.has_text.unsqueeze(-1),
+        )
 
     @torch.no_grad()
     def prepare_training(self, train_triples: Sequence[Sequence[int]] | torch.LongTensor) -> None:
@@ -229,29 +263,41 @@ class OpenBGMHyper(ReciprocalHeadScoringMixin, nn.Module):
             raise ValueError("train_triples must have shape [N, 3].")
         fit_ids = torch.unique(torch.cat((rows[:, 0], rows[:, 2]), dim=0), sorted=True)
         self.pca_fit_entity_ids = fit_ids.to(device=self.pca_fit_entity_ids.device)
+        if self.has_text is None:
+            image_fit_ids = fit_ids
+            text_fit_ids = fit_ids
+        else:
+            has_img_cpu = self.has_img.detach().cpu()
+            has_text_cpu = self.has_text.detach().cpu()
+            image_fit_ids = fit_ids[has_img_cpu[fit_ids]]
+            text_fit_ids = fit_ids[has_text_cpu[fit_ids]]
+        self.pca_fit_image_entity_ids = image_fit_ids.to(device=self.pca_fit_image_entity_ids.device)
+        self.pca_fit_text_entity_ids = text_fit_ids.to(device=self.pca_fit_text_entity_ids.device)
         if not self.pca_init:
             self._training_prepared = True
             return
-        if fit_ids.numel() < 2 * self.rank:
-            raise ValueError(
-                f"Train-visible PCA needs at least {2 * self.rank} entities; got {fit_ids.numel()}."
-            )
 
         from sklearn.decomposition import PCA
 
         scaled_img, scaled_text = self._scaled_features()
-        fit_ids_cpu = fit_ids.cpu()
 
-        def fit_and_transform(features: torch.Tensor) -> torch.Tensor:
+        def fit_and_transform(features: torch.Tensor, modality_fit_ids: torch.LongTensor, modality: str) -> torch.Tensor:
             values = features.detach().cpu().numpy()
+            fit_ids_cpu = modality_fit_ids.cpu()
+            components = 2 * self.rank
+            if fit_ids_cpu.numel() < components or values.shape[1] < components:
+                raise ValueError(
+                    f"Train-visible {modality} PCA needs at least {components} observed entities "
+                    f"and feature dimensions; got entities={fit_ids_cpu.numel()}, dim={values.shape[1]}."
+                )
             pca = PCA(n_components=2 * self.rank, random_state=self.pca_random_state)
             pca.fit(values[fit_ids_cpu.numpy()])
             transformed = pca.transform(values)
             return torch.from_numpy(transformed).to(dtype=torch.float32)
 
         # Upstream multiplies the PCA output by init_size once more.
-        img_reduced = fit_and_transform(scaled_img) * self.init_size
-        text_reduced = fit_and_transform(scaled_text) * self.init_size
+        img_reduced = fit_and_transform(scaled_img, image_fit_ids, "image") * self.init_size
+        text_reduced = fit_and_transform(scaled_text, text_fit_ids, "text") * self.init_size
         self.img.weight.copy_(img_reduced.to(device=self.img.weight.device))
         self.text.weight.copy_(text_reduced.to(device=self.text.weight.device))
         self._training_prepared = True
@@ -275,12 +321,14 @@ class OpenBGMHyper(ReciprocalHeadScoringMixin, nn.Module):
         projected_structure = self.structure.weight
         projected_image = self.img_proj(scaled_img)
         projected_text = self.text_proj(scaled_text)
+        projected_image, projected_text = self._apply_general_masks(projected_image, projected_text)
+        independent_image, independent_text = self._independent_modalities()
         output = self.ferf(
             self.stru.weight,
             projected_structure,
-            self.img.weight,
+            independent_image,
             projected_image,
-            self.text.weight,
+            independent_text,
             projected_text,
         )
         return output[0], output[1], output[2], (
@@ -301,12 +349,14 @@ class OpenBGMHyper(ReciprocalHeadScoringMixin, nn.Module):
         noisy_text_raw = scaled_text + self.sparse_noise(self.num_entities, self.text_mean, self.text_std)
         projected_image = self.img_proj(noisy_img_raw)
         projected_text = self.text_proj(noisy_text_raw)
+        projected_image, projected_text = self._apply_general_masks(projected_image, projected_text)
+        independent_image, independent_text = self._independent_modalities()
         output = self.ferf(
             self.stru.weight,
             noisy_structure,
-            self.img.weight,
+            independent_image,
             projected_image,
-            self.text.weight,
+            independent_text,
             projected_text,
         )
         return output[0], output[1], output[2], (
