@@ -1,4 +1,4 @@
-# Availability-aware vector Gate v2. Select checkpoints on validation only.
+# Availability-aware vector Gate v2 with DB15K v1-aligned optimization.
 dataset:
   name: db15k
   loader: openke_mmkg
@@ -19,7 +19,7 @@ training:
   termination_policy: dev_early_stop
   lr: 0.001
   text_dropout: 0.0
-  img_dropout: 0.1
+  img_dropout: 0.2
   gate_reg_weight: 0.001
   gate_reg_target: 0.5
   epochs: 300
@@ -35,4 +35,4 @@ evaluation:
   run_test: false
 
 output:
-  exp_name: db15k_gate_v2_vector
+  exp_name: db15k_gate_v2_vector_v1hp
