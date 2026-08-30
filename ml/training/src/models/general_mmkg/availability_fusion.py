@@ -8,7 +8,7 @@ from ml.training.src.models.decoders.complex import ComplEx
 
 
 class AvailabilityAwareGatedFusion(nn.Module):
-    """Relation-aware two-modality fusion with explicit availability masks."""
+    """Relation-aware vector fusion with explicit modality availability masks."""
 
     def __init__(self, d: int, num_relations: int, use_layernorm: bool = True) -> None:
         super().__init__()
@@ -17,8 +17,12 @@ class AvailabilityAwareGatedFusion(nn.Module):
         if self.use_layernorm:
             self.text_norm = nn.LayerNorm(self.d)
             self.image_norm = nn.LayerNorm(self.d)
-        self.gate = nn.Linear(2 * self.d + 2, 2)
-        self.relation_bias = nn.Embedding(num_relations, 2)
+        # Keep the expressive per-dimension gate used by Gate v1 while adding
+        # strict availability masking.  A scalar two-logit gate proved too
+        # restrictive on DB15K because all embedding dimensions had to share
+        # the same modality mixture.
+        self.gate = nn.Linear(2 * self.d + 2, self.d)
+        self.relation_bias = nn.Embedding(num_relations, self.d)
         self.fallback = nn.Parameter(torch.zeros(self.d))
         nn.init.xavier_uniform_(self.gate.weight)
         nn.init.zeros_(self.gate.bias)
@@ -56,14 +60,21 @@ class AvailabilityAwareGatedFusion(nn.Module):
         ) + self.relation_bias(relations)
 
         any_available = availability.any(dim=-1)
-        masked_logits = logits.masked_fill(~availability, torch.finfo(logits.dtype).min)
-        # Give the all-missing rows finite logits solely to avoid NaN softmax;
-        # their weights are explicitly zeroed and the fallback is used below.
-        masked_logits = torch.where(any_available.unsqueeze(-1), masked_logits, torch.zeros_like(masked_logits))
-        weights = F.softmax(masked_logits, dim=-1)
-        weights = torch.where(any_available.unsqueeze(-1), weights, torch.zeros_like(weights))
+        both_available = has_text & has_img
+        text_only = has_text & ~has_img
+        image_only = ~has_text & has_img
 
-        fused = weights[:, :1] * text_observed + weights[:, 1:] * image_observed
+        learned_text_weight = torch.sigmoid(logits)
+        text_weight = torch.zeros_like(learned_text_weight)
+        text_weight = torch.where(both_available.unsqueeze(-1), learned_text_weight, text_weight)
+        text_weight = torch.where(text_only.unsqueeze(-1), torch.ones_like(text_weight), text_weight)
+
+        image_weight = torch.zeros_like(learned_text_weight)
+        image_weight = torch.where(both_available.unsqueeze(-1), 1.0 - learned_text_weight, image_weight)
+        image_weight = torch.where(image_only.unsqueeze(-1), torch.ones_like(image_weight), image_weight)
+        weights = torch.stack([text_weight, image_weight], dim=1)
+
+        fused = text_weight * text_observed + image_weight * image_observed
         fallback = self.fallback.unsqueeze(0).expand_as(fused)
         fused = torch.where(any_available.unsqueeze(-1), fused, fallback)
         return fused, weights
@@ -148,6 +159,13 @@ class MMKGAvailabilityAwareFusionLP(nn.Module):
         has_text, has_img = self._effective_availability(eids)
         return self.fusion(text, image, relations, has_text, has_img)
 
+    @torch.no_grad()
+    def gate_for_entities(self, eids: torch.LongTensor) -> torch.Tensor:
+        """Return deterministic per-entity mean text weights for diagnostics."""
+        relations = eids.remainder(self.num_relations)
+        _, weights = self.entity_with_relation(eids, relations)
+        return weights[:, 0, :].mean(dim=-1)
+
     def _score_with_aux(
         self,
         triples: torch.LongTensor,
@@ -183,10 +201,10 @@ class MMKGAvailabilityAwareFusionLP(nn.Module):
         if self.gate_reg_weight <= 0.0:
             return self.fusion.fallback.new_zeros(())
         weights = torch.cat(weight_tensors, dim=0)
-        both_available = (weights > 0).all(dim=-1)
+        both_available = (weights[:, 0, :].sum(dim=-1) > 0) & (weights[:, 1, :].sum(dim=-1) > 0)
         if not bool(both_available.any()):
             return weights.new_zeros(())
-        text_weight = weights[both_available, 0].mean()
+        text_weight = weights[both_available, 0, :].mean()
         return self.gate_reg_weight * (text_weight - self.gate_reg_target).pow(2)
 
     def forward(self, positive: torch.LongTensor, negative: torch.LongTensor) -> torch.Tensor:

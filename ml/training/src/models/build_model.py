@@ -90,9 +90,11 @@ def build_model(cfg: dict, dataset_bundle: DatasetBundle | None = None):
         )
         return model, dataset_bundle.num_entities
 
-    if model_name == "mmkg_gate_only_v2":
-        if dataset_bundle is None or protocol_version != MMKG_GENERAL_V1:
-            raise ValueError("mmkg_gate_only_v2 requires a mmkg_general_v1 dataset bundle.")
+    if model_name in {"mmkg_gate_only_v2", "openbg_img_gate_v2"}:
+        if dataset_bundle is None:
+            raise ValueError(f"{model_name} requires a dataset bundle.")
+        if protocol_version not in {MMKG_GENERAL_V1, OPENBG_LEGACY_V1}:
+            raise ValueError(f"Unsupported protocol for {model_name}: {protocol_version!r}")
         from ml.training.src.models.general_mmkg.availability_fusion import (
             MMKGAvailabilityAwareFusionLP,
         )
@@ -100,7 +102,7 @@ def build_model(cfg: dict, dataset_bundle: DatasetBundle | None = None):
         features = dataset_bundle.features
         mcfg = cfg["model"]
         tr = cfg["training"]
-        print("[BuildModel] building general-v2 expert: Availability-aware Fusion")
+        print("[BuildModel] building v2 expert: Availability-aware Vector Fusion")
         model = MMKGAvailabilityAwareFusionLP(
             text_feat=features.text_features,
             img_feat=features.image_features,

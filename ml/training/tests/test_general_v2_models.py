@@ -66,9 +66,12 @@ def test_availability_aware_fusion_covers_all_four_states_without_nan() -> None:
 
     assert torch.isfinite(fused).all()
     assert torch.isfinite(weights).all()
-    assert weights[1].tolist() == [1.0, 0.0]
-    assert weights[2].tolist() == [0.0, 1.0]
-    assert weights[3].tolist() == [0.0, 0.0]
+    assert weights.shape == (4, 2, 4)
+    assert weights[1, 0].tolist() == [1.0] * 4
+    assert weights[1, 1].tolist() == [0.0] * 4
+    assert weights[2, 0].tolist() == [0.0] * 4
+    assert weights[2, 1].tolist() == [1.0] * 4
+    assert weights[3].tolist() == [[0.0] * 4, [0.0] * 4]
     assert torch.equal(fused[1], text[1])
     assert torch.equal(fused[2], image[2])
     assert torch.equal(fused[3], fusion.fallback)
@@ -90,10 +93,10 @@ def test_independent_dropout_uses_the_same_missing_availability_path() -> None:
         torch.arange(4),
         torch.zeros(4, dtype=torch.long),
     )
-    assert weights[0].tolist() == [0.0, 1.0]
-    assert weights[1].tolist() == [0.0, 0.0]
-    assert weights[2].tolist() == [0.0, 1.0]
-    assert weights[3].tolist() == [0.0, 0.0]
+    assert weights[0].tolist() == [[0.0] * 4, [1.0] * 4]
+    assert weights[1].tolist() == [[0.0] * 4, [0.0] * 4]
+    assert weights[2].tolist() == [[0.0] * 4, [1.0] * 4]
+    assert weights[3].tolist() == [[0.0] * 4, [0.0] * 4]
 
 
 def test_general_v2_models_use_unified_filtered_bidirectional_ranking() -> None:
