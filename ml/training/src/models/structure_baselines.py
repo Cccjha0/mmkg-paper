@@ -47,12 +47,16 @@ class StructureComplExLP(nn.Module):
         pos_score = self.score(pos)
         neg_score = self.score(neg)
 
-        pos_loss = F.softplus(-pos_score).mean()
-        neg_weight = F.softmax(neg_score * self.adv_temperature, dim=0).detach()
-        neg_loss = (neg_weight * F.softplus(neg_score)).sum()
+        if neg_score.numel() != pos_score.numel() * self.neg_ratio:
+            raise ValueError("Negative score count must equal batch_size * neg_ratio.")
+        neg_score = neg_score.view(pos_score.size(0), self.neg_ratio)
+        pos_loss = F.softplus(-pos_score)
+        with torch.no_grad():
+            neg_weight = F.softmax(neg_score * self.adv_temperature, dim=1)
+        neg_loss = (neg_weight * F.softplus(neg_score)).sum(dim=1)
 
         reg = self.entity_l2_weight * self.entity.weight.pow(2).mean()
-        return pos_loss + neg_loss + reg
+        return (pos_loss + neg_loss).mean() + reg
 
 
 class StructureTuckERLP(nn.Module):
