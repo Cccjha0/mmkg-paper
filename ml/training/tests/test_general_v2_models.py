@@ -74,7 +74,13 @@ def test_availability_aware_fusion_covers_all_four_states_without_nan() -> None:
     assert weights[3].tolist() == [[0.0] * 4, [0.0] * 4]
     assert torch.equal(fused[1], text[1])
     assert torch.equal(fused[2], image[2])
-    assert torch.equal(fused[3], fusion.fallback)
+    assert torch.equal(fused[3], fusion.availability_state.weight[0])
+
+    with torch.no_grad():
+        fusion.availability_state.weight[2].fill_(0.25)
+    shifted, _ = fusion(text, image, torch.zeros(4, dtype=torch.long), has_text, has_img)
+    assert torch.equal(shifted[0], fused[0])
+    assert torch.allclose(shifted[1], text[1] + 0.25)
 
 
 def test_independent_dropout_uses_the_same_missing_availability_path() -> None:

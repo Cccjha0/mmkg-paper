@@ -1,4 +1,4 @@
-# Availability-aware vector Gate v2 with DB15K v1-aligned optimization.
+# Availability-aware vector Gate v2 with learned missing-state embeddings.
 dataset:
   name: db15k
   loader: openke_mmkg
@@ -35,4 +35,4 @@ evaluation:
   run_test: false
 
 output:
-  exp_name: db15k_gate_v2_vector_v1hp
+  exp_name: db15k_gate_v2_state

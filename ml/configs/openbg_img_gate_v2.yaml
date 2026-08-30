@@ -1,4 +1,4 @@
-# OpenBG-IMG availability-aware vector Gate v2 with v1-aligned optimization.
+# OpenBG-IMG availability-aware vector Gate v2 with learned missing-state embeddings.
 dataset:
   name: openbg_img
   train: data/datasets/openbg_img/paper_split/OpenBG-IMG_paper_train.tsv
@@ -20,12 +20,12 @@ model:
 
 training:
   termination_policy: dev_early_stop
-  lr: 0.0003
+  lr: 0.001
   text_dropout: 0.0
-  img_dropout: 0.2
+  img_dropout: 0.1
   gate_reg_weight: 0.001
   gate_reg_target: 0.5
-  epochs: 200
+  epochs: 300
   eval_every: 5
   early_stop_patience: 10
 
@@ -38,4 +38,4 @@ evaluation:
   run_test: false
 
 output:
-  exp_name: openbg_img_gate_v2_vector_v1hp
+  exp_name: openbg_img_gate_v2_state

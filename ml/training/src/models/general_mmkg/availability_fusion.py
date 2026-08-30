@@ -23,11 +23,15 @@ class AvailabilityAwareGatedFusion(nn.Module):
         # the same modality mixture.
         self.gate = nn.Linear(2 * self.d + 2, self.d)
         self.relation_bias = nn.Embedding(num_relations, self.d)
-        self.fallback = nn.Parameter(torch.zeros(self.d))
+        # State ids use the bit layout ``2 * has_text + has_img``:
+        # neither=0, image-only=1, text-only=2, both=3.  The embedding is
+        # zero-initialized and only added when at least one modality is absent,
+        # so complete entities retain the original strict fusion path.
+        self.availability_state = nn.Embedding(4, self.d)
         nn.init.xavier_uniform_(self.gate.weight)
         nn.init.zeros_(self.gate.bias)
         nn.init.zeros_(self.relation_bias.weight)
-        nn.init.normal_(self.fallback, mean=0.0, std=0.02)
+        nn.init.zeros_(self.availability_state.weight)
 
     def forward(
         self,
@@ -59,7 +63,6 @@ class AvailabilityAwareGatedFusion(nn.Module):
             torch.cat([text_observed, image_observed, availability.to(text.dtype)], dim=-1)
         ) + self.relation_bias(relations)
 
-        any_available = availability.any(dim=-1)
         both_available = has_text & has_img
         text_only = has_text & ~has_img
         image_only = ~has_text & has_img
@@ -75,8 +78,10 @@ class AvailabilityAwareGatedFusion(nn.Module):
         weights = torch.stack([text_weight, image_weight], dim=1)
 
         fused = text_weight * text_observed + image_weight * image_observed
-        fallback = self.fallback.unsqueeze(0).expand_as(fused)
-        fused = torch.where(any_available.unsqueeze(-1), fused, fallback)
+        state_ids = 2 * has_text.to(torch.long) + has_img.to(torch.long)
+        state_offset = self.availability_state(state_ids)
+        state_offset = torch.where(both_available.unsqueeze(-1), torch.zeros_like(state_offset), state_offset)
+        fused = fused + state_offset
         return fused, weights
 
 
@@ -199,7 +204,7 @@ class MMKGAvailabilityAwareFusionLP(nn.Module):
 
     def _gate_regularization(self, *weight_tensors: torch.Tensor) -> torch.Tensor:
         if self.gate_reg_weight <= 0.0:
-            return self.fusion.fallback.new_zeros(())
+            return self.fusion.availability_state.weight.new_zeros(())
         weights = torch.cat(weight_tensors, dim=0)
         both_available = (weights[:, 0, :].sum(dim=-1) > 0) & (weights[:, 1, :].sum(dim=-1) > 0)
         if not bool(both_available.any()):
