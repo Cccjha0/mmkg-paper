@@ -5,6 +5,7 @@ import hashlib
 import json
 import re
 import sys
+from collections import Counter
 from pathlib import Path
 from typing import Callable
 from urllib.parse import unquote
@@ -43,6 +44,27 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--text-pooling", default="mean", choices=["mean"])
     parser.add_argument("--image-pooling", default="mean", choices=["mean"])
+    parser.add_argument(
+        "--split-policy",
+        choices=["auto", "official", "db15k_train_holdout_v1"],
+        default="auto",
+        help=(
+            "Canonical split policy. 'auto' uses the clean official splits for MKG-W and "
+            "db15k_train_holdout_v1 for DB15K, whose mirrored valid2id.txt overlaps train/test."
+        ),
+    )
+    parser.add_argument(
+        "--db15k-valid-fraction",
+        type=float,
+        default=0.10,
+        help="Fraction of the pinned DB15K training triples held out for validation.",
+    )
+    parser.add_argument(
+        "--split-seed",
+        type=int,
+        default=2025,
+        help="Fixed seed recorded for the deterministic DB15K train/validation split.",
+    )
     parser.add_argument("--source-version", default="official OpenKE benchmark files (repository external mirror)")
     parser.add_argument(
         "--source-lock",
@@ -183,6 +205,196 @@ def read_openke_triples(path: Path, num_entities: int, num_relations: int) -> li
     if len(triples) != declared:
         raise ValueError(f"{path}: declared {declared} triples but found {len(triples)} rows")
     return triples
+
+
+def split_integrity_report(
+    splits: dict[str, list[tuple[int, int, int]]],
+) -> dict[str, object]:
+    sets = {name: set(rows) for name, rows in splits.items()}
+    duplicates = {name: len(rows) - len(sets[name]) for name, rows in splits.items()}
+    overlaps: dict[str, int] = {}
+    names = list(splits)
+    for left_index, left in enumerate(names):
+        for right in names[left_index + 1 :]:
+            overlaps[f"{left}_{right}"] = len(sets[left] & sets[right])
+    return {"duplicates": duplicates, "exact_overlaps": overlaps}
+
+
+def _assert_clean_canonical_splits(
+    splits: dict[str, list[tuple[int, int, int]]],
+) -> dict[str, object]:
+    report = split_integrity_report(splits)
+    bad_duplicates = {name: count for name, count in report["duplicates"].items() if count}
+    bad_overlaps = {name: count for name, count in report["exact_overlaps"].items() if count}
+    if bad_duplicates or bad_overlaps:
+        raise ValueError(
+            "Canonical split integrity failed: "
+            f"duplicates={bad_duplicates}, exact_overlaps={bad_overlaps}. "
+            "Do not train or select checkpoints on these splits."
+        )
+    return report
+
+
+def _stable_triple_key(seed: int, triple: tuple[int, int, int]) -> bytes:
+    head, relation, tail = triple
+    return hashlib.sha256(f"{seed}:{head}:{relation}:{tail}".encode("ascii")).digest()
+
+
+def build_db15k_train_holdout(
+    source_train: list[tuple[int, int, int]],
+    source_test: list[tuple[int, int, int]],
+    *,
+    valid_fraction: float,
+    seed: int,
+) -> tuple[dict[str, list[tuple[int, int, int]]], dict[str, object]]:
+    """Build deterministic relation-stratified DEV from pinned DB15K TRAIN."""
+
+    if not 0.0 < valid_fraction < 1.0:
+        raise ValueError("--db15k-valid-fraction must be strictly between 0 and 1")
+    if len(source_train) != len(set(source_train)):
+        raise ValueError("Pinned DB15K train2id.txt contains duplicate triples")
+    if len(source_test) != len(set(source_test)):
+        raise ValueError("Pinned DB15K test2id.txt contains duplicate triples")
+    if set(source_train) & set(source_test):
+        raise ValueError("Pinned DB15K TRAIN and TEST overlap; refusing to construct a holdout")
+
+    target_valid = round(len(source_train) * valid_fraction)
+    relation_buckets: dict[int, list[tuple[int, int, int]]] = {}
+    for triple in source_train:
+        relation_buckets.setdefault(triple[1], []).append(triple)
+
+    quotas = {
+        relation: min(int(len(rows) * valid_fraction), len(rows) - 1)
+        for relation, rows in relation_buckets.items()
+    }
+    relation_order = sorted(
+        relation_buckets,
+        key=lambda relation: (
+            -(len(relation_buckets[relation]) * valid_fraction % 1.0),
+            relation,
+        ),
+    )
+    while sum(quotas.values()) < target_valid:
+        progressed = False
+        for relation in relation_order:
+            capacity = len(relation_buckets[relation]) - 1
+            if quotas[relation] < capacity:
+                quotas[relation] += 1
+                progressed = True
+                if sum(quotas.values()) == target_valid:
+                    break
+        if not progressed:
+            raise ValueError("Requested DB15K validation size cannot preserve relation coverage")
+
+    entity_remaining: Counter[int] = Counter()
+    relation_remaining: Counter[int] = Counter()
+    for head, relation, tail in source_train:
+        entity_remaining[head] += 1
+        if tail != head:
+            entity_remaining[tail] += 1
+        relation_remaining[relation] += 1
+
+    selected: set[tuple[int, int, int]] = set()
+
+    def can_hold_out(triple: tuple[int, int, int]) -> bool:
+        head, relation, tail = triple
+        if relation_remaining[relation] <= 1 or entity_remaining[head] <= 1:
+            return False
+        return tail == head or entity_remaining[tail] > 1
+
+    def hold_out(triple: tuple[int, int, int]) -> bool:
+        if triple in selected or not can_hold_out(triple):
+            return False
+        head, relation, tail = triple
+        selected.add(triple)
+        relation_remaining[relation] -= 1
+        entity_remaining[head] -= 1
+        if tail != head:
+            entity_remaining[tail] -= 1
+        return True
+
+    for relation in sorted(relation_buckets):
+        accepted = 0
+        candidates = sorted(
+            relation_buckets[relation], key=lambda triple: _stable_triple_key(seed, triple)
+        )
+        for triple in candidates:
+            if accepted == quotas[relation]:
+                break
+            if hold_out(triple):
+                accepted += 1
+
+    if len(selected) < target_valid:
+        candidates = sorted(source_train, key=lambda triple: _stable_triple_key(seed + 1, triple))
+        for triple in candidates:
+            if len(selected) == target_valid:
+                break
+            hold_out(triple)
+    if len(selected) != target_valid:
+        raise ValueError(
+            f"Could construct only {len(selected)} of {target_valid} requested DB15K validation triples "
+            "while preserving TRAIN entity/relation coverage"
+        )
+
+    canonical = {
+        "train": [triple for triple in source_train if triple not in selected],
+        "valid": [triple for triple in source_train if triple in selected],
+        "test": list(source_test),
+    }
+    integrity = _assert_clean_canonical_splits(canonical)
+    train_entities = {entity for h, _, t in canonical["train"] for entity in (h, t)}
+    valid_entities = {entity for h, _, t in canonical["valid"] for entity in (h, t)}
+    train_relations = {relation for _, relation, _ in canonical["train"]}
+    valid_relations = {relation for _, relation, _ in canonical["valid"]}
+    if not valid_entities <= train_entities or not valid_relations <= train_relations:
+        raise AssertionError("DB15K holdout lost TRAIN coverage for a DEV entity or relation")
+    metadata = {
+        "name": "db15k_train_holdout_v1",
+        "source_train": "pinned train2id.txt",
+        "source_valid": "pinned valid2id.txt audited but excluded because of exact leakage",
+        "source_test": "pinned test2id.txt preserved",
+        "valid_fraction": valid_fraction,
+        "seed": seed,
+        "selection": "relation_stratified_stable_sha256_with_train_entity_relation_coverage",
+        "target_valid_count": target_valid,
+        "canonical_integrity": integrity,
+    }
+    return canonical, metadata
+
+
+def construct_canonical_splits(
+    dataset: str,
+    source_splits: dict[str, list[tuple[int, int, int]]],
+    *,
+    split_policy: str,
+    db15k_valid_fraction: float,
+    split_seed: int,
+) -> tuple[dict[str, list[tuple[int, int, int]]], dict[str, object]]:
+    resolved_policy = (
+        "db15k_train_holdout_v1" if split_policy == "auto" and dataset == "db15k" else split_policy
+    )
+    if split_policy == "auto" and dataset != "db15k":
+        resolved_policy = "official"
+    if resolved_policy == "db15k_train_holdout_v1":
+        if dataset != "db15k":
+            raise ValueError("db15k_train_holdout_v1 is legal only for --dataset db15k")
+        return build_db15k_train_holdout(
+            source_splits["train"],
+            source_splits["test"],
+            valid_fraction=db15k_valid_fraction,
+            seed=split_seed,
+        )
+    if resolved_policy != "official":
+        raise ValueError(f"Unsupported split policy: {resolved_policy}")
+    canonical = {name: list(rows) for name, rows in source_splits.items()}
+    integrity = _assert_clean_canonical_splits(canonical)
+    return canonical, {
+        "name": "official",
+        "source_train": "pinned train2id.txt",
+        "source_valid": "pinned valid2id.txt",
+        "source_test": "pinned test2id.txt",
+        "canonical_integrity": integrity,
+    }
 
 
 def read_feature_key_map(path: Path | None) -> dict[str, str]:
@@ -383,10 +595,18 @@ def main() -> None:
             "Feature crosswalk contains entities outside entity2id.txt: "
             f"{unknown_crosswalk_entities[:10]}"
         )
-    splits = {
+    source_splits = {
         name: read_openke_triples(benchmark / filename, num_entities, num_relations)
         for name, filename in OPENKE_FILES.items()
     }
+    source_split_integrity = split_integrity_report(source_splits)
+    splits, split_construction = construct_canonical_splits(
+        args.dataset,
+        source_splits,
+        split_policy=args.split_policy,
+        db15k_valid_fraction=args.db15k_valid_fraction,
+        split_seed=args.split_seed,
+    )
     text_keys, text_dim, _, text_health = inspect_hdf5(args.text_h5)
     image_keys, image_dim, _, image_health = inspect_hdf5(args.image_h5)
     text_resolver, image_resolver, resolver_metadata = build_key_resolvers(args, image_h5_keys=image_keys)
@@ -411,6 +631,9 @@ def main() -> None:
             "valid": len(splits["valid"]),
             "test": len(splits["test"]),
         },
+        "source_counts": {name: len(rows) for name, rows in source_splits.items()},
+        "source_split_integrity": source_split_integrity,
+        "split_construction": split_construction,
         "features": {
             "text": {
                 "hdf5_keys": len(text_keys),
@@ -473,7 +696,7 @@ def main() -> None:
     manifest = {
         **audit,
         "protocol": "mmkg_general_v1",
-        "split": "official",
+        "split": split_construction["name"],
         "source": args.source_version,
         "feature_sources": {
             "text": {

@@ -20,7 +20,7 @@ manifest.json
 audit_report.json
 ```
 
-An all-zero feature row never determines missingness. The masks come from explicit entity-to-HDF5-key alignment. The preprocessor rejects duplicate/non-contiguous mappings, invalid triple IDs, ambiguous feature-key reuse, missing crosswalks, inconsistent HDF5 dimensions, and any NaN/Inf value. Every raw input is checked against `docs/EXTERNAL_SOURCES_LOCK.json` before preprocessing.
+An all-zero feature row never determines missingness. The masks come from explicit entity-to-HDF5-key alignment. The preprocessor rejects duplicate/non-contiguous mappings, invalid triple IDs, dirty canonical splits, missing crosswalks, inconsistent HDF5 dimensions, and any NaN/Inf value. Every raw input is checked against `docs/EXTERNAL_SOURCES_LOCK.json` before preprocessing.
 
 ## 1. Prepare MKG-W first
 
@@ -50,6 +50,8 @@ Use `--audit-only` on the preprocessing command to inspect counts, dimensions, c
 
 DB15K text keys use DBpedia resource basenames. Image keys use Freebase MIDs, so the official MMKB SameAs file is required; ID order is never used as a fallback.
 
+The pinned NativE mirror's DB15K `valid2id.txt` is not a legal validation split: its 9,904 rows contain 2,423 duplicates, 6,584 unique triples overlap TRAIN, and 824 unique triples overlap TEST. It remains source-locked for provenance and is audited, but it is never used for checkpoint selection. The versioned `db15k_train_holdout_v1` policy instead deterministically holds out 10% of the pinned TRAIN (seed 2025), stratifies by relation, preserves TRAIN coverage for every DEV entity/relation, and leaves the pinned TEST sequence unchanged.
+
 ```bash
 mkdir -p data/datasets/db15k/raw data/datasets/db15k/processed
 curl -L https://raw.githubusercontent.com/mniepert/mmkb/master/DB15K/DB15K_SameAsLink.txt \
@@ -61,17 +63,20 @@ python ml/training/scripts/preprocess_external_mmkg.py \
   --text-h5 data/datasets/MMKB_description_sentences.h5 \
   --image-h5 data/datasets/MMKB_img_BEIT_16-224.h5 \
   --db15k-same-as data/datasets/db15k/raw/DB15K_SameAsLink.txt \
+  --split-policy db15k_train_holdout_v1 \
+  --db15k-valid-fraction 0.10 \
+  --split-seed 2025 \
   --cross-modal-space independent \
   --output-dir data/datasets/db15k/processed
 ```
 
-The manifest records the pinned source lock, official split counts, mapping/split hashes, HDF5 hashes, dimensions, numeric-health audit, mean pooling and native text/image coverage. The dataset loader revalidates canonical mapping, split and feature hashes at training time.
+The repaired canonical counts are TRAIN 71,300 / DEV 7,922 / TEST 9,902. The manifest records source and canonical counts, the source leakage audit, split construction policy/seed, source lock, mapping/split hashes, HDF5 hashes, dimensions, numeric health, pooling and modality coverage. The loader revalidates these artifacts and rejects a manifest whose split policy differs from the YAML config. All old DB15K checkpoints and `processed/` split artifacts must therefore be discarded and regenerated; MKG-W and OpenBG-IMG are unchanged.
 
 ## 3. Server training commands
 
 Do not use the smoke configs as evidence. Run each seed with the corresponding common seed config. Examples for MKG-W:
 
-All `mmkg_general_v1` configs explicitly use the complete official validation split. `termination_policy: dev_early_stop` and `termination_policy: fixed_budget` control only when training ends; best-checkpoint selection remains DEV ONLY in both cases.
+MKG-W uses its complete clean official validation split. DB15K uses `db15k_train_holdout_v1` because the pinned mirrored validation file is contaminated. `termination_policy: dev_early_stop` and `termination_policy: fixed_budget` control only when training ends; best-checkpoint selection remains DEV ONLY in both cases.
 
 ```bash
 python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --config ml/configs/mkg_w_gate_only.yaml
@@ -86,7 +91,7 @@ python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --
 
 Replace `mkg_w` with `db15k` after the MKG-W load/train/valid/filtered-test chain passes. The dataset-neutral structural alias is `mmkg_complex`.
 
-All configs use official splits and the same canonical features, masks and evaluator. Hyperparameters remain architecture-specific and must be selected on validation only. The checked-in starting-anchor configs therefore set `evaluation.run_test: false`. After the configuration is frozen from validation results, change only that field to `true` for the final three-seed runs; final test evaluation is locked to the selected validation checkpoint.
+Within each dataset, all configs use the same canonical splits, features, masks and evaluator. Hyperparameters remain architecture-specific and must be selected on validation only. The checked-in starting-anchor configs therefore set `evaluation.run_test: false`. After the configuration is frozen from validation results, change only that field to `true` for the final three-seed runs; final test evaluation is locked to the selected validation checkpoint.
 
 Released-script anchors are dataset-specific and must not be copied across datasets:
 

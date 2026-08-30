@@ -7,6 +7,7 @@ import pytest
 
 from ml.training.scripts.preprocess_external_mmkg import (
     build_alignment,
+    construct_canonical_splits,
     inspect_hdf5,
     read_openke_mapping,
     read_openke_triples,
@@ -55,3 +56,54 @@ def test_hdf5_numeric_audit_reports_nonfinite_values(tmp_path: Path) -> None:
     assert health["all_finite"] is False
     assert health["nonfinite_values"] == 2
     assert "broken" in health["nonfinite_key_examples"]
+
+
+def test_db15k_repaired_split_is_deterministic_disjoint_and_train_covered() -> None:
+    source = {
+        "train": [
+            (0, 0, 1),
+            (1, 0, 2),
+            (2, 0, 3),
+            (3, 0, 0),
+            (0, 1, 2),
+            (2, 1, 0),
+            (1, 1, 3),
+            (3, 1, 1),
+        ],
+        # Deliberately contaminated; it must be audited but never used as DEV.
+        "valid": [(0, 0, 1), (9, 1, 9)],
+        "test": [(4, 0, 5)],
+    }
+    kwargs = {
+        "split_policy": "db15k_train_holdout_v1",
+        "db15k_valid_fraction": 0.25,
+        "split_seed": 2025,
+    }
+    first, metadata = construct_canonical_splits("db15k", source, **kwargs)
+    second, _ = construct_canonical_splits("db15k", source, **kwargs)
+    assert first == second
+    assert len(first["valid"]) == 2
+    assert first["test"] == source["test"]
+    assert not (set(first["train"]) & set(first["valid"]))
+    assert not (set(first["train"]) & set(first["test"]))
+    assert not (set(first["valid"]) & set(first["test"]))
+    train_entities = {entity for h, _, t in first["train"] for entity in (h, t)}
+    valid_entities = {entity for h, _, t in first["valid"] for entity in (h, t)}
+    assert valid_entities <= train_entities
+    assert metadata["name"] == "db15k_train_holdout_v1"
+
+
+def test_official_policy_rejects_contaminated_splits() -> None:
+    source = {
+        "train": [(0, 0, 1)],
+        "valid": [(0, 0, 1)],
+        "test": [(1, 0, 2)],
+    }
+    with pytest.raises(ValueError, match="Canonical split integrity failed"):
+        construct_canonical_splits(
+            "db15k",
+            source,
+            split_policy="official",
+            db15k_valid_fraction=0.1,
+            split_seed=2025,
+        )

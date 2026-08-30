@@ -49,6 +49,13 @@ def load_openke_mmkg(cfg: dict) -> DatasetBundle:
         raise ValueError(
             f"Manifest dataset {manifest.get('dataset')!r} does not match config dataset {dataset_cfg['name']!r}."
         )
+    configured_split = cfg.get("protocol", {}).get("split")
+    if configured_split and manifest.get("split") != configured_split:
+        raise ValueError(
+            f"Manifest split {manifest.get('split')!r} does not match config split "
+            f"{configured_split!r}. Re-run preprocessing; stale or incompatible split caches "
+            "must not be used for checkpoint selection."
+        )
     split_paths = {name: directory / f"{name}.tsv" for name in ("train", "valid", "test")}
     expected_hashes = manifest.get("hashes", {})
     expected_split_hashes = expected_hashes.get("splits", {})

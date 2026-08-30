@@ -5,7 +5,7 @@ dataset:
   processed_dir: data/datasets/db15k/processed
 protocol:
   version: mmkg_general_v1
-  split: official
+  split: db15k_train_holdout_v1
   modality_policy: native_text_visual_availability
   evaluation: filtered_bidirectional
 model:
