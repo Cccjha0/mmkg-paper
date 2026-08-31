@@ -48,8 +48,15 @@ def test_combination_preserves_filtered_candidates_for_every_mode() -> None:
 
 def test_rank_normalization_uses_competition_ranks_for_ties() -> None:
     scores = torch.tensor([[4.0, 4.0, 1.0, float("-inf")]])
-    normalized = normalize_candidate_scores(scores, "rank_based")
+    normalized = normalize_candidate_scores(scores, "rank_based", rank_tie_policy="competition")
     assert normalized[0, :3].tolist() == pytest.approx([1.0, 1.0, 1.0 / 3.0])
+    assert torch.isneginf(normalized[0, 3])
+
+
+def test_legacy_rank_normalization_keeps_ordinal_ties() -> None:
+    scores = torch.tensor([[4.0, 4.0, 1.0, float("-inf")]])
+    normalized = normalize_candidate_scores(scores, "rank_based")
+    assert normalized[0, :3].tolist() == pytest.approx([1.0, 0.5, 1.0 / 3.0])
     assert torch.isneginf(normalized[0, 3])
 
 

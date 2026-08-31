@@ -29,13 +29,25 @@ def _query_zscore(scores: torch.Tensor, eps: float) -> torch.Tensor:
     return torch.where(finite, normalized, torch.full_like(normalized, float("-inf")))
 
 
-def _rank_based(scores: torch.Tensor) -> torch.Tensor:
+def _rank_based(scores: torch.Tensor, tie_policy: str = "ordinal") -> torch.Tensor:
     finite = torch.isfinite(scores)
     safe = torch.where(finite, scores, torch.full_like(scores, float("-inf")))
     order = torch.argsort(safe, dim=1, descending=True, stable=True)
-    sorted_scores = safe.gather(1, order)
     rank_values = torch.arange(1, scores.size(1) + 1, device=scores.device, dtype=order.dtype)
     rank_values = rank_values.unsqueeze(0).expand_as(order)
+    if tie_policy == "ordinal":
+        ranks = torch.empty_like(order)
+        ranks.scatter_(1, order, rank_values)
+        reciprocal_rank_score = ranks.to(dtype=scores.dtype).reciprocal()
+        return torch.where(
+            finite,
+            reciprocal_rank_score,
+            torch.full_like(reciprocal_rank_score, float("-inf")),
+        )
+    if tie_policy != "competition":
+        raise ValueError("rank_tie_policy must be 'ordinal' or 'competition'.")
+
+    sorted_scores = safe.gather(1, order)
     starts_tie_group = torch.ones_like(sorted_scores, dtype=torch.bool)
     starts_tie_group[:, 1:] = sorted_scores[:, 1:] != sorted_scores[:, :-1]
     sorted_competition_ranks = torch.where(
@@ -57,6 +69,7 @@ def normalize_candidate_scores(
     scores: torch.Tensor,
     mode: str = "none",
     eps: float = 1e-8,
+    rank_tie_policy: str = "ordinal",
 ) -> torch.Tensor:
     """Normalize each expert's candidate distribution without answer access."""
     if scores.ndim != 2:
@@ -66,7 +79,7 @@ def normalize_candidate_scores(
         return scores.clone()
     if mode == "query_zscore":
         return _query_zscore(scores, eps=eps)
-    return _rank_based(scores)
+    return _rank_based(scores, tie_policy=rank_tie_policy)
 
 
 def _finite_fill(scores: torch.Tensor) -> torch.Tensor:
@@ -86,11 +99,22 @@ def combine_expert_scores(
     alpha: float | torch.Tensor,
     normalization: str = "none",
     eps: float = 1e-8,
+    rank_tie_policy: str = "ordinal",
 ) -> torch.Tensor:
     if fusion_scores.shape != structural_scores.shape:
         raise ValueError("Expert candidate-score matrices must have identical shapes.")
-    fusion = normalize_candidate_scores(fusion_scores, normalization, eps=eps)
-    structural = normalize_candidate_scores(structural_scores, normalization, eps=eps)
+    fusion = normalize_candidate_scores(
+        fusion_scores,
+        normalization,
+        eps=eps,
+        rank_tie_policy=rank_tie_policy,
+    )
+    structural = normalize_candidate_scores(
+        structural_scores,
+        normalization,
+        eps=eps,
+        rank_tie_policy=rank_tie_policy,
+    )
     fusion_safe = _finite_fill(fusion)
     structural_safe = _finite_fill(structural)
     alpha_tensor = torch.as_tensor(alpha, dtype=fusion.dtype, device=fusion.device)

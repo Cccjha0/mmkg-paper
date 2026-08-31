@@ -297,6 +297,7 @@ def combine_with_reference_targets(
         residual_scores,
         torch.as_tensor(alpha, dtype=gate_scores.dtype, device=gate_scores.device),
         normalization=score_normalization,
+        rank_tie_policy="competition",
     )
     gate_reference = normalize_reference_target_scores(
         gate_scores,
