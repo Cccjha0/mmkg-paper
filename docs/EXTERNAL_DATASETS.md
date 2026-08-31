@@ -245,6 +245,17 @@ python scripts/eval_score_ensemble_baselines.py \
 
 Repeat the last command with `none` and `rank_based`. Use `--relation-shrinkage-lambda 0` for unshrunk relation alpha. Nonzero lambda is rejected for `openbg_legacy_v1`. `--selection-only` never loads test summaries. Once every choice is frozen on validation, export final test scores and rerun without `--selection-only`; test is only for locked reporting.
 
+For a general-protocol dataset, run paired-bootstrap confidence intervals directly from the locked TEST per-query rows. This standalone path has no dependency on the OpenBG-only E5 or CA-S2 artifacts and can optionally compare two fixed fusion experts query by query:
+
+```bash
+python scripts/run_general_score_aware_bootstrap_ci.py \
+  --primary-query-rows outputs/<dataset>/v2/score_ensemble/<primary>/score_ensemble_selected_query_rows.csv \
+  --comparison-query-rows outputs/<dataset>/v2/score_ensemble/<comparison>/score_ensemble_selected_query_rows.csv \
+  --primary-label <primary> --comparison-label <comparison> \
+  --output-dir outputs/<dataset>/v2/significance/score_ensemble \
+  --bootstrap-unit query --n-bootstrap 10000 --seed 42
+```
+
 ## 6. Verification commands (server)
 
 The following suite includes model/evaluator tests and should run on the server, not the local low-compute machine:
