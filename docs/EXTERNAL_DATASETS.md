@@ -186,6 +186,13 @@ python scripts/eval_score_ensemble_baselines.py \
 
 For `mmkg_general_v1`, this command validates that every dev/test summary belongs to one dataset and one `top_k`, reports deltas against that dataset's Residual-only scores, and keeps plots under the dataset-specific output directory. Summary discovery no longer assumes `top100`; the JSON `top_k` field is authoritative. It never reads or overwrites the frozen OpenBG E5/CA-S2 paper artifacts.
 
+General-protocol score interpolation also preserves the fixed evaluator's
+separately scored target path. The validation output records both fixed-expert
+endpoint MRRs and rejects a run unless alpha zero and alpha one exactly recover
+the structural and fusion rankings. Candidate-derived normalization statistics
+remain answer-agnostic. Frozen `openbg_legacy_v1` raw-score interpolation keeps
+its historical full-matrix target behavior unchanged.
+
 ## 5. Generalized-v2 DEV-first funnel
 
 The v2 aliases exist only under `mmkg_general_v1`. They do not replace `mmkg_gate_only`, `mmkg_residual_only`, or any `openbg_img_*` alias. All checked-in v2 configs keep `evaluation.run_test: false`.

@@ -9,6 +9,7 @@ from router.score_combination import (
     shrink_relation_alpha,
 )
 from router.prior_utils import compute_relation_gain_stats
+from scripts.eval_score_ensemble_baselines import eval_mixed_rr, reference_ranks_and_rr
 
 
 @pytest.mark.parametrize("mode", ["none", "query_zscore", "rank_based", "rank"])
@@ -71,3 +72,47 @@ def test_general_relation_gain_shrinks_toward_global_dev_mean() -> None:
     # Global delta is -0.5; relation 0 has raw delta +1 with support 1.
     assert rows[0]["mean_delta_rr_shrunk"] == pytest.approx(0.25)
     assert rows[0]["shrinkage_target"] == pytest.approx(-0.5)
+
+
+@pytest.mark.parametrize("mode", ["none", "query_zscore", "rank_based"])
+def test_general_score_interpolation_uses_canonical_reference_endpoints(mode: str) -> None:
+    target_ids = torch.tensor([0])
+    fusion_candidates = torch.tensor([[0.0, 10.0, 9.0]])
+    structural_candidates = torch.tensor([[8.0, 7.0, 6.0]])
+    fusion_reference = torch.tensor([11.0])
+    structural_reference = torch.tensor([5.0])
+
+    _, fusion_rr = reference_ranks_and_rr(fusion_candidates, fusion_reference)
+    _, structural_rr = reference_ranks_and_rr(structural_candidates, structural_reference)
+    assert eval_mixed_rr(
+        fusion_candidates,
+        structural_candidates,
+        target_ids,
+        1.0,
+        score_normalization=mode,
+        gate_target_scores=fusion_reference,
+        residual_target_scores=structural_reference,
+    ) == fusion_rr
+    assert eval_mixed_rr(
+        fusion_candidates,
+        structural_candidates,
+        target_ids,
+        0.0,
+        score_normalization=mode,
+        gate_target_scores=fusion_reference,
+        residual_target_scores=structural_reference,
+    ) == structural_rr
+
+
+def test_legacy_score_interpolation_keeps_full_matrix_target_semantics() -> None:
+    target_ids = torch.tensor([0])
+    fusion_candidates = torch.tensor([[0.0, 10.0, 9.0]])
+    structural_candidates = torch.tensor([[8.0, 7.0, 6.0]])
+    # Without general-protocol reference scores, alpha=1 retains the frozen
+    # legacy behavior and ranks the target value gathered from the matrix.
+    assert eval_mixed_rr(
+        fusion_candidates,
+        structural_candidates,
+        target_ids,
+        1.0,
+    ) == pytest.approx([1.0 / 3.0])

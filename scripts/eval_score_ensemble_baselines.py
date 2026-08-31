@@ -217,6 +217,108 @@ def safe_scores(scores: torch.Tensor) -> torch.Tensor:
     return torch.nan_to_num(scores, nan=low, posinf=high, neginf=low)
 
 
+def reference_ranks_and_rr(
+    candidate_scores: torch.Tensor,
+    reference_target_scores: torch.Tensor,
+) -> tuple[list[int], list[float]]:
+    """Rank separately scored targets against candidate-score matrices.
+
+    This mirrors the fixed-expert evaluator: the labeled target score is
+    computed through the target-triple path, while candidate scores are
+    computed through the chunked all-entity path. The separation matters for
+    strict-``>`` ranking when numerically tied multimodal representations are
+    evaluated with different batch shapes.
+    """
+    if candidate_scores.ndim != 2:
+        raise ValueError("Candidate scores must be a [queries, entities] matrix.")
+    reference_target_scores = reference_target_scores.reshape(-1).to(
+        device=candidate_scores.device,
+        dtype=candidate_scores.dtype,
+    )
+    if reference_target_scores.numel() != candidate_scores.size(0):
+        raise ValueError("Reference target scores must contain one value per query.")
+    ranks = (candidate_scores > reference_target_scores.unsqueeze(1)).sum(dim=1).to(torch.long) + 1
+    ranks_list = [int(value) for value in ranks.tolist()]
+    return ranks_list, [float(1.0 / value) for value in ranks_list]
+
+
+def normalize_reference_target_scores(
+    candidate_scores: torch.Tensor,
+    reference_target_scores: torch.Tensor,
+    mode: str,
+    eps: float = 1e-8,
+) -> torch.Tensor:
+    """Apply candidate-derived normalization to evaluation-only target scores.
+
+    Normalization parameters depend only on each expert's candidate-score
+    distribution. The reference target score is transformed afterward and is
+    never exposed as a deployable router feature.
+    """
+    mode = canonical_score_normalization(mode)
+    reference = reference_target_scores.reshape(-1).to(
+        device=candidate_scores.device,
+        dtype=candidate_scores.dtype,
+    )
+    if reference.numel() != candidate_scores.size(0):
+        raise ValueError("Reference target scores must contain one value per query.")
+    if mode == "none":
+        return reference
+    if mode == "query_zscore":
+        finite = torch.isfinite(candidate_scores)
+        finite_values = torch.where(finite, candidate_scores, torch.zeros_like(candidate_scores))
+        count = finite.sum(dim=1).clamp_min(1)
+        mean = finite_values.sum(dim=1) / count
+        centered = torch.where(
+            finite,
+            candidate_scores - mean.unsqueeze(1),
+            torch.zeros_like(candidate_scores),
+        )
+        variance = centered.square().sum(dim=1) / count
+        return (reference - mean) / (variance.sqrt() + float(eps))
+
+    # The target's reciprocal-rank score is derived from the original
+    # candidate distribution with the same strict-greater tie rule.
+    ranks = (candidate_scores > reference.unsqueeze(1)).sum(dim=1).to(candidate_scores.dtype) + 1.0
+    return ranks.reciprocal()
+
+
+def combine_with_reference_targets(
+    gate_scores: torch.Tensor,
+    residual_scores: torch.Tensor,
+    gate_target_scores: torch.Tensor,
+    residual_target_scores: torch.Tensor,
+    alpha: float | np.ndarray,
+    score_normalization: str,
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """Combine candidate matrices and separately scored evaluation targets."""
+    score_normalization = canonical_score_normalization(score_normalization)
+    mixed = combine_expert_scores(
+        gate_scores,
+        residual_scores,
+        torch.as_tensor(alpha, dtype=gate_scores.dtype, device=gate_scores.device),
+        normalization=score_normalization,
+    )
+    gate_reference = normalize_reference_target_scores(
+        gate_scores,
+        gate_target_scores,
+        score_normalization,
+    )
+    residual_reference = normalize_reference_target_scores(
+        residual_scores,
+        residual_target_scores,
+        score_normalization,
+    )
+    alpha_value = torch.as_tensor(alpha, dtype=gate_reference.dtype, device=gate_reference.device)
+    if alpha_value.ndim == 0:
+        alpha_value = alpha_value.expand(gate_reference.numel())
+    else:
+        alpha_value = alpha_value.reshape(-1)
+    if alpha_value.numel() != gate_reference.numel():
+        raise ValueError("alpha must be scalar or contain one value per query.")
+    mixed_reference = alpha_value * gate_reference + (1.0 - alpha_value) * residual_reference
+    return mixed, mixed_reference
+
+
 def query_features(
     gate_scores: torch.Tensor,
     residual_scores: torch.Tensor,
@@ -256,7 +358,22 @@ def eval_mixed_rr(
     target_ids: torch.Tensor,
     alpha: float | np.ndarray,
     score_normalization: str = "none",
+    gate_target_scores: torch.Tensor | None = None,
+    residual_target_scores: torch.Tensor | None = None,
 ) -> list[float]:
+    if (gate_target_scores is None) != (residual_target_scores is None):
+        raise ValueError("Gate and residual reference target scores must be supplied together.")
+    if gate_target_scores is not None and residual_target_scores is not None:
+        mixed, mixed_reference = combine_with_reference_targets(
+            gate_scores,
+            residual_scores,
+            gate_target_scores,
+            residual_target_scores,
+            alpha,
+            score_normalization,
+        )
+        _, rr = reference_ranks_and_rr(mixed, mixed_reference)
+        return rr
     if canonical_score_normalization(score_normalization) == "none":
         gate_safe = safe_scores(gate_scores)
         residual_safe = safe_scores(residual_scores)
@@ -286,7 +403,21 @@ def eval_mixed_ranks_and_rr(
     target_ids: torch.Tensor,
     alpha: float | np.ndarray,
     score_normalization: str = "none",
+    gate_target_scores: torch.Tensor | None = None,
+    residual_target_scores: torch.Tensor | None = None,
 ) -> tuple[list[int], list[float]]:
+    if (gate_target_scores is None) != (residual_target_scores is None):
+        raise ValueError("Gate and residual reference target scores must be supplied together.")
+    if gate_target_scores is not None and residual_target_scores is not None:
+        mixed, mixed_reference = combine_with_reference_targets(
+            gate_scores,
+            residual_scores,
+            gate_target_scores,
+            residual_target_scores,
+            alpha,
+            score_normalization,
+        )
+        return reference_ranks_and_rr(mixed, mixed_reference)
     if canonical_score_normalization(score_normalization) == "none":
         gate_safe = safe_scores(gate_scores)
         residual_safe = safe_scores(residual_scores)
@@ -348,6 +479,8 @@ def evaluate_split(
     selected_policy_rows: list[dict] = []
     feature_rows: list[np.ndarray] = []
     labels: list[int] = []
+    gate_endpoint_rr: list[float] = []
+    residual_endpoint_rr: list[float] = []
     evaluation_dataset: str | None = None
     evaluation_protocol: str | None = None
     started_at = time.time()
@@ -411,6 +544,8 @@ def evaluate_split(
     def ingest_selected_rows(rows: list[dict]) -> None:
         selected_policy_rows.extend(rows)
         for row in rows:
+            gate_endpoint_rr.append(float(row["rr_gate"]))
+            residual_endpoint_rr.append(float(row["rr_residual"]))
             rr_global = float(row["rr_global_interp"])
             rr_direction = float(row["rr_direction_interp"])
             rr_relation = float(row["rr_relation_interp"])
@@ -495,7 +630,14 @@ def evaluate_split(
                 if protocol_version == MMKG_GENERAL_V1:
                     cached_datasets = {str(row.get("dataset", "")) for row in cached_rows}
                     cached_protocols = {str(row.get("protocol_version", "")) for row in cached_rows}
-                    if cached_datasets != {dataset_name} or cached_protocols != {protocol_version}:
+                    cached_target_semantics = {
+                        str(row.get("target_score_semantics", "")) for row in cached_rows
+                    }
+                    if (
+                        cached_datasets != {dataset_name}
+                        or cached_protocols != {protocol_version}
+                        or cached_target_semantics != {"canonical_separate_target_score"}
+                    ):
                         raise RuntimeError(
                             f"Cached score-ensemble rows do not match {dataset_name}/{protocol_version}: "
                             f"datasets={sorted(cached_datasets)}, protocols={sorted(cached_protocols)}"
@@ -517,8 +659,22 @@ def evaluate_split(
                     residual_model, q_cpu, direction, true_index, residual_num_entities, chunk_size, device
                 )
                 target_ids = target_ids_for_direction(q_cpu, direction)
-                _, gate_rr = target_ranks_and_rr(gate_scores, target_ids)
-                _, residual_rr = target_ranks_and_rr(residual_scores, target_ids)
+                gate_target_scores: torch.Tensor | None = None
+                residual_target_scores: torch.Tensor | None = None
+                if protocol_version == MMKG_GENERAL_V1:
+                    # General score-aware evaluation must reproduce the fixed
+                    # evaluator at alpha endpoints. OpenBG legacy intentionally
+                    # retains its historical full-matrix target semantics.
+                    target_triples = q_cpu.to(device)
+                    gate_target_scores = gate_model.score(target_triples).detach().cpu()
+                    residual_target_scores = residual_model.score(target_triples).detach().cpu()
+                    _, gate_rr = reference_ranks_and_rr(gate_scores, gate_target_scores)
+                    _, residual_rr = reference_ranks_and_rr(residual_scores, residual_target_scores)
+                else:
+                    _, gate_rr = target_ranks_and_rr(gate_scores, target_ids)
+                    _, residual_rr = target_ranks_and_rr(residual_scores, target_ids)
+                gate_endpoint_rr.extend(gate_rr)
+                residual_endpoint_rr.extend(residual_rr)
                 feats = query_features(
                     gate_scores,
                     residual_scores,
@@ -537,6 +693,8 @@ def evaluate_split(
                         target_ids,
                         alpha,
                         score_normalization=score_normalization,
+                        gate_target_scores=gate_target_scores,
+                        residual_target_scores=residual_target_scores,
                     )
                     alpha_rr_by_value[alpha] = rr
                     alpha_rr[alpha].extend(rr)
@@ -560,6 +718,8 @@ def evaluate_split(
                         target_ids,
                         selected_global_alpha,
                         score_normalization=score_normalization,
+                        gate_target_scores=gate_target_scores,
+                        residual_target_scores=residual_target_scores,
                     )
                     global_rows.extend({"mixed_rr": value} for value in global_rr)
                 if selected_direction_alpha is not None:
@@ -569,6 +729,8 @@ def evaluate_split(
                         target_ids,
                         selected_direction_alpha[direction],
                         score_normalization=score_normalization,
+                        gate_target_scores=gate_target_scores,
+                        residual_target_scores=residual_target_scores,
                     )
                     direction_rows.extend({"mixed_rr": value} for value in direction_rr)
                 if selected_relation_alpha is not None:
@@ -588,6 +750,8 @@ def evaluate_split(
                         target_ids,
                         relation_alpha,
                         score_normalization=score_normalization,
+                        gate_target_scores=gate_target_scores,
+                        residual_target_scores=residual_target_scores,
                     )
                     relation_rows.extend({"mixed_rr": value} for value in relation_rr)
                 if query_model is not None:
@@ -598,6 +762,8 @@ def evaluate_split(
                         target_ids,
                         query_soft_alpha,
                         score_normalization=score_normalization,
+                        gate_target_scores=gate_target_scores,
+                        residual_target_scores=residual_target_scores,
                     )
                     query_rows.extend({"mixed_rr": value, "alpha": float(a)} for value, a in zip(query_soft_rr, query_soft_alpha))
 
@@ -642,6 +808,7 @@ def evaluate_split(
                         if protocol_version == MMKG_GENERAL_V1:
                             row["dataset"] = dataset_name
                             row["protocol_version"] = protocol_version
+                            row["target_score_semantics"] = "canonical_separate_target_score"
                             row["target_has_text"] = int(target_has_text)
                             row["target_has_img"] = int(target_has_img)
                         if query_soft_rr is not None and query_soft_alpha is not None:
@@ -659,6 +826,16 @@ def evaluate_split(
                     write_csv_rows(ckpt_path, direction_selected_rows)
 
     progress_line(seed if run_pairs else -1, "done", total_queries, total_queries, force=True)
+    if evaluation_protocol == MMKG_GENERAL_V1:
+        for endpoint, expected in ((0.0, residual_endpoint_rr), (1.0, gate_endpoint_rr)):
+            if endpoint not in alpha_rr:
+                continue
+            actual = alpha_rr[endpoint]
+            if len(actual) != len(expected) or any(a != b for a, b in zip(actual, expected)):
+                expert = "structural" if endpoint == 0.0 else "fusion"
+                raise RuntimeError(
+                    f"General score interpolation alpha={endpoint:g} does not reproduce the {expert} endpoint."
+                )
     return {
         "alpha_rr": alpha_rr,
         "alpha_direction_rr": alpha_direction_rr,
@@ -670,6 +847,8 @@ def evaluate_split(
         "selected_policy_rows": selected_policy_rows,
         "features": np.concatenate(feature_rows, axis=0) if feature_rows else np.empty((0, 0), dtype=np.float32),
         "labels": np.array(labels, dtype=np.int64),
+        "gate_endpoint_rr": gate_endpoint_rr,
+        "residual_endpoint_rr": residual_endpoint_rr,
     }
 
 
@@ -968,6 +1147,13 @@ def main() -> None:
             "protocol_version": protocol_version,
             "selection_split": args.selection_split,
             "score_normalization": score_normalization,
+            "target_score_semantics": (
+                "canonical_separate_target_score"
+                if protocol_version == MMKG_GENERAL_V1
+                else "legacy_full_matrix_target"
+            ),
+            "fusion_endpoint_dev_mrr": float(np.mean(dev["gate_endpoint_rr"])),
+            "structural_endpoint_dev_mrr": float(np.mean(dev["residual_endpoint_rr"])),
             "global_alpha": global_alpha,
             "global_dev_mrr": global_dev_mrr,
             "head_alpha": head_alpha,
