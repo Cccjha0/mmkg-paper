@@ -33,10 +33,19 @@ def _rank_based(scores: torch.Tensor) -> torch.Tensor:
     finite = torch.isfinite(scores)
     safe = torch.where(finite, scores, torch.full_like(scores, float("-inf")))
     order = torch.argsort(safe, dim=1, descending=True, stable=True)
-    ordinal = torch.empty_like(order)
+    sorted_scores = safe.gather(1, order)
     rank_values = torch.arange(1, scores.size(1) + 1, device=scores.device, dtype=order.dtype)
-    ordinal.scatter_(1, order, rank_values.unsqueeze(0).expand_as(order))
-    reciprocal_rank_score = ordinal.to(dtype=scores.dtype).reciprocal()
+    rank_values = rank_values.unsqueeze(0).expand_as(order)
+    starts_tie_group = torch.ones_like(sorted_scores, dtype=torch.bool)
+    starts_tie_group[:, 1:] = sorted_scores[:, 1:] != sorted_scores[:, :-1]
+    sorted_competition_ranks = torch.where(
+        starts_tie_group,
+        rank_values,
+        torch.zeros_like(rank_values),
+    ).cummax(dim=1).values
+    competition_ranks = torch.empty_like(order)
+    competition_ranks.scatter_(1, order, sorted_competition_ranks)
+    reciprocal_rank_score = competition_ranks.to(dtype=scores.dtype).reciprocal()
     return torch.where(
         finite,
         reciprocal_rank_score,

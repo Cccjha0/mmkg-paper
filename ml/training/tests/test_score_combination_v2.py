@@ -9,7 +9,11 @@ from router.score_combination import (
     shrink_relation_alpha,
 )
 from router.prior_utils import compute_relation_gain_stats
-from scripts.eval_score_ensemble_baselines import eval_mixed_rr, reference_ranks_and_rr
+from scripts.eval_score_ensemble_baselines import (
+    combine_with_reference_targets,
+    eval_mixed_rr,
+    reference_ranks_and_rr,
+)
 
 
 @pytest.mark.parametrize("mode", ["none", "query_zscore", "rank_based", "rank"])
@@ -40,6 +44,35 @@ def test_combination_preserves_filtered_candidates_for_every_mode() -> None:
         mixed = combine_expert_scores(fusion, structural, 0.5, normalization=mode)
         assert torch.isneginf(mixed[0, 1])
         assert torch.isfinite(mixed[0, [0, 2]]).all()
+
+
+def test_rank_normalization_uses_competition_ranks_for_ties() -> None:
+    scores = torch.tensor([[4.0, 4.0, 1.0, float("-inf")]])
+    normalized = normalize_candidate_scores(scores, "rank_based")
+    assert normalized[0, :3].tolist() == pytest.approx([1.0, 1.0, 1.0 / 3.0])
+    assert torch.isneginf(normalized[0, 3])
+
+
+@pytest.mark.parametrize("mode", ["query_zscore", "rank_based"])
+@pytest.mark.parametrize("alpha", [0.0, 1.0])
+def test_general_normalized_endpoints_keep_exact_raw_scores(mode: str, alpha: float) -> None:
+    fusion_candidates = torch.tensor([[4.0, 4.0, float("-inf"), 1.0]])
+    structural_candidates = torch.tensor([[8.0, 7.0, 7.0, float("-inf")]])
+    fusion_reference = torch.tensor([4.0])
+    structural_reference = torch.tensor([7.0])
+
+    mixed, reference = combine_with_reference_targets(
+        fusion_candidates,
+        structural_candidates,
+        fusion_reference,
+        structural_reference,
+        alpha,
+        mode,
+    )
+    expected_candidates = fusion_candidates if alpha == 1.0 else structural_candidates
+    expected_reference = fusion_reference if alpha == 1.0 else structural_reference
+    assert torch.equal(mixed, expected_candidates)
+    assert torch.equal(reference, expected_reference)
 
 
 def test_relation_alpha_shrinkage_matches_documented_formula() -> None:

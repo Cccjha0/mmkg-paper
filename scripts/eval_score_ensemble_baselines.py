@@ -316,6 +316,26 @@ def combine_with_reference_targets(
     if alpha_value.numel() != gate_reference.numel():
         raise ValueError("alpha must be scalar or contain one value per query.")
     mixed_reference = alpha_value * gate_reference + (1.0 - alpha_value) * residual_reference
+
+    # The mathematical endpoints are the original fixed experts. Preserve
+    # their scores exactly instead of relying on an otherwise rank-preserving
+    # floating-point transform; the latter can collapse near-equal values.
+    gate_endpoint = alpha_value == 1.0
+    residual_endpoint = alpha_value == 0.0
+    if bool(gate_endpoint.any()):
+        gate_raw_reference = gate_target_scores.reshape(-1).to(
+            device=mixed_reference.device,
+            dtype=mixed_reference.dtype,
+        )
+        mixed = torch.where(gate_endpoint.unsqueeze(1), gate_scores, mixed)
+        mixed_reference = torch.where(gate_endpoint, gate_raw_reference, mixed_reference)
+    if bool(residual_endpoint.any()):
+        residual_raw_reference = residual_target_scores.reshape(-1).to(
+            device=mixed_reference.device,
+            dtype=mixed_reference.dtype,
+        )
+        mixed = torch.where(residual_endpoint.unsqueeze(1), residual_scores, mixed)
+        mixed_reference = torch.where(residual_endpoint, residual_raw_reference, mixed_reference)
     return mixed, mixed_reference
 
 
