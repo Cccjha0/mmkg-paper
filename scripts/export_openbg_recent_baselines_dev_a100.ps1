@@ -2,6 +2,7 @@
 param(
     [int]$ChunkSize = 8192,
     [int]$QueryBatchSize = 32,
+    [string[]]$ForceExperts = @(),
     [switch]$NoArchive
 )
 
@@ -42,14 +43,24 @@ $totalTimer = [System.Diagnostics.Stopwatch]::StartNew()
 foreach ($job in $jobs) {
     $csvPath = Join-Path -Path $outDir -ChildPath ($job.Stem + '.csv')
     $summaryPath = Join-Path -Path $outDir -ChildPath ($job.Stem + '_summary.json')
+    $forceExport = $ForceExperts -contains $job.Expert
 
     if (Test-Path -LiteralPath $csvPath) {
-        $existingRows = @(Import-Csv -LiteralPath $csvPath).Count
-        if ($existingRows -eq 10000) {
-            Write-Host "[SKIP] $($job.Expert) seed=$($job.Seed): already has 10000 rows" -ForegroundColor Yellow
-            continue
+        if ($forceExport) {
+            Write-Host "[REPLACE] $($job.Expert) seed=$($job.Seed)" -ForegroundColor Magenta
+            Remove-Item -LiteralPath $csvPath
+            if (Test-Path -LiteralPath $summaryPath) {
+                Remove-Item -LiteralPath $summaryPath
+            }
         }
-        throw "Unexpected row count in existing file: $csvPath ($existingRows rows)"
+        else {
+            $existingRows = @(Import-Csv -LiteralPath $csvPath).Count
+            if ($existingRows -eq 10000) {
+                Write-Host "[SKIP] $($job.Expert) seed=$($job.Seed): already has 10000 rows" -ForegroundColor Yellow
+                continue
+            }
+            throw "Unexpected row count in existing file: $csvPath ($existingRows rows)"
+        }
     }
 
     $checkpointPath = Join-Path -Path $job.RunDir -ChildPath 'best.ckpt'

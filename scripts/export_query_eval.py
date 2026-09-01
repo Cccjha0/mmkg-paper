@@ -126,6 +126,10 @@ def filtered_direction_details(
     query_batch_size: int,
 ) -> list[dict]:
     device_t = torch.device(device)
+    scorer_name = "score_head" if direction == "head" else "score_tail"
+    scorer = getattr(model, scorer_name, None)
+    if scorer is None:
+        scorer = model.score
     all_entities = torch.arange(num_entities, dtype=torch.long)
     neg_inf = float("-inf")
     records: list[dict] = []
@@ -143,7 +147,7 @@ def filtered_direction_details(
         t_cpu = q[:, 2]
         target_e = h if direction == "head" else t
 
-        target_scores = model.score(torch.stack([h, r, t], dim=1))
+        target_scores = scorer(torch.stack([h, r, t], dim=1))
         target_scores_cpu = target_scores.detach().cpu()
         greater = torch.zeros(bq, dtype=torch.long, device=device_t)
         top_scores = torch.full((bq, 2), neg_inf, dtype=torch.float32, device=device_t)
@@ -178,7 +182,7 @@ def filtered_direction_details(
                 t_g = t.unsqueeze(1).expand(bq, c)
                 batch = torch.stack([e_g.reshape(-1), r_g.reshape(-1), t_g.reshape(-1)], dim=1)
 
-            scores = model.score(batch).view(bq, c)
+            scores = scorer(batch).view(bq, c)
             cand_matrix = cand.unsqueeze(0).expand(bq, c)
 
             row_chunks = []
