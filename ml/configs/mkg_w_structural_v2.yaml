@@ -16,11 +16,14 @@ model:
 
 training:
   termination_policy: dev_early_stop
-  lr: 0.0001
+  # Match the converged structural anchors' optimization scale.  softplus(0.5413)
+  # is approximately 1, avoiding the severely attenuated scores produced by
+  # the previous -2 initialization while retaining the explicit v2 parameter.
+  lr: 0.001
   entity_l2_weight: 0.000001
-  structural_scale_init: -2.0
-  structural_scale_l2_weight: 0.0001
-  epochs: 200
+  structural_scale_init: 0.5413
+  structural_scale_l2_weight: 0.0
+  epochs: 300
   eval_every: 5
   early_stop_patience: 10
 
