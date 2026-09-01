@@ -29,6 +29,14 @@ expert A and receives weight alpha.
 Tie-breaking for equally good DEV alphas prefers the value closest to 0.5,
 then the smaller alpha. TEST consumes only `selection.json` written by DEV.
 
+The relation support count is not an independent-query count. Sixty pooled
+seed-direction observations correspond to at most about 20 seed-stripped
+directional query identities, or about 10 original-triple clusters when head
+and tail are grouped. Before TEST, run a five-fold DEV cross-fitting audit in
+which all seeds and both directions of one original triple share one fold.
+Normalization, alpha grid, support threshold, fallback, and tie-breaking must
+remain unchanged during this audit.
+
 ## Information boundaries
 
 - Equal RRF is rank-aware and answer-agnostic.
@@ -43,8 +51,8 @@ recovery. The audit must reproduce each fixed expert's stored DEV/TEST MRR to
 within `5e-7`. Also report seed agreement for the sign of `RR_B - RR_A`.
 
 DEV is exploratory policy selection. Do not interpret DEV-selected global or
-relation alpha as final evidence. Run TEST only after reviewing and freezing
-the two generated `selection.json` files.
+relation alpha as final evidence. Run TEST only after reviewing the grouped
+cross-fitting audit and freezing the two generated `selection.json` files.
 
 ## Decision rule
 
