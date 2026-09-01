@@ -56,6 +56,7 @@ NORMALIZATION = "filtered_query_minmax"
 LEARNED_EXPERT = "M-Hyper"
 FIXED_WEIGHT_EXPERT = "NativE"
 FIXED_WEIGHT = 1.0
+EVALUATOR_VERSION = 2
 
 ROW_FIELDS = (
     "pair_name",
@@ -88,6 +89,7 @@ ROW_FIELDS = (
     "feature_mhyper_variance",
     "feature_native_one_minus_mean",
     "feature_native_variance",
+    "evaluator_version",
     "selector_sha256",
     "baseline_selection_sha256",
 )
@@ -448,6 +450,10 @@ def evaluate_direction(
         both_filtered = (~torch.isfinite(normalized_a)) & (~torch.isfinite(normalized_b))
         ensemble = ensemble.masked_fill(both_filtered, float("-inf"))
         rank_dynasemble = ranks_against_reference(ensemble, ensemble_reference)
+        # A zero learned weight is exactly the fixed NativE endpoint. Preserve
+        # its already-audited rank rather than allowing min-max float rounding
+        # to change target/candidate comparisons by one position.
+        rank_dynasemble = torch.where(weights == 0.0, rank_b, rank_dynasemble)
         rr_a = reciprocal(rank_a)
         rr_b = reciprocal(rank_b)
         rr_equal = reciprocal(rank_equal)
@@ -491,6 +497,7 @@ def evaluate_direction(
                     "feature_mhyper_variance": float(features_a[index, 1]),
                     "feature_native_one_minus_mean": float(features_b[index, 0]),
                     "feature_native_variance": float(features_b[index, 1]),
+                    "evaluator_version": EVALUATOR_VERSION,
                     "selector_sha256": selector_hash,
                     "baseline_selection_sha256": selection_hash,
                 }
@@ -616,6 +623,48 @@ def clustered_interval(rows: list[dict], column: str, reference: str) -> dict:
         "ci95_high": mean + 1.96 * standard_error,
         "note": "normal interval over original-triple cluster means; seeds and directions clustered",
     }
+
+
+def weight_diagnostics(rows: list[dict]) -> list[dict]:
+    output = []
+    for seed in sorted({int(row["seed"]) for row in rows}):
+        for direction in ("all", "head", "tail"):
+            subset = [
+                row
+                for row in rows
+                if int(row["seed"]) == seed
+                and (direction == "all" or row["direction"] == direction)
+            ]
+            weights = sorted(float(row["weight_mhyper"]) for row in subset)
+            alphas = [float(row["effective_alpha_mhyper"]) for row in subset]
+
+            def quantile(fraction: float) -> float:
+                position = (len(weights) - 1) * fraction
+                lower = int(math.floor(position))
+                upper = int(math.ceil(position))
+                if lower == upper:
+                    return weights[lower]
+                weight = position - lower
+                return weights[lower] * (1.0 - weight) + weights[upper] * weight
+
+            mean = sum(weights) / len(weights)
+            variance = sum((value - mean) ** 2 for value in weights) / len(weights)
+            output.append(
+                {
+                    "seed": seed,
+                    "direction": direction,
+                    "count": len(weights),
+                    "weight_mean": mean,
+                    "weight_std": math.sqrt(variance),
+                    "weight_zero_fraction": sum(value == 0.0 for value in weights)
+                    / len(weights),
+                    "weight_p05": quantile(0.05),
+                    "weight_p50": quantile(0.50),
+                    "weight_p95": quantile(0.95),
+                    "effective_alpha_mean": sum(alphas) / len(alphas),
+                }
+            )
+    return output
 
 
 def write_csv(path: Path, rows: list[dict]) -> None:
@@ -834,10 +883,12 @@ def main() -> None:
         lock = pending_lock
         print(f"[DEV LOCK] {lock_path} sha256={sha256_file(lock_path)}", flush=True)
     pooled, by_seed, by_direction = summarize(all_rows)
+    weights = weight_diagnostics(all_rows)
     write_rows(output_dir / f"{args.stage}_query_rows.csv", all_rows)
     write_csv(output_dir / f"{args.stage}_results.csv", pooled)
     write_csv(output_dir / f"{args.stage}_results_by_seed.csv", by_seed)
     write_csv(output_dir / f"{args.stage}_results_by_direction.csv", by_direction)
+    write_csv(output_dir / f"{args.stage}_weight_diagnostics.csv", weights)
     write_markdown(output_dir / f"{args.stage}_results.md", pooled, args.stage)
     summary = {
         "schema_version": 1,
@@ -855,6 +906,7 @@ def main() -> None:
         "results": pooled,
         "results_by_seed": by_seed,
         "results_by_direction": by_direction,
+        "weight_diagnostics": weights,
         "clustered_intervals": {
             "dynasemble_vs_mhyper": clustered_interval(
                 all_rows, "rr_dynasemble", "rr_a"

@@ -62,6 +62,11 @@ baseline selection whose hashes or manifests differ. Rerunning DEV is also
 refused once a TEST summary exists. Existing TEST results must not be used to
 change any DynaSemble option.
 
+The evaluator preserves the exact fixed-expert endpoint: whenever the released
+selector's final ReLU produces a zero M-Hyper weight, the ensemble rank is set
+to the already-audited NativE rank. This prevents single-precision min-max
+rounding from changing a mathematically identical endpoint by one rank.
+
 The true-fact filtering universe and both-direction full-entity scoring are
 identical to the existing heterogeneous-complementarity evaluator. Training
 uses strict negatives from that frozen filtered candidate universe. Evaluation
