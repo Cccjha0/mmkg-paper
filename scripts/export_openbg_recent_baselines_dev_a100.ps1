@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
-    [int]$ChunkSize = 8192,
-    [int]$QueryBatchSize = 32,
+    [Nullable[int]]$ChunkSize = $null,
+    [Nullable[int]]$QueryBatchSize = $null,
     [string[]]$ForceExperts = @(),
     [switch]$NoArchive
 )
@@ -72,16 +72,26 @@ foreach ($job in $jobs) {
     Write-Host "[START] $($job.Expert) seed=$($job.Seed)" -ForegroundColor Cyan
     $jobTimer = [System.Diagnostics.Stopwatch]::StartNew()
 
-    & python scripts/export_query_eval.py `
-        --expert $job.Expert `
-        --run-dir $job.RunDir `
-        --seed $job.Seed `
-        --split dev `
-        --device cuda `
-        --chunk-size $ChunkSize `
-        --query-batch-size $QueryBatchSize `
-        --out $csvPath `
-        --summary-json $summaryPath
+    $exportArgs = @(
+        'scripts/export_query_eval.py',
+        '--expert', $job.Expert,
+        '--run-dir', $job.RunDir,
+        '--seed', $job.Seed,
+        '--split', 'dev',
+        '--device', 'cuda',
+        '--out', $csvPath,
+        '--summary-json', $summaryPath
+    )
+    # By default, export with the exact chunk/query-batch settings persisted in
+    # each run's config. This matters for strict-rank reproducibility when many
+    # candidate scores are tied or numerically indistinguishable (M-Hyper).
+    if ($null -ne $ChunkSize) {
+        $exportArgs += @('--chunk-size', $ChunkSize)
+    }
+    if ($null -ne $QueryBatchSize) {
+        $exportArgs += @('--query-batch-size', $QueryBatchSize)
+    }
+    & python @exportArgs
 
     if ($LASTEXITCODE -ne 0) {
         throw "Export failed: $($job.Expert) seed=$($job.Seed)"

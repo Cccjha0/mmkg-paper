@@ -14,6 +14,7 @@ from ml.training.src.data.dataset_spec import MMKG_GENERAL_V1, OPENBG_LEGACY_V1
 from ml.training.src.eval.filtered_ranking import prepare_true_heads_index, prepare_true_tails_index
 from ml.training.src.models.build_model import build_model
 from ml.training.src.utils.config import load_config
+from ml.training.src.utils.seed import set_seed
 from router.io_utils import write_csv, write_json
 from router.schemas import QUERY_EVAL_HEADER, QueryEvalRecord
 
@@ -359,6 +360,8 @@ def export_query_eval(cfg: dict, ckpt_path: Path, expert_name: str, split: str, 
         "dataset": dataset_bundle.name,
         "protocol_version": protocol_version,
         "n_rows": len(rows),
+        "chunk_size": chunk_size,
+        "query_batch_size": query_batch_size,
         "direction_counts": {
             "head": sum(1 for row in rows if row["direction"] == "head"),
             "tail": sum(1 for row in rows if row["direction"] == "tail"),
@@ -382,6 +385,7 @@ def main() -> None:
     args = parse_args()
     cfg, ckpt_path = load_cfg_and_ckpt(args)
     seed = int(args.seed if args.seed is not None else cfg.get("system", {}).get("seed", 1))
+    set_seed(seed, deterministic=bool(cfg.get("system", {}).get("deterministic", False)))
     device = resolve_device(args.device or cfg.get("system", {}).get("device", "cuda"))
     cfg.setdefault("system", {})["device"] = device
     ev_cfg = cfg.get("evaluation", {})
