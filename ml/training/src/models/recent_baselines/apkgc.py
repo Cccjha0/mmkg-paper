@@ -8,8 +8,6 @@ project's OpenKE or Transformers runtime.
 
 from __future__ import annotations
 
-from __future__ import annotations
-
 import math
 
 import torch
@@ -208,7 +206,10 @@ class OpenBGAPKGC(DirectionalScoringMixin, nn.Module):
                 text_filled[text_missing] = self.text_mean + self.text_std * torch.randn_like(text_filled[text_missing])
             self.register_buffer("text_filled", text_filled)
         else:
-            self.text_filled = self.text_feat
+            # Do not alias a registered buffer under a plain attribute. Module.to()
+            # replaces registered buffers with device-local tensors, which would
+            # leave such an alias pointing at the original CPU tensor.
+            self.text_filled = None
 
         self.ent_embeddings = nn.Embedding(num_entities, self.dim_e)
         self.rel_embeddings = nn.Embedding(num_relations, d)
@@ -267,7 +268,8 @@ class OpenBGAPKGC(DirectionalScoringMixin, nn.Module):
         to backpropagate through the first batch's freed graph.
         """
         self._epoch_img_noise = self._add_noise_to_embeddings(self.img_filled, self.img_mean, self.img_std)
-        self._epoch_text_noise = self._add_noise_to_embeddings(self.text_filled, self.text_mean, self.text_std)
+        text_filled = self.text_filled if self.text_filled is not None else self.text_feat
+        self._epoch_text_noise = self._add_noise_to_embeddings(text_filled, self.text_mean, self.text_std)
         entity_weights = self.ent_embeddings.weight
         entity_mean = entity_weights.detach().mean(dim=0)
         entity_std = entity_weights.detach().std(dim=0)
@@ -281,7 +283,8 @@ class OpenBGAPKGC(DirectionalScoringMixin, nn.Module):
     def _entity_modalities(self, entity_ids: torch.LongTensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         structural = self.ent_embeddings(entity_ids)
         image = self.img_filled[entity_ids]
-        text = self.text_filled[entity_ids]
+        text_filled = self.text_filled if self.text_filled is not None else self.text_feat
+        text = text_filled[entity_ids]
         if not (self.training and self.add_noise):
             return structural, image, text
 
