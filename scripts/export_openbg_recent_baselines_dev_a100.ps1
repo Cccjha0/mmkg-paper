@@ -10,6 +10,12 @@ $ErrorActionPreference = 'Stop'
 $outDir = 'outputs/openbg_img/recent_baselines/dev'
 New-Item -ItemType Directory -Force -Path $outDir | Out-Null
 
+Write-Host '[CHECK] Python 3.10+'
+& python -c "import sys; print('Python:', sys.version.split()[0]); print('Executable:', sys.executable); assert sys.version_info >= (3, 10), 'Python 3.10 or newer is required'"
+if ($LASTEXITCODE -ne 0) {
+    throw 'Python version check failed. Activate the Python 3.10 environment and retry.'
+}
+
 Write-Host '[CHECK] CUDA availability'
 & python -c "import torch; assert torch.cuda.is_available(), 'CUDA unavailable'; print('GPU:', torch.cuda.get_device_name(0)); print('VRAM GiB:', round(torch.cuda.get_device_properties(0).total_memory / 1024**3, 1))"
 if ($LASTEXITCODE -ne 0) {
