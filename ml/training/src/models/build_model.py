@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import torch
 
 from ml.training.src.data.dataset_spec import DatasetBundle, MMKG_GENERAL_V1, OPENBG_LEGACY_V1

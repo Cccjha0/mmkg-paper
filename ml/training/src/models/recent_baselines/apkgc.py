@@ -8,6 +8,8 @@ project's OpenKE or Transformers runtime.
 
 from __future__ import annotations
 
+from __future__ import annotations
+
 import math
 
 import torch

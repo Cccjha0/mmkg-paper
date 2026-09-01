@@ -6,6 +6,8 @@ matches the repository's filtered-ranking evaluator.
 
 from __future__ import annotations
 
+from __future__ import annotations
+
 import math
 
 import torch

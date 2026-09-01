@@ -7,6 +7,8 @@ provided by this repository.
 
 from __future__ import annotations
 
+from __future__ import annotations
+
 from collections.abc import Sequence
 
 import torch
