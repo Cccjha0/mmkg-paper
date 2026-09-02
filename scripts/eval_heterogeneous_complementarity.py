@@ -23,6 +23,7 @@ from ml.training.src.eval.filtered_ranking import (
 )
 from ml.training.src.models.build_model import build_model
 from ml.training.src.utils.seed import set_seed
+from router.query_geometry import QUERY_GEOMETRY_FIELDS, query_geometry_rows
 
 
 DEFAULT_ALPHAS = tuple(round(index * 0.05, 2) for index in range(21))
@@ -51,6 +52,7 @@ BASE_FIELDS = (
     "rank_equal",
     "rr_equal",
     "rrf_k",
+    *QUERY_GEOMETRY_FIELDS,
 )
 
 
@@ -447,6 +449,7 @@ def checkpoint_is_valid(
         and row.get("expert_a_name") == expert_a_name
         and row.get("expert_b_name") == expert_b_name
         and math.isclose(float(row.get("rrf_k", "nan")), rrf_k, rel_tol=0.0, abs_tol=1e-12)
+        and all(math.isfinite(float(row.get(field, "nan"))) for field in QUERY_GEOMETRY_FIELDS)
         for row in rows
     ):
         return False
@@ -513,6 +516,7 @@ def evaluate_unit(
         z_b, z_target_b = query_zscore_with_reference(raw_b, target_b)
         rank_equal = mixed_ranks(z_a, z_b, z_target_a, z_target_b, 0.5)
         rr_equal = reciprocal(rank_equal)
+        geometry_rows = query_geometry_rows(raw_a, raw_b, direction)
 
         alpha_rr: dict[float, torch.Tensor] = {}
         if split == "dev":
@@ -585,6 +589,7 @@ def evaluate_unit(
                 "rr_equal": float(rr_equal[index]),
                 "rrf_k": float(rrf_k),
             }
+            row.update(geometry_rows[index])
             if split == "dev":
                 for alpha in alphas:
                     row[alpha_column(alpha)] = float(alpha_rr[alpha][index])
@@ -997,6 +1002,7 @@ def main() -> None:
         "n_rows": len(all_rows),
         "rrf_k": args.rrf_k,
         "score_normalization": "query_zscore",
+        "query_geometry_fields": list(QUERY_GEOMETRY_FIELDS),
         "selection": selection,
         "results": overall,
         "stability": stability_summary(all_rows),
@@ -1007,6 +1013,10 @@ def main() -> None:
             "equal": "score-aware, answer-agnostic, fixed",
             "global_alpha": "score-aware, answer-agnostic; selected on DEV",
             "relation_alpha": "score-aware, answer-agnostic; relation-conditioned and selected on DEV",
+            "query_geometry": (
+                "answer-agnostic candidate-score statistics; excludes target ids, "
+                "target/reference scores, ranks, reciprocal ranks, and raw relation ids"
+            ),
             "oracle": "answer-aware upper bound",
         },
     }

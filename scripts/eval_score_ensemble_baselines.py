@@ -38,6 +38,7 @@ from router.score_combination import (
     combine_expert_scores,
     shrink_relation_alpha,
 )
+from router.query_geometry import query_geometry_tensor
 
 
 def parse_args() -> argparse.Namespace:
@@ -347,29 +348,18 @@ def query_features(
     relations: torch.Tensor,
     protocol_version: str = OPENBG_LEGACY_V1,
 ) -> np.ndarray:
-    def stats(scores: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
-        safe = safe_scores(scores)
-        top = torch.topk(safe, k=min(5, safe.size(1)), dim=1).values
-        top1 = top[:, 0]
-        top2 = top[:, 1] if top.size(1) > 1 else top[:, 0]
-        return top1, top[:, : min(5, top.size(1))].mean(dim=1), top1 - top2, safe.std(dim=1)
-
-    g1, g5, gm, gs = stats(gate_scores)
-    r1, r5, rm, rs = stats(residual_scores)
-    direction_tail = torch.full_like(g1, 1.0 if direction == "tail" else 0.0)
+    geometry = query_geometry_tensor(gate_scores, residual_scores, direction)
     rel = relations.to(dtype=torch.float32)
-    score_features = [g1, g5, gm, gs, r1, r5, rm, rs, g1 - r1, g5 - r5, gm - rm, gs - rs]
     if protocol_version == OPENBG_LEGACY_V1:
         # Frozen C4 input order.  Raw relation id is retained only so existing
         # OpenBG artifacts and saved score-aware models remain reproducible.
-        columns = [direction_tail, rel, *score_features]
+        features = torch.cat((geometry[:, :1], rel.unsqueeze(1), geometry[:, 1:]), dim=1)
     elif protocol_version == MMKG_GENERAL_V1:
         # Relation ids are categorical identifiers, not ordinal measurements.
         # Dataset-local relation priors can be joined by the caller separately.
-        columns = [direction_tail, *score_features]
+        features = geometry
     else:
         raise ValueError(f"Unsupported protocol version: {protocol_version}")
-    features = torch.stack(columns, dim=1)
     return features.detach().cpu().numpy().astype(np.float32)
 
 
