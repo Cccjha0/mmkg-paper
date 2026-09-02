@@ -223,6 +223,8 @@ def main() -> None:
         raise RuntimeError("Cross-fitting requires non-empty DEV query rows")
     if {row["pair_name"] for row in rows} != {selection["pair_name"]}:
         raise RuntimeError("Query rows and selection pair_name differ")
+    expert_a_name = str(selection["expert_a_name"])
+    expert_b_name = str(selection["expert_b_name"])
 
     alphas = tuple(float(value) for value in selection["alpha_grid"])
     required = {
@@ -306,7 +308,8 @@ def main() -> None:
                 "relation_mrr": metric(
                     [float(row["rr_relation_crossfit"]) for row in heldout_rows]
                 )["mrr"],
-                "mhyper_mrr": metric([float(row["rr_a"]) for row in heldout_rows])["mrr"],
+                "expert_a_name": expert_a_name,
+                "expert_a_mrr": metric([float(row["rr_a"]) for row in heldout_rows])["mrr"],
             }
         )
 
@@ -322,14 +325,14 @@ def main() -> None:
     )
     results = summarize(
         rows,
-        expert_a=str(selection["expert_a_name"]),
-        expert_b=str(selection["expert_b_name"]),
+        expert_a=expert_a_name,
+        expert_b=expert_b_name,
     )
     by_seed = []
     for seed in seeds:
         seed_rows = [row for row in rows if int(row["seed"]) == seed]
         for method, column in (
-            ("M-Hyper", "rr_a"),
+            (expert_a_name, "rr_a"),
             ("Global alpha (5-fold cross-fit)", "rr_global_crossfit"),
             ("Relation alpha (5-fold cross-fit)", "rr_relation_crossfit"),
         ):
