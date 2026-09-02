@@ -12,6 +12,11 @@ import torch
 
 from ml.training.src.data.dataset_spec import MMKG_GENERAL_V1, OPENBG_LEGACY_V1
 from router.query_geometry import QUERY_GEOMETRY_FIELDS, query_geometry_rows, query_geometry_tensor
+from scripts.ablate_anchored_dynamic import (
+    FEATURE_GROUPS,
+    apply_probability_shrinkage,
+    main as ablation_main,
+)
 from scripts.crossfit_anchored_dynamic import apply_policy, main, nearest_alpha
 from scripts.crossfit_heterogeneous_dev_policies import (
     alpha_column,
@@ -87,6 +92,58 @@ def test_anchored_policy_is_bounded_quantized_and_falls_back_to_anchor() -> None
     assert nearest_alpha(0.625, alphas, anchor=0.6) == 0.6
 
 
+def test_p3_feature_groups_and_probability_shrinkage_preserve_boundaries() -> None:
+    forbidden = ("target", "reference", "rank", "rr", "relation")
+    assert set(FEATURE_GROUPS["full_geometry"]) == set(QUERY_GEOMETRY_FIELDS)
+    assert all(
+        field in QUERY_GEOMETRY_FIELDS
+        for fields in FEATURE_GROUPS.values()
+        for field in fields
+    )
+    assert not any(
+        token in field
+        for fields in FEATURE_GROUPS.values()
+        for field in fields
+        for token in forbidden
+    )
+
+    alphas = tuple(round(index * 0.05, 2) for index in range(21))
+    rows = []
+    for _ in range(2):
+        row = {alpha_column(alpha): alpha for alpha in alphas}
+        rows.append(row)
+    probability = np.asarray([0.2, 0.8])
+    nonfinite = np.asarray([False, False])
+    anchored = apply_probability_shrinkage(
+        rows,
+        probability_a=probability,
+        nonfinite=nonfinite,
+        alpha0=0.6,
+        strength=0.0,
+        alphas=alphas,
+    )
+    weak_anchor = apply_probability_shrinkage(
+        rows,
+        probability_a=probability,
+        nonfinite=nonfinite,
+        alpha0=0.6,
+        strength=0.5,
+        alphas=alphas,
+    )
+    no_anchor = apply_probability_shrinkage(
+        rows,
+        probability_a=probability,
+        nonfinite=nonfinite,
+        alpha0=0.6,
+        strength=1.0,
+        alphas=alphas,
+    )
+
+    assert anchored["applied"].tolist() == [0.6, 0.6]
+    assert weak_anchor["applied"].tolist() == [0.4, 0.7]
+    assert no_anchor["applied"].tolist() == [0.2, 0.8]
+
+
 def test_anchored_crossfit_cli_writes_dynamic_expert_labels() -> None:
     alphas = (0.0, 0.4, 0.5, 0.6, 0.8, 1.0)
     rows = []
@@ -102,6 +159,7 @@ def test_anchored_crossfit_cli_writes_dynamic_expert_labels() -> None:
                 signal = 1.0 if target_alpha > 0.6 else -1.0
                 row = {
                     "pair_name": "toy_pair",
+                    "dataset": "toy",
                     "split": "dev",
                     "query_key": f"{direction}|r={relation}|h={h}|t={tail}",
                     "query_id": f"dev|{seed}|{direction}|r={relation}|h={h}|t={tail}",
@@ -189,5 +247,41 @@ def test_anchored_crossfit_cli_writes_dynamic_expert_labels() -> None:
         summary = json.loads((output_dir / "dev_anchored_summary.json").read_text(encoding="utf-8"))
         assert summary["leakage_guard"].startswith("all seeds and both directions")
         assert summary["diagnostics"]["saturation_rate"] == 0.0
+
+        p3_output_dir = temp / "p3_ablation"
+        original_argv = sys.argv
+        try:
+            sys.argv = [
+                "ablate_anchored_dynamic.py",
+                "--query-rows",
+                str(query_path),
+                "--selection-json",
+                str(selection_path),
+                "--output-dir",
+                str(p3_output_dir),
+                "--folds",
+                "5",
+                "--betas",
+                "0.10,0.20",
+                "--confidence-thresholds",
+                "0.00,0.10",
+                "--anchor-strengths",
+                "0.00,0.50,1.00",
+            ]
+            ablation_main()
+        finally:
+            sys.argv = original_argv
+
+        p3_results = list(
+            csv.DictReader((p3_output_dir / "dev_p3_results.csv").open(encoding="utf-8"))
+        )
+        p3_config_ids = {row["config_id"] for row in p3_results}
+        assert {"global", "expanded_selected", "query_soft_full"} <= p3_config_ids
+        assert {"beta_0p10", "beta_0p20", "anchor_strength_0p50"} <= p3_config_ids
+        p3_summary = json.loads(
+            (p3_output_dir / "dev_p3_summary.json").read_text(encoding="utf-8")
+        )
+        assert p3_summary["selection_rule"].startswith("expanded anchored beta")
+        assert len(p3_summary["selected_by_fold"]) == 5
     finally:
         shutil.rmtree(temp)
