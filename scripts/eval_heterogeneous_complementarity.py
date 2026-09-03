@@ -105,6 +105,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--progress-every", type=int, default=25)
     parser.add_argument("--no-resume", action="store_true")
     parser.add_argument("--no-reference-check", action="store_true")
+    parser.add_argument(
+        "--export-alpha-grid",
+        action="store_true",
+        help=(
+            "Also export exact reciprocal ranks for every locked alpha on TEST. "
+            "Required when a DEV-locked per-query policy will be applied afterwards."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -424,6 +432,7 @@ def checkpoint_is_valid(
     direction: str,
     expected_count: int,
     dev: bool,
+    export_alpha_grid: bool,
     alphas: tuple[float, ...],
     rrf_k: float,
     selection: dict | None,
@@ -436,7 +445,7 @@ def checkpoint_is_valid(
     if len(rows) != expected_count or not rows:
         return False
     required = set(BASE_FIELDS)
-    required.update(alpha_column(alpha) for alpha in alphas if dev)
+    required.update(alpha_column(alpha) for alpha in alphas if dev or export_alpha_grid)
     if not required.issubset(rows[0]):
         return False
     if not all(
@@ -492,6 +501,7 @@ def evaluate_unit(
     alphas: tuple[float, ...],
     rrf_k: float,
     selection: dict | None,
+    export_alpha_grid: bool,
     device: str,
     progress_every: int,
     pair_name: str,
@@ -519,7 +529,7 @@ def evaluate_unit(
         geometry_rows = query_geometry_rows(raw_a, raw_b, direction)
 
         alpha_rr: dict[float, torch.Tensor] = {}
-        if split == "dev":
+        if split == "dev" or export_alpha_grid:
             for alpha in alphas:
                 if alpha == 1.0:
                     alpha_rr[alpha] = rr_a
@@ -539,7 +549,7 @@ def evaluate_unit(
                             rank_b,
                         )
                     )
-        else:
+        if split == "test":
             if selection is None:
                 raise RuntimeError("TEST evaluation requires a locked DEV selection")
             global_alpha = float(selection["global_alpha"])
@@ -590,10 +600,10 @@ def evaluate_unit(
                 "rrf_k": float(rrf_k),
             }
             row.update(geometry_rows[index])
-            if split == "dev":
+            if split == "dev" or export_alpha_grid:
                 for alpha in alphas:
                     row[alpha_column(alpha)] = float(alpha_rr[alpha][index])
-            else:
+            if split == "test":
                 row.update(
                     {
                         "alpha_global": global_alpha,
@@ -846,6 +856,7 @@ def main() -> None:
             raise RuntimeError("Selection expert names do not match this TEST run")
         if not math.isclose(float(selection.get("rrf_k", float("nan"))), args.rrf_k, rel_tol=0.0, abs_tol=1e-12):
             raise RuntimeError("TEST rrf-k does not match the locked DEV selection")
+        alphas = tuple(float(value) for value in selection["alpha_grid"])
     elif args.selection_json:
         raise ValueError("--selection-json is TEST-only")
 
@@ -897,6 +908,7 @@ def main() -> None:
                 direction=direction,
                 expected_count=len(triples),
                 dev=args.split == "dev",
+                export_alpha_grid=args.export_alpha_grid,
                 alphas=alphas,
                 rrf_k=args.rrf_k,
                 selection=selection,
@@ -925,6 +937,7 @@ def main() -> None:
                     alphas=alphas,
                     rrf_k=args.rrf_k,
                     selection=selection,
+                    export_alpha_grid=args.export_alpha_grid,
                     device=device,
                     progress_every=args.progress_every,
                     pair_name=args.pair_name,
@@ -1002,6 +1015,7 @@ def main() -> None:
         "n_rows": len(all_rows),
         "rrf_k": args.rrf_k,
         "score_normalization": "query_zscore",
+        "export_alpha_grid": bool(args.split == "dev" or args.export_alpha_grid),
         "query_geometry_fields": list(QUERY_GEOMETRY_FIELDS),
         "selection": selection,
         "results": overall,
