@@ -1,6 +1,6 @@
-# MKG-W and DB15K experiment guide
+# MKG-W, MKG-Y, and DB15K experiment guide
 
-This guide prepares both external datasets for the shared-input `mmkg_general_v1` protocol. It does not redefine any OpenBG-IMG experiment.
+This guide prepares the three external datasets for the shared-input `mmkg_general_v1` protocol. It does not redefine any OpenBG-IMG experiment.
 
 ## Data contract
 
@@ -46,7 +46,26 @@ python ml/training/scripts/preprocess_external_mmkg.py \
 
 Use `--audit-only` on the preprocessing command to inspect counts, dimensions, coverage, finite ranges and NaN/Inf counts without writing `.pt` tensors. Review both `feature_key_map.tsv.report.json` and `audit_report.json` before training. Cross-modal cosine is disabled by default; `shared` is legal only when the two feature files are explicitly documented as one aligned embedding space.
 
-## 2. Prepare DB15K after MKG-W validation
+## 2. Prepare MKG-Y as the untouched replication
+
+The official MKG-Y mapping and split files are pinned under `external/NATIVE/benchmarks/MKG-Y`. They contain 15,000 entities, 28 relations, and clean official TRAIN/DEV/TEST splits with 21,310 / 2,665 / 2,663 triples. Entity tokens already use Wikipedia-style titles. Exact HDF5 keys are used first; the preprocessor then applies the two documented upstream filename conventions for the small number of titles containing `/`, `:`, or a terminal `.`. It never aligns by HDF5 order.
+
+```bash
+mkdir -p data/datasets/mkg_y/processed
+
+python ml/training/scripts/preprocess_external_mmkg.py \
+  --dataset mkg_y \
+  --benchmark-dir external/NATIVE/benchmarks/MKG-Y \
+  --text-h5 data/datasets/MKG_Y_description_sentences.h5 \
+  --image-h5 data/datasets/MKG_Y_img_BEIT_16-224.h5 \
+  --split-policy official \
+  --cross-modal-space independent \
+  --output-dir data/datasets/mkg_y/processed
+```
+
+Run once with `--audit-only` before creating tensors. The source lock records both HDF5 files and all five OpenKE inputs. Keep TEST untouched until the three-seed DEV protocol, score normalization, feature set, alpha/beta/fallback grids, and expert pair are fully locked.
+
+## 3. Prepare DB15K after MKG-W validation
 
 DB15K text keys use DBpedia resource basenames. Image keys use Freebase MIDs, so the official MMKB SameAs file is required; ID order is never used as a fallback.
 
@@ -72,11 +91,11 @@ python ml/training/scripts/preprocess_external_mmkg.py \
 
 The repaired canonical counts are TRAIN 71,300 / DEV 7,922 / TEST 9,902. The manifest records source and canonical counts, the source leakage audit, split construction policy/seed, source lock, mapping/split hashes, HDF5 hashes, dimensions, numeric health, pooling and modality coverage. The loader revalidates these artifacts and rejects a manifest whose split policy differs from the YAML config. All old DB15K checkpoints and `processed/` split artifacts must therefore be discarded and regenerated; MKG-W and OpenBG-IMG are unchanged.
 
-## 3. Server training commands
+## 4. Server training commands
 
 Do not use the smoke configs as evidence. Run each seed with the corresponding common seed config. Examples for MKG-W:
 
-MKG-W uses its complete clean official validation split. DB15K uses `db15k_train_holdout_v1` because the pinned mirrored validation file is contaminated. `termination_policy: dev_early_stop` and `termination_policy: fixed_budget` control only when training ends; best-checkpoint selection remains DEV ONLY in both cases.
+MKG-W and MKG-Y use their complete clean official validation splits. DB15K uses `db15k_train_holdout_v1` because the pinned mirrored validation file is contaminated. `termination_policy: dev_early_stop` and `termination_policy: fixed_budget` control only when training ends; best-checkpoint selection remains DEV ONLY.
 
 ```bash
 python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --config ml/configs/mkg_w_gate_only.yaml
@@ -91,16 +110,24 @@ python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --
 
 Replace `mkg_w` with `db15k` after the MKG-W load/train/valid/filtered-test chain passes. The dataset-neutral structural alias is `mmkg_complex`.
 
+For the MKG-Y P1 replication, start only with the planned strong pair. AdaMF-MAT is the optional weaker-expert pressure test:
+
+```bash
+python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --config ml/configs/mkg_y_mhyper.yaml
+python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --config ml/configs/mkg_y_native.yaml
+python -m ml.training.scripts.run_train --common ml/configs/common_seed1.yaml --config ml/configs/mkg_y_adamf_mat.yaml
+```
+
 Within each dataset, all configs use the same canonical splits, features, masks and evaluator. Hyperparameters remain architecture-specific and must be selected on validation only. The checked-in starting-anchor configs therefore set `evaluation.run_test: false`. After the configuration is frozen from validation results, change only that field to `true` for the final three-seed runs; final test evaluation is locked to the selected validation checkpoint.
 
 Released-script anchors are dataset-specific and must not be copied across datasets:
 
-| Model | MKG-W anchor | DB15K anchor |
-| --- | --- | --- |
-| NativE | `dim=250`, `margin=4`, batch 1024, 128 negatives, 1000 epochs | `dim=250`, `margin=12`, batch 1024, 128 negatives, 1000 epochs |
-| AdaMF-MAT | `dim=200`, `margin=12`, batch 1024, 128 negatives, 1000 epochs | `dim=250`, `margin=12`, batch 1024, 128 negatives, 1000 epochs |
-| APKGC | `num_proj=1`, `Mformer_hd_mean` | `num_proj=2`, `Mformer_hd_graph`; both use `dim=128`, batch 1024, 32 negatives and 8000 epochs |
-| M-Hyper | `rank=128`, batch 1000, Adagrad 0.1, `wN3=0.005`, 200 epochs | Same released command anchor |
+| Model | MKG-W anchor | MKG-Y anchor | DB15K anchor |
+| --- | --- | --- | --- |
+| NativE | `dim=250`, `margin=4`, batch 1024, 128 negatives, 1000 epochs | Same as MKG-W | `dim=250`, `margin=12`, batch 1024, 128 negatives, 1000 epochs |
+| AdaMF-MAT | `dim=200`, `margin=12`, batch 1024, 128 negatives, 1000 epochs | `dim=200`, `margin=4`, batch 1024, 128 negatives, 1000 epochs | `dim=250`, `margin=12`, batch 1024, 128 negatives, 1000 epochs |
+| APKGC | `num_proj=1`, `Mformer_hd_mean` | Not in the initial P1 scope | `num_proj=2`, `Mformer_hd_graph`; both use `dim=128`, batch 1024, 32 negatives and 8000 epochs |
+| M-Hyper | `rank=128`, batch 1000, Adagrad 0.1, `wN3=0.005`, 200 epochs | Same released command anchor | Same released command anchor |
 
 The canonical tensors remain unchanged across methods, while missing-modality handling stays architecture-specific and mask-driven:
 
@@ -117,7 +144,7 @@ The canonical tensors remain unchanged across methods, while missing-modality ha
 
 The unified evaluator ranks over every mapped entity, filters all other known positives from train+valid+test, evaluates head and tail prediction, uses the existing strict-`>` tie rule, and reports the equal-direction average. This is the same evaluator used by every method; external paper numbers are not mixed into the main comparison.
 
-## 4. Query export, router and score-aware analysis
+## 5. Query export, router and score-aware analysis
 
 Export Gate-only, Residual-only and Ours query results from their server run directories with `scripts/export_query_eval.py`. General exports report the real relation name, both target masks, and one of `head_T1V1` … `tail_T0V0`. Target masks are for reporting only.
 
@@ -193,7 +220,7 @@ the structural and fusion rankings. Candidate-derived normalization statistics
 remain answer-agnostic. Frozen `openbg_legacy_v1` raw-score interpolation keeps
 its historical full-matrix target behavior unchanged.
 
-## 5. Generalized-v2 DEV-first funnel
+## 6. Generalized-v2 DEV-first funnel
 
 The v2 aliases exist only under `mmkg_general_v1`. They do not replace `mmkg_gate_only`, `mmkg_residual_only`, or any `openbg_img_*` alias. All checked-in v2 configs keep `evaluation.run_test: false`.
 
@@ -256,7 +283,7 @@ python scripts/run_general_score_aware_bootstrap_ci.py \
   --bootstrap-unit query --n-bootstrap 10000 --seed 42
 ```
 
-## 6. Verification commands (server)
+## 7. Verification commands (server)
 
 The following suite includes model/evaluator tests and should run on the server, not the local low-compute machine:
 

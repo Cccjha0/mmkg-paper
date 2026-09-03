@@ -9,6 +9,7 @@ from ml.training.scripts.preprocess_external_mmkg import (
     build_alignment,
     construct_canonical_splits,
     inspect_hdf5,
+    mkg_y_feature_key_candidates,
     read_openke_mapping,
     read_openke_triples,
 )
@@ -43,6 +44,15 @@ def test_explicit_feature_alignment_can_share_a_key() -> None:
     )
     assert aligned == [["shared"], ["shared"]]
     assert missing == []
+
+
+def test_mkg_y_feature_key_candidates_preserve_modality_specific_upstream_conventions() -> None:
+    assert mkg_y_feature_key_candidates("AC/DC", "text") == ["AC/DC", "DC"]
+    assert mkg_y_feature_key_candidates("AC/DC", "image") == ["AC/DC", "ACDC"]
+    assert mkg_y_feature_key_candidates("Example_F.C.", "image") == [
+        "Example_F.C.",
+        "Example_F.C",
+    ]
 
 
 def test_hdf5_numeric_audit_reports_nonfinite_values(tmp_path: Path) -> None:

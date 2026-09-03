@@ -1,6 +1,6 @@
 # Multi-dataset implementation map
 
-OpenBG-IMG is frozen under `openbg_legacy_v1`; MKG-W and DB15K use the explicit `mmkg_general_v1` path. Old YAML files intentionally remain unchanged and infer the legacy loader.
+OpenBG-IMG is frozen under `openbg_legacy_v1`; MKG-W, MKG-Y, and DB15K use the explicit `mmkg_general_v1` path. Old YAML files intentionally remain unchanged and infer the legacy loader.
 
 | File / area | Current responsibility | OpenBG-specific assumption found | Required change | Legacy risk | Verification |
 |---|---|---|---|---|---|
@@ -18,7 +18,7 @@ OpenBG-IMG is frozen under `openbg_legacy_v1`; MKG-W and DB15K use the explicit 
 | `router/score_combination.py` | General score normalization/interpolation primitive | N/A | `none`, query z-score, rank-based; no target input | Low | Leakage and filtered-candidate tests |
 | `scripts/analyze_general_expert_complementarity.py` | Dataset-local post-hoc analysis | N/A | Fixed wins/ties, Oracle headroom and subgroup exports | Low | Synthetic CSV contract/manual DEV export |
 | Recent baseline adapters | M-Hyper, AdaMF-MAT, NativE, APKGC | OpenBG-named constructors/cache loading | Feed shared canonical tensors through `build_model` | Medium | Dataset-neutral config aliases |
-| `ml/training/scripts/preprocess_external_mmkg.py` | Canonical preprocessing | N/A | Clean official MKG-W splits; versioned deterministic DB15K TRAIN holdout because mirrored VALID leaks TRAIN/TEST; keyed alignment, pooling, masks, hashes | Low | Split-integrity audit and preprocessing tests |
+| `ml/training/scripts/preprocess_external_mmkg.py` | Canonical preprocessing | N/A | Clean official MKG-W/MKG-Y splits; versioned deterministic DB15K TRAIN holdout because mirrored VALID leaks TRAIN/TEST; keyed alignment, pooling, masks, hashes | Low | Split-integrity audit and preprocessing tests |
 
 The migration boundary is deliberately narrow: format and alignment logic live in the data layer, while training and evaluation receive integer triples and aligned tensors only.
 

@@ -16,15 +16,19 @@ def _config(name: str) -> dict:
 
 def test_native_released_script_anchors_are_dataset_specific() -> None:
     mkg_w = _config("mkg_w_native")
+    mkg_y = _config("mkg_y_native")
     db15k = _config("db15k_native")
     assert (mkg_w["model"]["dim"], mkg_w["model"]["margin"]) == (250, 4.0)
+    assert (mkg_y["model"]["dim"], mkg_y["model"]["margin"]) == (250, 4.0)
     assert (db15k["model"]["dim"], db15k["model"]["margin"]) == (250, 12.0)
 
 
 def test_adamf_mat_released_script_anchors_are_dataset_specific() -> None:
     mkg_w = _config("mkg_w_adamf_mat")
+    mkg_y = _config("mkg_y_adamf_mat")
     db15k = _config("db15k_adamf_mat")
     assert (mkg_w["model"]["dim"], mkg_w["model"]["margin"]) == (200, 12.0)
+    assert (mkg_y["model"]["dim"], mkg_y["model"]["margin"]) == (200, 4.0)
     assert (db15k["model"]["dim"], db15k["model"]["margin"]) == (250, 12.0)
 
 
@@ -42,8 +46,8 @@ def test_apkgc_released_script_fusion_anchors_are_dataset_specific() -> None:
 
 
 def test_all_external_starting_configs_are_dev_only() -> None:
-    for dataset in ("mkg_w", "db15k"):
-        for model in (
+    dataset_models = {
+        "mkg_w": (
             "adamf_mat",
             "apkgc",
             "complex",
@@ -52,7 +56,21 @@ def test_all_external_starting_configs_are_dev_only() -> None:
             "mhyper",
             "native",
             "residual_only",
-        ):
+        ),
+        "db15k": (
+            "adamf_mat",
+            "apkgc",
+            "complex",
+            "gate_only",
+            "gate_residual",
+            "mhyper",
+            "native",
+            "residual_only",
+        ),
+        "mkg_y": ("mhyper", "native", "adamf_mat"),
+    }
+    for dataset, models in dataset_models.items():
+        for model in models:
             cfg = _config(f"{dataset}_{model}")
             assert cfg["evaluation"]["run_test"] is False
             assert cfg["evaluation"]["dev_eval_limit"] is None

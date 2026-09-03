@@ -2,7 +2,7 @@
 
 This repository contains the paper-oriented code and artifacts for multimodal knowledge graph completion on **OpenBG-IMG**. The current focus is protocol-aware analysis of fixed experts, clean routing, candidate-level routing, and score-aware expert combination.
 
-The training framework also supports MKG-W and DB15K through a separate, explicit `mmkg_general_v1` protocol. See [the external dataset guide](docs/EXTERNAL_DATASETS.md) and [the implementation/legacy-risk map](docs/MULTI_DATASET_IMPLEMENTATION_PLAN.md). Existing OpenBG YAML files remain frozen legacy experiments.
+The training framework also supports MKG-W, MKG-Y, and DB15K through a separate, explicit `mmkg_general_v1` protocol. See [the external dataset guide](docs/EXTERNAL_DATASETS.md) and [the implementation/legacy-risk map](docs/MULTI_DATASET_IMPLEMENTATION_PLAN.md). Existing OpenBG YAML files remain frozen legacy experiments.
 
 ## Dataset: OpenBG-IMG
 

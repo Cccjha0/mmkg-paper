@@ -25,9 +25,12 @@ OPENKE_FILES = {
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Build an audited canonical MKG-W or DB15K dataset from official OpenKE splits and keyed HDF5 features."
+        description=(
+            "Build an audited canonical MKG-W, MKG-Y, or DB15K dataset from "
+            "official OpenKE splits and keyed HDF5 features."
+        )
     )
-    parser.add_argument("--dataset", required=True, choices=["mkg_w", "db15k"])
+    parser.add_argument("--dataset", required=True, choices=["mkg_w", "mkg_y", "db15k"])
     parser.add_argument("--benchmark-dir", type=Path, required=True)
     parser.add_argument("--text-h5", type=Path, required=True)
     parser.add_argument("--image-h5", type=Path, required=True)
@@ -35,7 +38,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--feature-key-map",
         type=Path,
-        help="TSV with entity token and HDF5 key. Required for MKG-W; optional override for DB15K.",
+        help=(
+            "TSV with entity token and HDF5 key. Required for MKG-W; optional override "
+            "for MKG-Y or DB15K."
+        ),
     )
     parser.add_argument(
         "--db15k-same-as",
@@ -49,7 +55,7 @@ def parse_args() -> argparse.Namespace:
         choices=["auto", "official", "db15k_train_holdout_v1"],
         default="auto",
         help=(
-            "Canonical split policy. 'auto' uses the clean official splits for MKG-W and "
+            "Canonical split policy. 'auto' uses the clean official splits for MKG-W/MKG-Y and "
             "db15k_train_holdout_v1 for DB15K, whose mirrored valid2id.txt overlaps train/test."
         ),
     )
@@ -440,8 +446,27 @@ def dbpedia_basename(entity: str) -> str:
     return unquote(entity[len(prefix) : -1])
 
 
+def mkg_y_feature_key_candidates(entity: str, modality: str) -> list[str]:
+    """Return the pinned MKG-Y HDF5 key conventions in priority order.
+
+    MKG-Y entity tokens are Wikipedia-style titles. Exact keys cover almost all
+    observed rows. The supplied text HDF5 keeps only the final path component
+    for the eleven titles containing ``/``; the image HDF5 removes ``/`` and
+    normalizes ``:``/terminal ``.``. Keeping these modality-specific fallbacks
+    explicit avoids any dependence on HDF5 iteration order.
+    """
+    if modality == "text":
+        normalized = entity.rsplit("/", 1)[-1].replace(":", "_").rstrip(".")
+    elif modality == "image":
+        normalized = entity.replace(":", "_").replace("/", "").rstrip(".")
+    else:
+        raise ValueError(f"Unsupported MKG-Y modality: {modality!r}")
+    return list(dict.fromkeys([entity, normalized]))
+
+
 def build_key_resolvers(
     args: argparse.Namespace,
+    text_h5_keys: set[str] | None = None,
     image_h5_keys: set[str] | None = None,
 ) -> tuple[Callable[[str], str | list[str] | None], Callable[[str], str | list[str] | None], dict]:
     explicit = read_feature_key_map(args.feature_key_map)
@@ -454,6 +479,35 @@ def build_key_resolvers(
             )
         metadata["feature_key_map"] = {"path": str(args.feature_key_map), "sha256": sha256_file(args.feature_key_map)}
         return explicit.get, explicit.get, metadata
+
+    if args.dataset == "mkg_y":
+        if explicit:
+            metadata["feature_key_map"] = {
+                "path": str(args.feature_key_map),
+                "sha256": sha256_file(args.feature_key_map),
+            }
+            return explicit.get, explicit.get, metadata
+        if text_h5_keys is None or image_h5_keys is None:
+            raise ValueError("MKG-Y key resolution requires both text and image HDF5 key sets")
+
+        def text_key(entity: str) -> str | None:
+            return next(
+                (key for key in mkg_y_feature_key_candidates(entity, "text") if key in text_h5_keys),
+                None,
+            )
+
+        def image_key(entity: str) -> str | None:
+            return next(
+                (key for key in mkg_y_feature_key_candidates(entity, "image") if key in image_h5_keys),
+                None,
+            )
+
+        metadata["mkg_y_key_convention"] = {
+            "text": "exact title, else final slash-delimited component with colon/terminal-dot normalization",
+            "image": "exact title, else colon-to-underscore/slash-removal/terminal-dot normalization",
+            "selection": "first present candidate in the documented priority order",
+        }
+        return text_key, image_key, metadata
 
     same_as: dict[str, list[str]] = {}
     if args.db15k_same_as is not None:
@@ -609,7 +663,9 @@ def main() -> None:
     )
     text_keys, text_dim, _, text_health = inspect_hdf5(args.text_h5)
     image_keys, image_dim, _, image_health = inspect_hdf5(args.image_h5)
-    text_resolver, image_resolver, resolver_metadata = build_key_resolvers(args, image_h5_keys=image_keys)
+    text_resolver, image_resolver, resolver_metadata = build_key_resolvers(
+        args, text_h5_keys=text_keys, image_h5_keys=image_keys
+    )
     aligned_text, missing_text = build_alignment(entity2id, text_keys, text_resolver, "text")
     aligned_image, missing_image = build_alignment(entity2id, image_keys, image_resolver, "image")
     aligned_text_count = num_entities - len(missing_text)

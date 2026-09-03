@@ -1,0 +1,42 @@
+# General-protocol MKG-Y anchor from the released M-Hyper command. DEV only.
+dataset:
+  name: mkg_y
+  loader: openke_mmkg
+  processed_dir: data/datasets/mkg_y/processed
+
+protocol:
+  version: mmkg_general_v1
+  split: official
+  modality_policy: native_text_visual_availability
+  evaluation: filtered_bidirectional
+
+model:
+  name: mmkg_mhyper
+  num_relations: 28
+  rank: 128
+  init_size: 0.001
+  noise_preserve_ratio: 0.2
+  pca_init: true
+  pca_fit_scope: train_entities
+  faithful_upstream_reconstruction: true
+training:
+  termination_policy: fixed_budget
+  engine: one_vs_all
+  sampler: none
+  optimizer: adagrad
+  lr: 0.1
+  batch_size: 1000
+  wn3_weight: 0.005
+  epochs: 200
+  eval_every: 5
+  early_stop_patience: null
+evaluation:
+  dev_eval_limit: null
+  filtered: true
+  direction: both
+  chunk_size: 4096
+  query_batch_size: 32
+  run_test: false
+
+output:
+  exp_name: mkg_y_mhyper
