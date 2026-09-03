@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="860" viewBox="0 0 1040 860">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,sans-serif;fill:#202124}.title{font-size:20px;font-weight:700}.panel{font-size:14px;font-weight:700}.axis{font-size:10px}.legend{font-size:12px}</style>
+<text x="24" y="30" class="title">AACPI V2 Phase 2A — DEV action utility signs</text>
+<rect x="24" y="46" width="12" height="12" fill="#2f855a"/><text x="42" y="57" class="legend">Positive U</text>
+<rect x="132" y="46" width="12" height="12" fill="#a0aec0"/><text x="150" y="57" class="legend">Zero U</text>
+<rect x="224" y="46" width="12" height="12" fill="#c53030"/><text x="242" y="57" class="legend">Negative U</text>
+<text x="28" y="102" class="panel">db15k / M-Hyper + AdaMF-MAT</text>
+<line x1="74" y1="122" x2="74" y2="282" stroke="#5f6368"/>
+<line x1="74" y1="282" x2="504" y2="282" stroke="#5f6368"/>
+<rect x="74.00" y="122.00" width="82.00" height="59.69" fill="#2f855a"/>
+<rect x="74.00" y="181.69" width="82.00" height="56.21" fill="#a0aec0"/>
+<rect x="74.00" y="237.90" width="82.00" height="44.10" fill="#c53030"/>
+<text x="115.00" y="296" text-anchor="middle" class="axis">-0.30</text>
+<rect x="161.00" y="122.00" width="82.00" height="58.21" fill="#2f855a"/>
+<rect x="161.00" y="180.21" width="82.00" height="63.86" fill="#a0aec0"/>
+<rect x="161.00" y="244.08" width="82.00" height="37.92" fill="#c53030"/>
+<text x="202.00" y="296" text-anchor="middle" class="axis">-0.20</text>
+<rect x="248.00" y="122.00" width="82.00" height="54.44" fill="#2f855a"/>
+<rect x="248.00" y="176.44" width="82.00" height="76.19" fill="#a0aec0"/>
+<rect x="248.00" y="252.62" width="82.00" height="29.38" fill="#c53030"/>
+<text x="289.00" y="296" text-anchor="middle" class="axis">-0.10</text>
+<rect x="335.00" y="122.00" width="82.00" height="49.64" fill="#2f855a"/>
+<rect x="335.00" y="171.64" width="82.00" height="86.67" fill="#a0aec0"/>
+<rect x="335.00" y="258.32" width="82.00" height="23.68" fill="#c53030"/>
+<text x="376.00" y="296" text-anchor="middle" class="axis">-0.05</text>
+<rect x="422.00" y="122.00" width="82.00" height="0.00" fill="#2f855a"/>
+<rect x="422.00" y="122.00" width="82.00" height="160.00" fill="#a0aec0"/>
+<rect x="422.00" y="282.00" width="82.00" height="0.00" fill="#c53030"/>
+<text x="463.00" y="296" text-anchor="middle" class="axis">+0.00</text>
+<text x="68" y="285.0" text-anchor="end" class="axis">0%</text>
+<text x="68" y="205.0" text-anchor="end" class="axis">50%</text>
+<text x="68" y="125.0" text-anchor="end" class="axis">100%</text>
+<text x="548" y="102" class="panel">db15k / M-Hyper + NativE</text>
+<line x1="594" y1="122" x2="594" y2="282" stroke="#5f6368"/>
+<line x1="594" y1="282" x2="1024" y2="282" stroke="#5f6368"/>
+<rect x="594.00" y="122.00" width="82.00" height="57.89" fill="#2f855a"/>
+<rect x="594.00" y="179.89" width="82.00" height="63.38" fill="#a0aec0"/>
+<rect x="594.00" y="243.27" width="82.00" height="38.73" fill="#c53030"/>
+<text x="635.00" y="296" text-anchor="middle" class="axis">-0.30</text>
+<rect x="681.00" y="122.00" width="82.00" height="55.85" fill="#2f855a"/>
+<rect x="681.00" y="177.85" width="82.00" height="70.67" fill="#a0aec0"/>
+<rect x="681.00" y="248.52" width="82.00" height="33.48" fill="#c53030"/>
+<text x="722.00" y="296" text-anchor="middle" class="axis">-0.20</text>
+<rect x="768.00" y="122.00" width="82.00" height="51.52" fill="#2f855a"/>
+<rect x="768.00" y="173.52" width="82.00" height="81.44" fill="#a0aec0"/>
+<rect x="768.00" y="254.96" width="82.00" height="27.04" fill="#c53030"/>
+<text x="809.00" y="296" text-anchor="middle" class="axis">-0.10</text>
+<rect x="855.00" y="122.00" width="82.00" height="46.12" fill="#2f855a"/>
+<rect x="855.00" y="168.12" width="82.00" height="91.31" fill="#a0aec0"/>
+<rect x="855.00" y="259.44" width="82.00" height="22.56" fill="#c53030"/>
+<text x="896.00" y="296" text-anchor="middle" class="axis">-0.05</text>
+<rect x="942.00" y="122.00" width="82.00" height="0.00" fill="#2f855a"/>
+<rect x="942.00" y="122.00" width="82.00" height="160.00" fill="#a0aec0"/>
+<rect x="942.00" y="282.00" width="82.00" height="0.00" fill="#c53030"/>
+<text x="983.00" y="296" text-anchor="middle" class="axis">+0.00</text>
+<text x="588" y="285.0" text-anchor="end" class="axis">0%</text>
+<text x="588" y="205.0" text-anchor="end" class="axis">50%</text>
+<text x="588" y="125.0" text-anchor="end" class="axis">100%</text>
+<text x="28" y="362" class="panel">db15k / NativE + AdaMF-MAT</text>
+<line x1="74" y1="382" x2="74" y2="542" stroke="#5f6368"/>
+<line x1="74" y1="542" x2="504" y2="542" stroke="#5f6368"/>
+<rect x="74.00" y="382.00" width="82.00" height="67.82" fill="#2f855a"/>
+<rect x="74.00" y="449.82" width="82.00" height="49.90" fill="#a0aec0"/>
+<rect x="74.00" y="499.73" width="82.00" height="42.27" fill="#c53030"/>
+<text x="115.00" y="556" text-anchor="middle" class="axis">-0.30</text>
+<rect x="161.00" y="382.00" width="82.00" height="66.54" fill="#2f855a"/>
+<rect x="161.00" y="448.54" width="82.00" height="56.07" fill="#a0aec0"/>
+<rect x="161.00" y="504.61" width="82.00" height="37.39" fill="#c53030"/>
+<text x="202.00" y="556" text-anchor="middle" class="axis">-0.20</text>
+<rect x="248.00" y="382.00" width="82.00" height="63.21" fill="#2f855a"/>
+<rect x="248.00" y="445.21" width="82.00" height="66.34" fill="#a0aec0"/>
+<rect x="248.00" y="511.55" width="82.00" height="30.45" fill="#c53030"/>
+<text x="289.00" y="556" text-anchor="middle" class="axis">-0.10</text>
+<rect x="335.00" y="382.00" width="82.00" height="59.12" fill="#2f855a"/>
+<rect x="335.00" y="441.12" width="82.00" height="76.21" fill="#a0aec0"/>
+<rect x="335.00" y="517.33" width="82.00" height="24.67" fill="#c53030"/>
+<text x="376.00" y="556" text-anchor="middle" class="axis">-0.05</text>
+<rect x="422.00" y="382.00" width="82.00" height="0.00" fill="#2f855a"/>
+<rect x="422.00" y="382.00" width="82.00" height="160.00" fill="#a0aec0"/>
+<rect x="422.00" y="542.00" width="82.00" height="0.00" fill="#c53030"/>
+<text x="463.00" y="556" text-anchor="middle" class="axis">+0.00</text>
+<text x="68" y="545.0" text-anchor="end" class="axis">0%</text>
+<text x="68" y="465.0" text-anchor="end" class="axis">50%</text>
+<text x="68" y="385.0" text-anchor="end" class="axis">100%</text>
+<text x="548" y="362" class="panel">mkg_w / M-Hyper + AdaMF-MAT</text>
+<line x1="594" y1="382" x2="594" y2="542" stroke="#5f6368"/>
+<line x1="594" y1="542" x2="1024" y2="542" stroke="#5f6368"/>
+<rect x="594.00" y="382.00" width="82.00" height="71.15" fill="#2f855a"/>
+<rect x="594.00" y="453.15" width="82.00" height="55.02" fill="#a0aec0"/>
+<rect x="594.00" y="508.17" width="82.00" height="33.83" fill="#c53030"/>
+<text x="635.00" y="556" text-anchor="middle" class="axis">-0.30</text>
+<rect x="681.00" y="382.00" width="82.00" height="69.98" fill="#2f855a"/>
+<rect x="681.00" y="451.98" width="82.00" height="61.11" fill="#a0aec0"/>
+<rect x="681.00" y="513.09" width="82.00" height="28.91" fill="#c53030"/>
+<text x="722.00" y="556" text-anchor="middle" class="axis">-0.20</text>
+<rect x="768.00" y="382.00" width="82.00" height="66.33" fill="#2f855a"/>
+<rect x="768.00" y="448.33" width="82.00" height="71.23" fill="#a0aec0"/>
+<rect x="768.00" y="519.56" width="82.00" height="22.44" fill="#c53030"/>
+<text x="809.00" y="556" text-anchor="middle" class="axis">-0.10</text>
+<rect x="855.00" y="382.00" width="82.00" height="62.05" fill="#2f855a"/>
+<rect x="855.00" y="444.05" width="82.00" height="80.01" fill="#a0aec0"/>
+<rect x="855.00" y="524.05" width="82.00" height="17.95" fill="#c53030"/>
+<text x="896.00" y="556" text-anchor="middle" class="axis">-0.05</text>
+<rect x="942.00" y="382.00" width="82.00" height="0.00" fill="#2f855a"/>
+<rect x="942.00" y="382.00" width="82.00" height="160.00" fill="#a0aec0"/>
+<rect x="942.00" y="542.00" width="82.00" height="0.00" fill="#c53030"/>
+<text x="983.00" y="556" text-anchor="middle" class="axis">+0.00</text>
+<text x="588" y="545.0" text-anchor="end" class="axis">0%</text>
+<text x="588" y="465.0" text-anchor="end" class="axis">50%</text>
+<text x="588" y="385.0" text-anchor="end" class="axis">100%</text>
+<text x="28" y="622" class="panel">mkg_w / M-Hyper + NativE</text>
+<line x1="74" y1="642" x2="74" y2="802" stroke="#5f6368"/>
+<line x1="74" y1="802" x2="504" y2="802" stroke="#5f6368"/>
+<rect x="74.00" y="642.00" width="43.33" height="69.67" fill="#2f855a"/>
+<rect x="74.00" y="711.67" width="43.33" height="56.95" fill="#a0aec0"/>
+<rect x="74.00" y="768.62" width="43.33" height="33.38" fill="#c53030"/>
+<text x="95.67" y="816" text-anchor="middle" class="axis">-0.30</text>
+<rect x="122.33" y="642.00" width="43.33" height="69.14" fill="#2f855a"/>
+<rect x="122.33" y="711.14" width="43.33" height="61.42" fill="#a0aec0"/>
+<rect x="122.33" y="772.56" width="43.33" height="29.44" fill="#c53030"/>
+<text x="144.00" y="816" text-anchor="middle" class="axis">-0.20</text>
+<rect x="170.67" y="642.00" width="43.33" height="65.49" fill="#2f855a"/>
+<rect x="170.67" y="707.49" width="43.33" height="69.44" fill="#a0aec0"/>
+<rect x="170.67" y="776.93" width="43.33" height="25.07" fill="#c53030"/>
+<text x="192.33" y="816" text-anchor="middle" class="axis">-0.10</text>
+<rect x="219.00" y="642.00" width="43.33" height="61.07" fill="#2f855a"/>
+<rect x="219.00" y="703.07" width="43.33" height="76.84" fill="#a0aec0"/>
+<rect x="219.00" y="779.90" width="43.33" height="22.10" fill="#c53030"/>
+<text x="240.67" y="816" text-anchor="middle" class="axis">-0.05</text>
+<rect x="267.33" y="642.00" width="43.33" height="0.00" fill="#2f855a"/>
+<rect x="267.33" y="642.00" width="43.33" height="160.00" fill="#a0aec0"/>
+<rect x="267.33" y="802.00" width="43.33" height="0.00" fill="#c53030"/>
+<text x="289.00" y="816" text-anchor="middle" class="axis">+0.00</text>
+<rect x="315.67" y="642.00" width="43.33" height="20.12" fill="#2f855a"/>
+<rect x="315.67" y="662.12" width="43.33" height="77.59" fill="#a0aec0"/>
+<rect x="315.67" y="739.71" width="43.33" height="62.29" fill="#c53030"/>
+<text x="337.33" y="816" text-anchor="middle" class="axis">+0.05</text>
+<rect x="364.00" y="642.00" width="43.33" height="22.03" fill="#2f855a"/>
+<rect x="364.00" y="664.03" width="43.33" height="70.50" fill="#a0aec0"/>
+<rect x="364.00" y="734.54" width="43.33" height="67.46" fill="#c53030"/>
+<text x="385.67" y="816" text-anchor="middle" class="axis">+0.10</text>
+<rect x="412.33" y="642.00" width="43.33" height="23.03" fill="#2f855a"/>
+<rect x="412.33" y="665.03" width="43.33" height="64.32" fill="#a0aec0"/>
+<rect x="412.33" y="729.35" width="43.33" height="72.65" fill="#c53030"/>
+<text x="434.00" y="816" text-anchor="middle" class="axis">+0.20</text>
+<rect x="460.67" y="642.00" width="43.33" height="23.09" fill="#2f855a"/>
+<rect x="460.67" y="665.09" width="43.33" height="60.80" fill="#a0aec0"/>
+<rect x="460.67" y="725.90" width="43.33" height="76.10" fill="#c53030"/>
+<text x="482.33" y="816" text-anchor="middle" class="axis">+0.30</text>
+<text x="68" y="805.0" text-anchor="end" class="axis">0%</text>
+<text x="68" y="725.0" text-anchor="end" class="axis">50%</text>
+<text x="68" y="645.0" text-anchor="end" class="axis">100%</text>
+<text x="548" y="622" class="panel">mkg_w / NativE + AdaMF-MAT</text>
+<line x1="594" y1="642" x2="594" y2="802" stroke="#5f6368"/>
+<line x1="594" y1="802" x2="1024" y2="802" stroke="#5f6368"/>
+<rect x="594.00" y="642.00" width="67.50" height="50.85" fill="#2f855a"/>
+<rect x="594.00" y="692.85" width="67.50" height="50.24" fill="#a0aec0"/>
+<rect x="594.00" y="743.09" width="67.50" height="58.91" fill="#c53030"/>
+<text x="627.75" y="816" text-anchor="middle" class="axis">-0.30</text>
+<rect x="666.50" y="642.00" width="67.50" height="50.00" fill="#2f855a"/>
+<rect x="666.50" y="692.00" width="67.50" height="55.60" fill="#a0aec0"/>
+<rect x="666.50" y="747.60" width="67.50" height="54.40" fill="#c53030"/>
+<text x="700.25" y="816" text-anchor="middle" class="axis">-0.20</text>
+<rect x="739.00" y="642.00" width="67.50" height="47.72" fill="#2f855a"/>
+<rect x="739.00" y="689.72" width="67.50" height="64.91" fill="#a0aec0"/>
+<rect x="739.00" y="754.63" width="67.50" height="47.37" fill="#c53030"/>
+<text x="772.75" y="816" text-anchor="middle" class="axis">-0.10</text>
+<rect x="811.50" y="642.00" width="67.50" height="45.15" fill="#2f855a"/>
+<rect x="811.50" y="687.15" width="67.50" height="72.63" fill="#a0aec0"/>
+<rect x="811.50" y="759.78" width="67.50" height="42.22" fill="#c53030"/>
+<text x="845.25" y="816" text-anchor="middle" class="axis">-0.05</text>
+<rect x="884.00" y="642.00" width="67.50" height="0.00" fill="#2f855a"/>
+<rect x="884.00" y="642.00" width="67.50" height="160.00" fill="#a0aec0"/>
+<rect x="884.00" y="802.00" width="67.50" height="0.00" fill="#c53030"/>
+<text x="917.75" y="816" text-anchor="middle" class="axis">+0.00</text>
+<rect x="956.50" y="642.00" width="67.50" height="38.65" fill="#2f855a"/>
+<rect x="956.50" y="680.65" width="67.50" height="74.06" fill="#a0aec0"/>
+<rect x="956.50" y="754.71" width="67.50" height="47.29" fill="#c53030"/>
+<text x="990.25" y="816" text-anchor="middle" class="axis">+0.05</text>
+<text x="588" y="805.0" text-anchor="end" class="axis">0%</text>
+<text x="588" y="725.0" text-anchor="end" class="axis">50%</text>
+<text x="588" y="645.0" text-anchor="end" class="axis">100%</text>
+</svg>

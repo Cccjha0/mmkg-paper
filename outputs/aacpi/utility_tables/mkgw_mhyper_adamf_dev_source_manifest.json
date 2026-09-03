@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-09-03T17:00:15.404567+00:00",
+  "dataset": "mkg_w",
+  "pair_id": "mkgw_mhyper_adamf",
+  "split": "dev",
+  "evidence_role": "AACPI DEV-only utility supervision",
+  "test_policy": "TEST inputs rejected; MKG-W/DB15K TEST is retrospective/secondary only",
+  "test_exposure_boundary": {
+    "status": "retrospective",
+    "evidence_role": "secondary",
+    "eligible_for_aacpi_method_selection": false
+  },
+  "source_query_rows": {
+    "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+    "sha256": "e389449b44379ecb18fe248127c6b062b2f5cc7894fb052536a442528ab4287b"
+  },
+  "source_selection": {
+    "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/selection.json",
+    "sha256": "f1c688963e62b52470c30ee722713bb372c51df61421503396cfbc3e5e8ad198"
+  },
+  "source_full_ranking_summary": {
+    "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_summary.json",
+    "sha256": "2a1293bb2f5a5e8a681e67fe7091d5f3c99c3357761b4569c7b3efc6610eb5a5"
+  },
+  "output_table": {
+    "path": "outputs/aacpi/utility_tables/mkgw_mhyper_adamf_dev_utility_table.csv.gz",
+    "format": "csv.gz",
+    "sha256": "33765d12c6832c7fa53256e76ed1b7085bf87e1f68ee4ecdd86951283010cb2f"
+  },
+  "source_exact_ranking_implementation": "scripts/eval_heterogeneous_complementarity.py",
+  "filtered_ranking_protocol": {
+    "protocol_version": "mmkg_general_v1",
+    "filtering": "all-split true-fact filtering; target retained",
+    "rank_ties": "strictly greater candidate scores plus one",
+    "directions": [
+      "head",
+      "tail"
+    ]
+  },
+  "reused_global_selection_and_group_key": "scripts/crossfit_heterogeneous_dev_policies.py",
+  "feature_contract": "router/constants.py::QUERY_GEOMETRY_FIELDS",
+  "score_normalization": "query_zscore",
+  "global_alpha_grid": [
+    0.0,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+  ],
+  "global_alpha": 1.0,
+  "local_action_rule": "clip(alpha0 +/- {0.05,0.10,0.20,0.30}, [0,1]); include alpha0; deduplicate; sort",
+  "local_action_grid": [
+    0.7,
+    0.8,
+    0.9,
+    0.95,
+    1.0
+  ],
+  "group_key": "h=<head_id>|r=<relation_id>|t=<tail_id>",
+  "fold_assignment_performed": false,
+  "output_fields": [
+    "dataset",
+    "protocol_version",
+    "expert_a",
+    "expert_b",
+    "pair_id",
+    "split",
+    "original_triple_id",
+    "query_key",
+    "query_id",
+    "seed",
+    "direction",
+    "head",
+    "relation",
+    "tail",
+    "target_entity_id",
+    "alpha0",
+    "alpha",
+    "delta_alpha",
+    "abs_delta_alpha",
+    "rr_anchor",
+    "rr_action",
+    "advantage",
+    "rank_anchor",
+    "rank_action",
+    "geometry_direction_tail",
+    "geometry_a_top1",
+    "geometry_a_top5_mean",
+    "geometry_a_top1_top2_margin",
+    "geometry_a_score_std",
+    "geometry_b_top1",
+    "geometry_b_top5_mean",
+    "geometry_b_top1_top2_margin",
+    "geometry_b_score_std",
+    "geometry_top1_delta_a_minus_b",
+    "geometry_top5_delta_a_minus_b",
+    "geometry_margin_delta_a_minus_b",
+    "geometry_std_delta_a_minus_b"
+  ]
+}

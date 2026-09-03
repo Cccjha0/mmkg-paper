@@ -1,0 +1,136 @@
+schema_version: 1
+method: AACPI V2 advantage predictor
+phase: 2B
+status: frozen_before_systematic_training
+effective_date: 2026-09-04
+
+data:
+  split: dev
+  input: phase1_query_action_utility_table
+  target: advantage
+  target_definition: "RR_q(alpha) - RR_q(alpha0)"
+  target_clipping: none
+  feature_fields:
+    - geometry_direction_tail
+    - geometry_a_top1
+    - geometry_a_top5_mean
+    - geometry_a_top1_top2_margin
+    - geometry_a_score_std
+    - geometry_b_top1
+    - geometry_b_top5_mean
+    - geometry_b_top1_top2_margin
+    - geometry_b_score_std
+    - geometry_top1_delta_a_minus_b
+    - geometry_top5_delta_a_minus_b
+    - geometry_margin_delta_a_minus_b
+    - geometry_std_delta_a_minus_b
+    - delta_alpha
+    - abs_delta_alpha
+  feature_standardization: fit_on_current_training_groups_only
+
+architecture:
+  family: two_hidden_layer_mlp
+  hidden_width: [32, 64, 128]
+  hidden_width_rule: same_width_for_both_hidden_layers
+  activation: relu
+  dropout: 0.0
+  output_dimension: 1
+
+loss:
+  family: smooth_l1
+  beta: 0.02
+  negative_advantage_weight: [1.0, 1.5, 2.0, 3.0]
+  zero_and_positive_weight: 1.0
+
+optimizer:
+  family: adam
+  learning_rate: [0.0001, 0.0003, 0.001]
+  weight_decay: 0.0
+  max_gradient_norm: 5.0
+
+training:
+  epochs: 30
+  batch_size: 4096
+  dtype: float32
+  model_seed: 20260904
+  early_stopping: false
+
+nested_cv:
+  grouping_key: original_triple_id
+  outer_folds: 5
+  inner_folds: 3
+  outer_fold_seed: 20260901
+  inner_fold_seed: 20260904
+  assignment: relation_stratified_sha256_round_robin
+  selection_scope: each_dataset_expert_pair_and_outer_fold
+  final_oof_rule: each_query_action_row_predicted_once_by_its_outer_fold_model
+
+inner_selection:
+  evaluation_rows: non_reference_actions_only
+  rule: lexicographic_max
+  criteria:
+    - minimum_of_positive_and_harmful_auprc_lift_over_prevalence
+    - mean_positive_and_harmful_auprc_lift_over_prevalence
+    - spearman_correlation
+    - negative_mae
+    - smaller_hidden_width
+    - negative_weight_closer_to_1
+    - smaller_learning_rate
+
+reporting:
+  primary_rows: non_reference_actions_only
+  regression_metrics: [mae, smooth_l1, spearman]
+  positive_detection:
+    label: "advantage > 0"
+    score: predicted_advantage
+    metrics: [auprc, prevalence, auprc_lift, auroc]
+  harmful_detection:
+    label: "advantage < 0"
+    score: negative_predicted_advantage
+    metrics: [auprc, prevalence, auprc_lift, auroc]
+  calibration_buckets_by_predicted_advantage_percentile:
+    - lowest_10pct
+    - 10_to_30pct
+    - 30_to_50pct
+    - 50_to_70pct
+    - 70_to_90pct
+    - highest_10pct
+  supplemental_all_action_metrics: true
+
+go_no_go:
+  h1_go:
+    majority_pair_count: 4
+    majority_pair_requirements:
+      - nonreference_spearman_gt_0
+      - positive_auprc_lift_gt_0
+      - harmful_auprc_lift_gt_0
+      - highest_10pct_actual_mean_advantage_gt_0
+    native_adamf_required_on_both_datasets: true
+    native_adamf_requirements:
+      - nonreference_spearman_gt_0
+      - positive_auprc_lift_gt_0
+      - harmful_auprc_lift_gt_0
+      - highest_10pct_actual_mean_advantage_gt_0
+  strong_go_phase2c:
+    requirement: advantage_greedy_beats_anchored_v1_on_native_adamf
+    datasets_required: [mkg_w, db15k]
+    pooled_mean_delta_mrr_threshold: 0.001
+  no_go:
+    - native_adamf_fails_advantage_learnability
+    - predicted_advantage_is_near_random
+    - highest_predicted_advantage_bucket_has_nonpositive_actual_mean
+    - high_predicted_gain_remains_frequently_harmful
+  no_go_response: investigate_identifiability_without_expanding_mlp_capacity
+
+prohibited:
+  - test_access
+  - test_based_search_expansion
+  - third_hidden_layer
+  - attention
+  - transformer
+  - target_clipping_in_primary_run
+  - kappa_selection
+  - lambda_selection
+  - tau_selection
+  - lcb_policy
+  - final_aacpi_policy

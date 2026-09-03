@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "phase": "AACPI V2 Phase 2B",
+  "split": "dev",
+  "dataset": "mkg_w",
+  "pair_id": "mkgw_native_adamf",
+  "utility_table": "outputs/aacpi/utility_tables/mkgw_native_adamf_dev_utility_table.csv.gz",
+  "utility_sha256": "20da7555f8a10a04a36dab57396f8726f1628cbffea59793fab586b4fcc16b61",
+  "search_space": "docs/protocols/AACPI_V2_PHASE2_SEARCH_SPACE.yaml",
+  "search_space_sha256": "bc5910b8ec8843239edc4e2288bea16c194c37252a5e57d00658c10fedd8e554",
+  "n_rows": 153936,
+  "n_query_instances": 25656,
+  "n_original_triples": 4276,
+  "n_reference_rows": 25656,
+  "n_nonreference_rows": 128280,
+  "n_configs": 36,
+  "outer_fold_audit": {
+    "assignment": "relation-stratified SHA256 ordering, then round-robin by original triple with a deterministic per-relation fold offset",
+    "fold_seed": 20260901,
+    "n_folds": 5,
+    "n_unique_triples": 4276,
+    "triple_groups_per_fold": {
+      "0": 853,
+      "1": 860,
+      "2": 857,
+      "3": 859,
+      "4": 847
+    },
+    "observations_per_fold": {
+      "0": 853,
+      "1": 860,
+      "2": 857,
+      "3": 859,
+      "4": 847
+    },
+    "utility_rows_per_fold": {
+      "0": 30708,
+      "1": 30960,
+      "2": 30852,
+      "3": 30924,
+      "4": 30492
+    },
+    "query_instances_per_fold": {
+      "0": 5118,
+      "1": 5160,
+      "2": 5142,
+      "3": 5154,
+      "4": 5082
+    }
+  },
+  "dry_run": true,
+  "test_accessed": false
+}

@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="775" viewBox="0 0 1040 775">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,sans-serif;fill:#202124}.title{font-size:20px;font-weight:700}.panel{font-size:14px;font-weight:700}.cell{font-size:12px}.axis{font-size:11px}</style>
+<text x="24" y="30" class="title">Winner label vs best local correction direction (DEV)</text>
+<text x="30" y="74" class="panel">db15k / M-Hyper + AdaMF-MAT</text>
+<text x="227.5" y="100" text-anchor="middle" class="axis">b</text>
+<text x="332.5" y="100" text-anchor="middle" class="axis">stay</text>
+<text x="437.5" y="100" text-anchor="middle" class="axis">a</text>
+<text x="165" y="141.5" text-anchor="end" class="axis">b_or_tie</text>
+<rect x="175" y="110" width="105" height="55" fill="rgb(161,161,255)" stroke="#ffffff"/>
+<text x="227.5" y="133" text-anchor="middle" class="cell">57.8%</text>
+<text x="227.5" y="150" text-anchor="middle" class="cell">n=12969</text>
+<rect x="280" y="110" width="105" height="55" fill="rgb(184,184,255)" stroke="#ffffff"/>
+<text x="332.5" y="133" text-anchor="middle" class="cell">42.2%</text>
+<text x="332.5" y="150" text-anchor="middle" class="cell">n=9474</text>
+<rect x="385" y="110" width="105" height="55" fill="rgb(248,248,255)" stroke="#ffffff"/>
+<text x="437.5" y="133" text-anchor="middle" class="cell">0.0%</text>
+<text x="437.5" y="150" text-anchor="middle" class="cell">n=0</text>
+<text x="165" y="196.5" text-anchor="end" class="axis">a</text>
+<rect x="175" y="165" width="105" height="55" fill="rgb(209,209,255)" stroke="#ffffff"/>
+<text x="227.5" y="188" text-anchor="middle" class="cell">25.6%</text>
+<text x="227.5" y="205" text-anchor="middle" class="cell">n=6429</text>
+<rect x="280" y="165" width="105" height="55" fill="rgb(136,136,255)" stroke="#ffffff"/>
+<text x="332.5" y="188" text-anchor="middle" class="cell">74.4%</text>
+<text x="332.5" y="205" text-anchor="middle" class="cell">n=18660</text>
+<rect x="385" y="165" width="105" height="55" fill="rgb(248,248,255)" stroke="#ffffff"/>
+<text x="437.5" y="188" text-anchor="middle" class="cell">0.0%</text>
+<text x="437.5" y="205" text-anchor="middle" class="cell">n=0</text>
+<text x="550" y="74" class="panel">db15k / M-Hyper + NativE</text>
+<text x="747.5" y="100" text-anchor="middle" class="axis">b</text>
+<text x="852.5" y="100" text-anchor="middle" class="axis">stay</text>
+<text x="957.5" y="100" text-anchor="middle" class="axis">a</text>
+<text x="685" y="141.5" text-anchor="end" class="axis">b_or_tie</text>
+<rect x="695" y="110" width="105" height="55" fill="rgb(170,170,255)" stroke="#ffffff"/>
+<text x="747.5" y="133" text-anchor="middle" class="cell">51.5%</text>
+<text x="747.5" y="150" text-anchor="middle" class="cell">n=12279</text>
+<rect x="800" y="110" width="105" height="55" fill="rgb(175,175,255)" stroke="#ffffff"/>
+<text x="852.5" y="133" text-anchor="middle" class="cell">48.5%</text>
+<text x="852.5" y="150" text-anchor="middle" class="cell">n=11573</text>
+<rect x="905" y="110" width="105" height="55" fill="rgb(248,248,255)" stroke="#ffffff"/>
+<text x="957.5" y="133" text-anchor="middle" class="cell">0.0%</text>
+<text x="957.5" y="150" text-anchor="middle" class="cell">n=0</text>
+<text x="685" y="196.5" text-anchor="end" class="axis">a</text>
+<rect x="695" y="165" width="105" height="55" fill="rgb(206,206,255)" stroke="#ffffff"/>
+<text x="747.5" y="188" text-anchor="middle" class="cell">27.6%</text>
+<text x="747.5" y="205" text-anchor="middle" class="cell">n=6546</text>
+<rect x="800" y="165" width="105" height="55" fill="rgb(139,139,255)" stroke="#ffffff"/>
+<text x="852.5" y="188" text-anchor="middle" class="cell">72.4%</text>
+<text x="852.5" y="205" text-anchor="middle" class="cell">n=17134</text>
+<rect x="905" y="165" width="105" height="55" fill="rgb(248,248,255)" stroke="#ffffff"/>
+<text x="957.5" y="188" text-anchor="middle" class="cell">0.0%</text>
+<text x="957.5" y="205" text-anchor="middle" class="cell">n=0</text>
+<text x="30" y="309" class="panel">db15k / NativE + AdaMF-MAT</text>
+<text x="227.5" y="335" text-anchor="middle" class="axis">b</text>
+<text x="332.5" y="335" text-anchor="middle" class="axis">stay</text>
+<text x="437.5" y="335" text-anchor="middle" class="axis">a</text>
+<text x="165" y="376.5" text-anchor="end" class="axis">b_or_tie</text>
+<rect x="175" y="345" width="105" height="55" fill="rgb(154,154,255)" stroke="#ffffff"/>
+<text x="227.5" y="368" text-anchor="middle" class="cell">62.4%</text>
+<text x="227.5" y="385" text-anchor="middle" class="cell">n=17320</text>
+<rect x="280" y="345" width="105" height="55" fill="rgb(191,191,255)" stroke="#ffffff"/>
+<text x="332.5" y="368" text-anchor="middle" class="cell">37.6%</text>
+<text x="332.5" y="385" text-anchor="middle" class="cell">n=10436</text>
+<rect x="385" y="345" width="105" height="55" fill="rgb(248,248,255)" stroke="#ffffff"/>
+<text x="437.5" y="368" text-anchor="middle" class="cell">0.0%</text>
+<text x="437.5" y="385" text-anchor="middle" class="cell">n=0</text>
+<text x="165" y="431.5" text-anchor="end" class="axis">a</text>
+<rect x="175" y="400" width="105" height="55" fill="rgb(211,211,255)" stroke="#ffffff"/>
+<text x="227.5" y="423" text-anchor="middle" class="cell">24.0%</text>
+<text x="227.5" y="440" text-anchor="middle" class="cell">n=4752</text>
+<rect x="280" y="400" width="105" height="55" fill="rgb(134,134,255)" stroke="#ffffff"/>
+<text x="332.5" y="423" text-anchor="middle" class="cell">76.0%</text>
+<text x="332.5" y="440" text-anchor="middle" class="cell">n=15024</text>
+<rect x="385" y="400" width="105" height="55" fill="rgb(248,248,255)" stroke="#ffffff"/>
+<text x="437.5" y="423" text-anchor="middle" class="cell">0.0%</text>
+<text x="437.5" y="440" text-anchor="middle" class="cell">n=0</text>
+<text x="550" y="309" class="panel">mkg_w / M-Hyper + AdaMF-MAT</text>
+<text x="747.5" y="335" text-anchor="middle" class="axis">b</text>
+<text x="852.5" y="335" text-anchor="middle" class="axis">stay</text>
+<text x="957.5" y="335" text-anchor="middle" class="axis">a</text>
+<text x="685" y="376.5" text-anchor="end" class="axis">b_or_tie</text>
+<rect x="695" y="345" width="105" height="55" fill="rgb(156,156,255)" stroke="#ffffff"/>
+<text x="747.5" y="368" text-anchor="middle" class="cell">60.7%</text>
+<text x="747.5" y="385" text-anchor="middle" class="cell">n=8731</text>
+<rect x="800" y="345" width="105" height="55" fill="rgb(189,189,255)" stroke="#ffffff"/>
+<text x="852.5" y="368" text-anchor="middle" class="cell">39.3%</text>
+<text x="852.5" y="385" text-anchor="middle" class="cell">n=5642</text>
+<rect x="905" y="345" width="105" height="55" fill="rgb(248,248,255)" stroke="#ffffff"/>
+<text x="957.5" y="368" text-anchor="middle" class="cell">0.0%</text>
+<text x="957.5" y="385" text-anchor="middle" class="cell">n=0</text>
+<text x="685" y="431.5" text-anchor="end" class="axis">a</text>
+<rect x="695" y="400" width="105" height="55" fill="rgb(200,200,255)" stroke="#ffffff"/>
+<text x="747.5" y="423" text-anchor="middle" class="cell">31.7%</text>
+<text x="747.5" y="440" text-anchor="middle" class="cell">n=3582</text>
+<rect x="800" y="400" width="105" height="55" fill="rgb(145,145,255)" stroke="#ffffff"/>
+<text x="852.5" y="423" text-anchor="middle" class="cell">68.3%</text>
+<text x="852.5" y="440" text-anchor="middle" class="cell">n=7701</text>
+<rect x="905" y="400" width="105" height="55" fill="rgb(248,248,255)" stroke="#ffffff"/>
+<text x="957.5" y="423" text-anchor="middle" class="cell">0.0%</text>
+<text x="957.5" y="440" text-anchor="middle" class="cell">n=0</text>
+<text x="30" y="544" class="panel">mkg_w / M-Hyper + NativE</text>
+<text x="227.5" y="570" text-anchor="middle" class="axis">b</text>
+<text x="332.5" y="570" text-anchor="middle" class="axis">stay</text>
+<text x="437.5" y="570" text-anchor="middle" class="axis">a</text>
+<text x="165" y="611.5" text-anchor="end" class="axis">b_or_tie</text>
+<rect x="175" y="580" width="105" height="55" fill="rgb(158,158,255)" stroke="#ffffff"/>
+<text x="227.5" y="603" text-anchor="middle" class="cell">59.5%</text>
+<text x="227.5" y="620" text-anchor="middle" class="cell">n=10384</text>
+<rect x="280" y="580" width="105" height="55" fill="rgb(189,189,255)" stroke="#ffffff"/>
+<text x="332.5" y="603" text-anchor="middle" class="cell">39.3%</text>
+<text x="332.5" y="620" text-anchor="middle" class="cell">n=6849</text>
+<rect x="385" y="580" width="105" height="55" fill="rgb(246,246,255)" stroke="#ffffff"/>
+<text x="437.5" y="603" text-anchor="middle" class="cell">1.2%</text>
+<text x="437.5" y="620" text-anchor="middle" class="cell">n=209</text>
+<text x="165" y="666.5" text-anchor="end" class="axis">a</text>
+<rect x="175" y="635" width="105" height="55" fill="rgb(220,220,255)" stroke="#ffffff"/>
+<text x="227.5" y="658" text-anchor="middle" class="cell">18.1%</text>
+<text x="227.5" y="675" text-anchor="middle" class="cell">n=1488</text>
+<rect x="280" y="635" width="105" height="55" fill="rgb(189,189,255)" stroke="#ffffff"/>
+<text x="332.5" y="658" text-anchor="middle" class="cell">39.1%</text>
+<text x="332.5" y="675" text-anchor="middle" class="cell">n=3209</text>
+<rect x="385" y="635" width="105" height="55" fill="rgb(183,183,255)" stroke="#ffffff"/>
+<text x="437.5" y="658" text-anchor="middle" class="cell">42.8%</text>
+<text x="437.5" y="675" text-anchor="middle" class="cell">n=3517</text>
+<text x="550" y="544" class="panel">mkg_w / NativE + AdaMF-MAT</text>
+<text x="747.5" y="570" text-anchor="middle" class="axis">b</text>
+<text x="852.5" y="570" text-anchor="middle" class="axis">stay</text>
+<text x="957.5" y="570" text-anchor="middle" class="axis">a</text>
+<text x="685" y="611.5" text-anchor="end" class="axis">b_or_tie</text>
+<rect x="695" y="580" width="105" height="55" fill="rgb(166,166,255)" stroke="#ffffff"/>
+<text x="747.5" y="603" text-anchor="middle" class="cell">54.1%</text>
+<text x="747.5" y="620" text-anchor="middle" class="cell">n=6870</text>
+<rect x="800" y="580" width="105" height="55" fill="rgb(180,180,255)" stroke="#ffffff"/>
+<text x="852.5" y="603" text-anchor="middle" class="cell">45.0%</text>
+<text x="852.5" y="620" text-anchor="middle" class="cell">n=5724</text>
+<rect x="905" y="580" width="105" height="55" fill="rgb(246,246,255)" stroke="#ffffff"/>
+<text x="957.5" y="603" text-anchor="middle" class="cell">0.9%</text>
+<text x="957.5" y="620" text-anchor="middle" class="cell">n=115</text>
+<text x="685" y="666.5" text-anchor="end" class="axis">a</text>
+<rect x="695" y="635" width="105" height="55" fill="rgb(219,219,255)" stroke="#ffffff"/>
+<text x="747.5" y="658" text-anchor="middle" class="cell">19.1%</text>
+<text x="747.5" y="675" text-anchor="middle" class="cell">n=2471</text>
+<rect x="800" y="635" width="105" height="55" fill="rgb(189,189,255)" stroke="#ffffff"/>
+<text x="852.5" y="658" text-anchor="middle" class="cell">38.7%</text>
+<text x="852.5" y="675" text-anchor="middle" class="cell">n=5014</text>
+<rect x="905" y="635" width="105" height="55" fill="rgb(184,184,255)" stroke="#ffffff"/>
+<text x="957.5" y="658" text-anchor="middle" class="cell">42.2%</text>
+<text x="957.5" y="675" text-anchor="middle" class="cell">n=5462</text>
+</svg>

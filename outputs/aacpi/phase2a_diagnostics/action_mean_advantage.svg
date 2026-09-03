@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="810" viewBox="0 0 1040 810">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,sans-serif;fill:#202124}.title{font-size:20px;font-weight:700}.panel{font-size:14px;font-weight:700}.axis{font-size:10px}</style>
+<text x="24" y="30" class="title">AACPI V2 Phase 2A — mean DEV advantage by action</text>
+<text x="28" y="70" class="panel">db15k / M-Hyper + AdaMF-MAT</text>
+<line x1="86" y1="165.0" x2="501" y2="165.0" stroke="#a0aec0" stroke-dasharray="4 3"/>
+<circle cx="127.50" cy="231.00" r="3.5" fill="#2b6cb0"/>
+<text x="127.50" y="254" text-anchor="middle" class="axis">-0.30</text>
+<circle cx="210.50" cy="212.64" r="3.5" fill="#2b6cb0"/>
+<text x="210.50" y="254" text-anchor="middle" class="axis">-0.20</text>
+<circle cx="293.50" cy="187.14" r="3.5" fill="#2b6cb0"/>
+<text x="293.50" y="254" text-anchor="middle" class="axis">-0.10</text>
+<circle cx="376.50" cy="175.93" r="3.5" fill="#2b6cb0"/>
+<text x="376.50" y="254" text-anchor="middle" class="axis">-0.05</text>
+<circle cx="459.50" cy="165.00" r="3.5" fill="#2b6cb0"/>
+<text x="459.50" y="254" text-anchor="middle" class="axis">+0.00</text>
+<polyline points="127.50,231.00 210.50,212.64 293.50,187.14 376.50,175.93 459.50,165.00" fill="none" stroke="#2b6cb0" stroke-width="2"/>
+<text x="80" y="94" text-anchor="end" class="axis">+0.0253</text>
+<text x="80" y="169.0" text-anchor="end" class="axis">0</text>
+<text x="80" y="240" text-anchor="end" class="axis">-0.0253</text>
+<text x="548" y="70" class="panel">db15k / M-Hyper + NativE</text>
+<line x1="606" y1="165.0" x2="1021" y2="165.0" stroke="#a0aec0" stroke-dasharray="4 3"/>
+<circle cx="647.50" cy="231.00" r="3.5" fill="#2b6cb0"/>
+<text x="647.50" y="254" text-anchor="middle" class="axis">-0.30</text>
+<circle cx="730.50" cy="203.63" r="3.5" fill="#2b6cb0"/>
+<text x="730.50" y="254" text-anchor="middle" class="axis">-0.20</text>
+<circle cx="813.50" cy="179.94" r="3.5" fill="#2b6cb0"/>
+<text x="813.50" y="254" text-anchor="middle" class="axis">-0.10</text>
+<circle cx="896.50" cy="172.84" r="3.5" fill="#2b6cb0"/>
+<text x="896.50" y="254" text-anchor="middle" class="axis">-0.05</text>
+<circle cx="979.50" cy="165.00" r="3.5" fill="#2b6cb0"/>
+<text x="979.50" y="254" text-anchor="middle" class="axis">+0.00</text>
+<polyline points="647.50,231.00 730.50,203.63 813.50,179.94 896.50,172.84 979.50,165.00" fill="none" stroke="#2b6cb0" stroke-width="2"/>
+<text x="600" y="94" text-anchor="end" class="axis">+0.0087</text>
+<text x="600" y="169.0" text-anchor="end" class="axis">0</text>
+<text x="600" y="240" text-anchor="end" class="axis">-0.0087</text>
+<text x="28" y="320" class="panel">db15k / NativE + AdaMF-MAT</text>
+<line x1="86" y1="415.0" x2="501" y2="415.0" stroke="#a0aec0" stroke-dasharray="4 3"/>
+<circle cx="127.50" cy="481.00" r="3.5" fill="#2b6cb0"/>
+<text x="127.50" y="504" text-anchor="middle" class="axis">-0.30</text>
+<circle cx="210.50" cy="474.16" r="3.5" fill="#2b6cb0"/>
+<text x="210.50" y="504" text-anchor="middle" class="axis">-0.20</text>
+<circle cx="293.50" cy="452.06" r="3.5" fill="#2b6cb0"/>
+<text x="293.50" y="504" text-anchor="middle" class="axis">-0.10</text>
+<circle cx="376.50" cy="435.10" r="3.5" fill="#2b6cb0"/>
+<text x="376.50" y="504" text-anchor="middle" class="axis">-0.05</text>
+<circle cx="459.50" cy="415.00" r="3.5" fill="#2b6cb0"/>
+<text x="459.50" y="504" text-anchor="middle" class="axis">+0.00</text>
+<polyline points="127.50,481.00 210.50,474.16 293.50,452.06 376.50,435.10 459.50,415.00" fill="none" stroke="#2b6cb0" stroke-width="2"/>
+<text x="80" y="344" text-anchor="end" class="axis">+0.0103</text>
+<text x="80" y="419.0" text-anchor="end" class="axis">0</text>
+<text x="80" y="490" text-anchor="end" class="axis">-0.0103</text>
+<text x="548" y="320" class="panel">mkg_w / M-Hyper + AdaMF-MAT</text>
+<line x1="606" y1="415.0" x2="1021" y2="415.0" stroke="#a0aec0" stroke-dasharray="4 3"/>
+<circle cx="647.50" cy="481.00" r="3.5" fill="#2b6cb0"/>
+<text x="647.50" y="504" text-anchor="middle" class="axis">-0.30</text>
+<circle cx="730.50" cy="457.01" r="3.5" fill="#2b6cb0"/>
+<text x="730.50" y="504" text-anchor="middle" class="axis">-0.20</text>
+<circle cx="813.50" cy="434.20" r="3.5" fill="#2b6cb0"/>
+<text x="813.50" y="504" text-anchor="middle" class="axis">-0.10</text>
+<circle cx="896.50" cy="424.76" r="3.5" fill="#2b6cb0"/>
+<text x="896.50" y="504" text-anchor="middle" class="axis">-0.05</text>
+<circle cx="979.50" cy="415.00" r="3.5" fill="#2b6cb0"/>
+<text x="979.50" y="504" text-anchor="middle" class="axis">+0.00</text>
+<polyline points="647.50,481.00 730.50,457.01 813.50,434.20 896.50,424.76 979.50,415.00" fill="none" stroke="#2b6cb0" stroke-width="2"/>
+<text x="600" y="344" text-anchor="end" class="axis">+0.0159</text>
+<text x="600" y="419.0" text-anchor="end" class="axis">0</text>
+<text x="600" y="490" text-anchor="end" class="axis">-0.0159</text>
+<text x="28" y="570" class="panel">mkg_w / M-Hyper + NativE</text>
+<line x1="86" y1="665.0" x2="501" y2="665.0" stroke="#a0aec0" stroke-dasharray="4 3"/>
+<circle cx="109.06" cy="718.41" r="3.5" fill="#2b6cb0"/>
+<text x="109.06" y="754" text-anchor="middle" class="axis">-0.30</text>
+<circle cx="155.17" cy="699.83" r="3.5" fill="#2b6cb0"/>
+<text x="155.17" y="754" text-anchor="middle" class="axis">-0.20</text>
+<circle cx="201.28" cy="691.15" r="3.5" fill="#2b6cb0"/>
+<text x="201.28" y="754" text-anchor="middle" class="axis">-0.10</text>
+<circle cx="247.39" cy="670.28" r="3.5" fill="#2b6cb0"/>
+<text x="247.39" y="754" text-anchor="middle" class="axis">-0.05</text>
+<circle cx="293.50" cy="665.00" r="3.5" fill="#2b6cb0"/>
+<text x="293.50" y="754" text-anchor="middle" class="axis">+0.00</text>
+<circle cx="339.61" cy="691.09" r="3.5" fill="#2b6cb0"/>
+<text x="339.61" y="754" text-anchor="middle" class="axis">+0.05</text>
+<circle cx="385.72" cy="688.47" r="3.5" fill="#2b6cb0"/>
+<text x="385.72" y="754" text-anchor="middle" class="axis">+0.10</text>
+<circle cx="431.83" cy="700.64" r="3.5" fill="#2b6cb0"/>
+<text x="431.83" y="754" text-anchor="middle" class="axis">+0.20</text>
+<circle cx="477.94" cy="731.00" r="3.5" fill="#2b6cb0"/>
+<text x="477.94" y="754" text-anchor="middle" class="axis">+0.30</text>
+<polyline points="109.06,718.41 155.17,699.83 201.28,691.15 247.39,670.28 293.50,665.00 339.61,691.09 385.72,688.47 431.83,700.64 477.94,731.00" fill="none" stroke="#2b6cb0" stroke-width="2"/>
+<text x="80" y="594" text-anchor="end" class="axis">+0.0021</text>
+<text x="80" y="669.0" text-anchor="end" class="axis">0</text>
+<text x="80" y="740" text-anchor="end" class="axis">-0.0021</text>
+<text x="548" y="570" class="panel">mkg_w / NativE + AdaMF-MAT</text>
+<line x1="606" y1="665.0" x2="1021" y2="665.0" stroke="#a0aec0" stroke-dasharray="4 3"/>
+<circle cx="640.58" cy="731.00" r="3.5" fill="#2b6cb0"/>
+<text x="640.58" y="754" text-anchor="middle" class="axis">-0.30</text>
+<circle cx="709.75" cy="713.98" r="3.5" fill="#2b6cb0"/>
+<text x="709.75" y="754" text-anchor="middle" class="axis">-0.20</text>
+<circle cx="778.92" cy="690.71" r="3.5" fill="#2b6cb0"/>
+<text x="778.92" y="754" text-anchor="middle" class="axis">-0.10</text>
+<circle cx="848.08" cy="675.73" r="3.5" fill="#2b6cb0"/>
+<text x="848.08" y="754" text-anchor="middle" class="axis">-0.05</text>
+<circle cx="917.25" cy="665.00" r="3.5" fill="#2b6cb0"/>
+<text x="917.25" y="754" text-anchor="middle" class="axis">+0.00</text>
+<circle cx="986.42" cy="702.23" r="3.5" fill="#2b6cb0"/>
+<text x="986.42" y="754" text-anchor="middle" class="axis">+0.05</text>
+<polyline points="640.58,731.00 709.75,713.98 778.92,690.71 848.08,675.73 917.25,665.00 986.42,702.23" fill="none" stroke="#2b6cb0" stroke-width="2"/>
+<text x="600" y="594" text-anchor="end" class="axis">+0.0114</text>
+<text x="600" y="669.0" text-anchor="end" class="axis">0</text>
+<text x="600" y="740" text-anchor="end" class="axis">-0.0114</text>
+</svg>

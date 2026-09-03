@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "phase": "AACPI V2 Phase 2B",
+  "split": "dev",
+  "dataset": "db15k",
+  "pair_id": "db15k_mhyper_adamf",
+  "utility_table": "outputs/aacpi/utility_tables/db15k_mhyper_adamf_dev_utility_table.csv.gz",
+  "utility_sha256": "bd4b7623e1eb60cf84718c42c93b2d47abbf3aaa411e5c04592d48a0aa410eca",
+  "search_space": "docs/protocols/AACPI_V2_PHASE2_SEARCH_SPACE.yaml",
+  "search_space_sha256": "bc5910b8ec8843239edc4e2288bea16c194c37252a5e57d00658c10fedd8e554",
+  "n_rows": 237660,
+  "n_query_instances": 47532,
+  "n_original_triples": 7922,
+  "n_reference_rows": 47532,
+  "n_nonreference_rows": 190128,
+  "n_configs": 36,
+  "outer_fold_audit": {
+    "assignment": "relation-stratified SHA256 ordering, then round-robin by original triple with a deterministic per-relation fold offset",
+    "fold_seed": 20260901,
+    "n_folds": 5,
+    "n_unique_triples": 7922,
+    "triple_groups_per_fold": {
+      "0": 1580,
+      "1": 1581,
+      "2": 1586,
+      "3": 1590,
+      "4": 1585
+    },
+    "observations_per_fold": {
+      "0": 1580,
+      "1": 1581,
+      "2": 1586,
+      "3": 1590,
+      "4": 1585
+    },
+    "utility_rows_per_fold": {
+      "0": 47400,
+      "1": 47430,
+      "2": 47580,
+      "3": 47700,
+      "4": 47550
+    },
+    "query_instances_per_fold": {
+      "0": 9480,
+      "1": 9486,
+      "2": 9516,
+      "3": 9540,
+      "4": 9510
+    }
+  },
+  "dry_run": true,
+  "test_accessed": false
+}

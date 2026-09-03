@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "method": "AACPI V2 phase-1 utility surface",
+  "evidence_role": "DEV-only descriptive supervision; not policy selection",
+  "dataset": "db15k",
+  "protocol_version": "mmkg_general_v1",
+  "pair_id": "db15k_mhyper_adamf",
+  "expert_a": "M-Hyper",
+  "expert_b": "AdaMF-MAT",
+  "split": "dev",
+  "score_normalization": "query_zscore",
+  "alpha0": 1.0,
+  "action_grid": [
+    0.7,
+    0.8,
+    0.9,
+    0.95,
+    1.0
+  ],
+  "n_original_triples": 7922,
+  "n_query_instances": 47532,
+  "n_query_action_rows": 237660,
+  "n_actions_per_query": 5,
+  "positive_action_rate": 0.277476226542119,
+  "zero_action_rate": 0.5536648994361694,
+  "negative_action_rate": 0.16885887402171168,
+  "nonreference_positive_action_rate": 0.34684528317764873,
+  "nonreference_zero_action_rate": 0.4420811242952116,
+  "nonreference_negative_action_rate": 0.21107359252713961,
+  "positive_opportunity_query_rate": 0.408104014137844,
+  "best_delta_alpha_distribution": {
+    "-0.30": {
+      "count": 14126,
+      "rate": 0.2971892619708828
+    },
+    "-0.20": {
+      "count": 2597,
+      "rate": 0.05463687620971135
+    },
+    "-0.10": {
+      "count": 1375,
+      "rate": 0.02892788016494151
+    },
+    "-0.05": {
+      "count": 1300,
+      "rate": 0.02734999579230834
+    },
+    "+0.00": {
+      "count": 28134,
+      "rate": 0.591895985862156
+    }
+  },
+  "best_alpha_distribution": {
+    "0.70": {
+      "count": 14126,
+      "rate": 0.2971892619708828
+    },
+    "0.80": {
+      "count": 2597,
+      "rate": 0.05463687620971135
+    },
+    "0.90": {
+      "count": 1375,
+      "rate": 0.02892788016494151
+    },
+    "0.95": {
+      "count": 1300,
+      "rate": 0.02734999579230834
+    },
+    "1.00": {
+      "count": 28134,
+      "rate": 0.591895985862156
+    }
+  },
+  "advantage_statistics": {
+    "min": -0.9090909090909091,
+    "p05": -0.04166666666666666,
+    "p25": 0.0,
+    "median": 0.0,
+    "p75": 2.0835867726273484e-05,
+    "p95": 0.0111111111111111,
+    "max": 0.9523809523809523,
+    "mean": -0.011259625329768336,
+    "std": 0.09775529028953277
+  },
+  "nonreference_advantage_statistics": {
+    "min": -0.9090909090909091,
+    "p05": -0.08333333333333331,
+    "p25": 0.0,
+    "median": 0.0,
+    "p75": 0.00011973747869210795,
+    "p95": 0.01785714285714285,
+    "max": 0.9523809523809523,
+    "mean": -0.014074531662210421,
+    "std": 0.10911233883524599
+  },
+  "best_advantage_statistics": {
+    "min": 0.0,
+    "p05": 0.0,
+    "p25": 0.0,
+    "median": 0.0,
+    "p75": 0.0007589553545148987,
+    "p95": 0.05714285714285716,
+    "max": 0.9523809523809523,
+    "mean": 0.014677370188677479,
+    "std": 0.06909568688129374
+  },
+  "per_delta_alpha_statistics": {
+    "-0.30": {
+      "count": 47532,
+      "positive_rate": 0.373032904148784,
+      "zero_rate": 0.3513212151813515,
+      "negative_rate": 0.2756458806698645,
+      "mean_advantage": -0.02532579338314262
+    },
+    "-0.20": {
+      "count": 47532,
+      "positive_rate": 0.363839097870908,
+      "zero_rate": 0.39914163090128757,
+      "negative_rate": 0.23701927122780442,
+      "mean_advantage": -0.018281790875621005
+    },
+    "-0.10": {
+      "count": 47532,
+      "positive_rate": 0.34023394765631576,
+      "zero_rate": 0.4761634267440882,
+      "negative_rate": 0.18360262559959606,
+      "mean_advantage": -0.008496039321582442
+    },
+    "-0.05": {
+      "count": 47532,
+      "positive_rate": 0.31027518303458723,
+      "zero_rate": 0.5416982243541193,
+      "negative_rate": 0.14802659261129344,
+      "mean_advantage": -0.004194503068491145
+    },
+    "+0.00": {
+      "count": 47532,
+      "positive_rate": 0.0,
+      "zero_rate": 1.0,
+      "negative_rate": 0.0,
+      "mean_advantage": 0.0
+    }
+  },
+  "utility_sparsity": {
+    "zero_action_rate": 0.5536648994361694,
+    "nonreference_zero_action_rate": 0.4420811242952116,
+    "no_positive_action_query_rate": 0.591895985862156,
+    "mean_distinct_rr_fraction_of_action_grid": 0.5858958175546809
+  },
+  "local_action_potential": {
+    "global_anchor_mrr": 0.3825870130241268,
+    "oracle_local_mrr": 0.3972643832127997,
+    "oracle_local_headroom": 0.014677370188672934,
+    "endpoint_oracle_mrr": 0.41446712577233513,
+    "local_headroom_as_fraction_of_endpoint_oracle_gap": 0.46039266876488066,
+    "note": "Descriptive answer-aware upper surface over the frozen local actions; not a deployable policy."
+  },
+  "best_action_tie_break": "maximum RR, then minimum abs(delta_alpha), then smaller alpha",
+  "validation": {
+    "dev_only": true,
+    "global_alpha_rule_reproduced": true,
+    "global_mrr_sanity_check_passed": true,
+    "alpha_bounds_passed": true,
+    "reference_advantage_zero_passed": true,
+    "anchor_consistency_max_abs_error": 0.0,
+    "finite_advantage_passed": true,
+    "original_triple_ids_complete": true,
+    "query_action_count_passed": true,
+    "group_coverage_passed": true,
+    "expected_seed_direction_observations_per_group": 6,
+    "sampled_source_exact_rank_queries": 64,
+    "sampled_source_exact_rank_action_checks": 320,
+    "sample_check_note": "Ranks were checked against the existing evaluator's stored exact RR columns; the evaluator and expert checkpoints were not rerun."
+  }
+}

@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "method": "AACPI V2 phase-1 utility surface",
+  "evidence_role": "DEV-only descriptive supervision; not policy selection",
+  "dataset": "mkg_w",
+  "protocol_version": "mmkg_general_v1",
+  "pair_id": "mkgw_mhyper_native",
+  "expert_a": "M-Hyper",
+  "expert_b": "NativE",
+  "split": "dev",
+  "score_normalization": "query_zscore",
+  "alpha0": 0.6,
+  "action_grid": [
+    0.3,
+    0.4,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.8,
+    0.9
+  ],
+  "n_original_triples": 4276,
+  "n_query_instances": 25656,
+  "n_query_action_rows": 230904,
+  "n_actions_per_query": 9,
+  "positive_action_rate": 0.2455782489692686,
+  "zero_action_rate": 0.48462997609396113,
+  "negative_action_rate": 0.26979177493677026,
+  "nonreference_positive_action_rate": 0.2762755300904272,
+  "nonreference_zero_action_rate": 0.4202087231057063,
+  "nonreference_negative_action_rate": 0.30351574680386656,
+  "positive_opportunity_query_rate": 0.6079669473027752,
+  "best_delta_alpha_distribution": {
+    "-0.30": {
+      "count": 8956,
+      "rate": 0.3490801371998753
+    },
+    "-0.20": {
+      "count": 1402,
+      "rate": 0.05464608668537574
+    },
+    "-0.10": {
+      "count": 679,
+      "rate": 0.026465544122232617
+    },
+    "-0.05": {
+      "count": 835,
+      "rate": 0.03254599314000624
+    },
+    "+0.00": {
+      "count": 10058,
+      "rate": 0.3920330526972248
+    },
+    "+0.05": {
+      "count": 552,
+      "rate": 0.021515434985968196
+    },
+    "+0.10": {
+      "count": 454,
+      "rate": 0.01769566573121297
+    },
+    "+0.20": {
+      "count": 697,
+      "rate": 0.02716713439351419
+    },
+    "+0.30": {
+      "count": 2023,
+      "rate": 0.07885095104458996
+    }
+  },
+  "best_alpha_distribution": {
+    "0.30": {
+      "count": 8956,
+      "rate": 0.3490801371998753
+    },
+    "0.40": {
+      "count": 1402,
+      "rate": 0.05464608668537574
+    },
+    "0.50": {
+      "count": 679,
+      "rate": 0.026465544122232617
+    },
+    "0.55": {
+      "count": 835,
+      "rate": 0.03254599314000624
+    },
+    "0.60": {
+      "count": 10058,
+      "rate": 0.3920330526972248
+    },
+    "0.65": {
+      "count": 552,
+      "rate": 0.021515434985968196
+    },
+    "0.70": {
+      "count": 454,
+      "rate": 0.01769566573121297
+    },
+    "0.80": {
+      "count": 697,
+      "rate": 0.02716713439351419
+    },
+    "0.90": {
+      "count": 2023,
+      "rate": 0.07885095104458996
+    }
+  },
+  "advantage_statistics": {
+    "min": -0.9979674796747967,
+    "p05": -0.0111111111111111,
+    "p25": -1.001284288506771e-05,
+    "median": 0.0,
+    "p75": 0.0,
+    "p95": 0.010256410256410262,
+    "max": 0.9818181818181818,
+    "mean": -0.0009571518612527873,
+    "std": 0.08723197938774284
+  },
+  "nonreference_advantage_statistics": {
+    "min": -0.9979674796747967,
+    "p05": -0.014423076923076927,
+    "p25": -4.494990123810177e-05,
+    "median": 0.0,
+    "p75": 1.109991786830176e-05,
+    "p95": 0.013888888888888895,
+    "max": 0.9818181818181818,
+    "mean": -0.0010767958439093857,
+    "std": 0.09252279002634203
+  },
+  "best_advantage_statistics": {
+    "min": 0.0,
+    "p05": 0.0,
+    "p25": 0.0,
+    "median": 0.00010134812639609196,
+    "p75": 0.003231659042927516,
+    "p95": 0.16666666666666669,
+    "max": 0.9818181818181818,
+    "mean": 0.027552134880326665,
+    "std": 0.10149065587047466
+  },
+  "per_delta_alpha_statistics": {
+    "-0.30": {
+      "count": 25656,
+      "positive_rate": 0.435414717804802,
+      "zero_rate": 0.3559401309635173,
+      "negative_rate": 0.2086451512316807,
+      "mean_advantage": -0.0016984836289287509
+    },
+    "-0.20": {
+      "count": 25656,
+      "positive_rate": 0.4321016526348612,
+      "zero_rate": 0.38388681010289993,
+      "negative_rate": 0.18401153726223884,
+      "mean_advantage": -0.001107676166721468
+    },
+    "-0.10": {
+      "count": 25656,
+      "positive_rate": 0.4092999688182102,
+      "zero_rate": 0.43401153726223884,
+      "negative_rate": 0.15668849391955098,
+      "mean_advantage": -0.0008317240217513734
+    },
+    "-0.05": {
+      "count": 25656,
+      "positive_rate": 0.3816651075771749,
+      "zero_rate": 0.48023854069223576,
+      "negative_rate": 0.13809635173058935,
+      "mean_advantage": -0.00016796844589378584
+    },
+    "+0.00": {
+      "count": 25656,
+      "positive_rate": 0.0,
+      "zero_rate": 1.0,
+      "negative_rate": 0.0,
+      "mean_advantage": 0.0
+    },
+    "+0.05": {
+      "count": 25656,
+      "positive_rate": 0.12574056750857499,
+      "zero_rate": 0.4849158091674462,
+      "negative_rate": 0.3893436233239788,
+      "mean_advantage": -0.0008298237098465843
+    },
+    "+0.10": {
+      "count": 25656,
+      "positive_rate": 0.13770657935765512,
+      "zero_rate": 0.44063766760212036,
+      "negative_rate": 0.4216557530402245,
+      "mean_advantage": -0.0007463413621002121
+    },
+    "+0.20": {
+      "count": 25656,
+      "positive_rate": 0.14394293732460242,
+      "zero_rate": 0.4020112254443405,
+      "negative_rate": 0.45404583723105707,
+      "mean_advantage": -0.001133366667557004
+    },
+    "+0.30": {
+      "count": 25656,
+      "positive_rate": 0.14433270969753664,
+      "zero_rate": 0.3800280636108513,
+      "negative_rate": 0.47563922669161207,
+      "mean_advantage": -0.002098982748476814
+    }
+  },
+  "utility_sparsity": {
+    "zero_action_rate": 0.48462997609396113,
+    "nonreference_zero_action_rate": 0.4202087231057063,
+    "no_positive_action_query_rate": 0.39203305269722477,
+    "mean_distinct_rr_fraction_of_action_grid": 0.5587560198178366
+  },
+  "local_action_potential": {
+    "global_anchor_mrr": 0.35635605747169313,
+    "oracle_local_mrr": 0.3839081923520184,
+    "oracle_local_headroom": 0.027552134880325263,
+    "endpoint_oracle_mrr": 0.3912186319155287,
+    "local_headroom_as_fraction_of_endpoint_oracle_gap": 0.7903069500708392,
+    "note": "Descriptive answer-aware upper surface over the frozen local actions; not a deployable policy."
+  },
+  "best_action_tie_break": "maximum RR, then minimum abs(delta_alpha), then smaller alpha",
+  "validation": {
+    "dev_only": true,
+    "global_alpha_rule_reproduced": true,
+    "global_mrr_sanity_check_passed": true,
+    "alpha_bounds_passed": true,
+    "reference_advantage_zero_passed": true,
+    "anchor_consistency_max_abs_error": 0.0,
+    "finite_advantage_passed": true,
+    "original_triple_ids_complete": true,
+    "query_action_count_passed": true,
+    "group_coverage_passed": true,
+    "expected_seed_direction_observations_per_group": 6,
+    "sampled_source_exact_rank_queries": 64,
+    "sampled_source_exact_rank_action_checks": 576,
+    "sample_check_note": "Ranks were checked against the existing evaluator's stored exact RR columns; the evaluator and expert checkpoints were not rerun."
+  }
+}
