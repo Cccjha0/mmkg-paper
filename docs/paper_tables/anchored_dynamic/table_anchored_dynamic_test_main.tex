@@ -1,0 +1,20 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{Locked TEST performance of query-dependent expert combination across datasets and expert pairs.}
+\label{tab:anchored_dynamic_test_main}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llcccccc}
+\toprule
+Dataset & Expert pair & Global & Relation ($\Delta$) & Query-soft ($\Delta$) & Anchored ($\Delta$) & 95\% CI $\Delta$ & Oracle \\
+\midrule
+MKG-W & M-Hyper + NativE & 0.3643 & 0.3686 (+0.0043) & \textbf{0.3705 (+0.0062)} & 0.3702 (+0.0059) & [+0.0047, +0.0070] & 0.4019 \\
+MKG-W & M-Hyper + AdaMF-MAT & 0.3597 & 0.3583 (-0.0014) & 0.3525 (-0.0073) & \textbf{0.3617 (+0.0020)} & [+0.0014, +0.0026] & 0.3907 \\
+\midrule
+DB15K & M-Hyper + NativE & 0.3746 & 0.3743 (-0.0002) & 0.3656 (-0.0089) & \textbf{0.3758 (+0.0013)} & [+0.0008, +0.0018] & 0.4093 \\
+DB15K & M-Hyper + AdaMF-MAT & 0.3746 & 0.3734 (-0.0012) & 0.3480 (-0.0266) & \textbf{0.3753 (+0.0007)} & [+0.0003, +0.0011] & 0.4050 \\
+\bottomrule
+\end{tabular}
+\vspace{0.4ex}
+\caption*{\footnotesize \textit{Note:} All policies and hyperparameters are selected on DEV and then locked before TEST. $\Delta$ is relative to the DEV-locked Global alpha. Intervals are paired normal 95\% intervals over original-triple cluster means, retaining all three seeds and both directions per cluster. MKG-W is the confirmatory dataset; DB15K is a secondary replication because its TEST split had been accessed by earlier experiments.}
+\end{table*}

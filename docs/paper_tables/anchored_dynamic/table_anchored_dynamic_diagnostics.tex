@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{Locked policy parameters and DEV-to-TEST behavior diagnostics.}
+\label{tab:supp_anchored_dynamic_diagnostics}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrrrrrrrr}
+\toprule
+Dataset & Expert B & $\alpha_0$ & $\beta$ & $\tau$ & DEV fall. & TEST fall. & DEV sat. & TEST sat. & DEV changed & TEST changed \\
+\midrule
+MKG-W & NativE & 0.60 & 0.50 & 0.00 & 0.0\% & 0.0\% & 19.6\% & 19.4\% & 94.1\% & 94.3\% \\
+MKG-W & AdaMF-MAT & 1.00 & 0.50 & 0.10 & 24.2\% & 24.2\% & 50.4\% & 50.4\% & 35.8\% & 35.6\% \\
+DB15K & NativE & 1.00 & 0.50 & 0.00 & 0.0\% & 0.0\% & 51.4\% & 52.2\% & 45.4\% & 44.4\% \\
+DB15K & AdaMF-MAT & 1.00 & 0.50 & 0.30 & 67.1\% & 67.2\% & 51.6\% & 52.1\% & 7.1\% & 7.0\% \\
+\bottomrule
+\end{tabular}
+\vspace{0.4ex}
+\caption*{\footnotesize \textit{Note:} fall. is the confidence-controlled fallback rate, sat. is the continuous policy saturation rate, and changed is the fraction of queries whose applied alpha differs from the Global anchor.}
+\end{table*}

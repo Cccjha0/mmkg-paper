@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\small
+\caption{DEV cross-fit and locked TEST deltas relative to Global alpha.}
+\label{tab:anchored_dynamic_dev_test_stability}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrrr}
+\toprule
+Dataset & Expert B & DEV QS & DEV Anch. & TEST QS & TEST Anch. \\
+\midrule
+MKG-W & NativE & +0.0065 & \textbf{+0.0066} & \textbf{+0.0062} & +0.0059 \\
+MKG-W & AdaMF-MAT & -0.0078 & \textbf{+0.0024} & -0.0073 & \textbf{+0.0020} \\
+DB15K & NativE & -0.0095 & \textbf{+0.0013} & -0.0089 & \textbf{+0.0013} \\
+DB15K & AdaMF-MAT & -0.0265 & \textbf{+0.0004} & -0.0266 & \textbf{+0.0007} \\
+\bottomrule
+\end{tabular}
+\vspace{0.4ex}
+\caption*{\footnotesize \textit{Note:} DEV values use grouped five-fold cross-fitting with all seeds and both directions of an original triple assigned to one fold. QS denotes the unanchored Query-soft logistic policy; Anch. denotes Anchored Dynamic.}
+\end{table}
