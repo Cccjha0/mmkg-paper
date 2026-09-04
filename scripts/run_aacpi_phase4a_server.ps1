@@ -32,11 +32,16 @@ foreach ($pair in $pairs) {
         if (-not $Overwrite -and (Test-Path -LiteralPath $contextTable) -and (Test-Path -LiteralPath $contextManifest)) {
             Write-Host "[SKIP] Context features already complete: $pair"
         } else {
+            $pairOverwriteArg = $overwriteArg
+            if (-not $Overwrite -and ((Test-Path -LiteralPath $contextTable) -or (Test-Path -LiteralPath $contextManifest))) {
+                Write-Host "[RESUME] Rebuilding partial context outputs: $pair"
+                $pairOverwriteArg = @("--overwrite")
+            }
             python scripts/build_aacpi_phase4a_context_features.py `
                 --phase3a-feature-table $featureTable `
                 --phase3a-source-manifest $sourceManifest `
                 --output-table $contextTable `
-                --output-manifest $contextManifest @overwriteArg
+                --output-manifest $contextManifest @pairOverwriteArg
             if ($LASTEXITCODE -ne 0) { throw "Context feature build failed: $pair" }
         }
     }
@@ -45,12 +50,17 @@ foreach ($pair in $pairs) {
         if (-not $Overwrite -and (Test-Path -LiteralPath $latentFile) -and (Test-Path -LiteralPath $latentManifest)) {
             Write-Host "[SKIP] Frozen latents already complete: $pair"
         } else {
+            $pairOverwriteArg = $overwriteArg
+            if (-not $Overwrite -and ((Test-Path -LiteralPath $latentFile) -or (Test-Path -LiteralPath $latentManifest))) {
+                Write-Host "[RESUME] Rebuilding partial latent outputs: $pair"
+                $pairOverwriteArg = @("--overwrite")
+            }
             python scripts/extract_aacpi_frozen_query_latents.py `
                 --phase3a-feature-table $featureTable `
                 --phase3a-source-manifest $sourceManifest `
                 --output-latents $latentFile `
                 --output-manifest $latentManifest `
-                --device $Device @overwriteArg
+                --device $Device @pairOverwriteArg
             if ($LASTEXITCODE -ne 0) { throw "Latent extraction failed: $pair" }
         }
     }
@@ -59,12 +69,18 @@ foreach ($pair in $pairs) {
         if (-not $Overwrite -and (Test-Path -LiteralPath $runManifest)) {
             Write-Host "[SKIP] Nested OOF already complete: $pair"
         } else {
+            $pairOverwriteArg = $overwriteArg
+            $partialOof = @("c0", "c1", "c2", "c3", "c4") | Where-Object { Test-Path -LiteralPath "$root/$pair/$_" }
+            if (-not $Overwrite -and $partialOof.Count -gt 0) {
+                Write-Host "[RESUME] Restarting partial nested OOF for: $pair"
+                $pairOverwriteArg = @("--overwrite")
+            }
             python scripts/run_aacpi_phase4a_context_oof.py `
                 --context-table $contextTable `
                 --latent-file $latentFile `
                 --phase3a-r3-oof "outputs/aacpi/phase3a/$pair/r3/dev_oof_predictions.csv.gz" `
                 --output-dir $root `
-                --device $Device @overwriteArg
+                --device $Device @pairOverwriteArg
             if ($LASTEXITCODE -ne 0) { throw "Nested OOF failed: $pair" }
         }
     }
