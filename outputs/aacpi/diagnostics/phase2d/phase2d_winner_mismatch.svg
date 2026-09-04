@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="500" viewBox="0 0 920 500">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,sans-serif;fill:#111827}.title{font-size:21px;font-weight:700}.label{font-size:12px}.value{font-size:12px;font-weight:700}</style>
+<text x="24" y="32" class="title">Endpoint winner opposite to best beneficial local direction</text>
+<text x="248" y="98" text-anchor="end" class="label">mkgw_mhyper_native</text>
+<rect x="260" y="70" width="161.7" height="44" rx="4" fill="#2563eb"/>
+<text x="429.7" y="98" class="value">10.7%</text>
+<text x="248" y="160" text-anchor="end" class="label">mkgw_mhyper_adamf</text>
+<rect x="260" y="132" width="443.2" height="44" rx="4" fill="#2563eb"/>
+<text x="711.2" y="160" class="value">29.5%</text>
+<text x="248" y="222" text-anchor="end" class="label">mkgw_native_adamf</text>
+<rect x="260" y="194" width="264.8" height="44" rx="4" fill="#c2410c"/>
+<text x="532.8" y="222" class="value">17.6%</text>
+<text x="248" y="284" text-anchor="end" class="label">db15k_mhyper_native</text>
+<rect x="260" y="256" width="535.7" height="44" rx="4" fill="#c2410c"/>
+<text x="803.7" y="284" class="value">35.6%</text>
+<text x="248" y="346" text-anchor="end" class="label">db15k_mhyper_adamf</text>
+<rect x="260" y="318" width="510.6" height="44" rx="4" fill="#c2410c"/>
+<text x="778.6" y="346" class="value">33.9%</text>
+<text x="248" y="408" text-anchor="end" class="label">db15k_native_adamf</text>
+<rect x="260" y="380" width="333.8" height="44" rx="4" fill="#2563eb"/>
+<text x="601.8" y="408" class="value">22.2%</text>
+</svg>

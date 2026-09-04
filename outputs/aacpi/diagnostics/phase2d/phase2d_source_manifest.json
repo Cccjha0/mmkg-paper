@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "phase": "AACPI V2 Phase 2D",
+  "scope": "DEV-only outer-fold OOF diagnostics",
+  "relation_min_distinct_query_instances": 60,
+  "source_files": [
+    {
+      "role": "db15k_mhyper_adamf:historical_anchored_dev",
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/p3_ablation/dev_p3_results.csv",
+      "sha256": "48c18e9cc1db5a94f4e81c1d9c5bf866455c6bb39eaecce9fe90d89d0d2a3d49"
+    },
+    {
+      "role": "db15k_mhyper_adamf:oof_predictions",
+      "path": "outputs/aacpi/phase2b/db15k_mhyper_adamf/dev_oof_predictions.csv.gz",
+      "sha256": "8cd62d8d118c5f19f0acc71bc0bfbf09e4497aa372630f1374a02ff39515f02b"
+    },
+    {
+      "role": "db15k_mhyper_adamf:phase2b_audit",
+      "path": "outputs/aacpi/phase2b/db15k_mhyper_adamf/phase2b_input_audit.json",
+      "sha256": "e440f849dc2f7da1e2078fe4af2e34e8ffb8f2d5ea84095721d58a587c68ce16"
+    },
+    {
+      "role": "db15k_mhyper_adamf:phase2b_metrics",
+      "path": "outputs/aacpi/phase2b/db15k_mhyper_adamf/dev_oof_metrics.json",
+      "sha256": "46a0f5161732d920fee752ba2cec5ced0dd1406f90e0a36b4adac1986c9128f0"
+    },
+    {
+      "role": "db15k_mhyper_adamf:utility_manifest",
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_adamf_dev_source_manifest.json",
+      "sha256": "0f95a6073e85b4d226f57d68e45f5013bc11091f604d9d129a1eb877156e920e"
+    },
+    {
+      "role": "db15k_mhyper_adamf:utility_summary",
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_adamf_dev_utility_summary.json",
+      "sha256": "49172442fdb4d7acc649dd01e8d8bb61e368666d9ff830dc45b593f96953eb50"
+    },
+    {
+      "role": "db15k_mhyper_adamf:utility_table",
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_adamf_dev_utility_table.csv.gz",
+      "sha256": "bd4b7623e1eb60cf84718c42c93b2d47abbf3aaa411e5c04592d48a0aa410eca"
+    },
+    {
+      "role": "db15k_mhyper_adamf:winner_actions",
+      "path": "outputs/aacpi/phase2a_diagnostics/query_diagnostics/db15k_mhyper_adamf_dev_winner_action_diagnostics.csv.gz",
+      "sha256": "9bd4e838bfedaa65d1d5e55fd006b3a4fec39f042c4e7b8bed4bc657f0946b8c"
+    },
+    {
+      "role": "db15k_mhyper_native:historical_anchored_dev",
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/p3_ablation/dev_p3_results.csv",
+      "sha256": "298ce425294450698176a7bff337d833725e2c0ee22ae4d694715940c9707235"
+    },
+    {
+      "role": "db15k_mhyper_native:oof_predictions",
+      "path": "outputs/aacpi/phase2b/db15k_mhyper_native/dev_oof_predictions.csv.gz",
+      "sha256": "d3f50066723b0fa20c848bd780f070ca060e03c987c9fd46e87db5e157e0ecdd"
+    },
+    {
+      "role": "db15k_mhyper_native:phase2b_audit",
+      "path": "outputs/aacpi/phase2b/db15k_mhyper_native/phase2b_input_audit.json",
+      "sha256": "0e4ef9fa6cd0dd975045b5c649e968f2483ca43596e17570d03036b3787c09b0"
+    },
+    {
+      "role": "db15k_mhyper_native:phase2b_metrics",
+      "path": "outputs/aacpi/phase2b/db15k_mhyper_native/dev_oof_metrics.json",
+      "sha256": "72603bf0c3db8d390cd55f1985bd270fd11d234cffe68d36c7b9a95aac124f02"
+    },
+    {
+      "role": "db15k_mhyper_native:utility_manifest",
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_native_dev_source_manifest.json",
+      "sha256": "3d5bd8a8069717933434d2a9dab6053decbe69cbe9b4dc06d74ddc84cab34b6d"
+    },
+    {
+      "role": "db15k_mhyper_native:utility_summary",
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_native_dev_utility_summary.json",
+      "sha256": "080ea2d8abf11cd7174e1d21bbaf1038a3fd437e24e7aaa51662e175006004a0"
+    },
+    {
+      "role": "db15k_mhyper_native:utility_table",
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_native_dev_utility_table.csv.gz",
+      "sha256": "a3726b3e6194512edc6f87738ab85812f030fd51bb12fc68ed2fee4efe83f748"
+    },
+    {
+      "role": "db15k_mhyper_native:winner_actions",
+      "path": "outputs/aacpi/phase2a_diagnostics/query_diagnostics/db15k_mhyper_native_dev_winner_action_diagnostics.csv.gz",
+      "sha256": "510d157749db18865c82cbfb1f3b1564cfc3f65a650f730576f0cf3a836ed240"
+    },
+    {
+      "role": "db15k_native_adamf:historical_anchored_dev",
+      "path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/p3_ablation/dev_p3_results.csv",
+      "sha256": "296af168e11bf4c2249acb4d61d998f9fcdaf68254059b04a143df345464a31a"
+    },
+    {
+      "role": "db15k_native_adamf:oof_predictions",
+      "path": "outputs/aacpi/phase2b/db15k_native_adamf/dev_oof_predictions.csv.gz",
+      "sha256": "1f6d07af55328905a66a072e168111a799b960c9b184540bc861bd065f9d9faa"
+    },
+    {
+      "role": "db15k_native_adamf:phase2b_audit",
+      "path": "outputs/aacpi/phase2b/db15k_native_adamf/phase2b_input_audit.json",
+      "sha256": "e16a0d6d825571c83ff9e0e63596a57547278ad7e81691780ecb2013f8c4b8a8"
+    },
+    {
+      "role": "db15k_native_adamf:phase2b_metrics",
+      "path": "outputs/aacpi/phase2b/db15k_native_adamf/dev_oof_metrics.json",
+      "sha256": "60fbb652a00cc47a55490c440ccb9a33161a8cb9ba6e0a3d7283ef7b90d88eb2"
+    },
+    {
+      "role": "db15k_native_adamf:utility_manifest",
+      "path": "outputs/aacpi/utility_tables/db15k_native_adamf_dev_source_manifest.json",
+      "sha256": "f9001315914573bc95444c27c09def97e1eddf0fea4bac2d1ee81b6f1d96e20a"
+    },
+    {
+      "role": "db15k_native_adamf:utility_summary",
+      "path": "outputs/aacpi/utility_tables/db15k_native_adamf_dev_utility_summary.json",
+      "sha256": "52675658ad7d2d923e6f4d786f2f8b8896e7bba839eca3094fdf67920e3d0edc"
+    },
+    {
+      "role": "db15k_native_adamf:utility_table",
+      "path": "outputs/aacpi/utility_tables/db15k_native_adamf_dev_utility_table.csv.gz",
+      "sha256": "b5769ce5d98a8b5198567bd1f824a9404ae889ca43030ee3b65d1caf1677ed3b"
+    },
+    {
+      "role": "db15k_native_adamf:winner_actions",
+      "path": "outputs/aacpi/phase2a_diagnostics/query_diagnostics/db15k_native_adamf_dev_winner_action_diagnostics.csv.gz",
+      "sha256": "c434bf9d1ce4c9bbd24c30d11bcb0c367d15ab0eee597fd5c32579461e8c27b4"
+    },
+    {
+      "role": "mkgw_mhyper_adamf:historical_anchored_dev",
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/p3_ablation/dev_p3_results.csv",
+      "sha256": "c9ec7e94767d701a8ebfc5400bb0d9b2273e0de960c7f8e582a178ce5accae0c"
+    },
+    {
+      "role": "mkgw_mhyper_adamf:oof_predictions",
+      "path": "outputs/aacpi/phase2b/mkgw_mhyper_adamf/dev_oof_predictions.csv.gz",
+      "sha256": "0c216d68787b4f5e4fb1133c59629f3c61b84c3bbf0131ce1c36636e9a3d46ea"
+    },
+    {
+      "role": "mkgw_mhyper_adamf:phase2b_audit",
+      "path": "outputs/aacpi/phase2b/mkgw_mhyper_adamf/phase2b_input_audit.json",
+      "sha256": "eed291d12e4f371e94597f79ae016199883ad35d809eca76f4d099b5507d32be"
+    },
+    {
+      "role": "mkgw_mhyper_adamf:phase2b_metrics",
+      "path": "outputs/aacpi/phase2b/mkgw_mhyper_adamf/dev_oof_metrics.json",
+      "sha256": "c5c5bedc9be085a80aeec2ee0c3b45651669d998ead0051cec4ff420dd9ad3b3"
+    },
+    {
+      "role": "mkgw_mhyper_adamf:utility_manifest",
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_adamf_dev_source_manifest.json",
+      "sha256": "8d9c1171dd9630742cfe8f80ea6a00adba580a76dc973c200fc77d60d78f8b8c"
+    },
+    {
+      "role": "mkgw_mhyper_adamf:utility_summary",
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_adamf_dev_utility_summary.json",
+      "sha256": "e4d0d9386289214abeaf023d62cc1ba908887292e1198367549a6e953def79fd"
+    },
+    {
+      "role": "mkgw_mhyper_adamf:utility_table",
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_adamf_dev_utility_table.csv.gz",
+      "sha256": "33765d12c6832c7fa53256e76ed1b7085bf87e1f68ee4ecdd86951283010cb2f"
+    },
+    {
+      "role": "mkgw_mhyper_adamf:winner_actions",
+      "path": "outputs/aacpi/phase2a_diagnostics/query_diagnostics/mkgw_mhyper_adamf_dev_winner_action_diagnostics.csv.gz",
+      "sha256": "6030a1c49a5ae70549dda2a19659679e393de76325c03b71cc29361ea4823bec"
+    },
+    {
+      "role": "mkgw_mhyper_native:historical_anchored_dev",
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/p3_ablation/dev_p3_results.csv",
+      "sha256": "5be95093f3b052352691874a66e8493a857a2d6de8ba360aa0e9b8e1a7730d34"
+    },
+    {
+      "role": "mkgw_mhyper_native:oof_predictions",
+      "path": "outputs/aacpi/phase2b/mkgw_mhyper_native/dev_oof_predictions.csv.gz",
+      "sha256": "9f895b9c3ddb935921e303652ada19db778e550ff92af5e0bde4f30c73dc0b23"
+    },
+    {
+      "role": "mkgw_mhyper_native:phase2b_audit",
+      "path": "outputs/aacpi/phase2b/mkgw_mhyper_native/phase2b_input_audit.json",
+      "sha256": "a5957e18ec88e15c7a663e4a108dc30d4aede6880c7ae054b2f2653cd283e704"
+    },
+    {
+      "role": "mkgw_mhyper_native:phase2b_metrics",
+      "path": "outputs/aacpi/phase2b/mkgw_mhyper_native/dev_oof_metrics.json",
+      "sha256": "c8231bcbcb841c9e2b8091a93a6c4080c844b0136d43099865305ade5be249e9"
+    },
+    {
+      "role": "mkgw_mhyper_native:utility_manifest",
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_native_dev_source_manifest.json",
+      "sha256": "57a24f419069845d35f4338ed8caa641dd50c290b6947cd14e8e83f65fdac0ac"
+    },
+    {
+      "role": "mkgw_mhyper_native:utility_summary",
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_native_dev_utility_summary.json",
+      "sha256": "6bd3d19257679a17590acbc7a10fd3ef74e810ee9b102c5abd0d1a3e684db445"
+    },
+    {
+      "role": "mkgw_mhyper_native:utility_table",
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_native_dev_utility_table.csv.gz",
+      "sha256": "d830f6978fd2380adcc8726fd53d8a9786990fa53d7fee9ef6d8a80e4d9ccc73"
+    },
+    {
+      "role": "mkgw_mhyper_native:winner_actions",
+      "path": "outputs/aacpi/phase2a_diagnostics/query_diagnostics/mkgw_mhyper_native_dev_winner_action_diagnostics.csv.gz",
+      "sha256": "286ef51f2059858852921e9bcdfa43a93b356d44a7bf3dfa17855026fa0a804f"
+    },
+    {
+      "role": "mkgw_native_adamf:historical_anchored_dev",
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/p3_ablation/dev_p3_results.csv",
+      "sha256": "bec4bc4daabe9d8b22a76d121f251dd3b95ac08c1c52deeb881b546ae6b9c823"
+    },
+    {
+      "role": "mkgw_native_adamf:oof_predictions",
+      "path": "outputs/aacpi/phase2b/mkgw_native_adamf/dev_oof_predictions.csv.gz",
+      "sha256": "8b77900baabe382acf298c545a1fa2ef8c1d0ab0ebe8d969848fd00bf8e9b184"
+    },
+    {
+      "role": "mkgw_native_adamf:phase2b_audit",
+      "path": "outputs/aacpi/phase2b/mkgw_native_adamf/phase2b_input_audit.json",
+      "sha256": "4a4e3d63177b51a7d7c6c1cedaee0bdbf2ca974f83a754f29b4521f4088cc660"
+    },
+    {
+      "role": "mkgw_native_adamf:phase2b_metrics",
+      "path": "outputs/aacpi/phase2b/mkgw_native_adamf/dev_oof_metrics.json",
+      "sha256": "cd07408b7f5ad7bbfc772c4938baeea27d8841996af283ac0e53b5710cf867e5"
+    },
+    {
+      "role": "mkgw_native_adamf:utility_manifest",
+      "path": "outputs/aacpi/utility_tables/mkgw_native_adamf_dev_source_manifest.json",
+      "sha256": "d4e01934588ec2919542b1ed4998d2a0992f300889cf313529f398eda6ff86b0"
+    },
+    {
+      "role": "mkgw_native_adamf:utility_summary",
+      "path": "outputs/aacpi/utility_tables/mkgw_native_adamf_dev_utility_summary.json",
+      "sha256": "b19f61fe4418ffc431a9b3fd1f73c1c5c4f47a329c4400264eefdb053b6a2a83"
+    },
+    {
+      "role": "mkgw_native_adamf:utility_table",
+      "path": "outputs/aacpi/utility_tables/mkgw_native_adamf_dev_utility_table.csv.gz",
+      "sha256": "20da7555f8a10a04a36dab57396f8726f1628cbffea59793fab586b4fcc16b61"
+    },
+    {
+      "role": "mkgw_native_adamf:winner_actions",
+      "path": "outputs/aacpi/phase2a_diagnostics/query_diagnostics/mkgw_native_adamf_dev_winner_action_diagnostics.csv.gz",
+      "sha256": "9d6bb1e79c184c35c0080f82425fbd15316dba3bb002c98740769e9f12755e5b"
+    },
+    {
+      "role": "phase2b_search_space",
+      "path": "docs/protocols/AACPI_V2_PHASE2_SEARCH_SPACE.yaml",
+      "sha256": "bc5910b8ec8843239edc4e2288bea16c194c37252a5e57d00658c10fedd8e554"
+    },
+    {
+      "role": "phase2d_analysis_script",
+      "path": "G:/mmkg-project-research/scripts/analyze_aacpi_advantage_identifiability.py",
+      "sha256": "d5d422c047f3d77b70f2496a692ecc719c9f1f23782400ef2415c738d156692f"
+    },
+    {
+      "role": "phase2d_protocol",
+      "path": "docs/protocols/AACPI_V2_PHASE2D_IDENTIFIABILITY_PROTOCOL.md",
+      "sha256": "3bf3a05bff64bbb7b9d8e4c5e244eef315c846a7c0ed18463deb371c71d952ef"
+    }
+  ],
+  "integrity": {
+    "test_rows_accessed": 0,
+    "test_evaluation_commands_executed": 0,
+    "phase1_utility_tables_modified": false,
+    "phase2b_predictor_retrained": false,
+    "features_modified": false,
+    "action_grid_modified": false,
+    "alpha0_modified": false,
+    "all_prediction_diagnostics_outer_fold_oof": true,
+    "original_triple_cross_fold_leakage_detected": false,
+    "phase2b_metrics_exactly_reproduced": true,
+    "unified_rebuild_script": "scripts/analyze_aacpi_advantage_identifiability.py"
+  }
+}

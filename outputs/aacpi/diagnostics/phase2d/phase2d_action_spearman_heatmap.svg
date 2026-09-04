@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1115" height="427" viewBox="0 0 1115 427">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,sans-serif;fill:#111827}.title{font-size:20px;font-weight:700}.label{font-size:12px}.value{font-size:11px;font-weight:600}</style>
+<text x="20" y="30" class="title">Action-conditional OOF Spearman</text>
+<text x="302.5" y="133" text-anchor="end" class="label" transform="rotate(-45 302.5 133)">-0.30</text>
+<text x="407.5" y="133" text-anchor="end" class="label" transform="rotate(-45 407.5 133)">-0.20</text>
+<text x="512.5" y="133" text-anchor="end" class="label" transform="rotate(-45 512.5 133)">-0.10</text>
+<text x="617.5" y="133" text-anchor="end" class="label" transform="rotate(-45 617.5 133)">-0.05</text>
+<text x="722.5" y="133" text-anchor="end" class="label" transform="rotate(-45 722.5 133)">+0.05</text>
+<text x="827.5" y="133" text-anchor="end" class="label" transform="rotate(-45 827.5 133)">+0.10</text>
+<text x="932.5" y="133" text-anchor="end" class="label" transform="rotate(-45 932.5 133)">+0.20</text>
+<text x="1037.5" y="133" text-anchor="end" class="label" transform="rotate(-45 1037.5 133)">+0.30</text>
+<text x="240" y="171" text-anchor="end" class="label">mkgw_mhyper_native</text>
+<rect x="250" y="145" width="103" height="40" rx="3" fill="#a4baf1"/>
+<text x="301.5" y="170" text-anchor="middle" class="value" fill="#111827">0.13</text>
+<rect x="355" y="145" width="103" height="40" rx="3" fill="#a6bbf1"/>
+<text x="406.5" y="170" text-anchor="middle" class="value" fill="#111827">0.12</text>
+<rect x="460" y="145" width="103" height="40" rx="3" fill="#c7d6f8"/>
+<text x="511.5" y="170" text-anchor="middle" class="value" fill="#111827">0.07</text>
+<rect x="565" y="145" width="103" height="40" rx="3" fill="#dee9fc"/>
+<text x="616.5" y="170" text-anchor="middle" class="value" fill="#111827">0.03</text>
+<rect x="670" y="145" width="103" height="40" rx="3" fill="#dfe9fc"/>
+<text x="721.5" y="170" text-anchor="middle" class="value" fill="#111827">0.03</text>
+<rect x="775" y="145" width="103" height="40" rx="3" fill="#c5d4f7"/>
+<text x="826.5" y="170" text-anchor="middle" class="value" fill="#111827">0.07</text>
+<rect x="880" y="145" width="103" height="40" rx="3" fill="#98b0ef"/>
+<text x="931.5" y="170" text-anchor="middle" class="value" fill="#111827">0.15</text>
+<rect x="985" y="145" width="103" height="40" rx="3" fill="#809eea"/>
+<text x="1036.5" y="170" text-anchor="middle" class="value" fill="#111827">0.18</text>
+<text x="240" y="213" text-anchor="end" class="label">mkgw_mhyper_adamf</text>
+<rect x="250" y="187" width="103" height="40" rx="3" fill="#7796e9"/>
+<text x="301.5" y="212" text-anchor="middle" class="value" fill="#111827">0.20</text>
+<rect x="355" y="187" width="103" height="40" rx="3" fill="#83a0eb"/>
+<text x="406.5" y="212" text-anchor="middle" class="value" fill="#111827">0.18</text>
+<rect x="460" y="187" width="103" height="40" rx="3" fill="#aabff2"/>
+<text x="511.5" y="212" text-anchor="middle" class="value" fill="#111827">0.11</text>
+<rect x="565" y="187" width="103" height="40" rx="3" fill="#becff6"/>
+<text x="616.5" y="212" text-anchor="middle" class="value" fill="#111827">0.08</text>
+<rect x="670" y="187" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="721.5" y="212" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<rect x="775" y="187" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="826.5" y="212" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<rect x="880" y="187" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="931.5" y="212" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<rect x="985" y="187" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="1036.5" y="212" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<text x="240" y="255" text-anchor="end" class="label">mkgw_native_adamf</text>
+<rect x="250" y="229" width="103" height="40" rx="3" fill="#dce7fb"/>
+<text x="301.5" y="254" text-anchor="middle" class="value" fill="#111827">0.03</text>
+<rect x="355" y="229" width="103" height="40" rx="3" fill="#dde8fc"/>
+<text x="406.5" y="254" text-anchor="middle" class="value" fill="#111827">0.03</text>
+<rect x="460" y="229" width="103" height="40" rx="3" fill="#ecf3fe"/>
+<text x="511.5" y="254" text-anchor="middle" class="value" fill="#111827">0.01</text>
+<rect x="565" y="229" width="103" height="40" rx="3" fill="#ecf4fe"/>
+<text x="616.5" y="254" text-anchor="middle" class="value" fill="#111827">0.00</text>
+<rect x="670" y="229" width="103" height="40" rx="3" fill="#e3edfd"/>
+<text x="721.5" y="254" text-anchor="middle" class="value" fill="#111827">0.02</text>
+<rect x="775" y="229" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="826.5" y="254" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<rect x="880" y="229" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="931.5" y="254" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<rect x="985" y="229" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="1036.5" y="254" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<text x="240" y="297" text-anchor="end" class="label">db15k_mhyper_native</text>
+<rect x="250" y="271" width="103" height="40" rx="3" fill="#c1d1f7"/>
+<text x="301.5" y="296" text-anchor="middle" class="value" fill="#111827">0.08</text>
+<rect x="355" y="271" width="103" height="40" rx="3" fill="#cddbf9"/>
+<text x="406.5" y="296" text-anchor="middle" class="value" fill="#111827">0.06</text>
+<rect x="460" y="271" width="103" height="40" rx="3" fill="#e0eafc"/>
+<text x="511.5" y="296" text-anchor="middle" class="value" fill="#111827">0.02</text>
+<rect x="565" y="271" width="103" height="40" rx="3" fill="#eef6ff"/>
+<text x="616.5" y="296" text-anchor="middle" class="value" fill="#111827">0.00</text>
+<rect x="670" y="271" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="721.5" y="296" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<rect x="775" y="271" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="826.5" y="296" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<rect x="880" y="271" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="931.5" y="296" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<rect x="985" y="271" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="1036.5" y="296" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<text x="240" y="339" text-anchor="end" class="label">db15k_mhyper_adamf</text>
+<rect x="250" y="313" width="103" height="40" rx="3" fill="#a2b8f1"/>
+<text x="301.5" y="338" text-anchor="middle" class="value" fill="#111827">0.13</text>
+<rect x="355" y="313" width="103" height="40" rx="3" fill="#aec2f3"/>
+<text x="406.5" y="338" text-anchor="middle" class="value" fill="#111827">0.11</text>
+<rect x="460" y="313" width="103" height="40" rx="3" fill="#cddbf9"/>
+<text x="511.5" y="338" text-anchor="middle" class="value" fill="#111827">0.06</text>
+<rect x="565" y="313" width="103" height="40" rx="3" fill="#e8f1fe"/>
+<text x="616.5" y="338" text-anchor="middle" class="value" fill="#111827">0.01</text>
+<rect x="670" y="313" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="721.5" y="338" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<rect x="775" y="313" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="826.5" y="338" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<rect x="880" y="313" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="931.5" y="338" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<rect x="985" y="313" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="1036.5" y="338" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<text x="240" y="381" text-anchor="end" class="label">db15k_native_adamf</text>
+<rect x="250" y="355" width="103" height="40" rx="3" fill="#a5bbf1"/>
+<text x="301.5" y="380" text-anchor="middle" class="value" fill="#111827">0.12</text>
+<rect x="355" y="355" width="103" height="40" rx="3" fill="#a1b8f1"/>
+<text x="406.5" y="380" text-anchor="middle" class="value" fill="#111827">0.13</text>
+<rect x="460" y="355" width="103" height="40" rx="3" fill="#b1c4f4"/>
+<text x="511.5" y="380" text-anchor="middle" class="value" fill="#111827">0.10</text>
+<rect x="565" y="355" width="103" height="40" rx="3" fill="#c8d6f8"/>
+<text x="616.5" y="380" text-anchor="middle" class="value" fill="#111827">0.07</text>
+<rect x="670" y="355" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="721.5" y="380" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<rect x="775" y="355" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="826.5" y="380" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<rect x="880" y="355" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="931.5" y="380" text-anchor="middle" class="value" fill="#111827">N/A</text>
+<rect x="985" y="355" width="103" height="40" rx="3" fill="#e5e7eb"/>
+<text x="1036.5" y="380" text-anchor="middle" class="value" fill="#111827">N/A</text>
+</svg>

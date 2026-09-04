@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="427" viewBox="0 0 1640 427">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,sans-serif;fill:#111827}.title{font-size:20px;font-weight:700}.label{font-size:12px}.value{font-size:11px;font-weight:600}</style>
+<text x="20" y="30" class="title">Frozen-feature Spearman with action advantage</text>
+<text x="302.5" y="133" text-anchor="end" class="label" transform="rotate(-45 302.5 133)">direction_tail</text>
+<text x="407.5" y="133" text-anchor="end" class="label" transform="rotate(-45 407.5 133)">a_top1</text>
+<text x="512.5" y="133" text-anchor="end" class="label" transform="rotate(-45 512.5 133)">a_top5_mean</text>
+<text x="617.5" y="133" text-anchor="end" class="label" transform="rotate(-45 617.5 133)">a_top1_top2_margin</text>
+<text x="722.5" y="133" text-anchor="end" class="label" transform="rotate(-45 722.5 133)">a_score_std</text>
+<text x="827.5" y="133" text-anchor="end" class="label" transform="rotate(-45 827.5 133)">b_top1</text>
+<text x="932.5" y="133" text-anchor="end" class="label" transform="rotate(-45 932.5 133)">b_top5_mean</text>
+<text x="1037.5" y="133" text-anchor="end" class="label" transform="rotate(-45 1037.5 133)">b_top1_top2_margin</text>
+<text x="1142.5" y="133" text-anchor="end" class="label" transform="rotate(-45 1142.5 133)">b_score_std</text>
+<text x="1247.5" y="133" text-anchor="end" class="label" transform="rotate(-45 1247.5 133)">top1_delta_a_minus_b</text>
+<text x="1352.5" y="133" text-anchor="end" class="label" transform="rotate(-45 1352.5 133)">top5_delta_a_minus_b</text>
+<text x="1457.5" y="133" text-anchor="end" class="label" transform="rotate(-45 1457.5 133)">margin_delta_a_minus_b</text>
+<text x="1562.5" y="133" text-anchor="end" class="label" transform="rotate(-45 1562.5 133)">std_delta_a_minus_b</text>
+<text x="240" y="171" text-anchor="end" class="label">mkgw_mhyper_native</text>
+<rect x="250" y="145" width="103" height="40" rx="3" fill="#eaf2fe"/>
+<text x="301.5" y="170" text-anchor="middle" class="value" fill="#111827">0.00</text>
+<rect x="355" y="145" width="103" height="40" rx="3" fill="#c8d7f8"/>
+<text x="406.5" y="170" text-anchor="middle" class="value" fill="#111827">0.03</text>
+<rect x="460" y="145" width="103" height="40" rx="3" fill="#d3e0fa"/>
+<text x="511.5" y="170" text-anchor="middle" class="value" fill="#111827">0.02</text>
+<rect x="565" y="145" width="103" height="40" rx="3" fill="#d2dffa"/>
+<text x="616.5" y="170" text-anchor="middle" class="value" fill="#111827">0.02</text>
+<rect x="670" y="145" width="103" height="40" rx="3" fill="#f9e5d7"/>
+<text x="721.5" y="170" text-anchor="middle" class="value" fill="#111827">-0.01</text>
+<rect x="775" y="145" width="103" height="40" rx="3" fill="#e9f1fe"/>
+<text x="826.5" y="170" text-anchor="middle" class="value" fill="#111827">0.00</text>
+<rect x="880" y="145" width="103" height="40" rx="3" fill="#fdf1e6"/>
+<text x="931.5" y="170" text-anchor="middle" class="value" fill="#111827">-0.00</text>
+<rect x="985" y="145" width="103" height="40" rx="3" fill="#d9e5fb"/>
+<text x="1036.5" y="170" text-anchor="middle" class="value" fill="#111827">0.02</text>
+<rect x="1090" y="145" width="103" height="40" rx="3" fill="#fbeadd"/>
+<text x="1141.5" y="170" text-anchor="middle" class="value" fill="#111827">-0.01</text>
+<rect x="1195" y="145" width="103" height="40" rx="3" fill="#d4e0fa"/>
+<text x="1246.5" y="170" text-anchor="middle" class="value" fill="#111827">0.02</text>
+<rect x="1300" y="145" width="103" height="40" rx="3" fill="#dae5fb"/>
+<text x="1351.5" y="170" text-anchor="middle" class="value" fill="#111827">0.02</text>
+<rect x="1405" y="145" width="103" height="40" rx="3" fill="#d6e2fa"/>
+<text x="1456.5" y="170" text-anchor="middle" class="value" fill="#111827">0.02</text>
+<rect x="1510" y="145" width="103" height="40" rx="3" fill="#e4eefd"/>
+<text x="1561.5" y="170" text-anchor="middle" class="value" fill="#111827">0.01</text>
+<text x="240" y="213" text-anchor="end" class="label">mkgw_mhyper_adamf</text>
+<rect x="250" y="187" width="103" height="40" rx="3" fill="#d57a52"/>
+<text x="301.5" y="212" text-anchor="middle" class="value" fill="#ffffff">-0.10</text>
+<rect x="355" y="187" width="103" height="40" rx="3" fill="#c2410c"/>
+<text x="406.5" y="212" text-anchor="middle" class="value" fill="#ffffff">-0.33</text>
+<rect x="460" y="187" width="103" height="40" rx="3" fill="#c2410c"/>
+<text x="511.5" y="212" text-anchor="middle" class="value" fill="#ffffff">-0.21</text>
+<rect x="565" y="187" width="103" height="40" rx="3" fill="#c2410c"/>
+<text x="616.5" y="212" text-anchor="middle" class="value" fill="#ffffff">-0.27</text>
+<rect x="670" y="187" width="103" height="40" rx="3" fill="#3f69de"/>
+<text x="721.5" y="212" text-anchor="middle" class="value" fill="#ffffff">0.13</text>
+<rect x="775" y="187" width="103" height="40" rx="3" fill="#e8b399"/>
+<text x="826.5" y="212" text-anchor="middle" class="value" fill="#111827">-0.06</text>
+<rect x="880" y="187" width="103" height="40" rx="3" fill="#7b9aea"/>
+<text x="931.5" y="212" text-anchor="middle" class="value" fill="#111827">0.08</text>
+<rect x="985" y="187" width="103" height="40" rx="3" fill="#c2410c"/>
+<text x="1036.5" y="212" text-anchor="middle" class="value" fill="#ffffff">-0.20</text>
+<rect x="1090" y="187" width="103" height="40" rx="3" fill="#1d4ed8"/>
+<text x="1141.5" y="212" text-anchor="middle" class="value" fill="#ffffff">0.16</text>
+<rect x="1195" y="187" width="103" height="40" rx="3" fill="#c2410c"/>
+<text x="1246.5" y="212" text-anchor="middle" class="value" fill="#ffffff">-0.24</text>
+<rect x="1300" y="187" width="103" height="40" rx="3" fill="#c2410c"/>
+<text x="1351.5" y="212" text-anchor="middle" class="value" fill="#ffffff">-0.19</text>
+<rect x="1405" y="187" width="103" height="40" rx="3" fill="#c2410c"/>
+<text x="1456.5" y="212" text-anchor="middle" class="value" fill="#ffffff">-0.19</text>
+<rect x="1510" y="187" width="103" height="40" rx="3" fill="#c44714"/>
+<text x="1561.5" y="212" text-anchor="middle" class="value" fill="#ffffff">-0.14</text>
+<text x="240" y="255" text-anchor="end" class="label">mkgw_native_adamf</text>
+<rect x="250" y="229" width="103" height="40" rx="3" fill="#bbccf5"/>
+<text x="301.5" y="254" text-anchor="middle" class="value" fill="#111827">0.04</text>
+<rect x="355" y="229" width="103" height="40" rx="3" fill="#ebbca5"/>
+<text x="406.5" y="254" text-anchor="middle" class="value" fill="#111827">-0.05</text>
+<rect x="460" y="229" width="103" height="40" rx="3" fill="#eec4ae"/>
+<text x="511.5" y="254" text-anchor="middle" class="value" fill="#111827">-0.04</text>
+<rect x="565" y="229" width="103" height="40" rx="3" fill="#fbecdf"/>
+<text x="616.5" y="254" text-anchor="middle" class="value" fill="#111827">-0.01</text>
+<rect x="670" y="229" width="103" height="40" rx="3" fill="#f2d0bd"/>
+<text x="721.5" y="254" text-anchor="middle" class="value" fill="#111827">-0.03</text>
+<rect x="775" y="229" width="103" height="40" rx="3" fill="#f3d3c0"/>
+<text x="826.5" y="254" text-anchor="middle" class="value" fill="#111827">-0.03</text>
+<rect x="880" y="229" width="103" height="40" rx="3" fill="#f4d6c4"/>
+<text x="931.5" y="254" text-anchor="middle" class="value" fill="#111827">-0.03</text>
+<rect x="985" y="229" width="103" height="40" rx="3" fill="#fef5eb"/>
+<text x="1036.5" y="254" text-anchor="middle" class="value" fill="#111827">-0.00</text>
+<rect x="1090" y="229" width="103" height="40" rx="3" fill="#f5d8c7"/>
+<text x="1141.5" y="254" text-anchor="middle" class="value" fill="#111827">-0.03</text>
+<rect x="1195" y="229" width="103" height="40" rx="3" fill="#f3d3c1"/>
+<text x="1246.5" y="254" text-anchor="middle" class="value" fill="#111827">-0.03</text>
+<rect x="1300" y="229" width="103" height="40" rx="3" fill="#f3d2bf"/>
+<text x="1351.5" y="254" text-anchor="middle" class="value" fill="#111827">-0.03</text>
+<rect x="1405" y="229" width="103" height="40" rx="3" fill="#fdf0e4"/>
+<text x="1456.5" y="254" text-anchor="middle" class="value" fill="#111827">-0.01</text>
+<rect x="1510" y="229" width="103" height="40" rx="3" fill="#f3d2c0"/>
+<text x="1561.5" y="254" text-anchor="middle" class="value" fill="#111827">-0.03</text>
+<text x="240" y="297" text-anchor="end" class="label">db15k_mhyper_native</text>
+<rect x="250" y="271" width="103" height="40" rx="3" fill="#ebbba3"/>
+<text x="301.5" y="296" text-anchor="middle" class="value" fill="#111827">-0.05</text>
+<rect x="355" y="271" width="103" height="40" rx="3" fill="#c95626"/>
+<text x="406.5" y="296" text-anchor="middle" class="value" fill="#ffffff">-0.13</text>
+<rect x="460" y="271" width="103" height="40" rx="3" fill="#d77f59"/>
+<text x="511.5" y="296" text-anchor="middle" class="value" fill="#ffffff">-0.10</text>
+<rect x="565" y="271" width="103" height="40" rx="3" fill="#c2410d"/>
+<text x="616.5" y="296" text-anchor="middle" class="value" fill="#ffffff">-0.15</text>
+<rect x="670" y="271" width="103" height="40" rx="3" fill="#f8e2d3"/>
+<text x="721.5" y="296" text-anchor="middle" class="value" fill="#111827">-0.02</text>
+<rect x="775" y="271" width="103" height="40" rx="3" fill="#d8825c"/>
+<text x="826.5" y="296" text-anchor="middle" class="value" fill="#ffffff">-0.10</text>
+<rect x="880" y="271" width="103" height="40" rx="3" fill="#eab9a1"/>
+<text x="931.5" y="296" text-anchor="middle" class="value" fill="#111827">-0.05</text>
+<rect x="985" y="271" width="103" height="40" rx="3" fill="#de9574"/>
+<text x="1036.5" y="296" text-anchor="middle" class="value" fill="#111827">-0.08</text>
+<rect x="1090" y="271" width="103" height="40" rx="3" fill="#dee8fc"/>
+<text x="1141.5" y="296" text-anchor="middle" class="value" fill="#111827">0.01</text>
+<rect x="1195" y="271" width="103" height="40" rx="3" fill="#d98560"/>
+<text x="1246.5" y="296" text-anchor="middle" class="value" fill="#ffffff">-0.09</text>
+<rect x="1300" y="271" width="103" height="40" rx="3" fill="#de9574"/>
+<text x="1351.5" y="296" text-anchor="middle" class="value" fill="#111827">-0.08</text>
+<rect x="1405" y="271" width="103" height="40" rx="3" fill="#d67e57"/>
+<text x="1456.5" y="296" text-anchor="middle" class="value" fill="#ffffff">-0.10</text>
+<rect x="1510" y="271" width="103" height="40" rx="3" fill="#fef3e8"/>
+<text x="1561.5" y="296" text-anchor="middle" class="value" fill="#111827">-0.00</text>
+<text x="240" y="339" text-anchor="end" class="label">db15k_mhyper_adamf</text>
+<rect x="250" y="313" width="103" height="40" rx="3" fill="#e8b297"/>
+<text x="301.5" y="338" text-anchor="middle" class="value" fill="#111827">-0.06</text>
+<rect x="355" y="313" width="103" height="40" rx="3" fill="#c2410c"/>
+<text x="406.5" y="338" text-anchor="middle" class="value" fill="#ffffff">-0.18</text>
+<rect x="460" y="313" width="103" height="40" rx="3" fill="#c54a17"/>
+<text x="511.5" y="338" text-anchor="middle" class="value" fill="#ffffff">-0.14</text>
+<rect x="565" y="313" width="103" height="40" rx="3" fill="#c2410c"/>
+<text x="616.5" y="338" text-anchor="middle" class="value" fill="#ffffff">-0.16</text>
+<rect x="670" y="313" width="103" height="40" rx="3" fill="#fdf2e6"/>
+<text x="721.5" y="338" text-anchor="middle" class="value" fill="#111827">-0.00</text>
+<rect x="775" y="313" width="103" height="40" rx="3" fill="#d4764e"/>
+<text x="826.5" y="338" text-anchor="middle" class="value" fill="#ffffff">-0.11</text>
+<rect x="880" y="313" width="103" height="40" rx="3" fill="#eab9a1"/>
+<text x="931.5" y="338" text-anchor="middle" class="value" fill="#111827">-0.05</text>
+<rect x="985" y="313" width="103" height="40" rx="3" fill="#e5aa8e"/>
+<text x="1036.5" y="338" text-anchor="middle" class="value" fill="#111827">-0.06</text>
+<rect x="1090" y="313" width="103" height="40" rx="3" fill="#c8d7f8"/>
+<text x="1141.5" y="338" text-anchor="middle" class="value" fill="#111827">0.03</text>
+<rect x="1195" y="313" width="103" height="40" rx="3" fill="#c85423"/>
+<text x="1246.5" y="338" text-anchor="middle" class="value" fill="#ffffff">-0.13</text>
+<rect x="1300" y="313" width="103" height="40" rx="3" fill="#d06c41"/>
+<text x="1351.5" y="338" text-anchor="middle" class="value" fill="#ffffff">-0.11</text>
+<rect x="1405" y="313" width="103" height="40" rx="3" fill="#c95626"/>
+<text x="1456.5" y="338" text-anchor="middle" class="value" fill="#ffffff">-0.13</text>
+<rect x="1510" y="313" width="103" height="40" rx="3" fill="#f8e3d4"/>
+<text x="1561.5" y="338" text-anchor="middle" class="value" fill="#111827">-0.02</text>
+<text x="240" y="381" text-anchor="end" class="label">db15k_native_adamf</text>
+<rect x="250" y="355" width="103" height="40" rx="3" fill="#ecf3fe"/>
+<text x="301.5" y="380" text-anchor="middle" class="value" fill="#111827">0.00</text>
+<rect x="355" y="355" width="103" height="40" rx="3" fill="#c2410c"/>
+<text x="406.5" y="380" text-anchor="middle" class="value" fill="#ffffff">-0.16</text>
+<rect x="460" y="355" width="103" height="40" rx="3" fill="#d16e44"/>
+<text x="511.5" y="380" text-anchor="middle" class="value" fill="#ffffff">-0.11</text>
+<rect x="565" y="355" width="103" height="40" rx="3" fill="#d9845f"/>
+<text x="616.5" y="380" text-anchor="middle" class="value" fill="#ffffff">-0.09</text>
+<rect x="670" y="355" width="103" height="40" rx="3" fill="#fae9db"/>
+<text x="721.5" y="380" text-anchor="middle" class="value" fill="#111827">-0.01</text>
+<rect x="775" y="355" width="103" height="40" rx="3" fill="#c2410c"/>
+<text x="826.5" y="380" text-anchor="middle" class="value" fill="#ffffff">-0.15</text>
+<rect x="880" y="355" width="103" height="40" rx="3" fill="#d3734a"/>
+<text x="931.5" y="380" text-anchor="middle" class="value" fill="#ffffff">-0.11</text>
+<rect x="985" y="355" width="103" height="40" rx="3" fill="#e2a183"/>
+<text x="1036.5" y="380" text-anchor="middle" class="value" fill="#111827">-0.07</text>
+<rect x="1090" y="355" width="103" height="40" rx="3" fill="#f2cfbc"/>
+<text x="1141.5" y="380" text-anchor="middle" class="value" fill="#111827">-0.03</text>
+<rect x="1195" y="355" width="103" height="40" rx="3" fill="#ecbfa8"/>
+<text x="1246.5" y="380" text-anchor="middle" class="value" fill="#111827">-0.05</text>
+<rect x="1300" y="355" width="103" height="40" rx="3" fill="#f8e3d4"/>
+<text x="1351.5" y="380" text-anchor="middle" class="value" fill="#111827">-0.02</text>
+<rect x="1405" y="355" width="103" height="40" rx="3" fill="#edc2ab"/>
+<text x="1456.5" y="380" text-anchor="middle" class="value" fill="#111827">-0.04</text>
+<rect x="1510" y="355" width="103" height="40" rx="3" fill="#e7effd"/>
+<text x="1561.5" y="380" text-anchor="middle" class="value" fill="#111827">0.01</text>
+</svg>

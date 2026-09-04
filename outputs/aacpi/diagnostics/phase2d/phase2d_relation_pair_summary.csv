@@ -1,0 +1,7 @@
+dataset,pair_id,n_supported_relations,n_passing_relations,passing_relation_rate,passing_relation_query_coverage,largest_relation_original_triples,largest_relation_passes
+mkg_w,mkgw_mhyper_native,46,24,0.5217391304347826,0.687255859375,829,True
+mkg_w,mkgw_mhyper_adamf,46,11,0.2391304347826087,0.1865234375,829,False
+mkg_w,mkgw_native_adamf,46,12,0.2608695652173913,0.16015625,829,False
+db15k,db15k_mhyper_native,91,19,0.2087912087912088,0.11486574983628028,1042,False
+db15k,db15k_mhyper_adamf,91,12,0.13186813186813187,0.11997380484610347,1042,False
+db15k,db15k_native_adamf,91,39,0.42857142857142855,0.4716437459070072,1042,False

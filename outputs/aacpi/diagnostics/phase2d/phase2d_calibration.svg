@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,sans-serif;fill:#111827}.title{font-size:21px;font-weight:700}.axis{font-size:12px}.legend{font-size:11px}</style>
+<text x="24" y="30" class="title">Phase 2D OOF advantage concentration</text>
+<line x1="80" y1="315.0" x2="1170" y2="315.0" stroke="#9ca3af" stroke-dasharray="5 4"/>
+<polyline points="80.0,377.4 298.0,330.3 516.0,318.1 734.0,312.0 952.0,309.4 1170.0,288.3" fill="none" stroke="#1d4ed8" stroke-width="2.5"/>
+<circle cx="80.0" cy="377.4" r="3.5" fill="#1d4ed8"/>
+<circle cx="298.0" cy="330.3" r="3.5" fill="#1d4ed8"/>
+<circle cx="516.0" cy="318.1" r="3.5" fill="#1d4ed8"/>
+<circle cx="734.0" cy="312.0" r="3.5" fill="#1d4ed8"/>
+<circle cx="952.0" cy="309.4" r="3.5" fill="#1d4ed8"/>
+<circle cx="1170.0" cy="288.3" r="3.5" fill="#1d4ed8"/>
+<line x1="90" y1="598" x2="114" y2="598" stroke="#1d4ed8" stroke-width="3"/>
+<text x="120" y="602" class="legend">mkgw_mhyper_native</text>
+<polyline points="80.0,450.9 298.0,393.9 516.0,346.4 734.0,339.5 952.0,326.8 1170.0,310.4" fill="none" stroke="#0891b2" stroke-width="2.5"/>
+<circle cx="80.0" cy="450.9" r="3.5" fill="#0891b2"/>
+<circle cx="298.0" cy="393.9" r="3.5" fill="#0891b2"/>
+<circle cx="516.0" cy="346.4" r="3.5" fill="#0891b2"/>
+<circle cx="734.0" cy="339.5" r="3.5" fill="#0891b2"/>
+<circle cx="952.0" cy="326.8" r="3.5" fill="#0891b2"/>
+<circle cx="1170.0" cy="310.4" r="3.5" fill="#0891b2"/>
+<line x1="450" y1="598" x2="474" y2="598" stroke="#0891b2" stroke-width="3"/>
+<text x="480" y="602" class="legend">mkgw_mhyper_adamf</text>
+<polyline points="80.0,407.5 298.0,356.3 516.0,337.6 734.0,337.9 952.0,341.3 1170.0,330.9" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
+<circle cx="80.0" cy="407.5" r="3.5" fill="#7c3aed"/>
+<circle cx="298.0" cy="356.3" r="3.5" fill="#7c3aed"/>
+<circle cx="516.0" cy="337.6" r="3.5" fill="#7c3aed"/>
+<circle cx="734.0" cy="337.9" r="3.5" fill="#7c3aed"/>
+<circle cx="952.0" cy="341.3" r="3.5" fill="#7c3aed"/>
+<circle cx="1170.0" cy="330.9" r="3.5" fill="#7c3aed"/>
+<line x1="810" y1="598" x2="834" y2="598" stroke="#7c3aed" stroke-width="3"/>
+<text x="840" y="602" class="legend">mkgw_native_adamf</text>
+<polyline points="80.0,396.8 298.0,348.0 516.0,331.8 734.0,319.6 952.0,326.0 1170.0,319.4" fill="none" stroke="#059669" stroke-width="2.5"/>
+<circle cx="80.0" cy="396.8" r="3.5" fill="#059669"/>
+<circle cx="298.0" cy="348.0" r="3.5" fill="#059669"/>
+<circle cx="516.0" cy="331.8" r="3.5" fill="#059669"/>
+<circle cx="734.0" cy="319.6" r="3.5" fill="#059669"/>
+<circle cx="952.0" cy="326.0" r="3.5" fill="#059669"/>
+<circle cx="1170.0" cy="319.4" r="3.5" fill="#059669"/>
+<line x1="90" y1="618" x2="114" y2="618" stroke="#059669" stroke-width="3"/>
+<text x="120" y="622" class="legend">db15k_mhyper_native</text>
+<polyline points="80.0,542.3 298.0,418.2 516.0,375.6 734.0,355.4 952.0,348.5 1170.0,336.8" fill="none" stroke="#d97706" stroke-width="2.5"/>
+<circle cx="80.0" cy="542.3" r="3.5" fill="#d97706"/>
+<circle cx="298.0" cy="418.2" r="3.5" fill="#d97706"/>
+<circle cx="516.0" cy="375.6" r="3.5" fill="#d97706"/>
+<circle cx="734.0" cy="355.4" r="3.5" fill="#d97706"/>
+<circle cx="952.0" cy="348.5" r="3.5" fill="#d97706"/>
+<circle cx="1170.0" cy="336.8" r="3.5" fill="#d97706"/>
+<line x1="450" y1="618" x2="474" y2="618" stroke="#d97706" stroke-width="3"/>
+<text x="480" y="622" class="legend">db15k_mhyper_adamf</text>
+<polyline points="80.0,456.9 298.0,363.6 516.0,345.5 734.0,335.4 952.0,334.9 1170.0,300.4" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+<circle cx="80.0" cy="456.9" r="3.5" fill="#dc2626"/>
+<circle cx="298.0" cy="363.6" r="3.5" fill="#dc2626"/>
+<circle cx="516.0" cy="345.5" r="3.5" fill="#dc2626"/>
+<circle cx="734.0" cy="335.4" r="3.5" fill="#dc2626"/>
+<circle cx="952.0" cy="334.9" r="3.5" fill="#dc2626"/>
+<circle cx="1170.0" cy="300.4" r="3.5" fill="#dc2626"/>
+<line x1="810" y1="618" x2="834" y2="618" stroke="#dc2626" stroke-width="3"/>
+<text x="840" y="622" class="legend">db15k_native_adamf</text>
+<text x="80.0" y="589" text-anchor="middle" class="axis">bottom_10pct</text>
+<text x="298.0" y="589" text-anchor="middle" class="axis">10_to_30pct</text>
+<text x="516.0" y="589" text-anchor="middle" class="axis">30_to_50pct</text>
+<text x="734.0" y="589" text-anchor="middle" class="axis">50_to_70pct</text>
+<text x="952.0" y="589" text-anchor="middle" class="axis">70_to_90pct</text>
+<text x="1170.0" y="589" text-anchor="middle" class="axis">top_10pct</text>
+<text x="18" y="315.0" class="axis" transform="rotate(-90 18 315.0)">Actual mean advantage</text>
+</svg>

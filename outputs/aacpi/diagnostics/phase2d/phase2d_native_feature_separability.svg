@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="259" viewBox="0 0 1640 259">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,sans-serif;fill:#111827}.title{font-size:20px;font-weight:700}.label{font-size:12px}.value{font-size:11px;font-weight:600}</style>
+<text x="20" y="30" class="title">NativE + AdaMF-MAT: positive-vs-harmful single-feature AUROC lift</text>
+<text x="302.5" y="133" text-anchor="end" class="label" transform="rotate(-45 302.5 133)">direction_tail</text>
+<text x="407.5" y="133" text-anchor="end" class="label" transform="rotate(-45 407.5 133)">a_top1</text>
+<text x="512.5" y="133" text-anchor="end" class="label" transform="rotate(-45 512.5 133)">a_top5_mean</text>
+<text x="617.5" y="133" text-anchor="end" class="label" transform="rotate(-45 617.5 133)">a_top1_top2_margin</text>
+<text x="722.5" y="133" text-anchor="end" class="label" transform="rotate(-45 722.5 133)">a_score_std</text>
+<text x="827.5" y="133" text-anchor="end" class="label" transform="rotate(-45 827.5 133)">b_top1</text>
+<text x="932.5" y="133" text-anchor="end" class="label" transform="rotate(-45 932.5 133)">b_top5_mean</text>
+<text x="1037.5" y="133" text-anchor="end" class="label" transform="rotate(-45 1037.5 133)">b_top1_top2_margin</text>
+<text x="1142.5" y="133" text-anchor="end" class="label" transform="rotate(-45 1142.5 133)">b_score_std</text>
+<text x="1247.5" y="133" text-anchor="end" class="label" transform="rotate(-45 1247.5 133)">top1_delta_a_minus_b</text>
+<text x="1352.5" y="133" text-anchor="end" class="label" transform="rotate(-45 1352.5 133)">top5_delta_a_minus_b</text>
+<text x="1457.5" y="133" text-anchor="end" class="label" transform="rotate(-45 1457.5 133)">margin_delta_a_minus_b</text>
+<text x="1562.5" y="133" text-anchor="end" class="label" transform="rotate(-45 1562.5 133)">std_delta_a_minus_b</text>
+<text x="240" y="171" text-anchor="end" class="label">mkgw_native_adamf</text>
+<rect x="250" y="145" width="103" height="40" rx="3" fill="#d0ddf9"/>
+<text x="301.5" y="170" text-anchor="middle" class="value" fill="#111827">0.02</text>
+<rect x="355" y="145" width="103" height="40" rx="3" fill="#b1c5f4"/>
+<text x="406.5" y="170" text-anchor="middle" class="value" fill="#111827">0.04</text>
+<rect x="460" y="145" width="103" height="40" rx="3" fill="#becff6"/>
+<text x="511.5" y="170" text-anchor="middle" class="value" fill="#111827">0.03</text>
+<rect x="565" y="145" width="103" height="40" rx="3" fill="#dbe6fb"/>
+<text x="616.5" y="170" text-anchor="middle" class="value" fill="#111827">0.01</text>
+<rect x="670" y="145" width="103" height="40" rx="3" fill="#d2dffa"/>
+<text x="721.5" y="170" text-anchor="middle" class="value" fill="#111827">0.02</text>
+<rect x="775" y="145" width="103" height="40" rx="3" fill="#cddbf9"/>
+<text x="826.5" y="170" text-anchor="middle" class="value" fill="#111827">0.02</text>
+<rect x="880" y="145" width="103" height="40" rx="3" fill="#d9e4fb"/>
+<text x="931.5" y="170" text-anchor="middle" class="value" fill="#111827">0.01</text>
+<rect x="985" y="145" width="103" height="40" rx="3" fill="#e7effd"/>
+<text x="1036.5" y="170" text-anchor="middle" class="value" fill="#111827">0.00</text>
+<rect x="1090" y="145" width="103" height="40" rx="3" fill="#d9e4fb"/>
+<text x="1141.5" y="170" text-anchor="middle" class="value" fill="#111827">0.01</text>
+<rect x="1195" y="145" width="103" height="40" rx="3" fill="#c8d7f8"/>
+<text x="1246.5" y="170" text-anchor="middle" class="value" fill="#111827">0.02</text>
+<rect x="1300" y="145" width="103" height="40" rx="3" fill="#c3d3f7"/>
+<text x="1351.5" y="170" text-anchor="middle" class="value" fill="#111827">0.03</text>
+<rect x="1405" y="145" width="103" height="40" rx="3" fill="#e8f0fe"/>
+<text x="1456.5" y="170" text-anchor="middle" class="value" fill="#111827">0.00</text>
+<rect x="1510" y="145" width="103" height="40" rx="3" fill="#cbdaf8"/>
+<text x="1561.5" y="170" text-anchor="middle" class="value" fill="#111827">0.02</text>
+<text x="240" y="213" text-anchor="end" class="label">db15k_native_adamf</text>
+<rect x="250" y="187" width="103" height="40" rx="3" fill="#c0d1f6"/>
+<text x="301.5" y="212" text-anchor="middle" class="value" fill="#111827">0.03</text>
+<rect x="355" y="187" width="103" height="40" rx="3" fill="#5c80e4"/>
+<text x="406.5" y="212" text-anchor="middle" class="value" fill="#ffffff">0.08</text>
+<rect x="460" y="187" width="103" height="40" rx="3" fill="#5c80e4"/>
+<text x="511.5" y="212" text-anchor="middle" class="value" fill="#ffffff">0.08</text>
+<rect x="565" y="187" width="103" height="40" rx="3" fill="#d6e2fa"/>
+<text x="616.5" y="212" text-anchor="middle" class="value" fill="#111827">0.01</text>
+<rect x="670" y="187" width="103" height="40" rx="3" fill="#99b1ef"/>
+<text x="721.5" y="212" text-anchor="middle" class="value" fill="#111827">0.05</text>
+<rect x="775" y="187" width="103" height="40" rx="3" fill="#597ee3"/>
+<text x="826.5" y="212" text-anchor="middle" class="value" fill="#ffffff">0.09</text>
+<rect x="880" y="187" width="103" height="40" rx="3" fill="#5b80e4"/>
+<text x="931.5" y="212" text-anchor="middle" class="value" fill="#ffffff">0.08</text>
+<rect x="985" y="187" width="103" height="40" rx="3" fill="#dfe9fc"/>
+<text x="1036.5" y="212" text-anchor="middle" class="value" fill="#111827">0.01</text>
+<rect x="1090" y="187" width="103" height="40" rx="3" fill="#9ab2ef"/>
+<text x="1141.5" y="212" text-anchor="middle" class="value" fill="#111827">0.05</text>
+<rect x="1195" y="187" width="103" height="40" rx="3" fill="#e9f1fe"/>
+<text x="1246.5" y="212" text-anchor="middle" class="value" fill="#111827">0.00</text>
+<rect x="1300" y="187" width="103" height="40" rx="3" fill="#e9f1fe"/>
+<text x="1351.5" y="212" text-anchor="middle" class="value" fill="#111827">0.00</text>
+<rect x="1405" y="187" width="103" height="40" rx="3" fill="#dfe9fc"/>
+<text x="1456.5" y="212" text-anchor="middle" class="value" fill="#111827">0.01</text>
+<rect x="1510" y="187" width="103" height="40" rx="3" fill="#cedbf9"/>
+<text x="1561.5" y="212" text-anchor="middle" class="value" fill="#111827">0.02</text>
+</svg>
