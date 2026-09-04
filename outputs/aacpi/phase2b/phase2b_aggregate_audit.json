@@ -1,0 +1,542 @@
+{
+  "schema_version": 1,
+  "decision": {
+    "decision": "NO-GO",
+    "pair_pass_count": 3,
+    "required_pair_pass_count": 4,
+    "native_adamf_pass": {
+      "mkgw_native_adamf": false,
+      "db15k_native_adamf": true
+    },
+    "both_native_adamf_pass": false,
+    "h1_go": false,
+    "next_step": "investigate_identifiability_without_expanding_mlp_capacity",
+    "phase2c_authorized_by_gate": false,
+    "test_accessed": false
+  },
+  "pairs": [
+    {
+      "pair_id": "mkgw_mhyper_native",
+      "go_signal_components": {
+        "nonreference_spearman_gt_0": true,
+        "positive_auprc_lift_gt_0": true,
+        "harmful_auprc_lift_gt_0": true,
+        "highest_10pct_actual_mean_advantage_gt_0": true
+      },
+      "outer_fold_metrics": [
+        {
+          "count": 40944,
+          "mae": 0.020926766067039013,
+          "smooth_l1": 0.018662896566935067,
+          "spearman": 0.29681732782600057,
+          "positive_prevalence": 0.27860003907776476,
+          "positive_auprc": 0.42831859769324326,
+          "positive_auprc_lift": 0.1497185586154785,
+          "positive_auroc": 0.6729744108750366,
+          "harmful_prevalence": 0.3076397030089879,
+          "harmful_auprc": 0.4340404370618266,
+          "harmful_auprc_lift": 0.1264007340528387,
+          "harmful_auroc": 0.6366171581007685
+        },
+        {
+          "count": 41280,
+          "mae": 0.02192362047462272,
+          "smooth_l1": 0.019030783668454232,
+          "spearman": 0.16636614340910577,
+          "positive_prevalence": 0.28280038759689924,
+          "positive_auprc": 0.3485390962690923,
+          "positive_auprc_lift": 0.06573870867219306,
+          "positive_auroc": 0.6034476638193312,
+          "harmful_prevalence": 0.30118701550387594,
+          "harmful_auprc": 0.3551293946230583,
+          "harmful_auprc_lift": 0.05394237911918237,
+          "harmful_auroc": 0.5671220621862053
+        },
+        {
+          "count": 41136,
+          "mae": 0.022723385111075238,
+          "smooth_l1": 0.01979330457618401,
+          "spearman": 0.2654150834891354,
+          "positive_prevalence": 0.27129521586931155,
+          "positive_auprc": 0.37094421648411946,
+          "positive_auprc_lift": 0.09964900061480791,
+          "positive_auroc": 0.6169222504646489,
+          "harmful_prevalence": 0.30564469078179696,
+          "harmful_auprc": 0.4549260064081566,
+          "harmful_auprc_lift": 0.14928131562635966,
+          "harmful_auroc": 0.659741111140711
+        },
+        {
+          "count": 41232,
+          "mae": 0.021332501843446986,
+          "smooth_l1": 0.019046607768690178,
+          "spearman": 0.2890899480369719,
+          "positive_prevalence": 0.2703967792006209,
+          "positive_auprc": 0.4276621665948931,
+          "positive_auprc_lift": 0.1572653873942722,
+          "positive_auroc": 0.6758611725247833,
+          "harmful_prevalence": 0.2988698098564222,
+          "harmful_auprc": 0.43746382808343715,
+          "harmful_auprc_lift": 0.13859401822701495,
+          "harmful_auroc": 0.6327455653368941
+        },
+        {
+          "count": 40656,
+          "mae": 0.02198195974454997,
+          "smooth_l1": 0.019493868634626252,
+          "spearman": 0.2547504154322075,
+          "positive_prevalence": 0.27831070444706807,
+          "positive_auprc": 0.3949018739457983,
+          "positive_auprc_lift": 0.11659116949873022,
+          "positive_auroc": 0.6491421825339517,
+          "harmful_prevalence": 0.30428473042109405,
+          "harmful_auprc": 0.4074363978587515,
+          "harmful_auprc_lift": 0.10315166743765747,
+          "harmful_auroc": 0.6177408869074545
+        }
+      ],
+      "selected_config_counts": {
+        "w32_lr1e-3_neg1p0": 3,
+        "w32_lr1e-3_neg2p0": 2
+      }
+    },
+    {
+      "pair_id": "mkgw_mhyper_adamf",
+      "go_signal_components": {
+        "nonreference_spearman_gt_0": true,
+        "positive_auprc_lift_gt_0": true,
+        "harmful_auprc_lift_gt_0": true,
+        "highest_10pct_actual_mean_advantage_gt_0": true
+      },
+      "outer_fold_metrics": [
+        {
+          "count": 20472,
+          "mae": 0.020846767594383368,
+          "smooth_l1": 0.017843384347557518,
+          "spearman": 0.13606617233734294,
+          "positive_prevalence": 0.4386967565455256,
+          "positive_auprc": 0.5160530459576049,
+          "positive_auprc_lift": 0.07735628941207934,
+          "positive_auroc": 0.6080645977582839,
+          "harmful_prevalence": 0.1568483782727628,
+          "harmful_auprc": 0.1532845369047786,
+          "harmful_auprc_lift": -0.003563841367984183,
+          "harmful_auroc": 0.49338632331206217
+        },
+        {
+          "count": 20640,
+          "mae": 0.02420244431801294,
+          "smooth_l1": 0.01976181044627876,
+          "spearman": 0.07052814653240876,
+          "positive_prevalence": 0.41501937984496123,
+          "positive_auprc": 0.4434774326752814,
+          "positive_auprc_lift": 0.028458052830320157,
+          "positive_auroc": 0.5613764055427363,
+          "harmful_prevalence": 0.16991279069767443,
+          "harmful_auprc": 0.1731067444280543,
+          "harmful_auprc_lift": 0.003193953730379867,
+          "harmful_auroc": 0.516397843597061
+        },
+        {
+          "count": 20568,
+          "mae": 0.02237229806595802,
+          "smooth_l1": 0.01877031891346644,
+          "spearman": 0.21383202350252467,
+          "positive_prevalence": 0.4149163749513808,
+          "positive_auprc": 0.5692669019766986,
+          "positive_auprc_lift": 0.15435052702531782,
+          "positive_auroc": 0.6742249247396419,
+          "harmful_prevalence": 0.16365227537922988,
+          "harmful_auprc": 0.1678169250942788,
+          "harmful_auprc_lift": 0.004164649715048929,
+          "harmful_auroc": 0.5135438313180983
+        },
+        {
+          "count": 20616,
+          "mae": 0.023046717464409918,
+          "smooth_l1": 0.019098284134015618,
+          "spearman": 0.21120370813861156,
+          "positive_prevalence": 0.409487776484284,
+          "positive_auprc": 0.5798870672779933,
+          "positive_auprc_lift": 0.1703992907937093,
+          "positive_auroc": 0.6724831606399616,
+          "harmful_prevalence": 0.1580325960419092,
+          "harmful_auprc": 0.1709786306550113,
+          "harmful_auprc_lift": 0.012946034613102092,
+          "harmful_auroc": 0.5196438737733404
+        },
+        {
+          "count": 20328,
+          "mae": 0.02196539478950644,
+          "smooth_l1": 0.017742109714228415,
+          "spearman": 0.09234093883748544,
+          "positive_prevalence": 0.4276367571822117,
+          "positive_auprc": 0.4902465715091368,
+          "positive_auprc_lift": 0.06260981432692508,
+          "positive_auroc": 0.5782445912870636,
+          "harmful_prevalence": 0.15717237308146398,
+          "harmful_auprc": 0.15050535769872564,
+          "harmful_auprc_lift": -0.006667015382738339,
+          "harmful_auroc": 0.48607266340378374
+        }
+      ],
+      "selected_config_counts": {
+        "w128_lr1e-3_neg2p0": 1,
+        "w32_lr1e-4_neg2p0": 1,
+        "w32_lr3e-4_neg3p0": 1,
+        "w64_lr1e-3_neg3p0": 2
+      }
+    },
+    {
+      "pair_id": "mkgw_native_adamf",
+      "go_signal_components": {
+        "nonreference_spearman_gt_0": true,
+        "positive_auprc_lift_gt_0": true,
+        "harmful_auprc_lift_gt_0": false,
+        "highest_10pct_actual_mean_advantage_gt_0": false
+      },
+      "outer_fold_metrics": [
+        {
+          "count": 25590,
+          "mae": 0.032534014430818034,
+          "smooth_l1": 0.028839197453260863,
+          "spearman": 0.038946583524739904,
+          "positive_prevalence": 0.29675654552559594,
+          "positive_auprc": 0.3107962507087821,
+          "positive_auprc_lift": 0.014039705183186146,
+          "positive_auroc": 0.5326535304453868,
+          "harmful_prevalence": 0.31125439624853457,
+          "harmful_auprc": 0.30694710199596326,
+          "harmful_auprc_lift": -0.004307294252571314,
+          "harmful_auroc": 0.5018626455280861
+        },
+        {
+          "count": 25800,
+          "mae": 0.03144933242193083,
+          "smooth_l1": 0.02785648392785234,
+          "spearman": 0.025541642344029374,
+          "positive_prevalence": 0.282984496124031,
+          "positive_auprc": 0.2914035379872673,
+          "positive_auprc_lift": 0.008419041863236332,
+          "positive_auroc": 0.5330867083447112,
+          "harmful_prevalence": 0.3201162790697674,
+          "harmful_auprc": 0.3084647710480803,
+          "harmful_auprc_lift": -0.01165150802168713,
+          "harmful_auroc": 0.491550924653243
+        },
+        {
+          "count": 25710,
+          "mae": 0.03216176193179731,
+          "smooth_l1": 0.029180521514885354,
+          "spearman": 0.021834385775946732,
+          "positive_prevalence": 0.28798133022170364,
+          "positive_auprc": 0.2982793217403024,
+          "positive_auprc_lift": 0.010297991518598781,
+          "positive_auroc": 0.5349117636885828,
+          "harmful_prevalence": 0.3102294826915597,
+          "harmful_auprc": 0.2911627743280759,
+          "harmful_auprc_lift": -0.019066708363483786,
+          "harmful_auroc": 0.4879041411196486
+        },
+        {
+          "count": 25770,
+          "mae": 0.033196549125527344,
+          "smooth_l1": 0.029117089702936715,
+          "spearman": 0.03530823499593715,
+          "positive_prevalence": 0.29057043073341093,
+          "positive_auprc": 0.2808620030716898,
+          "positive_auprc_lift": -0.009708427661721142,
+          "positive_auroc": 0.5056305564964184,
+          "harmful_prevalence": 0.30388048117966626,
+          "harmful_auprc": 0.31267217133726993,
+          "harmful_auprc_lift": 0.008791690157603671,
+          "harmful_auroc": 0.5256248653325499
+        },
+        {
+          "count": 25410,
+          "mae": 0.03330170676040749,
+          "smooth_l1": 0.030042746300167497,
+          "spearman": 0.028583399527166577,
+          "positive_prevalence": 0.29409681227863044,
+          "positive_auprc": 0.2969317357833071,
+          "positive_auprc_lift": 0.0028349235046766785,
+          "positive_auroc": 0.5180061202805802,
+          "harmful_prevalence": 0.31826052735143645,
+          "harmful_auprc": 0.3120636000384706,
+          "harmful_auprc_lift": -0.006196927312965839,
+          "harmful_auroc": 0.5099054650159399
+        }
+      ],
+      "selected_config_counts": {
+        "w128_lr1e-3_neg1p0": 1,
+        "w128_lr1e-3_neg2p0": 1,
+        "w128_lr3e-4_neg1p0": 1,
+        "w32_lr1e-3_neg1p0": 1,
+        "w64_lr1e-3_neg1p0": 1
+      }
+    },
+    {
+      "pair_id": "db15k_mhyper_native",
+      "go_signal_components": {
+        "nonreference_spearman_gt_0": true,
+        "positive_auprc_lift_gt_0": true,
+        "harmful_auprc_lift_gt_0": true,
+        "highest_10pct_actual_mean_advantage_gt_0": false
+      },
+      "outer_fold_metrics": [
+        {
+          "count": 37920,
+          "mae": 0.020564606435890954,
+          "smooth_l1": 0.017435337898186302,
+          "spearman": 0.0822637163719175,
+          "positive_prevalence": 0.33781645569620256,
+          "positive_auprc": 0.37123053220799435,
+          "positive_auprc_lift": 0.03341407651179179,
+          "positive_auroc": 0.563464251438868,
+          "harmful_prevalence": 0.18720991561181435,
+          "harmful_auprc": 0.20134169629118945,
+          "harmful_auprc_lift": 0.014131780679375094,
+          "harmful_auroc": 0.5380460967885401
+        },
+        {
+          "count": 37944,
+          "mae": 0.019229496802562022,
+          "smooth_l1": 0.016891790083000967,
+          "spearman": 0.10054670587919592,
+          "positive_prevalence": 0.3222907442546911,
+          "positive_auprc": 0.40950773866544365,
+          "positive_auprc_lift": 0.08721699441075254,
+          "positive_auroc": 0.6042800979881195,
+          "harmful_prevalence": 0.198292220113852,
+          "harmful_auprc": 0.17988761248963042,
+          "harmful_auprc_lift": -0.01840460762422158,
+          "harmful_auroc": 0.46890949618682415
+        },
+        {
+          "count": 38064,
+          "mae": 0.020916475188931156,
+          "smooth_l1": 0.017996989221324144,
+          "spearman": 0.017177507019312133,
+          "positive_prevalence": 0.32936633039092056,
+          "positive_auprc": 0.34992288939342203,
+          "positive_auprc_lift": 0.020556559002501473,
+          "positive_auroc": 0.548391678170907,
+          "harmful_prevalence": 0.18815678856662463,
+          "harmful_auprc": 0.1783277813409169,
+          "harmful_auprc_lift": -0.009829007225707731,
+          "harmful_auroc": 0.4597929693912516
+        },
+        {
+          "count": 38160,
+          "mae": 0.022172024500988017,
+          "smooth_l1": 0.018978941855168893,
+          "spearman": 0.054800055805468546,
+          "positive_prevalence": 0.33244234800838574,
+          "positive_auprc": 0.3464337111139227,
+          "positive_auprc_lift": 0.013991363105536947,
+          "positive_auroc": 0.5421675983466977,
+          "harmful_prevalence": 0.18569182389937106,
+          "harmful_auprc": 0.1980752360717491,
+          "harmful_auprc_lift": 0.012383412172378039,
+          "harmful_auroc": 0.537564230104093
+        },
+        {
+          "count": 38040,
+          "mae": 0.020189100423917913,
+          "smooth_l1": 0.017302854710683817,
+          "spearman": 0.0185417292805219,
+          "positive_prevalence": 0.32952155625657203,
+          "positive_auprc": 0.31966827115989305,
+          "positive_auprc_lift": -0.009853285096678988,
+          "positive_auroc": 0.5066986044251551,
+          "harmful_prevalence": 0.19235015772870662,
+          "harmful_auprc": 0.19995782471220308,
+          "harmful_auprc_lift": 0.007607666983496464,
+          "harmful_auroc": 0.523708256101971
+        }
+      ],
+      "selected_config_counts": {
+        "w128_lr1e-3_neg2p0": 2,
+        "w128_lr3e-4_neg2p0": 1,
+        "w64_lr1e-3_neg1p0": 1,
+        "w64_lr1e-3_neg3p0": 1
+      }
+    },
+    {
+      "pair_id": "db15k_mhyper_adamf",
+      "go_signal_components": {
+        "nonreference_spearman_gt_0": true,
+        "positive_auprc_lift_gt_0": true,
+        "harmful_auprc_lift_gt_0": false,
+        "highest_10pct_actual_mean_advantage_gt_0": false
+      },
+      "outer_fold_metrics": [
+        {
+          "count": 37920,
+          "mae": 0.03203524372622991,
+          "smooth_l1": 0.02831620715247292,
+          "spearman": 0.09341884958687216,
+          "positive_prevalence": 0.35809599156118144,
+          "positive_auprc": 0.4448046167384456,
+          "positive_auprc_lift": 0.08670862517726419,
+          "positive_auroc": 0.6147610146249147,
+          "harmful_prevalence": 0.20514240506329115,
+          "harmful_auprc": 0.20614179514520725,
+          "harmful_auprc_lift": 0.0009993900819161017,
+          "harmful_auroc": 0.46795680347786833
+        },
+        {
+          "count": 37944,
+          "mae": 0.03024149968305151,
+          "smooth_l1": 0.026932254231038434,
+          "spearman": 0.09339341722706793,
+          "positive_prevalence": 0.3371020451191229,
+          "positive_auprc": 0.41753932605522265,
+          "positive_auprc_lift": 0.08043728093609975,
+          "positive_auroc": 0.6116689494101121,
+          "harmful_prevalence": 0.22011385199240988,
+          "harmful_auprc": 0.2108585799379188,
+          "harmful_auprc_lift": -0.009255272054491087,
+          "harmful_auroc": 0.452572365233588
+        },
+        {
+          "count": 38064,
+          "mae": 0.031675884175654284,
+          "smooth_l1": 0.02782977877505336,
+          "spearman": 0.11076313476614545,
+          "positive_prevalence": 0.3463114754098361,
+          "positive_auprc": 0.4508991758595407,
+          "positive_auprc_lift": 0.10458770044970461,
+          "positive_auroc": 0.6358807792169116,
+          "harmful_prevalence": 0.20578499369482975,
+          "harmful_auprc": 0.20516402119849325,
+          "harmful_auprc_lift": -0.0006209724963364971,
+          "harmful_auroc": 0.45203319604372516
+        },
+        {
+          "count": 38160,
+          "mae": 0.03223871106547796,
+          "smooth_l1": 0.027816464756750182,
+          "spearman": 0.09623620935105276,
+          "positive_prevalence": 0.34659329140461215,
+          "positive_auprc": 0.436678367867084,
+          "positive_auprc_lift": 0.09008507646247188,
+          "positive_auroc": 0.6231567943029055,
+          "harmful_prevalence": 0.20828092243186583,
+          "harmful_auprc": 0.20330654923645086,
+          "harmful_auprc_lift": -0.004974373195414966,
+          "harmful_auroc": 0.4531498964106091
+        },
+        {
+          "count": 38040,
+          "mae": 0.030799251826772595,
+          "smooth_l1": 0.02787735966752307,
+          "spearman": 0.09330234096834016,
+          "positive_prevalence": 0.34613564668769714,
+          "positive_auprc": 0.3857646817944548,
+          "positive_auprc_lift": 0.03962903510675764,
+          "positive_auroc": 0.5363770731956907,
+          "harmful_prevalence": 0.21606203995793902,
+          "harmful_auprc": 0.2853708475882789,
+          "harmful_auprc_lift": 0.06930880763033989,
+          "harmful_auroc": 0.5528074884610104
+        }
+      ],
+      "selected_config_counts": {
+        "w128_lr1e-3_neg1p0": 1,
+        "w128_lr1e-3_neg1p5": 1,
+        "w128_lr1e-3_neg2p0": 1,
+        "w128_lr3e-4_neg3p0": 1,
+        "w64_lr1e-3_neg3p0": 1
+      }
+    },
+    {
+      "pair_id": "db15k_native_adamf",
+      "go_signal_components": {
+        "nonreference_spearman_gt_0": true,
+        "positive_auprc_lift_gt_0": true,
+        "harmful_auprc_lift_gt_0": true,
+        "highest_10pct_actual_mean_advantage_gt_0": true
+      },
+      "outer_fold_metrics": [
+        {
+          "count": 37920,
+          "mae": 0.033663750990073286,
+          "smooth_l1": 0.030005902809394035,
+          "spearman": 0.11927751401643909,
+          "positive_prevalence": 0.41012658227848103,
+          "positive_auprc": 0.4627313156776854,
+          "positive_auprc_lift": 0.05260473339920435,
+          "positive_auroc": 0.5572011910317392,
+          "harmful_prevalence": 0.20511603375527426,
+          "harmful_auprc": 0.22343188258897598,
+          "harmful_auprc_lift": 0.018315848833701714,
+          "harmful_auroc": 0.5322519776494968
+        },
+        {
+          "count": 37944,
+          "mae": 0.035324858758208504,
+          "smooth_l1": 0.031167305174792284,
+          "spearman": 0.0838571103328926,
+          "positive_prevalence": 0.4031203879401223,
+          "positive_auprc": 0.4460423063858991,
+          "positive_auprc_lift": 0.04292191844577681,
+          "positive_auroc": 0.5562785713619314,
+          "harmful_prevalence": 0.21270820156019396,
+          "harmful_auprc": 0.23516142318466698,
+          "harmful_auprc_lift": 0.022453221624473024,
+          "harmful_auroc": 0.5480355522141988
+        },
+        {
+          "count": 38064,
+          "mae": 0.03515706903742899,
+          "smooth_l1": 0.031473185765164155,
+          "spearman": 0.10415757325491976,
+          "positive_prevalence": 0.39457229928541404,
+          "positive_auprc": 0.48015766311590435,
+          "positive_auprc_lift": 0.08558536383049031,
+          "positive_auroc": 0.5938917986735858,
+          "harmful_prevalence": 0.21413934426229508,
+          "harmful_auprc": 0.2197443061367446,
+          "harmful_auprc_lift": 0.0056049618744495044,
+          "harmful_auroc": 0.502263514258827
+        },
+        {
+          "count": 38160,
+          "mae": 0.03349707611326997,
+          "smooth_l1": 0.029897500943346454,
+          "spearman": 0.14271386965292238,
+          "positive_prevalence": 0.38967505241090145,
+          "positive_auprc": 0.4813291936653897,
+          "positive_auprc_lift": 0.09165414125448823,
+          "positive_auroc": 0.6097217577383841,
+          "harmful_prevalence": 0.21129454926624738,
+          "harmful_auprc": 0.21946398786697974,
+          "harmful_auprc_lift": 0.008169438600732354,
+          "harmful_auroc": 0.5209023359919591
+        },
+        {
+          "count": 38040,
+          "mae": 0.03448049148428269,
+          "smooth_l1": 0.030750684405297483,
+          "spearman": 0.10086864115853156,
+          "positive_prevalence": 0.4079652996845426,
+          "positive_auprc": 0.48237588575686147,
+          "positive_auprc_lift": 0.07441058607231887,
+          "positive_auroc": 0.6011953305781728,
+          "harmful_prevalence": 0.20970031545741324,
+          "harmful_auprc": 0.20269810253722997,
+          "harmful_auprc_lift": -0.007002212920183271,
+          "harmful_auroc": 0.48045973206798503
+        }
+      ],
+      "selected_config_counts": {
+        "w128_lr1e-3_neg1p0": 1,
+        "w128_lr1e-3_neg2p0": 1,
+        "w128_lr3e-4_neg1p5": 1,
+        "w64_lr1e-3_neg1p5": 1,
+        "w64_lr1e-3_neg2p0": 1
+      }
+    }
+  ]
+}

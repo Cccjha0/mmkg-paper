@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="460" viewBox="0 0 1040 460">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,sans-serif;fill:#202124}.title{font-size:20px;font-weight:700}.subtitle{font-size:14px;font-weight:700}.axis{font-size:10px}.legend{font-size:12px}</style>
+<text x="24" y="30" class="title">AACPI Phase 2B OOF advantage calibration</text>
+<text x="24" y="52" class="subtitle">db15k / db15k_mhyper_native — non-reference DEV actions</text>
+<text x="70" y="85" class="subtitle">Predicted vs actual mean U</text>
+<line x1="70" y1="230.0" x2="480" y2="230.0" stroke="#a0aec0" stroke-dasharray="4 3"/>
+<circle cx="104.17" cy="275.40" r="4" fill="#2b6cb0"/>
+<circle cx="172.50" cy="249.11" r="4" fill="#2b6cb0"/>
+<circle cx="240.83" cy="237.24" r="4" fill="#2b6cb0"/>
+<circle cx="309.17" cy="229.41" r="4" fill="#2b6cb0"/>
+<circle cx="377.50" cy="220.92" r="4" fill="#2b6cb0"/>
+<circle cx="445.83" cy="205.53" r="4" fill="#2b6cb0"/>
+<polyline points="104.17,275.40 172.50,249.11 240.83,237.24 309.17,229.41 377.50,220.92 445.83,205.53" fill="none" stroke="#2b6cb0" stroke-width="2.5"/>
+<line x1="70" y1="417" x2="94" y2="417" stroke="#2b6cb0" stroke-width="3"/>
+<text x="100" y="421" class="legend">Predicted</text>
+<circle cx="104.17" cy="340.00" r="4" fill="#2f855a"/>
+<circle cx="172.50" cy="274.33" r="4" fill="#2f855a"/>
+<circle cx="240.83" cy="252.62" r="4" fill="#2f855a"/>
+<circle cx="309.17" cy="236.12" r="4" fill="#2f855a"/>
+<circle cx="377.50" cy="244.83" r="4" fill="#2f855a"/>
+<circle cx="445.83" cy="235.95" r="4" fill="#2f855a"/>
+<polyline points="104.17,340.00 172.50,274.33 240.83,252.62 309.17,236.12 377.50,244.83 445.83,235.95" fill="none" stroke="#2f855a" stroke-width="2.5"/>
+<line x1="180" y1="417" x2="204" y2="417" stroke="#2f855a" stroke-width="3"/>
+<text x="210" y="421" class="legend">Actual</text>
+<text x="104.17" y="373" text-anchor="middle" class="axis">lowest_10%</text>
+<text x="172.50" y="373" text-anchor="middle" class="axis">10_to_30%</text>
+<text x="240.83" y="373" text-anchor="middle" class="axis">30_to_50%</text>
+<text x="309.17" y="373" text-anchor="middle" class="axis">50_to_70%</text>
+<text x="377.50" y="373" text-anchor="middle" class="axis">70_to_90%</text>
+<text x="445.83" y="373" text-anchor="middle" class="axis">highest_10%</text>
+<text x="62" y="108" text-anchor="end" class="axis">+0.0159</text>
+<text x="62" y="233.0" text-anchor="end" class="axis">0</text>
+<text x="62" y="355" text-anchor="end" class="axis">-0.0159</text>
+<text x="580" y="85" class="subtitle">Actual outcome rates</text>
+<line x1="580" y1="355" x2="990" y2="355" stroke="#5f6368"/>
+<rect x="588.00" y="295.84" width="25.17" height="59.16" fill="#2f855a"/>
+<rect x="613.17" y="307.65" width="25.17" height="47.35" fill="#c53030"/>
+<text x="614.17" y="373" text-anchor="middle" class="axis">lowest_10%</text>
+<rect x="656.33" y="280.16" width="25.17" height="74.84" fill="#2f855a"/>
+<rect x="681.50" y="305.74" width="25.17" height="49.26" fill="#c53030"/>
+<text x="682.50" y="373" text-anchor="middle" class="axis">10_to_30%</text>
+<rect x="724.67" y="268.56" width="25.17" height="86.44" fill="#2f855a"/>
+<rect x="749.83" y="311.81" width="25.17" height="43.19" fill="#c53030"/>
+<text x="750.83" y="373" text-anchor="middle" class="axis">30_to_50%</text>
+<rect x="793.00" y="266.33" width="25.17" height="88.67" fill="#2f855a"/>
+<rect x="818.17" y="306.88" width="25.17" height="48.12" fill="#c53030"/>
+<text x="819.17" y="373" text-anchor="middle" class="axis">50_to_70%</text>
+<rect x="861.33" y="264.76" width="25.17" height="90.24" fill="#2f855a"/>
+<rect x="886.50" y="301.72" width="25.17" height="53.28" fill="#c53030"/>
+<text x="887.50" y="373" text-anchor="middle" class="axis">70_to_90%</text>
+<rect x="929.67" y="268.82" width="25.17" height="86.18" fill="#2f855a"/>
+<rect x="954.83" y="314.21" width="25.17" height="40.79" fill="#c53030"/>
+<text x="955.83" y="373" text-anchor="middle" class="axis">highest_10%</text>
+<text x="572" y="358.0" text-anchor="end" class="axis">0%</text>
+<text x="572" y="233.0" text-anchor="end" class="axis">50%</text>
+<text x="572" y="108.0" text-anchor="end" class="axis">100%</text>
+<rect x="580" y="403" width="12" height="12" fill="#2f855a"/><text x="598" y="414" class="legend">P(U &gt; 0)</text>
+<rect x="690" y="403" width="12" height="12" fill="#c53030"/><text x="708" y="414" class="legend">P(U &lt; 0)</text>
+</svg>

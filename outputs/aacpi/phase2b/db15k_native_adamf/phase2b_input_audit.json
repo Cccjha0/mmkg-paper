@@ -48,6 +48,6 @@
       "4": 9510
     }
   },
-  "dry_run": true,
+  "dry_run": false,
   "test_accessed": false
 }
