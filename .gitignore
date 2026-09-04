@@ -63,6 +63,13 @@ outputs/score_ensemble/full_smoke/
 outputs/score_ensemble/full_smoke_figures/
 outputs/score_ensemble/full_smoke_tables/
 
+# AACPI large reproducible artifacts (retain manifests/summaries in Git)
+outputs/aacpi/action_response_assets/*/dev_action_response_features.csv.gz
+outputs/aacpi/phase3a/*/r*/dev_oof_predictions.csv.gz
+outputs/aacpi/phase4a/raw/
+outputs/aacpi/phase4a/latents/
+outputs/aacpi/phase4a/oof_raw/
+
 # OS
 .DS_Store
 Thumbs.db

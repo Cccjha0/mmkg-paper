@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "phase": "AACPI Phase 3A",
+  "split": "dev",
+  "pair_id": "mkgw_mhyper_adamf",
+  "dataset": "mkg_w",
+  "expert_a": "M-Hyper",
+  "expert_b": "AdaMF-MAT",
+  "alpha0": 1.0,
+  "action_grid": [
+    0.7,
+    0.8,
+    0.9,
+    0.95,
+    1.0
+  ],
+  "candidate_domain": "full_unfiltered",
+  "target_identity_used_for_features": false,
+  "score_normalization": "router.score_combination.normalize_candidate_scores(query_zscore)",
+  "utility_table": {
+    "path": "outputs/aacpi/utility_tables/mkgw_mhyper_adamf_dev_utility_table.csv.gz",
+    "sha256": "33765d12c6832c7fa53256e76ed1b7085bf87e1f68ee4ecdd86951283010cb2f"
+  },
+  "full_ranking_summary": {
+    "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_summary.json",
+    "sha256": "2a1293bb2f5a5e8a681e67fe7091d5f3c99c3357761b4569c7b3efc6610eb5a5"
+  },
+  "feature_contract": {
+    "path": "outputs/aacpi/action_response_assets/mkgw_mhyper_adamf/feature_manifest.json",
+    "sha256": "e38ec724fb29e67c079d89c2f3730d08deee30388a0869de1b9f5d15af7a54b5"
+  },
+  "source_files": {
+    "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1/config_merged.json": "7376df5cf5383162ff51832984063274c38d21cf153fbf0d05cac28123ab80ae",
+    "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_060855_seed1/config_merged.json": "93a231efa327c5e836013149227d7c7484326ecf699ce060b153551e552f0497",
+    "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1/best.ckpt": "4a5cb66cf61d4cf4d68dfabf7c0560333563e7497b79b36872665b42396bbfed",
+    "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_060855_seed1/best.ckpt": "28781f99687850e5f7ca595bc8a80e320b7231c5fbae58992af6857e9d776828",
+    "ml/artifacts/outputs/mkg_w_mhyper/20260902_015400_seed2/config_merged.json": "08676952cb4528acbf2421cb6c6f8ffe998c0d81134fd18e7abd99221ef31fa3",
+    "ml/artifacts/outputs/mkg_w_mhyper/20260902_015400_seed2/best.ckpt": "7d51cbc3ae0fa8ae7d16bb318c5d76affe27caefbcd94f7015c938e58c739337",
+    "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_083530_seed2/config_merged.json": "88c5035bc5c51b9ecabf689950b4596dd6e19a8be9d2bfd5fd1c15d053f29284",
+    "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_083530_seed2/best.ckpt": "267ea0cddb9eb6dc94e853b65e1f50d276f0800d2aa83a9f6bf2b975b8f93f23",
+    "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_142555_seed3/config_merged.json": "2dcb8f5df2e1ae5b7e5b09428267b1e5ebcffcceac7bd03d495fec9ca3c26647",
+    "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_142555_seed3/best.ckpt": "9027b50fe93c066bec46a3c2a7ffb79f406045014c38338103514ba6731b1a18",
+    "ml/artifacts/outputs/mkg_w_mhyper/20260902_020435_seed3/config_merged.json": "15b0ac51e56f6d379b6a8a1e77205c5b89a8a546c2d3b13d7a8f38578f805b29",
+    "ml/artifacts/outputs/mkg_w_mhyper/20260902_020435_seed3/best.ckpt": "42f6d06ba2ec51106a1cf04cf09fb49aab439666fdfd293e1818cf19087ac30f",
+    "data/datasets/mkg_w/processed/entity2id.json": "29f1dc806a021425b4489e9e8cbb3143c2a2b4a3f44aea70bd88af147e787a7e",
+    "data/datasets/mkg_w/processed/has_img.pt": "1ef42bc0c282f207d449f357692457463556edc2311ec0708fa0aa767ef2ed6a",
+    "data/datasets/mkg_w/processed/has_text.pt": "177bb30043375084f3b279c5ad1dac14c8d110293b60e72a2ed0ee8e565b8350",
+    "data/datasets/mkg_w/processed/img_feat.pt": "f9edaf3ba52960f7a66f4520cb48f5874431ce8043579d2a4122c2d67ce6cc8e",
+    "data/datasets/mkg_w/processed/manifest.json": "2fa1d9fdda81d6c9302c521e372ec698e086b36ef20e1307111a6dade6d17a13",
+    "data/datasets/mkg_w/processed/relation2id.json": "8efa192393bab3935e164d15568e9b6a51f6037eb7e0dcab23eb4c5c90689480",
+    "data/datasets/mkg_w/processed/text_feat.pt": "2e6e0aee99d958be3aebd35ddb3988c53f4e2d5c2c4c11f316c1fc2e14b9dc95",
+    "data/datasets/mkg_w/processed/train.tsv": "61e60a55886675a9144b9725f9b7451e3002a49bbf9429c50e322c4d943f2fb3",
+    "data/datasets/mkg_w/processed/valid.tsv": "03d25d880788492632516c3a419f4d92b4c59216123a89201819e1203075f254"
+  },
+  "output": {
+    "path": "outputs/aacpi/action_response_assets/mkgw_mhyper_adamf/dev_action_response_features.csv.gz",
+    "sha256": "66657a9cf262177ed663e03e402a64666803292e7e8bf2b8978d54a7ff688f5d"
+  },
+  "n_rows": 128280,
+  "n_queries": 25656,
+  "n_original_triples": 4276,
+  "test_rows_accessed": 0,
+  "test_evaluation_commands": 0,
+  "expert_training_performed": false,
+  "checkpoint_selection_performed": false
+}

@@ -1,0 +1,4 @@
+representation,h1_pass_count,h1_pass_pairs,prior_fail_clear_improvement_count,mkgw_native_adamf_clear_improvement,prior_pass_h1_stable_count,prior_pass_no_double_collapse,primary_gate,representation_recovery_gate,prior_pass_stability_gate,phase3a_go
+R1,2,mkgw_mhyper_adamf;mkgw_mhyper_native,0,False,2,True,False,False,True,False
+R2,3,db15k_native_adamf;mkgw_mhyper_adamf;mkgw_mhyper_native,0,False,3,True,False,False,True,False
+R3,3,db15k_native_adamf;mkgw_mhyper_adamf;mkgw_mhyper_native,0,False,3,True,False,False,True,False

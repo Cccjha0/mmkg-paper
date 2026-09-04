@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="540" viewBox="0 0 1180 540">
+<rect width="100%" height="100%" fill="white"/>
+<text x="590.0" y="28" text-anchor="middle" font-family="Arial" font-size="18">Phase 3A positive-vs-harmful AUROC lift</text>
+<line x1="80" y1="270.0" x2="1100" y2="270.0" stroke="#222"/>
+<rect x="81.00" y="227.34" width="40.50" height="42.66" fill="#777777"/>
+<rect x="123.50" y="210.09" width="40.50" height="59.91" fill="#377eb8"/>
+<text x="166.00" y="520" text-anchor="middle" font-family="Arial" font-size="10" transform="rotate(-18 166.00,520)">db15k mhyper adamf</text>
+<rect x="166.00" y="229.22" width="40.50" height="40.78" fill="#e41a1c"/>
+<rect x="208.50" y="214.78" width="40.50" height="55.22" fill="#4daf4a"/>
+<rect x="251.00" y="238.41" width="40.50" height="31.59" fill="#777777"/>
+<rect x="293.50" y="206.70" width="40.50" height="63.30" fill="#377eb8"/>
+<text x="336.00" y="520" text-anchor="middle" font-family="Arial" font-size="10" transform="rotate(-18 336.00,520)">db15k mhyper native</text>
+<rect x="336.00" y="266.98" width="40.50" height="3.02" fill="#e41a1c"/>
+<rect x="378.50" y="226.90" width="40.50" height="43.10" fill="#4daf4a"/>
+<rect x="421.00" y="198.03" width="40.50" height="71.97" fill="#777777"/>
+<rect x="463.50" y="218.42" width="40.50" height="51.58" fill="#377eb8"/>
+<text x="506.00" y="520" text-anchor="middle" font-family="Arial" font-size="10" transform="rotate(-18 506.00,520)">db15k native adamf</text>
+<rect x="506.00" y="211.91" width="40.50" height="58.09" fill="#e41a1c"/>
+<rect x="548.50" y="217.83" width="40.50" height="52.17" fill="#4daf4a"/>
+<rect x="591.00" y="185.30" width="40.50" height="84.70" fill="#777777"/>
+<rect x="633.50" y="172.51" width="40.50" height="97.49" fill="#377eb8"/>
+<text x="676.00" y="520" text-anchor="middle" font-family="Arial" font-size="10" transform="rotate(-18 676.00,520)">mkgw mhyper adamf</text>
+<rect x="676.00" y="166.56" width="40.50" height="103.44" fill="#e41a1c"/>
+<rect x="718.50" y="167.09" width="40.50" height="102.91" fill="#4daf4a"/>
+<rect x="761.00" y="89.05" width="40.50" height="180.95" fill="#777777"/>
+<rect x="803.50" y="83.53" width="40.50" height="186.47" fill="#377eb8"/>
+<text x="846.00" y="520" text-anchor="middle" font-family="Arial" font-size="10" transform="rotate(-18 846.00,520)">mkgw mhyper native</text>
+<rect x="846.00" y="80.00" width="40.50" height="190.00" fill="#e41a1c"/>
+<rect x="888.50" y="86.40" width="40.50" height="183.60" fill="#4daf4a"/>
+<rect x="931.00" y="252.23" width="40.50" height="17.77" fill="#777777"/>
+<rect x="973.50" y="246.31" width="40.50" height="23.69" fill="#377eb8"/>
+<text x="1016.00" y="520" text-anchor="middle" font-family="Arial" font-size="10" transform="rotate(-18 1016.00,520)">mkgw native adamf</text>
+<rect x="1016.00" y="242.37" width="40.50" height="27.63" fill="#e41a1c"/>
+<rect x="1058.50" y="238.50" width="40.50" height="31.50" fill="#4daf4a"/>
+</svg>

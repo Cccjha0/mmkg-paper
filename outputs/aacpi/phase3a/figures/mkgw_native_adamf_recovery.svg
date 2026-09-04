@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="540" viewBox="0 0 1180 540">
+<rect width="100%" height="100%" fill="white"/>
+<text x="590.0" y="28" text-anchor="middle" font-family="Arial" font-size="18">MKG-W NativE + AdaMF-MAT recovery</text>
+<line x1="80" y1="270.0" x2="1100" y2="270.0" stroke="#222"/>
+<rect x="81.00" y="270.00" width="253.00" height="148.10" fill="#777777"/>
+<rect x="336.00" y="270.00" width="253.00" height="181.88" fill="#377eb8"/>
+<text x="591.00" y="520" text-anchor="middle" font-family="Arial" font-size="10" transform="rotate(-18 591.00,520)">mkgw native adamf</text>
+<rect x="591.00" y="270.00" width="253.00" height="190.00" fill="#e41a1c"/>
+<rect x="846.00" y="270.00" width="253.00" height="134.60" fill="#4daf4a"/>
+</svg>

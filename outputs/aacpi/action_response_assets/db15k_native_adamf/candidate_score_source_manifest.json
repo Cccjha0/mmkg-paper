@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "phase": "AACPI Phase 3A",
+  "split": "dev",
+  "pair_id": "db15k_native_adamf",
+  "dataset": "db15k",
+  "expert_a": "NativE",
+  "expert_b": "AdaMF-MAT",
+  "alpha0": 1.0,
+  "action_grid": [
+    0.7,
+    0.8,
+    0.9,
+    0.95,
+    1.0
+  ],
+  "candidate_domain": "full_unfiltered",
+  "target_identity_used_for_features": false,
+  "score_normalization": "router.score_combination.normalize_candidate_scores(query_zscore)",
+  "utility_table": {
+    "path": "outputs/aacpi/utility_tables/db15k_native_adamf_dev_utility_table.csv.gz",
+    "sha256": "b5769ce5d98a8b5198567bd1f824a9404ae889ca43030ee3b65d1caf1677ed3b"
+  },
+  "full_ranking_summary": {
+    "path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/dev_summary.json",
+    "sha256": "260c0e2590c340fd8e99a6c039048cb4e38db9f9673564689864c0ef302eec56"
+  },
+  "feature_contract": {
+    "path": "outputs/aacpi/action_response_assets/db15k_native_adamf/feature_manifest.json",
+    "sha256": "e38ec724fb29e67c079d89c2f3730d08deee30388a0869de1b9f5d15af7a54b5"
+  },
+  "source_files": {
+    "ml/artifacts/outputs/db15k_native/20260831_223530_seed1/best.ckpt": "2bd4ff09976173f06a07bfac1260d7b9fb8b3b9a72ebcc56d8805688a13e6c79",
+    "ml/artifacts/outputs/db15k_adamf_mat/20260901_030904_seed1/best.ckpt": "0e306e56c556ef776678850c3ca7258b9e5b90eefb14245a7b3902ad71da1861",
+    "ml/artifacts/outputs/db15k_native/20260831_223530_seed1/config_merged.json": "1d295e9bc891d148eea44d6bd2a0876938f354c75b4c9999973a0fd77b0e0df9",
+    "ml/artifacts/outputs/db15k_adamf_mat/20260901_030904_seed1/config_merged.json": "25357d0ae01320f8ac1bc5d2ab53c8018929f84015de0a9f40ff0cb3e9dd80ae",
+    "ml/artifacts/outputs/db15k_native/20260902_182809_seed2/best.ckpt": "de24c0ad1a9127d6ef951e16b67f396e16b6d02515acf03ceaa8f6666d39b6a6",
+    "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2/best.ckpt": "bcefd66bbbecfb60fb2a29ed8166b7e7f8d337494b539f81fbbd66d262b7ff00",
+    "ml/artifacts/outputs/db15k_native/20260902_182809_seed2/config_merged.json": "c51f5f474d244bed3c583749b6e5ab7299a4621cbb3666a2b818f2581b152b0e",
+    "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2/config_merged.json": "8b4c3561b7cd49a64903f8918c42e158fe4d1c4f14e64599d46b53d770b77ce8",
+    "ml/artifacts/outputs/db15k_native/20260903_012002_seed3/config_merged.json": "21a119dcf44a869d71de0d1a0ee5d2eeb23acd46e525a77f48dd4d71532eaac0",
+    "ml/artifacts/outputs/db15k_adamf_mat/20260903_090422_seed3/best.ckpt": "391f06d80621a274b02aeea42b744cddc84964427321c8533d2706e1588fd9ad",
+    "ml/artifacts/outputs/db15k_adamf_mat/20260903_090422_seed3/config_merged.json": "f19d6ba3c7d49a30bb4e8820eb2fbc4f64fb0b8ef5c3f829f71482ef9a452140",
+    "ml/artifacts/outputs/db15k_native/20260903_012002_seed3/best.ckpt": "5ad6151d9acae60c3c3b1562aa9092d54b10ecaaa88f3ea07468493e1d272355",
+    "data/datasets/db15k/processed/entity2id.json": "f5e52e7595f6086ad3e60b620669cbc5763d9db5c32893bc6abb9bdc0a7222e3",
+    "data/datasets/db15k/processed/has_img.pt": "cc9aa38ab5ef75d10a86a1cb9ff5696cab31eb0fa815f725af91adff4c749ec0",
+    "data/datasets/db15k/processed/has_text.pt": "def3d3017ea16a4cca07e2526809f89c4f5752a180369cf4c9902db9c12451fe",
+    "data/datasets/db15k/processed/img_feat.pt": "e739d859a5c02ffd295827fc12301ea78354423b70eadd1ccf1b39259afba352",
+    "data/datasets/db15k/processed/manifest.json": "395e0783448fa9b1a0e153d43562108c9a79fe17576a9da59e830050dd3f7410",
+    "data/datasets/db15k/processed/relation2id.json": "d601a1f835ae77c91135d6b814902e12b115b6b9fc7431a27902d7d928d48a87",
+    "data/datasets/db15k/processed/text_feat.pt": "d33e8bb611f0cb47de095a78cbaba7538cf603ad97e7c02bfa9201ccc91f4a96",
+    "data/datasets/db15k/processed/train.tsv": "df9faa7bcba6856ad718432f7141e453fb001b2f9e5aa6580e8d1a9756987435",
+    "data/datasets/db15k/processed/valid.tsv": "4bfaee6744dc4cb9fb1952e822c3d9d3fef405252432876201a2e9d210d8fff8"
+  },
+  "output": {
+    "path": "outputs/aacpi/action_response_assets/db15k_native_adamf/dev_action_response_features.csv.gz",
+    "sha256": "da19c904b03d7400c7ac78a1e27869884e92b0500c532a15cc114247aa2e5cd4"
+  },
+  "n_rows": 237660,
+  "n_queries": 47532,
+  "n_original_triples": 7922,
+  "test_rows_accessed": 0,
+  "test_evaluation_commands": 0,
+  "expert_training_performed": false,
+  "checkpoint_selection_performed": false
+}

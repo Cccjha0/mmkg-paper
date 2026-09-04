@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "phase": "AACPI Phase 3A",
+  "representation": "R1",
+  "split": "dev",
+  "dataset": "db15k",
+  "pair_id": "db15k_native_adamf",
+  "feature_table": "outputs/aacpi/action_response_assets/db15k_native_adamf/dev_action_response_features.csv.gz",
+  "feature_table_sha256": "da19c904b03d7400c7ac78a1e27869884e92b0500c532a15cc114247aa2e5cd4",
+  "search_space": "docs/protocols/AACPI_V2_PHASE2_SEARCH_SPACE.yaml",
+  "search_space_sha256": "bc5910b8ec8843239edc4e2288bea16c194c37252a5e57d00658c10fedd8e554",
+  "feature_fields": [
+    "geometry_direction_tail",
+    "geometry_a_top1",
+    "geometry_a_top5_mean",
+    "geometry_a_top1_top2_margin",
+    "geometry_a_score_std",
+    "geometry_b_top1",
+    "geometry_b_top5_mean",
+    "geometry_b_top1_top2_margin",
+    "geometry_b_score_std",
+    "geometry_top1_delta_a_minus_b",
+    "geometry_top5_delta_a_minus_b",
+    "geometry_margin_delta_a_minus_b",
+    "geometry_std_delta_a_minus_b",
+    "delta_alpha",
+    "abs_delta_alpha",
+    "r1_expert_top5_jaccard",
+    "r1_expert_top10_jaccard",
+    "r1_expert_top20_jaccard",
+    "r1_union20_rank_spearman",
+    "r1_union20_rank_displacement_mean",
+    "r1_union20_rank_displacement_median",
+    "r1_union20_rank_displacement_max",
+    "r1_expert_top1_same",
+    "r1_a_top1_rank_under_b",
+    "r1_b_top1_rank_under_a"
+  ],
+  "n_features": 25,
+  "n_rows": 237660,
+  "n_queries": 47532,
+  "n_original_triples": 7922,
+  "outer_fold_audit": {
+    "assignment": "relation-stratified SHA256 ordering, then round-robin by original triple with a deterministic per-relation fold offset",
+    "fold_seed": 20260901,
+    "n_folds": 5,
+    "n_unique_triples": 7922,
+    "triple_groups_per_fold": {
+      "0": 1580,
+      "1": 1581,
+      "2": 1586,
+      "3": 1590,
+      "4": 1585
+    },
+    "observations_per_fold": {
+      "0": 1580,
+      "1": 1581,
+      "2": 1586,
+      "3": 1590,
+      "4": 1585
+    },
+    "utility_rows_per_fold": {
+      "0": 47400,
+      "1": 47430,
+      "2": 47580,
+      "3": 47700,
+      "4": 47550
+    },
+    "query_instances_per_fold": {
+      "0": 9480,
+      "1": 9486,
+      "2": 9516,
+      "3": 9540,
+      "4": 9510
+    }
+  },
+  "frozen_phase2b_estimator": true,
+  "test_rows_accessed": 0,
+  "test_evaluation_commands": 0,
+  "dry_run": false
+}

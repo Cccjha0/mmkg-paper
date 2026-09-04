@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "status": "frozen_before_systematic_comparison",
+  "representations": [
+    "R0",
+    "R1",
+    "R2",
+    "R3"
+  ],
+  "estimator": "frozen AACPI V2 Phase 2B two-hidden-layer MLP",
+  "nested_cv": "five outer/three inner original-triple grouped folds",
+  "pair_gate": "Spearman, positive AP lift, harmful AP lift, and top-decile actual U all > 0",
+  "clear_improvement_thresholds": {
+    "positive_vs_harmful_auroc_delta_min": 0.02,
+    "positive_auprc_lift_delta_min": 0.01,
+    "harmful_auprc_lift_delta_min": 0.01,
+    "top_decile_actual_u_delta_min": 0.001,
+    "top_decile_actual_u_must_be_positive": true,
+    "spearman_delta_min": 0.0
+  },
+  "policy_evaluation": false
+}
