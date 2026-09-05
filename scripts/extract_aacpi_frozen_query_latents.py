@@ -121,10 +121,10 @@ def main() -> None:
     if not expected <= set(runs):
         raise RuntimeError(f"Missing frozen runs: {sorted(expected-set(runs))}")
     outputs: dict[str, np.ndarray] = {
-        "query_id": frame.query_id.astype(str).to_numpy(),
-        "original_triple_id": frame.original_triple_id.astype(str).to_numpy(),
+        "query_id": np.asarray(frame.query_id.astype(str).tolist(), dtype=np.str_),
+        "original_triple_id": np.asarray(frame.original_triple_id.astype(str).tolist(), dtype=np.str_),
         "seed": frame.seed.to_numpy(np.int64),
-        "direction": frame.direction.astype(str).to_numpy(),
+        "direction": np.asarray(frame.direction.astype(str).tolist(), dtype=np.str_),
     }
     dimensions, checkpoint_sources = {}, []
     for position, expert in zip(("a", "b"), experts):
@@ -168,7 +168,7 @@ def main() -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(output_path, **outputs)
     payload = {
-        "schema_version": 1, "phase": "AACPI Phase 4A", "split": "dev",
+        "schema_version": 2, "phase": "AACPI Phase 4A", "split": "dev",
         "dataset": str(frame.dataset.iloc[0]), "pair_id": str(frame.pair_id.iloc[0]),
         "expert_a": experts[0], "expert_b": experts[1], "n_queries": len(frame),
         "raw_dimensions": dimensions,
@@ -178,6 +178,7 @@ def main() -> None:
             "AdaMF-MAT": "known-side fused entity concatenated with relation embedding",
         },
         "candidate_independent": True, "current_target_identity_used": False,
+        "npz_string_storage": "fixed_width_unicode_no_pickle",
         "source_table": {"path": portable_path(table_path), "sha256": sha256_file(table_path)},
         "source_manifest": {"path": portable_path(source_path), "sha256": sha256_file(source_path)},
         "frozen_runs": checkpoint_sources,

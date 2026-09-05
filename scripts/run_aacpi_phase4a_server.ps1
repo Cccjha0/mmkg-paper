@@ -47,12 +47,20 @@ foreach ($pair in $pairs) {
     }
     if ($Stage -in @("all", "latents")) {
         $latentManifest = "$root/$pair/latent_extraction_manifest.json"
-        if (-not $Overwrite -and (Test-Path -LiteralPath $latentFile) -and (Test-Path -LiteralPath $latentManifest)) {
+        $latentSchemaCurrent = $false
+        if ((Test-Path -LiteralPath $latentFile) -and (Test-Path -LiteralPath $latentManifest)) {
+            try {
+                $latentSchemaCurrent = [int](Get-Content -LiteralPath $latentManifest -Raw | ConvertFrom-Json).schema_version -ge 2
+            } catch {
+                $latentSchemaCurrent = $false
+            }
+        }
+        if (-not $Overwrite -and $latentSchemaCurrent) {
             Write-Host "[SKIP] Frozen latents already complete: $pair"
         } else {
             $pairOverwriteArg = $overwriteArg
             if (-not $Overwrite -and ((Test-Path -LiteralPath $latentFile) -or (Test-Path -LiteralPath $latentManifest))) {
-                Write-Host "[RESUME] Rebuilding partial latent outputs: $pair"
+                Write-Host "[RESUME] Rebuilding partial or legacy latent outputs: $pair"
                 $pairOverwriteArg = @("--overwrite")
             }
             python scripts/extract_aacpi_frozen_query_latents.py `

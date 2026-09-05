@@ -83,7 +83,12 @@ def standardization_audit(values: np.ndarray, frame, train_indices: np.ndarray) 
 def load_latents(path: Path, frame):
     reject_test_path(path)
     with np.load(path, allow_pickle=False) as payload:
-        query_ids = payload["query_id"].astype(str)
+        try:
+            query_ids = payload["query_id"].astype(str)
+        except ValueError as exc:
+            raise RuntimeError(
+                "Latent NPZ contains object arrays; rebuild it with the schema-v2 fixed-width Unicode extractor"
+            ) from exc
         z_a = payload["z_a"].astype(np.float64)
         z_b = payload["z_b"].astype(np.float64)
     if len(query_ids) != len(set(query_ids)) or z_a.shape[0] != len(query_ids) or z_b.shape[0] != len(query_ids):
