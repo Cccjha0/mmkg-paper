@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "phase": "AACPI Phase 4A",
+  "representation": "C0",
+  "split": "dev",
+  "dataset": "db15k",
+  "pair_id": "db15k_native_adamf",
+  "control_source": {
+    "path": "outputs/aacpi/phase3a/db15k_native_adamf/r3/dev_oof_predictions.csv.gz",
+    "sha256": "afb28a0b1c83076f445696cebb394b774c4752e57bd2f615b87cb65a7b98e8c0"
+  },
+  "prediction_vector_sha256": "d7f3d6badd1ec36004b0939a2935a9793cbc3f2cb386e12438dbb4d6e4919a4c",
+  "exact_phase3a_r3_copy": true,
+  "n_rows": 237660,
+  "n_queries": 47532,
+  "outer_original_triple_leakage": 0,
+  "test_rows_accessed": 0,
+  "test_evaluation_commands": 0,
+  "dry_run": false,
+  "primary_metrics": {
+    "count": 190128,
+    "mae": 0.03521479911827678,
+    "smooth_l1": 0.031014127968727143,
+    "spearman": 0.08656336951354537,
+    "positive_prevalence": 0.4010771690650509,
+    "positive_auprc": 0.46977256762800684,
+    "positive_auprc_lift": 0.06869539856295592,
+    "positive_auroc": 0.5738699685437606,
+    "harmful_prevalence": 0.2105949676007742,
+    "harmful_auprc": 0.21754801471303267,
+    "harmful_auprc_lift": 0.00695304711225847,
+    "harmful_auroc": 0.5007478660304836,
+    "positive_vs_harmful_auroc": 0.544957173314778,
+    "positive_vs_harmful_auroc_lift": 0.044957173314778,
+    "nonzero_activity_auprc": 0.6042407859513873,
+    "nonzero_activity_prevalence": 0.6116721366658251,
+    "nonzero_activity_auprc_lift": -0.00743135071443779,
+    "highest_10pct_actual_mean_advantage": 0.0066980037694453955,
+    "highest_10pct_positive_rate": 0.5229053805291116,
+    "highest_10pct_harmful_rate": 0.1850838899700205
+  },
+  "h1_style_pass": true,
+  "oof_predictions": {
+    "path": "outputs/aacpi/phase4a/oof_raw/db15k_native_adamf/c0/dev_oof_predictions.csv.gz",
+    "sha256": "e0789e8d8914bf797711a1542a4853c0a841cfceed92ae90ec895dce1b66c091"
+  },
+  "outer_oof_complete": true,
+  "policy_evaluation_performed": false
+}

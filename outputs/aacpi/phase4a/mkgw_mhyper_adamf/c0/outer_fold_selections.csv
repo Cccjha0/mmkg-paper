@@ -1,0 +1,6 @@
+representation,outer_fold,selected_config_id,source
+C0,1,w32_lr1e-3_neg3p0,Phase3A_R3_exact_copy
+C0,2,w32_lr1e-3_neg3p0,Phase3A_R3_exact_copy
+C0,3,w128_lr1e-3_neg3p0,Phase3A_R3_exact_copy
+C0,4,w128_lr3e-4_neg3p0,Phase3A_R3_exact_copy
+C0,5,w128_lr1e-3_neg3p0,Phase3A_R3_exact_copy

@@ -1,0 +1,119 @@
+{
+  "schema_version": 2,
+  "phase": "AACPI Phase 4A",
+  "split": "dev",
+  "dataset": "db15k",
+  "pair_id": "db15k_mhyper_native",
+  "expert_a": "M-Hyper",
+  "expert_b": "NativE",
+  "n_queries": 47532,
+  "raw_dimensions": {
+    "M-Hyper": 1024,
+    "NativE": 750
+  },
+  "semantics": {
+    "M-Hyper": "pre-candidate dot-product query; reciprocal transform for head prediction",
+    "NativE": "known-side relation-gated fused entity concatenated with relation embedding",
+    "AdaMF-MAT": "known-side fused entity concatenated with relation embedding"
+  },
+  "candidate_independent": true,
+  "current_target_identity_used": false,
+  "npz_string_storage": "fixed_width_unicode_no_pickle",
+  "source_table": {
+    "path": "outputs/aacpi/action_response_assets/db15k_mhyper_native/dev_action_response_features.csv.gz",
+    "sha256": "d0b3d9cd2daf49b21d17655d1daa22fe5d35755c5f9681d6cbf73ed31bebbd34"
+  },
+  "source_manifest": {
+    "path": "outputs/aacpi/action_response_assets/db15k_mhyper_native/candidate_score_source_manifest.json",
+    "sha256": "407781d1ca255a05a94740e67b9a3016297bf4f7f0928318a77607e67d2b9bdd"
+  },
+  "frozen_runs": [
+    {
+      "expert": "M-Hyper",
+      "seed": 1,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1/best.ckpt",
+        "sha256": "059b45d53023bf8122ef3b07a4dc4c10660841666afa78823f863105c0d34a27"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1/config_merged.json",
+        "sha256": "7bba01b7b582700727dd9f1d920220de8be61b7d82dcd6cc73ec73dbd43341d1"
+      },
+      "model_class": "OpenBGMHyper"
+    },
+    {
+      "expert": "M-Hyper",
+      "seed": 2,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2/best.ckpt",
+        "sha256": "bea2dc185952ccdd54091267809ea39d971cd027f596c2f77c89f8d4df6500c9"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2/config_merged.json",
+        "sha256": "952fe987bf8cd66497ad9b48e3e49f11b1f3f9df7b16ebeee136c62fcae7fcb0"
+      },
+      "model_class": "OpenBGMHyper"
+    },
+    {
+      "expert": "M-Hyper",
+      "seed": 3,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/db15k_mhyper/20260902_180912_seed3/best.ckpt",
+        "sha256": "5f128cbd54cb7d97122c686017aa517c7439cca4dfe0b5379092707ee7a29844"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/db15k_mhyper/20260902_180912_seed3/config_merged.json",
+        "sha256": "88a2895817eb976723d41ddbb223a47ffbb756ebc6a37d44d37218a981abc53a"
+      },
+      "model_class": "OpenBGMHyper"
+    },
+    {
+      "expert": "NativE",
+      "seed": 1,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/db15k_native/20260831_223530_seed1/best.ckpt",
+        "sha256": "2bd4ff09976173f06a07bfac1260d7b9fb8b3b9a72ebcc56d8805688a13e6c79"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/db15k_native/20260831_223530_seed1/config_merged.json",
+        "sha256": "1d295e9bc891d148eea44d6bd2a0876938f354c75b4c9999973a0fd77b0e0df9"
+      },
+      "model_class": "OpenBGNativE"
+    },
+    {
+      "expert": "NativE",
+      "seed": 2,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/db15k_native/20260902_182809_seed2/best.ckpt",
+        "sha256": "de24c0ad1a9127d6ef951e16b67f396e16b6d02515acf03ceaa8f6666d39b6a6"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/db15k_native/20260902_182809_seed2/config_merged.json",
+        "sha256": "c51f5f474d244bed3c583749b6e5ab7299a4621cbb3666a2b818f2581b152b0e"
+      },
+      "model_class": "OpenBGNativE"
+    },
+    {
+      "expert": "NativE",
+      "seed": 3,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/db15k_native/20260903_012002_seed3/best.ckpt",
+        "sha256": "5ad6151d9acae60c3c3b1562aa9092d54b10ecaaa88f3ea07468493e1d272355"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/db15k_native/20260903_012002_seed3/config_merged.json",
+        "sha256": "21a119dcf44a869d71de0d1a0ee5d2eeb23acd46e525a77f48dd4d71532eaac0"
+      },
+      "model_class": "OpenBGNativE"
+    }
+  ],
+  "output": {
+    "path": "outputs/aacpi/phase4a/latents/db15k_mhyper_native_query_latents.npz",
+    "sha256": "d52368878d0108f0f70b3f56afacfa59e4c1e60e77c6077aa65dc389074c9cbf"
+  },
+  "expert_training_performed": false,
+  "checkpoint_selection_performed": false,
+  "test_rows_accessed": 0,
+  "test_evaluation_commands": 0,
+  "policy_evaluations": 0
+}

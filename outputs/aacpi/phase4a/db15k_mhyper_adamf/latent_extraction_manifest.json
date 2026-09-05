@@ -1,0 +1,119 @@
+{
+  "schema_version": 2,
+  "phase": "AACPI Phase 4A",
+  "split": "dev",
+  "dataset": "db15k",
+  "pair_id": "db15k_mhyper_adamf",
+  "expert_a": "M-Hyper",
+  "expert_b": "AdaMF-MAT",
+  "n_queries": 47532,
+  "raw_dimensions": {
+    "M-Hyper": 1024,
+    "AdaMF-MAT": 750
+  },
+  "semantics": {
+    "M-Hyper": "pre-candidate dot-product query; reciprocal transform for head prediction",
+    "NativE": "known-side relation-gated fused entity concatenated with relation embedding",
+    "AdaMF-MAT": "known-side fused entity concatenated with relation embedding"
+  },
+  "candidate_independent": true,
+  "current_target_identity_used": false,
+  "npz_string_storage": "fixed_width_unicode_no_pickle",
+  "source_table": {
+    "path": "outputs/aacpi/action_response_assets/db15k_mhyper_adamf/dev_action_response_features.csv.gz",
+    "sha256": "10361996fc156583309436d3d72751381c3924aabfe6ccb326a425d8287962af"
+  },
+  "source_manifest": {
+    "path": "outputs/aacpi/action_response_assets/db15k_mhyper_adamf/candidate_score_source_manifest.json",
+    "sha256": "03a32591d976b341447a97da93b76c87b06ba8e34168fb3838d3bc80dbcfc48f"
+  },
+  "frozen_runs": [
+    {
+      "expert": "M-Hyper",
+      "seed": 1,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1/best.ckpt",
+        "sha256": "059b45d53023bf8122ef3b07a4dc4c10660841666afa78823f863105c0d34a27"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1/config_merged.json",
+        "sha256": "7bba01b7b582700727dd9f1d920220de8be61b7d82dcd6cc73ec73dbd43341d1"
+      },
+      "model_class": "OpenBGMHyper"
+    },
+    {
+      "expert": "M-Hyper",
+      "seed": 2,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2/best.ckpt",
+        "sha256": "bea2dc185952ccdd54091267809ea39d971cd027f596c2f77c89f8d4df6500c9"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2/config_merged.json",
+        "sha256": "952fe987bf8cd66497ad9b48e3e49f11b1f3f9df7b16ebeee136c62fcae7fcb0"
+      },
+      "model_class": "OpenBGMHyper"
+    },
+    {
+      "expert": "M-Hyper",
+      "seed": 3,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/db15k_mhyper/20260902_180912_seed3/best.ckpt",
+        "sha256": "5f128cbd54cb7d97122c686017aa517c7439cca4dfe0b5379092707ee7a29844"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/db15k_mhyper/20260902_180912_seed3/config_merged.json",
+        "sha256": "88a2895817eb976723d41ddbb223a47ffbb756ebc6a37d44d37218a981abc53a"
+      },
+      "model_class": "OpenBGMHyper"
+    },
+    {
+      "expert": "AdaMF-MAT",
+      "seed": 1,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/db15k_adamf_mat/20260901_030904_seed1/best.ckpt",
+        "sha256": "0e306e56c556ef776678850c3ca7258b9e5b90eefb14245a7b3902ad71da1861"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/db15k_adamf_mat/20260901_030904_seed1/config_merged.json",
+        "sha256": "25357d0ae01320f8ac1bc5d2ab53c8018929f84015de0a9f40ff0cb3e9dd80ae"
+      },
+      "model_class": "OpenBGAdaMFMAT"
+    },
+    {
+      "expert": "AdaMF-MAT",
+      "seed": 2,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2/best.ckpt",
+        "sha256": "bcefd66bbbecfb60fb2a29ed8166b7e7f8d337494b539f81fbbd66d262b7ff00"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2/config_merged.json",
+        "sha256": "8b4c3561b7cd49a64903f8918c42e158fe4d1c4f14e64599d46b53d770b77ce8"
+      },
+      "model_class": "OpenBGAdaMFMAT"
+    },
+    {
+      "expert": "AdaMF-MAT",
+      "seed": 3,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/db15k_adamf_mat/20260903_090422_seed3/best.ckpt",
+        "sha256": "391f06d80621a274b02aeea42b744cddc84964427321c8533d2706e1588fd9ad"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/db15k_adamf_mat/20260903_090422_seed3/config_merged.json",
+        "sha256": "f19d6ba3c7d49a30bb4e8820eb2fbc4f64fb0b8ef5c3f829f71482ef9a452140"
+      },
+      "model_class": "OpenBGAdaMFMAT"
+    }
+  ],
+  "output": {
+    "path": "outputs/aacpi/phase4a/latents/db15k_mhyper_adamf_query_latents.npz",
+    "sha256": "450c44d6794be36507796dbec59b8e1d37d48706b8f6b4eff98ee8762d4efa6b"
+  },
+  "expert_training_performed": false,
+  "checkpoint_selection_performed": false,
+  "test_rows_accessed": 0,
+  "test_evaluation_commands": 0,
+  "policy_evaluations": 0
+}

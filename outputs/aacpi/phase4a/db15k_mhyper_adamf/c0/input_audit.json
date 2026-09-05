@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "phase": "AACPI Phase 4A",
+  "representation": "C0",
+  "split": "dev",
+  "dataset": "db15k",
+  "pair_id": "db15k_mhyper_adamf",
+  "control_source": {
+    "path": "outputs/aacpi/phase3a/db15k_mhyper_adamf/r3/dev_oof_predictions.csv.gz",
+    "sha256": "13204df4d456f87bae710f641eab02714882f34a294c0d048a8f2a0e44cd560c"
+  },
+  "prediction_vector_sha256": "ef066d2d512fd9d2a6c7dd205f19dea1f1be36b76d3413dfd7b0b9545c9fba58",
+  "exact_phase3a_r3_copy": true,
+  "n_rows": 237660,
+  "n_queries": 47532,
+  "outer_original_triple_leakage": 0,
+  "test_rows_accessed": 0,
+  "test_evaluation_commands": 0
+}

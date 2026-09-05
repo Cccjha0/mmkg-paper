@@ -1,0 +1,119 @@
+{
+  "schema_version": 2,
+  "phase": "AACPI Phase 4A",
+  "split": "dev",
+  "dataset": "mkg_w",
+  "pair_id": "mkgw_mhyper_native",
+  "expert_a": "M-Hyper",
+  "expert_b": "NativE",
+  "n_queries": 25656,
+  "raw_dimensions": {
+    "M-Hyper": 1024,
+    "NativE": 750
+  },
+  "semantics": {
+    "M-Hyper": "pre-candidate dot-product query; reciprocal transform for head prediction",
+    "NativE": "known-side relation-gated fused entity concatenated with relation embedding",
+    "AdaMF-MAT": "known-side fused entity concatenated with relation embedding"
+  },
+  "candidate_independent": true,
+  "current_target_identity_used": false,
+  "npz_string_storage": "fixed_width_unicode_no_pickle",
+  "source_table": {
+    "path": "outputs/aacpi/action_response_assets/mkgw_mhyper_native/dev_action_response_features.csv.gz",
+    "sha256": "98daa3e7d3c8504401b64e3efcedf3f1f4b68be4c82f3cb071bf6efd95a9412f"
+  },
+  "source_manifest": {
+    "path": "outputs/aacpi/action_response_assets/mkgw_mhyper_native/candidate_score_source_manifest.json",
+    "sha256": "d57f53246f8c69ef350627c275cf1c4c73c99f94074f0e6bc93576151ca0dc61"
+  },
+  "frozen_runs": [
+    {
+      "expert": "M-Hyper",
+      "seed": 1,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1/best.ckpt",
+        "sha256": "4a5cb66cf61d4cf4d68dfabf7c0560333563e7497b79b36872665b42396bbfed"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1/config_merged.json",
+        "sha256": "7376df5cf5383162ff51832984063274c38d21cf153fbf0d05cac28123ab80ae"
+      },
+      "model_class": "OpenBGMHyper"
+    },
+    {
+      "expert": "M-Hyper",
+      "seed": 2,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/mkg_w_mhyper/20260902_015400_seed2/best.ckpt",
+        "sha256": "7d51cbc3ae0fa8ae7d16bb318c5d76affe27caefbcd94f7015c938e58c739337"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/mkg_w_mhyper/20260902_015400_seed2/config_merged.json",
+        "sha256": "08676952cb4528acbf2421cb6c6f8ffe998c0d81134fd18e7abd99221ef31fa3"
+      },
+      "model_class": "OpenBGMHyper"
+    },
+    {
+      "expert": "M-Hyper",
+      "seed": 3,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/mkg_w_mhyper/20260902_020435_seed3/best.ckpt",
+        "sha256": "42f6d06ba2ec51106a1cf04cf09fb49aab439666fdfd293e1818cf19087ac30f"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/mkg_w_mhyper/20260902_020435_seed3/config_merged.json",
+        "sha256": "15b0ac51e56f6d379b6a8a1e77205c5b89a8a546c2d3b13d7a8f38578f805b29"
+      },
+      "model_class": "OpenBGMHyper"
+    },
+    {
+      "expert": "NativE",
+      "seed": 1,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/mkg_w_native/20260902_021506_seed1/best.ckpt",
+        "sha256": "f44cba3fdd34b3aa06531b41d6ffd5bb2c1ed236e27f37c6109c683e353b3d6c"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/mkg_w_native/20260902_021506_seed1/config_merged.json",
+        "sha256": "31c76aa923716f53fef83ac23aa200d2ab70e81eaa5017dd3726486d083db44d"
+      },
+      "model_class": "OpenBGNativE"
+    },
+    {
+      "expert": "NativE",
+      "seed": 2,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/mkg_w_native/20260902_033610_seed2/best.ckpt",
+        "sha256": "b218609bbcfc8b94d56f42c4f3f5493079810d6739e47bc4ad477d6f6bc853fc"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/mkg_w_native/20260902_033610_seed2/config_merged.json",
+        "sha256": "bd3feb87f8b41a5c3633ecfc193352c109556727fa6c8822317dc038959be982"
+      },
+      "model_class": "OpenBGNativE"
+    },
+    {
+      "expert": "NativE",
+      "seed": 3,
+      "checkpoint": {
+        "path": "ml/artifacts/outputs/mkg_w_native/20260902_044121_seed3/best.ckpt",
+        "sha256": "e7dc11ecf6e5bfceae94116c58cb0ff988f87985bfeb8c8156969ec2b30b512f"
+      },
+      "config": {
+        "path": "ml/artifacts/outputs/mkg_w_native/20260902_044121_seed3/config_merged.json",
+        "sha256": "0afa0b107aa8539892bf6a3cfb595666a08c7bb01b92c4706be544b453eb90d4"
+      },
+      "model_class": "OpenBGNativE"
+    }
+  ],
+  "output": {
+    "path": "outputs/aacpi/phase4a/latents/mkgw_mhyper_native_query_latents.npz",
+    "sha256": "dedd4e3f9767a6d793778818e9bf3286ddec42ce8051612dba3847da85591a83"
+  },
+  "expert_training_performed": false,
+  "checkpoint_selection_performed": false,
+  "test_rows_accessed": 0,
+  "test_evaluation_commands": 0,
+  "policy_evaluations": 0
+}
