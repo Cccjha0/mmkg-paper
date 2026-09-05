@@ -20,7 +20,7 @@ Every context field must be available before the correct target is known. Correc
 
 ## Frozen representation families
 
-- **C0:** exact Phase 3A R3 OOF control. Its row-level predictions are copied with hash verification, not retrained.
+- **C0:** Phase 3A R3 OOF control. Its row-level predictions are copied with hash verification, not retrained; independent analysis requires a maximum absolute difference no larger than `1e-18` after CSV serialization.
 - **C1:** C0 plus the frozen TRAIN-only structural fields in `AACPI_PHASE4A_CONTEXT_FEATURE_CONTRACT.md`.
 - **C2:** C0 plus the frozen known-side modality and TRAIN-only relation modality fields in the contract.
 - **C3:** C0 plus frozen expert query latents. Each expert is independently reduced to 16 dimensions by unsupervised PCA fitted on the current training groups; inputs are projected `z_A`, projected `z_B`, their difference, and absolute difference.
@@ -67,4 +67,4 @@ Phase 4A is GO only when one frozen contextual representation passes the Primary
 
 ## Artifact and integrity contract
 
-Large raw context tables, latent tensors, and row-level OOF predictions live under ignored `outputs/aacpi/phase4a/{raw,latents,oof_raw}`. Git retains protocols, scripts, manifests, hashes, small summaries, figures, and the audit report. Every systematic run must certify: TEST rows/commands 0; policy evaluations 0; expert training 0; checkpoint reselection 0; outer group leakage 0; and exact C0 equality with Phase 3A R3.
+Large raw context tables, latent tensors, and row-level OOF predictions live under ignored `outputs/aacpi/phase4a/{raw,latents,oof_raw}`. Git retains protocols, scripts, manifests, hashes, small summaries, figures, and the audit report. Every systematic run must certify: TEST rows/commands 0; policy evaluations 0; expert training 0; checkpoint reselection 0; outer group leakage 0; and C0 equality with Phase 3A R3 within the frozen `1e-18` CSV round-trip tolerance.

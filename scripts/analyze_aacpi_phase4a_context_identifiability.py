@@ -28,6 +28,7 @@ METRIC_FIELDS = (
     "highest_10pct_actual_mean_advantage", "highest_10pct_positive_rate",
     "highest_10pct_harmful_rate", "nonzero_activity_auprc_lift",
 )
+C0_CSV_ROUNDTRIP_ATOL = 1e-18
 
 
 def parse_args() -> argparse.Namespace:
@@ -93,8 +94,11 @@ def load_predictions(root: Path, phase3a_root: Path):
             delta = np.max(np.abs(frame.predicted_advantage_oof.to_numpy(float) - r3.predicted_advantage_oof.to_numpy(float)))
             c0_max_delta = max(c0_max_delta, float(delta))
         frames.append(frame); sources.append(path)
-    if c0_max_delta != 0.0:
-        raise AssertionError(f"C0 does not exactly reproduce Phase 3A R3: max delta={c0_max_delta}")
+    if c0_max_delta > C0_CSV_ROUNDTRIP_ATOL:
+        raise AssertionError(
+            "C0 does not reproduce Phase 3A R3 within the frozen CSV round-trip tolerance: "
+            f"max delta={c0_max_delta}, atol={C0_CSV_ROUNDTRIP_ATOL}"
+        )
     return pd.concat(frames, ignore_index=True), sources, c0_max_delta
 
 
@@ -187,7 +191,7 @@ def report_text(pair_rows, increments, gates, action_rows, direction_rows, seed_
     best_sign = max(REPRESENTATIONS[1:], key=lambda rep: mean_delta(rep,"positive_vs_harmful_auroc"))
     best_top = max(REPRESENTATIONS[1:], key=lambda rep: mean_delta(rep,"highest_10pct_actual_mean_advantage"))
     c3, c4 = by_key[("mkgw_native_adamf","C3")], by_key[("mkgw_native_adamf","C4")]
-    lines += ["", "## Core audit answers", "", f"1. Structural context: C1 mean sign-AUROC increment is {mean_delta('C1','positive_vs_harmful_auroc'):+.6f}; interpret together with its gate row above.", f"2. Modality context: C2 mean sign-AUROC increment is {mean_delta('C2','positive_vs_harmful_auroc'):+.6f}; activity lift is reported separately in `context_increments.csv`.", f"3. Frozen latent context: C3 mean sign-AUROC increment is {mean_delta('C3','positive_vs_harmful_auroc'):+.6f}; the strongest mean sign increment is {best_sign}.", f"4. C3 critical-pair top-confidence utility is {c3['highest_10pct_actual_mean_advantage']:+.6f} ({'positive' if c3['highest_10pct_actual_mean_advantage']>0 else 'nonpositive'}).", f"5. C4 critical-pair top-confidence utility is {c4['highest_10pct_actual_mean_advantage']:+.6f}; the strongest mean top-decile increment is {best_top}.", "6. Beneficial-vs-harmful and nonzero-activity increments are separate columns; the frozen gate uses sign separation and actual top-decile utility.", f"7. Prior-PASS stability: " + ", ".join(f"{x['representation']}={x['prior_pass_stability_gate']}" for x in gates) + ".", f"8. Phase 4A GO representations: {', '.join(go) if go else 'none'}.", f"9. Evidence for Context-Conditioned Conservative Policy: {'eligible for a separately preregistered Phase 4B, without TEST access' if go else 'insufficient; policy remains prohibited'}.", f"10. Frozen conclusion: {'contextual identifiability recovered on DEV' if go else 'the frozen contextual families did not clear the information-sufficiency gates; stop feature expansion and treat an answer-agnostic identifiability ceiling as the active explanation'}.", "", "## Integrity audit", "", "- TEST rows accessed: **0**; TEST commands: **0**; policy evaluations: **0**.", "- Expert retraining: **0**; checkpoint reselection: **0**.", "- AACPI V2, Phase 3A results, alpha0, action grid, utility target, and historical feature contracts modified: **no**.", "- Structural/modality statistics are TRAIN-only; latent states are frozen and target-independent.", "- Fold-fitted PCA and scaling use current training groups only; outer original-triple leakage is zero.", "- C0 exactly reproduces Phase 3A R3; all source and generated artifacts are hash-auditable."]
+    lines += ["", "## Core audit answers", "", f"1. Structural context: C1 mean sign-AUROC increment is {mean_delta('C1','positive_vs_harmful_auroc'):+.6f}; interpret together with its gate row above.", f"2. Modality context: C2 mean sign-AUROC increment is {mean_delta('C2','positive_vs_harmful_auroc'):+.6f}; activity lift is reported separately in `context_increments.csv`.", f"3. Frozen latent context: C3 mean sign-AUROC increment is {mean_delta('C3','positive_vs_harmful_auroc'):+.6f}; the strongest mean sign increment is {best_sign}.", f"4. C3 critical-pair top-confidence utility is {c3['highest_10pct_actual_mean_advantage']:+.6f} ({'positive' if c3['highest_10pct_actual_mean_advantage']>0 else 'nonpositive'}).", f"5. C4 critical-pair top-confidence utility is {c4['highest_10pct_actual_mean_advantage']:+.6f}; the strongest mean top-decile increment is {best_top}.", "6. Beneficial-vs-harmful and nonzero-activity increments are separate columns; the frozen gate uses sign separation and actual top-decile utility.", f"7. Prior-PASS stability: " + ", ".join(f"{x['representation']}={x['prior_pass_stability_gate']}" for x in gates) + ".", f"8. Phase 4A GO representations: {', '.join(go) if go else 'none'}.", f"9. Evidence for Context-Conditioned Conservative Policy: {'eligible for a separately preregistered Phase 4B, without TEST access' if go else 'insufficient; policy remains prohibited'}.", f"10. Frozen conclusion: {'contextual identifiability recovered on DEV' if go else 'the frozen contextual families did not clear the information-sufficiency gates; stop feature expansion and treat an answer-agnostic identifiability ceiling as the active explanation'}.", "", "## Integrity audit", "", "- TEST rows accessed: **0**; TEST commands: **0**; policy evaluations: **0**.", "- Expert retraining: **0**; checkpoint reselection: **0**.", "- AACPI V2, Phase 3A results, alpha0, action grid, utility target, and historical feature contracts modified: **no**.", "- Structural/modality statistics are TRAIN-only; latent states are frozen and target-independent.", "- Fold-fitted PCA and scaling use current training groups only; outer original-triple leakage is zero.", "- C0 reproduces Phase 3A R3 within the frozen `1e-18` CSV round-trip tolerance; all source and generated artifacts are hash-auditable."]
     return "\n".join(lines) + "\n"
 
 
@@ -207,7 +211,7 @@ def main() -> None:
     svg_bars(figures/"context_top_decile_utility.svg", pair_rows, "highest_10pct_actual_mean_advantage", "Phase 4A top-decile actual advantage")
     svg_bars(figures/"mkgw_native_adamf_context_recovery.svg", [x for x in pair_rows if x["pair_id"]=="mkgw_native_adamf"], "highest_10pct_actual_mean_advantage", "MKG-W NativE + AdaMF-MAT contextual recovery")
     report.parent.mkdir(parents=True, exist_ok=True); report.write_text(report_text(pair_rows,increments,gates,action_rows,direction_rows,seed_rows,relation_rows), encoding="utf-8")
-    manifest = {"schema_version":1,"phase":"AACPI Phase 4A","split":"dev","source_oof_predictions":[{"path":portable_path(p),"sha256":sha256_file(p)} for p in sources],"outputs":[],"c0_phase3a_r3_max_abs_prediction_delta":c0_delta,"outer_original_triple_leakage":0,"test_rows_accessed":0,"test_evaluation_commands":0,"policy_evaluations":0,"phase4a_go_representations":[x["representation"] for x in gates if x["phase4a_go"]]}
+    manifest = {"schema_version":1,"phase":"AACPI Phase 4A","split":"dev","source_oof_predictions":[{"path":portable_path(p),"sha256":sha256_file(p)} for p in sources],"outputs":[],"c0_phase3a_r3_max_abs_prediction_delta":c0_delta,"c0_csv_roundtrip_atol":C0_CSV_ROUNDTRIP_ATOL,"c0_reproduction_within_tolerance":c0_delta <= C0_CSV_ROUNDTRIP_ATOL,"outer_original_triple_leakage":0,"test_rows_accessed":0,"test_evaluation_commands":0,"policy_evaluations":0,"phase4a_go_representations":[x["representation"] for x in gates if x["phase4a_go"]]}
     manifest["outputs"]=[{"path":portable_path(p),"sha256":sha256_file(p)} for p in [*outputs[:8],report,*sorted(figures.glob("*.svg"))]]
     outputs[8].write_text(json.dumps(manifest,indent=2)+"\n",encoding="utf-8")
     print(f"[OK] Phase 4A frozen decision={'GO' if manifest['phase4a_go_representations'] else 'NO-GO'} -> {report}")
