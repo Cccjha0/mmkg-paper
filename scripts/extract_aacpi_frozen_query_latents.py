@@ -74,7 +74,7 @@ def extract_batch(model, rows, device: str) -> torch.Tensor:
         raise ValueError("Latent batch must contain one direction")
     relation = torch.as_tensor(rows.relation.to_numpy(np.int64), device=device)
     known = torch.as_tensor(
-        rows.head.to_numpy(np.int64) if direction == "tail" else rows.tail.to_numpy(np.int64),
+        rows["head"].to_numpy(np.int64) if direction == "tail" else rows["tail"].to_numpy(np.int64),
         device=device,
     )
     if model.__class__.__name__ == "OpenBGMHyper":
