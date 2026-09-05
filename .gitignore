@@ -70,6 +70,13 @@ outputs/aacpi/phase4a/raw/
 outputs/aacpi/phase4a/latents/
 outputs/aacpi/phase4a/oof_raw/
 
+# Complementarity Identifiability large reproducible artifacts (retain audit tables/figures)
+outputs/complementarity_identifiability/exp1_landscape/per_query_action_geometry.csv.gz
+outputs/complementarity_identifiability/exp2_information/assets/*.npz
+outputs/complementarity_identifiability/exp2_information/candidate_assets/*.npz
+outputs/complementarity_identifiability/exp2_information/runs/**/oof_action_predictions.npz
+outputs/complementarity_identifiability/exp2_information/preflight/
+
 # OS
 .DS_Store
 Thumbs.db

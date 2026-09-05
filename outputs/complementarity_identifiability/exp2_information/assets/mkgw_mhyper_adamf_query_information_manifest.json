@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "experiment": "Experiment 2 \u2014 Information\u2013Identifiability Audit",
+  "split": "dev",
+  "pair_id": "mkgw_mhyper_adamf",
+  "dry_run": false,
+  "n_queries": 25656,
+  "feature_fields_x4": [
+    "geometry_direction_tail",
+    "geometry_a_top1",
+    "geometry_a_top5_mean",
+    "geometry_a_top1_top2_margin",
+    "geometry_a_score_std",
+    "geometry_b_top1",
+    "geometry_b_top5_mean",
+    "geometry_b_top1_top2_margin",
+    "geometry_b_score_std",
+    "geometry_top1_delta_a_minus_b",
+    "geometry_top5_delta_a_minus_b",
+    "geometry_margin_delta_a_minus_b",
+    "geometry_std_delta_a_minus_b",
+    "r1_expert_top5_jaccard",
+    "r1_expert_top10_jaccard",
+    "r1_expert_top20_jaccard",
+    "r1_union20_rank_spearman",
+    "r1_union20_rank_displacement_mean",
+    "r1_union20_rank_displacement_median",
+    "r1_union20_rank_displacement_max",
+    "r1_expert_top1_same",
+    "r1_a_top1_rank_under_b",
+    "r1_b_top1_rank_under_a",
+    "r3_train_relation_frequency_log1p",
+    "r3_train_observed_entity_frequency_log1p",
+    "r3_train_observed_entity_direction_frequency_log1p",
+    "r3_train_observed_entity_unique_relation_count_log1p",
+    "c1_known_entity_neighborhood_fraction",
+    "c1_relation_unique_heads_log1p",
+    "c1_relation_unique_tails_log1p",
+    "c1_relation_tails_per_head_log1p",
+    "c1_relation_heads_per_tail_log1p",
+    "c1_relation_head_tail_log_ratio",
+    "c1_relation_known_role_diversity_log1p",
+    "r3_observed_entity_has_text",
+    "r3_observed_entity_has_image",
+    "r3_train_relation_target_text_support",
+    "r3_train_relation_target_image_support",
+    "c2_relation_known_image_support",
+    "c2_relation_known_text_support"
+  ],
+  "representation_dimensions": {
+    "X1": 9,
+    "X2": 23,
+    "X3": 34,
+    "X4": 40,
+    "X5": 40
+  },
+  "raw_latent_shapes": {
+    "z_a": [
+      25656,
+      1024
+    ],
+    "z_b": [
+      25656,
+      600
+    ]
+  },
+  "sources": [
+    {
+      "role": "exp1_audit",
+      "path": "outputs/complementarity_identifiability/exp1_landscape/audit_manifest.json",
+      "sha256": "51ce41d6491c15ccf6ac154b720cf25fe9fc798a3e21221654b07810a201391c"
+    },
+    {
+      "role": "exact_dev_query_rows",
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "e389449b44379ecb18fe248127c6b062b2f5cc7894fb052536a442528ab4287b"
+    },
+    {
+      "role": "phase4a_context",
+      "path": "outputs/aacpi/phase4a/raw/mkgw_mhyper_adamf_context_features.csv.gz",
+      "sha256": "be8e5271b127ce28a6a0f1e1142e82c3c3ef37b9fe97d9d7c4a1e63ffb6ea4d4"
+    },
+    {
+      "role": "phase4a_context_manifest",
+      "path": "outputs/aacpi/phase4a/mkgw_mhyper_adamf/context_feature_manifest.json",
+      "sha256": "c0c83f87d5f1be2f2b2819e10590410002c920227e62476d983a502234c9791e"
+    },
+    {
+      "role": "frozen_latents",
+      "path": "outputs/aacpi/phase4a/latents/mkgw_mhyper_adamf_query_latents.npz",
+      "sha256": "74d33f8efc04297e25276619598c189da5b595561337a2393531e337b96287ce"
+    },
+    {
+      "role": "latent_manifest",
+      "path": "outputs/aacpi/phase4a/mkgw_mhyper_adamf/latent_extraction_manifest.json",
+      "sha256": "fff83d40fc9172416775ddf1a892196375e048c11a6726bd39acc35df6407bf9"
+    },
+    {
+      "role": "feature_contract",
+      "path": "docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json",
+      "sha256": "93083b07ca6f699dc1418aa988a436e1906d28235968a77cf8eadd476641c70e"
+    }
+  ],
+  "output": {
+    "path": "outputs/complementarity_identifiability/exp2_information/assets/mkgw_mhyper_adamf_query_information.npz",
+    "sha256": "b9754c10fd81554e9cd7fb7cb6064b61e1df09cfe0b4c8d5e5f9f60ef6f87371"
+  },
+  "test_rows_accessed": 0,
+  "checkpoint_training": 0,
+  "checkpoint_reselection": 0,
+  "policy_development": 0
+}

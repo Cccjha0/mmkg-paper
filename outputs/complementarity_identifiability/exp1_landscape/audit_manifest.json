@@ -1,0 +1,385 @@
+{
+  "schema_version": 1,
+  "experiment": "Experiment 1 — Complementarity Landscape Audit",
+  "created_date": "2026-09-05",
+  "branch": "m1/recent-mmkgc-baselines",
+  "split": "dev",
+  "datasets": [
+    "mkg_w",
+    "db15k"
+  ],
+  "pairs": [
+    "mkgw_mhyper_native",
+    "mkgw_mhyper_adamf",
+    "mkgw_native_adamf",
+    "db15k_mhyper_native",
+    "db15k_mhyper_adamf",
+    "db15k_native_adamf"
+  ],
+  "score_normalization": "query_zscore",
+  "alpha_grid": [
+    0.0,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+  ],
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "directions": [
+    "head",
+    "tail"
+  ],
+  "statistics_cluster": "original_triple_id",
+  "bootstrap_samples": 10000,
+  "bootstrap_seed_base": 20260905,
+  "support_min_seed_direction_queries": 60,
+  "definitions": {
+    "beneficial_basin_width": "count(U(alpha)>0)/21",
+    "minimum_beneficial_distance": "min abs(alpha-alpha0) over U(alpha)>0; missing without opportunity",
+    "deterministic_best_alpha": "max RR, then nearest global alpha, then smaller alpha",
+    "plateau_ratio": "(21-number of distinct exact RR values)/20",
+    "fragmentation": "number of contiguous U(alpha)>0 components on the ordered grid",
+    "direction_consistency": "max(toward_a,toward_b)/positive opportunities within group"
+  },
+  "gate": {
+    "name": "Available-complementarity GO",
+    "headroom_rule": ">=5/6 pairs Available headroom > 0 and clustered bootstrap 95% CI lower > 0",
+    "positive_rate_rule": ">=5/6 pairs positive-opportunity rate >= 25%",
+    "headroom_pass_count": 6,
+    "positive_rate_pass_count": 6,
+    "pair_results": [
+      {
+        "pair_id": "mkgw_mhyper_native",
+        "headroom_pass": true,
+        "positive_rate_pass": true
+      },
+      {
+        "pair_id": "mkgw_mhyper_adamf",
+        "headroom_pass": true,
+        "positive_rate_pass": true
+      },
+      {
+        "pair_id": "mkgw_native_adamf",
+        "headroom_pass": true,
+        "positive_rate_pass": true
+      },
+      {
+        "pair_id": "db15k_mhyper_native",
+        "headroom_pass": true,
+        "positive_rate_pass": true
+      },
+      {
+        "pair_id": "db15k_mhyper_adamf",
+        "headroom_pass": true,
+        "positive_rate_pass": true
+      },
+      {
+        "pair_id": "db15k_native_adamf",
+        "headroom_pass": true,
+        "positive_rate_pass": true
+      }
+    ],
+    "decision": "GO",
+    "interpretation": "Experiment 2 is eligible, but is not started by this audit"
+  },
+  "operational_audit": {
+    "test_access": 0,
+    "checkpoint_retraining": 0,
+    "checkpoint_reselection": 0,
+    "full_ranking_evaluator_runs": 0,
+    "historical_result_modification": 0,
+    "selector_training": 0,
+    "policy_runs": 0,
+    "experiment_2_started": 0,
+    "aacpi_local_action_utility_table_consumed": 0
+  },
+  "sources": [
+    {
+      "pair_id": "db15k_mhyper_adamf",
+      "role": "source_query_rows",
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "431d98b55b288fff46c7454be1e0e4409e47c75226b8441ec2ec02fe9ba1a6d2",
+      "consumed": true
+    },
+    {
+      "pair_id": "db15k_mhyper_adamf",
+      "role": "source_selection",
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/full_ranking/selection.json",
+      "sha256": "4bbac94200d8d11821670e4a183f92975baba5c2531bf13f50aedf0fba64f282",
+      "consumed": true
+    },
+    {
+      "pair_id": "db15k_mhyper_adamf",
+      "role": "source_full_ranking_summary",
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_summary.json",
+      "sha256": "f9d277474077d25cbde9112db4e5d74ae9d3de8403b72ac1421531736c7f9720",
+      "consumed": false
+    },
+    {
+      "pair_id": "db15k_mhyper_adamf",
+      "role": "aacpi_utility_table_not_consumed",
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_adamf_dev_utility_table.csv.gz",
+      "sha256": "bd4b7623e1eb60cf84718c42c93b2d47abbf3aaa411e5c04592d48a0aa410eca",
+      "consumed": false
+    },
+    {
+      "pair_id": "db15k_mhyper_adamf",
+      "role": "aacpi_source_manifest",
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_adamf_dev_source_manifest.json",
+      "sha256": "0f95a6073e85b4d226f57d68e45f5013bc11091f604d9d129a1eb877156e920e",
+      "consumed": true
+    },
+    {
+      "pair_id": "db15k_mhyper_native",
+      "role": "source_query_rows",
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "f85d657f7183dc960bba762418ea3695ab0af78b59d45e158e1cd0a34079a081",
+      "consumed": true
+    },
+    {
+      "pair_id": "db15k_mhyper_native",
+      "role": "source_selection",
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/full_ranking/selection.json",
+      "sha256": "b0378a6bc3bc7f8ee50dc1f0aeee2d0073df801372d4f657dd35113ed07d2c04",
+      "consumed": true
+    },
+    {
+      "pair_id": "db15k_mhyper_native",
+      "role": "source_full_ranking_summary",
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_summary.json",
+      "sha256": "499286e155a8c5f03202531cfe7f4a46015c3b8475c5ada4862c096fec0a2420",
+      "consumed": false
+    },
+    {
+      "pair_id": "db15k_mhyper_native",
+      "role": "aacpi_utility_table_not_consumed",
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_native_dev_utility_table.csv.gz",
+      "sha256": "a3726b3e6194512edc6f87738ab85812f030fd51bb12fc68ed2fee4efe83f748",
+      "consumed": false
+    },
+    {
+      "pair_id": "db15k_mhyper_native",
+      "role": "aacpi_source_manifest",
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_native_dev_source_manifest.json",
+      "sha256": "3d5bd8a8069717933434d2a9dab6053decbe69cbe9b4dc06d74ddc84cab34b6d",
+      "consumed": true
+    },
+    {
+      "pair_id": "db15k_native_adamf",
+      "role": "source_query_rows",
+      "path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "0b132d2a13d5df045d71adda1cf6282230f5db26ef18a5d2052caeb58da22bfd",
+      "consumed": true
+    },
+    {
+      "pair_id": "db15k_native_adamf",
+      "role": "source_selection",
+      "path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/selection.json",
+      "sha256": "cce837ceb70ef765e6cc0ac6230b6a5241a7167e10621cb205339dbaa767c499",
+      "consumed": true
+    },
+    {
+      "pair_id": "db15k_native_adamf",
+      "role": "source_full_ranking_summary",
+      "path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/dev_summary.json",
+      "sha256": "260c0e2590c340fd8e99a6c039048cb4e38db9f9673564689864c0ef302eec56",
+      "consumed": false
+    },
+    {
+      "pair_id": "db15k_native_adamf",
+      "role": "aacpi_utility_table_not_consumed",
+      "path": "outputs/aacpi/utility_tables/db15k_native_adamf_dev_utility_table.csv.gz",
+      "sha256": "b5769ce5d98a8b5198567bd1f824a9404ae889ca43030ee3b65d1caf1677ed3b",
+      "consumed": false
+    },
+    {
+      "pair_id": "db15k_native_adamf",
+      "role": "aacpi_source_manifest",
+      "path": "outputs/aacpi/utility_tables/db15k_native_adamf_dev_source_manifest.json",
+      "sha256": "f9001315914573bc95444c27c09def97e1eddf0fea4bac2d1ee81b6f1d96e20a",
+      "consumed": true
+    },
+    {
+      "pair_id": "mkgw_mhyper_adamf",
+      "role": "source_query_rows",
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "e389449b44379ecb18fe248127c6b062b2f5cc7894fb052536a442528ab4287b",
+      "consumed": true
+    },
+    {
+      "pair_id": "mkgw_mhyper_adamf",
+      "role": "source_selection",
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/selection.json",
+      "sha256": "f1c688963e62b52470c30ee722713bb372c51df61421503396cfbc3e5e8ad198",
+      "consumed": true
+    },
+    {
+      "pair_id": "mkgw_mhyper_adamf",
+      "role": "source_full_ranking_summary",
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_summary.json",
+      "sha256": "2a1293bb2f5a5e8a681e67fe7091d5f3c99c3357761b4569c7b3efc6610eb5a5",
+      "consumed": false
+    },
+    {
+      "pair_id": "mkgw_mhyper_adamf",
+      "role": "aacpi_utility_table_not_consumed",
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_adamf_dev_utility_table.csv.gz",
+      "sha256": "33765d12c6832c7fa53256e76ed1b7085bf87e1f68ee4ecdd86951283010cb2f",
+      "consumed": false
+    },
+    {
+      "pair_id": "mkgw_mhyper_adamf",
+      "role": "aacpi_source_manifest",
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_adamf_dev_source_manifest.json",
+      "sha256": "8d9c1171dd9630742cfe8f80ea6a00adba580a76dc973c200fc77d60d78f8b8c",
+      "consumed": true
+    },
+    {
+      "pair_id": "mkgw_mhyper_native",
+      "role": "source_query_rows",
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "8b7dfb913f3a0d00eef156200e4a656f4062f2b2306b85cf8e68130749254b98",
+      "consumed": true
+    },
+    {
+      "pair_id": "mkgw_mhyper_native",
+      "role": "source_selection",
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/full_ranking/selection.json",
+      "sha256": "28f40889a625e53cf14c69111f2225f1d998019987bf6109a46c06126a43db6c",
+      "consumed": true
+    },
+    {
+      "pair_id": "mkgw_mhyper_native",
+      "role": "source_full_ranking_summary",
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_summary.json",
+      "sha256": "ed8bcb7375bb87f5f32e9bdc05496e59adc7ab6c596fcb83c5577786df9902d1",
+      "consumed": false
+    },
+    {
+      "pair_id": "mkgw_mhyper_native",
+      "role": "aacpi_utility_table_not_consumed",
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_native_dev_utility_table.csv.gz",
+      "sha256": "d830f6978fd2380adcc8726fd53d8a9786990fa53d7fee9ef6d8a80e4d9ccc73",
+      "consumed": false
+    },
+    {
+      "pair_id": "mkgw_mhyper_native",
+      "role": "aacpi_source_manifest",
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_native_dev_source_manifest.json",
+      "sha256": "57a24f419069845d35f4338ed8caa641dd50c290b6947cd14e8e83f65fdac0ac",
+      "consumed": true
+    },
+    {
+      "pair_id": "mkgw_native_adamf",
+      "role": "source_query_rows",
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "980197c29b8d0c447e298b862d43064e0b86c088a134347136fa87a64ad877ed",
+      "consumed": true
+    },
+    {
+      "pair_id": "mkgw_native_adamf",
+      "role": "source_selection",
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/selection.json",
+      "sha256": "15bd47d17171a3e603c5a5fb2f27bc33875ef6fd7f78a95be3f12f67d3fdfeaf",
+      "consumed": true
+    },
+    {
+      "pair_id": "mkgw_native_adamf",
+      "role": "source_full_ranking_summary",
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/dev_summary.json",
+      "sha256": "73a0308e5afbedc714d357cbea2f73fc5c090e931eae3ae01a2f03d02acf1b4e",
+      "consumed": false
+    },
+    {
+      "pair_id": "mkgw_native_adamf",
+      "role": "aacpi_utility_table_not_consumed",
+      "path": "outputs/aacpi/utility_tables/mkgw_native_adamf_dev_utility_table.csv.gz",
+      "sha256": "20da7555f8a10a04a36dab57396f8726f1628cbffea59793fab586b4fcc16b61",
+      "consumed": false
+    },
+    {
+      "pair_id": "mkgw_native_adamf",
+      "role": "aacpi_source_manifest",
+      "path": "outputs/aacpi/utility_tables/mkgw_native_adamf_dev_source_manifest.json",
+      "sha256": "d4e01934588ec2919542b1ed4998d2a0992f300889cf313529f398eda6ff86b0",
+      "consumed": true
+    }
+  ],
+  "outputs": [
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/per_query_action_geometry.csv.gz",
+      "size_bytes": 25189318,
+      "sha256": "ce6e5702f3e5f4a5788d9870d14aad0b4681690ec74f5b6fc3f27db46b302209"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/pair_statistics.csv",
+      "size_bytes": 3871,
+      "sha256": "95e790ffbb727ef02559098938aa4891128189b9e8653bb810c5ff958393688c"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/pair_statistics.json",
+      "size_bytes": 9839,
+      "sha256": "851dbc020746d6857702963edaf4b857e6dc8f0feee775ffccf62506cdd85c1f"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/gwd_plateau_distribution_summary.csv",
+      "size_bytes": 6220,
+      "sha256": "a44527c8f2179c6818d94951316dfcda520565a0deb5b62775da26846a3489fb"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/fragmentation_statistics.csv",
+      "size_bytes": 664,
+      "sha256": "96f4d24b6f221417cbc0e3058b0be050e2831a0ffc083e9d517140e0c6a6a30e"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/direction_consistency.csv",
+      "size_bytes": 222856,
+      "sha256": "36817f79dd4803b82b6118d99c9b850738d29f50f8037fd66ed4405e08aebf16"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/action_level_summary.csv",
+      "size_bytes": 15581,
+      "sha256": "98be123cb4e809991e130a25c5b64700122dce47c7ac8435dd075684452c8d50"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/figure1_global_to_oracle.svg",
+      "size_bytes": 3483,
+      "sha256": "4436151b7946afbf2ca0c47283c321d9922964df08588bc99d2edc431e061459"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/figure2_action_landscape_heatmaps.svg",
+      "size_bytes": 811099,
+      "sha256": "aa5bcbe91d037a8a81b79dfe812a5a07af793103db5baa086a263d60b159647f"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/figure3_gwd_distributions.svg",
+      "size_bytes": 10166,
+      "sha256": "20145e503bd08fbbfb8e9a1e87bab80edd5c20c41459c2a7de9a51c5a1d5402d"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/figure4_relation_direction_consistency.svg",
+      "size_bytes": 54242,
+      "sha256": "5abf5b162a6d01ff2dd52efbe0915b1e3eccb5e6c53cc018937c159df42db4e0"
+    }
+  ]
+}

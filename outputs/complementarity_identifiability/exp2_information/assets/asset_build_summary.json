@@ -1,0 +1,32 @@
+[
+  {
+    "pair_id": "mkgw_mhyper_native",
+    "n_queries": 25656,
+    "status": "built"
+  },
+  {
+    "pair_id": "mkgw_mhyper_adamf",
+    "n_queries": 25656,
+    "status": "built"
+  },
+  {
+    "pair_id": "mkgw_native_adamf",
+    "n_queries": 25656,
+    "status": "built"
+  },
+  {
+    "pair_id": "db15k_mhyper_native",
+    "n_queries": 47532,
+    "status": "built"
+  },
+  {
+    "pair_id": "db15k_mhyper_adamf",
+    "n_queries": 47532,
+    "status": "built"
+  },
+  {
+    "pair_id": "db15k_native_adamf",
+    "n_queries": 47532,
+    "status": "built"
+  }
+]
