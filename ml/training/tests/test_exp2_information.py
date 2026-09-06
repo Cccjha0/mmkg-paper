@@ -22,6 +22,14 @@ from scripts.exp2_information_common import (
 
 
 class Experiment2InformationTest(unittest.TestCase):
+    def test_hash_inventory_accepts_top_level_json_array(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            summary = Path(directory) / "asset_build_summary.json"
+            summary.write_text(json.dumps([{"pair_id": "example", "status": "built"}]), encoding="utf-8")
+            inventory = complete_hash_inventory([summary], set())
+            self.assertEqual(len(inventory), 1)
+            self.assertEqual(Path(inventory[0]["path"]).name, summary.name)
+
     def test_hash_inventory_treats_exp1_audit_as_opaque_boundary(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -40,6 +48,22 @@ class Experiment2InformationTest(unittest.TestCase):
             inventory = complete_hash_inventory([audit], set())
             self.assertEqual(len(inventory), 1)
             self.assertEqual(Path(inventory[0]["path"]).name, audit.name)
+
+    def test_hash_inventory_expands_exp2_manifest_sources(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            manifest = root / "exp2_manifest.json"
+            manifest.write_text(
+                json.dumps(
+                    {
+                        "experiment": "Experiment 2 — Information–Identifiability Audit",
+                        "sources": [{"path": str(root / "missing.csv"), "sha256": "0" * 64}],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaises(RuntimeError):
+                complete_hash_inventory([manifest], set())
 
     def test_feature_ladder_is_cumulative_and_x6_is_frozen_without_embeddings(self) -> None:
         path = Path("docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json")

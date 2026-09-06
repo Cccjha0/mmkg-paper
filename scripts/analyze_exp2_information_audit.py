@@ -197,11 +197,14 @@ def complete_hash_inventory(seed_paths: list[Path], excluded: set[Path]) -> list
             continue
         parsed_json.add(portable)
         payload = json.loads(path.read_text(encoding="utf-8"))
-        # Experiment 1 is an upstream, already-audited boundary. Experiment 2
-        # consumes its gate/summary, not every large artifact listed inside it.
-        # Record the Exp1 audit hash itself, but do not expand its transitive
-        # output inventory (for example per_query_action_geometry.csv.gz).
-        if str(payload.get("experiment", "")).startswith("Experiment 1"):
+        # Expand only manifests produced by this experiment. Exp1, Phase 3A/4A,
+        # and full-ranking manifests are already-audited upstream boundaries:
+        # record and verify the manifest itself, but do not recursively re-audit
+        # its historical datasets/checkpoints/large outputs at analysis time.
+        if not (
+            isinstance(payload, dict)
+            and str(payload.get("experiment", "")).startswith("Experiment 2")
+        ):
             continue
         for declared_path, expected in declared_hash_records(payload):
             source = Path(declared_path).resolve()
