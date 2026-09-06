@@ -95,9 +95,33 @@ foreach ($pair in $pairs) {
 }
 
 if ($Stage -in @("all", "analyze")) {
-    python scripts/analyze_aacpi_phase4a_context_identifiability.py `
-        --phase4a-root $root `
-        --phase3a-root outputs/aacpi/phase3a `
-        --report docs/reports/aacpi_phase4a_contextual_identifiability_audit_2026-09-05.md @overwriteArg
-    if ($LASTEXITCODE -ne 0) { throw "Phase 4A analysis failed" }
+    $analysisManifest = "$root/phase4a_analysis_manifest.json"
+    $analysisReport = "docs/reports/aacpi_phase4a_contextual_identifiability_audit_2026-09-05.md"
+    if (-not $Overwrite -and (Test-Path -LiteralPath $analysisManifest) -and (Test-Path -LiteralPath $analysisReport)) {
+        Write-Host "[SKIP] Phase 4A analysis already complete"
+    } else {
+        $analysisOverwriteArg = $overwriteArg
+        $analysisOutputs = @(
+            "$root/pair_summaries.csv",
+            "$root/action_summaries.csv",
+            "$root/direction_summaries.csv",
+            "$root/seed_summaries.csv",
+            "$root/relation_summaries.csv",
+            "$root/context_increments.csv",
+            "$root/phase4a_gate_summary.csv",
+            "$root/context_feature_manifest.json",
+            $analysisManifest,
+            $analysisReport
+        )
+        $partialAnalysis = $analysisOutputs | Where-Object { Test-Path -LiteralPath $_ }
+        if (-not $Overwrite -and $partialAnalysis.Count -gt 0) {
+            Write-Host "[RESUME] Rebuilding partial Phase 4A analysis outputs"
+            $analysisOverwriteArg = @("--overwrite")
+        }
+        python scripts/analyze_aacpi_phase4a_context_identifiability.py `
+            --phase4a-root $root `
+            --phase3a-root outputs/aacpi/phase3a `
+            --report $analysisReport @analysisOverwriteArg
+        if ($LASTEXITCODE -ne 0) { throw "Phase 4A analysis failed" }
+    }
 }
