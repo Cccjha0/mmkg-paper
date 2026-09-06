@@ -197,6 +197,12 @@ def complete_hash_inventory(seed_paths: list[Path], excluded: set[Path]) -> list
             continue
         parsed_json.add(portable)
         payload = json.loads(path.read_text(encoding="utf-8"))
+        # Experiment 1 is an upstream, already-audited boundary. Experiment 2
+        # consumes its gate/summary, not every large artifact listed inside it.
+        # Record the Exp1 audit hash itself, but do not expand its transitive
+        # output inventory (for example per_query_action_geometry.csv.gz).
+        if str(payload.get("experiment", "")).startswith("Experiment 1"):
+            continue
         for declared_path, expected in declared_hash_records(payload):
             source = Path(declared_path).resolve()
             if source in excluded_resolved:
@@ -339,12 +345,20 @@ def main() -> None:
     report_lines += ["", "Experiment 3 remains the required next comparison regardless of this preliminary result. No query selector or final policy was developed.", "", "## Machine-readable results", "", "- `metrics_by_x_learner.csv`: every dataset/pair/X/learner result", "- `primary_nested_probe_metrics.csv`: fold-wise inner-selected primary probes", "- `nested_learner_selections.csv`: fold-specific learner choices", "- `runs/<pair>/<x>/<learner>/seed_direction_metrics.csv`: seed, direction, and seed × direction results", "", "## Figures", ""]
     for index, path in enumerate(figure_paths, 1): report_lines.append(f"{index}. [{path.stem}]({relative_link(path, report_path)})")
     report_lines += ["", "## Operational audit", "", "- TEST access = 0", "- full-DEV Global used for held-out folds = 0", "- checkpoint training/reselection = 0", "- AACPI resurrection = 0", "- final policy development = 0", "- candidate embeddings = 0", "", "All input and output hashes are recorded in the machine-readable `audit_manifest.json`.", ""]
-    report_path.parent.mkdir(parents=True, exist_ok=True); report_path.write_text("\n".join(report_lines), encoding="utf-8")
     audit_manifest_path = output_dir / "audit_manifest.json"
-    output_paths = [path for path in output_dir.rglob("*") if path.is_file()]
+    output_paths = [
+        path for path in output_dir.rglob("*")
+        if path.is_file() and path.resolve() != audit_manifest_path.resolve()
+    ]
     utility_manifests = [Path(args.utility_manifest_dir) / f"{pair_id}_dev_source_manifest.json" for pair_id in PAIR_IDS]
-    source_paths = [contract_path, Path(args.exp1_stats), report_path, *utility_manifests, *output_paths]
+    source_paths = [contract_path, Path(args.exp1_stats), *utility_manifests, *output_paths]
     inventory = complete_hash_inventory(source_paths, {audit_manifest_path})
+    # Publish the human-readable report only after every declared source hash
+    # has passed, so a failed audit cannot create a new partial final report.
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text("\n".join(report_lines), encoding="utf-8")
+    inventory.append({"path": portable_path(report_path), "sha256": sha256_file(report_path)})
+    inventory.sort(key=lambda row: row["path"])
     manifest = {"schema_version": 1, "experiment": "Experiment 2 — Information–Identifiability Audit", "split": "dev", "decision": decision, "gate": gate_rows, "source_and_output_hash_count": len(inventory), "sources_and_outputs": inventory, "operational_audit": {"test_access": 0, "full_dev_global_for_heldout": 0, "checkpoint_training": 0, "checkpoint_reselection": 0, "aacpi_resurrection": 0, "final_policy_development": 0, "candidate_embeddings": 0}, "next_step_started": 0}
     audit_manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"decision": decision, "gate": gate_rows}, indent=2))

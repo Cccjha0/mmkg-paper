@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -8,6 +9,7 @@ import numpy as np
 import pandas as pd
 
 from scripts.build_exp2_union_top100 import candidate_block
+from scripts.analyze_exp2_information_audit import complete_hash_inventory
 from scripts.exp2_information_common import (
     ALPHAS,
     grouped_folds,
@@ -20,6 +22,25 @@ from scripts.exp2_information_common import (
 
 
 class Experiment2InformationTest(unittest.TestCase):
+    def test_hash_inventory_treats_exp1_audit_as_opaque_boundary(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            audit = root / "exp1_audit.json"
+            audit.write_text(
+                json.dumps(
+                    {
+                        "experiment": "Experiment 1 — Complementarity Landscape Audit",
+                        "sources_and_outputs": [
+                            {"path": str(root / "not_required_by_exp2.csv.gz"), "sha256": "0" * 64}
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            inventory = complete_hash_inventory([audit], set())
+            self.assertEqual(len(inventory), 1)
+            self.assertEqual(Path(inventory[0]["path"]).name, audit.name)
+
     def test_feature_ladder_is_cumulative_and_x6_is_frozen_without_embeddings(self) -> None:
         path = Path("docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json")
         contract = load_contract(path)
