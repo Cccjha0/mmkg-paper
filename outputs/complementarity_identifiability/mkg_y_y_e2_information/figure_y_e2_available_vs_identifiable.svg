@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="600" viewBox="0 0 760 600">
+<rect width="100%" height="100%" fill="white"/>
+<style>text{font-family:Arial,sans-serif;fill:#202124}.title{font-size:20px;font-weight:700}.label{font-size:11px}</style>
+<text x="24" y="32" class="title">Available vs Empirically Identifiable Headroom — MKG-Y</text>
+<line x1="90" y1="510" x2="670" y2="90" stroke="#aaa" stroke-dasharray="5 4"/>
+<circle cx="574.9" cy="474.7" r="7" fill="#4c78a8"/>
+<text x="584.9" y="466.7" class="label">M-Hyper + NativE</text>
+<circle cx="670.0" cy="445.4" r="7" fill="#f58518"/>
+<text x="680.0" y="437.4" class="label">M-Hyper + AdaMF-MAT</text>
+<circle cx="588.1" cy="514.2" r="7" fill="#54a24b"/>
+<text x="598.1" y="506.2" class="label">NativE + AdaMF-MAT</text>
+<text x="380" y="570" text-anchor="middle" class="label">Y-E1 Available Headroom</text>
+<text x="25" y="300" transform="rotate(-90 25 300)" text-anchor="middle" class="label">Y-E2 X4 OOF gain</text>
+</svg>

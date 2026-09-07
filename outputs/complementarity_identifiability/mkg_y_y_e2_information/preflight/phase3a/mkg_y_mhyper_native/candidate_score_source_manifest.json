@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "phase": "AACPI Phase 3A",
+  "dry_run": true,
+  "split": "dev",
+  "pair_id": "mkg_y_mhyper_native",
+  "utility_table": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_native_dev_utility_table.csv.gz",
+  "utility_sha256": "c55ad2f05dd4300f8a859d3ef402670eef26d679a9e6ff3f72e8057b4b3cb1d4",
+  "full_ranking_summary": "outputs/mkg_y/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_summary.json",
+  "full_ranking_summary_sha256": "c2a16dc7ff6e2993e8dc0c598956f0eedb33ed84afcfaf2f22358356fde8cc32",
+  "frozen_run_manifest": {
+    "path": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/mkg_y_mhyper_native_dev_source_manifest.json",
+    "sha256": "007353bb7d1f4269ef9a9d07c43d209fa226dbf2f4148a568fc89623b822dff2"
+  },
+  "run_pairs": {
+    "1": [
+      "ml/artifacts/outputs/mkg_y_mhyper/20260903_215952_seed1",
+      "ml/artifacts/outputs/mkg_y_native/20260903_221947_seed1"
+    ],
+    "2": [
+      "ml/artifacts/outputs/mkg_y_mhyper/20260903_220630_seed2",
+      "ml/artifacts/outputs/mkg_y_native/20260903_230141_seed2"
+    ],
+    "3": [
+      "ml/artifacts/outputs/mkg_y_mhyper/20260903_221310_seed3",
+      "ml/artifacts/outputs/mkg_y_native/20260903_234233_seed3"
+    ]
+  },
+  "n_rows": 143910,
+  "n_queries": 15990,
+  "test_rows_accessed": 0,
+  "test_evaluation_commands": 0
+}

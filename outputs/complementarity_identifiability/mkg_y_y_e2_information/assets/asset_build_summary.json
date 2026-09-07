@@ -1,0 +1,17 @@
+[
+  {
+    "pair_id": "mkg_y_mhyper_native",
+    "n_queries": 15990,
+    "status": "built"
+  },
+  {
+    "pair_id": "mkg_y_mhyper_adamf",
+    "n_queries": 15990,
+    "status": "built"
+  },
+  {
+    "pair_id": "mkg_y_native_adamf",
+    "n_queries": 15990,
+    "status": "built"
+  }
+]

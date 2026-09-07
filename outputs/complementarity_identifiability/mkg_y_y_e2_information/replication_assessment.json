@@ -1,0 +1,28 @@
+{
+  "outcome": "Y_E2_X4_REPLICATION_REPORTED",
+  "is_progression_gate": false,
+  "robust_positive_pairs": 2,
+  "recovery_ge_10pct_pairs": 2,
+  "pair_diagnostics": [
+    {
+      "pair_id": "mkg_y_mhyper_native",
+      "robust_positive": true,
+      "recovery_ge_10pct": true,
+      "positive_seeds": 3
+    },
+    {
+      "pair_id": "mkg_y_mhyper_adamf",
+      "robust_positive": true,
+      "recovery_ge_10pct": true,
+      "positive_seeds": 3
+    },
+    {
+      "pair_id": "mkg_y_native_adamf",
+      "robust_positive": false,
+      "recovery_ge_10pct": false,
+      "positive_seeds": 0
+    }
+  ],
+  "x6_run": false,
+  "method_development_started": false
+}

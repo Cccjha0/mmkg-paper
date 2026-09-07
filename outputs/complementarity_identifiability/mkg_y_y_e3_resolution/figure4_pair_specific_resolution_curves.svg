@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="390" viewBox="0 0 1180 390">
+<rect width="100%" height="100%" fill="#fff"/>
+<style>text{font-family:Arial,sans-serif;fill:#202124}.title{font-size:20px;font-weight:700}.panel{font-size:12px;font-weight:700}.axis{font-size:9px}.note{font-size:10px;fill:#5f6368}</style>
+<text x="20" y="28" class="title">MKG-Y Pair-Specific Resolution Curves</text>
+<text x="55" y="68" class="panel">MKG-Y / M-Hyper + NativE</text>
+<line x1="55" y1="283.3" x2="370" y2="283.3" stroke="#9aa0a6"/>
+<polyline points="55.0,283.3 118.0,300.0 181.0,271.9 244.0,277.7 307.0,275.1 370.0,231.7" fill="none" stroke="#376795" stroke-width="2" stroke-dasharray=""/>
+<polyline points="55.0,283.3 118.0,278.0 181.0,230.0 244.0,211.5 307.0,191.2 370.0,80.0" fill="none" stroke="#d1495b" stroke-width="2" stroke-dasharray="5 3"/>
+<text x="55.0" y="315" text-anchor="middle" class="axis">Global</text>
+<text x="118.0" y="315" text-anchor="middle" class="axis">Direction</text>
+<text x="181.0" y="315" text-anchor="middle" class="axis">Relation</text>
+<text x="244.0" y="315" text-anchor="middle" class="axis">Relation×Direction</text>
+<text x="307.0" y="315" text-anchor="middle" class="axis">Context</text>
+<text x="370.0" y="315" text-anchor="middle" class="axis">Query</text>
+<text x="440" y="68" class="panel">MKG-Y / M-Hyper + AdaMF-MAT</text>
+<line x1="440" y1="286.9" x2="755" y2="286.9" stroke="#9aa0a6"/>
+<polyline points="440.0,286.9 503.0,296.4 566.0,222.7 629.0,236.8 692.0,243.1 755.0,198.5" fill="none" stroke="#376795" stroke-width="2" stroke-dasharray=""/>
+<polyline points="440.0,286.9 503.0,278.7 566.0,204.2 629.0,189.6 692.0,157.7 755.0,80.0" fill="none" stroke="#d1495b" stroke-width="2" stroke-dasharray="5 3"/>
+<text x="440.0" y="315" text-anchor="middle" class="axis">Global</text>
+<text x="503.0" y="315" text-anchor="middle" class="axis">Direction</text>
+<text x="566.0" y="315" text-anchor="middle" class="axis">Relation</text>
+<text x="629.0" y="315" text-anchor="middle" class="axis">Relation×Direction</text>
+<text x="692.0" y="315" text-anchor="middle" class="axis">Context</text>
+<text x="755.0" y="315" text-anchor="middle" class="axis">Query</text>
+<text x="825" y="68" class="panel">MKG-Y / NativE + AdaMF-MAT</text>
+<line x1="825" y1="259.7" x2="1140" y2="259.7" stroke="#9aa0a6"/>
+<polyline points="825.0,259.7 888.0,289.0 951.0,228.0 1014.0,275.1 1077.0,281.0 1140.0,277.5" fill="none" stroke="#376795" stroke-width="2" stroke-dasharray=""/>
+<polyline points="825.0,259.7 888.0,249.9 951.0,144.8 1014.0,103.4 1077.0,151.2 1140.0,80.0" fill="none" stroke="#d1495b" stroke-width="2" stroke-dasharray="5 3"/>
+<text x="825.0" y="315" text-anchor="middle" class="axis">Global</text>
+<text x="888.0" y="315" text-anchor="middle" class="axis">Direction</text>
+<text x="951.0" y="315" text-anchor="middle" class="axis">Relation</text>
+<text x="1014.0" y="315" text-anchor="middle" class="axis">Relation×Direction</text>
+<text x="1077.0" y="315" text-anchor="middle" class="axis">Context</text>
+<text x="1140.0" y="315" text-anchor="middle" class="axis">Query</text>
+<line x1="430" y1="370" x2="455" y2="370" stroke="#376795" stroke-width="2"/><text x="462" y="374" class="note">OOF gain</text>
+<line x1="555" y1="370" x2="580" y2="370" stroke="#d1495b" stroke-width="2" stroke-dasharray="5 3"/><text x="587" y="374" class="note">training gain</text>
+</svg>

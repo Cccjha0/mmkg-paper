@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "experiment": "MKG-Y Y-E4 Cross-Seed Transfer and LOSO Stability Replication",
+  "split": "dev",
+  "dataset": "mkg_y",
+  "assessment": {
+    "outcome": "Y_E4_CROSS_SEED_REPLICATION_REPORTED",
+    "is_progression_gate": false,
+    "transfer_ci_lower_positive_pairs": 3,
+    "loso_ci_lower_positive_pairs": 3,
+    "median_transfer_recovery": 0.18460671124974937,
+    "median_loso_recovery": 0.2545906696569422,
+    "next_replication": "Y-E5",
+    "test_status": "LOCKED"
+  },
+  "source_and_output_hash_count": 28,
+  "sources_and_outputs": [
+    {
+      "path": "docs/protocols/MKG_Y_Y_E4_CROSS_SEED_TRANSFER_CONTRACT.json",
+      "sha256": "545dcdf80148f0cb8b94a6ee2d73381805fcd237fb0e057281a04abde6ff76af",
+      "role": "y_e3_contract"
+    },
+    {
+      "path": "docs/reports/mkg_y_cross_seed_transfer_audit_2026-09-08.md",
+      "sha256": "780351bf18d5374d333cfe13fe2143fb691e87d8c2a6028d2787ea323a80e85b",
+      "role": "y_e4_output"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/audit_manifest.json",
+      "sha256": "867c7edcc7e0b8947369b442bb06ec4fbd655e436ade1b24ce90cfdeecf894ef",
+      "declared_sha256": "867c7edcc7e0b8947369b442bb06ec4fbd655e436ade1b24ce90cfdeecf894ef",
+      "declared_hash_verification": "raw_bytes"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/pair_statistics.csv",
+      "sha256": "e931036c92683e0ee0fc8219662f4c4c5b5293a71b6812e79ea2fc66a157e6cd",
+      "declared_sha256": "e931036c92683e0ee0fc8219662f4c4c5b5293a71b6812e79ea2fc66a157e6cd",
+      "declared_hash_verification": "raw_bytes"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/audit_manifest.json",
+      "sha256": "f5799897478dfda7cfcc49409b0e573fd18d991d6b2161077b7622c632d8622e",
+      "declared_sha256": "f5799897478dfda7cfcc49409b0e573fd18d991d6b2161077b7622c632d8622e",
+      "declared_hash_verification": "raw_bytes"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/primary_nested_x4_probe_metrics.csv",
+      "sha256": "f69a64481eef6a6627bf201b88129ec24506b1daf8098a89fda47d1902fe3351",
+      "declared_sha256": "f69a64481eef6a6627bf201b88129ec24506b1daf8098a89fda47d1902fe3351",
+      "declared_hash_verification": "raw_bytes"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_adamf_dev_source_manifest.json",
+      "sha256": "777548a3dc647d1e0a1b0484f2ddfb3e2d1a0c4cddbb19585caee2c802be571f",
+      "declared_sha256": "777548a3dc647d1e0a1b0484f2ddfb3e2d1a0c4cddbb19585caee2c802be571f",
+      "declared_hash_verification": "raw_bytes"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_native_dev_source_manifest.json",
+      "sha256": "d5d82cffcb308f5bf44001119447af99375a3f3c66ebec5528d246baf7915a68",
+      "declared_sha256": "d5d82cffcb308f5bf44001119447af99375a3f3c66ebec5528d246baf7915a68",
+      "declared_hash_verification": "raw_bytes"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_native_adamf_dev_source_manifest.json",
+      "sha256": "36cfb1ed86bd59efcfe56240b8b78ce838dd28438fd0b031ef5e56240d7b790c",
+      "declared_sha256": "36cfb1ed86bd59efcfe56240b8b78ce838dd28438fd0b031ef5e56240d7b790c",
+      "declared_hash_verification": "raw_bytes"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e3_resolution/audit_manifest.json",
+      "sha256": "44358dbec7adb3d0893b22f3c3d1cac17e7b545c85ed14bd1f63bb2b2f532e66",
+      "declared_sha256": "44358dbec7adb3d0893b22f3c3d1cac17e7b545c85ed14bd1f63bb2b2f532e66",
+      "declared_hash_verification": "raw_bytes"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/bootstrap_ci.csv",
+      "sha256": "5ef15d06f58a85fcba71904256a8f0e3c1fe29a99978e690117082dc9d7bd72c",
+      "role": "y_e4_output"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/figure1_headroom_funnel.svg",
+      "sha256": "af26a8b71574855259aab88f5bcb033f5c5341f06975fe10d7572b3cbca75140",
+      "role": "y_e4_output"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/figure2_cross_seed_transfer_matrix.svg",
+      "sha256": "788242bc2b1dd1eea89f101d0973de069a8527c88d7290f9f8b1511c66b43b93",
+      "role": "y_e4_output"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/figure3_transfer_recovery_forest.svg",
+      "sha256": "ae53fe368a0cdd10c4c9ac378c60d2d35cb912bb5a68f32cfa8e85872f629854",
+      "role": "y_e4_output"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/figure4_stability_vs_transfer.svg",
+      "sha256": "007e00020a98dcf0c621318fee0b0e01ab8593164018ef1346e52d4150af7571",
+      "role": "y_e4_output"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/pair_summary.csv",
+      "sha256": "ceb74de562e8bee3eeece80a546d915f3943124a6596a31baef28917bdaff3df",
+      "role": "y_e4_output"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/per_query_loso.csv.gz",
+      "sha256": "d2564b5e3cf9f74e89c6614ee86b06bab7f19c1bb6700cdbb4da19da8bb4ecd4",
+      "role": "y_e4_output"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/per_query_oracle.csv.gz",
+      "sha256": "db4b0f082166088d7d4efcbffc314b4c064033ecd63eb1a57de4c20d0bb6e561",
+      "role": "y_e4_output"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/per_query_seed_transfer.csv.gz",
+      "sha256": "4b527812d008a01725204b9af8fb2cbe99b9586ca36bf8ad282b554bbded8314",
+      "role": "y_e4_output"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/replication_assessment.json",
+      "sha256": "833c5a3da8d38371a7cf43fa38821abbd32ef1c5a212f31ea6a5022a027ce999",
+      "role": "y_e4_output"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/seed_pair_transfer_matrix.csv",
+      "sha256": "456143fca0867e023a2f125a86d6544c3db16e8acb5f11394b0f35be8e6c333a",
+      "role": "y_e4_output"
+    },
+    {
+      "path": "outputs/mkg_y/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "bcb61387bfb88970a893fd1649d1626933a70bddd0d938939fa7e7b61e2b5d5d",
+      "role": "exact_rr_source"
+    },
+    {
+      "path": "outputs/mkg_y/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "b37c8f69052a6b8abe6e5a878daaafdc6203d3ca31f98a3dbb9ffa853352569b",
+      "role": "exact_rr_source"
+    },
+    {
+      "path": "outputs/mkg_y/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "d00e97dcd7b94949eab2fd9e8ef30c153d0797656aaee94ce94c831700e091b3",
+      "role": "exact_rr_source"
+    },
+    {
+      "path": "scripts/audit_cross_seed_transfer.py",
+      "sha256": "ea2bce0df639a23b1e4ca1f51132bc8daef6d1da0d0283aec0ffb16170c46007",
+      "role": "audit_code"
+    },
+    {
+      "path": "scripts/audit_mkg_y_y_e4_cross_seed_transfer.py",
+      "sha256": "66b2aebfa7bab8652fe762939fc2f3d827cbd0aad4b76edef921de65acb2b821",
+      "role": "audit_code"
+    },
+    {
+      "path": "scripts/exp2_information_common.py",
+      "sha256": "2a9cd8f957540b0640ecb8c41c56826a4936ab9f2b2b7be892ae764895d3732e",
+      "role": "audit_code"
+    },
+    {
+      "path": "scripts/run_mkg_y_y_e4_cross_seed_transfer.ps1",
+      "sha256": "1a92f4b6147a630898adbd63964793ff6315a5369edc81961f9d63e3ac2520db",
+      "role": "audit_code"
+    }
+  ],
+  "operational_audit": {
+    "test_access": 0,
+    "checkpoint_execution": 0,
+    "checkpoint_retraining": 0,
+    "checkpoint_reselection": 0,
+    "target_reselection": 0,
+    "negative_gain_clipping": 0,
+    "new_selector": 0,
+    "new_feature": 0,
+    "new_representation": 0,
+    "original_triple_bootstrap_intact": true
+  },
+  "next_step_started": 0
+}

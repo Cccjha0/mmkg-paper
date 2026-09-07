@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="520" viewBox="0 0 1060 520">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="40" y="38" font-family="Arial" font-size="22" font-weight="700" fill="#202124">Cross-seed Transfer Recovery with clustered 95% CI</text>
+<line x1="425.7" y1="75" x2="425.7" y2="455" stroke="#8c8c8c" stroke-dasharray="5 4"/>
+<text x="425.7" y="477.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">0%</text>
+<line x1="617.1" y1="75" x2="617.1" y2="455" stroke="#8c8c8c" stroke-dasharray="5 4"/>
+<text x="617.1" y="477.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">10%</text>
+<line x1="904.3" y1="75" x2="904.3" y2="455" stroke="#8c8c8c" stroke-dasharray="5 4"/>
+<text x="904.3" y="477.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">25%</text>
+<text x="312.0" y="114.0" text-anchor="end" font-family="Arial" font-size="11" fill="#30343b">MKG-Y / M-Hyper + NativE</text>
+<line x1="733.2" y1="110" x2="825.1" y2="110" stroke="#3f5f75" stroke-width="2"/>
+<circle cx="779.1" cy="110" r="6" fill="#c45d3c"/>
+<text x="833.1" y="114.0" text-anchor="start" font-family="Arial" font-size="10" fill="#30343b">18.5%</text>
+<text x="312.0" y="170.0" text-anchor="end" font-family="Arial" font-size="11" fill="#30343b">MKG-Y / M-Hyper + AdaMF-MAT</text>
+<line x1="760.7" y1="166" x2="856.9" y2="166" stroke="#3f5f75" stroke-width="2"/>
+<circle cx="809.3" cy="166" r="6" fill="#c45d3c"/>
+<text x="864.9" y="170.0" text-anchor="start" font-family="Arial" font-size="10" fill="#30343b">20.0%</text>
+<text x="312.0" y="226.0" text-anchor="end" font-family="Arial" font-size="11" fill="#30343b">MKG-Y / NativE + AdaMF-MAT</text>
+<line x1="520.2" y1="222" x2="599.6" y2="222" stroke="#3f5f75" stroke-width="2"/>
+<circle cx="559.3" cy="222" r="6" fill="#c45d3c"/>
+<text x="607.6" y="226.0" text-anchor="start" font-family="Arial" font-size="10" fill="#30343b">7.0%</text>
+</svg>

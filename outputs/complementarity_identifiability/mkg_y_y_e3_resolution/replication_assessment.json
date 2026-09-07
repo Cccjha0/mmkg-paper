@@ -1,0 +1,18 @@
+{
+  "outcome": "Y_E3_RESOLUTION_REPLICATION_REPORTED",
+  "is_progression_gate": false,
+  "route_selection": false,
+  "robust_positive_pairs_by_level": {
+    "L1": 0,
+    "L2": 1,
+    "L3": 1,
+    "L4": 1
+  },
+  "best_group_ge_x4_pairs": 1,
+  "x4_significantly_exceeds_best_group_pairs": 1,
+  "finer_overfit_pattern_pairs": [
+    "mkg_y_mhyper_adamf"
+  ],
+  "next_replication": "Y-E4",
+  "test_status": "LOCKED"
+}

@@ -1,0 +1,10 @@
+{
+  "outcome": "Y_E4_CROSS_SEED_REPLICATION_REPORTED",
+  "is_progression_gate": false,
+  "transfer_ci_lower_positive_pairs": 3,
+  "loso_ci_lower_positive_pairs": 3,
+  "median_transfer_recovery": 0.18460671124974937,
+  "median_loso_recovery": 0.2545906696569422,
+  "next_replication": "Y-E5",
+  "test_status": "LOCKED"
+}

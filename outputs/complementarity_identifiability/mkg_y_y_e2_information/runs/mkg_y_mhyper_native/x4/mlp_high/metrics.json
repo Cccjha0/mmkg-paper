@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "experiment": "MKG-Y Y-E2 Frozen X4 Information\u2013Identifiability Replication",
+  "split": "dev",
+  "dataset": "mkg_y",
+  "pair_id": "mkg_y_mhyper_native",
+  "representation": "X4",
+  "learner": "mlp_high",
+  "n_queries": 15990,
+  "n_original_triples": 2665,
+  "outer_fold_audit": {
+    "assignment": "relation-stratified SHA256 ordering, then round-robin by original triple with a deterministic per-relation fold offset",
+    "fold_seed": 20260901,
+    "n_folds": 5,
+    "n_unique_triples": 2665,
+    "triple_groups_per_fold": {
+      "0": 532,
+      "1": 535,
+      "2": 534,
+      "3": 535,
+      "4": 529
+    },
+    "observations_per_fold": {
+      "0": 532,
+      "1": 535,
+      "2": 534,
+      "3": 535,
+      "4": 529
+    }
+  },
+  "available_headroom_exp1": 0.036845721448909,
+  "contract_sha256": "8f1a7948dd3069b1a93298ae26d1726e798ae0f808e010a700be21764669e572",
+  "sources": [
+    {
+      "path": "docs/protocols/MKG_Y_Y_E2_X4_OOF_CONTRACT.json",
+      "sha256": "8f1a7948dd3069b1a93298ae26d1726e798ae0f808e010a700be21764669e572"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/audit_manifest.json",
+      "sha256": "867c7edcc7e0b8947369b442bb06ec4fbd655e436ade1b24ce90cfdeecf894ef"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/pair_statistics.csv",
+      "sha256": "e931036c92683e0ee0fc8219662f4c4c5b5293a71b6812e79ea2fc66a157e6cd"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_mhyper_native_query_information_manifest.json",
+      "sha256": "5dc42906b7df566766763d8103af56b3c2813b25132d4dc643746ac112f0efbd"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_native_dev_source_manifest.json",
+      "sha256": "d5d82cffcb308f5bf44001119447af99375a3f3c66ebec5528d246baf7915a68"
+    },
+    {
+      "path": "outputs/mkg_y/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "b37c8f69052a6b8abe6e5a878daaafdc6203d3ca31f98a3dbb9ffa853352569b"
+    }
+  ],
+  "test_rows_accessed": 0,
+  "full_dev_global_used_for_heldout": 0,
+  "checkpoint_training": 0,
+  "checkpoint_reselection": 0,
+  "final_policy_development": 0,
+  "dry_run": false,
+  "fold_specific_globals": [
+    {
+      "outer_fold": 1,
+      "global_index": 7,
+      "global_alpha": 0.35,
+      "outer_train_global_mrr": 0.33826012655518967
+    },
+    {
+      "outer_fold": 2,
+      "global_index": 7,
+      "global_alpha": 0.35,
+      "outer_train_global_mrr": 0.341536123234777
+    },
+    {
+      "outer_fold": 3,
+      "global_index": 7,
+      "global_alpha": 0.35,
+      "outer_train_global_mrr": 0.33946086967308126
+    },
+    {
+      "outer_fold": 4,
+      "global_index": 7,
+      "global_alpha": 0.35,
+      "outer_train_global_mrr": 0.33950954546586615
+    },
+    {
+      "outer_fold": 5,
+      "global_index": 7,
+      "global_alpha": 0.35,
+      "outer_train_global_mrr": 0.33785377358903995
+    }
+  ],
+  "metrics": {
+    "count": 15990,
+    "oof_mrr": 0.34074605524432405,
+    "fold_specific_global_mrr": 0.33932297353978536,
+    "delta_mrr": 0.0014230817045386291,
+    "clustered_ci95_low": -0.0004826587431623192,
+    "clustered_ci95_high": 0.00332079141657232,
+    "headroom_recovery": 0.03862271245012538,
+    "negative_transfer_rate": 0.2759224515322076,
+    "positive_gain_rate": 0.24859287054409004,
+    "changed_rate": 0.8085678549093184,
+    "spearman_pred_u_actual_u": 0.1361224054177939,
+    "positive_ap": 0.25069171073402485,
+    "positive_prevalence": 0.240187617260788,
+    "positive_ap_lift": 0.010504093473236858,
+    "harmful_ap": 0.4906537406087042,
+    "harmful_prevalence": 0.41155722326454036,
+    "harmful_ap_lift": 0.07909651734416384,
+    "positive_vs_harmful_auroc": 0.5763570187170417,
+    "training_gain": 0.02077948249197061,
+    "oof_gain": 0.0014230817045386291,
+    "train_oof_generalization_gap": 0.01935640078743198
+  },
+  "prediction_artifact": {
+    "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/runs/mkg_y_mhyper_native/x4/mlp_high/oof_action_predictions.npz",
+    "sha256": "492de37a6ce7d060621bbd24ff32246ad1ed246e6249d4346da6b7f5f5a11423",
+    "predicted_u_sha256": "cdeb3334cd1fc4419de77551b1e11d1b28b462bce6e2674e376997ae2c9353d1"
+  },
+  "operational_audit": {
+    "test_access": 0,
+    "full_dev_global_for_heldout": 0,
+    "selector_development": 0,
+    "aacpi_resurrection": 0
+  }
+}

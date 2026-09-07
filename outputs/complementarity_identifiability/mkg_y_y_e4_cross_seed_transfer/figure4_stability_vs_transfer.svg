@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="610" viewBox="0 0 1060 610">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="40" y="38" font-family="Arial" font-size="22" font-weight="700" fill="#202124">Action-direction stability vs cross-seed transfer recovery</text>
+<line x1="95" y1="457.1" x2="985" y2="457.1" stroke="#bbb" stroke-dasharray="4 4"/>
+<line x1="95" y1="331.4" x2="985" y2="331.4" stroke="#bbb" stroke-dasharray="4 4"/>
+<line x1="95" y1="142.9" x2="985" y2="142.9" stroke="#bbb" stroke-dasharray="4 4"/>
+<line x1="95" y1="520" x2="985" y2="520" stroke="#444"/>
+<line x1="95" y1="80" x2="95" y2="520" stroke="#444"/>
+<circle cx="778.6" cy="225.1" r="7" fill="#c45d3c"/>
+<text x="787.6" y="215.1" text-anchor="start" font-family="Arial" font-size="10" fill="#30343b">mkg_y_mhyper_native</text>
+<circle cx="749.6" cy="205.3" r="7" fill="#c45d3c"/>
+<text x="758.6" y="223.3" text-anchor="start" font-family="Arial" font-size="10" fill="#30343b">mkg_y_mhyper_adamf</text>
+<circle cx="301.4" cy="369.4" r="7" fill="#c45d3c"/>
+<text x="310.4" y="359.4" text-anchor="start" font-family="Arial" font-size="10" fill="#30343b">mkg_y_native_adamf</text>
+<text x="540.0" y="572.0" text-anchor="middle" font-family="Arial" font-size="12" fill="#30343b">3-seed LEFT / ANCHOR / RIGHT agreement</text>
+<text x="24.0" y="300.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">Transfer Recovery</text>
+<text x="740.0" y="48.0" text-anchor="start" font-family="Arial" font-size="10" fill="#28778e">MKG-W</text>
+<text x="825.0" y="48.0" text-anchor="start" font-family="Arial" font-size="10" fill="#c45d3c">DB15K</text>
+</svg>

@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="750" viewBox="0 0 1120 750">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="40" y="38" font-family="Arial" font-size="22" font-weight="700" fill="#202124">Cross-seed transfer matrix (uniform MRR-gain scale)</text>
+<text x="65.0" y="72.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">MKG-Y / M-Hyper + NativE</text>
+<text x="117.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 1</text>
+<text x="57.0" y="135.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 1</text>
+<text x="189.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 2</text>
+<text x="57.0" y="207.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 2</text>
+<text x="261.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 3</text>
+<text x="57.0" y="279.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 3</text>
+<rect x="81" y="104" width="68" height="68" fill="rgb(79, 143, 160)" stroke="#fff"/>
+<text x="115.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0365</text>
+<rect x="153" y="104" width="68" height="68" fill="rgb(221, 229, 227)" stroke="#fff"/>
+<text x="187.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0055</text>
+<rect x="225" y="104" width="68" height="68" fill="rgb(217, 227, 225)" stroke="#fff"/>
+<text x="259.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0064</text>
+<rect x="81" y="176" width="68" height="68" fill="rgb(210, 223, 222)" stroke="#fff"/>
+<text x="115.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0080</text>
+<rect x="153" y="176" width="68" height="68" fill="rgb(76, 141, 159)" stroke="#fff"/>
+<text x="187.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0370</text>
+<rect x="225" y="176" width="68" height="68" fill="rgb(211, 223, 222)" stroke="#fff"/>
+<text x="259.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0078</text>
+<rect x="81" y="248" width="68" height="68" fill="rgb(219, 228, 226)" stroke="#fff"/>
+<text x="115.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0060</text>
+<rect x="153" y="248" width="68" height="68" fill="rgb(214, 225, 224)" stroke="#fff"/>
+<text x="187.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0071</text>
+<rect x="225" y="248" width="68" height="68" fill="rgb(76, 141, 159)" stroke="#fff"/>
+<text x="259.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0370</text>
+<text x="420.0" y="72.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">MKG-Y / M-Hyper + AdaMF-MAT</text>
+<text x="472.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 1</text>
+<text x="412.0" y="135.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 1</text>
+<text x="544.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 2</text>
+<text x="412.0" y="207.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 2</text>
+<text x="616.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 3</text>
+<text x="412.0" y="279.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 3</text>
+<rect x="436" y="104" width="68" height="68" fill="rgb(40, 119, 142)" stroke="#fff"/>
+<text x="470.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0449</text>
+<rect x="508" y="104" width="68" height="68" fill="rgb(211, 223, 222)" stroke="#fff"/>
+<text x="542.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0077</text>
+<rect x="580" y="104" width="68" height="68" fill="rgb(211, 223, 222)" stroke="#fff"/>
+<text x="614.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0079</text>
+<rect x="436" y="176" width="68" height="68" fill="rgb(207, 220, 220)" stroke="#fff"/>
+<text x="470.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0088</text>
+<rect x="508" y="176" width="68" height="68" fill="rgb(44, 121, 144)" stroke="#fff"/>
+<text x="542.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0441</text>
+<rect x="580" y="176" width="68" height="68" fill="rgb(204, 219, 219)" stroke="#fff"/>
+<text x="614.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0094</text>
+<rect x="436" y="248" width="68" height="68" fill="rgb(200, 216, 217)" stroke="#fff"/>
+<text x="470.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0103</text>
+<rect x="508" y="248" width="68" height="68" fill="rgb(206, 220, 220)" stroke="#fff"/>
+<text x="542.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0090</text>
+<rect x="580" y="248" width="68" height="68" fill="rgb(48, 124, 146)" stroke="#fff"/>
+<text x="614.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0433</text>
+<text x="775.0" y="72.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">MKG-Y / NativE + AdaMF-MAT</text>
+<text x="827.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 1</text>
+<text x="767.0" y="135.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 1</text>
+<text x="899.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 2</text>
+<text x="767.0" y="207.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 2</text>
+<text x="971.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 3</text>
+<text x="767.0" y="279.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 3</text>
+<rect x="791" y="104" width="68" height="68" fill="rgb(73, 139, 157)" stroke="#fff"/>
+<text x="825.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0378</text>
+<rect x="863" y="104" width="68" height="68" fill="rgb(243, 242, 237)" stroke="#fff"/>
+<text x="897.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0009</text>
+<rect x="935" y="104" width="68" height="68" fill="rgb(227, 233, 230)" stroke="#fff"/>
+<text x="969.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0043</text>
+<rect x="791" y="176" width="68" height="68" fill="rgb(233, 236, 232)" stroke="#fff"/>
+<text x="825.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0031</text>
+<rect x="863" y="176" width="68" height="68" fill="rgb(79, 143, 160)" stroke="#fff"/>
+<text x="897.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0364</text>
+<rect x="935" y="176" width="68" height="68" fill="rgb(235, 238, 233)" stroke="#fff"/>
+<text x="969.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0026</text>
+<rect x="791" y="248" width="68" height="68" fill="rgb(233, 237, 233)" stroke="#fff"/>
+<text x="825.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0030</text>
+<rect x="863" y="248" width="68" height="68" fill="rgb(238, 239, 235)" stroke="#fff"/>
+<text x="897.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0020</text>
+<rect x="935" y="248" width="68" height="68" fill="rgb(66, 135, 154)" stroke="#fff"/>
+<text x="969.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0393</text>
+<text x="40.0" y="732.0" text-anchor="start" font-family="Arial" font-size="11" fill="#666">Diagonal: per-seed Raw Oracle. Off-diagonal: source-to-target transfer. Shared |max| = 0.0449.</text>
+</svg>

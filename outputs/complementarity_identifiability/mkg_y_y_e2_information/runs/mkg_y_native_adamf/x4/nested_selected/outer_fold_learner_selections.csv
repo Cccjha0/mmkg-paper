@@ -1,0 +1,6 @@
+dataset,pair_id,representation,outer_fold,selected_learner,selected_config,inner_probe_delta_mrr,inner_spearman,fold_global_alpha
+mkg_y,mkg_y_native_adamf,X4,1,linear_huber,"{""alpha"": 1e-05, ""epsilon"": 0.1, ""max_iter"": 80}",-0.0001576299502476,0.0285032009045298,0.55
+mkg_y,mkg_y_native_adamf,X4,2,linear_huber,"{""alpha"": 1e-05, ""epsilon"": 0.1, ""max_iter"": 80}",-0.0004279819924092,0.026872538949722,0.6
+mkg_y,mkg_y_native_adamf,X4,3,linear_huber,"{""alpha"": 0.0001, ""epsilon"": 0.1, ""max_iter"": 80}",4.214787050703314e-05,0.0232371509172317,0.55
+mkg_y,mkg_y_native_adamf,X4,4,hist_gbdt,"{""l2_regularization"": 0.0, ""learning_rate"": 0.05, ""max_iter"": 150, ""max_leaf_nodes"": 31}",0.000544131600971,0.0216426079300185,0.55
+mkg_y,mkg_y_native_adamf,X4,5,hist_gbdt,"{""l2_regularization"": 0.0, ""learning_rate"": 0.05, ""max_iter"": 150, ""max_leaf_nodes"": 15}",0.0002409622350167,0.0180437337752321,0.6

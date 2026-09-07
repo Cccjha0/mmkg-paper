@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1380" height="720" viewBox="0 0 1380 720">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="40" y="38" font-family="Arial" font-size="22" font-weight="700" fill="#202124">Headroom funnel: stability and observability constraints</text>
+<rect x="55" y="75" width="390" height="230" rx="8" fill="#ffffff" stroke="#dedbd4"/>
+<text x="67.0" y="97.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">MKG-Y / M-Hyper + NativE</text>
+<line x1="97" y1="263.4" x2="433" y2="263.4" stroke="#aaa" stroke-dasharray="3 3"/>
+<line x1="119" y1="144.2" x2="119" y2="159.5" stroke="#3f5f75"/>
+<line x1="115" y1="144.2" x2="123" y2="144.2" stroke="#3f5f75"/>
+<line x1="115" y1="159.5" x2="123" y2="159.5" stroke="#3f5f75"/>
+<circle cx="119" cy="151.9" r="5" fill="#c45d3c"/>
+<text x="119.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="9" fill="#30343b">Raw Oracle</text>
+<line x1="213" y1="239.5" x2="213" y2="246.1" stroke="#3f5f75"/>
+<line x1="209" y1="239.5" x2="217" y2="239.5" stroke="#3f5f75"/>
+<line x1="209" y1="246.1" x2="217" y2="246.1" stroke="#3f5f75"/>
+<circle cx="213" cy="242.8" r="5" fill="#c45d3c"/>
+<text x="213.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="9" fill="#30343b">Cross-seed</text>
+<line x1="307" y1="230.4" x2="307" y2="239.5" stroke="#3f5f75"/>
+<line x1="303" y1="230.4" x2="311" y2="230.4" stroke="#3f5f75"/>
+<line x1="303" y1="239.5" x2="311" y2="239.5" stroke="#3f5f75"/>
+<circle cx="307" cy="235.0" r="5" fill="#c45d3c"/>
+<text x="307.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="9" fill="#30343b">LOSO Stable</text>
+<line x1="401" y1="247.8" x2="401" y2="256.6" stroke="#3f5f75"/>
+<line x1="397" y1="247.8" x2="405" y2="247.8" stroke="#3f5f75"/>
+<line x1="397" y1="256.6" x2="405" y2="256.6" stroke="#3f5f75"/>
+<circle cx="401" cy="252.2" r="5" fill="#c45d3c"/>
+<text x="401.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="9" fill="#30343b">Frozen X4 OOF*</text>
+<polyline points="119,151.9 213,242.8 307,235.0 401,252.2" fill="none" stroke="#c45d3c" stroke-width="1.5"/>
+<rect x="500" y="75" width="390" height="230" rx="8" fill="#ffffff" stroke="#dedbd4"/>
+<text x="512.0" y="97.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">MKG-Y / M-Hyper + AdaMF-MAT</text>
+<line x1="542" y1="263.4" x2="878" y2="263.4" stroke="#aaa" stroke-dasharray="3 3"/>
+<line x1="564" y1="121.4" x2="564" y2="138.4" stroke="#3f5f75"/>
+<line x1="560" y1="121.4" x2="568" y2="121.4" stroke="#3f5f75"/>
+<line x1="560" y1="138.4" x2="568" y2="138.4" stroke="#3f5f75"/>
+<circle cx="564" cy="130.0" r="5" fill="#c45d3c"/>
+<text x="564.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="9" fill="#30343b">Raw Oracle</text>
+<line x1="658" y1="232.6" x2="658" y2="240.7" stroke="#3f5f75"/>
+<line x1="654" y1="232.6" x2="662" y2="232.6" stroke="#3f5f75"/>
+<line x1="654" y1="240.7" x2="662" y2="240.7" stroke="#3f5f75"/>
+<circle cx="658" cy="236.7" r="5" fill="#c45d3c"/>
+<text x="658.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="9" fill="#30343b">Cross-seed</text>
+<line x1="752" y1="222.0" x2="752" y2="232.9" stroke="#3f5f75"/>
+<line x1="748" y1="222.0" x2="756" y2="222.0" stroke="#3f5f75"/>
+<line x1="748" y1="232.9" x2="756" y2="232.9" stroke="#3f5f75"/>
+<circle cx="752" cy="227.6" r="5" fill="#c45d3c"/>
+<text x="752.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="9" fill="#30343b">LOSO Stable</text>
+<line x1="846" y1="237.1" x2="846" y2="248.8" stroke="#3f5f75"/>
+<line x1="842" y1="237.1" x2="850" y2="237.1" stroke="#3f5f75"/>
+<line x1="842" y1="248.8" x2="850" y2="248.8" stroke="#3f5f75"/>
+<circle cx="846" cy="242.9" r="5" fill="#c45d3c"/>
+<text x="846.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="9" fill="#30343b">Frozen X4 OOF*</text>
+<polyline points="564,130.0 658,236.7 752,227.6 846,242.9" fill="none" stroke="#c45d3c" stroke-width="1.5"/>
+<rect x="945" y="75" width="390" height="230" rx="8" fill="#ffffff" stroke="#dedbd4"/>
+<text x="957.0" y="97.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">MKG-Y / NativE + AdaMF-MAT</text>
+<line x1="987" y1="263.4" x2="1323" y2="263.4" stroke="#aaa" stroke-dasharray="3 3"/>
+<line x1="1009" y1="141.6" x2="1009" y2="156.0" stroke="#3f5f75"/>
+<line x1="1005" y1="141.6" x2="1013" y2="141.6" stroke="#3f5f75"/>
+<line x1="1005" y1="156.0" x2="1013" y2="156.0" stroke="#3f5f75"/>
+<circle cx="1009" cy="148.9" r="5" fill="#c45d3c"/>
+<text x="1009.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="9" fill="#30343b">Raw Oracle</text>
+<line x1="1103" y1="252.9" x2="1103" y2="257.8" stroke="#3f5f75"/>
+<line x1="1099" y1="252.9" x2="1107" y2="252.9" stroke="#3f5f75"/>
+<line x1="1099" y1="257.8" x2="1107" y2="257.8" stroke="#3f5f75"/>
+<circle cx="1103" cy="255.4" r="5" fill="#c45d3c"/>
+<text x="1103.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="9" fill="#30343b">Cross-seed</text>
+<line x1="1197" y1="247.7" x2="1197" y2="255.5" stroke="#3f5f75"/>
+<line x1="1193" y1="247.7" x2="1201" y2="247.7" stroke="#3f5f75"/>
+<line x1="1193" y1="255.5" x2="1201" y2="255.5" stroke="#3f5f75"/>
+<circle cx="1197" cy="251.6" r="5" fill="#c45d3c"/>
+<text x="1197.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="9" fill="#30343b">LOSO Stable</text>
+<line x1="1291" y1="261.6" x2="1291" y2="268.0" stroke="#3f5f75"/>
+<line x1="1287" y1="261.6" x2="1295" y2="261.6" stroke="#3f5f75"/>
+<line x1="1287" y1="268.0" x2="1295" y2="268.0" stroke="#3f5f75"/>
+<circle cx="1291" cy="264.8" r="5" fill="#c45d3c"/>
+<text x="1291.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="9" fill="#30343b">Frozen X4 OOF*</text>
+<polyline points="1009,148.9 1103,255.4 1197,251.6 1291,264.8" fill="none" stroke="#c45d3c" stroke-width="1.5"/>
+<text x="40.0" y="702.0" text-anchor="start" font-family="Arial" font-size="11" fill="#666">MRR gain vs Global. *Frozen X4 uses its preregistered fold-specific OOF Global baseline.</text>
+</svg>

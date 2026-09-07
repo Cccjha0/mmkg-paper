@@ -4,7 +4,7 @@
   "status": "PASS",
   "contract": {
     "path": "docs/protocols/MKG_Y_Y_E2_X4_OOF_CONTRACT.json",
-    "sha256": "784617d7bc274b6f8f9efa2805f40071edc06f61f68ba24fd9b44ae3ae5a3045"
+    "sha256": "8f1a7948dd3069b1a93298ae26d1726e798ae0f808e010a700be21764669e572"
   },
   "verified_source_count": 58,
   "split": "dev",

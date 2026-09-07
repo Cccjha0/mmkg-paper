@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "experiment": "MKG-Y Y-E2 Frozen X4 Information\u2013Identifiability Replication",
+  "split": "dev",
+  "dataset": "mkg_y",
+  "pair_id": "mkg_y_native_adamf",
+  "representation": "X4",
+  "learner": "hist_gbdt",
+  "n_queries": 15990,
+  "n_original_triples": 2665,
+  "outer_fold_audit": {
+    "assignment": "relation-stratified SHA256 ordering, then round-robin by original triple with a deterministic per-relation fold offset",
+    "fold_seed": 20260901,
+    "n_folds": 5,
+    "n_unique_triples": 2665,
+    "triple_groups_per_fold": {
+      "0": 532,
+      "1": 535,
+      "2": 534,
+      "3": 535,
+      "4": 529
+    },
+    "observations_per_fold": {
+      "0": 532,
+      "1": 535,
+      "2": 534,
+      "3": 535,
+      "4": 529
+    }
+  },
+  "available_headroom_exp1": 0.0378442288474499,
+  "contract_sha256": "8f1a7948dd3069b1a93298ae26d1726e798ae0f808e010a700be21764669e572",
+  "sources": [
+    {
+      "path": "docs/protocols/MKG_Y_Y_E2_X4_OOF_CONTRACT.json",
+      "sha256": "8f1a7948dd3069b1a93298ae26d1726e798ae0f808e010a700be21764669e572"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/audit_manifest.json",
+      "sha256": "867c7edcc7e0b8947369b442bb06ec4fbd655e436ade1b24ce90cfdeecf894ef"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/pair_statistics.csv",
+      "sha256": "e931036c92683e0ee0fc8219662f4c4c5b5293a71b6812e79ea2fc66a157e6cd"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_native_adamf_query_information_manifest.json",
+      "sha256": "79f506b01221951a79c2a3cfe55a0411557614d536281e447bc7e2bd7d617184"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_native_adamf_dev_source_manifest.json",
+      "sha256": "36cfb1ed86bd59efcfe56240b8b78ce838dd28438fd0b031ef5e56240d7b790c"
+    },
+    {
+      "path": "outputs/mkg_y/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "d00e97dcd7b94949eab2fd9e8ef30c153d0797656aaee94ce94c831700e091b3"
+    }
+  ],
+  "test_rows_accessed": 0,
+  "full_dev_global_used_for_heldout": 0,
+  "checkpoint_training": 0,
+  "checkpoint_reselection": 0,
+  "final_policy_development": 0,
+  "dry_run": false,
+  "fold_specific_globals": [
+    {
+      "outer_fold": 1,
+      "global_index": 11,
+      "global_alpha": 0.55,
+      "outer_train_global_mrr": 0.32766554859620645
+    },
+    {
+      "outer_fold": 2,
+      "global_index": 12,
+      "global_alpha": 0.6,
+      "outer_train_global_mrr": 0.3296381874787994
+    },
+    {
+      "outer_fold": 3,
+      "global_index": 11,
+      "global_alpha": 0.55,
+      "outer_train_global_mrr": 0.32812939816743875
+    },
+    {
+      "outer_fold": 4,
+      "global_index": 11,
+      "global_alpha": 0.55,
+      "outer_train_global_mrr": 0.32871653591344147
+    },
+    {
+      "outer_fold": 5,
+      "global_index": 12,
+      "global_alpha": 0.6,
+      "outer_train_global_mrr": 0.3277965074027957
+    }
+  ]
+}
