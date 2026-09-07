@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "experiment": "Experiment 6 — Stable Headroom & Gain Concentration Audit",
+  "status": "frozen_before_systematic_run",
+  "effective_date": "2026-09-07",
+  "split": "dev",
+  "pair_ids": [
+    "mkgw_mhyper_native",
+    "mkgw_mhyper_adamf",
+    "mkgw_native_adamf",
+    "db15k_mhyper_native",
+    "db15k_mhyper_adamf",
+    "db15k_native_adamf"
+  ],
+  "seeds": [1, 2, 3],
+  "directions": ["head", "tail"],
+  "query_identity": ["original_triple_id", "direction"],
+  "alpha_grid": [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0],
+  "normalization": "query_zscore",
+  "evaluation": "exact filtered reciprocal rank",
+  "alpha0_source": "Experiment 1 canonical source manifest global_alpha",
+  "tie_break": ["maximum mean RR", "nearest alpha0", "smaller alpha"],
+  "stable_actions": {
+    "consensus": "argmax alpha of mean RR over all three seeds; ex-post upper diagnostic",
+    "two_of_three": "non-alpha0 actions with strictly positive utility in at least two seeds; maximize mean RR; empty-set fallback alpha0",
+    "three_of_three": "non-alpha0 actions with strictly positive utility in all three seeds; maximize mean RR; empty-set fallback alpha0",
+    "positive_threshold": 0.0,
+    "recovery_clipping": false,
+    "query_ratio_averaging": false
+  },
+  "concentration": {
+    "unit": "original_triple_id",
+    "triple_gain": "mean over seed and direction of seed-specific Oracle gain",
+    "top_fractions": [0.01, 0.05, 0.10, 0.20],
+    "top_count_rounding": "ceil(fraction * N)",
+    "q50": "minimum prefix count reaching at least 50% total gain divided by N",
+    "gini_formula": "sum_i (2*i-N-1)*x_(i) / (N*sum_i x_i), with non-negative gains sorted ascending and i=1..N",
+    "effective_support": "((sum G)^2 / sum G^2) / N",
+    "curve_name": "Cumulative Oracle-Gain Concentration",
+    "diagonal_label": "uniform contribution reference"
+  },
+  "bootstrap": {
+    "samples": 10000,
+    "seed": 20260907,
+    "unit": "original_triple_id",
+    "interval": "percentile 95%",
+    "preserve": ["both directions", "all three seeds", "all alpha actions"],
+    "paired_recovery_ratios": true,
+    "clipping": false
+  },
+  "stable_classification": {
+    "stable_high": {
+      "minimum_two_of_three_ci_lower_positive_pairs": 4,
+      "median_two_of_three_recovery_gte": 0.25,
+      "minimum_three_of_three_ci_lower_positive_pairs": 3,
+      "both_datasets_have_three_of_three_significant_pair": true
+    },
+    "stable_collapse": {
+      "median_two_of_three_recovery_lt": 0.10,
+      "median_three_of_three_recovery_lt": 0.05,
+      "minimum_three_of_three_not_significantly_positive_pairs": 4
+    },
+    "fallback": "E6_STABLE_INTERMEDIATE"
+  },
+  "gain_classification": {
+    "highly_concentrated": {
+      "minimum_top10_share_gte_half_pairs": 4,
+      "minimum_q50_lte_ten_percent_pairs": 4
+    },
+    "diffuse": {
+      "minimum_top10_share_lte_quarter_pairs": 4,
+      "minimum_q50_gte_thirty_percent_pairs": 4
+    },
+    "fallback": "E6_GAIN_INTERMEDIATE"
+  },
+  "joint_interpretation": {
+    "strong_e4_intermediate_definition": {
+      "classification": "E4_INTERMEDIATE",
+      "minimum_loso_ci_lower_positive_pairs": 4,
+      "both_datasets_have_loso_significant_pair": true,
+      "median_loso_recovery_gte": 0.10
+    },
+    "precedence": [
+      "FINAL_RESIDUAL_DOMINATED_LIMITS",
+      "FINAL_STABLE_BUT_UNOBSERVABLE",
+      "FINAL_MODELING_BOTTLENECK",
+      "FINAL_SELECTIVE_RARE_OPPORTUNITY",
+      "FINAL_MIXED_LIMITS"
+    ],
+    "selective_requires_stable_not_collapse": true,
+    "modeling_bottleneck_minimum_stable2_gt_frozen_x4_pairs": 4
+  },
+  "decision_memo": {
+    "status_after_generation": "FROZEN_AFTER_DEV_CLOSURE_BEFORE_TEST",
+    "test_unlock_requires_committed_memo": true,
+    "test_runs": "one-time only",
+    "test_result_role": "validate extrapolation of the frozen DEV interpretation"
+  },
+  "test_access": 0,
+  "test_commands_executed": 0,
+  "checkpoint_retraining": 0,
+  "checkpoint_reselection": 0,
+  "new_selector": 0,
+  "new_representation": 0,
+  "policy_tuning": 0,
+  "action_grid_modification": 0,
+  "experiment_4_5_result_modification": 0
+}
