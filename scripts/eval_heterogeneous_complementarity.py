@@ -24,6 +24,7 @@ from ml.training.src.eval.filtered_ranking import (
 from ml.training.src.models.build_model import build_model
 from ml.training.src.utils.seed import set_seed
 from router.query_geometry import QUERY_GEOMETRY_FIELDS, query_geometry_rows
+from scripts.dev_only_dataset_loader import load_dev_only_dataset_bundle
 
 
 DEFAULT_ALPHAS = tuple(round(index * 0.05, 2) for index in range(21))
@@ -106,6 +107,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--no-resume", action="store_true")
     parser.add_argument("--no-reference-check", action="store_true")
     parser.add_argument(
+        "--dev-only-no-test-access",
+        action="store_true",
+        help=(
+            "For DEV only: load TRAIN/DEV assets without opening TEST rows and build "
+            "filtered-ranking truth sets from TRAIN+DEV only."
+        ),
+    )
+    parser.add_argument(
         "--export-alpha-grid",
         action="store_true",
         help=(
@@ -160,7 +169,13 @@ def read_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def load_expert(name: str, run_dir: Path, device: str) -> LoadedExpert:
+def load_expert(
+    name: str,
+    run_dir: Path,
+    device: str,
+    *,
+    dev_only_no_test_access: bool = False,
+) -> LoadedExpert:
     run_dir = run_dir.resolve()
     cfg_path = run_dir / "config_merged.json"
     ckpt_path = run_dir / "best.ckpt"
@@ -170,7 +185,10 @@ def load_expert(name: str, run_dir: Path, device: str) -> LoadedExpert:
     seed = int(cfg.get("system", {}).get("seed", 1))
     set_seed(seed, deterministic=bool(cfg.get("system", {}).get("deterministic", False)))
     cfg.setdefault("system", {})["device"] = device
-    bundle = load_dataset_bundle(cfg)
+    if dev_only_no_test_access:
+        bundle, _ = load_dev_only_dataset_bundle(cfg)
+    else:
+        bundle = load_dataset_bundle(cfg)
     model, num_entities = build_model(cfg, dataset_bundle=bundle)
     state = torch.load(ckpt_path, map_location=device)
     model.load_state_dict(state)
@@ -441,6 +459,7 @@ def checkpoint_is_valid(
     protocol_version: str,
     expert_a_name: str,
     expert_b_name: str,
+    filter_fact_scope: str,
 ) -> bool:
     if len(rows) != expected_count or not rows:
         return False
@@ -457,6 +476,7 @@ def checkpoint_is_valid(
         and row.get("protocol_version") == protocol_version
         and row.get("expert_a_name") == expert_a_name
         and row.get("expert_b_name") == expert_b_name
+        and row.get("filter_fact_scope", "train_dev_test") == filter_fact_scope
         and math.isclose(float(row.get("rrf_k", "nan")), rrf_k, rel_tol=0.0, abs_tol=1e-12)
         and all(math.isfinite(float(row.get(field, "nan"))) for field in QUERY_GEOMETRY_FIELDS)
         for row in rows
@@ -505,6 +525,7 @@ def evaluate_unit(
     device: str,
     progress_every: int,
     pair_name: str,
+    filter_fact_scope: str,
 ) -> list[dict]:
     triples_t = torch.tensor(triples, dtype=torch.long)
     outer_batch = max(expert_a.query_batch_size, expert_b.query_batch_size)
@@ -598,6 +619,7 @@ def evaluate_unit(
                 "rank_equal": int(rank_equal[index]),
                 "rr_equal": float(rr_equal[index]),
                 "rrf_k": float(rrf_k),
+                "filter_fact_scope": filter_fact_scope,
             }
             row.update(geometry_rows[index])
             if split == "dev" or export_alpha_grid:
@@ -838,6 +860,8 @@ def write_markdown(path: Path, rows: list[dict], split: str) -> None:
 
 def main() -> None:
     args = parse_args()
+    if args.dev_only_no_test_access and args.split != "dev":
+        raise ValueError("--dev-only-no-test-access is valid only with --split dev")
     if args.rrf_k <= 0 or args.relation_min_support < 1:
         raise ValueError("rrf-k and relation-min-support must be positive")
     device = resolve_device(args.device)
@@ -865,8 +889,18 @@ def main() -> None:
     dataset_name = None
     protocol_version = None
     for left_path, right_path in run_pairs:
-        expert_a = load_expert(args.expert_a_name, left_path, device)
-        expert_b = load_expert(args.expert_b_name, right_path, device)
+        expert_a = load_expert(
+            args.expert_a_name,
+            left_path,
+            device,
+            dev_only_no_test_access=args.dev_only_no_test_access,
+        )
+        expert_b = load_expert(
+            args.expert_b_name,
+            right_path,
+            device,
+            dev_only_no_test_access=args.dev_only_no_test_access,
+        )
         validate_pair(expert_a, expert_b)
         if expert_a.seed in seen_seeds:
             raise RuntimeError(f"Duplicate seed in run pairs: {expert_a.seed}")
@@ -889,11 +923,13 @@ def main() -> None:
         )
         if not triples:
             raise RuntimeError(f"No labeled triples for split={args.split}")
-        true_tails, true_heads = build_true_facts(
-            expert_a.bundle.train_triples
-            + expert_a.bundle.valid_triples
-            + expert_a.bundle.test_triples
+        filter_fact_scope = (
+            "train_dev" if args.dev_only_no_test_access else "train_dev_test"
         )
+        truth_triples = expert_a.bundle.train_triples + expert_a.bundle.valid_triples
+        if not args.dev_only_no_test_access:
+            truth_triples += expert_a.bundle.test_triples
+        true_tails, true_heads = build_true_facts(truth_triples)
         true_indexes = {
             "tail": prepare_true_tails_index(true_tails),
             "head": prepare_true_heads_index(true_heads),
@@ -917,6 +953,7 @@ def main() -> None:
                 protocol_version=current_protocol,
                 expert_a_name=args.expert_a_name,
                 expert_b_name=args.expert_b_name,
+                filter_fact_scope=filter_fact_scope,
             ):
                 print(f"[RESUME] {checkpoint}")
                 unit_rows = cached
@@ -941,6 +978,7 @@ def main() -> None:
                     device=device,
                     progress_every=args.progress_every,
                     pair_name=args.pair_name,
+                    filter_fact_scope=filter_fact_scope,
                 )
                 write_rows(checkpoint, unit_rows)
                 print(f"[CHECKPOINT] {checkpoint}")
@@ -1016,6 +1054,11 @@ def main() -> None:
         "rrf_k": args.rrf_k,
         "score_normalization": "query_zscore",
         "export_alpha_grid": bool(args.split == "dev" or args.export_alpha_grid),
+        "dev_only_no_test_access": bool(args.dev_only_no_test_access),
+        "test_rows_opened": 0 if args.dev_only_no_test_access else None,
+        "filter_fact_scope": (
+            "train_dev" if args.dev_only_no_test_access else "train_dev_test"
+        ),
         "query_geometry_fields": list(QUERY_GEOMETRY_FIELDS),
         "selection": selection,
         "results": overall,

@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "study": "MKG-Y Y2 DEV Exact Full-Ranking Export",
+  "contract_path": "docs/protocols/MKG_Y_Y2_DEV_FULL_RANKING_CONTRACT.json",
+  "status": "frozen_before_y2_export",
+  "frozen_date": "2026-09-07",
+  "dataset": "mkg_y",
+  "dataset_protocol": "mmkg_general_v1",
+  "split": "dev",
+  "dataset_counts": {
+    "entities": 15000,
+    "relations": 28,
+    "train": 21310,
+    "valid": 2665,
+    "test": 2663
+  },
+  "acceptance_decision": "outputs/complementarity_identifiability/mkg_y_y0_y1_acceptance/acceptance_decision.json",
+  "checkpoint_inventory": "outputs/complementarity_identifiability/mkg_y_y0_y1_acceptance/checkpoint_inventory.csv",
+  "required_acceptance_progression": "Y2_DEV_EXPORT_ALLOWED",
+  "ranking_protocol": {
+    "directions": [
+      "head",
+      "tail"
+    ],
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "alpha_grid": {
+      "start": 0.0,
+      "stop": 1.0,
+      "step": 0.05,
+      "values": [
+        0.0,
+        0.05,
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3,
+        0.35,
+        0.4,
+        0.45,
+        0.5,
+        0.55,
+        0.6,
+        0.65,
+        0.7,
+        0.75,
+        0.8,
+        0.85,
+        0.9,
+        0.95,
+        1.0
+      ]
+    },
+    "score_normalization": "query_zscore",
+    "normalization_epsilon": 1e-08,
+    "rank_semantics": "exact filtered competition rank",
+    "filter_fact_scope": "train_dev",
+    "filter_scope_reason": "DEV export must not open or derive filtering facts from canonical TEST rows.",
+    "global_alpha_tie_break": [
+      "maximum pooled DEV MRR",
+      "closest to 0.50",
+      "smaller alpha"
+    ],
+    "rrf_k": 60.0,
+    "relation_min_support": 60,
+    "reference_endpoint_check": "disabled because accepted standalone DEV metrics used the historical all-split filter scope, whereas Y2 is clean TRAIN+DEV-only filtering"
+  },
+  "experts": {
+    "mkg_y_mhyper": {
+      "display_name": "M-Hyper",
+      "model_name": "mmkg_mhyper",
+      "runs": {
+        "1": {
+          "run_dir": "ml/artifacts/outputs/mkg_y_mhyper/20260903_215952_seed1",
+          "checkpoint_sha256": "5f6f9605eeef187e10489fbd177b9b7c242c20b4b0298500e6634ac379edf97e"
+        },
+        "2": {
+          "run_dir": "ml/artifacts/outputs/mkg_y_mhyper/20260903_220630_seed2",
+          "checkpoint_sha256": "992f136403a05e737bbecff54747e369f259348a8b498ec53554fc17ae5d9457"
+        },
+        "3": {
+          "run_dir": "ml/artifacts/outputs/mkg_y_mhyper/20260903_221310_seed3",
+          "checkpoint_sha256": "9fc18389c40c1a3612f95e7e83bd7b49e49b2f2536ed0a40e19d151769822e80"
+        }
+      }
+    },
+    "mkg_y_native": {
+      "display_name": "NativE",
+      "model_name": "mmkg_native",
+      "runs": {
+        "1": {
+          "run_dir": "ml/artifacts/outputs/mkg_y_native/20260903_221947_seed1",
+          "checkpoint_sha256": "ed63585a759e4abb9a5270134f13031513f9f80106034c48fba920299dca41cf"
+        },
+        "2": {
+          "run_dir": "ml/artifacts/outputs/mkg_y_native/20260903_230141_seed2",
+          "checkpoint_sha256": "f04267f53c5136af8b85ed5aa94c458a51bd551828d8c18fa30f5f040b67a9e5"
+        },
+        "3": {
+          "run_dir": "ml/artifacts/outputs/mkg_y_native/20260903_234233_seed3",
+          "checkpoint_sha256": "9da57cd7e645436aaa8bea8a490856512bd0bd1002f650db618104e4429a8708"
+        }
+      }
+    },
+    "mkg_y_adamf_mat": {
+      "display_name": "AdaMF-MAT",
+      "model_name": "mmkg_adamf_mat",
+      "runs": {
+        "1": {
+          "run_dir": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_002716_seed1",
+          "checkpoint_sha256": "b1a7e6ffd054b784851c61f02c0d3d93b9ca5db28d863460b9fc9dc69afa59da"
+        },
+        "2": {
+          "run_dir": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_020546_seed2",
+          "checkpoint_sha256": "d37aa89374f814bc843dcbbedb0d54d0fcd0522fd5c5105058dfb59f191b1262"
+        },
+        "3": {
+          "run_dir": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_035250_seed3",
+          "checkpoint_sha256": "e8eb1e9d451d567b73956a71a86e9da620711291fe3b267da3815ae8097035d3"
+        }
+      }
+    }
+  },
+  "pairs": [
+    {
+      "id": "mkg_y_mhyper_native",
+      "pair_name": "mkg_y_mhyper_native",
+      "experts": [
+        "mkg_y_mhyper",
+        "mkg_y_native"
+      ],
+      "expert_a": "M-Hyper",
+      "expert_b": "NativE",
+      "output_dir": "outputs/mkg_y/anchored_dynamic/mhyper_native_seed123/full_ranking"
+    },
+    {
+      "id": "mkg_y_mhyper_adamf",
+      "pair_name": "mkg_y_mhyper_adamf",
+      "experts": [
+        "mkg_y_mhyper",
+        "mkg_y_adamf_mat"
+      ],
+      "expert_a": "M-Hyper",
+      "expert_b": "AdaMF-MAT",
+      "output_dir": "outputs/mkg_y/anchored_dynamic/mhyper_adamf_seed123/full_ranking"
+    },
+    {
+      "id": "mkg_y_native_adamf",
+      "pair_name": "mkg_y_native_adamf",
+      "experts": [
+        "mkg_y_native",
+        "mkg_y_adamf_mat"
+      ],
+      "expert_a": "NativE",
+      "expert_b": "AdaMF-MAT",
+      "output_dir": "outputs/mkg_y/anchored_dynamic/native_adamf_seed123/full_ranking"
+    }
+  ],
+  "test_policy": {
+    "status": "LOCKED",
+    "test_rows_opened": 0,
+    "test_evaluation": 0,
+    "test_filter_facts_used": 0,
+    "unlock_condition": "not part of Y2"
+  },
+  "prohibited": {
+    "checkpoint_retraining": 0,
+    "checkpoint_reselection": 0,
+    "checkpoint_modification": 0,
+    "alpha_grid_modification": 0,
+    "test_access": 0
+  },
+  "frozen_source_hashes": {
+    "data/datasets/mkg_y/processed/manifest.json": {
+      "sha256": "148cd499bc09edead45858ef57e9bb93b442783a41fc3d5f9dead2af19194ae4",
+      "mode": "lf_normalized"
+    },
+    "outputs/complementarity_identifiability/mkg_y_y0_y1_acceptance/acceptance_decision.json": {
+      "sha256": "8a9837600ee6d075a0698e4ac8bcf28b77f16acdb34082f434fc9527ae6a8585",
+      "mode": "lf_normalized"
+    },
+    "outputs/complementarity_identifiability/mkg_y_y0_y1_acceptance/checkpoint_inventory.csv": {
+      "sha256": "11f9c0c1e3c4787627e2dded63388d156f66640c72e93d04856081b993c22d5d",
+      "mode": "lf_normalized"
+    },
+    "scripts/eval_heterogeneous_complementarity.py": {
+      "sha256": "a7543b4a8948cc63abdd87bf4b2b2eda6e252bf6e4fecc3f563103abf0aaca2e",
+      "mode": "lf_normalized"
+    },
+    "scripts/dev_only_dataset_loader.py": {
+      "sha256": "51edd1fb35d1be812b9aef04cd1a142a06a14e14db77f53aa35b46071b667655",
+      "mode": "lf_normalized"
+    },
+    "scripts/audit_mkg_y_y2_dev_export.py": {
+      "sha256": "297474a46e528512b40dfdeeff3e43e1a57f030b0829d34ddfa5d8d226d9425b",
+      "mode": "lf_normalized"
+    },
+    "scripts/run_mkg_y_y2_dev_full_ranking.ps1": {
+      "sha256": "b849dcd671828751fc31267114e62fd84b1316d1b53eb9f80bdcb0d394fd785f",
+      "mode": "lf_normalized"
+    }
+  },
+  "output_contract": {
+    "audit_directory": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking",
+    "per_pair_required": [
+      "dev_query_rows.csv",
+      "dev_results.csv",
+      "dev_results_by_seed.csv",
+      "dev_results.md",
+      "dev_summary.json",
+      "selection.json",
+      "checkpoints/dev_seed{1,2,3}_{head,tail}.csv"
+    ],
+    "verification_outputs": [
+      "preflight.json",
+      "export_verification.json",
+      "mkg_y_mhyper_native_dev_source_manifest.json",
+      "mkg_y_mhyper_adamf_dev_source_manifest.json",
+      "mkg_y_native_adamf_dev_source_manifest.json",
+      "audit_manifest.json"
+    ]
+  }
+}
