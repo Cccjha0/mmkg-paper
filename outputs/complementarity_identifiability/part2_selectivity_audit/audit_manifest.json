@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "study": "Part II \u2014 Frozen High-Value Opportunity Selectivity Audit",
+  "split": "dev",
+  "contract": {
+    "path": "docs/protocols/FROZEN_HIGH_VALUE_SELECTIVITY_AUDIT.json",
+    "sha256": "2df0770f0820c079a90eaf6bf710f7675615eb31b6585f63023e01bbecd099f6"
+  },
+  "sources": [
+    {
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_adamf_dev_source_manifest.json",
+      "sha256": "0f95a6073e85b4d226f57d68e45f5013bc11091f604d9d129a1eb877156e920e",
+      "bytes": 3346,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_native_dev_source_manifest.json",
+      "sha256": "3d5bd8a8069717933434d2a9dab6053decbe69cbe9b4dc06d74ddc84cab34b6d",
+      "bytes": 3351,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/db15k_native_adamf_dev_source_manifest.json",
+      "sha256": "f9001315914573bc95444c27c09def97e1eddf0fea4bac2d1ee81b6f1d96e20a",
+      "bytes": 3346,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_adamf_dev_source_manifest.json",
+      "sha256": "8d9c1171dd9630742cfe8f80ea6a00adba580a76dc973c200fc77d60d78f8b8c",
+      "bytes": 3344,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_native_dev_source_manifest.json",
+      "sha256": "57a24f419069845d35f4338ed8caa641dd50c290b6947cd14e8e83f65fdac0ac",
+      "bytes": 3390,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/mkgw_native_adamf_dev_source_manifest.json",
+      "sha256": "d4e01934588ec2919542b1ed4998d2a0992f300889cf313529f398eda6ff86b0",
+      "bytes": 3358,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/db15k_mhyper_adamf_query_information.npz",
+      "sha256": "fb235a929d19ec3a9f5f17d520490c9184b75bdf45a4d428af8b3b9c7a24a758",
+      "bytes": 3197699,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/db15k_mhyper_native_query_information.npz",
+      "sha256": "5d131ba6e22c67762855337838381d27a661212b52fcbab35a5b4f277a0d1a63",
+      "bytes": 3206892,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/db15k_native_adamf_query_information.npz",
+      "sha256": "1bd556756257095cebdea8ba1d98f6675def2a5feae4da344f326eb054021e4f",
+      "bytes": 3159088,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/mkgw_mhyper_adamf_query_information.npz",
+      "sha256": "b9754c10fd81554e9cd7fb7cb6064b61e1df09cfe0b4c8d5e5f9f60ef6f87371",
+      "bytes": 1741475,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/mkgw_mhyper_native_query_information.npz",
+      "sha256": "78a1d1d6ac83b0728dad63725fdfdaeae5035b77ce377cb0f786ce580ada75f4",
+      "bytes": 1742220,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/mkgw_native_adamf_query_information.npz",
+      "sha256": "3f7fe2dcb1368197a3955279cbd0bce4990a3cb9b4fd798b2c2e8a4f5a03770d",
+      "bytes": 1730554,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/audit_manifest.json",
+      "sha256": "5c8a3dea2bf600b7295162bd846e4e2480e83a8c7fa414dacd54da8d967d93d7",
+      "bytes": 254203,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/runs/db15k_mhyper_adamf/x4/nested_selected/oof_action_predictions.npz",
+      "sha256": "02006fe2bc1bdd4df7872aa1445859b92ce1b06ecd7e7f3b3e5f92156b6a66a7",
+      "bytes": 3225699,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/runs/db15k_mhyper_native/x4/nested_selected/oof_action_predictions.npz",
+      "sha256": "27e1b4e742a93191d7eb1588dbf5f1845a69545bea2947b83f1e20f4949e9486",
+      "bytes": 2871212,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/runs/db15k_native_adamf/x4/nested_selected/oof_action_predictions.npz",
+      "sha256": "54085c42494c527f0e433c37fe38278385913a4d1e4db3aa75f0fa7dcdfd3c0c",
+      "bytes": 2817755,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/runs/mkgw_mhyper_adamf/x4/nested_selected/oof_action_predictions.npz",
+      "sha256": "f7ea28eb9b471c2bcdd235615813340f7b1f6bf86f56f816ad071e7c37e83f97",
+      "bytes": 1574613,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/runs/mkgw_mhyper_native/x4/nested_selected/oof_action_predictions.npz",
+      "sha256": "e5f04bf6c67964fea9c4a5dcdf929e7d49f5fe7e2baf89e9e24e7c1db873f6c5",
+      "bytes": 1453509,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/runs/mkgw_native_adamf/x4/nested_selected/oof_action_predictions.npz",
+      "sha256": "171165126d5ccdd929ea066069ae9f475d488837183cf238ff655a9af5e4b1d1",
+      "bytes": 1758374,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp6_stable_headroom/audit_manifest.json",
+      "sha256": "5b5eb7776c3fa33056338d35e785f22025c3f99201b554120b5602b563ca8bdb",
+      "bytes": 11305,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp6_stable_headroom/concentration_per_triple.csv.gz",
+      "sha256": "e205b3efe8e3680985522ad1cc6af123d9ca129dd00eb94adb0b541dce92431e",
+      "bytes": 1362724,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp6_stable_headroom/stable_headroom_per_query.csv.gz",
+      "sha256": "d5e8200134cdece1140c4bc502eb88e8baaa674c1a11fd1a5660d7c4da2872b6",
+      "bytes": 2969367,
+      "role": "frozen_source"
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "8b7dfb913f3a0d00eef156200e4a656f4062f2b2306b85cf8e68130749254b98",
+      "bytes": 20634465,
+      "role": "exact_dev_query_rows"
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "e389449b44379ecb18fe248127c6b062b2f5cc7894fb052536a442528ab4287b",
+      "bytes": 20881730,
+      "role": "exact_dev_query_rows"
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "980197c29b8d0c447e298b862d43064e0b86c088a134347136fa87a64ad877ed",
+      "bytes": 21016969,
+      "role": "exact_dev_query_rows"
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "f85d657f7183dc960bba762418ea3695ab0af78b59d45e158e1cd0a34079a081",
+      "bytes": 37499423,
+      "role": "exact_dev_query_rows"
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "431d98b55b288fff46c7454be1e0e4409e47c75226b8441ec2ec02fe9ba1a6d2",
+      "bytes": 37718006,
+      "role": "exact_dev_query_rows"
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "0b132d2a13d5df045d71adda1cf6282230f5db26ef18a5d2052caeb58da22bfd",
+      "bytes": 38700123,
+      "role": "exact_dev_query_rows"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "outputs/complementarity_identifiability/part2_selectivity_audit/selectivity_per_query.csv.gz",
+      "sha256": "d95583e65675951209ed98b2817aa3576e9a7aaadddf4fe5173d6c05e5004ebd",
+      "bytes": 11189745
+    },
+    {
+      "path": "outputs/complementarity_identifiability/part2_selectivity_audit/coverage_metrics.csv",
+      "sha256": "8f6af0c0f8480e4b1b6d651f042cbf6e973d467132c321ded20939404b280b76",
+      "bytes": 51765
+    },
+    {
+      "path": "outputs/complementarity_identifiability/part2_selectivity_audit/bootstrap_ci.csv",
+      "sha256": "20c42eb3ec80778c70e94c29225ee24ed54f3f835ea5a7c78e5b48a54808717d",
+      "bytes": 64630
+    },
+    {
+      "path": "outputs/complementarity_identifiability/part2_selectivity_audit/matched_random_baseline.csv",
+      "sha256": "3d91c7a1d84dd2e089c20fbf1633b947ee823bbe2555787cfa3415986ba0626b",
+      "bytes": 88304
+    },
+    {
+      "path": "outputs/complementarity_identifiability/part2_selectivity_audit/figure_p2_1_selective_gain.svg",
+      "sha256": "6b2a8c4fcc019c98b8af349c071562d6e4c67b200a5270605186da9c97191355",
+      "bytes": 6100
+    },
+    {
+      "path": "outputs/complementarity_identifiability/part2_selectivity_audit/figure_p2_2_stable2_enrichment.svg",
+      "sha256": "b4ccd750bfcbd2d2ce0b8f4b7c1a64e78ec10d133dd68d3ca624f7f1a6052e8c",
+      "bytes": 6098
+    },
+    {
+      "path": "outputs/complementarity_identifiability/part2_selectivity_audit/figure_p2_3_high_gain_enrichment.svg",
+      "sha256": "4afa45a1cb0e07f5212109a50f9b291c0b51131aa85026a5ba53af5c612eefdc",
+      "bytes": 6097
+    },
+    {
+      "path": "docs/reports/high_value_opportunity_selectivity_audit_2026-09-07.md",
+      "sha256": "630f5dad480e8820c35ef601de8582184dbaa36ef80d46e60954fbbf2cd26ea7",
+      "bytes": 4269
+    }
+  ],
+  "frozen_score": "predicted_u[row, chosen_action_index[row]]",
+  "coverage_fractions": [
+    0.01,
+    0.05,
+    0.1,
+    0.2,
+    0.3
+  ],
+  "operational_audit": {
+    "test_access": 0,
+    "new_ranker": 0,
+    "new_selector": 0,
+    "new_representation": 0,
+    "new_feature": 0,
+    "checkpoint_retraining": 0,
+    "checkpoint_reselection": 0,
+    "policy_tuning": 0,
+    "closure_route_change": 0
+  },
+  "closure_route": "FINAL_SELECTIVE_RARE_OPPORTUNITY"
+}

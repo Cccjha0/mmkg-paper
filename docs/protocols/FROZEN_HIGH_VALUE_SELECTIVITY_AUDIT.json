@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "study": "Part II — Frozen High-Value Opportunity Selectivity Audit",
+  "status": "frozen_before_systematic_run",
+  "frozen_date": "2026-09-07",
+  "split": "dev",
+  "purpose": "Measure whether the already-frozen Experiment 2 X4 strict-OOF probe ranks the high-value and seed-stable opportunities diagnosed by Experiment 6.",
+  "interpretation_boundary": "descriptive_limits_evidence_only",
+  "pair_ids": [
+    "mkgw_mhyper_native",
+    "mkgw_mhyper_adamf",
+    "mkgw_native_adamf",
+    "db15k_mhyper_native",
+    "db15k_mhyper_adamf",
+    "db15k_native_adamf"
+  ],
+  "input_contract": {
+    "probe": "Experiment 2 X4 nested-selected strict outer-OOF predictions",
+    "probe_path_template": "outputs/complementarity_identifiability/exp2_information/runs/{pair_id}/x4/nested_selected/oof_action_predictions.npz",
+    "query_asset_path_template": "outputs/complementarity_identifiability/exp2_information/assets/{pair_id}_query_information.npz",
+    "utility_manifest_path_template": "outputs/aacpi/utility_tables/{pair_id}_dev_source_manifest.json",
+    "stable_query_path": "outputs/complementarity_identifiability/exp6_stable_headroom/stable_headroom_per_query.csv.gz",
+    "concentration_path": "outputs/complementarity_identifiability/exp6_stable_headroom/concentration_per_triple.csv.gz",
+    "required_prediction_fields": [
+      "query_id",
+      "outer_fold",
+      "fold_global_index",
+      "predicted_u",
+      "chosen_action_index"
+    ],
+    "required_query_fields": [
+      "query_id",
+      "seed",
+      "direction",
+      "head_id",
+      "relation_id",
+      "tail_id"
+    ],
+    "required_seeds": [1, 2, 3],
+    "required_directions": ["head", "tail"],
+    "alpha_grid": [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0]
+  },
+  "analysis_unit": {
+    "row": "original_triple_id × direction × seed",
+    "cluster": "original_triple_id",
+    "stable_identity": "original_triple_id × direction",
+    "selection_scope": "within each dataset/expert pair over all strict-OOF rows"
+  },
+  "ranking_rule": {
+    "primary_scalar": "predicted_u[row, chosen_action_index[row]]",
+    "global_action_predicted_advantage": 0.0,
+    "descending": true,
+    "tie_break": ["query_id_lexicographic_ascending"],
+    "coverage_fractions": [0.01, 0.05, 0.1, 0.2, 0.3],
+    "coverage_count_rule": "ceil(fraction * number_of_rows)",
+    "unselected_action": "fold_specific_global",
+    "no_score_calibration_or_refit": true
+  },
+  "targets": {
+    "primary_stable_opportunity": "Experiment 6 stable2_nonempty",
+    "primary_stable_gain": "Experiment 6 stable2_gain",
+    "secondary_stable_opportunity": "Experiment 6 stable3_nonempty",
+    "secondary_stable_gain": "Experiment 6 stable3_gain",
+    "secondary_consensus_gain": "Experiment 6 consensus_gain",
+    "high_gain_definition": "Experiment 6 descending_gain_rank <= ceil(0.10 * pair triple count)",
+    "realized_utility": "exact RR at the frozen X4 chosen action minus exact RR at its fold-specific Global action",
+    "zero_tolerance": 1e-12
+  },
+  "metrics": [
+    "selected_mean_realized_utility",
+    "selective_population_gain",
+    "positive_transfer_rate",
+    "negative_transfer_rate",
+    "changed_rate",
+    "stable2_opportunity_rate",
+    "stable2_opportunity_enrichment",
+    "stable2_gain_capture",
+    "stable3_opportunity_rate",
+    "stable3_opportunity_enrichment",
+    "stable3_gain_capture",
+    "consensus_gain_capture",
+    "high_gain_precision",
+    "high_gain_recall",
+    "high_gain_enrichment",
+    "raw_oracle_gain_capture"
+  ],
+  "matched_random_baseline": {
+    "samples": 2000,
+    "seed": 20260907,
+    "strata": ["seed", "direction", "relation_id"],
+    "rule": "For every repetition, sample without replacement and preserve the observed selected count in every stratum.",
+    "reported": ["mean", "2.5_percentile", "97.5_percentile", "observed_minus_random_mean"]
+  },
+  "clustered_bootstrap": {
+    "samples": 10000,
+    "seed": 20260907,
+    "unit": "original_triple_id",
+    "preserve": ["both_directions", "all_three_seeds", "selected_status", "all_attached_targets"],
+    "interval": "percentile_95"
+  },
+  "decision_rule": {
+    "new_route_or_go_gate": false,
+    "selector_reopening": false,
+    "allowed_conclusion": "Report whether frozen X4 ranking is enriched for stable/high-gain opportunities, without changing the frozen closure route."
+  },
+  "prohibited": {
+    "test_access": 0,
+    "new_ranker": 0,
+    "new_representation": 0,
+    "new_feature": 0,
+    "score_selection_after_results": 0,
+    "checkpoint_retraining": 0,
+    "checkpoint_reselection": 0,
+    "policy_tuning": 0,
+    "closure_route_change": 0
+  },
+  "source_hashes": {
+    "outputs/aacpi/utility_tables/db15k_mhyper_adamf_dev_source_manifest.json": "0f95a6073e85b4d226f57d68e45f5013bc11091f604d9d129a1eb877156e920e",
+    "outputs/aacpi/utility_tables/db15k_mhyper_native_dev_source_manifest.json": "3d5bd8a8069717933434d2a9dab6053decbe69cbe9b4dc06d74ddc84cab34b6d",
+    "outputs/aacpi/utility_tables/db15k_native_adamf_dev_source_manifest.json": "f9001315914573bc95444c27c09def97e1eddf0fea4bac2d1ee81b6f1d96e20a",
+    "outputs/aacpi/utility_tables/mkgw_mhyper_adamf_dev_source_manifest.json": "8d9c1171dd9630742cfe8f80ea6a00adba580a76dc973c200fc77d60d78f8b8c",
+    "outputs/aacpi/utility_tables/mkgw_mhyper_native_dev_source_manifest.json": "57a24f419069845d35f4338ed8caa641dd50c290b6947cd14e8e83f65fdac0ac",
+    "outputs/aacpi/utility_tables/mkgw_native_adamf_dev_source_manifest.json": "d4e01934588ec2919542b1ed4998d2a0992f300889cf313529f398eda6ff86b0",
+    "outputs/complementarity_identifiability/exp2_information/audit_manifest.json": "5c8a3dea2bf600b7295162bd846e4e2480e83a8c7fa414dacd54da8d967d93d7",
+    "outputs/complementarity_identifiability/exp2_information/assets/db15k_mhyper_adamf_query_information.npz": "fb235a929d19ec3a9f5f17d520490c9184b75bdf45a4d428af8b3b9c7a24a758",
+    "outputs/complementarity_identifiability/exp2_information/assets/db15k_mhyper_native_query_information.npz": "5d131ba6e22c67762855337838381d27a661212b52fcbab35a5b4f277a0d1a63",
+    "outputs/complementarity_identifiability/exp2_information/assets/db15k_native_adamf_query_information.npz": "1bd556756257095cebdea8ba1d98f6675def2a5feae4da344f326eb054021e4f",
+    "outputs/complementarity_identifiability/exp2_information/assets/mkgw_mhyper_adamf_query_information.npz": "b9754c10fd81554e9cd7fb7cb6064b61e1df09cfe0b4c8d5e5f9f60ef6f87371",
+    "outputs/complementarity_identifiability/exp2_information/assets/mkgw_mhyper_native_query_information.npz": "78a1d1d6ac83b0728dad63725fdfdaeae5035b77ce377cb0f786ce580ada75f4",
+    "outputs/complementarity_identifiability/exp2_information/assets/mkgw_native_adamf_query_information.npz": "3f7fe2dcb1368197a3955279cbd0bce4990a3cb9b4fd798b2c2e8a4f5a03770d",
+    "outputs/complementarity_identifiability/exp2_information/runs/db15k_mhyper_adamf/x4/nested_selected/oof_action_predictions.npz": "02006fe2bc1bdd4df7872aa1445859b92ce1b06ecd7e7f3b3e5f92156b6a66a7",
+    "outputs/complementarity_identifiability/exp2_information/runs/db15k_mhyper_native/x4/nested_selected/oof_action_predictions.npz": "27e1b4e742a93191d7eb1588dbf5f1845a69545bea2947b83f1e20f4949e9486",
+    "outputs/complementarity_identifiability/exp2_information/runs/db15k_native_adamf/x4/nested_selected/oof_action_predictions.npz": "54085c42494c527f0e433c37fe38278385913a4d1e4db3aa75f0fa7dcdfd3c0c",
+    "outputs/complementarity_identifiability/exp2_information/runs/mkgw_mhyper_adamf/x4/nested_selected/oof_action_predictions.npz": "f7ea28eb9b471c2bcdd235615813340f7b1f6bf86f56f816ad071e7c37e83f97",
+    "outputs/complementarity_identifiability/exp2_information/runs/mkgw_mhyper_native/x4/nested_selected/oof_action_predictions.npz": "e5f04bf6c67964fea9c4a5dcdf929e7d49f5fe7e2baf89e9e24e7c1db873f6c5",
+    "outputs/complementarity_identifiability/exp2_information/runs/mkgw_native_adamf/x4/nested_selected/oof_action_predictions.npz": "171165126d5ccdd929ea066069ae9f475d488837183cf238ff655a9af5e4b1d1",
+    "outputs/complementarity_identifiability/exp6_stable_headroom/audit_manifest.json": "5b5eb7776c3fa33056338d35e785f22025c3f99201b554120b5602b563ca8bdb",
+    "outputs/complementarity_identifiability/exp6_stable_headroom/concentration_per_triple.csv.gz": "e205b3efe8e3680985522ad1cc6af123d9ca129dd00eb94adb0b541dce92431e",
+    "outputs/complementarity_identifiability/exp6_stable_headroom/stable_headroom_per_query.csv.gz": "d5e8200134cdece1140c4bc502eb88e8baaa674c1a11fd1a5660d7c4da2872b6"
+  },
+  "output_contract": {
+    "directory": "outputs/complementarity_identifiability/part2_selectivity_audit",
+    "per_query": "selectivity_per_query.csv.gz",
+    "coverage_summary": "coverage_metrics.csv",
+    "bootstrap_ci": "bootstrap_ci.csv",
+    "matched_random": "matched_random_baseline.csv",
+    "audit_manifest": "audit_manifest.json",
+    "report": "docs/reports/high_value_opportunity_selectivity_audit_2026-09-07.md"
+  }
+}
