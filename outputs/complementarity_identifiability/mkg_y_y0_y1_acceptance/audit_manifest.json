@@ -1,0 +1,389 @@
+{
+  "schema_version": 1,
+  "study": "MKG-Y Y0/Y1 Existing-Checkpoint Acceptance Audit",
+  "contract": {
+    "path": "docs/protocols/MKG_Y_Y0_Y1_ACCEPTANCE_CONTRACT.json",
+    "sha256": "54cef3906535a17044461f939d4ef0f40319a6b01dcbbe90b972b2816c59cb44"
+  },
+  "inputs": [
+    {
+      "path": "data/datasets/mkg_y/processed/manifest.json",
+      "sha256": "11b61fc7076b1808ed19ab4cd6a4c9c20fb629c0443f7e4f91f8611579f16ba4",
+      "bytes": 6996,
+      "role": "processed_manifest"
+    },
+    {
+      "path": "data/datasets/mkg_y/processed/audit_report.json",
+      "sha256": "a642cfde4719c3f5dc1756af9b6e6cf05e8b496a01626cbbc4307286a1b08492",
+      "bytes": 5355,
+      "role": "processed_audit"
+    },
+    {
+      "path": "docs/EXTERNAL_SOURCES_LOCK.json",
+      "sha256": "29d3a90e5fc2697b518edbfa4f09c7306ff5a8671befa0481552fab80fb1b13e",
+      "bytes": 3543,
+      "role": "source_lock_registry"
+    },
+    {
+      "path": "data/datasets/MKG_Y_description_sentences.h5",
+      "sha256": "9e1e78edfe08891c689608d15d716bf2f3961b7c5fb067a68c439c20cf03e2c3",
+      "bytes": 72177152,
+      "role": "text_feature_source"
+    },
+    {
+      "path": "data/datasets/MKG_Y_img_BEIT_16-224.h5",
+      "sha256": "fb87436ce3327fbf338d3b379ca4a47687adb6c6c16410f792e991351ba91ebc",
+      "bytes": 537359797,
+      "role": "image_feature_source"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_mhyper/20260903_215952_seed1/best.ckpt",
+      "sha256": "5f6f9605eeef187e10489fbd177b9b7c242c20b4b0298500e6634ac379edf97e",
+      "bytes": 126504318,
+      "role": "checkpoint"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_mhyper/20260903_215952_seed1/common.yaml",
+      "sha256": "24f85bbef1d89c6da83cc886583c74d4840801f08792d502603d35f2f4d4d80a",
+      "bytes": 471,
+      "role": "run_common_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_mhyper/20260903_215952_seed1/config_merged.json",
+      "sha256": "293f8376c39ee9b9f642991e4f2e0231772bbd1bd8e1853924e4008c11283720",
+      "bytes": 8920,
+      "role": "run_merged_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_mhyper/20260903_215952_seed1/experiment.yaml",
+      "sha256": "c99e99618169bef95ebf469cb08f5c71dc8752b7019cd502dcdd49311e18fef4",
+      "bytes": 926,
+      "role": "run_experiment_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_mhyper/20260903_215952_seed1/metrics_seed1.csv",
+      "sha256": "4027af8e2d5a4bf8c00742eab24c0584faaaa349ec11a94f596e79fc2f9de18d",
+      "bytes": 6787,
+      "role": "dev_metric_trace"
+    },
+    {
+      "path": "ml/configs/mkg_y_mhyper.yaml",
+      "sha256": "99bd8ad149b242a10434a1e4defcd90878c155b228e3327a8b4b2e44b1de3bfe",
+      "bytes": 884,
+      "role": "checked_in_anchor_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_mhyper/20260903_220630_seed2/best.ckpt",
+      "sha256": "992f136403a05e737bbecff54747e369f259348a8b498ec53554fc17ae5d9457",
+      "bytes": 126504318,
+      "role": "checkpoint"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_mhyper/20260903_220630_seed2/common.yaml",
+      "sha256": "eb5d3200299015f7bc44f7df8bb34725e30a087303af1a7292abcc57d2cf9db6",
+      "bytes": 471,
+      "role": "run_common_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_mhyper/20260903_220630_seed2/config_merged.json",
+      "sha256": "5d6cb940d9fd24aab20c9acaabda5c54a8f772d2ba5b782fda5797ccd254261b",
+      "bytes": 8920,
+      "role": "run_merged_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_mhyper/20260903_220630_seed2/experiment.yaml",
+      "sha256": "c99e99618169bef95ebf469cb08f5c71dc8752b7019cd502dcdd49311e18fef4",
+      "bytes": 926,
+      "role": "run_experiment_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_mhyper/20260903_220630_seed2/metrics_seed1.csv",
+      "sha256": "fd3ec644d2e1f2bbbde2a9930b22d6eabdd33e8c213f0545e644c31796f79641",
+      "bytes": 6749,
+      "role": "dev_metric_trace"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_mhyper/20260903_221310_seed3/best.ckpt",
+      "sha256": "9fc18389c40c1a3612f95e7e83bd7b49e49b2f2536ed0a40e19d151769822e80",
+      "bytes": 126504318,
+      "role": "checkpoint"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_mhyper/20260903_221310_seed3/common.yaml",
+      "sha256": "31efb1bab413bd64d7bea39445995bd852921675cf5f0dfe6fe50beb01e08a6d",
+      "bytes": 471,
+      "role": "run_common_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_mhyper/20260903_221310_seed3/config_merged.json",
+      "sha256": "38419d4c2ae6b6627b5f6a9800020c949d10bcc101b3053d028ee2545d73fc1b",
+      "bytes": 8920,
+      "role": "run_merged_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_mhyper/20260903_221310_seed3/experiment.yaml",
+      "sha256": "c99e99618169bef95ebf469cb08f5c71dc8752b7019cd502dcdd49311e18fef4",
+      "bytes": 926,
+      "role": "run_experiment_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_mhyper/20260903_221310_seed3/metrics_seed1.csv",
+      "sha256": "ad7d7b38c75a167a2809c93d04830eb259bc2c53c93a7356e13a69b3bd1a89ea",
+      "bytes": 6779,
+      "role": "dev_metric_trace"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_native/20260903_221947_seed1/best.ckpt",
+      "sha256": "ed63585a759e4abb9a5270134f13031513f9f80106034c48fba920299dca41cf",
+      "bytes": 79627992,
+      "role": "checkpoint"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_native/20260903_221947_seed1/common.yaml",
+      "sha256": "24f85bbef1d89c6da83cc886583c74d4840801f08792d502603d35f2f4d4d80a",
+      "bytes": 471,
+      "role": "run_common_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_native/20260903_221947_seed1/config_merged.json",
+      "sha256": "22eb9f6d24986c1797e14d15b32b19b597ff8ca001f0c289c3cf051558d9de89",
+      "bytes": 8952,
+      "role": "run_merged_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_native/20260903_221947_seed1/experiment.yaml",
+      "sha256": "838740ed15d428a5cf5eeb42c457199dc9345d5a7234ba4861b0957a17543c5f",
+      "bytes": 974,
+      "role": "run_experiment_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_native/20260903_221947_seed1/metrics_seed1.csv",
+      "sha256": "268fee6796a9c7aee13086c6c8ccdbfdaf59487c00f112ef2219c6ef6a5d0066",
+      "bytes": 10955,
+      "role": "dev_metric_trace"
+    },
+    {
+      "path": "ml/configs/mkg_y_native.yaml",
+      "sha256": "15a8b1cf45ae2490c6f315756ef8b0a158b78a9baba8db19b36538b60078b9c5",
+      "bytes": 930,
+      "role": "checked_in_anchor_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_native/20260903_230141_seed2/best.ckpt",
+      "sha256": "f04267f53c5136af8b85ed5aa94c458a51bd551828d8c18fa30f5f040b67a9e5",
+      "bytes": 79627992,
+      "role": "checkpoint"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_native/20260903_230141_seed2/common.yaml",
+      "sha256": "eb5d3200299015f7bc44f7df8bb34725e30a087303af1a7292abcc57d2cf9db6",
+      "bytes": 471,
+      "role": "run_common_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_native/20260903_230141_seed2/config_merged.json",
+      "sha256": "1e547cdbc6f910856533e3657a1cd9a84a21c60604f9ca97b1452d6441093991",
+      "bytes": 8952,
+      "role": "run_merged_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_native/20260903_230141_seed2/experiment.yaml",
+      "sha256": "838740ed15d428a5cf5eeb42c457199dc9345d5a7234ba4861b0957a17543c5f",
+      "bytes": 974,
+      "role": "run_experiment_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_native/20260903_230141_seed2/metrics_seed1.csv",
+      "sha256": "fb2ce4fee9e3af1ee3aac9c5f4cccdeec67191e53edb239dda0b14d4f42a48fb",
+      "bytes": 10742,
+      "role": "dev_metric_trace"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_native/20260903_234233_seed3/best.ckpt",
+      "sha256": "9da57cd7e645436aaa8bea8a490856512bd0bd1002f650db618104e4429a8708",
+      "bytes": 79627992,
+      "role": "checkpoint"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_native/20260903_234233_seed3/common.yaml",
+      "sha256": "31efb1bab413bd64d7bea39445995bd852921675cf5f0dfe6fe50beb01e08a6d",
+      "bytes": 471,
+      "role": "run_common_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_native/20260903_234233_seed3/config_merged.json",
+      "sha256": "e12fc0e6ec44737ed39b4fbb710eb2c3ac65821199b485620fc0321e6d199ceb",
+      "bytes": 8952,
+      "role": "run_merged_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_native/20260903_234233_seed3/experiment.yaml",
+      "sha256": "838740ed15d428a5cf5eeb42c457199dc9345d5a7234ba4861b0957a17543c5f",
+      "bytes": 974,
+      "role": "run_experiment_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_native/20260903_234233_seed3/metrics_seed1.csv",
+      "sha256": "9e3c3ace89a3ce8c75fb29292e29e3c6d9c6b5853bec803f36c2c1e8f8285c61",
+      "bytes": 11736,
+      "role": "dev_metric_trace"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_002716_seed1/best.ckpt",
+      "sha256": "b1a7e6ffd054b784851c61f02c0d3d93b9ca5db28d863460b9fc9dc69afa59da",
+      "bytes": 71308726,
+      "role": "checkpoint"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_002716_seed1/common.yaml",
+      "sha256": "24f85bbef1d89c6da83cc886583c74d4840801f08792d502603d35f2f4d4d80a",
+      "bytes": 471,
+      "role": "run_common_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_002716_seed1/config_merged.json",
+      "sha256": "2f59cb1eba41fa5bc132d4e3ddb6ab92bcb7376a33c51b11a0df98ac7f5f3319",
+      "bytes": 8875,
+      "role": "run_merged_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_002716_seed1/experiment.yaml",
+      "sha256": "42eac192361593b0eb4846df27c2a8b963974be76f06faad1788210d076aff7f",
+      "bytes": 907,
+      "role": "run_experiment_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_002716_seed1/metrics_seed1.csv",
+      "sha256": "aa21eb47220cebe0e2f5c23219bd2985cb298f3292bf087e8643487fa08180ac",
+      "bytes": 32245,
+      "role": "dev_metric_trace"
+    },
+    {
+      "path": "ml/configs/mkg_y_adamf_mat.yaml",
+      "sha256": "7b3f2f7fc924e877551220ca64db2eade62b6b2254178acc2505b7c704a006b2",
+      "bytes": 865,
+      "role": "checked_in_anchor_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_020546_seed2/best.ckpt",
+      "sha256": "d37aa89374f814bc843dcbbedb0d54d0fcd0522fd5c5105058dfb59f191b1262",
+      "bytes": 71308726,
+      "role": "checkpoint"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_020546_seed2/common.yaml",
+      "sha256": "eb5d3200299015f7bc44f7df8bb34725e30a087303af1a7292abcc57d2cf9db6",
+      "bytes": 471,
+      "role": "run_common_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_020546_seed2/config_merged.json",
+      "sha256": "3b9f4da717279182f331ad581cca3e6810ef59c7d1efb587ff280a8473b5225b",
+      "bytes": 8875,
+      "role": "run_merged_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_020546_seed2/experiment.yaml",
+      "sha256": "42eac192361593b0eb4846df27c2a8b963974be76f06faad1788210d076aff7f",
+      "bytes": 907,
+      "role": "run_experiment_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_020546_seed2/metrics_seed1.csv",
+      "sha256": "0f9d118cb4980c4042f8d26fc159b52db09830151cfdedb6e9a717e33b7e6db0",
+      "bytes": 35745,
+      "role": "dev_metric_trace"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_035250_seed3/best.ckpt",
+      "sha256": "e8eb1e9d451d567b73956a71a86e9da620711291fe3b267da3815ae8097035d3",
+      "bytes": 71308726,
+      "role": "checkpoint"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_035250_seed3/common.yaml",
+      "sha256": "31efb1bab413bd64d7bea39445995bd852921675cf5f0dfe6fe50beb01e08a6d",
+      "bytes": 471,
+      "role": "run_common_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_035250_seed3/config_merged.json",
+      "sha256": "305f87de95030fc0b6ed6d6acbe1752f2f9f9f9fcc84193a8c8ebb99b166c9a9",
+      "bytes": 8875,
+      "role": "run_merged_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_035250_seed3/experiment.yaml",
+      "sha256": "42eac192361593b0eb4846df27c2a8b963974be76f06faad1788210d076aff7f",
+      "bytes": 907,
+      "role": "run_experiment_config"
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_035250_seed3/metrics_seed1.csv",
+      "sha256": "220d75a094ef49118688bd886dd54cb9cb51168549d9740aca44fb4d24745327",
+      "bytes": 33208,
+      "role": "dev_metric_trace"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y0_y1_acceptance/data_acceptance.json",
+      "sha256": "51544efc0c8028c1351d8473821e80bab90d381a78ab140d150b8df3e3fba81c",
+      "bytes": 1277
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y0_y1_acceptance/checkpoint_inventory.csv",
+      "sha256": "3fff8bf1d9758e7f7232f641e0d5d4212b59bdf865bbdea125a30d553eab8d5f",
+      "bytes": 6725
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y0_y1_acceptance/standalone_dev_summary.csv",
+      "sha256": "521ea37c1018eb070f8ce1b11bf793d8ce45ae3dc075ce5679daeb4004723b70",
+      "bytes": 661
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y0_y1_acceptance/acceptance_decision.json",
+      "sha256": "187848bba937da367c2b025d13a0833756c32e96278cf465d62486518ff71940",
+      "bytes": 1994
+    },
+    {
+      "path": "docs/reports/mkg_y_y0_y1_acceptance_audit_2026-09-07.md",
+      "sha256": "97e0b4fcebbe7f8b2006d7a4879e6b0874f8421632a8e2cfd2636d4a0670106a",
+      "bytes": 3177
+    }
+  ],
+  "decisions": {
+    "schema_version": 1,
+    "study": "MKG-Y Y0/Y1 Existing-Checkpoint Acceptance Audit",
+    "y0_decision": "Y0_ACCEPTED",
+    "y1_decision": "Y1_ACCEPTED_WITH_PROVENANCE_NOTES",
+    "progression": "Y2_DEV_EXPORT_ALLOWED",
+    "y1_errors": [],
+    "y1_provenance_notes": [
+      "mkg_y_adamf_mat/seed1: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+      "mkg_y_adamf_mat/seed2: legacy metric filename metrics_seed1.csv; accepted seed from config metadata",
+      "mkg_y_adamf_mat/seed2: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+      "mkg_y_adamf_mat/seed3: legacy metric filename metrics_seed1.csv; accepted seed from config metadata",
+      "mkg_y_adamf_mat/seed3: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+      "mkg_y_mhyper/seed1: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+      "mkg_y_mhyper/seed2: legacy metric filename metrics_seed1.csv; accepted seed from config metadata",
+      "mkg_y_mhyper/seed2: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+      "mkg_y_mhyper/seed3: legacy metric filename metrics_seed1.csv; accepted seed from config metadata",
+      "mkg_y_mhyper/seed3: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+      "mkg_y_native/seed1: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+      "mkg_y_native/seed2: legacy metric filename metrics_seed1.csv; accepted seed from config metadata",
+      "mkg_y_native/seed2: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+      "mkg_y_native/seed3: legacy metric filename metrics_seed1.csv; accepted seed from config metadata",
+      "mkg_y_native/seed3: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical"
+    ],
+    "test_status": "LOCKED"
+  },
+  "operational_audit": {
+    "test_rows_opened": 0,
+    "test_evaluations_run": 0,
+    "checkpoint_training": 0,
+    "checkpoint_reselection": 0,
+    "checkpoint_modification": 0,
+    "hyperparameter_change": 0
+  }
+}

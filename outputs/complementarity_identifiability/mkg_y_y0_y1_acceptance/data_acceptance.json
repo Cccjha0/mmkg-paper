@@ -1,0 +1,47 @@
+{
+  "decision": "Y0_ACCEPTED",
+  "checks": {
+    "manifest_status_pass": true,
+    "audit_status_pass": true,
+    "counts_match": true,
+    "source_counts_match": true,
+    "protocol_match": true,
+    "official_split": true,
+    "source_duplicates_zero": true,
+    "source_overlaps_zero": true,
+    "canonical_duplicates_zero": true,
+    "canonical_overlaps_zero": true,
+    "text_finite": true,
+    "image_finite": true,
+    "independent_modal_spaces": true,
+    "canonical_hash_inventory_present": true,
+    "source_lock_current": true,
+    "text_source_hash_match": true,
+    "image_source_hash_match": true
+  },
+  "counts": {
+    "entities": 15000,
+    "relations": 28,
+    "test": 2663,
+    "train": 21310,
+    "valid": 2665
+  },
+  "features": {
+    "text": {
+      "coverage": 0.8210666666666666,
+      "aligned_entities": 12316,
+      "missing_entities": 2684,
+      "dimension": 384,
+      "all_finite": true
+    },
+    "image": {
+      "coverage": 0.9644,
+      "aligned_entities": 14466,
+      "missing_entities": 534,
+      "dimension": 383,
+      "all_finite": true
+    }
+  },
+  "test_rows_opened": 0,
+  "note": "TEST counts/hashes were read only as already-recorded manifest metadata; no TEST row file was opened."
+}

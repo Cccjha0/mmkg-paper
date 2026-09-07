@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "study": "MKG-Y Y0/Y1 Existing-Checkpoint Acceptance Audit",
+  "status": "frozen_before_systematic_acceptance_run",
+  "frozen_date": "2026-09-07",
+  "dataset": "mkg_y",
+  "scope": "existing assets and DEV-only checkpoints",
+  "y0": {
+    "processed_manifest": "data/datasets/mkg_y/processed/manifest.json",
+    "audit_report": "data/datasets/mkg_y/processed/audit_report.json",
+    "source_lock": "docs/EXTERNAL_SOURCES_LOCK.json",
+    "expected_counts": {
+      "entities": 15000,
+      "relations": 28,
+      "train": 21310,
+      "valid": 2665,
+      "test": 2663
+    },
+    "expected_protocol": "mmkg_general_v1",
+    "expected_split": "official",
+    "expected_cross_modal_space": "independent",
+    "required_checks": [
+      "manifest_and_audit_status_pass",
+      "canonical_and_source_counts_match",
+      "declared_duplicate_counts_zero",
+      "declared_split_overlap_counts_zero",
+      "text_and_image_numeric_health_all_finite",
+      "canonical_mapping_split_feature_hashes_present",
+      "current_source_lock_hash_matches_processed_manifest",
+      "text_and_image_source_files_match_declared_hashes"
+    ],
+    "frozen_file_hashes": {
+      "data/datasets/mkg_y/processed/manifest.json": "11b61fc7076b1808ed19ab4cd6a4c9c20fb629c0443f7e4f91f8611579f16ba4",
+      "data/datasets/mkg_y/processed/audit_report.json": "a642cfde4719c3f5dc1756af9b6e6cf05e8b496a01626cbbc4307286a1b08492",
+      "docs/EXTERNAL_SOURCES_LOCK.json": "29d3a90e5fc2697b518edbfa4f09c7306ff5a8671befa0481552fab80fb1b13e"
+    }
+  },
+  "y1": {
+    "models": {
+      "mkg_y_mhyper": {
+        "model_name": "mmkg_mhyper",
+        "anchor_config": "ml/configs/mkg_y_mhyper.yaml",
+        "termination_policy": "fixed_budget",
+        "runs": {
+          "1": "ml/artifacts/outputs/mkg_y_mhyper/20260903_215952_seed1",
+          "2": "ml/artifacts/outputs/mkg_y_mhyper/20260903_220630_seed2",
+          "3": "ml/artifacts/outputs/mkg_y_mhyper/20260903_221310_seed3"
+        }
+      },
+      "mkg_y_native": {
+        "model_name": "mmkg_native",
+        "anchor_config": "ml/configs/mkg_y_native.yaml",
+        "termination_policy": "dev_early_stop",
+        "runs": {
+          "1": "ml/artifacts/outputs/mkg_y_native/20260903_221947_seed1",
+          "2": "ml/artifacts/outputs/mkg_y_native/20260903_230141_seed2",
+          "3": "ml/artifacts/outputs/mkg_y_native/20260903_234233_seed3"
+        }
+      },
+      "mkg_y_adamf_mat": {
+        "model_name": "mmkg_adamf_mat",
+        "anchor_config": "ml/configs/mkg_y_adamf_mat.yaml",
+        "termination_policy": "dev_early_stop",
+        "runs": {
+          "1": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_002716_seed1",
+          "2": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_020546_seed2",
+          "3": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_035250_seed3"
+        }
+      }
+    },
+    "required_seeds": [1, 2, 3],
+    "required_run_files": [
+      "best.ckpt",
+      "common.yaml",
+      "config_merged.json",
+      "experiment.yaml"
+    ],
+    "required_checks": [
+      "exact_model_seed_inventory",
+      "directory_seed_matches_common_and_merged_config",
+      "dataset_protocol_and_processed_dir_match",
+      "experiment_snapshot_semantically_matches_anchor_config",
+      "filtered_bidirectional_full_dev",
+      "run_test_false",
+      "embedded_dataset_manifest_matches_current_except_global_source_lock_registry_hash",
+      "metrics_have_finite_legal_dev_values",
+      "fixed_budget_or_early_stop_trace_is_complete",
+      "checkpoint_is_nonempty_valid_zip_archive",
+      "checkpoint_hashes_are_distinct_across_seeds"
+    ],
+    "no_hard_mrr_acceptance_threshold": true
+  },
+  "pre_registered_provenance_notes": {
+    "legacy_metric_filename": "Runs for seeds 2 and 3 may retain the legacy filename metrics_seed1.csv; seed identity must come from system.seed in common/config_merged plus the frozen run directory, never from the metric filename.",
+    "source_lock_registry_drift": "The embedded training manifest may contain an older whole-registry docs/EXTERNAL_SOURCES_LOCK.json hash. This is acceptable only if the embedded MKG-Y manifest is otherwise byte-value identical to the current processed manifest and every record-level source/canonical hash is unchanged."
+  },
+  "decisions": {
+    "y0": ["Y0_ACCEPTED", "Y0_REJECTED"],
+    "y1": ["Y1_ACCEPTED", "Y1_ACCEPTED_WITH_PROVENANCE_NOTES", "Y1_REJECTED"],
+    "progression": "Y2_DEV_EXPORT_ALLOWED only when Y0 is accepted and Y1 is accepted with or without provenance notes."
+  },
+  "prohibited": {
+    "test_row_open": 0,
+    "test_evaluation": 0,
+    "checkpoint_training": 0,
+    "checkpoint_reselection": 0,
+    "hyperparameter_change": 0,
+    "checkpoint_modification": 0
+  },
+  "output_contract": {
+    "directory": "outputs/complementarity_identifiability/mkg_y_y0_y1_acceptance",
+    "data_acceptance": "data_acceptance.json",
+    "checkpoint_inventory": "checkpoint_inventory.csv",
+    "standalone_dev_summary": "standalone_dev_summary.csv",
+    "decision": "acceptance_decision.json",
+    "audit_manifest": "audit_manifest.json",
+    "report": "docs/reports/mkg_y_y0_y1_acceptance_audit_2026-09-07.md"
+  }
+}

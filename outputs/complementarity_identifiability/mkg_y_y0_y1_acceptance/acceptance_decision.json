@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "study": "MKG-Y Y0/Y1 Existing-Checkpoint Acceptance Audit",
+  "y0_decision": "Y0_ACCEPTED",
+  "y1_decision": "Y1_ACCEPTED_WITH_PROVENANCE_NOTES",
+  "progression": "Y2_DEV_EXPORT_ALLOWED",
+  "y1_errors": [],
+  "y1_provenance_notes": [
+    "mkg_y_adamf_mat/seed1: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+    "mkg_y_adamf_mat/seed2: legacy metric filename metrics_seed1.csv; accepted seed from config metadata",
+    "mkg_y_adamf_mat/seed2: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+    "mkg_y_adamf_mat/seed3: legacy metric filename metrics_seed1.csv; accepted seed from config metadata",
+    "mkg_y_adamf_mat/seed3: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+    "mkg_y_mhyper/seed1: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+    "mkg_y_mhyper/seed2: legacy metric filename metrics_seed1.csv; accepted seed from config metadata",
+    "mkg_y_mhyper/seed2: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+    "mkg_y_mhyper/seed3: legacy metric filename metrics_seed1.csv; accepted seed from config metadata",
+    "mkg_y_mhyper/seed3: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+    "mkg_y_native/seed1: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+    "mkg_y_native/seed2: legacy metric filename metrics_seed1.csv; accepted seed from config metadata",
+    "mkg_y_native/seed2: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical",
+    "mkg_y_native/seed3: legacy metric filename metrics_seed1.csv; accepted seed from config metadata",
+    "mkg_y_native/seed3: whole source-lock registry hash drifted; all MKG-Y record-level values remain identical"
+  ],
+  "test_status": "LOCKED"
+}
