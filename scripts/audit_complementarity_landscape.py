@@ -418,8 +418,14 @@ def binned_landscape(frame: pd.DataFrame, max_bins: int = 240) -> tuple[np.ndarr
     return matrix, head_boundary
 
 
-def plot_action_heatmaps(geometries: dict[str, pd.DataFrame], output_dir: Path) -> list[Path]:
-    pair_ids = ["mkgw_mhyper_native", "mkgw_native_adamf"]
+def plot_action_heatmaps(
+    geometries: dict[str, pd.DataFrame],
+    output_dir: Path,
+    pair_ids: list[str] | None = None,
+) -> list[Path]:
+    pair_ids = pair_ids or ["mkgw_mhyper_native", "mkgw_native_adamf"]
+    if len(pair_ids) != 2:
+        raise ValueError("The action-landscape figure requires exactly two highlighted pairs")
     width, height = 1220, 760
     parts = svg_header(width, height, "Complete 21-action DEV landscapes (all three seeds)")
     parts.append('<text x="24" y="50" class="note">Rows are deterministically ordered then averaged into 240 equal-count display bins; statistics use unbinned exact queries.</text>')
@@ -493,23 +499,31 @@ def plot_gwd(geometries: dict[str, pd.DataFrame], output_dir: Path) -> list[Path
     return write_svg(output_dir / "figure3_gwd_distributions.svg", parts)
 
 
-def plot_relation_direction_consistency(consistency: pd.DataFrame, output_dir: Path) -> list[Path]:
+def plot_relation_direction_consistency(
+    consistency: pd.DataFrame,
+    output_dir: Path,
+    dataset_panels: list[tuple[str, str]] | None = None,
+) -> list[Path]:
     subset = consistency[
         (consistency["scope"] == "relation_x_direction")
         & consistency["supported"]
         & consistency["signed_direction_preference"].notna()
     ].copy()
-    width, height = 1350, 980
+    dataset_panels = dataset_panels or [("mkg_w", "MKG-W"), ("db15k", "DB15K")]
+    width, height = max(700, 50 + 650 * len(dataset_panels)), 980
     parts = svg_header(width, height, "Relation x prediction-direction complementarity consistency")
-    for panel, (dataset, dataset_label) in enumerate((("mkg_w", "MKG-W"), ("db15k", "DB15K"))):
+    for panel, (dataset, dataset_label) in enumerate(dataset_panels):
         current = subset[subset["dataset"] == dataset]
         relations = sorted(int(value) for value in current["relation_id"].unique())
+        available_pairs = set(current["pair_id"].astype(str))
         columns = [
             (pair, direction)
             for pair in PAIR_ORDER
-            if pair.startswith("mkgw" if dataset == "mkg_w" else "db15k")
+            if pair in available_pairs
             for direction in ("head", "tail")
         ]
+        if not relations or not columns:
+            raise RuntimeError(f"No supported relation-direction groups for dataset={dataset}")
         matrix = np.full((len(relations), len(columns)), np.nan)
         relation_index = {value: index for index, value in enumerate(relations)}
         column_index = {value: index for index, value in enumerate(columns)}
@@ -536,11 +550,12 @@ def plot_relation_direction_consistency(consistency: pd.DataFrame, output_dir: P
             parts.append(f'<text x="{x:.1f}" y="{oy + chart_h + 32}" text-anchor="middle" class="axis">{html.escape(experts.replace(" + ", "+"))}</text>')
         parts.append(f'<text x="{ox - 7}" y="{oy - 8}" text-anchor="end" class="note">relation_id</text>')
     legend_y = 920
+    legend_x = max(160, width / 2 - 168)
     for index, value in enumerate(np.linspace(-1, 1, 21)):
         color = interpolate_color(value, (118, 42, 131), (230, 97, 1))
-        parts.append(f'<rect x="{480 + index*16}" y="{legend_y}" width="17" height="14" fill="{color}"/>')
-    parts.append(f'<text x="470" y="{legend_y + 11}" text-anchor="end" class="axis">-1: toward B</text>')
-    parts.append(f'<text x="830" y="{legend_y + 11}" class="axis">+1: toward A</text>')
+        parts.append(f'<rect x="{legend_x + index*16}" y="{legend_y}" width="17" height="14" fill="{color}"/>')
+    parts.append(f'<text x="{legend_x - 10}" y="{legend_y + 11}" text-anchor="end" class="axis">-1: toward B</text>')
+    parts.append(f'<text x="{legend_x + 350}" y="{legend_y + 11}" class="axis">+1: toward A</text>')
     return write_svg(output_dir / "figure4_relation_direction_consistency.svg", parts)
 
 

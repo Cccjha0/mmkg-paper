@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "pair_name": "mkg_y_mhyper_native",
+  "dataset": "mkg_y",
+  "protocol_version": "mmkg_general_v1",
+  "split": "dev",
+  "expert_a_name": "M-Hyper",
+  "expert_b_name": "NativE",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "n_rows": 15990,
+  "rrf_k": 60.0,
+  "score_normalization": "query_zscore",
+  "export_alpha_grid": true,
+  "dev_only_no_test_access": true,
+  "test_rows_opened": 0,
+  "filter_fact_scope": "train_dev",
+  "query_geometry_fields": [
+    "geometry_direction_tail",
+    "geometry_a_top1",
+    "geometry_a_top5_mean",
+    "geometry_a_top1_top2_margin",
+    "geometry_a_score_std",
+    "geometry_b_top1",
+    "geometry_b_top5_mean",
+    "geometry_b_top1_top2_margin",
+    "geometry_b_score_std",
+    "geometry_top1_delta_a_minus_b",
+    "geometry_top5_delta_a_minus_b",
+    "geometry_margin_delta_a_minus_b",
+    "geometry_std_delta_a_minus_b"
+  ],
+  "selection": {
+    "schema_version": 1,
+    "pair_name": "mkg_y_mhyper_native",
+    "dataset": "mkg_y",
+    "protocol_version": "mmkg_general_v1",
+    "expert_a_name": "M-Hyper",
+    "expert_b_name": "NativE",
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "score_normalization": "query_zscore",
+    "alpha_grid": [
+      0.0,
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      1.0
+    ],
+    "rrf_k": 60.0,
+    "global_alpha": 0.35,
+    "global_dev_mrr": 0.33932297353978363,
+    "relation_min_support": 60,
+    "relation_alpha": {
+      "0": 0.4,
+      "1": 0.95,
+      "2": 0.35,
+      "3": 0.4,
+      "4": 0.8,
+      "5": 0.45,
+      "6": 0.2,
+      "7": 0.25,
+      "8": 0.85,
+      "9": 0.15,
+      "10": 0.35,
+      "11": 0.35,
+      "12": 0.15,
+      "13": 0.35,
+      "14": 0.35,
+      "15": 0.25,
+      "16": 0.35,
+      "17": 0.2,
+      "18": 0.35,
+      "19": 0.35,
+      "20": 0.35,
+      "21": 0.35,
+      "22": 0.35,
+      "23": 0.35,
+      "24": 0.35,
+      "25": 0.35,
+      "26": 0.35
+    },
+    "relation_details": {
+      "0": {
+        "support": 438,
+        "alpha": 0.4,
+        "source": "relation_dev"
+      },
+      "1": {
+        "support": 1986,
+        "alpha": 0.95,
+        "source": "relation_dev"
+      },
+      "2": {
+        "support": 810,
+        "alpha": 0.35,
+        "source": "relation_dev"
+      },
+      "3": {
+        "support": 2490,
+        "alpha": 0.4,
+        "source": "relation_dev"
+      },
+      "4": {
+        "support": 2238,
+        "alpha": 0.8,
+        "source": "relation_dev"
+      },
+      "5": {
+        "support": 774,
+        "alpha": 0.45,
+        "source": "relation_dev"
+      },
+      "6": {
+        "support": 1110,
+        "alpha": 0.2,
+        "source": "relation_dev"
+      },
+      "7": {
+        "support": 84,
+        "alpha": 0.25,
+        "source": "relation_dev"
+      },
+      "8": {
+        "support": 270,
+        "alpha": 0.85,
+        "source": "relation_dev"
+      },
+      "9": {
+        "support": 4674,
+        "alpha": 0.15,
+        "source": "relation_dev"
+      },
+      "10": {
+        "support": 204,
+        "alpha": 0.35,
+        "source": "relation_dev"
+      },
+      "11": {
+        "support": 42,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "12": {
+        "support": 474,
+        "alpha": 0.15,
+        "source": "relation_dev"
+      },
+      "13": {
+        "support": 54,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "14": {
+        "support": 6,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "15": {
+        "support": 60,
+        "alpha": 0.25,
+        "source": "relation_dev"
+      },
+      "16": {
+        "support": 12,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "17": {
+        "support": 120,
+        "alpha": 0.2,
+        "source": "relation_dev"
+      },
+      "18": {
+        "support": 36,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "19": {
+        "support": 6,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "20": {
+        "support": 6,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "21": {
+        "support": 18,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "22": {
+        "support": 12,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "23": {
+        "support": 42,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "24": {
+        "support": 6,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "25": {
+        "support": 12,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "26": {
+        "support": 6,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      }
+    }
+  },
+  "results": [
+    {
+      "method": "M-Hyper",
+      "count": 15990,
+      "mrr": 0.33587988446898576,
+      "hits@1": 0.2892432770481551,
+      "hits@3": 0.36791744840525326,
+      "hits@10": 0.40725453408380236,
+      "notes": "fixed expert",
+      "delta_vs_a": 0.0,
+      "oracle_gap_recovery": 0.0
+    },
+    {
+      "method": "NativE",
+      "count": 15990,
+      "mrr": 0.3111092408409618,
+      "hits@1": 0.2275797373358349,
+      "hits@3": 0.3753595997498437,
+      "hits@10": 0.4280175109443402,
+      "notes": "fixed expert",
+      "delta_vs_a": -0.024770643628023947,
+      "oracle_gap_recovery": -0.8058707709994023
+    },
+    {
+      "method": "Equal RRF",
+      "count": 15990,
+      "mrr": 0.317632141629286,
+      "hits@1": 0.24227642276422764,
+      "hits@3": 0.374671669793621,
+      "hits@10": 0.4273921200750469,
+      "notes": "fixed k=60; answer-agnostic ranks",
+      "delta_vs_a": -0.018247742839699765,
+      "oracle_gap_recovery": -0.5936592852432383
+    },
+    {
+      "method": "Query-zscore 0.5",
+      "count": 15990,
+      "mrr": 0.3370777404439447,
+      "hits@1": 0.27879924953095686,
+      "hits@3": 0.3769230769230769,
+      "hits@10": 0.424765478424015,
+      "notes": "fixed equal weighting",
+      "delta_vs_a": 0.0011978559749589168,
+      "oracle_gap_recovery": 0.038970207338265686
+    },
+    {
+      "method": "Global alpha",
+      "count": 15990,
+      "mrr": 0.33932297353978363,
+      "hits@1": 0.27836147592245153,
+      "hits@3": 0.38161350844277675,
+      "hits@10": 0.43151969981238275,
+      "notes": "DEV-selected shared alpha",
+      "delta_vs_a": 0.003443089070797878,
+      "oracle_gap_recovery": 0.11201504836815776
+    },
+    {
+      "method": "Relation alpha",
+      "count": 15990,
+      "mrr": 0.34299217583207586,
+      "hits@1": 0.2861163227016886,
+      "hits@3": 0.3815509693558474,
+      "hits@10": 0.42789243277048156,
+      "notes": "DEV-selected; low-support fallback to global",
+      "delta_vs_a": 0.007112291363090106,
+      "oracle_gap_recovery": 0.23138630591986137
+    },
+    {
+      "method": "Oracle",
+      "count": 15990,
+      "mrr": 0.3666176212370095,
+      "hits@1": 0.31682301438399,
+      "hits@3": 0.3951219512195122,
+      "hits@10": 0.441963727329581,
+      "notes": "answer-aware upper bound",
+      "delta_vs_a": 0.030737736768023716,
+      "oracle_gap_recovery": 1.0
+    }
+  ],
+  "stability": {
+    "n_seed_stripped_queries": 5330,
+    "observations_per_query": [
+      3
+    ],
+    "unanimous_winner_label_rate": 0.5465290806754222,
+    "expert_b_wins_all_seeds_rate": 0.34108818011257036,
+    "pairwise_seed_label_agreement": 0.6923702313946216,
+    "label_definition": "sign(RR_B - RR_A), with ties as a third label"
+  },
+  "endpoint_reproduction": [],
+  "information_boundaries": {
+    "fixed_experts": "answer-agnostic",
+    "rrf": "rank-aware, answer-agnostic, fixed",
+    "equal": "score-aware, answer-agnostic, fixed",
+    "global_alpha": "score-aware, answer-agnostic; selected on DEV",
+    "relation_alpha": "score-aware, answer-agnostic; relation-conditioned and selected on DEV",
+    "query_geometry": "answer-agnostic candidate-score statistics; excludes target ids, target/reference scores, ranks, reciprocal ranks, and raw relation ids",
+    "oracle": "answer-aware upper bound"
+  }
+}

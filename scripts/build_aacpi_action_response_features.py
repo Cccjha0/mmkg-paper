@@ -39,6 +39,14 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--utility-table", required=True)
     parser.add_argument("--full-ranking-summary", required=True)
+    parser.add_argument(
+        "--frozen-run-manifest",
+        default=None,
+        help=(
+            "Optional audited manifest containing accepted_runs. Use this when the "
+            "DEV full-ranking export deliberately omitted endpoint_reproduction."
+        ),
+    )
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--device", choices=("cuda", "cpu", "auto"), default="cuda")
     parser.add_argument("--query-batch-size", type=int, default=None)
@@ -241,10 +249,44 @@ def context_features(row, bundle: DatasetBundle, context: dict) -> dict[str, flo
     }
 
 
-def resolve_run_pairs(summary: dict) -> dict[int, tuple[Path, Path]]:
+def _expert_run_key(expert_name: str, accepted_runs: dict) -> str:
+    normalized = "".join(character for character in expert_name.lower() if character.isalnum())
+    aliases = {
+        "mhyper": "mhyper",
+        "native": "native",
+        "adamfmat": "adamf_mat",
+    }
+    token = aliases.get(normalized)
+    if token is None:
+        raise ValueError(f"Unsupported frozen expert label: {expert_name}")
+    matches = [key for key in accepted_runs if key.lower().endswith(token)]
+    if len(matches) != 1:
+        raise ValueError(f"Expected one accepted_runs entry for {expert_name}, found {matches}")
+    return matches[0]
+
+
+def resolve_run_pairs(summary: dict, frozen_run_manifest: dict | None = None) -> dict[int, tuple[Path, Path]]:
     by_seed: dict[int, dict[str, Path]] = defaultdict(dict)
     for row in summary.get("endpoint_reproduction", []):
         by_seed[int(row["seed"])][str(row["expert"])] = Path(row["run_dir"])
+    if not by_seed and frozen_run_manifest is not None:
+        accepted_runs = frozen_run_manifest.get("accepted_runs", {})
+        if not isinstance(accepted_runs, dict):
+            raise ValueError("Frozen run manifest accepted_runs must be an object")
+        key_a = _expert_run_key(str(summary["expert_a_name"]), accepted_runs)
+        key_b = _expert_run_key(str(summary["expert_b_name"]), accepted_runs)
+        for seed in (1, 2, 3):
+            for expert, key in (("A", key_a), ("B", key_b)):
+                record = accepted_runs.get(key, {}).get(str(seed))
+                if not isinstance(record, dict) or not record.get("run_dir") or not record.get("checkpoint_sha256"):
+                    raise ValueError(f"Incomplete accepted run provenance for {key} seed {seed}")
+                run_dir = Path(record["run_dir"])
+                checkpoint = run_dir / "best.ckpt"
+                if not checkpoint.exists():
+                    raise FileNotFoundError(checkpoint)
+                if sha256_file(checkpoint) != str(record["checkpoint_sha256"]):
+                    raise RuntimeError(f"Accepted checkpoint hash mismatch: {checkpoint}")
+                by_seed[seed][expert] = run_dir
     result = {}
     for seed, values in by_seed.items():
         if set(values) != {"A", "B"}:
@@ -260,8 +302,11 @@ def build(args: argparse.Namespace) -> None:
 
     utility_path = Path(args.utility_table)
     summary_path = Path(args.full_ranking_summary)
+    frozen_run_manifest_path = Path(args.frozen_run_manifest) if args.frozen_run_manifest else None
     output_dir = Path(args.output_dir)
-    for path in (utility_path, summary_path, output_dir):
+    for path in (utility_path, summary_path, output_dir, frozen_run_manifest_path):
+        if path is None:
+            continue
         reject_test_path(path)
     utility = pd.read_csv(utility_path, compression="infer")
     if utility.empty or set(utility["split"].astype(str)) != {"dev"}:
@@ -284,7 +329,13 @@ def build(args: argparse.Namespace) -> None:
     )
     if any(actions != tuple(expected_actions) for actions in per_query_actions):
         raise ValueError("Not every query has the same frozen local action grid")
-    run_pairs = resolve_run_pairs(summary)
+    frozen_run_manifest = load_json(frozen_run_manifest_path) if frozen_run_manifest_path else None
+    if frozen_run_manifest is not None:
+        if frozen_run_manifest.get("pair", {}).get("pair_id") != summary.get("pair_name"):
+            raise ValueError("Frozen run manifest/full-ranking pair mismatch")
+        if int(frozen_run_manifest.get("pair", {}).get("test_rows_opened", -1)) != 0:
+            raise RuntimeError("Frozen run manifest is not DEV-only")
+    run_pairs = resolve_run_pairs(summary, frozen_run_manifest)
     output_dir.mkdir(parents=True, exist_ok=True)
     table_path = output_dir / "dev_action_response_features.csv.gz"
     source_path = output_dir / "candidate_score_source_manifest.json"
@@ -304,6 +355,11 @@ def build(args: argparse.Namespace) -> None:
             "utility_sha256": sha256_file(utility_path),
             "full_ranking_summary": portable_path(summary_path),
             "full_ranking_summary_sha256": sha256_file(summary_path),
+            "frozen_run_manifest": (
+                None
+                if frozen_run_manifest_path is None
+                else {"path": portable_path(frozen_run_manifest_path), "sha256": sha256_file(frozen_run_manifest_path)}
+            ),
             "run_pairs": {str(seed): [portable_path(a), portable_path(b)] for seed, (a, b) in run_pairs.items()},
             "n_rows": len(utility),
             "n_queries": int(utility["query_id"].nunique()),
@@ -400,6 +456,11 @@ def build(args: argparse.Namespace) -> None:
         "score_normalization": "router.score_combination.normalize_candidate_scores(query_zscore)",
         "utility_table": {"path": portable_path(utility_path), "sha256": sha256_file(utility_path)},
         "full_ranking_summary": {"path": portable_path(summary_path), "sha256": sha256_file(summary_path)},
+        "frozen_run_manifest": (
+            None
+            if frozen_run_manifest_path is None
+            else {"path": portable_path(frozen_run_manifest_path), "sha256": sha256_file(frozen_run_manifest_path)}
+        ),
         "feature_contract": {"path": portable_path(feature_path), "sha256": sha256_file(feature_path)},
         "source_files": source_files,
         "output": {"path": portable_path(table_path), "sha256": sha256_file(table_path)},

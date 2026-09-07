@@ -67,6 +67,18 @@ def load_contract(path: Path) -> dict:
         raise ValueError("Experiment 2 alpha grid mismatch")
     if tuple(contract.get("action_descriptors", [])) != ACTION_FIELDS:
         raise ValueError("Experiment 2 action descriptor mismatch")
+    if contract.get("protocol_profile") == "mkg_y_frozen_x4_replication":
+        expected_compatibility = {
+            "X4": ["linear_huber", "hist_gbdt", "mlp_low", "mlp_high"],
+        }
+        if contract.get("learner_compatibility") != expected_compatibility:
+            raise ValueError("Frozen MKG-Y X4 learner compatibility changed")
+        required_representation_keys = {"X1", "X2_additions", "X3_additions", "X4_additions"}
+        if set(contract.get("representations", {})) != required_representation_keys:
+            raise ValueError("MKG-Y X4 contract must contain exactly the frozen X1-X4 ladder")
+        if contract.get("x6_status") != "excluded_no_independent_justification":
+            raise ValueError("MKG-Y X6 exclusion changed after freeze")
+        return contract
     x6 = contract["representations"]["X6_candidate"]
     if x6.get("inherits") != "X5":
         raise ValueError("X6 must inherit the complete X5 query context")

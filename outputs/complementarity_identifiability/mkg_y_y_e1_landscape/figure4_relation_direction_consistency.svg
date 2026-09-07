@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="980" viewBox="0 0 700 980">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,sans-serif;fill:#202124}.title{font-size:20px;font-weight:700}.panel{font-size:13px;font-weight:700}.axis{font-size:10px}.note{font-size:11px;fill:#5f6368}</style>
+<text x="24" y="30" class="title">Relation x prediction-direction complementarity consistency</text>
+<text x="65" y="75" class="panel">MKG-Y: supported groups</text>
+<rect x="65.00" y="100.00" width="88.53" height="61.03" fill="rgb(203,177,207)"/>
+<rect x="153.33" y="100.00" width="88.53" height="61.03" fill="rgb(241,237,241)"/>
+<rect x="241.67" y="100.00" width="88.53" height="61.03" fill="rgb(201,173,205)"/>
+<rect x="330.00" y="100.00" width="88.53" height="61.03" fill="rgb(223,208,225)"/>
+<rect x="418.33" y="100.00" width="88.53" height="61.03" fill="rgb(232,222,233)"/>
+<rect x="506.67" y="100.00" width="88.53" height="61.03" fill="rgb(211,190,214)"/>
+<rect x="65.00" y="160.83" width="88.53" height="61.03" fill="rgb(231,222,233)"/>
+<rect x="153.33" y="160.83" width="88.53" height="61.03" fill="rgb(218,201,221)"/>
+<rect x="241.67" y="160.83" width="88.53" height="61.03" fill="rgb(219,202,222)"/>
+<rect x="330.00" y="160.83" width="88.53" height="61.03" fill="rgb(208,185,212)"/>
+<rect x="418.33" y="160.83" width="88.53" height="61.03" fill="rgb(218,202,221)"/>
+<rect x="506.67" y="160.83" width="88.53" height="61.03" fill="rgb(216,198,219)"/>
+<rect x="65.00" y="221.67" width="88.53" height="61.03" fill="rgb(204,179,208)"/>
+<rect x="153.33" y="221.67" width="88.53" height="61.03" fill="rgb(194,163,200)"/>
+<rect x="241.67" y="221.67" width="88.53" height="61.03" fill="rgb(215,196,218)"/>
+<rect x="330.00" y="221.67" width="88.53" height="61.03" fill="rgb(198,169,203)"/>
+<rect x="418.33" y="221.67" width="88.53" height="61.03" fill="rgb(228,217,230)"/>
+<rect x="506.67" y="221.67" width="88.53" height="61.03" fill="rgb(247,246,245)"/>
+<rect x="65.00" y="282.50" width="88.53" height="61.03" fill="rgb(193,162,199)"/>
+<rect x="153.33" y="282.50" width="88.53" height="61.03" fill="rgb(212,191,215)"/>
+<rect x="241.67" y="282.50" width="88.53" height="61.03" fill="rgb(196,166,201)"/>
+<rect x="330.00" y="282.50" width="88.53" height="61.03" fill="rgb(208,185,212)"/>
+<rect x="418.33" y="282.50" width="88.53" height="61.03" fill="rgb(223,209,225)"/>
+<rect x="506.67" y="282.50" width="88.53" height="61.03" fill="rgb(223,209,226)"/>
+<rect x="65.00" y="343.33" width="88.53" height="61.03" fill="rgb(214,195,217)"/>
+<rect x="153.33" y="343.33" width="88.53" height="61.03" fill="rgb(194,162,199)"/>
+<rect x="241.67" y="343.33" width="88.53" height="61.03" fill="rgb(212,192,216)"/>
+<rect x="330.00" y="343.33" width="88.53" height="61.03" fill="rgb(194,163,199)"/>
+<rect x="418.33" y="343.33" width="88.53" height="61.03" fill="rgb(207,183,211)"/>
+<rect x="506.67" y="343.33" width="88.53" height="61.03" fill="rgb(213,193,216)"/>
+<rect x="65.00" y="404.17" width="88.53" height="61.03" fill="rgb(241,238,242)"/>
+<rect x="153.33" y="404.17" width="88.53" height="61.03" fill="rgb(247,243,240)"/>
+<rect x="241.67" y="404.17" width="88.53" height="61.03" fill="rgb(244,242,244)"/>
+<rect x="330.00" y="404.17" width="88.53" height="61.03" fill="rgb(246,245,246)"/>
+<rect x="418.33" y="404.17" width="88.53" height="61.03" fill="rgb(241,238,242)"/>
+<rect x="506.67" y="404.17" width="88.53" height="61.03" fill="rgb(208,185,212)"/>
+<rect x="65.00" y="465.00" width="88.53" height="61.03" fill="rgb(193,162,199)"/>
+<rect x="153.33" y="465.00" width="88.53" height="61.03" fill="rgb(199,170,204)"/>
+<rect x="241.67" y="465.00" width="88.53" height="61.03" fill="rgb(194,163,200)"/>
+<rect x="330.00" y="465.00" width="88.53" height="61.03" fill="rgb(200,173,205)"/>
+<rect x="418.33" y="465.00" width="88.53" height="61.03" fill="rgb(236,229,237)"/>
+<rect x="506.67" y="465.00" width="88.53" height="61.03" fill="rgb(238,232,239)"/>
+<rect x="65.00" y="525.83" width="88.53" height="61.03" fill="rgb(243,214,192)"/>
+<rect x="153.33" y="525.83" width="88.53" height="61.03" fill="rgb(243,214,192)"/>
+<rect x="241.67" y="525.83" width="88.53" height="61.03" fill="rgb(247,247,247)"/>
+<rect x="330.00" y="525.83" width="88.53" height="61.03" fill="rgb(242,204,177)"/>
+<rect x="418.33" y="525.83" width="88.53" height="61.03" fill="rgb(246,242,239)"/>
+<rect x="506.67" y="525.83" width="88.53" height="61.03" fill="rgb(247,243,240)"/>
+<rect x="65.00" y="586.67" width="88.53" height="61.03" fill="rgb(175,132,182)"/>
+<rect x="153.33" y="586.67" width="88.53" height="61.03" fill="rgb(186,150,192)"/>
+<rect x="241.67" y="586.67" width="88.53" height="61.03" fill="rgb(178,137,185)"/>
+<rect x="330.00" y="586.67" width="88.53" height="61.03" fill="rgb(180,140,186)"/>
+<rect x="418.33" y="586.67" width="88.53" height="61.03" fill="rgb(233,225,235)"/>
+<rect x="506.67" y="586.67" width="88.53" height="61.03" fill="rgb(230,220,232)"/>
+<rect x="65.00" y="647.50" width="88.53" height="61.03" fill="rgb(205,180,209)"/>
+<rect x="153.33" y="647.50" width="88.53" height="61.03" fill="rgb(247,247,247)"/>
+<rect x="241.67" y="647.50" width="88.53" height="61.03" fill="rgb(198,169,203)"/>
+<rect x="330.00" y="647.50" width="88.53" height="61.03" fill="rgb(246,240,236)"/>
+<rect x="418.33" y="647.50" width="88.53" height="61.03" fill="rgb(219,203,222)"/>
+<rect x="506.67" y="647.50" width="88.53" height="61.03" fill="rgb(194,163,200)"/>
+<rect x="65.00" y="708.33" width="88.53" height="61.03" fill="rgb(196,167,202)"/>
+<rect x="153.33" y="708.33" width="88.53" height="61.03" fill="rgb(178,137,185)"/>
+<rect x="241.67" y="708.33" width="88.53" height="61.03" fill="rgb(208,185,212)"/>
+<rect x="330.00" y="708.33" width="88.53" height="61.03" fill="rgb(187,152,193)"/>
+<rect x="418.33" y="708.33" width="88.53" height="61.03" fill="rgb(223,209,225)"/>
+<rect x="506.67" y="708.33" width="88.53" height="61.03" fill="rgb(246,237,231)"/>
+<rect x="65.00" y="769.17" width="88.53" height="61.03" fill="rgb(209,186,212)"/>
+<rect x="153.33" y="769.17" width="88.53" height="61.03" fill="rgb(247,244,242)"/>
+<rect x="241.67" y="769.17" width="88.53" height="61.03" fill="rgb(222,207,225)"/>
+<rect x="330.00" y="769.17" width="88.53" height="61.03" fill="rgb(243,213,191)"/>
+<rect x="418.33" y="769.17" width="88.53" height="61.03" fill="rgb(246,234,225)"/>
+<rect x="506.67" y="769.17" width="88.53" height="61.03" fill="rgb(204,179,208)"/>
+<text x="58" y="133.4" text-anchor="end" class="axis">0</text>
+<text x="58" y="194.2" text-anchor="end" class="axis">1</text>
+<text x="58" y="255.1" text-anchor="end" class="axis">2</text>
+<text x="58" y="315.9" text-anchor="end" class="axis">3</text>
+<text x="58" y="376.8" text-anchor="end" class="axis">4</text>
+<text x="58" y="437.6" text-anchor="end" class="axis">5</text>
+<text x="58" y="498.4" text-anchor="end" class="axis">6</text>
+<text x="58" y="559.2" text-anchor="end" class="axis">8</text>
+<text x="58" y="620.1" text-anchor="end" class="axis">9</text>
+<text x="58" y="680.9" text-anchor="end" class="axis">10</text>
+<text x="58" y="741.8" text-anchor="end" class="axis">12</text>
+<text x="58" y="802.6" text-anchor="end" class="axis">17</text>
+<text x="109.2" y="848" text-anchor="middle" class="axis">head</text>
+<text x="109.2" y="862" text-anchor="middle" class="axis">M-Hyper+NativE</text>
+<text x="197.5" y="848" text-anchor="middle" class="axis">tail</text>
+<text x="197.5" y="862" text-anchor="middle" class="axis">M-Hyper+NativE</text>
+<text x="285.8" y="848" text-anchor="middle" class="axis">head</text>
+<text x="285.8" y="862" text-anchor="middle" class="axis">M-Hyper+AdaMF</text>
+<text x="374.2" y="848" text-anchor="middle" class="axis">tail</text>
+<text x="374.2" y="862" text-anchor="middle" class="axis">M-Hyper+AdaMF</text>
+<text x="462.5" y="848" text-anchor="middle" class="axis">head</text>
+<text x="462.5" y="862" text-anchor="middle" class="axis">NativE+AdaMF</text>
+<text x="550.8" y="848" text-anchor="middle" class="axis">tail</text>
+<text x="550.8" y="862" text-anchor="middle" class="axis">NativE+AdaMF</text>
+<text x="58" y="92" text-anchor="end" class="note">relation_id</text>
+<rect x="182.0" y="920" width="17" height="14" fill="rgb(118,42,131)"/>
+<rect x="198.0" y="920" width="17" height="14" fill="rgb(131,62,143)"/>
+<rect x="214.0" y="920" width="17" height="14" fill="rgb(144,83,154)"/>
+<rect x="230.0" y="920" width="17" height="14" fill="rgb(157,104,166)"/>
+<rect x="246.0" y="920" width="17" height="14" fill="rgb(170,124,177)"/>
+<rect x="262.0" y="920" width="17" height="14" fill="rgb(182,144,189)"/>
+<rect x="278.0" y="920" width="17" height="14" fill="rgb(195,165,201)"/>
+<rect x="294.0" y="920" width="17" height="14" fill="rgb(208,186,212)"/>
+<rect x="310.0" y="920" width="17" height="14" fill="rgb(221,206,224)"/>
+<rect x="326.0" y="920" width="17" height="14" fill="rgb(234,226,235)"/>
+<rect x="342.0" y="920" width="17" height="14" fill="rgb(247,247,247)"/>
+<rect x="358.0" y="920" width="17" height="14" fill="rgb(245,232,222)"/>
+<rect x="374.0" y="920" width="17" height="14" fill="rgb(244,217,198)"/>
+<rect x="390.0" y="920" width="17" height="14" fill="rgb(242,202,173)"/>
+<rect x="406.0" y="920" width="17" height="14" fill="rgb(240,187,149)"/>
+<rect x="422.0" y="920" width="17" height="14" fill="rgb(238,172,124)"/>
+<rect x="438.0" y="920" width="17" height="14" fill="rgb(237,157,99)"/>
+<rect x="454.0" y="920" width="17" height="14" fill="rgb(235,142,75)"/>
+<rect x="470.0" y="920" width="17" height="14" fill="rgb(233,127,50)"/>
+<rect x="486.0" y="920" width="17" height="14" fill="rgb(232,112,26)"/>
+<rect x="502.0" y="920" width="17" height="14" fill="rgb(230,97,1)"/>
+<text x="172.0" y="931" text-anchor="end" class="axis">-1: toward B</text>
+<text x="532.0" y="931" class="axis">+1: toward A</text>
+</svg>

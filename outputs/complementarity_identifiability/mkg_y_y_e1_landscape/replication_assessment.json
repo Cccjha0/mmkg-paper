@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "outcome": "Y_E1_AVAILABLE_COMPLEMENTARITY_PRESENT",
+  "is_progression_gate": false,
+  "significant_headroom_pairs": 3,
+  "positive_opportunity_at_least_25pct_pairs": 3,
+  "pair_results": [
+    {
+      "pair_id": "mkg_y_mhyper_native",
+      "available_headroom": 0.036845721448909075,
+      "ci95_low": 0.034395737631134744,
+      "ci95_high": 0.039433227823462424,
+      "positive_opportunity_rate": 0.6387742338961852
+    },
+    {
+      "pair_id": "mkg_y_mhyper_adamf",
+      "available_headroom": 0.04406971850797567,
+      "ci95_low": 0.041320120623570426,
+      "ci95_high": 0.04690725720444775,
+      "positive_opportunity_rate": 0.652157598499062
+    },
+    {
+      "pair_id": "mkg_y_native_adamf",
+      "available_headroom": 0.03784422884744998,
+      "ci95_low": 0.03544966494442196,
+      "ci95_high": 0.04033931120881825,
+      "positive_opportunity_rate": 0.6594121325828642
+    }
+  ],
+  "next_stage": "Y_E2_PROTOCOL_FREEZE_ELIGIBLE",
+  "test_status": "LOCKED"
+}

@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "experiment": "MKG-Y Y-E1 Available Complementarity Landscape Audit",
+  "date": "2026-09-07",
+  "branch": "m1/recent-mmkgc-baselines",
+  "split": "dev",
+  "dataset": "mkg_y",
+  "pairs": [
+    "mkg_y_mhyper_native",
+    "mkg_y_mhyper_adamf",
+    "mkg_y_native_adamf"
+  ],
+  "alpha_grid": [
+    0.0,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+  ],
+  "score_normalization": "query_zscore",
+  "filter_fact_scope": "train_dev",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "directions": [
+    "head",
+    "tail"
+  ],
+  "bootstrap_unit": "original_triple_id",
+  "bootstrap_samples": 10000,
+  "assessment": {
+    "schema_version": 1,
+    "outcome": "Y_E1_AVAILABLE_COMPLEMENTARITY_PRESENT",
+    "is_progression_gate": false,
+    "significant_headroom_pairs": 3,
+    "positive_opportunity_at_least_25pct_pairs": 3,
+    "pair_results": [
+      {
+        "pair_id": "mkg_y_mhyper_native",
+        "available_headroom": 0.036845721448909075,
+        "ci95_low": 0.034395737631134744,
+        "ci95_high": 0.039433227823462424,
+        "positive_opportunity_rate": 0.6387742338961852
+      },
+      {
+        "pair_id": "mkg_y_mhyper_adamf",
+        "available_headroom": 0.04406971850797567,
+        "ci95_low": 0.041320120623570426,
+        "ci95_high": 0.04690725720444775,
+        "positive_opportunity_rate": 0.652157598499062
+      },
+      {
+        "pair_id": "mkg_y_native_adamf",
+        "available_headroom": 0.03784422884744998,
+        "ci95_low": 0.03544966494442196,
+        "ci95_high": 0.04033931120881825,
+        "positive_opportunity_rate": 0.6594121325828642
+      }
+    ],
+    "next_stage": "Y_E2_PROTOCOL_FREEZE_ELIGIBLE",
+    "test_status": "LOCKED"
+  },
+  "operational_audit": {
+    "test_access": 0,
+    "checkpoint_evaluation": 0,
+    "checkpoint_retraining": 0,
+    "checkpoint_reselection": 0,
+    "historical_result_modification": 0,
+    "selector_training": 0,
+    "policy_runs": 0,
+    "y_e2_started": 0
+  },
+  "sources": [
+    {
+      "pair_id": "all",
+      "role": "y2_export_verification",
+      "path": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/export_verification.json",
+      "sha256": "b9d3e6ef09ef7933923e512d209f5147042034747c7f435e1ffa746e544dbb42"
+    },
+    {
+      "pair_id": "all",
+      "role": "y2_audit_manifest",
+      "path": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/audit_manifest.json",
+      "sha256": "caa1e701dfa6b3bd99097a2580cd070cd730dd905720d3bfc6e143f2d54d9b41"
+    },
+    {
+      "pair_id": "all",
+      "role": "y_e1_contract",
+      "path": "docs/protocols/MKG_Y_Y_E1_LANDSCAPE_CONTRACT.json",
+      "sha256": "e60dfaed5c0e56a76befb9b3a932f761956674308c4caf643e5f4c651f119785"
+    },
+    {
+      "pair_id": "all",
+      "role": "y_e1_implementation",
+      "path": "scripts/audit_mkg_y_e1_landscape.py",
+      "sha256": "496bbd8ac4ec3963779de3f5673cf06580a8b131e3b70d79164f87e1aca991b2"
+    },
+    {
+      "pair_id": "all",
+      "role": "shared_landscape_implementation",
+      "path": "scripts/audit_complementarity_landscape.py",
+      "sha256": "161a4979b764f7509ffddaa4090b2c17942dfb8ea7c50eab93b3661f839e5df2"
+    },
+    {
+      "pair_id": "mkg_y_mhyper_native",
+      "role": "y2_source_manifest",
+      "path": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/mkg_y_mhyper_native_dev_source_manifest.json",
+      "sha256": "007353bb7d1f4269ef9a9d07c43d209fa226dbf2f4148a568fc89623b822dff2"
+    },
+    {
+      "pair_id": "mkg_y_mhyper_native",
+      "role": "source_query_rows",
+      "path": "outputs/mkg_y/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "b37c8f69052a6b8abe6e5a878daaafdc6203d3ca31f98a3dbb9ffa853352569b"
+    },
+    {
+      "pair_id": "mkg_y_mhyper_native",
+      "role": "source_selection",
+      "path": "outputs/mkg_y/anchored_dynamic/mhyper_native_seed123/full_ranking/selection.json",
+      "sha256": "c41b24bf8225752e95111e5169c670d76eec64e99710349373168457e6338772"
+    },
+    {
+      "pair_id": "mkg_y_mhyper_native",
+      "role": "source_summary",
+      "path": "outputs/mkg_y/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_summary.json",
+      "sha256": "c2a16dc7ff6e2993e8dc0c598956f0eedb33ed84afcfaf2f22358356fde8cc32"
+    },
+    {
+      "pair_id": "mkg_y_mhyper_adamf",
+      "role": "y2_source_manifest",
+      "path": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/mkg_y_mhyper_adamf_dev_source_manifest.json",
+      "sha256": "ca19a0cfcf63c18c1c0a4a2046efd409d61226a654e5e04625652d88e2a35826"
+    },
+    {
+      "pair_id": "mkg_y_mhyper_adamf",
+      "role": "source_query_rows",
+      "path": "outputs/mkg_y/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "bcb61387bfb88970a893fd1649d1626933a70bddd0d938939fa7e7b61e2b5d5d"
+    },
+    {
+      "pair_id": "mkg_y_mhyper_adamf",
+      "role": "source_selection",
+      "path": "outputs/mkg_y/anchored_dynamic/mhyper_adamf_seed123/full_ranking/selection.json",
+      "sha256": "b25a19769b733bd9350866b17c3b6207c890460c3cc25cfdcbe358b1b139bba9"
+    },
+    {
+      "pair_id": "mkg_y_mhyper_adamf",
+      "role": "source_summary",
+      "path": "outputs/mkg_y/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_summary.json",
+      "sha256": "83dc12669cee784285b9300bc70143a912be275cfb10a922fa7b07faa4cba69e"
+    },
+    {
+      "pair_id": "mkg_y_native_adamf",
+      "role": "y2_source_manifest",
+      "path": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/mkg_y_native_adamf_dev_source_manifest.json",
+      "sha256": "215772f489a1818cb830afb19c97aae42f1db18aca1c45d3f68f78bdbfe036dc"
+    },
+    {
+      "pair_id": "mkg_y_native_adamf",
+      "role": "source_query_rows",
+      "path": "outputs/mkg_y/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "d00e97dcd7b94949eab2fd9e8ef30c153d0797656aaee94ce94c831700e091b3"
+    },
+    {
+      "pair_id": "mkg_y_native_adamf",
+      "role": "source_selection",
+      "path": "outputs/mkg_y/anchored_dynamic/native_adamf_seed123/full_ranking/selection.json",
+      "sha256": "683eb814d3a9bcf0eaa954498c745138a091b0395e953c94546829cea1e683d3"
+    },
+    {
+      "pair_id": "mkg_y_native_adamf",
+      "role": "source_summary",
+      "path": "outputs/mkg_y/anchored_dynamic/native_adamf_seed123/full_ranking/dev_summary.json",
+      "sha256": "ac09c4795247bdd76936bfce87ae6b650d5a070af9f9cd1fd4af9eb4e0d72a0c"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/per_query_action_geometry.csv.gz",
+      "size_bytes": 6713491,
+      "sha256": "e3e64af5e1ffd2be8560ab4605962767dd09ddcea277a08021b33bf7d4465365"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/pair_statistics.csv",
+      "size_bytes": 2397,
+      "sha256": "e931036c92683e0ee0fc8219662f4c4c5b5293a71b6812e79ea2fc66a157e6cd"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/pair_statistics.json",
+      "size_bytes": 5014,
+      "sha256": "85b7bb792624fc69924c777d176cf27d06beb53495e44c4dad2b788f3a437c62"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/gwd_plateau_distribution_summary.csv",
+      "size_bytes": 3222,
+      "sha256": "01061a9823937c6c58e62a7c1d7d1317d001f7f6a02283f60ff0196ddc9aae0c"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/fragmentation_statistics.csv",
+      "size_bytes": 407,
+      "sha256": "9b0687b027952398e7b4ebcf4b8b9dbe9cb473c31f41e26a9eba76ba7b9618a2"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/direction_consistency.csv",
+      "size_bytes": 25758,
+      "sha256": "084e055d930a83f5aebf886f2eb702cde336d8283dc112f26f49b23c50796174"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/action_level_summary.csv",
+      "size_bytes": 8138,
+      "sha256": "fd514544d6125f0d9d35ed076a2811cab70e7e39867e63f459acfe92a70f749d"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/replication_assessment.json",
+      "size_bytes": 1036,
+      "sha256": "6eaa7928984bf4b844416b48d9ce65bd8a3211f0bc5564811068a2bba0c3a67a"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/figure1_global_to_oracle.svg",
+      "size_bytes": 2503,
+      "sha256": "2fc3e5bed7081297f7f9d167e5c41d16682135e91f2a693013ce5fbb4543ef8d"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/figure2_action_landscape_heatmaps.svg",
+      "size_bytes": 811126,
+      "sha256": "32075eb8d21b9df745a80b9f0bd863a92dde18eb67dd7a80606889a230bfa0ae"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/figure3_gwd_distributions.svg",
+      "size_bytes": 6602,
+      "sha256": "df223681b2008c7cbdfad4aaeb23abcf32f35e44a49cdab220a1210ba13c3ab0"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/figure4_relation_direction_consistency.svg",
+      "size_bytes": 9973,
+      "sha256": "ddfadf6a6acfed418adb5b036924acf9f3f3465b1153219aa9184c7cfc7b493e"
+    },
+    {
+      "path": "docs/reports/mkg_y_complementarity_landscape_audit_2026-09-07.md",
+      "size_bytes": 7002,
+      "sha256": "bd2b91413c32aaa9019d233e657fc4c78244aebff30377132e091a8dde801e13"
+    }
+  ]
+}

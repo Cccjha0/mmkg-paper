@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "study": "MKG-Y Y-E1 Available Complementarity Landscape Audit",
+  "status": "frozen_before_y_e1_run",
+  "frozen_date": "2026-09-07",
+  "branch": "m1/recent-mmkgc-baselines",
+  "dataset": "mkg_y",
+  "split": "dev",
+  "filter_fact_scope": "train_dev",
+  "test_access": 0,
+  "inputs": {
+    "y2_export_verification": {
+      "path": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/export_verification.json",
+      "sha256": "b9d3e6ef09ef7933923e512d209f5147042034747c7f435e1ffa746e544dbb42"
+    },
+    "y2_audit_manifest": {
+      "path": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/audit_manifest.json",
+      "sha256": "caa1e701dfa6b3bd99097a2580cd070cd730dd905720d3bfc6e143f2d54d9b41"
+    }
+  },
+  "pairs": [
+    {
+      "pair_id": "mkg_y_mhyper_native",
+      "expert_a": "M-Hyper",
+      "expert_b": "NativE",
+      "source_manifest": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/mkg_y_mhyper_native_dev_source_manifest.json",
+      "source_manifest_sha256": "007353bb7d1f4269ef9a9d07c43d209fa226dbf2f4148a568fc89623b822dff2"
+    },
+    {
+      "pair_id": "mkg_y_mhyper_adamf",
+      "expert_a": "M-Hyper",
+      "expert_b": "AdaMF-MAT",
+      "source_manifest": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/mkg_y_mhyper_adamf_dev_source_manifest.json",
+      "source_manifest_sha256": "ca19a0cfcf63c18c1c0a4a2046efd409d61226a654e5e04625652d88e2a35826"
+    },
+    {
+      "pair_id": "mkg_y_native_adamf",
+      "expert_a": "NativE",
+      "expert_b": "AdaMF-MAT",
+      "source_manifest": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/mkg_y_native_adamf_dev_source_manifest.json",
+      "source_manifest_sha256": "215772f489a1818cb830afb19c97aae42f1db18aca1c45d3f68f78bdbfe036dc"
+    }
+  ],
+  "protocol": {
+    "alpha_grid": {
+      "start": 0.0,
+      "stop": 1.0,
+      "step": 0.05,
+      "count": 21
+    },
+    "score_normalization": "query_zscore",
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "directions": [
+      "head",
+      "tail"
+    ],
+    "global_alpha": "pair-specific Y2 DEV selection, unchanged",
+    "statistics_cluster": "original_triple_id",
+    "bootstrap_samples": 10000,
+    "bootstrap_seed_base": 20260907,
+    "supported_group_min_seed_direction_queries": 60,
+    "deterministic_best_alpha_tie_break": [
+      "maximum exact reciprocal rank",
+      "minimum absolute distance to Global alpha",
+      "smaller alpha"
+    ]
+  },
+  "per_query_metrics": [
+    "global_alpha",
+    "gain_amplitude",
+    "beneficial_basin_width",
+    "minimum_beneficial_distance_to_global",
+    "deterministic_best_alpha",
+    "best_action_direction",
+    "plateau_ratio",
+    "beneficial_region_fragmentation",
+    "positive_opportunity_indicator"
+  ],
+  "pair_statistics": [
+    "global_mrr",
+    "oracle_mrr",
+    "available_headroom",
+    "original_triple_clustered_bootstrap_95ci",
+    "positive_opportunity_rate",
+    "g_w_d_distributions",
+    "plateau_distribution",
+    "direction_consistency",
+    "fragmentation_statistics"
+  ],
+  "classification": {
+    "is_gate": false,
+    "labels": [
+      "Y_E1_AVAILABLE_COMPLEMENTARITY_PRESENT",
+      "Y_E1_MIXED_AVAILABLE_COMPLEMENTARITY"
+    ],
+    "present_definition": "all three pairs have Available headroom > 0 with original-triple clustered bootstrap 95% CI lower > 0",
+    "effect": "descriptive replication outcome only; does not authorize method development or TEST"
+  },
+  "prohibited": {
+    "test_access": 0,
+    "checkpoint_evaluation": 0,
+    "checkpoint_retraining": 0,
+    "checkpoint_reselection": 0,
+    "selector_training": 0,
+    "policy_run": 0,
+    "action_grid_change": 0,
+    "historical_result_modification": 0
+  },
+  "outputs": {
+    "directory": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape",
+    "report": "docs/reports/mkg_y_complementarity_landscape_audit_2026-09-07.md"
+  }
+}

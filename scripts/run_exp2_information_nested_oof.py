@@ -349,7 +349,10 @@ def load_inputs(args, contract, contract_path: Path):
             order = align_indices(candidate["query_id"].astype(str), query_ids, "candidate")
             candidates = candidate["candidate_features"][order].astype(np.float32)
             candidate_mask = candidate["candidate_mask"][order].astype(bool)
-    return frame, rr, static, z_a, z_b, candidates, candidate_mask, [asset_manifest_path, utility_manifest_path, query_path, latent_manifest_path, candidate_manifest_path]
+    dataset = str(asset_manifest.get("dataset", ""))
+    if not dataset:
+        raise RuntimeError("Query-information asset does not declare its dataset")
+    return frame, rr, static, z_a, z_b, candidates, candidate_mask, dataset, [asset_manifest_path, utility_manifest_path, query_path, latent_manifest_path, candidate_manifest_path]
 
 
 def main() -> None:
@@ -359,7 +362,11 @@ def main() -> None:
     exp1_manifest_path = Path(args.exp1_manifest)
     reject_test_path(exp1_manifest_path)
     exp1_manifest = json.loads(exp1_manifest_path.read_text(encoding="utf-8"))
-    if exp1_manifest.get("gate", {}).get("decision") != "GO":
+    if contract.get("protocol_profile") == "mkg_y_frozen_x4_replication":
+        required = contract.get("prerequisite", {}).get("required_assessment")
+        if exp1_manifest.get("assessment", {}).get("outcome") != required:
+            raise RuntimeError("MKG-Y Y-E1 prerequisite assessment does not match the frozen X4 contract")
+    elif exp1_manifest.get("gate", {}).get("decision") != "GO":
         raise RuntimeError("Experiment 1 Available Complementarity Gate did not pass")
     compatible = contract["learner_compatibility"].get(args.representation, [])
     if args.learner not in compatible:
@@ -371,8 +378,7 @@ def main() -> None:
     audit_path = output_dir / "input_audit.json"
     if (output_dir / "metrics.json").exists() and not args.overwrite:
         raise FileExistsError(f"Refusing to overwrite {output_dir}")
-    frame, rr, static, z_a, z_b, candidates, candidate_mask, source_paths = load_inputs(args, contract, contract_path)
-    dataset = "mkg_w" if args.pair_id.startswith("mkgw_") else "db15k"
+    frame, rr, static, z_a, z_b, candidates, candidate_mask, dataset, source_paths = load_inputs(args, contract, contract_path)
     nested = contract["nested_cv"]
     outer_vector, outer_audit = grouped_folds(frame, int(nested["outer_folds"]), int(nested["outer_fold_seed"]))
     exp1_stats = pd.read_csv(args.exp1_stats)
@@ -382,7 +388,7 @@ def main() -> None:
     for path in [contract_path, exp1_manifest_path, Path(args.exp1_stats), *[item for item in source_paths if item is not None]]:
         source_records.append({"path": portable_path(path), "sha256": sha256_file(path)})
     audit = {
-        "schema_version": 1, "experiment": "Experiment 2 — Information–Identifiability Audit",
+        "schema_version": 1, "experiment": contract.get("experiment", "Experiment 2 — Information–Identifiability Audit"),
         "split": "dev", "dataset": dataset, "pair_id": args.pair_id, "representation": args.representation, "learner": args.learner,
         "n_queries": len(frame), "n_original_triples": int(frame.original_triple_id.nunique()),
         "outer_fold_audit": outer_audit, "available_headroom_exp1": available,

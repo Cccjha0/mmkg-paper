@@ -589,6 +589,13 @@ def build_utility_table(
     )
 
     source_summary_path = query_path.with_name("dev_summary.json")
+    source_summary = read_json(source_summary_path) if source_summary_path.exists() else {}
+    filter_scope = str(source_summary.get("filter_fact_scope", "all_splits"))
+    filtering_label = (
+        "TRAIN+DEV true-fact filtering; target retained; TEST facts unopened"
+        if filter_scope == "train_dev"
+        else "all-split true-fact filtering; target retained"
+    )
     manifest = {
         "schema_version": SCHEMA_VERSION,
         "created_utc": datetime.now(timezone.utc).isoformat(),
@@ -596,7 +603,7 @@ def build_utility_table(
         "pair_id": selection["pair_name"],
         "split": "dev",
         "evidence_role": "AACPI DEV-only utility supervision",
-        "test_policy": "TEST inputs rejected; MKG-W/DB15K TEST is retrospective/secondary only",
+        "test_policy": "TEST inputs rejected; utility generation is DEV-only",
         "test_exposure_boundary": {
             "status": "retrospective",
             "evidence_role": "secondary",
@@ -626,7 +633,8 @@ def build_utility_table(
         "source_exact_ranking_implementation": "scripts/eval_heterogeneous_complementarity.py",
         "filtered_ranking_protocol": {
             "protocol_version": selection["protocol_version"],
-            "filtering": "all-split true-fact filtering; target retained",
+            "filter_fact_scope": filter_scope,
+            "filtering": filtering_label,
             "rank_ties": "strictly greater candidate scores plus one",
             "directions": ["head", "tail"],
         },

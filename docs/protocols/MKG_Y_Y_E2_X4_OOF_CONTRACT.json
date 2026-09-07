@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "experiment": "MKG-Y Y-E2 Frozen X4 Information–Identifiability Replication",
+  "protocol_profile": "mkg_y_frozen_x4_replication",
+  "status": "frozen_before_first_systematic_run",
+  "effective_date": "2026-09-08",
+  "split": "dev",
+  "dataset": "mkg_y",
+  "pair_ids": [
+    "mkg_y_mhyper_native",
+    "mkg_y_mhyper_adamf",
+    "mkg_y_native_adamf"
+  ],
+  "purpose": "Replicate the already-frozen Experiment 2 X4 strict nested-OOF identifiability probe on MKG-Y without developing a new selector or representation.",
+  "prerequisite": {
+    "manifest": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/audit_manifest.json",
+    "sha256": "867c7edcc7e0b8947369b442bb06ec4fbd655e436ade1b24ce90cfdeecf894ef",
+    "required_assessment": "Y_E1_AVAILABLE_COMPLEMENTARITY_PRESENT",
+    "is_progression_gate": false
+  },
+  "source_boundaries": {
+    "available_headroom": {
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/pair_statistics.csv",
+      "sha256": "e931036c92683e0ee0fc8219662f4c4c5b5293a71b6812e79ea2fc66a157e6cd"
+    },
+    "full_ranking_manifests": {
+      "mkg_y_mhyper_native": {
+        "path": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/mkg_y_mhyper_native_dev_source_manifest.json",
+        "sha256": "007353bb7d1f4269ef9a9d07c43d209fa226dbf2f4148a568fc89623b822dff2"
+      },
+      "mkg_y_mhyper_adamf": {
+        "path": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/mkg_y_mhyper_adamf_dev_source_manifest.json",
+        "sha256": "ca19a0cfcf63c18c1c0a4a2046efd409d61226a654e5e04625652d88e2a35826"
+      },
+      "mkg_y_native_adamf": {
+        "path": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/mkg_y_native_adamf_dev_source_manifest.json",
+        "sha256": "215772f489a1818cb830afb19c97aae42f1db18aca1c45d3f68f78bdbfe036dc"
+      }
+    },
+    "utility_scaffolding": {
+      "mkg_y_mhyper_native": {
+        "manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_native_dev_source_manifest.json", "sha256": "d5d82cffcb308f5bf44001119447af99375a3f3c66ebec5528d246baf7915a68"},
+        "summary": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_native_dev_utility_summary.json", "sha256": "3d3c9f408079922a80a0d0b1bd58b0dc91fdccf8126b817a133e2b7770dc49f1"},
+        "table": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_native_dev_utility_table.csv.gz", "sha256": "c55ad2f05dd4300f8a859d3ef402670eef26d679a9e6ff3f72e8057b4b3cb1d4"}
+      },
+      "mkg_y_mhyper_adamf": {
+        "manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_adamf_dev_source_manifest.json", "sha256": "777548a3dc647d1e0a1b0484f2ddfb3e2d1a0c4cddbb19585caee2c802be571f"},
+        "summary": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_adamf_dev_utility_summary.json", "sha256": "d770eedac2296deab3fdf071f9a2f4d11be51943fcd9264f8e55622b17cac0e1"},
+        "table": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_adamf_dev_utility_table.csv.gz", "sha256": "9e78983eb5a69faf24e16b213d13695cec899ea1eb7b7e8763617abe1b038d51"}
+      },
+      "mkg_y_native_adamf": {
+        "manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_native_adamf_dev_source_manifest.json", "sha256": "36cfb1ed86bd59efcfe56240b8b78ce838dd28438fd0b031ef5e56240d7b790c"},
+        "summary": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_native_adamf_dev_utility_summary.json", "sha256": "48feb8d6a03c25e7097ce8b33c44a84c322909696940691d89cfaadbdccb3215"},
+        "table": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_native_adamf_dev_utility_table.csv.gz", "sha256": "cc11ccfcd5ddd06a5a0f96b3f9f40786f9c109cd69749ff897bc1486e4a25541"}
+      }
+    }
+  },
+  "alpha_grid": [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0],
+  "score_normalization": "query_zscore",
+  "action_descriptors": ["alpha", "delta_alpha", "abs_delta_alpha"],
+  "representations": {
+    "X1": [
+      "geometry_direction_tail",
+      "geometry_a_top1", "geometry_a_top5_mean", "geometry_a_top1_top2_margin", "geometry_a_score_std",
+      "geometry_b_top1", "geometry_b_top5_mean", "geometry_b_top1_top2_margin", "geometry_b_score_std"
+    ],
+    "X2_additions": [
+      "geometry_top1_delta_a_minus_b", "geometry_top5_delta_a_minus_b", "geometry_margin_delta_a_minus_b", "geometry_std_delta_a_minus_b",
+      "r1_expert_top5_jaccard", "r1_expert_top10_jaccard", "r1_expert_top20_jaccard",
+      "r1_union20_rank_spearman", "r1_union20_rank_displacement_mean", "r1_union20_rank_displacement_median", "r1_union20_rank_displacement_max",
+      "r1_expert_top1_same", "r1_a_top1_rank_under_b", "r1_b_top1_rank_under_a"
+    ],
+    "X3_additions": [
+      "r3_train_relation_frequency_log1p", "r3_train_observed_entity_frequency_log1p",
+      "r3_train_observed_entity_direction_frequency_log1p", "r3_train_observed_entity_unique_relation_count_log1p",
+      "c1_known_entity_neighborhood_fraction", "c1_relation_unique_heads_log1p", "c1_relation_unique_tails_log1p",
+      "c1_relation_tails_per_head_log1p", "c1_relation_heads_per_tail_log1p", "c1_relation_head_tail_log_ratio",
+      "c1_relation_known_role_diversity_log1p"
+    ],
+    "X4_additions": [
+      "r3_observed_entity_has_text", "r3_observed_entity_has_image",
+      "r3_train_relation_target_text_support", "r3_train_relation_target_image_support",
+      "c2_relation_known_image_support", "c2_relation_known_text_support"
+    ]
+  },
+  "prohibited_existing_fields": [
+    "r2_response_top5_jaccard", "r2_response_top10_jaccard", "r2_response_top20_jaccard",
+    "r2_response_union20_rank_spearman", "r2_response_union20_rank_displacement_mean",
+    "r2_response_union20_rank_displacement_median", "r2_response_union20_rank_displacement_max",
+    "r2_response_top1_changed", "r2_action_top1_top2_margin", "r2_response_top1_top2_margin_change",
+    "r2_response_top5_mean_score_change", "r2_response_score_std_change"
+  ],
+  "learner_compatibility": {
+    "X4": ["linear_huber", "hist_gbdt", "mlp_low", "mlp_high"]
+  },
+  "hyperparameters": {
+    "linear_huber": [
+      {"alpha": 0.00001, "epsilon": 0.1, "max_iter": 80},
+      {"alpha": 0.0001, "epsilon": 0.1, "max_iter": 80}
+    ],
+    "hist_gbdt": [
+      {"learning_rate": 0.05, "max_leaf_nodes": 15, "max_iter": 150, "l2_regularization": 0.0},
+      {"learning_rate": 0.05, "max_leaf_nodes": 31, "max_iter": 150, "l2_regularization": 0.0},
+      {"learning_rate": 0.1, "max_leaf_nodes": 15, "max_iter": 150, "l2_regularization": 0.0001},
+      {"learning_rate": 0.1, "max_leaf_nodes": 31, "max_iter": 150, "l2_regularization": 0.0001}
+    ],
+    "mlp_low": [
+      {"hidden_width": 32, "hidden_layers": 2, "learning_rate": 0.0003, "epochs": 30},
+      {"hidden_width": 64, "hidden_layers": 2, "learning_rate": 0.0003, "epochs": 30},
+      {"hidden_width": 32, "hidden_layers": 2, "learning_rate": 0.001, "epochs": 30},
+      {"hidden_width": 64, "hidden_layers": 2, "learning_rate": 0.001, "epochs": 30}
+    ],
+    "mlp_high": [
+      {"hidden_width": 128, "hidden_layers": 3, "learning_rate": 0.0003, "epochs": 40},
+      {"hidden_width": 256, "hidden_layers": 3, "learning_rate": 0.0003, "epochs": 40}
+    ]
+  },
+  "training": {
+    "loss": "smooth_l1_beta_0.02",
+    "batch_size": 4096,
+    "weight_decay": 0.0,
+    "max_gradient_norm": 5.0,
+    "model_seed": 20260905,
+    "early_stopping": false
+  },
+  "nested_cv": {
+    "outer_folds": 5,
+    "inner_folds": 3,
+    "outer_fold_seed": 20260901,
+    "inner_fold_seed": 20260905,
+    "grouping_key": "original_triple_id",
+    "assignment": "relation_stratified_sha256_round_robin",
+    "global_alpha_scope": "outer_train_only",
+    "inner_configuration_selection": "maximum inner probe delta_mrr, then action-row Spearman, then contract order",
+    "inner_learner_selection": "maximum inner probe delta_mrr, then action-row Spearman, then contract order"
+  },
+  "bootstrap": {"samples": 10000, "seed": 20260905, "unit": "original_triple_id"},
+  "primary_probe": "fold-wise inner-selected learner over the four frozen X4 learners",
+  "assessment": {
+    "is_progression_gate": false,
+    "report_only": true,
+    "terminology": ["Empirical Identifiable Headroom", "OOF Identifiability Probe"]
+  },
+  "x6_status": "excluded_no_independent_justification",
+  "x6_reason": "The frozen replication plan makes X6 conditional; existing cross-dataset evidence does not independently justify reopening the candidate representation.",
+  "test_access": 0,
+  "final_policy_development": 0,
+  "aacpi_resurrection": 0,
+  "checkpoint_retraining": 0,
+  "checkpoint_reselection": 0,
+  "output": {
+    "directory": "outputs/complementarity_identifiability/mkg_y_y_e2_information",
+    "report": "docs/reports/mkg_y_information_identifiability_audit_2026-09-08.md"
+  }
+}

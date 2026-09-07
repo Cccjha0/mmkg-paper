@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "pair_name": "mkg_y_native_adamf",
+  "dataset": "mkg_y",
+  "protocol_version": "mmkg_general_v1",
+  "expert_a_name": "NativE",
+  "expert_b_name": "AdaMF-MAT",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "score_normalization": "query_zscore",
+  "alpha_grid": [
+    0.0,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+  ],
+  "rrf_k": 60.0,
+  "global_alpha": 0.55,
+  "global_dev_mrr": 0.32828715218754256,
+  "relation_min_support": 60,
+  "relation_alpha": {
+    "0": 0.5,
+    "1": 0.95,
+    "2": 0.15,
+    "3": 0.4,
+    "4": 0.6,
+    "5": 0.8,
+    "6": 0.45,
+    "7": 0.25,
+    "8": 0.85,
+    "9": 0.6,
+    "10": 0.7,
+    "11": 0.55,
+    "12": 0.65,
+    "13": 0.55,
+    "14": 0.55,
+    "15": 0.55,
+    "16": 0.55,
+    "17": 0.0,
+    "18": 0.55,
+    "19": 0.55,
+    "20": 0.55,
+    "21": 0.55,
+    "22": 0.55,
+    "23": 0.55,
+    "24": 0.55,
+    "25": 0.55,
+    "26": 0.55
+  },
+  "relation_details": {
+    "0": {
+      "support": 438,
+      "alpha": 0.5,
+      "source": "relation_dev"
+    },
+    "1": {
+      "support": 1986,
+      "alpha": 0.95,
+      "source": "relation_dev"
+    },
+    "2": {
+      "support": 810,
+      "alpha": 0.15,
+      "source": "relation_dev"
+    },
+    "3": {
+      "support": 2490,
+      "alpha": 0.4,
+      "source": "relation_dev"
+    },
+    "4": {
+      "support": 2238,
+      "alpha": 0.6,
+      "source": "relation_dev"
+    },
+    "5": {
+      "support": 774,
+      "alpha": 0.8,
+      "source": "relation_dev"
+    },
+    "6": {
+      "support": 1110,
+      "alpha": 0.45,
+      "source": "relation_dev"
+    },
+    "7": {
+      "support": 84,
+      "alpha": 0.25,
+      "source": "relation_dev"
+    },
+    "8": {
+      "support": 270,
+      "alpha": 0.85,
+      "source": "relation_dev"
+    },
+    "9": {
+      "support": 4674,
+      "alpha": 0.6,
+      "source": "relation_dev"
+    },
+    "10": {
+      "support": 204,
+      "alpha": 0.7,
+      "source": "relation_dev"
+    },
+    "11": {
+      "support": 42,
+      "alpha": 0.55,
+      "source": "global_fallback"
+    },
+    "12": {
+      "support": 474,
+      "alpha": 0.65,
+      "source": "relation_dev"
+    },
+    "13": {
+      "support": 54,
+      "alpha": 0.55,
+      "source": "global_fallback"
+    },
+    "14": {
+      "support": 6,
+      "alpha": 0.55,
+      "source": "global_fallback"
+    },
+    "15": {
+      "support": 60,
+      "alpha": 0.55,
+      "source": "relation_dev"
+    },
+    "16": {
+      "support": 12,
+      "alpha": 0.55,
+      "source": "global_fallback"
+    },
+    "17": {
+      "support": 120,
+      "alpha": 0.0,
+      "source": "relation_dev"
+    },
+    "18": {
+      "support": 36,
+      "alpha": 0.55,
+      "source": "global_fallback"
+    },
+    "19": {
+      "support": 6,
+      "alpha": 0.55,
+      "source": "global_fallback"
+    },
+    "20": {
+      "support": 6,
+      "alpha": 0.55,
+      "source": "global_fallback"
+    },
+    "21": {
+      "support": 18,
+      "alpha": 0.55,
+      "source": "global_fallback"
+    },
+    "22": {
+      "support": 12,
+      "alpha": 0.55,
+      "source": "global_fallback"
+    },
+    "23": {
+      "support": 42,
+      "alpha": 0.55,
+      "source": "global_fallback"
+    },
+    "24": {
+      "support": 6,
+      "alpha": 0.55,
+      "source": "global_fallback"
+    },
+    "25": {
+      "support": 12,
+      "alpha": 0.55,
+      "source": "global_fallback"
+    },
+    "26": {
+      "support": 6,
+      "alpha": 0.55,
+      "source": "global_fallback"
+    }
+  }
+}

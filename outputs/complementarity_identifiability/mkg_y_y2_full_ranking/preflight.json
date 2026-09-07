@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "study": "MKG-Y Y2 DEV Exact Full-Ranking Export",
+  "status": "PASS",
+  "acceptance_progression": "Y2_DEV_EXPORT_ALLOWED",
+  "split": "dev",
+  "filter_fact_scope": "train_dev",
+  "checkpoint_count": 9,
+  "pair_count": 3,
+  "test_rows_opened": 0,
+  "checkpoint_retraining": 0,
+  "checkpoint_reselection": 0,
+  "checked_at_utc": "2026-09-07T13:12:37.191848+00:00"
+}

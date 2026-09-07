@@ -1,0 +1,4 @@
+dataset,pair_id,fragmented_all_query_rate,fragmented_positive_opportunity_rate,beneficial_components_mean_positive_only,beneficial_components_max
+mkg_y,mkg_y_mhyper_native,0.07392120075046904,0.11572351674172704,1.1815155668690034,7
+mkg_y,mkg_y_mhyper_adamf,0.08455284552845528,0.12965093977752207,1.214614499424626,7
+mkg_y,mkg_y_native_adamf,0.11350844277673545,0.17213581183611532,1.310034142640364,7
