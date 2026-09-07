@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
 import json
 import os
@@ -29,6 +30,10 @@ PAIR_LABELS = {
     "mkg_y_mhyper_native": "MKG-Y / M-Hyper + NativE",
     "mkg_y_mhyper_adamf": "MKG-Y / M-Hyper + AdaMF-MAT",
     "mkg_y_native_adamf": "MKG-Y / NativE + AdaMF-MAT",
+}
+
+TEXT_HASH_SUFFIXES = {
+    ".bib", ".csv", ".json", ".md", ".ps1", ".py", ".svg", ".tex", ".tsv", ".txt", ".yaml", ".yml"
 }
 
 
@@ -77,6 +82,7 @@ def declared_hash_records(value):
 
 def complete_hash_inventory(seed_paths: list[Path], excluded: set[Path]) -> list[dict]:
     records: dict[str, str] = {}
+    verification_modes: dict[str, str] = {}
     queue = [Path(path) for path in seed_paths]
     parsed_json: set[Path] = set()
     excluded_resolved = {path.resolve() for path in excluded}
@@ -100,10 +106,28 @@ def complete_hash_inventory(seed_paths: list[Path], excluded: set[Path]) -> list
             source = Path(declared_path).resolve()
             if source in excluded_resolved:
                 continue
-            if not source.exists() or sha256_file(source) != expected:
+            if not source.exists():
+                raise RuntimeError(f"Declared source hash mismatch: {declared_path}")
+            actual = sha256_file(source)
+            if actual == expected:
+                verification_modes.setdefault(portable_path(source), "raw_bytes")
+            elif source.suffix.lower() in TEXT_HASH_SUFFIXES:
+                normalized = source.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+                normalized_hash = hashlib.sha256(normalized).hexdigest()
+                if normalized_hash != expected:
+                    raise RuntimeError(f"Declared source hash mismatch: {declared_path}")
+                verification_modes[portable_path(source)] = "lf_normalized_text"
+            else:
                 raise RuntimeError(f"Declared source hash mismatch: {declared_path}")
             queue.append(source)
-    return [{"path": path, "sha256": records[path]} for path in sorted(records)]
+    return [
+        {
+            "path": path,
+            "sha256": records[path],
+            **({"declared_hash_verification": verification_modes[path]} if path in verification_modes else {}),
+        }
+        for path in sorted(records)
+    ]
 
 
 def load_pair_data(pair_id: str, asset_dir: Path, utility_dir: Path):

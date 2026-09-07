@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 
@@ -96,3 +97,19 @@ def test_server_runner_exposes_only_x4_systematic_runs() -> None:
     assert '"--representation", "X6"' not in script
     assert "build_exp2_union_top100.py" not in script
     assert "extract_aacpi_frozen_query_latents.py" not in script
+
+
+def test_audit_accepts_only_newline_normalized_text_hashes(tmp_path: Path) -> None:
+    analyzer_path = ROOT / "scripts/analyze_mkg_y_y_e2_x4_oof.py"
+    spec = importlib.util.spec_from_file_location("mkg_y_y_e2_analyzer", analyzer_path)
+    analyzer = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(analyzer)
+    target = tmp_path / "contract.json"
+    target.write_bytes(b'{"status":"frozen"}\r\n')
+    expected = hashlib.sha256(b'{"status":"frozen"}\n').hexdigest()
+    manifest = tmp_path / "manifest.json"
+    manifest.write_text(json.dumps({"source": {"path": str(target), "sha256": expected}}), encoding="utf-8")
+    inventory = analyzer.complete_hash_inventory([manifest], set())
+    row = next(item for item in inventory if Path(item["path"]).name == "contract.json")
+    assert row["declared_hash_verification"] == "lf_normalized_text"
