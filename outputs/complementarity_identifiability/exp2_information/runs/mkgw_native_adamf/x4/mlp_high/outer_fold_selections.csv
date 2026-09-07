@@ -1,0 +1,6 @@
+outer_fold,selected_config_index,selected_config,inner_probe_delta_mrr,inner_spearman,fold_global_alpha
+1,1,"{""epochs"": 40, ""hidden_layers"": 3, ""hidden_width"": 256, ""learning_rate"": 0.0003}",-0.009314348457727231,0.06762396912658475,0.95
+2,1,"{""epochs"": 40, ""hidden_layers"": 3, ""hidden_width"": 256, ""learning_rate"": 0.0003}",-0.008672133058309729,0.0568521978349355,0.95
+3,0,"{""epochs"": 40, ""hidden_layers"": 3, ""hidden_width"": 128, ""learning_rate"": 0.0003}",-0.009495515722980396,0.052364817598963366,0.95
+4,0,"{""epochs"": 40, ""hidden_layers"": 3, ""hidden_width"": 128, ""learning_rate"": 0.0003}",-0.007879019359129918,0.0583379071616588,0.95
+5,1,"{""epochs"": 40, ""hidden_layers"": 3, ""hidden_width"": 256, ""learning_rate"": 0.0003}",-0.010367687244405522,0.04901688915174448,0.95

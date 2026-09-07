@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "experiment": "Experiment 2 \u2014 Information\u2013Identifiability Audit",
+  "representation": "X6",
+  "split": "dev",
+  "pair_id": "mkgw_native_adamf",
+  "top_k_per_expert": 100,
+  "maximum_union_size": 200,
+  "candidate_fields": [
+    "normalized_score_a",
+    "normalized_score_b",
+    "normalized_rank_a",
+    "normalized_rank_b",
+    "top100_member_a",
+    "top100_member_b",
+    "score_a_minus_b",
+    "abs_score_a_minus_b",
+    "rank_a_minus_b",
+    "abs_rank_a_minus_b"
+  ],
+  "candidate_embeddings_used": false,
+  "candidate_identity_feature_used": false,
+  "n_queries": 25656,
+  "sources": [
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/audit_manifest.json",
+      "sha256": "51ce41d6491c15ccf6ac154b720cf25fe9fc798a3e21221654b07810a201391c"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/mkgw_native_adamf_dev_source_manifest.json",
+      "sha256": "d4e01934588ec2919542b1ed4998d2a0992f300889cf313529f398eda6ff86b0"
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "980197c29b8d0c447e298b862d43064e0b86c088a134347136fa87a64ad877ed"
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/dev_summary.json",
+      "sha256": "73a0308e5afbedc714d357cbea2f73fc5c090e931eae3ae01a2f03d02acf1b4e"
+    },
+    {
+      "path": "outputs/aacpi/action_response_assets/mkgw_native_adamf/candidate_score_source_manifest.json",
+      "sha256": "8808a0041df6ca49df37014c734b689bf0789df75712edb833800eae13637fd7"
+    },
+    {
+      "path": "docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json",
+      "sha256": "cdf9cb961eacac7d977d9ec72cbb189e3d0614a06f92a1a5f11aa25504aebeae"
+    }
+  ],
+  "test_rows_accessed": 0,
+  "checkpoint_training": 0,
+  "checkpoint_reselection": 0,
+  "full_ranking_evaluation": 0,
+  "dry_run": false,
+  "output": {
+    "path": "outputs/complementarity_identifiability/exp2_information/candidate_assets/mkgw_native_adamf_union_top100.npz",
+    "sha256": "9e4417478aaa93677787b415bb0fec13b29880b43e86aa1d97b7ebcbf924f37b"
+  },
+  "union_size": {
+    "min": 102,
+    "mean": 150.84377923292797,
+    "max": 200
+  },
+  "target_entity_id_used_for_features": false,
+  "candidate_ids_stored_for_audit_not_model_input": true
+}

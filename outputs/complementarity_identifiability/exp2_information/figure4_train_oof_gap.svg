@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560">
+<rect width="100%" height="100%" fill="#fff"/>
+<style>text{font-family:Arial,sans-serif;fill:#202124}.title{font-size:20px;font-weight:700}.panel{font-size:12px;font-weight:700}.axis{font-size:9px}.note{font-size:10px;fill:#5f6368}</style>
+<text x="20" y="28" class="title">Train–OOF generalization gap by information richness</text>
+<line x1="100" y1="285" x2="725" y2="285" stroke="#999"/>
+<polyline points="100.0,135.5 225.0,119.3 350.0,113.4 475.0,98.5 600.0,110.3 725.0,175.0" fill="none" stroke="#4c78a8" stroke-width="2"/>
+<text x="750" y="110" class="note" fill="#4c78a8">MKG-W / M-Hyper+NativE</text>
+<polyline points="100.0,227.5 225.0,206.2 350.0,181.0 475.0,186.6 600.0,177.1 725.0,122.6" fill="none" stroke="#f58518" stroke-width="2"/>
+<text x="750" y="140" class="note" fill="#f58518">MKG-W / M-Hyper+AdaMF</text>
+<polyline points="100.0,206.7 225.0,200.1 350.0,194.2 475.0,176.3 600.0,179.7 725.0,113.7" fill="none" stroke="#54a24b" stroke-width="2"/>
+<text x="750" y="170" class="note" fill="#54a24b">MKG-W / NativE+AdaMF</text>
+<polyline points="100.0,216.8 225.0,221.9 350.0,194.9 475.0,178.6 600.0,200.7 725.0,112.7" fill="none" stroke="#e45756" stroke-width="2"/>
+<text x="750" y="200" class="note" fill="#e45756">DB15K / M-Hyper+NativE</text>
+<polyline points="100.0,245.0 225.0,226.0 350.0,230.4 475.0,222.8 600.0,215.1 725.0,120.3" fill="none" stroke="#72b7b2" stroke-width="2"/>
+<text x="750" y="230" class="note" fill="#72b7b2">DB15K / M-Hyper+AdaMF</text>
+<polyline points="100.0,235.5 225.0,238.1 350.0,217.2 475.0,227.3 600.0,236.8 725.0,75.0" fill="none" stroke="#b279a2" stroke-width="2"/>
+<text x="750" y="260" class="note" fill="#b279a2">DB15K / NativE+AdaMF</text>
+<text x="100.0" y="515" text-anchor="middle" class="axis">X1</text>
+<text x="225.0" y="515" text-anchor="middle" class="axis">X2</text>
+<text x="350.0" y="515" text-anchor="middle" class="axis">X3</text>
+<text x="475.0" y="515" text-anchor="middle" class="axis">X4</text>
+<text x="600.0" y="515" text-anchor="middle" class="axis">X5</text>
+<text x="725.0" y="515" text-anchor="middle" class="axis">X6</text>
+</svg>

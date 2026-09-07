@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "experiment": "Experiment 2 \u2014 Information\u2013Identifiability Audit",
+  "split": "dev",
+  "dataset": "mkg_w",
+  "pair_id": "mkgw_mhyper_native",
+  "representation": "X4",
+  "learner": "hist_gbdt",
+  "n_queries": 25656,
+  "n_original_triples": 4276,
+  "outer_fold_audit": {
+    "assignment": "relation-stratified SHA256 ordering, then round-robin by original triple with a deterministic per-relation fold offset",
+    "fold_seed": 20260901,
+    "n_folds": 5,
+    "n_unique_triples": 4276,
+    "triple_groups_per_fold": {
+      "0": 853,
+      "1": 860,
+      "2": 857,
+      "3": 859,
+      "4": 847
+    },
+    "observations_per_fold": {
+      "0": 853,
+      "1": 860,
+      "2": 857,
+      "3": 859,
+      "4": 847
+    }
+  },
+  "available_headroom_exp1": 0.0466252525468295,
+  "contract_sha256": "cdf9cb961eacac7d977d9ec72cbb189e3d0614a06f92a1a5f11aa25504aebeae",
+  "sources": [
+    {
+      "path": "docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json",
+      "sha256": "cdf9cb961eacac7d977d9ec72cbb189e3d0614a06f92a1a5f11aa25504aebeae"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/audit_manifest.json",
+      "sha256": "51ce41d6491c15ccf6ac154b720cf25fe9fc798a3e21221654b07810a201391c"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/pair_statistics.csv",
+      "sha256": "95e790ffbb727ef02559098938aa4891128189b9e8653bb810c5ff958393688c"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/mkgw_mhyper_native_query_information_manifest.json",
+      "sha256": "a9d94c1913ee3e05e4f167e1b9ae898ce136593b1df9e671c00b64739b8c71c4"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_native_dev_source_manifest.json",
+      "sha256": "57a24f419069845d35f4338ed8caa641dd50c290b6947cd14e8e83f65fdac0ac"
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "8b7dfb913f3a0d00eef156200e4a656f4062f2b2306b85cf8e68130749254b98"
+    }
+  ],
+  "test_rows_accessed": 0,
+  "full_dev_global_used_for_heldout": 0,
+  "checkpoint_training": 0,
+  "checkpoint_reselection": 0,
+  "final_policy_development": 0,
+  "dry_run": false,
+  "fold_specific_globals": [
+    {
+      "outer_fold": 1,
+      "global_index": 12,
+      "global_alpha": 0.6,
+      "outer_train_global_mrr": 0.35766059832546215
+    },
+    {
+      "outer_fold": 2,
+      "global_index": 12,
+      "global_alpha": 0.6,
+      "outer_train_global_mrr": 0.3576776477075589
+    },
+    {
+      "outer_fold": 3,
+      "global_index": 11,
+      "global_alpha": 0.55,
+      "outer_train_global_mrr": 0.3551102547856723
+    },
+    {
+      "outer_fold": 4,
+      "global_index": 12,
+      "global_alpha": 0.6,
+      "outer_train_global_mrr": 0.3537904009990375
+    },
+    {
+      "outer_fold": 5,
+      "global_index": 12,
+      "global_alpha": 0.6,
+      "outer_train_global_mrr": 0.35801720784803137
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="700" viewBox="0 0 1160 700">
+<rect width="100%" height="100%" fill="#fff"/>
+<style>text{font-family:Arial,sans-serif;fill:#202124}.title{font-size:20px;font-weight:700}.panel{font-size:12px;font-weight:700}.axis{font-size:9px}.note{font-size:10px;fill:#5f6368}</style>
+<text x="20" y="28" class="title">Information–Identifiability Curve</text>
+<text x="65" y="58" class="panel">MKG-W / M-Hyper+NativE</text>
+<line x1="65" y1="266.6" x2="370" y2="266.6" stroke="#9aa0a6"/>
+<line x1="65" y1="70.0" x2="370" y2="70.0" stroke="#888" stroke-dasharray="2 3"/>
+<polyline points="65.0,233.5 126.0,232.7 187.0,232.0 248.0,235.6 309.0,236.9 370.0,251.0" fill="none" stroke="#376795" stroke-width="2" stroke-dasharray=""/>
+<polyline points="65.0,191.8 126.0,186.4 187.0,184.1 248.0,183.6 309.0,188.1 370.0,220.3" fill="none" stroke="#d1495b" stroke-width="2" stroke-dasharray="5 3"/>
+<text x="65.0" y="290" text-anchor="middle" class="axis">X1</text>
+<text x="126.0" y="290" text-anchor="middle" class="axis">X2</text>
+<text x="187.0" y="290" text-anchor="middle" class="axis">X3</text>
+<text x="248.0" y="290" text-anchor="middle" class="axis">X4</text>
+<text x="309.0" y="290" text-anchor="middle" class="axis">X5</text>
+<text x="370.0" y="290" text-anchor="middle" class="axis">X6</text>
+<text x="440" y="58" class="panel">MKG-W / M-Hyper+AdaMF</text>
+<line x1="440" y1="265.4" x2="745" y2="265.4" stroke="#9aa0a6"/>
+<line x1="440" y1="70.0" x2="745" y2="70.0" stroke="#888" stroke-dasharray="2 3"/>
+<polyline points="440.0,247.8 501.0,242.4 562.0,239.5 623.0,237.2 684.0,240.0 745.0,272.7" fill="none" stroke="#376795" stroke-width="2" stroke-dasharray=""/>
+<polyline points="440.0,229.6 501.0,217.4 562.0,206.5 623.0,206.0 684.0,205.8 745.0,221.3" fill="none" stroke="#d1495b" stroke-width="2" stroke-dasharray="5 3"/>
+<text x="440.0" y="290" text-anchor="middle" class="axis">X1</text>
+<text x="501.0" y="290" text-anchor="middle" class="axis">X2</text>
+<text x="562.0" y="290" text-anchor="middle" class="axis">X3</text>
+<text x="623.0" y="290" text-anchor="middle" class="axis">X4</text>
+<text x="684.0" y="290" text-anchor="middle" class="axis">X5</text>
+<text x="745.0" y="290" text-anchor="middle" class="axis">X6</text>
+<text x="815" y="58" class="panel">MKG-W / NativE+AdaMF</text>
+<line x1="815" y1="264.2" x2="1120" y2="264.2" stroke="#9aa0a6"/>
+<line x1="815" y1="70.0" x2="1120" y2="70.0" stroke="#888" stroke-dasharray="2 3"/>
+<polyline points="815.0,261.5 876.0,260.5 937.0,261.0 998.0,260.0 1059.0,260.3 1120.0,275.0" fill="none" stroke="#376795" stroke-width="2" stroke-dasharray=""/>
+<polyline points="815.0,240.4 876.0,237.6 937.0,236.5 998.0,230.6 1059.0,231.9 1120.0,228.8" fill="none" stroke="#d1495b" stroke-width="2" stroke-dasharray="5 3"/>
+<text x="815.0" y="290" text-anchor="middle" class="axis">X1</text>
+<text x="876.0" y="290" text-anchor="middle" class="axis">X2</text>
+<text x="937.0" y="290" text-anchor="middle" class="axis">X3</text>
+<text x="998.0" y="290" text-anchor="middle" class="axis">X4</text>
+<text x="1059.0" y="290" text-anchor="middle" class="axis">X5</text>
+<text x="1120.0" y="290" text-anchor="middle" class="axis">X6</text>
+<text x="65" y="363" class="panel">DB15K / M-Hyper+NativE</text>
+<line x1="65" y1="569.8" x2="370" y2="569.8" stroke="#9aa0a6"/>
+<line x1="65" y1="375.0" x2="370" y2="375.0" stroke="#888" stroke-dasharray="2 3"/>
+<polyline points="65.0,564.3 126.0,562.9 187.0,560.1 248.0,561.5 309.0,561.5 370.0,580.0" fill="none" stroke="#376795" stroke-width="2" stroke-dasharray=""/>
+<polyline points="65.0,546.5 126.0,546.4 187.0,536.6 248.0,533.8 309.0,539.6 370.0,535.2" fill="none" stroke="#d1495b" stroke-width="2" stroke-dasharray="5 3"/>
+<text x="65.0" y="595" text-anchor="middle" class="axis">X1</text>
+<text x="126.0" y="595" text-anchor="middle" class="axis">X2</text>
+<text x="187.0" y="595" text-anchor="middle" class="axis">X3</text>
+<text x="248.0" y="595" text-anchor="middle" class="axis">X4</text>
+<text x="309.0" y="595" text-anchor="middle" class="axis">X5</text>
+<text x="370.0" y="595" text-anchor="middle" class="axis">X6</text>
+<text x="440" y="363" class="panel">DB15K / M-Hyper+AdaMF</text>
+<line x1="440" y1="555.4" x2="745" y2="555.4" stroke="#9aa0a6"/>
+<line x1="440" y1="375.0" x2="745" y2="375.0" stroke="#888" stroke-dasharray="2 3"/>
+<polyline points="440.0,554.8 501.0,552.9 562.0,552.1 623.0,551.8 684.0,551.1 745.0,580.0" fill="none" stroke="#376795" stroke-width="2" stroke-dasharray=""/>
+<polyline points="440.0,544.3 501.0,537.4 562.0,537.8 623.0,535.4 684.0,532.7 745.0,536.7" fill="none" stroke="#d1495b" stroke-width="2" stroke-dasharray="5 3"/>
+<text x="440.0" y="595" text-anchor="middle" class="axis">X1</text>
+<text x="501.0" y="595" text-anchor="middle" class="axis">X2</text>
+<text x="562.0" y="595" text-anchor="middle" class="axis">X3</text>
+<text x="623.0" y="595" text-anchor="middle" class="axis">X4</text>
+<text x="684.0" y="595" text-anchor="middle" class="axis">X5</text>
+<text x="745.0" y="595" text-anchor="middle" class="axis">X6</text>
+<text x="815" y="363" class="panel">DB15K / NativE+AdaMF</text>
+<line x1="815" y1="570.3" x2="1120" y2="570.3" stroke="#9aa0a6"/>
+<line x1="815" y1="375.0" x2="1120" y2="375.0" stroke="#888" stroke-dasharray="2 3"/>
+<polyline points="815.0,568.5 876.0,566.0 937.0,566.1 998.0,565.0 1059.0,566.7 1120.0,580.0" fill="none" stroke="#376795" stroke-width="2" stroke-dasharray=""/>
+<polyline points="815.0,557.4 876.0,555.5 937.0,550.9 998.0,552.1 1059.0,555.9 1120.0,532.8" fill="none" stroke="#d1495b" stroke-width="2" stroke-dasharray="5 3"/>
+<text x="815.0" y="595" text-anchor="middle" class="axis">X1</text>
+<text x="876.0" y="595" text-anchor="middle" class="axis">X2</text>
+<text x="937.0" y="595" text-anchor="middle" class="axis">X3</text>
+<text x="998.0" y="595" text-anchor="middle" class="axis">X4</text>
+<text x="1059.0" y="595" text-anchor="middle" class="axis">X5</text>
+<text x="1120.0" y="595" text-anchor="middle" class="axis">X6</text>
+<line x1="420" y1="675" x2="445" y2="675" stroke="#376795" stroke-width="2"/><text x="452" y="679" class="note">OOF gain</text>
+<line x1="535" y1="675" x2="560" y2="675" stroke="#d1495b" stroke-width="2" stroke-dasharray="5 3"/><text x="567" y="679" class="note">train gain</text>
+<line x1="670" y1="675" x2="695" y2="675" stroke="#888" stroke-dasharray="2 3"/><text x="702" y="679" class="note">Available headroom</text>
+</svg>

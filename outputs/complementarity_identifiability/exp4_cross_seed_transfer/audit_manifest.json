@@ -1,0 +1,322 @@
+{
+  "schema_version": 1,
+  "experiment": "Experiment 4 \u2014 Cross-Seed Transferable Complementarity Audit",
+  "split": "dev",
+  "classification": "E4_INTERMEDIATE",
+  "classification_evidence": {
+    "transfer_ci_lower_positive_pairs": 6,
+    "transfer_significant_datasets": [
+      "db15k",
+      "mkg_w"
+    ],
+    "transfer_recovery_ge_25pct_pairs": 0,
+    "loso_ci_lower_positive_pairs": 6,
+    "median_transfer_recovery": 0.17091241278315975,
+    "median_loso_recovery": 0.22772034467534336,
+    "transfer_not_significantly_positive_pairs": 0,
+    "substantially_transferable_gate": false,
+    "residual_dominated_gate": false
+  },
+  "preflight": [
+    {
+      "pair_id": "mkgw_mhyper_native",
+      "canonical_source": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "rows": 25656,
+      "query_identities": 8552,
+      "original_triples": 4276,
+      "seed_inventory": [
+        1,
+        2,
+        3
+      ],
+      "direction_inventory": [
+        "head",
+        "tail"
+      ],
+      "alpha_columns": 21,
+      "alpha0": 0.6,
+      "raw_matches_exp1": true
+    },
+    {
+      "pair_id": "mkgw_mhyper_adamf",
+      "canonical_source": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "rows": 25656,
+      "query_identities": 8552,
+      "original_triples": 4276,
+      "seed_inventory": [
+        1,
+        2,
+        3
+      ],
+      "direction_inventory": [
+        "head",
+        "tail"
+      ],
+      "alpha_columns": 21,
+      "alpha0": 1.0,
+      "raw_matches_exp1": true
+    },
+    {
+      "pair_id": "mkgw_native_adamf",
+      "canonical_source": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "rows": 25656,
+      "query_identities": 8552,
+      "original_triples": 4276,
+      "seed_inventory": [
+        1,
+        2,
+        3
+      ],
+      "direction_inventory": [
+        "head",
+        "tail"
+      ],
+      "alpha_columns": 21,
+      "alpha0": 0.95,
+      "raw_matches_exp1": true
+    },
+    {
+      "pair_id": "db15k_mhyper_native",
+      "canonical_source": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "rows": 47532,
+      "query_identities": 15844,
+      "original_triples": 7922,
+      "seed_inventory": [
+        1,
+        2,
+        3
+      ],
+      "direction_inventory": [
+        "head",
+        "tail"
+      ],
+      "alpha_columns": 21,
+      "alpha0": 1.0,
+      "raw_matches_exp1": true
+    },
+    {
+      "pair_id": "db15k_mhyper_adamf",
+      "canonical_source": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "rows": 47532,
+      "query_identities": 15844,
+      "original_triples": 7922,
+      "seed_inventory": [
+        1,
+        2,
+        3
+      ],
+      "direction_inventory": [
+        "head",
+        "tail"
+      ],
+      "alpha_columns": 21,
+      "alpha0": 1.0,
+      "raw_matches_exp1": true
+    },
+    {
+      "pair_id": "db15k_native_adamf",
+      "canonical_source": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "rows": 47532,
+      "query_identities": 15844,
+      "original_triples": 7922,
+      "seed_inventory": [
+        1,
+        2,
+        3
+      ],
+      "direction_inventory": [
+        "head",
+        "tail"
+      ],
+      "alpha_columns": 21,
+      "alpha0": 1.0,
+      "raw_matches_exp1": true
+    }
+  ],
+  "sources_and_outputs": [
+    {
+      "role": "source",
+      "path": "docs/protocols/EXP4_CROSS_SEED_TRANSFER_CONTRACT.json",
+      "sha256": "a483932000a9cd8f697b5843af77a985729bdbab75898582b2b994406de8a065"
+    },
+    {
+      "role": "source",
+      "path": "docs/protocols/EXP4_CROSS_SEED_TRANSFER_PROTOCOL.md",
+      "sha256": "547375c6da0834f42b27911ee7e360b3f006e9f14ff69b642c28161ec30da57a"
+    },
+    {
+      "role": "source",
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_adamf_dev_source_manifest.json",
+      "sha256": "0f95a6073e85b4d226f57d68e45f5013bc11091f604d9d129a1eb877156e920e"
+    },
+    {
+      "role": "source",
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_native_dev_source_manifest.json",
+      "sha256": "3d5bd8a8069717933434d2a9dab6053decbe69cbe9b4dc06d74ddc84cab34b6d"
+    },
+    {
+      "role": "source",
+      "path": "outputs/aacpi/utility_tables/db15k_native_adamf_dev_source_manifest.json",
+      "sha256": "f9001315914573bc95444c27c09def97e1eddf0fea4bac2d1ee81b6f1d96e20a"
+    },
+    {
+      "role": "source",
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_adamf_dev_source_manifest.json",
+      "sha256": "8d9c1171dd9630742cfe8f80ea6a00adba580a76dc973c200fc77d60d78f8b8c"
+    },
+    {
+      "role": "source",
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_native_dev_source_manifest.json",
+      "sha256": "57a24f419069845d35f4338ed8caa641dd50c290b6947cd14e8e83f65fdac0ac"
+    },
+    {
+      "role": "source",
+      "path": "outputs/aacpi/utility_tables/mkgw_native_adamf_dev_source_manifest.json",
+      "sha256": "d4e01934588ec2919542b1ed4998d2a0992f300889cf313529f398eda6ff86b0"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/exp1_landscape/audit_manifest.json",
+      "sha256": "51ce41d6491c15ccf6ac154b720cf25fe9fc798a3e21221654b07810a201391c"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/exp1_landscape/pair_statistics.csv",
+      "sha256": "95e790ffbb727ef02559098938aa4891128189b9e8653bb810c5ff958393688c"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/exp2_information/audit_manifest.json",
+      "sha256": "5c8a3dea2bf600b7295162bd846e4e2480e83a8c7fa414dacd54da8d967d93d7"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/exp2_information/primary_nested_probe_metrics.csv",
+      "sha256": "da089a2046b2a93b47762bd5fd3f39591c88aabcc68866294d6baa3ec8dc2626"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/exp3_resolution/audit_manifest.json",
+      "sha256": "71cff24d54c3fd31240c3bb197eb621e1c33509e1e7fc4ec15d5dfd383110c61"
+    },
+    {
+      "role": "source",
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "431d98b55b288fff46c7454be1e0e4409e47c75226b8441ec2ec02fe9ba1a6d2"
+    },
+    {
+      "role": "source",
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "f85d657f7183dc960bba762418ea3695ab0af78b59d45e158e1cd0a34079a081"
+    },
+    {
+      "role": "source",
+      "path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "0b132d2a13d5df045d71adda1cf6282230f5db26ef18a5d2052caeb58da22bfd"
+    },
+    {
+      "role": "source",
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "e389449b44379ecb18fe248127c6b062b2f5cc7894fb052536a442528ab4287b"
+    },
+    {
+      "role": "source",
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "8b7dfb913f3a0d00eef156200e4a656f4062f2b2306b85cf8e68130749254b98"
+    },
+    {
+      "role": "source",
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "980197c29b8d0c447e298b862d43064e0b86c088a134347136fa87a64ad877ed"
+    },
+    {
+      "role": "source",
+      "path": "scripts/audit_cross_seed_transfer.py",
+      "sha256": "ea2bce0df639a23b1e4ca1f51132bc8daef6d1da0d0283aec0ffb16170c46007"
+    },
+    {
+      "role": "source",
+      "path": "scripts/exp2_information_common.py",
+      "sha256": "90978cdee5c0eee4d5f49ae76799d9150db114481ce8d8a674e8e75336cd10f9"
+    },
+    {
+      "role": "source",
+      "path": "scripts/run_exp4_cross_seed_transfer.ps1",
+      "sha256": "ac072f7fb4b25dae4946c92f0706ded524ed1ee95d368d0df150c69d6647e1f3"
+    },
+    {
+      "role": "output",
+      "path": "docs/reports/cross_seed_transferable_complementarity_audit_2026-09-07.md",
+      "sha256": "9be7e0fbb32b425eed009bbd30b275340349dcb5dc23080919572e4568e85531"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/exp4_cross_seed_transfer/bootstrap_ci.csv",
+      "sha256": "b2bfbb6c49dcbc11417fb706f1cbb470ee6734e6d48724b190c7dd5ad2e254f5"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/exp4_cross_seed_transfer/classification.json",
+      "sha256": "4a7af1fb3d2f137c13ec0ad93f42cc4b87962a083f87fa1b1f21c2dca7d276fa"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/exp4_cross_seed_transfer/figure1_headroom_funnel.svg",
+      "sha256": "eca8faf472ff91d0220d9708b395083cdd8bf3d3bf858d6f86e3856f8b940e4e"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/exp4_cross_seed_transfer/figure2_cross_seed_transfer_matrix.svg",
+      "sha256": "bf5e2cdb45bd6f38eb926920f66ad4f03098ee21e976107399c54364dcac42b5"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/exp4_cross_seed_transfer/figure3_transfer_recovery_forest.svg",
+      "sha256": "b6b5dc69b43f58a51055c26ec1c1a322bf6ae50e2f087360227f61feeeae1060"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/exp4_cross_seed_transfer/figure4_stability_vs_transfer.svg",
+      "sha256": "7c201f9a87896cc3acebf386a1861ea32a5d7156308a14dc7bc78ea6ab923df8"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/exp4_cross_seed_transfer/pair_summary.csv",
+      "sha256": "65af3d24c95cbffd29c68d65fef524c8aea99e1f9f084947eb5cc35c7e29fe7c"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/exp4_cross_seed_transfer/per_query_loso.csv.gz",
+      "sha256": "2678510729a65b7100210a865914d922f9b5aa047e037dbe3812eb1e832e8a28"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/exp4_cross_seed_transfer/per_query_oracle.csv.gz",
+      "sha256": "216bfd74769f28a3d432e8ea654914cb1ebf1f8c584e94da5f3881bbc1836d09"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/exp4_cross_seed_transfer/per_query_seed_transfer.csv.gz",
+      "sha256": "8c719060b126ff1785b7ab9d5d05f288ed55a75bc3a75d4714204200a23c1bef"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/exp4_cross_seed_transfer/seed_pair_transfer_matrix.csv",
+      "sha256": "f46f586f31327e3974887d2eb6a771b0ed8a9034c627f845fd56f0a78afbeebb"
+    }
+  ],
+  "hash_inventory_note": "audit_manifest.json self-hash excluded to avoid recursive content",
+  "operational_audit": {
+    "test_access": 0,
+    "test_commands": 0,
+    "checkpoint_retraining": 0,
+    "checkpoint_reselection": 0,
+    "new_selector": 0,
+    "new_representation": 0,
+    "alpha_grid_modified": false,
+    "alpha0_modified": false,
+    "experiment_1_result_modified": false,
+    "original_triple_bootstrap_intact": true
+  },
+  "next_experiment_started": 0
+}

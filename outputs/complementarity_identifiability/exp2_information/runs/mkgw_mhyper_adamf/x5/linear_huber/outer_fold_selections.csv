@@ -1,0 +1,6 @@
+outer_fold,selected_config_index,selected_config,inner_probe_delta_mrr,inner_spearman,fold_global_alpha
+1,0,"{""alpha"": 1e-05, ""epsilon"": 0.1, ""max_iter"": 80}",1.4925466604968419e-05,0.28318691683771435,1.0
+2,1,"{""alpha"": 0.0001, ""epsilon"": 0.1, ""max_iter"": 80}",8.760192136616239e-05,0.2925469134147481,1.0
+3,1,"{""alpha"": 0.0001, ""epsilon"": 0.1, ""max_iter"": 80}",0.0002002629265248408,0.28307471350891966,1.0
+4,0,"{""alpha"": 1e-05, ""epsilon"": 0.1, ""max_iter"": 80}",6.033390725018904e-05,0.28527704609898874,1.0
+5,0,"{""alpha"": 1e-05, ""epsilon"": 0.1, ""max_iter"": 80}",1.9705807553599094e-05,0.27876435492072077,1.0

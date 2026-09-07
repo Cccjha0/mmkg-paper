@@ -76,6 +76,12 @@ outputs/complementarity_identifiability/exp2_information/assets/*.npz
 outputs/complementarity_identifiability/exp2_information/candidate_assets/*.npz
 outputs/complementarity_identifiability/exp2_information/runs/**/oof_action_predictions.npz
 outputs/complementarity_identifiability/exp2_information/preflight/
+outputs/complementarity_identifiability/exp3_resolution/per_query_resolution_results.npz
+outputs/complementarity_identifiability/exp4_cross_seed_transfer/per_query_seed_transfer.csv.gz
+outputs/complementarity_identifiability/exp4_cross_seed_transfer/per_query_loso.csv.gz
+outputs/complementarity_identifiability/exp4_cross_seed_transfer/per_query_oracle.csv.gz
+outputs/complementarity_identifiability/exp5_local_identifiability/per_center_knn_metrics.csv.gz
+outputs/complementarity_identifiability/exp5_local_identifiability/neighbors/
 
 # OS
 .DS_Store

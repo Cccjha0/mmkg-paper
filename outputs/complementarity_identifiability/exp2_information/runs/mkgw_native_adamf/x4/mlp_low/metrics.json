@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "experiment": "Experiment 2 \u2014 Information\u2013Identifiability Audit",
+  "split": "dev",
+  "dataset": "mkg_w",
+  "pair_id": "mkgw_native_adamf",
+  "representation": "X4",
+  "learner": "mlp_low",
+  "n_queries": 25656,
+  "n_original_triples": 4276,
+  "outer_fold_audit": {
+    "assignment": "relation-stratified SHA256 ordering, then round-robin by original triple with a deterministic per-relation fold offset",
+    "fold_seed": 20260901,
+    "n_folds": 5,
+    "n_unique_triples": 4276,
+    "triple_groups_per_fold": {
+      "0": 853,
+      "1": 860,
+      "2": 857,
+      "3": 859,
+      "4": 847
+    },
+    "observations_per_fold": {
+      "0": 853,
+      "1": 860,
+      "2": 857,
+      "3": 859,
+      "4": 847
+    }
+  },
+  "available_headroom_exp1": 0.0476449164848637,
+  "contract_sha256": "cdf9cb961eacac7d977d9ec72cbb189e3d0614a06f92a1a5f11aa25504aebeae",
+  "sources": [
+    {
+      "path": "docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json",
+      "sha256": "cdf9cb961eacac7d977d9ec72cbb189e3d0614a06f92a1a5f11aa25504aebeae"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/audit_manifest.json",
+      "sha256": "51ce41d6491c15ccf6ac154b720cf25fe9fc798a3e21221654b07810a201391c"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/pair_statistics.csv",
+      "sha256": "95e790ffbb727ef02559098938aa4891128189b9e8653bb810c5ff958393688c"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/mkgw_native_adamf_query_information_manifest.json",
+      "sha256": "6d73125af4deb012b5d311fdbacac6593d2bd45d39f582456b35ba164215161f"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/mkgw_native_adamf_dev_source_manifest.json",
+      "sha256": "d4e01934588ec2919542b1ed4998d2a0992f300889cf313529f398eda6ff86b0"
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "980197c29b8d0c447e298b862d43064e0b86c088a134347136fa87a64ad877ed"
+    }
+  ],
+  "test_rows_accessed": 0,
+  "full_dev_global_used_for_heldout": 0,
+  "checkpoint_training": 0,
+  "checkpoint_reselection": 0,
+  "final_policy_development": 0,
+  "dry_run": false,
+  "fold_specific_globals": [
+    {
+      "outer_fold": 1,
+      "global_index": 19,
+      "global_alpha": 0.95,
+      "outer_train_global_mrr": 0.3366423753360714
+    },
+    {
+      "outer_fold": 2,
+      "global_index": 19,
+      "global_alpha": 0.95,
+      "outer_train_global_mrr": 0.3340911269924119
+    },
+    {
+      "outer_fold": 3,
+      "global_index": 19,
+      "global_alpha": 0.95,
+      "outer_train_global_mrr": 0.33439861843512947
+    },
+    {
+      "outer_fold": 4,
+      "global_index": 19,
+      "global_alpha": 0.95,
+      "outer_train_global_mrr": 0.33252934364424025
+    },
+    {
+      "outer_fold": 5,
+      "global_index": 19,
+      "global_alpha": 0.95,
+      "outer_train_global_mrr": 0.33660574262535453
+    }
+  ],
+  "metrics": {
+    "count": 25656,
+    "oof_mrr": 0.3308190192288998,
+    "fold_specific_global_mrr": 0.3348552897395901,
+    "delta_mrr": -0.00403627051069028,
+    "clustered_ci95_low": -0.0055739188502507845,
+    "clustered_ci95_high": -0.0025344298946284355,
+    "headroom_recovery": -0.08471565926603232,
+    "negative_transfer_rate": 0.1933660742126598,
+    "positive_gain_rate": 0.1785937012784534,
+    "changed_rate": 0.6043030869971936,
+    "spearman_pred_u_actual_u": 0.11371185580165058,
+    "positive_ap": 0.32262421651543416,
+    "positive_prevalence": 0.29813883691923915,
+    "positive_ap_lift": 0.02448537959619501,
+    "harmful_ap": 0.463562150340738,
+    "harmful_prevalence": 0.4006450732772061,
+    "harmful_ap_lift": 0.06291707706353189,
+    "positive_vs_harmful_auroc": 0.5627626077371901,
+    "training_gain": 0.0028376405055801665,
+    "oof_gain": -0.00403627051069028,
+    "train_oof_generalization_gap": 0.006873911016270447
+  },
+  "prediction_artifact": {
+    "path": "outputs/complementarity_identifiability/exp2_information/runs/mkgw_native_adamf/x4/mlp_low/oof_action_predictions.npz",
+    "sha256": "af48e87c41933af12cd5589c9026dabfa260a0fe9114b1918aab4ca48e24aada",
+    "predicted_u_sha256": "231aaef7f82b9e214cee63849c3882643cd20b48952ece1a8d59f84a154aa5b2"
+  },
+  "operational_audit": {
+    "test_access": 0,
+    "full_dev_global_for_heldout": 0,
+    "selector_development": 0,
+    "aacpi_resurrection": 0
+  }
+}

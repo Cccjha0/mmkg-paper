@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="750" viewBox="0 0 1120 750">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="40" y="38" font-family="Arial" font-size="22" font-weight="700" fill="#202124">Cross-seed transfer matrix (uniform MRR-gain scale)</text>
+<text x="65.0" y="72.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">MKG-W / M-Hyper+NativE</text>
+<text x="117.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 1</text>
+<text x="57.0" y="135.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 1</text>
+<text x="189.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 2</text>
+<text x="57.0" y="207.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 2</text>
+<text x="261.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 3</text>
+<text x="57.0" y="279.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 3</text>
+<rect x="81" y="104" width="68" height="68" fill="rgb(87, 147, 164)" stroke="#fff"/>
+<text x="115.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0456</text>
+<rect x="153" y="104" width="68" height="68" fill="rgb(209, 222, 221)" stroke="#fff"/>
+<text x="187.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0108</text>
+<rect x="225" y="104" width="68" height="68" fill="rgb(207, 221, 220)" stroke="#fff"/>
+<text x="259.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0114</text>
+<rect x="81" y="176" width="68" height="68" fill="rgb(207, 221, 220)" stroke="#fff"/>
+<text x="115.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0113</text>
+<rect x="153" y="176" width="68" height="68" fill="rgb(86, 147, 163)" stroke="#fff"/>
+<text x="187.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0460</text>
+<rect x="225" y="176" width="68" height="68" fill="rgb(210, 223, 222)" stroke="#fff"/>
+<text x="259.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0104</text>
+<rect x="81" y="248" width="68" height="68" fill="rgb(207, 221, 220)" stroke="#fff"/>
+<text x="115.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0113</text>
+<rect x="153" y="248" width="68" height="68" fill="rgb(213, 224, 223)" stroke="#fff"/>
+<text x="187.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0096</text>
+<rect x="225" y="248" width="68" height="68" fill="rgb(77, 142, 160)" stroke="#fff"/>
+<text x="259.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0483</text>
+<text x="420.0" y="72.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">MKG-W / M-Hyper+AdaMF</text>
+<text x="472.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 1</text>
+<text x="412.0" y="135.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 1</text>
+<text x="544.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 2</text>
+<text x="412.0" y="207.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 2</text>
+<text x="616.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 3</text>
+<text x="412.0" y="279.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 3</text>
+<rect x="436" y="104" width="68" height="68" fill="rgb(105, 158, 172)" stroke="#fff"/>
+<text x="470.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0406</text>
+<rect x="508" y="104" width="68" height="68" fill="rgb(214, 225, 224)" stroke="#fff"/>
+<text x="542.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0094</text>
+<rect x="580" y="104" width="68" height="68" fill="rgb(211, 223, 222)" stroke="#fff"/>
+<text x="614.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0102</text>
+<rect x="436" y="176" width="68" height="68" fill="rgb(213, 224, 223)" stroke="#fff"/>
+<text x="470.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0097</text>
+<rect x="508" y="176" width="68" height="68" fill="rgb(109, 161, 174)" stroke="#fff"/>
+<text x="542.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0394</text>
+<rect x="580" y="176" width="68" height="68" fill="rgb(211, 223, 222)" stroke="#fff"/>
+<text x="614.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0102</text>
+<rect x="436" y="248" width="68" height="68" fill="rgb(215, 226, 224)" stroke="#fff"/>
+<text x="470.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0091</text>
+<rect x="508" y="248" width="68" height="68" fill="rgb(212, 224, 223)" stroke="#fff"/>
+<text x="542.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0099</text>
+<rect x="580" y="248" width="68" height="68" fill="rgb(98, 154, 169)" stroke="#fff"/>
+<text x="614.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0425</text>
+<text x="775.0" y="72.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">MKG-W / NativE+AdaMF</text>
+<text x="827.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 1</text>
+<text x="767.0" y="135.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 1</text>
+<text x="899.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 2</text>
+<text x="767.0" y="207.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 2</text>
+<text x="971.0" y="92.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 3</text>
+<text x="767.0" y="279.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 3</text>
+<rect x="791" y="104" width="68" height="68" fill="rgb(80, 144, 161)" stroke="#fff"/>
+<text x="825.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0474</text>
+<rect x="863" y="104" width="68" height="68" fill="rgb(230, 235, 231)" stroke="#fff"/>
+<text x="897.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0049</text>
+<rect x="935" y="104" width="68" height="68" fill="rgb(222, 230, 227)" stroke="#fff"/>
+<text x="969.0" y="143.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0070</text>
+<rect x="791" y="176" width="68" height="68" fill="rgb(226, 232, 229)" stroke="#fff"/>
+<text x="825.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0060</text>
+<rect x="863" y="176" width="68" height="68" fill="rgb(88, 148, 164)" stroke="#fff"/>
+<text x="897.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0454</text>
+<rect x="935" y="176" width="68" height="68" fill="rgb(228, 233, 230)" stroke="#fff"/>
+<text x="969.0" y="215.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0054</text>
+<rect x="791" y="248" width="68" height="68" fill="rgb(225, 231, 229)" stroke="#fff"/>
+<text x="825.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0064</text>
+<rect x="863" y="248" width="68" height="68" fill="rgb(232, 236, 232)" stroke="#fff"/>
+<text x="897.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0041</text>
+<rect x="935" y="248" width="68" height="68" fill="rgb(71, 138, 157)" stroke="#fff"/>
+<text x="969.0" y="287.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0501</text>
+<text x="65.0" y="387.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">DB15K / M-Hyper+NativE</text>
+<text x="117.0" y="407.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 1</text>
+<text x="57.0" y="450.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 1</text>
+<text x="189.0" y="407.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 2</text>
+<text x="57.0" y="522.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 2</text>
+<text x="261.0" y="407.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 3</text>
+<text x="57.0" y="594.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 3</text>
+<rect x="81" y="419" width="68" height="68" fill="rgb(78, 142, 160)" stroke="#fff"/>
+<text x="115.0" y="458.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0483</text>
+<rect x="153" y="419" width="68" height="68" fill="rgb(214, 225, 224)" stroke="#fff"/>
+<text x="187.0" y="458.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0094</text>
+<rect x="225" y="419" width="68" height="68" fill="rgb(212, 224, 223)" stroke="#fff"/>
+<text x="259.0" y="458.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0099</text>
+<rect x="81" y="491" width="68" height="68" fill="rgb(216, 226, 225)" stroke="#fff"/>
+<text x="115.0" y="530.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0087</text>
+<rect x="153" y="491" width="68" height="68" fill="rgb(65, 135, 154)" stroke="#fff"/>
+<text x="187.0" y="530.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0517</text>
+<rect x="225" y="491" width="68" height="68" fill="rgb(215, 225, 224)" stroke="#fff"/>
+<text x="259.0" y="530.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0092</text>
+<rect x="81" y="563" width="68" height="68" fill="rgb(215, 225, 224)" stroke="#fff"/>
+<text x="115.0" y="602.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0092</text>
+<rect x="153" y="563" width="68" height="68" fill="rgb(215, 225, 224)" stroke="#fff"/>
+<text x="187.0" y="602.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0092</text>
+<rect x="225" y="563" width="68" height="68" fill="rgb(76, 141, 159)" stroke="#fff"/>
+<text x="259.0" y="602.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0488</text>
+<text x="420.0" y="387.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">DB15K / M-Hyper+AdaMF</text>
+<text x="472.0" y="407.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 1</text>
+<text x="412.0" y="450.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 1</text>
+<text x="544.0" y="407.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 2</text>
+<text x="412.0" y="522.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 2</text>
+<text x="616.0" y="407.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 3</text>
+<text x="412.0" y="594.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 3</text>
+<rect x="436" y="419" width="68" height="68" fill="rgb(93, 152, 167)" stroke="#fff"/>
+<text x="470.0" y="458.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0437</text>
+<rect x="508" y="419" width="68" height="68" fill="rgb(219, 228, 226)" stroke="#fff"/>
+<text x="542.0" y="458.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0080</text>
+<rect x="580" y="419" width="68" height="68" fill="rgb(222, 230, 227)" stroke="#fff"/>
+<text x="614.0" y="458.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0071</text>
+<rect x="436" y="491" width="68" height="68" fill="rgb(225, 231, 229)" stroke="#fff"/>
+<text x="470.0" y="530.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0063</text>
+<rect x="508" y="491" width="68" height="68" fill="rgb(89, 149, 165)" stroke="#fff"/>
+<text x="542.0" y="530.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0451</text>
+<rect x="580" y="491" width="68" height="68" fill="rgb(225, 232, 229)" stroke="#fff"/>
+<text x="614.0" y="530.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0063</text>
+<rect x="436" y="563" width="68" height="68" fill="rgb(225, 231, 229)" stroke="#fff"/>
+<text x="470.0" y="602.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0063</text>
+<rect x="508" y="563" width="68" height="68" fill="rgb(218, 227, 226)" stroke="#fff"/>
+<text x="542.0" y="602.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0082</text>
+<rect x="580" y="563" width="68" height="68" fill="rgb(80, 143, 161)" stroke="#fff"/>
+<text x="614.0" y="602.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0476</text>
+<text x="775.0" y="387.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">DB15K / NativE+AdaMF</text>
+<text x="827.0" y="407.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 1</text>
+<text x="767.0" y="450.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 1</text>
+<text x="899.0" y="407.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 2</text>
+<text x="767.0" y="522.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 2</text>
+<text x="971.0" y="407.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">target 3</text>
+<text x="767.0" y="594.0" text-anchor="end" font-family="Arial" font-size="10" fill="#30343b">source 3</text>
+<rect x="791" y="419" width="68" height="68" fill="rgb(46, 123, 145)" stroke="#fff"/>
+<text x="825.0" y="458.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0571</text>
+<rect x="863" y="419" width="68" height="68" fill="rgb(233, 236, 232)" stroke="#fff"/>
+<text x="897.0" y="458.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0041</text>
+<rect x="935" y="419" width="68" height="68" fill="rgb(236, 239, 234)" stroke="#fff"/>
+<text x="969.0" y="458.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0030</text>
+<rect x="791" y="491" width="68" height="68" fill="rgb(230, 235, 231)" stroke="#fff"/>
+<text x="825.0" y="530.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0047</text>
+<rect x="863" y="491" width="68" height="68" fill="rgb(40, 119, 142)" stroke="#fff"/>
+<text x="897.0" y="530.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0590</text>
+<rect x="935" y="491" width="68" height="68" fill="rgb(237, 239, 234)" stroke="#fff"/>
+<text x="969.0" y="530.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0028</text>
+<rect x="791" y="563" width="68" height="68" fill="rgb(235, 237, 233)" stroke="#fff"/>
+<text x="825.0" y="602.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0035</text>
+<rect x="863" y="563" width="68" height="68" fill="rgb(239, 240, 235)" stroke="#fff"/>
+<text x="897.0" y="602.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0021</text>
+<rect x="935" y="563" width="68" height="68" fill="rgb(48, 124, 146)" stroke="#fff"/>
+<text x="969.0" y="602.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#111">+0.0566</text>
+<text x="40.0" y="732.0" text-anchor="start" font-family="Arial" font-size="11" fill="#666">Diagonal: per-seed Raw Oracle. Off-diagonal: source-to-target transfer. Shared |max| = 0.0590.</text>
+</svg>

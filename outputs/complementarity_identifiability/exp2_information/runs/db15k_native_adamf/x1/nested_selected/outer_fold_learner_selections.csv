@@ -1,0 +1,6 @@
+pair_id,representation,outer_fold,selected_learner,selected_config,inner_probe_delta_mrr,inner_spearman,fold_global_alpha
+db15k_native_adamf,X1,1,hist_gbdt,"{""l2_regularization"": 0.0, ""learning_rate"": 0.05, ""max_iter"": 150, ""max_leaf_nodes"": 15}",0.0007559186633712,0.1247442063538565,1.0
+db15k_native_adamf,X1,2,hist_gbdt,"{""l2_regularization"": 0.0, ""learning_rate"": 0.05, ""max_iter"": 150, ""max_leaf_nodes"": 31}",0.0007342174002599,0.1255420370755801,1.0
+db15k_native_adamf,X1,3,hist_gbdt,"{""l2_regularization"": 0.0001, ""learning_rate"": 0.1, ""max_iter"": 150, ""max_leaf_nodes"": 15}",0.0007539609846667,0.1222083912262418,1.0
+db15k_native_adamf,X1,4,hist_gbdt,"{""l2_regularization"": 0.0, ""learning_rate"": 0.05, ""max_iter"": 150, ""max_leaf_nodes"": 15}",0.001461345645318,0.1309947326106468,1.0
+db15k_native_adamf,X1,5,hist_gbdt,"{""l2_regularization"": 0.0001, ""learning_rate"": 0.1, ""max_iter"": 150, ""max_leaf_nodes"": 15}",0.0008977354681033,0.1159486195380158,1.0

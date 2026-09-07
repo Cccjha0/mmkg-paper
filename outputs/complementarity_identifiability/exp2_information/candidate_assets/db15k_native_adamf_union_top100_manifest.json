@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "experiment": "Experiment 2 \u2014 Information\u2013Identifiability Audit",
+  "representation": "X6",
+  "split": "dev",
+  "pair_id": "db15k_native_adamf",
+  "top_k_per_expert": 100,
+  "maximum_union_size": 200,
+  "candidate_fields": [
+    "normalized_score_a",
+    "normalized_score_b",
+    "normalized_rank_a",
+    "normalized_rank_b",
+    "top100_member_a",
+    "top100_member_b",
+    "score_a_minus_b",
+    "abs_score_a_minus_b",
+    "rank_a_minus_b",
+    "abs_rank_a_minus_b"
+  ],
+  "candidate_embeddings_used": false,
+  "candidate_identity_feature_used": false,
+  "n_queries": 47532,
+  "sources": [
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/audit_manifest.json",
+      "sha256": "51ce41d6491c15ccf6ac154b720cf25fe9fc798a3e21221654b07810a201391c"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/db15k_native_adamf_dev_source_manifest.json",
+      "sha256": "f9001315914573bc95444c27c09def97e1eddf0fea4bac2d1ee81b6f1d96e20a"
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "0b132d2a13d5df045d71adda1cf6282230f5db26ef18a5d2052caeb58da22bfd"
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/dev_summary.json",
+      "sha256": "260c0e2590c340fd8e99a6c039048cb4e38db9f9673564689864c0ef302eec56"
+    },
+    {
+      "path": "outputs/aacpi/action_response_assets/db15k_native_adamf/candidate_score_source_manifest.json",
+      "sha256": "efeb261b8c5d4b5f232b8421e3ffbb06ca89092829eff6f7fe39e3aea4553bae"
+    },
+    {
+      "path": "docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json",
+      "sha256": "cdf9cb961eacac7d977d9ec72cbb189e3d0614a06f92a1a5f11aa25504aebeae"
+    }
+  ],
+  "test_rows_accessed": 0,
+  "checkpoint_training": 0,
+  "checkpoint_reselection": 0,
+  "full_ranking_evaluation": 0,
+  "dry_run": false,
+  "output": {
+    "path": "outputs/complementarity_identifiability/exp2_information/candidate_assets/db15k_native_adamf_union_top100.npz",
+    "sha256": "b2ac3c3d2613f45f4c4d088d83147a9440665caa17759b89037cc94db12d6c95"
+  },
+  "union_size": {
+    "min": 101,
+    "mean": 148.8934191702432,
+    "max": 198
+  },
+  "target_entity_id_used_for_features": false,
+  "candidate_ids_stored_for_audit_not_model_input": true
+}

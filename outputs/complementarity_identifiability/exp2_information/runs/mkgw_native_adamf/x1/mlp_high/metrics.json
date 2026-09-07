@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "experiment": "Experiment 2 \u2014 Information\u2013Identifiability Audit",
+  "split": "dev",
+  "dataset": "mkg_w",
+  "pair_id": "mkgw_native_adamf",
+  "representation": "X1",
+  "learner": "mlp_high",
+  "n_queries": 25656,
+  "n_original_triples": 4276,
+  "outer_fold_audit": {
+    "assignment": "relation-stratified SHA256 ordering, then round-robin by original triple with a deterministic per-relation fold offset",
+    "fold_seed": 20260901,
+    "n_folds": 5,
+    "n_unique_triples": 4276,
+    "triple_groups_per_fold": {
+      "0": 853,
+      "1": 860,
+      "2": 857,
+      "3": 859,
+      "4": 847
+    },
+    "observations_per_fold": {
+      "0": 853,
+      "1": 860,
+      "2": 857,
+      "3": 859,
+      "4": 847
+    }
+  },
+  "available_headroom_exp1": 0.0476449164848637,
+  "contract_sha256": "cdf9cb961eacac7d977d9ec72cbb189e3d0614a06f92a1a5f11aa25504aebeae",
+  "sources": [
+    {
+      "path": "docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json",
+      "sha256": "cdf9cb961eacac7d977d9ec72cbb189e3d0614a06f92a1a5f11aa25504aebeae"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/audit_manifest.json",
+      "sha256": "51ce41d6491c15ccf6ac154b720cf25fe9fc798a3e21221654b07810a201391c"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/pair_statistics.csv",
+      "sha256": "95e790ffbb727ef02559098938aa4891128189b9e8653bb810c5ff958393688c"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/mkgw_native_adamf_query_information_manifest.json",
+      "sha256": "6d73125af4deb012b5d311fdbacac6593d2bd45d39f582456b35ba164215161f"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/mkgw_native_adamf_dev_source_manifest.json",
+      "sha256": "d4e01934588ec2919542b1ed4998d2a0992f300889cf313529f398eda6ff86b0"
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "980197c29b8d0c447e298b862d43064e0b86c088a134347136fa87a64ad877ed"
+    }
+  ],
+  "test_rows_accessed": 0,
+  "full_dev_global_used_for_heldout": 0,
+  "checkpoint_training": 0,
+  "checkpoint_reselection": 0,
+  "final_policy_development": 0,
+  "dry_run": false,
+  "fold_specific_globals": [
+    {
+      "outer_fold": 1,
+      "global_index": 19,
+      "global_alpha": 0.95,
+      "outer_train_global_mrr": 0.3366423753360714
+    },
+    {
+      "outer_fold": 2,
+      "global_index": 19,
+      "global_alpha": 0.95,
+      "outer_train_global_mrr": 0.3340911269924119
+    },
+    {
+      "outer_fold": 3,
+      "global_index": 19,
+      "global_alpha": 0.95,
+      "outer_train_global_mrr": 0.33439861843512947
+    },
+    {
+      "outer_fold": 4,
+      "global_index": 19,
+      "global_alpha": 0.95,
+      "outer_train_global_mrr": 0.33252934364424025
+    },
+    {
+      "outer_fold": 5,
+      "global_index": 19,
+      "global_alpha": 0.95,
+      "outer_train_global_mrr": 0.33660574262535453
+    }
+  ],
+  "metrics": {
+    "count": 25656,
+    "oof_mrr": 0.3272675176559177,
+    "fold_specific_global_mrr": 0.3348552897395901,
+    "delta_mrr": -0.0075877720836724045,
+    "clustered_ci95_low": -0.009430579284815471,
+    "clustered_ci95_high": -0.0057804144328169335,
+    "headroom_recovery": -0.15925669816386312,
+    "negative_transfer_rate": 0.29922825070159026,
+    "positive_gain_rate": 0.26999532273152477,
+    "changed_rate": 0.8554724041159962,
+    "spearman_pred_u_actual_u": 0.10152719225619199,
+    "positive_ap": 0.3106005257902002,
+    "positive_prevalence": 0.29813883691923915,
+    "positive_ap_lift": 0.012461688870961052,
+    "harmful_ap": 0.4387531592618534,
+    "harmful_prevalence": 0.4006450732772061,
+    "harmful_ap_lift": 0.038108085984647266,
+    "positive_vs_harmful_auroc": 0.5556507850924036,
+    "training_gain": 0.005513683628248716,
+    "oof_gain": -0.0075877720836724045,
+    "train_oof_generalization_gap": 0.01310145571192112
+  },
+  "prediction_artifact": {
+    "path": "outputs/complementarity_identifiability/exp2_information/runs/mkgw_native_adamf/x1/mlp_high/oof_action_predictions.npz",
+    "sha256": "29390e67c707ac06a87826bdeae45810292a184db2b2891f183ea275faaf20a6",
+    "predicted_u_sha256": "5f5a260ca72b41987a2e087329ac0a0628fa8209ff2724c6b2f3974ce5d09137"
+  },
+  "operational_audit": {
+    "test_access": 0,
+    "full_dev_global_for_heldout": 0,
+    "selector_development": 0,
+    "aacpi_resurrection": 0
+  }
+}

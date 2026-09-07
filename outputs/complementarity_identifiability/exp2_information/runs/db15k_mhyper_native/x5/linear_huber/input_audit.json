@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "experiment": "Experiment 2 \u2014 Information\u2013Identifiability Audit",
+  "split": "dev",
+  "dataset": "db15k",
+  "pair_id": "db15k_mhyper_native",
+  "representation": "X5",
+  "learner": "linear_huber",
+  "n_queries": 47532,
+  "n_original_triples": 7922,
+  "outer_fold_audit": {
+    "assignment": "relation-stratified SHA256 ordering, then round-robin by original triple with a deterministic per-relation fold offset",
+    "fold_seed": 20260901,
+    "n_folds": 5,
+    "n_unique_triples": 7922,
+    "triple_groups_per_fold": {
+      "0": 1580,
+      "1": 1581,
+      "2": 1586,
+      "3": 1590,
+      "4": 1585
+    },
+    "observations_per_fold": {
+      "0": 1580,
+      "1": 1581,
+      "2": 1586,
+      "3": 1590,
+      "4": 1585
+    }
+  },
+  "available_headroom_exp1": 0.0495791850440901,
+  "contract_sha256": "cdf9cb961eacac7d977d9ec72cbb189e3d0614a06f92a1a5f11aa25504aebeae",
+  "sources": [
+    {
+      "path": "docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json",
+      "sha256": "cdf9cb961eacac7d977d9ec72cbb189e3d0614a06f92a1a5f11aa25504aebeae"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/audit_manifest.json",
+      "sha256": "51ce41d6491c15ccf6ac154b720cf25fe9fc798a3e21221654b07810a201391c"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/pair_statistics.csv",
+      "sha256": "95e790ffbb727ef02559098938aa4891128189b9e8653bb810c5ff958393688c"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/db15k_mhyper_native_query_information_manifest.json",
+      "sha256": "0c1599312147c9e3a5de7747a0b64ff79f666c4357c37756ec130fcd19c61bed"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_native_dev_source_manifest.json",
+      "sha256": "3d5bd8a8069717933434d2a9dab6053decbe69cbe9b4dc06d74ddc84cab34b6d"
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "f85d657f7183dc960bba762418ea3695ab0af78b59d45e158e1cd0a34079a081"
+    },
+    {
+      "path": "outputs/aacpi/phase4a/db15k_mhyper_native/latent_extraction_manifest.json",
+      "sha256": "ddbeb327021a26ef07c65905526b503a068cf16b9304509116859d9a3e2432d1"
+    }
+  ],
+  "test_rows_accessed": 0,
+  "full_dev_global_used_for_heldout": 0,
+  "checkpoint_training": 0,
+  "checkpoint_reselection": 0,
+  "final_policy_development": 0,
+  "dry_run": false,
+  "fold_specific_globals": [
+    {
+      "outer_fold": 1,
+      "global_index": 20,
+      "global_alpha": 1.0,
+      "outer_train_global_mrr": 0.3825901812783759
+    },
+    {
+      "outer_fold": 2,
+      "global_index": 20,
+      "global_alpha": 1.0,
+      "outer_train_global_mrr": 0.3833973734192316
+    },
+    {
+      "outer_fold": 3,
+      "global_index": 20,
+      "global_alpha": 1.0,
+      "outer_train_global_mrr": 0.3828977772661324
+    },
+    {
+      "outer_fold": 4,
+      "global_index": 20,
+      "global_alpha": 1.0,
+      "outer_train_global_mrr": 0.3811000771976192
+    },
+    {
+      "outer_fold": 5,
+      "global_index": 20,
+      "global_alpha": 1.0,
+      "outer_train_global_mrr": 0.382948017771218
+    }
+  ]
+}

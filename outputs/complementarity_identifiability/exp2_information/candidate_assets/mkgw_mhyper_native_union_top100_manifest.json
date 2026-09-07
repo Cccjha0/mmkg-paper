@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "experiment": "Experiment 2 \u2014 Information\u2013Identifiability Audit",
+  "representation": "X6",
+  "split": "dev",
+  "pair_id": "mkgw_mhyper_native",
+  "top_k_per_expert": 100,
+  "maximum_union_size": 200,
+  "candidate_fields": [
+    "normalized_score_a",
+    "normalized_score_b",
+    "normalized_rank_a",
+    "normalized_rank_b",
+    "top100_member_a",
+    "top100_member_b",
+    "score_a_minus_b",
+    "abs_score_a_minus_b",
+    "rank_a_minus_b",
+    "abs_rank_a_minus_b"
+  ],
+  "candidate_embeddings_used": false,
+  "candidate_identity_feature_used": false,
+  "n_queries": 25656,
+  "sources": [
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/audit_manifest.json",
+      "sha256": "51ce41d6491c15ccf6ac154b720cf25fe9fc798a3e21221654b07810a201391c"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_native_dev_source_manifest.json",
+      "sha256": "57a24f419069845d35f4338ed8caa641dd50c290b6947cd14e8e83f65fdac0ac"
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "8b7dfb913f3a0d00eef156200e4a656f4062f2b2306b85cf8e68130749254b98"
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_summary.json",
+      "sha256": "ed8bcb7375bb87f5f32e9bdc05496e59adc7ab6c596fcb83c5577786df9902d1"
+    },
+    {
+      "path": "outputs/aacpi/action_response_assets/mkgw_mhyper_native/candidate_score_source_manifest.json",
+      "sha256": "d57f53246f8c69ef350627c275cf1c4c73c99f94074f0e6bc93576151ca0dc61"
+    },
+    {
+      "path": "docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json",
+      "sha256": "cdf9cb961eacac7d977d9ec72cbb189e3d0614a06f92a1a5f11aa25504aebeae"
+    }
+  ],
+  "test_rows_accessed": 0,
+  "checkpoint_training": 0,
+  "checkpoint_reselection": 0,
+  "full_ranking_evaluation": 0,
+  "dry_run": false,
+  "output": {
+    "path": "outputs/complementarity_identifiability/exp2_information/candidate_assets/mkgw_mhyper_native_union_top100.npz",
+    "sha256": "cc3baa3492a9233fdf3d646bdbe3cbdfee9e494ceafcb8d6c4f947ac4ede1279"
+  },
+  "union_size": {
+    "min": 104,
+    "mean": 158.5153570314936,
+    "max": 200
+  },
+  "target_entity_id_used_for_features": false,
+  "candidate_ids_stored_for_audit_not_model_input": true
+}

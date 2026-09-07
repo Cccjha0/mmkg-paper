@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "experiment": "Experiment 2 \u2014 Information\u2013Identifiability Audit",
+  "split": "dev",
+  "dataset": "mkg_w",
+  "pair_id": "mkgw_mhyper_adamf",
+  "representation": "X1",
+  "learner": "linear_huber",
+  "n_queries": 25656,
+  "n_original_triples": 4276,
+  "outer_fold_audit": {
+    "assignment": "relation-stratified SHA256 ordering, then round-robin by original triple with a deterministic per-relation fold offset",
+    "fold_seed": 20260901,
+    "n_folds": 5,
+    "n_unique_triples": 4276,
+    "triple_groups_per_fold": {
+      "0": 853,
+      "1": 860,
+      "2": 857,
+      "3": 859,
+      "4": 847
+    },
+    "observations_per_fold": {
+      "0": 853,
+      "1": 860,
+      "2": 857,
+      "3": 859,
+      "4": 847
+    }
+  },
+  "available_headroom_exp1": 0.0408407813615023,
+  "contract_sha256": "cdf9cb961eacac7d977d9ec72cbb189e3d0614a06f92a1a5f11aa25504aebeae",
+  "sources": [
+    {
+      "path": "docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json",
+      "sha256": "cdf9cb961eacac7d977d9ec72cbb189e3d0614a06f92a1a5f11aa25504aebeae"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/audit_manifest.json",
+      "sha256": "51ce41d6491c15ccf6ac154b720cf25fe9fc798a3e21221654b07810a201391c"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp1_landscape/pair_statistics.csv",
+      "sha256": "95e790ffbb727ef02559098938aa4891128189b9e8653bb810c5ff958393688c"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/mkgw_mhyper_adamf_query_information_manifest.json",
+      "sha256": "da1d1945e3b7a7e200ce3fc80438050142361ea80c6b1e845fe7d606ef8ddc45"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/mkgw_mhyper_adamf_dev_source_manifest.json",
+      "sha256": "8d9c1171dd9630742cfe8f80ea6a00adba580a76dc973c200fc77d60d78f8b8c"
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "e389449b44379ecb18fe248127c6b062b2f5cc7894fb052536a442528ab4287b"
+    }
+  ],
+  "test_rows_accessed": 0,
+  "full_dev_global_used_for_heldout": 0,
+  "checkpoint_training": 0,
+  "checkpoint_reselection": 0,
+  "final_policy_development": 0,
+  "dry_run": false,
+  "fold_specific_globals": [
+    {
+      "outer_fold": 1,
+      "global_index": 20,
+      "global_alpha": 1.0,
+      "outer_train_global_mrr": 0.35490918439620506
+    },
+    {
+      "outer_fold": 2,
+      "global_index": 20,
+      "global_alpha": 1.0,
+      "outer_train_global_mrr": 0.35377062851365865
+    },
+    {
+      "outer_fold": 3,
+      "global_index": 20,
+      "global_alpha": 1.0,
+      "outer_train_global_mrr": 0.35077932584054533
+    },
+    {
+      "outer_fold": 4,
+      "global_index": 20,
+      "global_alpha": 1.0,
+      "outer_train_global_mrr": 0.349862498815464
+    },
+    {
+      "outer_fold": 5,
+      "global_index": 20,
+      "global_alpha": 1.0,
+      "outer_train_global_mrr": 0.3547791242172697
+    }
+  ],
+  "metrics": {
+    "count": 25656,
+    "oof_mrr": 0.35281826876953915,
+    "fold_specific_global_mrr": 0.35282196536677,
+    "delta_mrr": -3.696597230911377e-06,
+    "clustered_ci95_low": -0.0004223120561071788,
+    "clustered_ci95_high": 0.00043389269051525073,
+    "headroom_recovery": -9.051240225281038e-05,
+    "negative_transfer_rate": 0.0851652634861241,
+    "positive_gain_rate": 0.3297084502650452,
+    "changed_rate": 0.5836061739943873,
+    "spearman_pred_u_actual_u": 0.281645308675317,
+    "positive_ap": 0.6442403504380974,
+    "positive_prevalence": 0.4218681789834737,
+    "positive_ap_lift": 0.22237217145462368,
+    "harmful_ap": 0.28166611645973527,
+    "harmful_prevalence": 0.2728328656064858,
+    "harmful_ap_lift": 0.008833250853249486,
+    "positive_vs_harmful_auroc": 0.6732237885042297,
+    "training_gain": 4.04284596314731e-05,
+    "oof_gain": -3.696597230911377e-06,
+    "train_oof_generalization_gap": 4.412505686238448e-05
+  },
+  "prediction_artifact": {
+    "path": "outputs/complementarity_identifiability/exp2_information/runs/mkgw_mhyper_adamf/x1/linear_huber/oof_action_predictions.npz",
+    "sha256": "7dc52654ac1d23dcb2ce82b3c1fc70d866153fd0ecf2f182a0dbb03426911a1f",
+    "predicted_u_sha256": "7dc1a83f5d79e55bf4dda19aeeeab7f44e5c78151ddbeb35b1201f04bd551544"
+  },
+  "operational_audit": {
+    "test_access": 0,
+    "full_dev_global_for_heldout": 0,
+    "selector_development": 0,
+    "aacpi_resurrection": 0
+  }
+}

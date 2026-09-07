@@ -1,0 +1,5 @@
+level,robust_positive_pairs,mkg_w_has_robust_positive,db15k_has_robust_positive,pairs_delta_below_minus_0_001,pass
+L1,0,False,False,0,False
+L2,1,True,False,0,False
+L3,2,True,True,1,False
+L4,2,True,False,0,False

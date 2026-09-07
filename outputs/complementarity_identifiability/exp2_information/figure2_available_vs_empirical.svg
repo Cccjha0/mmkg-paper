@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="600" viewBox="0 0 780 600">
+<rect width="100%" height="100%" fill="#fff"/>
+<style>text{font-family:Arial,sans-serif;fill:#202124}.title{font-size:20px;font-weight:700}.panel{font-size:12px;font-weight:700}.axis{font-size:9px}.note{font-size:10px;fill:#5f6368}</style>
+<text x="20" y="28" class="title">Available vs Empirically Identifiable Headroom</text>
+<line x1="80" y1="478.3" x2="700" y2="90.0" stroke="#aaa" stroke-dasharray="4 3"/>
+<line x1="80" y1="478.3" x2="700" y2="478.3" stroke="#999"/>
+<circle cx="582.3" cy="425.3" r="5" fill="#4c78a8"/>
+<circle cx="582.3" cy="424.0" r="5" fill="#f58518"/>
+<circle cx="582.3" cy="422.9" r="5" fill="#54a24b"/>
+<circle cx="582.3" cy="428.8" r="5" fill="#e45756"/>
+<circle cx="582.3" cy="430.7" r="5" fill="#72b7b2"/>
+<circle cx="582.3" cy="453.4" r="5" fill="#b279a2"/>
+<circle cx="520.0" cy="453.4" r="5" fill="#4c78a8"/>
+<circle cx="520.0" cy="445.7" r="5" fill="#f58518"/>
+<circle cx="520.0" cy="441.7" r="5" fill="#54a24b"/>
+<circle cx="520.0" cy="438.4" r="5" fill="#e45756"/>
+<circle cx="520.0" cy="442.4" r="5" fill="#72b7b2"/>
+<circle cx="520.0" cy="488.6" r="5" fill="#b279a2"/>
+<circle cx="593.3" cy="473.9" r="5" fill="#4c78a8"/>
+<circle cx="593.3" cy="472.2" r="5" fill="#f58518"/>
+<circle cx="593.3" cy="473.0" r="5" fill="#54a24b"/>
+<circle cx="593.3" cy="471.3" r="5" fill="#e45756"/>
+<circle cx="593.3" cy="471.9" r="5" fill="#72b7b2"/>
+<circle cx="593.3" cy="496.2" r="5" fill="#b279a2"/>
+<circle cx="614.2" cy="468.7" r="5" fill="#4c78a8"/>
+<circle cx="614.2" cy="466.3" r="5" fill="#f58518"/>
+<circle cx="614.2" cy="461.5" r="5" fill="#54a24b"/>
+<circle cx="614.2" cy="463.9" r="5" fill="#e45756"/>
+<circle cx="614.2" cy="464.0" r="5" fill="#72b7b2"/>
+<circle cx="614.2" cy="495.7" r="5" fill="#b279a2"/>
+<circle cx="569.7" cy="477.2" r="5" fill="#4c78a8"/>
+<circle cx="569.7" cy="473.9" r="5" fill="#f58518"/>
+<circle cx="569.7" cy="472.7" r="5" fill="#54a24b"/>
+<circle cx="569.7" cy="472.0" r="5" fill="#e45756"/>
+<circle cx="569.7" cy="470.8" r="5" fill="#72b7b2"/>
+<circle cx="569.7" cy="520.0" r="5" fill="#b279a2"/>
+<circle cx="700.0" cy="474.7" r="5" fill="#4c78a8"/>
+<circle cx="700.0" cy="469.7" r="5" fill="#f58518"/>
+<circle cx="700.0" cy="469.9" r="5" fill="#54a24b"/>
+<circle cx="700.0" cy="467.7" r="5" fill="#e45756"/>
+<circle cx="700.0" cy="471.1" r="5" fill="#72b7b2"/>
+<circle cx="700.0" cy="497.5" r="5" fill="#b279a2"/>
+<circle cx="120" cy="555" r="5" fill="#4c78a8"/><text x="130" y="559" class="note">X1</text>
+<circle cx="205" cy="555" r="5" fill="#f58518"/><text x="215" y="559" class="note">X2</text>
+<circle cx="290" cy="555" r="5" fill="#54a24b"/><text x="300" y="559" class="note">X3</text>
+<circle cx="375" cy="555" r="5" fill="#e45756"/><text x="385" y="559" class="note">X4</text>
+<circle cx="460" cy="555" r="5" fill="#72b7b2"/><text x="470" y="559" class="note">X5</text>
+<circle cx="545" cy="555" r="5" fill="#b279a2"/><text x="555" y="559" class="note">X6</text>
+<text x="390" y="590" text-anchor="middle" class="panel">Experiment 1 Available Headroom</text>
+<text x="20" y="300" transform="rotate(-90 20 300)" text-anchor="middle" class="panel">OOF Empirical Identifiable Headroom</text>
+</svg>

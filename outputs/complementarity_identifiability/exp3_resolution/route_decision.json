@@ -1,0 +1,15 @@
+{
+  "decision": "ROUTE_C_LIMITS",
+  "group_level_go": false,
+  "query_level_go": false,
+  "route_a_pass": false,
+  "route_b_pass": false,
+  "best_group_ge_x4_pairs": 0,
+  "x4_significantly_exceeds_best_group_pairs": 5,
+  "finer_overfit_pattern_pairs": [
+    "mkgw_mhyper_adamf",
+    "db15k_mhyper_adamf"
+  ],
+  "x6_significantly_exceeds_best_group_pairs": [],
+  "defaulted_to_route_c_for_insufficient_evidence": false
+}

@@ -1,0 +1,257 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="690" viewBox="0 0 1260 690">
+<rect width="100%" height="100%" fill="#fff"/>
+<style>text{font-family:Arial,sans-serif;fill:#202124}.title{font-size:20px;font-weight:700}.panel{font-size:12px;font-weight:700}.axis{font-size:9px}.note{font-size:10px;fill:#5f6368}</style>
+<text x="20" y="28" class="title">X × learner OOF gain</text>
+<text x="55" y="63" class="panel">MKG-W / M-Hyper+NativE</text>
+<text x="150" y="97" text-anchor="end" class="axis">linear_huber</text>
+<rect x="160" y="75" width="43" height="33" fill="rgb(244,236,237)"/>
+<rect x="205" y="75" width="43" height="33" fill="rgb(246,242,243)"/>
+<rect x="250" y="75" width="43" height="33" fill="rgb(245,240,240)"/>
+<rect x="295" y="75" width="43" height="33" fill="rgb(245,241,242)"/>
+<rect x="340" y="75" width="43" height="33" fill="rgb(245,241,241)"/>
+<rect x="385" y="75" width="43" height="33" fill="#d9d9d9"/>
+<text x="150" y="132" text-anchor="end" class="axis">hist_gbdt</text>
+<rect x="160" y="110" width="43" height="33" fill="rgb(219,156,163)"/>
+<rect x="205" y="110" width="43" height="33" fill="rgb(218,153,161)"/>
+<rect x="250" y="110" width="43" height="33" fill="rgb(217,151,160)"/>
+<rect x="295" y="110" width="43" height="33" fill="rgb(221,161,169)"/>
+<rect x="340" y="110" width="43" height="33" fill="rgb(222,165,172)"/>
+<rect x="385" y="110" width="43" height="33" fill="#d9d9d9"/>
+<text x="150" y="167" text-anchor="end" class="axis">mlp_low</text>
+<rect x="160" y="145" width="43" height="33" fill="rgb(225,177,183)"/>
+<rect x="205" y="145" width="43" height="33" fill="rgb(228,186,191)"/>
+<rect x="250" y="145" width="43" height="33" fill="rgb(222,166,173)"/>
+<rect x="295" y="145" width="43" height="33" fill="rgb(232,199,204)"/>
+<rect x="340" y="145" width="43" height="33" fill="rgb(237,216,219)"/>
+<rect x="385" y="145" width="43" height="33" fill="#d9d9d9"/>
+<text x="150" y="202" text-anchor="end" class="axis">mlp_high</text>
+<rect x="160" y="180" width="43" height="33" fill="rgb(226,181,186)"/>
+<rect x="205" y="180" width="43" height="33" fill="rgb(232,198,202)"/>
+<rect x="250" y="180" width="43" height="33" fill="rgb(236,212,215)"/>
+<rect x="295" y="180" width="43" height="33" fill="rgb(236,210,213)"/>
+<rect x="340" y="180" width="43" height="33" fill="rgb(236,211,214)"/>
+<rect x="385" y="180" width="43" height="33" fill="#d9d9d9"/>
+<text x="150" y="237" text-anchor="end" class="axis">set_encoder</text>
+<rect x="160" y="215" width="43" height="33" fill="#d9d9d9"/>
+<rect x="205" y="215" width="43" height="33" fill="#d9d9d9"/>
+<rect x="250" y="215" width="43" height="33" fill="#d9d9d9"/>
+<rect x="295" y="215" width="43" height="33" fill="#d9d9d9"/>
+<rect x="340" y="215" width="43" height="33" fill="#d9d9d9"/>
+<rect x="385" y="215" width="43" height="33" fill="rgb(234,204,208)"/>
+<text x="182.5" y="265" text-anchor="middle" class="axis">X1</text>
+<text x="227.5" y="265" text-anchor="middle" class="axis">X2</text>
+<text x="272.5" y="265" text-anchor="middle" class="axis">X3</text>
+<text x="317.5" y="265" text-anchor="middle" class="axis">X4</text>
+<text x="362.5" y="265" text-anchor="middle" class="axis">X5</text>
+<text x="407.5" y="265" text-anchor="middle" class="axis">X6</text>
+<text x="465" y="63" class="panel">MKG-W / M-Hyper+AdaMF</text>
+<text x="560" y="97" text-anchor="end" class="axis">linear_huber</text>
+<rect x="570" y="75" width="43" height="33" fill="rgb(247,247,247)"/>
+<rect x="615" y="75" width="43" height="33" fill="rgb(247,246,246)"/>
+<rect x="660" y="75" width="43" height="33" fill="rgb(247,247,247)"/>
+<rect x="705" y="75" width="43" height="33" fill="rgb(247,247,247)"/>
+<rect x="750" y="75" width="43" height="33" fill="rgb(247,246,246)"/>
+<rect x="795" y="75" width="43" height="33" fill="#d9d9d9"/>
+<text x="560" y="132" text-anchor="end" class="axis">hist_gbdt</text>
+<rect x="570" y="110" width="43" height="33" fill="rgb(234,204,208)"/>
+<rect x="615" y="110" width="43" height="33" fill="rgb(230,191,196)"/>
+<rect x="660" y="110" width="43" height="33" fill="rgb(227,184,189)"/>
+<rect x="705" y="110" width="43" height="33" fill="rgb(226,178,184)"/>
+<rect x="750" y="110" width="43" height="33" fill="rgb(228,185,190)"/>
+<rect x="795" y="110" width="43" height="33" fill="#d9d9d9"/>
+<text x="560" y="167" text-anchor="end" class="axis">mlp_low</text>
+<rect x="570" y="145" width="43" height="33" fill="rgb(228,234,240)"/>
+<rect x="615" y="145" width="43" height="33" fill="rgb(246,244,244)"/>
+<rect x="660" y="145" width="43" height="33" fill="rgb(246,243,244)"/>
+<rect x="705" y="145" width="43" height="33" fill="rgb(245,245,246)"/>
+<rect x="750" y="145" width="43" height="33" fill="rgb(192,210,228)"/>
+<rect x="795" y="145" width="43" height="33" fill="#d9d9d9"/>
+<text x="560" y="202" text-anchor="end" class="axis">mlp_high</text>
+<rect x="570" y="180" width="43" height="33" fill="rgb(184,204,225)"/>
+<rect x="615" y="180" width="43" height="33" fill="rgb(152,183,214)"/>
+<rect x="660" y="180" width="43" height="33" fill="rgb(163,190,218)"/>
+<rect x="705" y="180" width="43" height="33" fill="rgb(176,199,222)"/>
+<rect x="750" y="180" width="43" height="33" fill="rgb(135,171,208)"/>
+<rect x="795" y="180" width="43" height="33" fill="#d9d9d9"/>
+<text x="560" y="237" text-anchor="end" class="axis">set_encoder</text>
+<rect x="570" y="215" width="43" height="33" fill="#d9d9d9"/>
+<rect x="615" y="215" width="43" height="33" fill="#d9d9d9"/>
+<rect x="660" y="215" width="43" height="33" fill="#d9d9d9"/>
+<rect x="705" y="215" width="43" height="33" fill="#d9d9d9"/>
+<rect x="750" y="215" width="43" height="33" fill="#d9d9d9"/>
+<rect x="795" y="215" width="43" height="33" fill="rgb(230,235,241)"/>
+<text x="592.5" y="265" text-anchor="middle" class="axis">X1</text>
+<text x="637.5" y="265" text-anchor="middle" class="axis">X2</text>
+<text x="682.5" y="265" text-anchor="middle" class="axis">X3</text>
+<text x="727.5" y="265" text-anchor="middle" class="axis">X4</text>
+<text x="772.5" y="265" text-anchor="middle" class="axis">X5</text>
+<text x="817.5" y="265" text-anchor="middle" class="axis">X6</text>
+<text x="875" y="63" class="panel">MKG-W / NativE+AdaMF</text>
+<text x="970" y="97" text-anchor="end" class="axis">linear_huber</text>
+<rect x="980" y="75" width="43" height="33" fill="rgb(243,244,246)"/>
+<rect x="1025" y="75" width="43" height="33" fill="rgb(246,247,247)"/>
+<rect x="1070" y="75" width="43" height="33" fill="rgb(247,247,247)"/>
+<rect x="1115" y="75" width="43" height="33" fill="rgb(246,246,247)"/>
+<rect x="1160" y="75" width="43" height="33" fill="rgb(247,247,247)"/>
+<rect x="1205" y="75" width="43" height="33" fill="#d9d9d9"/>
+<text x="970" y="132" text-anchor="end" class="axis">hist_gbdt</text>
+<rect x="980" y="110" width="43" height="33" fill="rgb(245,239,240)"/>
+<rect x="1025" y="110" width="43" height="33" fill="rgb(244,237,237)"/>
+<rect x="1070" y="110" width="43" height="33" fill="rgb(244,238,239)"/>
+<rect x="1115" y="110" width="43" height="33" fill="rgb(243,235,236)"/>
+<rect x="1160" y="110" width="43" height="33" fill="rgb(244,236,237)"/>
+<rect x="1205" y="110" width="43" height="33" fill="#d9d9d9"/>
+<text x="970" y="167" text-anchor="end" class="axis">mlp_low</text>
+<rect x="980" y="145" width="43" height="33" fill="rgb(228,234,240)"/>
+<rect x="1025" y="145" width="43" height="33" fill="rgb(222,230,238)"/>
+<rect x="1070" y="145" width="43" height="33" fill="rgb(216,226,236)"/>
+<rect x="1115" y="145" width="43" height="33" fill="rgb(202,216,231)"/>
+<rect x="1160" y="145" width="43" height="33" fill="rgb(207,220,233)"/>
+<rect x="1205" y="145" width="43" height="33" fill="#d9d9d9"/>
+<text x="970" y="202" text-anchor="end" class="axis">mlp_high</text>
+<rect x="980" y="180" width="43" height="33" fill="rgb(162,190,217)"/>
+<rect x="1025" y="180" width="43" height="33" fill="rgb(129,167,206)"/>
+<rect x="1070" y="180" width="43" height="33" fill="rgb(133,170,207)"/>
+<rect x="1115" y="180" width="43" height="33" fill="rgb(129,167,206)"/>
+<rect x="1160" y="180" width="43" height="33" fill="rgb(127,166,205)"/>
+<rect x="1205" y="180" width="43" height="33" fill="#d9d9d9"/>
+<text x="970" y="237" text-anchor="end" class="axis">set_encoder</text>
+<rect x="980" y="215" width="43" height="33" fill="#d9d9d9"/>
+<rect x="1025" y="215" width="43" height="33" fill="#d9d9d9"/>
+<rect x="1070" y="215" width="43" height="33" fill="#d9d9d9"/>
+<rect x="1115" y="215" width="43" height="33" fill="#d9d9d9"/>
+<rect x="1160" y="215" width="43" height="33" fill="#d9d9d9"/>
+<rect x="1205" y="215" width="43" height="33" fill="rgb(217,227,237)"/>
+<text x="1002.5" y="265" text-anchor="middle" class="axis">X1</text>
+<text x="1047.5" y="265" text-anchor="middle" class="axis">X2</text>
+<text x="1092.5" y="265" text-anchor="middle" class="axis">X3</text>
+<text x="1137.5" y="265" text-anchor="middle" class="axis">X4</text>
+<text x="1182.5" y="265" text-anchor="middle" class="axis">X5</text>
+<text x="1227.5" y="265" text-anchor="middle" class="axis">X6</text>
+<text x="55" y="348" class="panel">DB15K / M-Hyper+NativE</text>
+<text x="150" y="382" text-anchor="end" class="axis">linear_huber</text>
+<rect x="160" y="360" width="43" height="33" fill="rgb(247,246,246)"/>
+<rect x="205" y="360" width="43" height="33" fill="rgb(247,247,247)"/>
+<rect x="250" y="360" width="43" height="33" fill="rgb(247,247,247)"/>
+<rect x="295" y="360" width="43" height="33" fill="rgb(247,247,247)"/>
+<rect x="340" y="360" width="43" height="33" fill="rgb(246,245,245)"/>
+<rect x="385" y="360" width="43" height="33" fill="#d9d9d9"/>
+<text x="150" y="417" text-anchor="end" class="axis">hist_gbdt</text>
+<rect x="160" y="395" width="43" height="33" fill="rgb(242,231,232)"/>
+<rect x="205" y="395" width="43" height="33" fill="rgb(241,226,228)"/>
+<rect x="250" y="395" width="43" height="33" fill="rgb(238,218,220)"/>
+<rect x="295" y="395" width="43" height="33" fill="rgb(239,222,224)"/>
+<rect x="340" y="395" width="43" height="33" fill="rgb(239,222,224)"/>
+<rect x="385" y="395" width="43" height="33" fill="#d9d9d9"/>
+<text x="150" y="452" text-anchor="end" class="axis">mlp_low</text>
+<rect x="160" y="430" width="43" height="33" fill="rgb(242,244,245)"/>
+<rect x="205" y="430" width="43" height="33" fill="rgb(234,238,242)"/>
+<rect x="250" y="430" width="43" height="33" fill="rgb(224,232,239)"/>
+<rect x="295" y="430" width="43" height="33" fill="rgb(220,229,238)"/>
+<rect x="340" y="430" width="43" height="33" fill="rgb(200,215,230)"/>
+<rect x="385" y="430" width="43" height="33" fill="#d9d9d9"/>
+<text x="150" y="487" text-anchor="end" class="axis">mlp_high</text>
+<rect x="160" y="465" width="43" height="33" fill="rgb(202,216,231)"/>
+<rect x="205" y="465" width="43" height="33" fill="rgb(162,189,217)"/>
+<rect x="250" y="465" width="43" height="33" fill="rgb(155,185,215)"/>
+<rect x="295" y="465" width="43" height="33" fill="rgb(147,179,212)"/>
+<rect x="340" y="465" width="43" height="33" fill="rgb(84,136,190)"/>
+<rect x="385" y="465" width="43" height="33" fill="#d9d9d9"/>
+<text x="150" y="522" text-anchor="end" class="axis">set_encoder</text>
+<rect x="160" y="500" width="43" height="33" fill="#d9d9d9"/>
+<rect x="205" y="500" width="43" height="33" fill="#d9d9d9"/>
+<rect x="250" y="500" width="43" height="33" fill="#d9d9d9"/>
+<rect x="295" y="500" width="43" height="33" fill="#d9d9d9"/>
+<rect x="340" y="500" width="43" height="33" fill="#d9d9d9"/>
+<rect x="385" y="500" width="43" height="33" fill="rgb(218,227,237)"/>
+<text x="182.5" y="550" text-anchor="middle" class="axis">X1</text>
+<text x="227.5" y="550" text-anchor="middle" class="axis">X2</text>
+<text x="272.5" y="550" text-anchor="middle" class="axis">X3</text>
+<text x="317.5" y="550" text-anchor="middle" class="axis">X4</text>
+<text x="362.5" y="550" text-anchor="middle" class="axis">X5</text>
+<text x="407.5" y="550" text-anchor="middle" class="axis">X6</text>
+<text x="465" y="348" class="panel">DB15K / M-Hyper+AdaMF</text>
+<text x="560" y="382" text-anchor="end" class="axis">linear_huber</text>
+<rect x="570" y="360" width="43" height="33" fill="rgb(238,241,244)"/>
+<rect x="615" y="360" width="43" height="33" fill="rgb(239,241,244)"/>
+<rect x="660" y="360" width="43" height="33" fill="rgb(240,242,245)"/>
+<rect x="705" y="360" width="43" height="33" fill="rgb(240,242,244)"/>
+<rect x="750" y="360" width="43" height="33" fill="rgb(240,242,245)"/>
+<rect x="795" y="360" width="43" height="33" fill="#d9d9d9"/>
+<text x="560" y="417" text-anchor="end" class="axis">hist_gbdt</text>
+<rect x="570" y="395" width="43" height="33" fill="rgb(246,245,245)"/>
+<rect x="615" y="395" width="43" height="33" fill="rgb(245,239,240)"/>
+<rect x="660" y="395" width="43" height="33" fill="rgb(244,237,238)"/>
+<rect x="705" y="395" width="43" height="33" fill="rgb(244,236,237)"/>
+<rect x="750" y="395" width="43" height="33" fill="rgb(243,234,235)"/>
+<rect x="795" y="395" width="43" height="33" fill="#d9d9d9"/>
+<text x="560" y="452" text-anchor="end" class="axis">mlp_low</text>
+<rect x="570" y="430" width="43" height="33" fill="rgb(196,213,229)"/>
+<rect x="615" y="430" width="43" height="33" fill="rgb(191,209,227)"/>
+<rect x="660" y="430" width="43" height="33" fill="rgb(200,215,231)"/>
+<rect x="705" y="430" width="43" height="33" fill="rgb(165,191,218)"/>
+<rect x="750" y="430" width="43" height="33" fill="rgb(176,199,222)"/>
+<rect x="795" y="430" width="43" height="33" fill="#d9d9d9"/>
+<text x="560" y="487" text-anchor="end" class="axis">mlp_high</text>
+<rect x="570" y="465" width="43" height="33" fill="rgb(128,166,205)"/>
+<rect x="615" y="465" width="43" height="33" fill="rgb(36,104,173)"/>
+<rect x="660" y="465" width="43" height="33" fill="rgb(33,102,172)"/>
+<rect x="705" y="465" width="43" height="33" fill="rgb(33,102,172)"/>
+<rect x="750" y="465" width="43" height="33" fill="rgb(33,102,172)"/>
+<rect x="795" y="465" width="43" height="33" fill="#d9d9d9"/>
+<text x="560" y="522" text-anchor="end" class="axis">set_encoder</text>
+<rect x="570" y="500" width="43" height="33" fill="#d9d9d9"/>
+<rect x="615" y="500" width="43" height="33" fill="#d9d9d9"/>
+<rect x="660" y="500" width="43" height="33" fill="#d9d9d9"/>
+<rect x="705" y="500" width="43" height="33" fill="#d9d9d9"/>
+<rect x="750" y="500" width="43" height="33" fill="#d9d9d9"/>
+<rect x="795" y="500" width="43" height="33" fill="rgb(178,200,223)"/>
+<text x="592.5" y="550" text-anchor="middle" class="axis">X1</text>
+<text x="637.5" y="550" text-anchor="middle" class="axis">X2</text>
+<text x="682.5" y="550" text-anchor="middle" class="axis">X3</text>
+<text x="727.5" y="550" text-anchor="middle" class="axis">X4</text>
+<text x="772.5" y="550" text-anchor="middle" class="axis">X5</text>
+<text x="817.5" y="550" text-anchor="middle" class="axis">X6</text>
+<text x="875" y="348" class="panel">DB15K / NativE+AdaMF</text>
+<text x="970" y="382" text-anchor="end" class="axis">linear_huber</text>
+<rect x="980" y="360" width="43" height="33" fill="rgb(235,239,243)"/>
+<rect x="1025" y="360" width="43" height="33" fill="rgb(236,240,243)"/>
+<rect x="1070" y="360" width="43" height="33" fill="rgb(238,241,244)"/>
+<rect x="1115" y="360" width="43" height="33" fill="rgb(238,241,244)"/>
+<rect x="1160" y="360" width="43" height="33" fill="rgb(238,241,244)"/>
+<rect x="1205" y="360" width="43" height="33" fill="#d9d9d9"/>
+<text x="970" y="417" text-anchor="end" class="axis">hist_gbdt</text>
+<rect x="980" y="395" width="43" height="33" fill="rgb(245,241,241)"/>
+<rect x="1025" y="395" width="43" height="33" fill="rgb(242,232,233)"/>
+<rect x="1070" y="395" width="43" height="33" fill="rgb(243,233,234)"/>
+<rect x="1115" y="395" width="43" height="33" fill="rgb(241,229,230)"/>
+<rect x="1160" y="395" width="43" height="33" fill="rgb(243,235,236)"/>
+<rect x="1205" y="395" width="43" height="33" fill="#d9d9d9"/>
+<text x="970" y="452" text-anchor="end" class="axis">mlp_low</text>
+<rect x="980" y="430" width="43" height="33" fill="rgb(224,231,239)"/>
+<rect x="1025" y="430" width="43" height="33" fill="rgb(230,236,241)"/>
+<rect x="1070" y="430" width="43" height="33" fill="rgb(223,231,239)"/>
+<rect x="1115" y="430" width="43" height="33" fill="rgb(216,226,236)"/>
+<rect x="1160" y="430" width="43" height="33" fill="rgb(206,219,233)"/>
+<rect x="1205" y="430" width="43" height="33" fill="#d9d9d9"/>
+<text x="970" y="487" text-anchor="end" class="axis">mlp_high</text>
+<rect x="980" y="465" width="43" height="33" fill="rgb(171,195,220)"/>
+<rect x="1025" y="465" width="43" height="33" fill="rgb(172,196,221)"/>
+<rect x="1070" y="465" width="43" height="33" fill="rgb(183,203,224)"/>
+<rect x="1115" y="465" width="43" height="33" fill="rgb(166,192,219)"/>
+<rect x="1160" y="465" width="43" height="33" fill="rgb(150,182,213)"/>
+<rect x="1205" y="465" width="43" height="33" fill="#d9d9d9"/>
+<text x="970" y="522" text-anchor="end" class="axis">set_encoder</text>
+<rect x="980" y="500" width="43" height="33" fill="#d9d9d9"/>
+<rect x="1025" y="500" width="43" height="33" fill="#d9d9d9"/>
+<rect x="1070" y="500" width="43" height="33" fill="#d9d9d9"/>
+<rect x="1115" y="500" width="43" height="33" fill="#d9d9d9"/>
+<rect x="1160" y="500" width="43" height="33" fill="#d9d9d9"/>
+<rect x="1205" y="500" width="43" height="33" fill="rgb(215,225,236)"/>
+<text x="1002.5" y="550" text-anchor="middle" class="axis">X1</text>
+<text x="1047.5" y="550" text-anchor="middle" class="axis">X2</text>
+<text x="1092.5" y="550" text-anchor="middle" class="axis">X3</text>
+<text x="1137.5" y="550" text-anchor="middle" class="axis">X4</text>
+<text x="1182.5" y="550" text-anchor="middle" class="axis">X5</text>
+<text x="1227.5" y="550" text-anchor="middle" class="axis">X6</text>
+</svg>

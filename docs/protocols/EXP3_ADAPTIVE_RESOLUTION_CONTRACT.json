@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "experiment": "Experiment 3 — Granularity Ladder / Adaptive Resolution Audit",
+  "status": "frozen_before_systematic_run",
+  "effective_date": "2026-09-07",
+  "split": "dev",
+  "pair_ids": [
+    "mkgw_mhyper_native",
+    "mkgw_mhyper_adamf",
+    "mkgw_native_adamf",
+    "db15k_mhyper_native",
+    "db15k_mhyper_adamf",
+    "db15k_native_adamf"
+  ],
+  "alpha_grid": [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0],
+  "outer_cv": {
+    "folds": 5,
+    "fold_seed": 20260901,
+    "grouping_key": "original_triple_id",
+    "fold_source": "Experiment 2 X4 nested-selected OOF artifact",
+    "global_alpha_scope": "outer_train_only"
+  },
+  "inner_cv": {
+    "folds": 3,
+    "fold_seed": 20260905,
+    "grouping_key": "original_triple_id",
+    "purpose": "L4 minimum-support selection only",
+    "selection": "maximum pooled inner-held-out delta MRR, then contract order"
+  },
+  "levels": {
+    "L0": {"name": "Global", "group_fields": []},
+    "L1": {"name": "Direction", "group_fields": ["direction"], "minimum_support": 1},
+    "L2": {"name": "Relation", "group_fields": ["relation_id"], "minimum_support": 25},
+    "L3": {"name": "Relation × Direction", "group_fields": ["relation_id", "direction"], "minimum_support": 25},
+    "L4": {
+      "name": "Context Group",
+      "group_fields": ["relation_id", "direction", "degree_bucket", "known_side_modality_state"],
+      "minimum_support_candidates": [10, 25, 50, 100],
+      "support_unit": "distinct original triples",
+      "degree_feature": "r3_train_observed_entity_frequency_log1p",
+      "degree_quantiles": [0.25, 0.5, 0.75],
+      "degree_fit_unit": "unique original_triple_id × direction rows in current inner/outer training partition",
+      "degree_assignment": "numpy searchsorted with side=right",
+      "modality_fields": ["r3_observed_entity_has_text", "r3_observed_entity_has_image"],
+      "modality_states": ["none", "text_only", "image_only", "text_and_image"]
+    },
+    "L5": {
+      "name": "Individual Query",
+      "source": "Experiment 2 X4 nested_selected strict-OOF predictions",
+      "new_training": false,
+      "selection_reason": "single frozen representation with 6/6 robust-positive pairs and closest frozen preliminary-gate result"
+    }
+  },
+  "action_tie_break": "maximum training mean RR, then nearest fold Global alpha, then smaller alpha",
+  "fallback": "fold-specific Global only",
+  "support_unit": "distinct original triples",
+  "bootstrap": {"samples": 10000, "seed": 20260907, "unit": "original_triple_id"},
+  "robust_positive": {
+    "delta_mrr_gt_zero": true,
+    "clustered_ci95_lower_gt_zero": true,
+    "minimum_positive_seeds": 2,
+    "head_tail_not_both_negative": true
+  },
+  "group_level_gate": {
+    "eligible_levels": ["L1", "L2", "L3", "L4"],
+    "minimum_robust_positive_pairs": 4,
+    "both_datasets_represented": true,
+    "maximum_pairs_below_minus_0_001": 1
+  },
+  "route_a": {
+    "minimum_pairs_best_group_ge_x4_query": 4,
+    "maximum_pairs_x4_query_significantly_gt_best_group": 1,
+    "finer_overfit_definition": "at least 2/3 adjacent L1→L2→L3→L4 steps have training gain increase and OOF gain non-increase",
+    "minimum_pairs_with_finer_overfit_pattern": 4
+  },
+  "route_b": {
+    "query_source": "Experiment 2 X6 set_encoder strict-OOF predictions",
+    "minimum_pairs_query_minus_best_group_ci_lower_gt_zero": 4,
+    "required_pairs": ["mkgw_native_adamf", "db15k_native_adamf"]
+  },
+  "route_precedence": ["ROUTE_B_QUERY_LEVEL", "ROUTE_A_HIERARCHICAL", "ROUTE_C_LIMITS"],
+  "default_route": "ROUTE_C_LIMITS",
+  "test_access": 0,
+  "hierarchical_shrinkage": 0,
+  "lcb": 0,
+  "conservative_policy": 0,
+  "new_query_selector": 0,
+  "checkpoint_modification": 0
+}

@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "experiment": "Experiment 5 — Local Identifiability / Action Ambiguity Audit",
+  "status": "frozen_before_systematic_run",
+  "effective_date": "2026-09-07",
+  "split": "dev",
+  "pair_ids": [
+    "mkgw_mhyper_native",
+    "mkgw_mhyper_adamf",
+    "mkgw_native_adamf",
+    "db15k_mhyper_native",
+    "db15k_mhyper_adamf",
+    "db15k_native_adamf"
+  ],
+  "representations": {
+    "X4": {
+      "status": "available",
+      "source": "Experiment 2 frozen query_information asset",
+      "dimension": 40,
+      "feature_contract": "Experiment 2 X1 + X2_additions + X3_additions + X4_additions",
+      "preprocessing": "outer-training-only z-standardization",
+      "distance": "Euclidean"
+    },
+    "X6": {
+      "status": "X6_FIXED_VECTOR_UNAVAILABLE",
+      "reason": "Experiment 2 freezes a variable-size candidate set plus set encoder, not a deterministic target-independent canonical fixed vector",
+      "new_encoder_or_pooling": false
+    }
+  },
+  "outer_fold_assignment": {
+    "source": "Experiment 2 X4 nested_selected oof_action_predictions.npz",
+    "folds": 5,
+    "stored_encoding": "1..5",
+    "internal_encoding": "stored outer_fold minus one; membership unchanged",
+    "grouping_key": "original_triple_id",
+    "reuse_exact_assignment": true
+  },
+  "alpha_grid": [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0],
+  "oracle_tie_break": ["maximum RR", "nearest alpha0", "smaller alpha"],
+  "neighbor_tie_break": "smaller canonical reference row index after exact Euclidean distance",
+  "k_values": [5, 10, 20, 50],
+  "knn_reference_pool": "all current outer-training rows for the dataset-pair representation",
+  "same_original_triple_excluded_by_outer_group_split": true,
+  "matched_random": {
+    "match_fields": ["dataset", "pair_id", "seed", "direction", "relation_id"],
+    "fallback": "none",
+    "draws": 100,
+    "sampling": "without replacement within each draw",
+    "draw_sharing": "100 deterministic draws are frozen per outer-fold matched stratum and evaluated for every supported center in that stratum",
+    "seed": 20260907,
+    "unsupported_when_pool_lt_k": true
+  },
+  "beneficial_set": {
+    "definition": "alpha where RR(alpha)-RR(alpha0) > 0",
+    "both_empty_jaccard": "NA",
+    "both_empty_rate_reported": true
+  },
+  "direction_labels": ["LEFT", "ANCHOR", "RIGHT"],
+  "direction_entropy_normalization": "natural-log entropy divided by log(3)",
+  "consensus_tie_break": ["maximum mean neighbor utility", "nearest alpha0", "smaller alpha"],
+  "distance_purity_bins": {
+    "count": 10,
+    "definition": "fixed empirical deciles of held-out-to-training top-50 neighbor distances within dataset-pair-representation",
+    "display_k": 50
+  },
+  "primary_display_k": 10,
+  "bootstrap": {
+    "samples": 10000,
+    "seed": 20260905,
+    "unit": "center original_triple_id",
+    "interval": "percentile 95%",
+    "preserve": ["three seeds", "two directions", "all k", "all supported representations"]
+  },
+  "local_signal_pair": {
+    "minimum_k_satisfying_all": 2,
+    "requirements": [
+      "direction-agreement lift CI lower > 0",
+      "neighbor-consensus utility CI lower > 0",
+      "consensus-utility lift CI lower > 0"
+    ]
+  },
+  "classification": {
+    "local_identifiable": {
+      "minimum_local_signal_pairs": 4,
+      "both_datasets_supported": true,
+      "minimum_native_adamf_local_signal_pairs": 1
+    },
+    "x6_recovery": {
+      "minimum_x6_utility_gt_x4_pairs": 4,
+      "both_native_adamf_pairs_required": true,
+      "x6_purity_lift_gt_x4_required": true
+    },
+    "local_ambiguity": {
+      "maximum_local_signal_pairs": 2,
+      "minimum_pairs_consensus_ci_includes_zero": 4,
+      "consensus_ci_reference": "X4 at frozen primary display k=10",
+      "x6_recovery_must_fail": true
+    },
+    "fallback": "E5_INTERMEDIATE",
+    "record_multiple": ["E5_X6_RECOVERY", "E5_LOCAL_IDENTIFIABLE"],
+    "report_final_line_precedence": ["E5_X6_RECOVERY", "E5_LOCAL_IDENTIFIABLE", "E5_LOCAL_AMBIGUITY", "E5_INTERMEDIATE"]
+  },
+  "test_access": 0,
+  "new_representation": 0,
+  "supervised_metric_learning": 0,
+  "new_pca": 0,
+  "new_embedding": 0,
+  "new_selector": 0,
+  "neighbor_policy_development": 0,
+  "checkpoint_execution": 0
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "experiment": "Experiment 2 \u2014 Information\u2013Identifiability Audit",
+  "probe": "nested_selected",
+  "pair_id": "mkgw_native_adamf",
+  "representation": "X3",
+  "metrics": {
+    "count": 25656,
+    "oof_mrr": 0.33563309162845967,
+    "fold_specific_global_mrr": 0.3348552897395901,
+    "delta_mrr": 0.0007778018888695402,
+    "clustered_ci95_low": -0.00017748476036274257,
+    "clustered_ci95_high": 0.001720172823756312,
+    "headroom_recovery": 0.016324971187988962,
+    "negative_transfer_rate": 0.07857811038353602,
+    "positive_gain_rate": 0.0949875272840661,
+    "changed_rate": 0.2924462114125351,
+    "spearman_pred_u_actual_u": 0.12435063829057895,
+    "positive_ap": 0.32978108876143525,
+    "positive_prevalence": 0.29813883691923915,
+    "positive_ap_lift": 0.0316422518421961,
+    "harmful_ap": 0.4214224199808916,
+    "harmful_prevalence": 0.4006450732772061,
+    "harmful_ap_lift": 0.020777346703685473,
+    "positive_vs_harmful_auroc": 0.5731709106071115,
+    "training_gain": 0.00678598439000024,
+    "oof_gain": 0.0007778018888695402,
+    "train_oof_generalization_gap": 0.006008182501130699
+  },
+  "test_access": 0,
+  "final_policy_development": 0
+}

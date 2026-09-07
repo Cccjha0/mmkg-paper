@@ -1,0 +1,7 @@
+representation,robust_positive_pairs,both_native_adamf_positive,recovery_ge_10pct_pairs,mkgw_native_adamf_ci_lower_gt_zero,pass
+X1,3,True,1,False,False
+X2,5,True,2,False,False
+X3,5,True,2,False,False
+X4,6,True,2,True,False
+X5,6,True,2,True,False
+X6,1,False,0,False,False

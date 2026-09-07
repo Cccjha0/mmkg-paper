@@ -1,0 +1,17 @@
+{
+  "classification": "E4_INTERMEDIATE",
+  "evidence": {
+    "transfer_ci_lower_positive_pairs": 6,
+    "transfer_significant_datasets": [
+      "db15k",
+      "mkg_w"
+    ],
+    "transfer_recovery_ge_25pct_pairs": 0,
+    "loso_ci_lower_positive_pairs": 6,
+    "median_transfer_recovery": 0.17091241278315975,
+    "median_loso_recovery": 0.22772034467534336,
+    "transfer_not_significantly_positive_pairs": 0,
+    "substantially_transferable_gate": false,
+    "residual_dominated_gate": false
+  }
+}
