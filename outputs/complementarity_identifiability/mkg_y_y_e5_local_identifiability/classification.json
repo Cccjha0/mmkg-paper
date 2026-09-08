@@ -1,0 +1,17 @@
+{
+  "recorded_classifications": [
+    "Y_E5_LOCAL_IDENTIFIABILITY_REPLICATION_REPORTED"
+  ],
+  "final_classification": "Y_E5_LOCAL_IDENTIFIABILITY_REPLICATION_REPORTED",
+  "evidence": {
+    "local_signal_pairs": 1,
+    "supported_datasets": [
+      "mkg_y"
+    ],
+    "native_adamf_local_signal_pairs": 0,
+    "x6_status": "X6_FIXED_VECTOR_UNAVAILABLE",
+    "x6_recovery": false,
+    "primary_k_consensus_ci_includes_zero_pairs": 2,
+    "descriptive_replication": true
+  }
+}

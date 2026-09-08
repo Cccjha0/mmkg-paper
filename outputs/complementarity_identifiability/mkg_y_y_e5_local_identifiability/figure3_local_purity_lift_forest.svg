@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="520" viewBox="0 0 1080 520">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="40" y="38" font-family="Arial" font-size="22" font-weight="700" fill="#202124">Local Direction-Purity Lift at frozen k=10</text>
+<line x1="596.2" y1="85" x2="596.2" y2="455" stroke="#888" stroke-dasharray="5 4"/>
+<text x="322.0" y="124.0" text-anchor="end" font-family="Arial" font-size="11" fill="#30343b">MKG-Y / M-Hyper + NativE</text>
+<line x1="959.6" y1="120" x2="1010.0" y2="120" stroke="#3f5f75" stroke-width="2"/>
+<circle cx="984.6" cy="120" r="6" fill="#c45d3c"/>
+<text x="1018.0" y="124.0" text-anchor="start" font-family="Arial" font-size="10" fill="#30343b">+0.076</text>
+<text x="322.0" y="179.0" text-anchor="end" font-family="Arial" font-size="11" fill="#30343b">MKG-Y / M-Hyper + AdaMF-MAT</text>
+<line x1="927.3" y1="175" x2="979.4" y2="175" stroke="#3f5f75" stroke-width="2"/>
+<circle cx="953.2" cy="175" r="6" fill="#c45d3c"/>
+<text x="987.4" y="179.0" text-anchor="start" font-family="Arial" font-size="10" fill="#30343b">+0.070</text>
+<text x="322.0" y="234.0" text-anchor="end" font-family="Arial" font-size="11" fill="#30343b">MKG-Y / NativE + AdaMF-MAT</text>
+<line x1="880.4" y1="230" x2="924.5" y2="230" stroke="#3f5f75" stroke-width="2"/>
+<circle cx="902.7" cy="230" r="6" fill="#c45d3c"/>
+<text x="932.5" y="234.0" text-anchor="start" font-family="Arial" font-size="10" fill="#30343b">+0.060</text>
+<text x="675.0" y="492.0" text-anchor="middle" font-family="Arial" font-size="12" fill="#30343b">kNN direction agreement − matched random</text>
+</svg>

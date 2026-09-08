@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1380" height="720" viewBox="0 0 1380 720">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="40" y="38" font-family="Arial" font-size="22" font-weight="700" fill="#202124">Neighbor Consensus Utility vs k</text>
+<rect x="55" y="75" width="390" height="230" rx="8" fill="#fff" stroke="#ddd"/>
+<text x="67.0" y="97.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">MKG-Y / M-Hyper + NativE</text>
+<line x1="95" y1="198.0" x2="433" y2="198.0" stroke="#aaa" stroke-dasharray="3 3"/>
+<line x1="115" y1="204.6" x2="115" y2="241.0" stroke="#28778e"/>
+<circle cx="115" cy="222.8" r="4" fill="#28778e"/>
+<line x1="210" y1="207.9" x2="210" y2="246.0" stroke="#28778e"/>
+<circle cx="210" cy="226.8" r="4" fill="#28778e"/>
+<line x1="305" y1="183.7" x2="305" y2="222.9" stroke="#28778e"/>
+<circle cx="305" cy="203.0" r="4" fill="#28778e"/>
+<line x1="400" y1="168.3" x2="400" y2="206.7" stroke="#28778e"/>
+<circle cx="400" cy="187.2" r="4" fill="#28778e"/>
+<polyline points="115,222.8 210,226.8 305,203.0 400,187.2" fill="none" stroke="#28778e" stroke-width="2"/>
+<line x1="115" y1="241.7" x2="115" y2="265.5" stroke="#c45d3c"/>
+<circle cx="115" cy="253.5" r="4" fill="#c45d3c"/>
+<line x1="210" y1="226.2" x2="210" y2="250.4" stroke="#c45d3c"/>
+<circle cx="210" cy="238.2" r="4" fill="#c45d3c"/>
+<line x1="305" y1="208.6" x2="305" y2="233.7" stroke="#c45d3c"/>
+<circle cx="305" cy="221.1" r="4" fill="#c45d3c"/>
+<line x1="400" y1="193.3" x2="400" y2="223.1" stroke="#c45d3c"/>
+<circle cx="400" cy="208.2" r="4" fill="#c45d3c"/>
+<polyline points="115,253.5 210,238.2 305,221.1 400,208.2" fill="none" stroke="#c45d3c" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="115.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">5</text>
+<text x="210.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">10</text>
+<text x="305.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">20</text>
+<text x="400.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">50</text>
+<rect x="500" y="75" width="390" height="230" rx="8" fill="#fff" stroke="#ddd"/>
+<text x="512.0" y="97.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">MKG-Y / M-Hyper + AdaMF-MAT</text>
+<line x1="540" y1="198.0" x2="878" y2="198.0" stroke="#aaa" stroke-dasharray="3 3"/>
+<line x1="560" y1="195.4" x2="560" y2="234.6" stroke="#28778e"/>
+<circle cx="560" cy="215.0" r="4" fill="#28778e"/>
+<line x1="655" y1="174.2" x2="655" y2="214.1" stroke="#28778e"/>
+<circle cx="655" cy="194.2" r="4" fill="#28778e"/>
+<line x1="750" y1="152.3" x2="750" y2="193.6" stroke="#28778e"/>
+<circle cx="750" cy="173.1" r="4" fill="#28778e"/>
+<line x1="845" y1="119.4" x2="845" y2="164.4" stroke="#28778e"/>
+<circle cx="845" cy="141.9" r="4" fill="#28778e"/>
+<polyline points="560,215.0 655,194.2 750,173.1 845,141.9" fill="none" stroke="#28778e" stroke-width="2"/>
+<line x1="560" y1="241.2" x2="560" y2="268.0" stroke="#c45d3c"/>
+<circle cx="560" cy="254.6" r="4" fill="#c45d3c"/>
+<line x1="655" y1="219.2" x2="655" y2="245.9" stroke="#c45d3c"/>
+<circle cx="655" cy="232.5" r="4" fill="#c45d3c"/>
+<line x1="750" y1="198.3" x2="750" y2="227.4" stroke="#c45d3c"/>
+<circle cx="750" cy="212.9" r="4" fill="#c45d3c"/>
+<line x1="845" y1="182.9" x2="845" y2="217.8" stroke="#c45d3c"/>
+<circle cx="845" cy="200.5" r="4" fill="#c45d3c"/>
+<polyline points="560,254.6 655,232.5 750,212.9 845,200.5" fill="none" stroke="#c45d3c" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="560.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">5</text>
+<text x="655.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">10</text>
+<text x="750.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">20</text>
+<text x="845.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">50</text>
+<rect x="945" y="75" width="390" height="230" rx="8" fill="#fff" stroke="#ddd"/>
+<text x="957.0" y="97.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">MKG-Y / NativE + AdaMF-MAT</text>
+<line x1="985" y1="198.0" x2="1323" y2="198.0" stroke="#aaa" stroke-dasharray="3 3"/>
+<line x1="1005" y1="191.8" x2="1005" y2="225.5" stroke="#28778e"/>
+<circle cx="1005" cy="208.5" r="4" fill="#28778e"/>
+<line x1="1100" y1="188.4" x2="1100" y2="224.8" stroke="#28778e"/>
+<circle cx="1100" cy="206.7" r="4" fill="#28778e"/>
+<line x1="1195" y1="189.1" x2="1195" y2="223.9" stroke="#28778e"/>
+<circle cx="1195" cy="206.3" r="4" fill="#28778e"/>
+<line x1="1290" y1="186.2" x2="1290" y2="220.0" stroke="#28778e"/>
+<circle cx="1290" cy="203.1" r="4" fill="#28778e"/>
+<polyline points="1005,208.5 1100,206.7 1195,206.3 1290,203.1" fill="none" stroke="#28778e" stroke-width="2"/>
+<line x1="1005" y1="229.5" x2="1005" y2="253.1" stroke="#c45d3c"/>
+<circle cx="1005" cy="241.4" r="4" fill="#c45d3c"/>
+<line x1="1100" y1="218.8" x2="1100" y2="242.5" stroke="#c45d3c"/>
+<circle cx="1100" cy="230.8" r="4" fill="#c45d3c"/>
+<line x1="1195" y1="208.6" x2="1195" y2="232.4" stroke="#c45d3c"/>
+<circle cx="1195" cy="220.5" r="4" fill="#c45d3c"/>
+<line x1="1290" y1="204.9" x2="1290" y2="228.3" stroke="#c45d3c"/>
+<circle cx="1290" cy="216.7" r="4" fill="#c45d3c"/>
+<polyline points="1005,241.4 1100,230.8 1195,220.5 1290,216.7" fill="none" stroke="#c45d3c" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="1005.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">5</text>
+<text x="1100.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">10</text>
+<text x="1195.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">20</text>
+<text x="1290.0" y="293.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">50</text>
+<text x="40.0" y="702.0" text-anchor="start" font-family="Arial" font-size="11" fill="#666">X4 kNN (blue solid) and matched random (orange dashed); X6 fixed vector unavailable. MRR utility vs unchanged Global.</text>
+</svg>

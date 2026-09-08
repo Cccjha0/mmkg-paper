@@ -1,0 +1,4 @@
+dataset,pair_id,representation,satisfying_k_count,satisfying_k,local_signal_pair
+mkg_y,mkg_y_mhyper_native,X4,0,,False
+mkg_y,mkg_y_mhyper_adamf,X4,2,"20,50",True
+mkg_y,mkg_y_native_adamf,X4,0,,False

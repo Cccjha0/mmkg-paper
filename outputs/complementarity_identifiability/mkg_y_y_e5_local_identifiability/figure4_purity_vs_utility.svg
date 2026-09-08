@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1050" height="610" viewBox="0 0 1050 610">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="40" y="38" font-family="Arial" font-size="22" font-weight="700" fill="#202124">Local Purity vs Consensus Utility (k=10)</text>
+<line x1="252.0" y1="80" x2="252.0" y2="520" stroke="#aaa" stroke-dasharray="4 4"/>
+<line x1="100" y1="230.6" x2="980" y2="230.6" stroke="#aaa" stroke-dasharray="4 4"/>
+<circle cx="828.0" cy="444.7" r="7" fill="#c45d3c"/>
+<text x="837.0" y="434.7" text-anchor="start" font-family="Arial" font-size="9" fill="#30343b">mkg_y_mhyper_native</text>
+<circle cx="781.4" cy="202.1" r="7" fill="#c45d3c"/>
+<text x="790.4" y="220.1" text-anchor="start" font-family="Arial" font-size="9" fill="#30343b">mkg_y_mhyper_adamf</text>
+<circle cx="706.5" cy="295.0" r="7" fill="#c45d3c"/>
+<text x="715.5" y="285.0" text-anchor="start" font-family="Arial" font-size="9" fill="#30343b">mkg_y_native_adamf</text>
+<text x="540.0" y="570.0" text-anchor="middle" font-family="Arial" font-size="12" fill="#30343b">Direction-agreement lift vs matched</text>
+<text x="20.0" y="300.0" text-anchor="start" font-family="Arial" font-size="12" fill="#30343b">kNN consensus utility</text>
+</svg>

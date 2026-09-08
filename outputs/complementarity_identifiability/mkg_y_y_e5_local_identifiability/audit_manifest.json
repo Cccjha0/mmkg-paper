@@ -1,0 +1,316 @@
+{
+  "schema_version": 1,
+  "experiment": "MKG-Y Y-E5 X4 Local Identifiability / Action Ambiguity Replication",
+  "split": "dev",
+  "representations": {
+    "X4": "available",
+    "X6": "X6_FIXED_VECTOR_UNAVAILABLE"
+  },
+  "recorded_classifications": [
+    "Y_E5_LOCAL_IDENTIFIABILITY_REPLICATION_REPORTED"
+  ],
+  "final_classification": "Y_E5_LOCAL_IDENTIFIABILITY_REPLICATION_REPORTED",
+  "classification_evidence": {
+    "local_signal_pairs": 1,
+    "supported_datasets": [
+      "mkg_y"
+    ],
+    "native_adamf_local_signal_pairs": 0,
+    "x6_status": "X6_FIXED_VECTOR_UNAVAILABLE",
+    "x6_recovery": false,
+    "primary_k_consensus_ci_includes_zero_pairs": 2,
+    "descriptive_replication": true
+  },
+  "sources_and_outputs": [
+    {
+      "role": "source",
+      "path": "docs/protocols/EXP5_LOCAL_IDENTIFIABILITY_PROTOCOL.md",
+      "sha256": "749a71a7dd6bcc3b9c7093ea71ca23adce82041388c6f35ea01d60dde7493e10"
+    },
+    {
+      "role": "source",
+      "path": "docs/protocols/MKG_Y_Y_E2_X4_OOF_CONTRACT.json",
+      "sha256": "8f1a7948dd3069b1a93298ae26d1726e798ae0f808e010a700be21764669e572"
+    },
+    {
+      "role": "source",
+      "path": "docs/protocols/MKG_Y_Y_E5_LOCAL_IDENTIFIABILITY_CONTRACT.json",
+      "sha256": "76f2e4d71d28602d040899fea5366368ba8e616ead05e879e0ee2589b4b6ea44"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/audit_manifest.json",
+      "sha256": "867c7edcc7e0b8947369b442bb06ec4fbd655e436ade1b24ce90cfdeecf894ef"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/pair_statistics.csv",
+      "sha256": "e931036c92683e0ee0fc8219662f4c4c5b5293a71b6812e79ea2fc66a157e6cd"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_mhyper_adamf_query_information.npz",
+      "sha256": "6d858809c4789d7149761189de0e8869494d464aae2d94c43683f07bb895b809"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_mhyper_adamf_query_information_manifest.json",
+      "sha256": "e5674063712537c8f72a1aa4b78931abde489b2a78ece5e559dc86fe14317890"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_mhyper_native_query_information.npz",
+      "sha256": "6ad5eaa005bbe5a2d62d7b8dcca4953f40aafaff5fe50471d9b69c77a67575ca"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_mhyper_native_query_information_manifest.json",
+      "sha256": "5dc42906b7df566766763d8103af56b3c2813b25132d4dc643746ac112f0efbd"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_native_adamf_query_information.npz",
+      "sha256": "1cc7da4d23972b6f2550c39f38b80b3ca79ce627d0171b04eb327014f714d47a"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_native_adamf_query_information_manifest.json",
+      "sha256": "79f506b01221951a79c2a3cfe55a0411557614d536281e447bc7e2bd7d617184"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/audit_manifest.json",
+      "sha256": "f5799897478dfda7cfcc49409b0e573fd18d991d6b2161077b7622c632d8622e"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/runs/mkg_y_mhyper_adamf/x4/nested_selected/oof_action_predictions.npz",
+      "sha256": "d38ada5019a472585b6bbcfc356c52b314cdd36ca9a649491e518f1b93d06a54"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/runs/mkg_y_mhyper_native/x4/nested_selected/oof_action_predictions.npz",
+      "sha256": "2576c436b1286b2160af1a88eb13ae8c5e6390fe64a776466a64c16cd2805e87"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/runs/mkg_y_native_adamf/x4/nested_selected/oof_action_predictions.npz",
+      "sha256": "ab9d6cba7132976d4a95815f559cae05a512bd09491181325a97714398e4a122"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_adamf_dev_source_manifest.json",
+      "sha256": "777548a3dc647d1e0a1b0484f2ddfb3e2d1a0c4cddbb19585caee2c802be571f"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_native_dev_source_manifest.json",
+      "sha256": "d5d82cffcb308f5bf44001119447af99375a3f3c66ebec5528d246baf7915a68"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_native_adamf_dev_source_manifest.json",
+      "sha256": "36cfb1ed86bd59efcfe56240b8b78ce838dd28438fd0b031ef5e56240d7b790c"
+    },
+    {
+      "role": "source",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/audit_manifest.json",
+      "sha256": "ab42c9a88ddf6f229e1457e76104364b1039e763fda1810662924858cdc894fc"
+    },
+    {
+      "role": "source",
+      "path": "outputs/mkg_y/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "bcb61387bfb88970a893fd1649d1626933a70bddd0d938939fa7e7b61e2b5d5d"
+    },
+    {
+      "role": "source",
+      "path": "outputs/mkg_y/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "b37c8f69052a6b8abe6e5a878daaafdc6203d3ca31f98a3dbb9ffa853352569b"
+    },
+    {
+      "role": "source",
+      "path": "outputs/mkg_y/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "d00e97dcd7b94949eab2fd9e8ef30c153d0797656aaee94ce94c831700e091b3"
+    },
+    {
+      "role": "source",
+      "path": "scripts/audit_local_identifiability.py",
+      "sha256": "30b47c146a8f79b5b3416b7b1e76f1ca91da47f756d40b1f7ac9c96159f5d7bf"
+    },
+    {
+      "role": "source",
+      "path": "scripts/exp2_information_common.py",
+      "sha256": "39c9caf1085e12f459cb84d3b4087820c5b9fc3a5b0c99772e81e13e2373599b"
+    },
+    {
+      "role": "source",
+      "path": "scripts/run_mkg_y_y_e5_local_identifiability.ps1",
+      "sha256": "53ed0bf536e6de54d1cdfa490272af9b34031ae9d78c58d97755b5df884ffe18"
+    },
+    {
+      "role": "output",
+      "path": "docs/reports/mkg_y_local_identifiability_audit_2026-09-08.md",
+      "sha256": "08aab90798754b40b05043b203579fd879b7615bf4145ae733ebe4a0e50532c7"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/bootstrap_ci.csv",
+      "sha256": "d0069bc3cce7ec20a032de7a756d169303213e200b9097aada4507951e174b7b"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/classification.json",
+      "sha256": "0fa807adf0b40adc054cc2224109ea887354c0096058e3679fd108334702d0bc"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/distance_purity_bins.csv",
+      "sha256": "ca2a907ff246c3be911cc599d3c1311ab05ff78f95fa06a4e467fa47a3233042"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/figure1_distance_purity_curves.svg",
+      "sha256": "1f5dadde23ae07bd71620bcfe9b97b68307842266bbf4c9c342b4c81e4db05f4"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/figure2_consensus_utility_vs_k.svg",
+      "sha256": "ea7f199e62fe45afaa58bc1fcacc1f1b737278d406e5363a2fe1000c66af7ac3"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/figure3_local_purity_lift_forest.svg",
+      "sha256": "fb9a57324c258d3b82b2d0576cbf71472ea5c4b33461694c44d94c925d5c7b39"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/figure4_purity_vs_utility.svg",
+      "sha256": "be4d37c9c883252b90dcd26625d00d98ddbcc8885bc07e860dde5cb53aff64ad"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/local_signal_pairs.csv",
+      "sha256": "021d1f7da21a934011e3e28ad99ffaa4d78128632e921af1b8977fe672a60425"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/matched_baseline_summary.csv",
+      "sha256": "a0e5a5e1c103b6d5e3226ca29078ac13352bc13dbbda6c6b0cb1fb4fab3cb624"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/neighbors/mkg_y_mhyper_adamf_x4_neighbors.npz",
+      "sha256": "4d50e201fbc219032b67d956323a8a775b4624b4b8e37dd5552d581364e4aee6"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/neighbors/mkg_y_mhyper_native_x4_neighbors.npz",
+      "sha256": "e4faa70838a0f6bb08d8799f55fffd330b704a7c5602853acccf2f2434c38b73"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/neighbors/mkg_y_native_adamf_x4_neighbors.npz",
+      "sha256": "5a566240956fc3a731afb72d603165e989a3a573f1c3d73fcff3feab705c5903"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/pair_k_summary.csv",
+      "sha256": "e02e3a6abf83c06960bacda55199bd9ba108f9b14f0e92a539e9922eeda38ef9"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/per_center_knn_metrics.csv.gz",
+      "sha256": "2f8b17b98deb975b410058511671246b74781e967ef557f94445b5c8f4b3986a"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/work/mkg_y_mhyper_adamf/bootstrap_ci.csv",
+      "sha256": "5b0bc01181ccdf4bf65b665ae1911fd466199a248cc926577082769b6c6187e2"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/work/mkg_y_mhyper_adamf/distance_purity_bins.csv",
+      "sha256": "0134afcc219fa2407291700eeae06af0f92aa04e2eef50d157280a035ca03ca9"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/work/mkg_y_mhyper_adamf/pair_k_summary.csv",
+      "sha256": "3b8fada16ac2aa5265a517ca7c7d28ff1badf1429e2fdb05b5439145e91944cf"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/work/mkg_y_mhyper_adamf/per_center_x4.csv.gz",
+      "sha256": "5c535565bd2c06ce03e9d29626a03bde6d129e05999cfd653f908e3915b01e70"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/work/mkg_y_mhyper_adamf/systematic_manifest.json",
+      "sha256": "480da2552f8dc223797dce0968a2fc4fb4e1b12fb8e5f01513af07cb4bd03ba4"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/work/mkg_y_mhyper_native/bootstrap_ci.csv",
+      "sha256": "9b61fe316632947c8d685fde615cf8d293057420546901564d549d0a4fa10c5c"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/work/mkg_y_mhyper_native/distance_purity_bins.csv",
+      "sha256": "e8240cf0b31bb32173e978d78628965da5c87763c9fdafc607c2ece5245a9459"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/work/mkg_y_mhyper_native/pair_k_summary.csv",
+      "sha256": "86a34aa04698fd9360490a0ba525b18560d910b5c0664383bd9bf5c926c2103e"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/work/mkg_y_mhyper_native/per_center_x4.csv.gz",
+      "sha256": "98ffbca04b301f616dea769619b5abe82dab739acf3bde5c12e65c0e16c44bea"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/work/mkg_y_mhyper_native/systematic_manifest.json",
+      "sha256": "20c54d22bba889f4cb295b22be57175d6af08c7f12b234afcec784ef6aff92c0"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/work/mkg_y_native_adamf/bootstrap_ci.csv",
+      "sha256": "dbee7bf8d68923c3f8a3e05418f8eca656274a6e70ba711151e19abede78c644"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/work/mkg_y_native_adamf/distance_purity_bins.csv",
+      "sha256": "7c448ac1c4c27e7ad0b138957812da07766e92596ab00236a73b1e3b585da64b"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/work/mkg_y_native_adamf/pair_k_summary.csv",
+      "sha256": "826bb4934507c945ac0d122dcb198366af994bf992aa3bdeba3cfacbeb2510ef"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/work/mkg_y_native_adamf/per_center_x4.csv.gz",
+      "sha256": "5b073d7866a01ddb9767a1ac343f7a1cbd5ec5faddbdf7e31d86aa8c4abf2eeb"
+    },
+    {
+      "role": "output",
+      "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/work/mkg_y_native_adamf/systematic_manifest.json",
+      "sha256": "5e13354f415fbdb6e031a3ce20a45132d41f5463d7233142614dca7303f1221e"
+    }
+  ],
+  "hash_inventory_note": "audit_manifest.json self-hash excluded to avoid recursive content",
+  "operational_audit": {
+    "test_access": 0,
+    "checkpoint_execution": 0,
+    "outer_triple_leakage": 0,
+    "new_representation": 0,
+    "supervised_metric_learning": 0,
+    "new_pca": 0,
+    "new_embedding": 0,
+    "new_selector": 0,
+    "neighbor_policy_development": 0,
+    "k_tuning": 0,
+    "post_result_distance_selection": 0
+  },
+  "next_experiment_started": 0
+}
