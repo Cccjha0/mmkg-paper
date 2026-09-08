@@ -9,7 +9,9 @@ import time
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
+from types import SimpleNamespace
 
+import numpy as np
 import torch
 
 if __package__ in (None, ""):
@@ -24,6 +26,10 @@ from ml.training.src.eval.filtered_ranking import (
 from ml.training.src.models.build_model import build_model
 from ml.training.src.utils.seed import set_seed
 from router.query_geometry import QUERY_GEOMETRY_FIELDS, query_geometry_rows
+from router.score_combination import normalize_candidate_scores
+from scripts.aacpi_phase3a_common import R1_ADDITIONS, R3_ADDITIONS, cross_expert_features
+from scripts.aacpi_phase4a_common import C1_ADDITIONS, C2_ADDITIONS
+from scripts.build_aacpi_phase4a_context_features import context_row, train_statistics
 from scripts.dev_only_dataset_loader import load_dev_only_dataset_bundle
 
 
@@ -122,7 +128,78 @@ def parse_args() -> argparse.Namespace:
             "Required when a DEV-locked per-query policy will be applied afterwards."
         ),
     )
+    parser.add_argument(
+        "--export-x4-features",
+        action="store_true",
+        help=(
+            "Export the already-frozen answer-agnostic X4 query features alongside "
+            "the TEST alpha grid. This is reserved for the memo-locked closure run."
+        ),
+    )
     return parser.parse_args()
+
+
+def x4_train_context(bundle) -> dict:
+    relation_frequency = defaultdict(int)
+    entity_frequency = defaultdict(int)
+    entity_head_frequency = defaultdict(int)
+    entity_tail_frequency = defaultdict(int)
+    entity_relations: dict[int, set[int]] = defaultdict(set)
+    target_text: dict[tuple[int, str], list[float]] = defaultdict(list)
+    target_image: dict[tuple[int, str], list[float]] = defaultdict(list)
+    has_text, has_image = bundle.features.has_text, bundle.features.has_img
+    for head, relation, tail in bundle.train_triples:
+        relation_frequency[relation] += 1
+        entity_frequency[head] += 1
+        entity_frequency[tail] += 1
+        entity_head_frequency[head] += 1
+        entity_tail_frequency[tail] += 1
+        entity_relations[head].add(relation)
+        entity_relations[tail].add(relation)
+        target_text[(relation, "tail")].append(float(has_text[tail]))
+        target_image[(relation, "tail")].append(float(has_image[tail]))
+        target_text[(relation, "head")].append(float(has_text[head]))
+        target_image[(relation, "head")].append(float(has_image[head]))
+    return {
+        "relation_frequency": relation_frequency,
+        "entity_frequency": entity_frequency,
+        "entity_head_frequency": entity_head_frequency,
+        "entity_tail_frequency": entity_tail_frequency,
+        "entity_relations": entity_relations,
+        "target_text": {key: float(np.mean(value)) for key, value in target_text.items()},
+        "target_image": {key: float(np.mean(value)) for key, value in target_image.items()},
+    }
+
+
+def x4_query_context(
+    *, direction: str, head: int, relation: int, tail: int, bundle, phase3: dict, phase4: dict
+) -> dict[str, float]:
+    observed = tail if direction == "head" else head
+    directional = (
+        phase3["entity_tail_frequency"][observed]
+        if direction == "head"
+        else phase3["entity_head_frequency"][observed]
+    )
+    r3 = {
+        "r3_train_relation_frequency_log1p": float(np.log1p(phase3["relation_frequency"][relation])),
+        "r3_train_observed_entity_frequency_log1p": float(np.log1p(phase3["entity_frequency"][observed])),
+        "r3_train_observed_entity_direction_frequency_log1p": float(np.log1p(directional)),
+        "r3_train_observed_entity_unique_relation_count_log1p": float(
+            np.log1p(len(phase3["entity_relations"].get(observed, set())))
+        ),
+        "r3_observed_entity_has_text": float(bundle.features.has_text[observed]),
+        "r3_observed_entity_has_image": float(bundle.features.has_img[observed]),
+        "r3_train_relation_target_text_support": phase3["target_text"].get((relation, direction), 0.0),
+        "r3_train_relation_target_image_support": phase3["target_image"].get((relation, direction), 0.0),
+    }
+    c12 = context_row(
+        SimpleNamespace(direction=direction, head=head, relation=relation, tail=tail), phase4
+    )
+    result = {**r3, **c12}
+    expected = [*R3_ADDITIONS, *C1_ADDITIONS, *C2_ADDITIONS]
+    if list(result) != expected or not np.isfinite(np.asarray(list(result.values()), dtype=np.float64)).all():
+        raise RuntimeError("Frozen X4 TRAIN-only context contract mismatch")
+    return result
 
 
 def parse_alphas(raw: str) -> tuple[float, ...]:
@@ -277,10 +354,13 @@ def score_expert_block(
     direction: str,
     true_index: dict,
     device: str,
-) -> tuple[torch.Tensor, torch.Tensor]:
+    *,
+    retain_unfiltered: bool = False,
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor | None]:
     """Score one outer query block using the expert's original eval batch shapes."""
     scorer = direction_scorer(expert.model, direction)
     matrices = []
+    unfiltered_matrices = []
     references = []
     all_entities = torch.arange(expert.num_entities, dtype=torch.long, device=device)
     for q_start in range(0, q_cpu.size(0), expert.query_batch_size):
@@ -289,6 +369,7 @@ def score_expert_block(
         references.append(scorer(q_sub).detach().cpu())
         h, r, t = q_sub.unbind(dim=1)
         parts = []
+        unfiltered_parts = []
         for start in range(0, expert.num_entities, expert.chunk_size):
             end = min(expert.num_entities, start + expert.chunk_size)
             candidates = all_entities[start:end]
@@ -312,10 +393,15 @@ def score_expert_block(
                     dim=1,
                 )
             scores = scorer(batch).view(q_sub.size(0), width)
+            if retain_unfiltered:
+                unfiltered_parts.append(scores.detach().cpu().clone())
             filter_scores_(scores, q_sub_cpu, start, direction, true_index)
             parts.append(scores.detach().cpu())
         matrices.append(torch.cat(parts, dim=1))
-    return torch.cat(matrices, dim=0), torch.cat(references, dim=0)
+        if retain_unfiltered:
+            unfiltered_matrices.append(torch.cat(unfiltered_parts, dim=1))
+    unfiltered = torch.cat(unfiltered_matrices, dim=0) if retain_unfiltered else None
+    return torch.cat(matrices, dim=0), torch.cat(references, dim=0), unfiltered
 
 
 def ranks_against_reference(scores: torch.Tensor, reference: torch.Tensor) -> torch.LongTensor:
@@ -451,6 +537,7 @@ def checkpoint_is_valid(
     expected_count: int,
     dev: bool,
     export_alpha_grid: bool,
+    export_x4_features: bool,
     alphas: tuple[float, ...],
     rrf_k: float,
     selection: dict | None,
@@ -465,6 +552,8 @@ def checkpoint_is_valid(
         return False
     required = set(BASE_FIELDS)
     required.update(alpha_column(alpha) for alpha in alphas if dev or export_alpha_grid)
+    if export_x4_features:
+        required.update([*R1_ADDITIONS, *R3_ADDITIONS, *C1_ADDITIONS, *C2_ADDITIONS])
     if not required.issubset(rows[0]):
         return False
     if not all(
@@ -522,6 +611,8 @@ def evaluate_unit(
     rrf_k: float,
     selection: dict | None,
     export_alpha_grid: bool,
+    export_x4_features: bool,
+    x4_context: dict | None,
     device: str,
     progress_every: int,
     pair_name: str,
@@ -535,8 +626,12 @@ def evaluate_unit(
     for batch_index, start in enumerate(range(0, len(triples), outer_batch), start=1):
         end = min(len(triples), start + outer_batch)
         q_cpu = triples_t[start:end]
-        raw_a, target_a = score_expert_block(expert_a, q_cpu, direction, true_index, device)
-        raw_b, target_b = score_expert_block(expert_b, q_cpu, direction, true_index, device)
+        raw_a, target_a, unfiltered_a = score_expert_block(
+            expert_a, q_cpu, direction, true_index, device, retain_unfiltered=export_x4_features
+        )
+        raw_b, target_b, unfiltered_b = score_expert_block(
+            expert_b, q_cpu, direction, true_index, device, retain_unfiltered=export_x4_features
+        )
         rank_a = ranks_against_reference(raw_a, target_a)
         rank_b = ranks_against_reference(raw_b, target_b)
         rr_a = reciprocal(rank_a)
@@ -548,6 +643,27 @@ def evaluate_unit(
         rank_equal = mixed_ranks(z_a, z_b, z_target_a, z_target_b, 0.5)
         rr_equal = reciprocal(rank_equal)
         geometry_rows = query_geometry_rows(raw_a, raw_b, direction)
+        x4_rows = None
+        if export_x4_features:
+            if x4_context is None or unfiltered_a is None or unfiltered_b is None:
+                raise RuntimeError("Frozen X4 export context is unavailable")
+            unfiltered_z_a = normalize_candidate_scores(unfiltered_a, "query_zscore").numpy()
+            unfiltered_z_b = normalize_candidate_scores(unfiltered_b, "query_zscore").numpy()
+            x4_rows = []
+            for index, (head, relation, tail) in enumerate(q_cpu.tolist()):
+                disagreement = cross_expert_features(unfiltered_z_a[index], unfiltered_z_b[index])
+                context = x4_query_context(
+                    direction=direction,
+                    head=int(head),
+                    relation=int(relation),
+                    tail=int(tail),
+                    bundle=expert_a.bundle,
+                    phase3=x4_context["phase3"],
+                    phase4=x4_context["phase4"],
+                )
+                if list(disagreement) != R1_ADDITIONS:
+                    raise RuntimeError("Frozen X4 disagreement contract mismatch")
+                x4_rows.append({**disagreement, **context})
 
         alpha_rr: dict[float, torch.Tensor] = {}
         if split == "dev" or export_alpha_grid:
@@ -622,6 +738,8 @@ def evaluate_unit(
                 "filter_fact_scope": filter_fact_scope,
             }
             row.update(geometry_rows[index])
+            if x4_rows is not None:
+                row.update(x4_rows[index])
             if split == "dev" or export_alpha_grid:
                 for alpha in alphas:
                     row[alpha_column(alpha)] = float(alpha_rr[alpha][index])
@@ -862,6 +980,8 @@ def main() -> None:
     args = parse_args()
     if args.dev_only_no_test_access and args.split != "dev":
         raise ValueError("--dev-only-no-test-access is valid only with --split dev")
+    if args.export_x4_features and (args.split != "test" or not args.export_alpha_grid):
+        raise ValueError("--export-x4-features requires TEST with --export-alpha-grid")
     if args.rrf_k <= 0 or args.relation_min_support < 1:
         raise ValueError("rrf-k and relation-min-support must be positive")
     device = resolve_device(args.device)
@@ -902,6 +1022,19 @@ def main() -> None:
             dev_only_no_test_access=args.dev_only_no_test_access,
         )
         validate_pair(expert_a, expert_b)
+        x4_context = None
+        if args.export_x4_features:
+            has_img = expert_a.bundle.features.has_img.detach().cpu().bool().numpy()
+            has_text = expert_a.bundle.features.has_text.detach().cpu().bool().numpy()
+            x4_context = {
+                "phase3": x4_train_context(expert_a.bundle),
+                "phase4": train_statistics(
+                    expert_a.bundle.train_triples,
+                    expert_a.num_entities,
+                    has_img,
+                    has_text,
+                ),
+            }
         if expert_a.seed in seen_seeds:
             raise RuntimeError(f"Duplicate seed in run pairs: {expert_a.seed}")
         seen_seeds.add(expert_a.seed)
@@ -945,6 +1078,7 @@ def main() -> None:
                 expected_count=len(triples),
                 dev=args.split == "dev",
                 export_alpha_grid=args.export_alpha_grid,
+                export_x4_features=args.export_x4_features,
                 alphas=alphas,
                 rrf_k=args.rrf_k,
                 selection=selection,
@@ -975,6 +1109,8 @@ def main() -> None:
                     rrf_k=args.rrf_k,
                     selection=selection,
                     export_alpha_grid=args.export_alpha_grid,
+                    export_x4_features=args.export_x4_features,
+                    x4_context=x4_context,
                     device=device,
                     progress_every=args.progress_every,
                     pair_name=args.pair_name,
@@ -1054,6 +1190,7 @@ def main() -> None:
         "rrf_k": args.rrf_k,
         "score_normalization": "query_zscore",
         "export_alpha_grid": bool(args.split == "dev" or args.export_alpha_grid),
+        "export_x4_features": bool(args.export_x4_features),
         "dev_only_no_test_access": bool(args.dev_only_no_test_access),
         "test_rows_opened": 0 if args.dev_only_no_test_access else None,
         "filter_fact_scope": (

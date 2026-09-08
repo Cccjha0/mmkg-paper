@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "experiment": "Three-Dataset Complementarity Closure — One-Time Confirmatory TEST",
+  "effective_date": "2026-09-08",
+  "status": "frozen_before_one_time_test",
+  "datasets": ["mkg_w", "db15k", "mkg_y"],
+  "split": "test",
+  "pair_count": 9,
+  "seeds": [1, 2, 3],
+  "directions": ["head", "tail"],
+  "alpha_grid": [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0],
+  "score_normalization": "query_zscore",
+  "representation": "X4",
+  "learner_order": ["linear_huber", "hist_gbdt", "mlp_low", "mlp_high"],
+  "x4_feature_fields": [
+    "geometry_direction_tail", "geometry_a_top1", "geometry_a_top5_mean", "geometry_a_top1_top2_margin", "geometry_a_score_std",
+    "geometry_b_top1", "geometry_b_top5_mean", "geometry_b_top1_top2_margin", "geometry_b_score_std",
+    "geometry_top1_delta_a_minus_b", "geometry_top5_delta_a_minus_b", "geometry_margin_delta_a_minus_b", "geometry_std_delta_a_minus_b",
+    "r1_expert_top5_jaccard", "r1_expert_top10_jaccard", "r1_expert_top20_jaccard", "r1_union20_rank_spearman",
+    "r1_union20_rank_displacement_mean", "r1_union20_rank_displacement_median", "r1_union20_rank_displacement_max",
+    "r1_expert_top1_same", "r1_a_top1_rank_under_b", "r1_b_top1_rank_under_a",
+    "r3_train_relation_frequency_log1p", "r3_train_observed_entity_frequency_log1p", "r3_train_observed_entity_direction_frequency_log1p", "r3_train_observed_entity_unique_relation_count_log1p",
+    "c1_known_entity_neighborhood_fraction", "c1_relation_unique_heads_log1p", "c1_relation_unique_tails_log1p", "c1_relation_tails_per_head_log1p", "c1_relation_heads_per_tail_log1p", "c1_relation_head_tail_log_ratio", "c1_relation_known_role_diversity_log1p",
+    "r3_observed_entity_has_text", "r3_observed_entity_has_image", "r3_train_relation_target_text_support", "r3_train_relation_target_image_support",
+    "c2_relation_known_image_support", "c2_relation_known_text_support"
+  ],
+  "action_descriptors": ["alpha", "delta_alpha", "abs_delta_alpha"],
+  "test_baseline": "one full-DEV-selected alpha0 per dataset/pair",
+  "dev_oof_baseline_note": "Experiment 2 DEV OOF gains use fold-specific outer-train alpha0; TEST uses the single full-DEV alpha0 and is not numerically the same baseline estimand.",
+  "final_x4_configuration_rule": "Use the modal (learner, hyperparameter configuration) pair among the five already-frozen nested-OOF outer-fold selections. Break a vote tie by higher mean inner probe delta MRR among voting folds, then frozen learner order, then frozen hyperparameter order. Refit that configuration once on all DEV action rows using utility relative to the full-DEV alpha0; TEST labels are never used for fitting or action selection.",
+  "training": {
+    "loss": "as_frozen_by_selected_learner",
+    "batch_size": 4096,
+    "weight_decay": 0.0,
+    "max_gradient_norm": 5.0,
+    "model_seed": 20260905,
+    "early_stopping": false
+  },
+  "bootstrap": {"samples": 10000, "seed": 20260907, "unit": "original_triple_id", "cluster_contents": "both directions, all three seeds, all alpha actions"},
+  "diagnostics": {
+    "raw_oracle": "per-seed answer-aware upper diagnostic",
+    "consensus_and_stable_2_3": "all-seed ex-post upper diagnostics",
+    "direct_transfer_and_loso": "held-out-seed stability diagnostics",
+    "x4": "DEV-fitted inference-time observable probe",
+    "concentration": "descriptive original-triple Oracle-gain concentration"
+  },
+  "global_dev_sources": [
+    {"path": "docs/protocols/CROSS_DATASET_COMPLEMENTARITY_CLOSURE_SYNTHESIS_CONTRACT.json", "sha256_lf": "030e389d1715f6eaecfa3d9913b95a86f242d7c3c3539da2decb35b3f8a9d13a"},
+    {"path": "outputs/complementarity_identifiability/cross_dataset_closure_synthesis/synthesis_assessment.json", "sha256_lf": "deca784e66ffc311f6eca5be4a1e903a6028bb1332a9f10c3b62f7ba64da48c4"},
+    {"path": "outputs/complementarity_identifiability/cross_dataset_closure_synthesis/audit_manifest.json", "sha256_lf": "580385bbefaf909817d3ac42f3fc63711631747b992eb23247554bc7569879a8"},
+    {"path": "docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json", "sha256_lf": "93083b07ca6f699dc1418aa988a436e1906d28235968a77cf8eadd476641c70e"},
+    {"path": "docs/protocols/MKG_Y_Y_E2_X4_OOF_CONTRACT.json", "sha256_lf": "784617d7bc274b6f8f9efa2805f40071edc06f61f68ba24fd9b44ae3ae5a3045"}
+  ],
+  "experts": {
+    "mkg_w_mhyper": [
+      {"seed": 1, "run_dir": "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1", "checkpoint_sha256": "4a5cb66cf61d4cf4d68dfabf7c0560333563e7497b79b36872665b42396bbfed"},
+      {"seed": 2, "run_dir": "ml/artifacts/outputs/mkg_w_mhyper/20260902_015400_seed2", "checkpoint_sha256": "7d51cbc3ae0fa8ae7d16bb318c5d76affe27caefbcd94f7015c938e58c739337"},
+      {"seed": 3, "run_dir": "ml/artifacts/outputs/mkg_w_mhyper/20260902_020435_seed3", "checkpoint_sha256": "42f6d06ba2ec51106a1cf04cf09fb49aab439666fdfd293e1818cf19087ac30f"}
+    ],
+    "mkg_w_native": [
+      {"seed": 1, "run_dir": "ml/artifacts/outputs/mkg_w_native/20260902_021506_seed1", "checkpoint_sha256": "f44cba3fdd34b3aa06531b41d6ffd5bb2c1ed236e27f37c6109c683e353b3d6c"},
+      {"seed": 2, "run_dir": "ml/artifacts/outputs/mkg_w_native/20260902_033610_seed2", "checkpoint_sha256": "b218609bbcfc8b94d56f42c4f3f5493079810d6739e47bc4ad477d6f6bc853fc"},
+      {"seed": 3, "run_dir": "ml/artifacts/outputs/mkg_w_native/20260902_044121_seed3", "checkpoint_sha256": "e7dc11ecf6e5bfceae94116c58cb0ff988f87985bfeb8c8156969ec2b30b512f"}
+    ],
+    "mkg_w_adamf": [
+      {"seed": 1, "run_dir": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_060855_seed1", "checkpoint_sha256": "28781f99687850e5f7ca595bc8a80e320b7231c5fbae58992af6857e9d776828"},
+      {"seed": 2, "run_dir": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_083530_seed2", "checkpoint_sha256": "267ea0cddb9eb6dc94e853b65e1f50d276f0800d2aa83a9f6bf2b975b8f93f23"},
+      {"seed": 3, "run_dir": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_142555_seed3", "checkpoint_sha256": "9027b50fe93c066bec46a3c2a7ffb79f406045014c38338103514ba6731b1a18"}
+    ],
+    "db15k_mhyper": [
+      {"seed": 1, "run_dir": "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1", "checkpoint_sha256": "059b45d53023bf8122ef3b07a4dc4c10660841666afa78823f863105c0d34a27"},
+      {"seed": 2, "run_dir": "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2", "checkpoint_sha256": "bea2dc185952ccdd54091267809ea39d971cd027f596c2f77c89f8d4df6500c9"},
+      {"seed": 3, "run_dir": "ml/artifacts/outputs/db15k_mhyper/20260902_180912_seed3", "checkpoint_sha256": "5f128cbd54cb7d97122c686017aa517c7439cca4dfe0b5379092707ee7a29844"}
+    ],
+    "db15k_native": [
+      {"seed": 1, "run_dir": "ml/artifacts/outputs/db15k_native/20260831_223530_seed1", "checkpoint_sha256": "2bd4ff09976173f06a07bfac1260d7b9fb8b3b9a72ebcc56d8805688a13e6c79"},
+      {"seed": 2, "run_dir": "ml/artifacts/outputs/db15k_native/20260902_182809_seed2", "checkpoint_sha256": "de24c0ad1a9127d6ef951e16b67f396e16b6d02515acf03ceaa8f6666d39b6a6"},
+      {"seed": 3, "run_dir": "ml/artifacts/outputs/db15k_native/20260903_012002_seed3", "checkpoint_sha256": "5ad6151d9acae60c3c3b1562aa9092d54b10ecaaa88f3ea07468493e1d272355"}
+    ],
+    "db15k_adamf": [
+      {"seed": 1, "run_dir": "ml/artifacts/outputs/db15k_adamf_mat/20260901_030904_seed1", "checkpoint_sha256": "0e306e56c556ef776678850c3ca7258b9e5b90eefb14245a7b3902ad71da1861"},
+      {"seed": 2, "run_dir": "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2", "checkpoint_sha256": "bcefd66bbbecfb60fb2a29ed8166b7e7f8d337494b539f81fbbd66d262b7ff00"},
+      {"seed": 3, "run_dir": "ml/artifacts/outputs/db15k_adamf_mat/20260903_090422_seed3", "checkpoint_sha256": "391f06d80621a274b02aeea42b744cddc84964427321c8533d2706e1588fd9ad"}
+    ],
+    "mkg_y_mhyper": [
+      {"seed": 1, "run_dir": "ml/artifacts/outputs/mkg_y_mhyper/20260903_215952_seed1", "checkpoint_sha256": "5f6f9605eeef187e10489fbd177b9b7c242c20b4b0298500e6634ac379edf97e"},
+      {"seed": 2, "run_dir": "ml/artifacts/outputs/mkg_y_mhyper/20260903_220630_seed2", "checkpoint_sha256": "992f136403a05e737bbecff54747e369f259348a8b498ec53554fc17ae5d9457"},
+      {"seed": 3, "run_dir": "ml/artifacts/outputs/mkg_y_mhyper/20260903_221310_seed3", "checkpoint_sha256": "9fc18389c40c1a3612f95e7e83bd7b49e49b2f2536ed0a40e19d151769822e80"}
+    ],
+    "mkg_y_native": [
+      {"seed": 1, "run_dir": "ml/artifacts/outputs/mkg_y_native/20260903_221947_seed1", "checkpoint_sha256": "ed63585a759e4abb9a5270134f13031513f9f80106034c48fba920299dca41cf"},
+      {"seed": 2, "run_dir": "ml/artifacts/outputs/mkg_y_native/20260903_230141_seed2", "checkpoint_sha256": "f04267f53c5136af8b85ed5aa94c458a51bd551828d8c18fa30f5f040b67a9e5"},
+      {"seed": 3, "run_dir": "ml/artifacts/outputs/mkg_y_native/20260903_234233_seed3", "checkpoint_sha256": "9da57cd7e645436aaa8bea8a490856512bd0bd1002f650db618104e4429a8708"}
+    ],
+    "mkg_y_adamf": [
+      {"seed": 1, "run_dir": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_002716_seed1", "checkpoint_sha256": "b1a7e6ffd054b784851c61f02c0d3d93b9ca5db28d863460b9fc9dc69afa59da"},
+      {"seed": 2, "run_dir": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_020546_seed2", "checkpoint_sha256": "d37aa89374f814bc843dcbbedb0d54d0fcd0522fd5c5105058dfb59f191b1262"},
+      {"seed": 3, "run_dir": "ml/artifacts/outputs/mkg_y_adamf_mat/20260904_035250_seed3", "checkpoint_sha256": "e8eb1e9d451d567b73956a71a86e9da620711291fe3b267da3815ae8097035d3"}
+    ]
+  },
+  "pairs": [
+    {
+      "pair_id": "mkgw_mhyper_native", "dataset": "mkg_w", "alpha0": 0.6, "expert_a_name": "M-Hyper", "expert_b_name": "NativE", "expert_a_key": "mkg_w_mhyper", "expert_b_key": "mkg_w_native",
+      "dev_utility_manifest": {"path": "outputs/aacpi/utility_tables/mkgw_mhyper_native_dev_source_manifest.json", "sha256_lf": "384b36fae546421d56deb272dcb59b40cd395f9a2513625695adc62ab02b642f"},
+      "dev_selection": {"path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/full_ranking/selection.json", "sha256_lf": "e8c7f9b11473d8bef756ea61837a312c0738ebe0eafbc5a9ac6c5c4a165ef510"},
+      "dev_x4_asset_manifest": {"path": "outputs/complementarity_identifiability/exp2_information/assets/mkgw_mhyper_native_query_information_manifest.json", "sha256_lf": "25ef12453a3cd59ed80187334183fe14669ad8f19cd9b3841c803ba890a82914"},
+      "dev_nested_selection": {"path": "outputs/complementarity_identifiability/exp2_information/runs/mkgw_mhyper_native/X4/nested_selected/outer_fold_learner_selections.csv", "sha256_lf": "593436377dd3a58a4e72b3f0d380a474bf93a3257d37faf7cc87cff838e2113c"},
+      "run_manifest": {"path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_summary.json", "sha256_lf": "a5b741adac1caf0c6908dbc2b7c4ce11445a7171e6321cfa963733290aa783ac"},
+      "final_x4": {"learner": "hist_gbdt", "config": {"l2_regularization": 0.0001, "learning_rate": 0.1, "max_iter": 150, "max_leaf_nodes": 31}, "outer_fold_votes": 4}
+    },
+    {
+      "pair_id": "mkgw_mhyper_adamf", "dataset": "mkg_w", "alpha0": 1.0, "expert_a_name": "M-Hyper", "expert_b_name": "AdaMF-MAT", "expert_a_key": "mkg_w_mhyper", "expert_b_key": "mkg_w_adamf",
+      "dev_utility_manifest": {"path": "outputs/aacpi/utility_tables/mkgw_mhyper_adamf_dev_source_manifest.json", "sha256_lf": "9d97a71ede4d39f9b0ab6a810202c59f0a7a8cc0f10a3d3bebd3460fe9a5dddc"},
+      "dev_selection": {"path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/selection.json", "sha256_lf": "1ab6a977faa31863eb93c743bc6e6c3e6657db070c77a4cd457fd8f9ad3073a7"},
+      "dev_x4_asset_manifest": {"path": "outputs/complementarity_identifiability/exp2_information/assets/mkgw_mhyper_adamf_query_information_manifest.json", "sha256_lf": "c8034d9024086a37c3db338a8594b740699f68ff8bdf1c2c403020c6cb01370a"},
+      "dev_nested_selection": {"path": "outputs/complementarity_identifiability/exp2_information/runs/mkgw_mhyper_adamf/X4/nested_selected/outer_fold_learner_selections.csv", "sha256_lf": "b177d65385d81d3162fd7b0f8f06df7cbe1ddefd2f0a247df4ab7b01fac7bd85"},
+      "run_manifest": {"path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_summary.json", "sha256_lf": "db349d552f6cd6d5dc5685f3fb24a9f90547791ffff7f697619dc340e6df66b1"},
+      "final_x4": {"learner": "hist_gbdt", "config": {"l2_regularization": 0.0, "learning_rate": 0.05, "max_iter": 150, "max_leaf_nodes": 31}, "outer_fold_votes": 5}
+    },
+    {
+      "pair_id": "mkgw_native_adamf", "dataset": "mkg_w", "alpha0": 0.95, "expert_a_name": "NativE", "expert_b_name": "AdaMF-MAT", "expert_a_key": "mkg_w_native", "expert_b_key": "mkg_w_adamf",
+      "dev_utility_manifest": {"path": "outputs/aacpi/utility_tables/mkgw_native_adamf_dev_source_manifest.json", "sha256_lf": "d896598f776704c67d83176da383afc9a13564bdf598f97f658a475aaa6dca62"},
+      "dev_selection": {"path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/selection.json", "sha256_lf": "27f8b667cd01b501fbae57de20371edb6ff4e74d51d6cc532f3e1a130a18940c"},
+      "dev_x4_asset_manifest": {"path": "outputs/complementarity_identifiability/exp2_information/assets/mkgw_native_adamf_query_information_manifest.json", "sha256_lf": "aa881d9c8da0b525b813647340536be23119be0b0a67d90e60b79b28b33c18d3"},
+      "dev_nested_selection": {"path": "outputs/complementarity_identifiability/exp2_information/runs/mkgw_native_adamf/X4/nested_selected/outer_fold_learner_selections.csv", "sha256_lf": "3bed78499f6d5e2606e1f975c10d47d941015c59ae26e96b3385c20d10964495"},
+      "run_manifest": {"path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/dev_summary.json", "sha256_lf": "966e336ff6423dea1a32c82cc6fd56bbba8b96b7a223325f7ef1554940c6b579"},
+      "final_x4": {"learner": "hist_gbdt", "config": {"l2_regularization": 0.0, "learning_rate": 0.05, "max_iter": 150, "max_leaf_nodes": 15}, "outer_fold_votes": 2}
+    },
+    {
+      "pair_id": "db15k_mhyper_native", "dataset": "db15k", "alpha0": 1.0, "expert_a_name": "M-Hyper", "expert_b_name": "NativE", "expert_a_key": "db15k_mhyper", "expert_b_key": "db15k_native",
+      "dev_utility_manifest": {"path": "outputs/aacpi/utility_tables/db15k_mhyper_native_dev_source_manifest.json", "sha256_lf": "a536f53b72c5cb1d85874b9489e7bbdbbcbe06afe4cdd74b287991b3b7d9ad2c"},
+      "dev_selection": {"path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/full_ranking/selection.json", "sha256_lf": "cf0ceb5a75c221fa400daeac2bb9ff6a52feac74c5e8dc84f0e61bf4ed02e361"},
+      "dev_x4_asset_manifest": {"path": "outputs/complementarity_identifiability/exp2_information/assets/db15k_mhyper_native_query_information_manifest.json", "sha256_lf": "dc4bf057bf6b9ec83711cb7873399384055cf3c1d15735626b2745c72adb7841"},
+      "dev_nested_selection": {"path": "outputs/complementarity_identifiability/exp2_information/runs/db15k_mhyper_native/X4/nested_selected/outer_fold_learner_selections.csv", "sha256_lf": "75153b82ba28a797eff07f13c06090e7a3e470587733a207b69da16b43216c71"},
+      "run_manifest": {"path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_summary.json", "sha256_lf": "c68213181c057b03f95a4e9c1bf3f517ed22dabe7a11f2107daebbf80db96658"},
+      "final_x4": {"learner": "hist_gbdt", "config": {"l2_regularization": 0.0, "learning_rate": 0.05, "max_iter": 150, "max_leaf_nodes": 31}, "outer_fold_votes": 3}
+    },
+    {
+      "pair_id": "db15k_mhyper_adamf", "dataset": "db15k", "alpha0": 1.0, "expert_a_name": "M-Hyper", "expert_b_name": "AdaMF-MAT", "expert_a_key": "db15k_mhyper", "expert_b_key": "db15k_adamf",
+      "dev_utility_manifest": {"path": "outputs/aacpi/utility_tables/db15k_mhyper_adamf_dev_source_manifest.json", "sha256_lf": "e6c9c8dd6cacceb6928d681e690d271e6366e6803c4f7691f655c7735ccaffa8"},
+      "dev_selection": {"path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/full_ranking/selection.json", "sha256_lf": "b08fea5f4d79f40fe3ce6b4737b4026e5becc154985b9539e1dd07326ae9eace"},
+      "dev_x4_asset_manifest": {"path": "outputs/complementarity_identifiability/exp2_information/assets/db15k_mhyper_adamf_query_information_manifest.json", "sha256_lf": "f4d90a690873ae080873083a11c09d69bc7ad8bf03833f61de51baeb7dcb6f5b"},
+      "dev_nested_selection": {"path": "outputs/complementarity_identifiability/exp2_information/runs/db15k_mhyper_adamf/X4/nested_selected/outer_fold_learner_selections.csv", "sha256_lf": "576431a571dd4122a63f5066cc75f5430f1e249c5ced13939418d3bbd11b6272"},
+      "run_manifest": {"path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_summary.json", "sha256_lf": "5e7968018db54991a564a91d64b9364cc3b68ebe6bde6262c22bc897070f54c1"},
+      "final_x4": {"learner": "hist_gbdt", "config": {"l2_regularization": 0.0, "learning_rate": 0.05, "max_iter": 150, "max_leaf_nodes": 31}, "outer_fold_votes": 4}
+    },
+    {
+      "pair_id": "db15k_native_adamf", "dataset": "db15k", "alpha0": 1.0, "expert_a_name": "NativE", "expert_b_name": "AdaMF-MAT", "expert_a_key": "db15k_native", "expert_b_key": "db15k_adamf",
+      "dev_utility_manifest": {"path": "outputs/aacpi/utility_tables/db15k_native_adamf_dev_source_manifest.json", "sha256_lf": "f5085502538cbab9bbc8e57106bf170be08622e18318797e7a01cc3e7667072a"},
+      "dev_selection": {"path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/selection.json", "sha256_lf": "be2d2d45ad01898af94d7604313ad3df2adf618f9af6a4d057e0f065811bab1a"},
+      "dev_x4_asset_manifest": {"path": "outputs/complementarity_identifiability/exp2_information/assets/db15k_native_adamf_query_information_manifest.json", "sha256_lf": "caaeeb9973380f52fd69569c5bda9277280eb4d82404e27468589f6f70edd576"},
+      "dev_nested_selection": {"path": "outputs/complementarity_identifiability/exp2_information/runs/db15k_native_adamf/X4/nested_selected/outer_fold_learner_selections.csv", "sha256_lf": "e225d8db33ed430da958f7473a5dc8941b902fc1c0c0466f1f87fdfcc69f4d23"},
+      "run_manifest": {"path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/dev_summary.json", "sha256_lf": "5848c6f54f10814e7fd015bfbf701fe4ee248744bac22681852a06e8bce74496"},
+      "final_x4": {"learner": "hist_gbdt", "config": {"l2_regularization": 0.0, "learning_rate": 0.05, "max_iter": 150, "max_leaf_nodes": 15}, "outer_fold_votes": 3}
+    },
+    {
+      "pair_id": "mkg_y_mhyper_native", "dataset": "mkg_y", "alpha0": 0.35, "expert_a_name": "M-Hyper", "expert_b_name": "NativE", "expert_a_key": "mkg_y_mhyper", "expert_b_key": "mkg_y_native",
+      "dev_utility_manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_native_dev_source_manifest.json", "sha256_lf": "bbb6021a5e24677b4e2804d8d371ab9a959068cbece7f2862e3eba4bfbfe51e4"},
+      "dev_selection": {"path": "outputs/mkg_y/anchored_dynamic/mhyper_native_seed123/full_ranking/selection.json", "sha256_lf": "cd1a69bf487b06f3f00ae9e78ab0be4cf1e68d7f1b8c274a0f9c164c7c539870"},
+      "dev_x4_asset_manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_mhyper_native_query_information_manifest.json", "sha256_lf": "83bcc0aedb16e4d9fa7c7ffc481194c409925245d43b9e57080a9c292a15aa69"},
+      "dev_nested_selection": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/runs/mkg_y_mhyper_native/X4/nested_selected/outer_fold_learner_selections.csv", "sha256_lf": "c991296b10cf5c669e2c631f0f96e1f28b0a6b42c914f98abaaf55a6eaf22f05"},
+      "run_manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/mkg_y_mhyper_native_dev_source_manifest.json", "sha256_lf": "1c6b4d7d36421755e9269836ee7b43c627d20adbfa65df30414c36b304c8ddcd"},
+      "final_x4": {"learner": "hist_gbdt", "config": {"l2_regularization": 0.0, "learning_rate": 0.05, "max_iter": 150, "max_leaf_nodes": 31}, "outer_fold_votes": 3}
+    },
+    {
+      "pair_id": "mkg_y_mhyper_adamf", "dataset": "mkg_y", "alpha0": 0.35, "expert_a_name": "M-Hyper", "expert_b_name": "AdaMF-MAT", "expert_a_key": "mkg_y_mhyper", "expert_b_key": "mkg_y_adamf",
+      "dev_utility_manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_adamf_dev_source_manifest.json", "sha256_lf": "24c12eb974200b747cf6492e791910a9cabc1f590e357a916db0a4bfce5c3710"},
+      "dev_selection": {"path": "outputs/mkg_y/anchored_dynamic/mhyper_adamf_seed123/full_ranking/selection.json", "sha256_lf": "977961e686978066a2d95118dbbd23e816bb659f5e7a3f868a6846013d1c58a7"},
+      "dev_x4_asset_manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_mhyper_adamf_query_information_manifest.json", "sha256_lf": "34159d8e5b2f64dd139de300d06520c74d2ee650277b2231a39fa69437f94c4b"},
+      "dev_nested_selection": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/runs/mkg_y_mhyper_adamf/X4/nested_selected/outer_fold_learner_selections.csv", "sha256_lf": "4614dca818b9e5313c5e79873fb17bc6227d6ba944cf1f5e8cdbc491698170fa"},
+      "run_manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/mkg_y_mhyper_adamf_dev_source_manifest.json", "sha256_lf": "15bdc4f67bd5b172cf7b9916c1fcad2d5474a5befc9838eef869b1244a70b3bd"},
+      "final_x4": {"learner": "hist_gbdt", "config": {"l2_regularization": 0.0001, "learning_rate": 0.1, "max_iter": 150, "max_leaf_nodes": 15}, "outer_fold_votes": 2}
+    },
+    {
+      "pair_id": "mkg_y_native_adamf", "dataset": "mkg_y", "alpha0": 0.55, "expert_a_name": "NativE", "expert_b_name": "AdaMF-MAT", "expert_a_key": "mkg_y_native", "expert_b_key": "mkg_y_adamf",
+      "dev_utility_manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_native_adamf_dev_source_manifest.json", "sha256_lf": "fec6d701bed4904f0d99f7e50cf1e0fdab86c529193714699d2f51e930b38d1d"},
+      "dev_selection": {"path": "outputs/mkg_y/anchored_dynamic/native_adamf_seed123/full_ranking/selection.json", "sha256_lf": "bf1e2410c4fde291f0d60550e18cf00c0189979212a30cd9aab8a771401074c2"},
+      "dev_x4_asset_manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_native_adamf_query_information_manifest.json", "sha256_lf": "3146208eccb9afc17d590c1c0b028e922046a2727652fcc5c2f2b4c577d1ad44"},
+      "dev_nested_selection": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/runs/mkg_y_native_adamf/X4/nested_selected/outer_fold_learner_selections.csv", "sha256_lf": "70f096e4b6467ce3a3ecffd53b7f985945bf79bc11106b5b25278dd0ee253323"},
+      "run_manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y2_full_ranking/mkg_y_native_adamf_dev_source_manifest.json", "sha256_lf": "8317784fa21739a41b22a2b447f0f6bba6ee5ef7b8e3fb94251a3d0edc2bfc40"},
+      "final_x4": {"learner": "linear_huber", "config": {"alpha": 0.00001, "epsilon": 0.1, "max_iter": 80}, "outer_fold_votes": 2}
+    }
+  ],
+  "outputs": {
+    "root": "outputs/complementarity_identifiability/closure_test",
+    "report": "docs/reports/complementarity_closure_test_audit.md"
+  },
+  "post_test_prohibitions": [
+    "new_feature", "new_selector", "action_grid_change", "gate_change", "metric_redefinition",
+    "title_or_narrative_rewrite_from_test", "checkpoint_reselection", "policy_tuning", "repeat_completed_test"
+  ]
+}
