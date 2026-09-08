@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="850" height="610" viewBox="0 0 850 610">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="32" y="34" font-family="Arial" font-size="18" font-weight="bold" fill="#222">Oracle-Gain Concentration and Frozen X4 Recovery</text>
+<rect x="85" y="70" width="715" height="455" fill="#fff" stroke="#ddd"/>
+<line x1="85.0" y1="70" x2="85.0" y2="525" stroke="#eee"/>
+<text x="85.0" y="547.0" font-family="Arial" font-size="10" text-anchor="middle" fill="#333" font-weight="normal">40%</text>
+<line x1="308.4375" y1="70" x2="308.4375" y2="525" stroke="#eee"/>
+<text x="308.4" y="547.0" font-family="Arial" font-size="10" text-anchor="middle" fill="#333" font-weight="normal">50%</text>
+<line x1="531.875" y1="70" x2="531.875" y2="525" stroke="#eee"/>
+<text x="531.9" y="547.0" font-family="Arial" font-size="10" text-anchor="middle" fill="#333" font-weight="normal">60%</text>
+<line x1="755.3124999999999" y1="70" x2="755.3124999999999" y2="525" stroke="#eee"/>
+<text x="755.3" y="547.0" font-family="Arial" font-size="10" text-anchor="middle" fill="#333" font-weight="normal">70%</text>
+<line x1="85" y1="455.0" x2="800" y2="455.0" stroke="#eee"/>
+<text x="75.0" y="459.0" font-family="Arial" font-size="10" text-anchor="end" fill="#333" font-weight="normal">0%</text>
+<line x1="85" y1="367.5" x2="800" y2="367.5" stroke="#eee"/>
+<text x="75.0" y="371.5" font-family="Arial" font-size="10" text-anchor="end" fill="#333" font-weight="normal">5%</text>
+<line x1="85" y1="280.0" x2="800" y2="280.0" stroke="#eee"/>
+<text x="75.0" y="284.0" font-family="Arial" font-size="10" text-anchor="end" fill="#333" font-weight="normal">10%</text>
+<line x1="85" y1="192.5" x2="800" y2="192.5" stroke="#eee"/>
+<text x="75.0" y="196.5" font-family="Arial" font-size="10" text-anchor="end" fill="#333" font-weight="normal">15%</text>
+<line x1="85" y1="105.0" x2="800" y2="105.0" stroke="#eee"/>
+<text x="75.0" y="109.0" font-family="Arial" font-size="10" text-anchor="end" fill="#333" font-weight="normal">20%</text>
+<line x1="85" y1="455.0" x2="800" y2="455.0" stroke="#777"/>
+<rect x="305.7" y="174.5" width="10" height="10" fill="#28778e" stroke="#222"/>
+<text x="318.7" y="172.5" font-family="Arial" font-size="9" text-anchor="start" fill="#333" font-weight="normal">MKG-W M-Hyper+NativE</text>
+<circle cx="488.6" cy="201.8" r="5" fill="#28778e" stroke="#222"/>
+<text x="496.6" y="194.8" font-family="Arial" font-size="9" text-anchor="start" fill="#333" font-weight="normal">MKG-W M-Hyper+AdaMF</text>
+<circle cx="217.0" cy="416.8" r="5" fill="#28778e" stroke="#222"/>
+<text x="225.0" y="409.8" font-family="Arial" font-size="9" text-anchor="start" fill="#333" font-weight="normal">MKG-W NativE+AdaMF</text>
+<circle cx="434.6" cy="380.0" r="5" fill="#c45d3c" stroke="#222"/>
+<text x="442.6" y="373.0" font-family="Arial" font-size="9" text-anchor="start" fill="#333" font-weight="normal">DB15K M-Hyper+NativE</text>
+<circle cx="424.6" cy="419.4" r="5" fill="#c45d3c" stroke="#222"/>
+<text x="432.6" y="412.4" font-family="Arial" font-size="9" text-anchor="start" fill="#333" font-weight="normal">DB15K M-Hyper+AdaMF</text>
+<circle cx="100.8" cy="407.4" r="5" fill="#c45d3c" stroke="#222"/>
+<text x="108.8" y="400.4" font-family="Arial" font-size="9" text-anchor="start" fill="#333" font-weight="normal">DB15K NativE+AdaMF</text>
+<circle cx="446.1" cy="279.0" r="5" fill="#48a08a" stroke="#222"/>
+<text x="454.1" y="272.0" font-family="Arial" font-size="9" text-anchor="start" fill="#333" font-weight="normal">MKG-Y M-Hyper+NativE</text>
+<rect x="344.6" y="181.0" width="10" height="10" fill="#48a08a" stroke="#222"/>
+<text x="357.6" y="179.0" font-family="Arial" font-size="9" text-anchor="start" fill="#333" font-weight="normal">MKG-Y M-Hyper+AdaMF</text>
+<circle cx="374.0" cy="475.4" r="5" fill="#48a08a" stroke="#222"/>
+<text x="382.0" y="468.4" font-family="Arial" font-size="9" text-anchor="start" fill="#333" font-weight="normal">MKG-Y NativE+AdaMF</text>
+<text x="442.5" y="575.0" font-family="Arial" font-size="11" text-anchor="middle" fill="#333" font-weight="normal">Top-10% original-triple gain share</text>
+<text x="18.0" y="300.0" font-family="Arial" font-size="11" text-anchor="start" fill="#333" font-weight="normal">Frozen X4 OOF recovery</text>
+<text x="470.0" y="550.0" font-family="Arial" font-size="9" text-anchor="start" fill="#666" font-weight="normal">Square: frozen LOCAL_SIGNAL_PAIR</text>
+</svg>

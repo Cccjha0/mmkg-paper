@@ -1,0 +1,44 @@
+{
+  "experiment4_classification": "E4_INTERMEDIATE",
+  "experiment5_classification": "E5_INTERMEDIATE",
+  "stable_classification": "E6_STABLE_HIGH",
+  "stable_evidence": {
+    "stable2_ci_lower_positive_pairs": 6,
+    "median_stable2_recovery": 0.6362355377946451,
+    "stable3_ci_lower_positive_pairs": 6,
+    "stable3_significant_datasets": [
+      "db15k",
+      "mkg_w"
+    ],
+    "median_stable3_recovery": 0.38450210923051076,
+    "stable3_not_significantly_positive_pairs": 0,
+    "stable_high_gate": true,
+    "stable_collapse_gate": false
+  },
+  "gain_concentration_classification": "E6_GAIN_HIGHLY_CONCENTRATED",
+  "gain_evidence": {
+    "top10_share_gte_50pct_pairs": 4,
+    "q50_lte_10pct_pairs": 4,
+    "top10_share_lte_25pct_pairs": 0,
+    "q50_gte_30pct_pairs": 0,
+    "highly_concentrated_gate": true,
+    "diffuse_gate": false
+  },
+  "final_joint_interpretation": "FINAL_SELECTIVE_RARE_OPPORTUNITY",
+  "joint_evidence": {
+    "experiment4_classification": "E4_INTERMEDIATE",
+    "experiment5_classification": "E5_INTERMEDIATE",
+    "experiment6_stable_classification": "E6_STABLE_HIGH",
+    "experiment6_gain_classification": "E6_GAIN_HIGHLY_CONCENTRATED",
+    "strong_e4_intermediate": true,
+    "e5_x6_recovery": false,
+    "e5_local_identifiable": false,
+    "candidate_gates": {
+      "residual_dominated_limits": false,
+      "stable_but_unobservable": false,
+      "modeling_bottleneck": false,
+      "selective_rare_opportunity": true
+    }
+  },
+  "test_status": "LOCKED_PENDING_DECISION_MEMO_COMMIT"
+}

@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "experiment": "Cross-Dataset Complementarity Closure Synthesis",
+  "effective_date": "2026-09-08",
+  "status": "frozen_before_synthesis",
+  "split": "dev",
+  "datasets": [
+    "mkg_w",
+    "db15k",
+    "mkg_y"
+  ],
+  "pair_suffixes": [
+    "mhyper_native",
+    "mhyper_adamf",
+    "native_adamf"
+  ],
+  "scope": {
+    "purpose": "Descriptive synthesis of the frozen Experiment 1-6 and MKG-Y Y-E1-Y-E6 evidence chains.",
+    "evidence_order": [
+      "Raw Available",
+      "Seed-Stable / Transferable",
+      "Locally Observable",
+      "Empirically Deployable"
+    ],
+    "new_gate": false,
+    "route_reselection": false,
+    "threshold_rescaling": false,
+    "method_development": false
+  },
+  "frozen_interpretations": {
+    "core_exp3_route": "ROUTE_C_LIMITS",
+    "core_exp4_classification": "E4_INTERMEDIATE",
+    "core_exp5_classification": "E5_INTERMEDIATE",
+    "core_exp6_stable_classification": "E6_STABLE_HIGH",
+    "core_exp6_concentration_classification": "E6_GAIN_HIGHLY_CONCENTRATED",
+    "core_exp6_joint_interpretation": "FINAL_SELECTIVE_RARE_OPPORTUNITY",
+    "mkg_y_role": "descriptive external replication only"
+  },
+  "definitions": {
+    "query_probe": "Frozen X4 nested-selected strict grouped OOF gain from Experiment 2 / Y-E2.",
+    "best_group": "The already frozen E3/Y-E3 best L1-L4 resolution; no synthesis-time model or level selection.",
+    "local_primary_k": 10,
+    "local_signal": "The frozen E5/Y-E5 LOCAL_SIGNAL_PAIR flag; no gate is reapplied.",
+    "stable_diagnostics": "Consensus, 2-of-3 and 3-of-3 are ex-post stability upper diagnostics; LOSO is held-out-seed; X4 is inference-time observable strict OOF.",
+    "concentration": "Original-triple Oracle-gain concentration using frozen E6/Y-E6 outputs."
+  },
+  "required_invariants": {
+    "pair_count": 9,
+    "pairs_per_dataset": 3,
+    "raw_headroom_tolerance": 1e-12,
+    "x4_gain_tolerance": 1e-12,
+    "loso_tolerance": 1e-12,
+    "local_k_values": [5, 10, 20, 50]
+  },
+  "sources": [
+    {"role": "core_e1", "path": "outputs/complementarity_identifiability/exp1_landscape/pair_statistics.csv", "sha256": "95e790ffbb727ef02559098938aa4891128189b9e8653bb810c5ff958393688c"},
+    {"role": "core_e2", "path": "outputs/complementarity_identifiability/exp2_information/primary_nested_probe_metrics.csv", "sha256": "da089a2046b2a93b47762bd5fd3f39591c88aabcc68866294d6baa3ec8dc2626"},
+    {"role": "core_e2_gate", "path": "outputs/complementarity_identifiability/exp2_information/preliminary_query_level_gate.csv", "sha256": "3b30d64c83b501b0c00277cd5f292b7b960887628d4f8da7836f464515d0fe74"},
+    {"role": "core_e3", "path": "outputs/complementarity_identifiability/exp3_resolution/pair_level_metrics.csv", "sha256": "610513da9a662e4bc04265707fa7b060613cc115b884e013d0d45ce6e6b85a0b"},
+    {"role": "core_e3_comparison", "path": "outputs/complementarity_identifiability/exp3_resolution/route_comparisons.csv", "sha256": "030106a97227a4cae59659087f7272a9aca8b1f1bfbadd70af16bd2b44d712b0"},
+    {"role": "core_e3_decision", "path": "outputs/complementarity_identifiability/exp3_resolution/route_decision.json", "sha256": "820d190274e0f983911faf8df80c9a9380880232a9939306e4ac93204693a076"},
+    {"role": "core_e4", "path": "outputs/complementarity_identifiability/exp4_cross_seed_transfer/pair_summary.csv", "sha256": "65af3d24c95cbffd29c68d65fef524c8aea99e1f9f084947eb5cc35c7e29fe7c"},
+    {"role": "core_e4_classification", "path": "outputs/complementarity_identifiability/exp4_cross_seed_transfer/classification.json", "sha256": "4a7af1fb3d2f137c13ec0ad93f42cc4b87962a083f87fa1b1f21c2dca7d276fa"},
+    {"role": "core_e5", "path": "outputs/complementarity_identifiability/exp5_local_identifiability/pair_k_summary.csv", "sha256": "aad121a83b447570fd5af8c82e9796ebca67482c81a24b8ddfd8f5682f40f5fa"},
+    {"role": "core_e5_signal", "path": "outputs/complementarity_identifiability/exp5_local_identifiability/local_signal_pairs.csv", "sha256": "4d3463702ffef585487820d311b16b393f18cc9be01ff5c2b57c98915c081fa2"},
+    {"role": "core_e5_classification", "path": "outputs/complementarity_identifiability/exp5_local_identifiability/classification.json", "sha256": "35caee7830955d0a7e994f54af35489ea84e4c87d43a8696745c203ec864ef24"},
+    {"role": "core_e6_stable", "path": "outputs/complementarity_identifiability/exp6_stable_headroom/stable_headroom_pair_summary.csv", "sha256": "d663118b9a4ff14f29615b00503912ba93d778e39cd680cadcd330046e0dfd5c"},
+    {"role": "core_e6_concentration", "path": "outputs/complementarity_identifiability/exp6_stable_headroom/concentration_pair_summary.csv", "sha256": "f90bdc6ed65260a1c3f568a3bf7d751c3e8262991f159a3d4fb64e9f50442189"},
+    {"role": "core_e6_interpretation", "path": "outputs/complementarity_identifiability/exp6_stable_headroom/final_joint_interpretation.json", "sha256": "100fa517b7d434ddf808e1603efb7a218b0ee9e568263afa8dc2299eca9c6fa1"},
+    {"role": "mkg_y_e1", "path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/pair_statistics.csv", "sha256": "e931036c92683e0ee0fc8219662f4c4c5b5293a71b6812e79ea2fc66a157e6cd"},
+    {"role": "mkg_y_e2", "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/primary_nested_x4_probe_metrics.csv", "sha256": "f69a64481eef6a6627bf201b88129ec24506b1daf8098a89fda47d1902fe3351"},
+    {"role": "mkg_y_e2_assessment", "path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/replication_assessment.json", "sha256": "8b911f1e5abe5e35a46c770dbe006f8b04bbbf88a7c31dc3fc47d77747bd2c41"},
+    {"role": "mkg_y_e3", "path": "outputs/complementarity_identifiability/mkg_y_y_e3_resolution/pair_level_metrics.csv", "sha256": "9c29576a16ddb8a652cf77786efc96aa1049d6989f65f1ef7961b9cd661889c9"},
+    {"role": "mkg_y_e3_comparison", "path": "outputs/complementarity_identifiability/mkg_y_y_e3_resolution/best_group_vs_x4.csv", "sha256": "ec09dfe3e8dd1cd896b6f80f3b7315d11eeca9c1dee97985e502b24457395ab4"},
+    {"role": "mkg_y_e3_assessment", "path": "outputs/complementarity_identifiability/mkg_y_y_e3_resolution/replication_assessment.json", "sha256": "61dad195470b003152a92da883b8501ccf012d26322876fd3545420a4b4bab0c"},
+    {"role": "mkg_y_e4", "path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/pair_summary.csv", "sha256": "ceb74de562e8bee3eeece80a546d915f3943124a6596a31baef28917bdaff3df"},
+    {"role": "mkg_y_e4_assessment", "path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/replication_assessment.json", "sha256": "833c5a3da8d38371a7cf43fa38821abbd32ef1c5a212f31ea6a5022a027ce999"},
+    {"role": "mkg_y_e5", "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/pair_k_summary.csv", "sha256": "e02e3a6abf83c06960bacda55199bd9ba108f9b14f0e92a539e9922eeda38ef9"},
+    {"role": "mkg_y_e5_signal", "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/local_signal_pairs.csv", "sha256": "021d1f7da21a934011e3e28ad99ffaa4d78128632e921af1b8977fe672a60425"},
+    {"role": "mkg_y_e5_classification", "path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/classification.json", "sha256": "0fa807adf0b40adc054cc2224109ea887354c0096058e3679fd108334702d0bc"},
+    {"role": "mkg_y_e6_stable", "path": "outputs/complementarity_identifiability/mkg_y_y_e6_stable_headroom/stable_headroom_pair_summary.csv", "sha256": "74f1b740872b1e802c0343ab5a7bc126c80465f4d0095e9860a9e40aa4103bd7"},
+    {"role": "mkg_y_e6_concentration", "path": "outputs/complementarity_identifiability/mkg_y_y_e6_stable_headroom/concentration_pair_summary.csv", "sha256": "a2241381d6b7b900fe59b007dfa4d06e9d21d3128f8727f045382c3553829f71"},
+    {"role": "mkg_y_e6_assessment", "path": "outputs/complementarity_identifiability/mkg_y_y_e6_stable_headroom/replication_assessment.json", "sha256": "48f31e3f2fb4b78921f79d4d56c85c76a47ab02d1b086ffc2174c462a9b4fd15"}
+  ],
+  "outputs": {
+    "directory": "outputs/complementarity_identifiability/cross_dataset_closure_synthesis",
+    "pair_evidence_chain": "pair_evidence_chain.csv",
+    "dataset_summary": "dataset_summary.csv",
+    "stage_summary": "stage_summary.csv",
+    "assessment": "synthesis_assessment.json",
+    "audit": "audit_manifest.json",
+    "report": "docs/reports/cross_dataset_complementarity_closure_synthesis_2026-09-08.md"
+  },
+  "operational_boundaries": {
+    "test_access": 0,
+    "checkpoint_execution": 0,
+    "checkpoint_retraining": 0,
+    "checkpoint_reselection": 0,
+    "new_selector": 0,
+    "new_representation": 0,
+    "policy_tuning": 0,
+    "gate_change": 0,
+    "historical_result_modification": 0
+  }
+}

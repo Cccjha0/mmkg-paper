@@ -1,0 +1,4 @@
+dataset,dataset_label,pair_count,median_available_headroom,median_stable2_recovery,median_stable3_recovery,median_loso_recovery,median_x4_recovery,available_ci_lower_positive_pairs,stable2_ci_lower_positive_pairs,stable3_ci_lower_positive_pairs,loso_ci_lower_positive_pairs,x4_ci_lower_positive_pairs,best_group_robust_positive_pairs,local_signal_pairs,top10_share_ge_50pct_pairs,q50_le_10pct_pairs,median_effective_support
+mkg_w,MKG-W,3,0.0466252525468295,0.6150953775947303,0.3647061056934566,0.3003528387478454,0.1446839355572693,3,3,3,3,3,2,1,2,2,0.2662018913796826
+db15k,DB15K,3,0.0495791850440901,0.6573756979945601,0.4042981127675649,0.2051315235971121,0.0271722945490126,3,3,3,3,3,1,0,2,2,0.234110596202821
+mkg_y,MKG-Y,3,0.0378442288474499,0.5322959981964462,0.2680448275938352,0.2545906696569422,0.1005456673896475,3,3,3,3,2,1,1,3,3,0.2573282407536066

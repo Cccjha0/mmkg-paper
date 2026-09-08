@@ -1,0 +1,13 @@
+# Preserve byte-exact frozen audit artifacts and their executable provenance.
+docs/protocols/CROSS_DATASET_COMPLEMENTARITY_CLOSURE_SYNTHESIS_CONTRACT.json -text
+docs/reports/cross_dataset_complementarity_closure_synthesis_2026-09-08.md -text
+scripts/synthesize_cross_dataset_closure.py -text
+scripts/run_cross_dataset_closure_synthesis.ps1 -text
+tests/test_cross_dataset_closure_synthesis.py -text
+outputs/complementarity_identifiability/cross_dataset_closure_synthesis/** -text
+outputs/complementarity_identifiability/exp5_local_identifiability/classification.json -text whitespace=cr-at-eol
+outputs/complementarity_identifiability/exp5_local_identifiability/local_signal_pairs.csv -text whitespace=cr-at-eol
+outputs/complementarity_identifiability/exp5_local_identifiability/pair_k_summary.csv -text whitespace=cr-at-eol
+outputs/complementarity_identifiability/exp6_stable_headroom/concentration_pair_summary.csv -text whitespace=cr-at-eol
+outputs/complementarity_identifiability/exp6_stable_headroom/final_joint_interpretation.json -text whitespace=cr-at-eol
+outputs/complementarity_identifiability/exp6_stable_headroom/stable_headroom_pair_summary.csv -text whitespace=cr-at-eol
