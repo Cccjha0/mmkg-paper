@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1450" height="690" viewBox="0 0 1450 690">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="40" y="38" font-family="Arial" font-size="22" font-weight="700" fill="#202124">Stable Headroom Decomposition</text>
+<line x1="170" y1="556.3" x2="1410" y2="556.3" stroke="#888"/>
+<rect x="227.9" y="222.7" width="39.3" height="333.6" fill="#5b6573"/>
+<line x1="247.5" y1="199.0" x2="247.5" y2="245.5" stroke="#222"/>
+<rect x="279.5" y="252.8" width="39.3" height="303.5" fill="#28778e"/>
+<line x1="299.2" y1="230.5" x2="299.2" y2="274.3" stroke="#222"/>
+<rect x="331.2" y="378.8" width="39.3" height="177.6" fill="#48a08a"/>
+<line x1="350.8" y1="360.0" x2="350.8" y2="396.8" stroke="#222"/>
+<rect x="382.9" y="466.9" width="39.3" height="89.4" fill="#87b75d"/>
+<line x1="402.5" y1="452.7" x2="402.5" y2="480.7" stroke="#222"/>
+<rect x="434.5" y="471.4" width="39.3" height="84.9" fill="#d49a43"/>
+<line x1="454.2" y1="457.6" x2="454.2" y2="484.7" stroke="#222"/>
+<rect x="486.2" y="522.8" width="39.3" height="33.5" fill="#c45d3c"/>
+<line x1="505.8" y1="509.5" x2="505.8" y2="535.9" stroke="#222"/>
+<text x="376.7" y="594.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">M-Hyper + NativE</text>
+<rect x="641.2" y="157.3" width="39.3" height="399.0" fill="#5b6573"/>
+<line x1="660.8" y1="131.0" x2="660.8" y2="182.8" stroke="#222"/>
+<rect x="692.9" y="190.4" width="39.3" height="365.9" fill="#28778e"/>
+<line x1="712.5" y1="165.5" x2="712.5" y2="215.1" stroke="#222"/>
+<rect x="744.5" y="338.5" width="39.3" height="217.8" fill="#48a08a"/>
+<line x1="764.2" y1="316.9" x2="764.2" y2="359.0" stroke="#222"/>
+<rect x="796.2" y="437.2" width="39.3" height="119.1" fill="#87b75d"/>
+<line x1="815.8" y1="420.5" x2="815.8" y2="453.1" stroke="#222"/>
+<rect x="847.9" y="449.0" width="39.3" height="107.3" fill="#d49a43"/>
+<line x1="867.5" y1="432.5" x2="867.5" y2="465.1" stroke="#222"/>
+<rect x="899.5" y="495.0" width="39.3" height="61.3" fill="#c45d3c"/>
+<line x1="919.2" y1="477.6" x2="919.2" y2="512.6" stroke="#222"/>
+<text x="790.0" y="594.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">M-Hyper + AdaMF-MAT</text>
+<rect x="1054.5" y="213.7" width="39.3" height="342.6" fill="#5b6573"/>
+<line x1="1074.2" y1="191.6" x2="1074.2" y2="235.4" stroke="#222"/>
+<rect x="1106.2" y="253.4" width="39.3" height="302.9" fill="#28778e"/>
+<line x1="1125.8" y1="233.0" x2="1125.8" y2="273.6" stroke="#222"/>
+<rect x="1157.9" y="424.6" width="39.3" height="131.7" fill="#48a08a"/>
+<line x1="1177.5" y1="409.8" x2="1177.5" y2="438.8" stroke="#222"/>
+<rect x="1209.5" y="511.2" width="39.3" height="45.2" fill="#87b75d"/>
+<line x1="1229.2" y1="502.2" x2="1229.2" y2="519.5" stroke="#222"/>
+<rect x="1261.2" y="521.1" width="39.3" height="35.2" fill="#d49a43"/>
+<line x1="1280.8" y1="509.4" x2="1280.8" y2="532.6" stroke="#222"/>
+<rect x="1312.9" y="556.3" width="39.3" height="4.0" fill="#c45d3c"/>
+<line x1="1332.5" y1="550.8" x2="1332.5" y2="570.0" stroke="#222"/>
+<text x="1203.3" y="594.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">NativE + AdaMF-MAT</text>
+<rect x="170" y="620" width="14" height="14" fill="#5b6573"/>
+<text x="190.0" y="632.0" text-anchor="start" font-family="Arial" font-size="11" fill="#30343b">Raw</text>
+<rect x="340" y="620" width="14" height="14" fill="#28778e"/>
+<text x="360.0" y="632.0" text-anchor="start" font-family="Arial" font-size="11" fill="#30343b">Consensus</text>
+<rect x="510" y="620" width="14" height="14" fill="#48a08a"/>
+<text x="530.0" y="632.0" text-anchor="start" font-family="Arial" font-size="11" fill="#30343b">2/3</text>
+<rect x="680" y="620" width="14" height="14" fill="#87b75d"/>
+<text x="700.0" y="632.0" text-anchor="start" font-family="Arial" font-size="11" fill="#30343b">3/3</text>
+<rect x="850" y="620" width="14" height="14" fill="#d49a43"/>
+<text x="870.0" y="632.0" text-anchor="start" font-family="Arial" font-size="11" fill="#30343b">LOSO</text>
+<rect x="1020" y="620" width="14" height="14" fill="#c45d3c"/>
+<text x="1040.0" y="632.0" text-anchor="start" font-family="Arial" font-size="11" fill="#30343b">X4 OOF*</text>
+<text x="40.0" y="666.0" text-anchor="start" font-family="Arial" font-size="11" fill="#666">MRR gain vs Global. Consensus/2-of-3/3-of-3 are ex-post diagnostics; LOSO is held-out-seed; *X4 uses fold-specific OOF Global.</text>
+</svg>

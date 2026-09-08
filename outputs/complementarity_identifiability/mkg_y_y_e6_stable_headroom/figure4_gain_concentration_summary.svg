@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="540" viewBox="0 0 1080 540">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="40" y="38" font-family="Arial" font-size="22" font-weight="700" fill="#202124">Gain Concentration Summary</text>
+<line x1="350.0" y1="85" x2="350.0" y2="455" stroke="#ddd"/>
+<text x="350.0" y="478.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">0%</text>
+<line x1="516.2" y1="85" x2="516.2" y2="455" stroke="#ddd"/>
+<text x="516.2" y="478.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">25%</text>
+<line x1="682.5" y1="85" x2="682.5" y2="455" stroke="#ddd"/>
+<text x="682.5" y="478.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">50%</text>
+<line x1="848.8" y1="85" x2="848.8" y2="455" stroke="#ddd"/>
+<text x="848.8" y="478.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">75%</text>
+<line x1="1015.0" y1="85" x2="1015.0" y2="455" stroke="#ddd"/>
+<text x="1015.0" y="478.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">100%</text>
+<text x="332.0" y="121.0" text-anchor="end" font-family="Arial" font-size="11" fill="#30343b">MKG-Y / M-Hyper + NativE</text>
+<circle cx="723.5" cy="107" r="5" fill="#28778e"/>
+<circle cx="405.6" cy="117" r="5" fill="#c45d3c"/>
+<circle cx="504.7" cy="127" r="5" fill="#7d8f45"/>
+<text x="332.0" y="177.0" text-anchor="end" font-family="Arial" font-size="11" fill="#30343b">MKG-Y / M-Hyper + AdaMF-MAT</text>
+<circle cx="694.8" cy="163" r="5" fill="#28778e"/>
+<circle cx="413.6" cy="173" r="5" fill="#c45d3c"/>
+<circle cx="521.1" cy="183" r="5" fill="#7d8f45"/>
+<text x="332.0" y="233.0" text-anchor="end" font-family="Arial" font-size="11" fill="#30343b">MKG-Y / NativE + AdaMF-MAT</text>
+<circle cx="702.0" cy="219" r="5" fill="#28778e"/>
+<circle cx="411.6" cy="229" r="5" fill="#c45d3c"/>
+<circle cx="521.8" cy="239" r="5" fill="#7d8f45"/>
+<circle cx="410" cy="515" r="5" fill="#28778e"/>
+<text x="420.0" y="519.0" text-anchor="start" font-family="Arial" font-size="11" fill="#30343b">Top10 gain share</text>
+<circle cx="620" cy="515" r="5" fill="#c45d3c"/>
+<text x="630.0" y="519.0" text-anchor="start" font-family="Arial" font-size="11" fill="#30343b">Q50</text>
+<circle cx="830" cy="515" r="5" fill="#7d8f45"/>
+<text x="840.0" y="519.0" text-anchor="start" font-family="Arial" font-size="11" fill="#30343b">Effective support</text>
+</svg>

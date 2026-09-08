@@ -1,0 +1,15 @@
+{
+  "outcome": "Y_E6_CLOSURE_REPLICATION_REPORTED",
+  "is_progression_gate": false,
+  "classification": false,
+  "route_selection": false,
+  "stable2_ci_lower_positive_pairs": 3,
+  "median_stable2_recovery": 0.5322959981964462,
+  "stable3_ci_lower_positive_pairs": 3,
+  "median_stable3_recovery": 0.2680448275938352,
+  "top10_share_gte_50pct_pairs": 3,
+  "q50_lte_10pct_pairs": 3,
+  "y_e5_local_signal_pairs": 1,
+  "next_step": "cross_dataset_closure_synthesis",
+  "test_status": "LOCKED"
+}

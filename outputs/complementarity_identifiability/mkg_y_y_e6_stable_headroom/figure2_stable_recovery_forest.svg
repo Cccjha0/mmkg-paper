@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="560" viewBox="0 0 1120 560">
+<rect width="100%" height="100%" fill="#fbfaf7"/>
+<text x="40" y="38" font-family="Arial" font-size="22" font-weight="700" fill="#202124">Stable Recovery Forest Plot</text>
+<line x1="335.0" y1="75" x2="335.0" y2="480" stroke="#999" stroke-dasharray="4 4"/>
+<text x="335.0" y="502.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">0%</text>
+<line x1="458.0" y1="75" x2="458.0" y2="480" stroke="#999" stroke-dasharray="4 4"/>
+<text x="458.0" y="502.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">10%</text>
+<line x1="642.4" y1="75" x2="642.4" y2="480" stroke="#999" stroke-dasharray="4 4"/>
+<text x="642.4" y="502.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">25%</text>
+<line x1="949.9" y1="75" x2="949.9" y2="480" stroke="#999" stroke-dasharray="4 4"/>
+<text x="949.9" y="502.0" text-anchor="middle" font-family="Arial" font-size="10" fill="#30343b">50%</text>
+<text x="317.0" y="117.0" text-anchor="end" font-family="Arial" font-size="11" fill="#30343b">MKG-Y / M-Hyper + NativE</text>
+<line x1="948.8" y1="105" x2="1028.8" y2="105" stroke="#28778e" stroke-width="2"/>
+<circle cx="989.6" cy="105" r="4" fill="#28778e"/>
+<line x1="622.8" y1="113" x2="706.3" y2="113" stroke="#87b75d" stroke-width="2"/>
+<circle cx="664.6" cy="113" r="4" fill="#87b75d"/>
+<line x1="606.9" y1="121" x2="689.4" y2="121" stroke="#c45d3c" stroke-width="2"/>
+<circle cx="648.1" cy="121" r="4" fill="#c45d3c"/>
+<text x="317.0" y="179.0" text-anchor="end" font-family="Arial" font-size="11" fill="#30343b">MKG-Y / M-Hyper + AdaMF-MAT</text>
+<line x1="968.3" y1="167" x2="1044.0" y2="167" stroke="#28778e" stroke-width="2"/>
+<circle cx="1006.3" cy="167" r="4" fill="#28778e"/>
+<line x1="662.2" y1="175" x2="742.5" y2="175" stroke="#87b75d" stroke-width="2"/>
+<circle cx="702.1" cy="175" r="4" fill="#87b75d"/>
+<line x1="623.3" y1="183" x2="706.5" y2="183" stroke="#c45d3c" stroke-width="2"/>
+<circle cx="665.7" cy="183" r="4" fill="#c45d3c"/>
+<text x="317.0" y="241.0" text-anchor="end" font-family="Arial" font-size="11" fill="#30343b">MKG-Y / NativE + AdaMF-MAT</text>
+<line x1="770.1" y1="229" x2="844.7" y2="229" stroke="#28778e" stroke-width="2"/>
+<circle cx="807.7" cy="229" r="4" fill="#28778e"/>
+<line x1="469.3" y1="237" x2="526.9" y2="237" stroke="#87b75d" stroke-width="2"/>
+<circle cx="497.1" cy="237" r="4" fill="#87b75d"/>
+<line x1="421.5" y1="245" x2="501.4" y2="245" stroke="#c45d3c" stroke-width="2"/>
+<circle cx="461.5" cy="245" r="4" fill="#c45d3c"/>
+<circle cx="520" cy="535" r="5" fill="#28778e"/>
+<text x="530.0" y="539.0" text-anchor="start" font-family="Arial" font-size="11" fill="#30343b">2-of-3</text>
+<circle cx="670" cy="535" r="5" fill="#87b75d"/>
+<text x="680.0" y="539.0" text-anchor="start" font-family="Arial" font-size="11" fill="#30343b">3-of-3</text>
+<circle cx="820" cy="535" r="5" fill="#c45d3c"/>
+<text x="830.0" y="539.0" text-anchor="start" font-family="Arial" font-size="11" fill="#30343b">LOSO</text>
+</svg>
