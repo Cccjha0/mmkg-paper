@@ -528,7 +528,10 @@ def write_headroom_figure(summary: pd.DataFrame, path: Path) -> None:
             y = yscale(value)
             parts.append(f'<rect x="{x-bar_width*.38:.1f}" y="{min(y,zero):.1f}" width="{bar_width*.76:.1f}" height="{abs(zero-y):.1f}" fill="{color}"/>')
             parts.append(f'<line x1="{x:.1f}" y1="{yscale(high):.1f}" x2="{x:.1f}" y2="{yscale(low):.1f}" stroke="#222"/>')
-        svg_text(parts, center, bottom + 24, row.pair_id.replace("mkgw_", "MW/").replace("db15k_", "DB/"), 10, "middle")
+        short_label = row.pair_id.replace("mkgw_", "MW/").replace("db15k_", "DB/")
+        if row.pair_id.startswith("mkg_y_"):
+            short_label = PAIR_LABELS[row.pair_id].replace("MKG-Y / ", "")
+        svg_text(parts, center, bottom + 24, short_label, 10, "middle")
     for index, (label, _, _, _, color) in enumerate(metrics):
         x = 170 + index * 170
         parts.append(f'<rect x="{x}" y="620" width="14" height="14" fill="{color}"/>')

@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "experiment": "MKG-Y Y-E6 Stable Headroom and Gain Concentration Replication",
+  "status": "frozen_before_systematic_run",
+  "effective_date": "2026-09-08",
+  "split": "dev",
+  "dataset": "mkg_y",
+  "pair_ids": [
+    "mkg_y_mhyper_native",
+    "mkg_y_mhyper_adamf",
+    "mkg_y_native_adamf"
+  ],
+  "seeds": [1, 2, 3],
+  "directions": ["head", "tail"],
+  "query_identity": ["original_triple_id", "direction"],
+  "alpha_grid": [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0],
+  "normalization": "query_zscore",
+  "evaluation": "exact filtered reciprocal rank",
+  "alpha0_source": "MKG-Y Y-E1 canonical utility manifest global_alpha",
+  "tie_break": ["maximum mean RR", "nearest alpha0", "smaller alpha"],
+  "stable_actions": {
+    "consensus": "argmax alpha of mean RR over all three seeds; ex-post upper diagnostic",
+    "two_of_three": "non-alpha0 actions with positive utility in at least two seeds; maximize mean RR; empty-set fallback alpha0",
+    "three_of_three": "non-alpha0 actions with positive utility in all three seeds; maximize mean RR; empty-set fallback alpha0",
+    "positive_threshold": 0.0,
+    "recovery_clipping": false,
+    "query_ratio_averaging": false
+  },
+  "concentration": {
+    "unit": "original_triple_id",
+    "triple_gain": "mean over seed and direction of seed-specific Oracle gain",
+    "top_fractions": [0.01, 0.05, 0.10, 0.20],
+    "top_count_rounding": "ceil(fraction * N)",
+    "q50": "minimum descending prefix reaching half total gain divided by N",
+    "gini_formula": "sum_i (2*i-N-1)*x_(i) / (N*sum_i x_i), with non-negative gains sorted ascending and i=1..N",
+    "effective_support": "((sum G)^2 / sum G^2) / N",
+    "curve_name": "Cumulative Oracle-Gain Concentration",
+    "diagonal_label": "uniform contribution reference"
+  },
+  "bootstrap": {
+    "samples": 10000,
+    "seed": 20260907,
+    "unit": "original_triple_id",
+    "interval": "percentile 95%",
+    "preserve": ["both directions", "all three seeds", "all alpha actions"],
+    "paired_recovery_ratios": true,
+    "clipping": false
+  },
+  "assessment": {
+    "is_progression_gate": false,
+    "classification": false,
+    "route_selection": false,
+    "outcome": "Y_E6_CLOSURE_REPLICATION_REPORTED",
+    "next_step": "cross_dataset_closure_synthesis",
+    "test_status": "LOCKED"
+  },
+  "source_boundaries": {
+    "y_e1_audit": {"path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/audit_manifest.json", "sha256": "867c7edcc7e0b8947369b442bb06ec4fbd655e436ade1b24ce90cfdeecf894ef"},
+    "available_headroom": {"path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/pair_statistics.csv", "sha256": "e931036c92683e0ee0fc8219662f4c4c5b5293a71b6812e79ea2fc66a157e6cd"},
+    "y_e2_audit": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/audit_manifest.json", "sha256": "f5799897478dfda7cfcc49409b0e573fd18d991d6b2161077b7622c632d8622e"},
+    "y_e4_audit": {"path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/audit_manifest.json", "sha256": "ab42c9a88ddf6f229e1457e76104364b1039e763fda1810662924858cdc894fc"},
+    "y_e4_pair_summary": {"path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/pair_summary.csv", "sha256": "ceb74de562e8bee3eeece80a546d915f3943124a6596a31baef28917bdaff3df"},
+    "y_e5_audit": {"path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/audit_manifest.json", "sha256": "af6899b843baed5c5caf7c83d03d8399f70655afdc217dedbadb1c6897355d89"},
+    "y_e5_assessment": {"path": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability/classification.json", "sha256": "0fa807adf0b40adc054cc2224109ea887354c0096058e3679fd108334702d0bc"},
+    "utility_manifests": {
+      "mkg_y_mhyper_native": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_native_dev_source_manifest.json", "sha256": "d5d82cffcb308f5bf44001119447af99375a3f3c66ebec5528d246baf7915a68"},
+      "mkg_y_mhyper_adamf": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_adamf_dev_source_manifest.json", "sha256": "777548a3dc647d1e0a1b0484f2ddfb3e2d1a0c4cddbb19585caee2c802be571f"},
+      "mkg_y_native_adamf": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_native_adamf_dev_source_manifest.json", "sha256": "36cfb1ed86bd59efcfe56240b8b78ce838dd28438fd0b031ef5e56240d7b790c"}
+    }
+  },
+  "test_access": 0,
+  "test_commands": 0,
+  "checkpoint_retraining": 0,
+  "checkpoint_reselection": 0,
+  "new_selector": 0,
+  "new_feature": 0,
+  "new_representation": 0,
+  "policy_tuning": 0,
+  "action_grid_modification": 0,
+  "prior_result_modification": 0,
+  "output": {
+    "directory": "outputs/complementarity_identifiability/mkg_y_y_e6_stable_headroom",
+    "report": "docs/reports/mkg_y_stable_headroom_gain_concentration_audit_2026-09-08.md"
+  }
+}
