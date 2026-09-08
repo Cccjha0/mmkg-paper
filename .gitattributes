@@ -5,6 +5,14 @@ scripts/synthesize_cross_dataset_closure.py -text
 scripts/run_cross_dataset_closure_synthesis.ps1 -text
 tests/test_cross_dataset_closure_synthesis.py -text
 outputs/complementarity_identifiability/cross_dataset_closure_synthesis/** -text
+docs/reports/complementarity_closure_test_audit_2026-09-08.md -text whitespace=cr-at-eol
+outputs/complementarity_identifiability/closure_test/preflight.json -text whitespace=cr-at-eol
+outputs/complementarity_identifiability/closure_test/audit/** -text whitespace=cr-at-eol
+outputs/complementarity_identifiability/closure_test/raw/**/test_summary.json -text whitespace=cr-at-eol
+outputs/complementarity_identifiability/closure_test/raw/**/test_results.csv -text whitespace=cr-at-eol
+outputs/complementarity_identifiability/closure_test/raw/**/test_results_by_seed.csv -text whitespace=cr-at-eol
+outputs/complementarity_identifiability/closure_test/raw/**/test_results.md -text whitespace=cr-at-eol
+outputs/complementarity_identifiability/closure_test/x4/**/test_x4_summary.json -text whitespace=cr-at-eol
 outputs/complementarity_identifiability/exp5_local_identifiability/classification.json -text whitespace=cr-at-eol
 outputs/complementarity_identifiability/exp5_local_identifiability/local_signal_pairs.csv -text whitespace=cr-at-eol
 outputs/complementarity_identifiability/exp5_local_identifiability/pair_k_summary.csv -text whitespace=cr-at-eol

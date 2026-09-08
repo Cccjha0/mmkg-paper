@@ -1,0 +1,392 @@
+{
+  "schema_version": 1,
+  "pair_name": "mkg_y_mhyper_adamf",
+  "dataset": "mkg_y",
+  "protocol_version": "mmkg_general_v1",
+  "split": "test",
+  "expert_a_name": "M-Hyper",
+  "expert_b_name": "AdaMF-MAT",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "n_rows": 15978,
+  "rrf_k": 60.0,
+  "score_normalization": "query_zscore",
+  "export_alpha_grid": true,
+  "export_x4_features": true,
+  "dev_only_no_test_access": false,
+  "test_rows_opened": null,
+  "filter_fact_scope": "train_dev_test",
+  "query_geometry_fields": [
+    "geometry_direction_tail",
+    "geometry_a_top1",
+    "geometry_a_top5_mean",
+    "geometry_a_top1_top2_margin",
+    "geometry_a_score_std",
+    "geometry_b_top1",
+    "geometry_b_top5_mean",
+    "geometry_b_top1_top2_margin",
+    "geometry_b_score_std",
+    "geometry_top1_delta_a_minus_b",
+    "geometry_top5_delta_a_minus_b",
+    "geometry_margin_delta_a_minus_b",
+    "geometry_std_delta_a_minus_b"
+  ],
+  "selection": {
+    "schema_version": 1,
+    "pair_name": "mkg_y_mhyper_adamf",
+    "dataset": "mkg_y",
+    "protocol_version": "mmkg_general_v1",
+    "expert_a_name": "M-Hyper",
+    "expert_b_name": "AdaMF-MAT",
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "score_normalization": "query_zscore",
+    "alpha_grid": [
+      0.0,
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      1.0
+    ],
+    "rrf_k": 60.0,
+    "global_alpha": 0.35,
+    "global_dev_mrr": 0.3373069998936002,
+    "relation_min_support": 60,
+    "relation_alpha": {
+      "0": 0.35,
+      "1": 0.95,
+      "2": 0.45,
+      "3": 0.4,
+      "4": 1.0,
+      "5": 0.6,
+      "6": 0.4,
+      "7": 0.25,
+      "8": 0.95,
+      "9": 0.25,
+      "10": 0.25,
+      "11": 0.35,
+      "12": 0.25,
+      "13": 0.35,
+      "14": 0.35,
+      "15": 0.45,
+      "16": 0.35,
+      "17": 0.9,
+      "18": 0.35,
+      "19": 0.35,
+      "20": 0.35,
+      "21": 0.35,
+      "22": 0.35,
+      "23": 0.35,
+      "24": 0.35,
+      "25": 0.35,
+      "26": 0.35
+    },
+    "relation_details": {
+      "0": {
+        "support": 438,
+        "alpha": 0.35,
+        "source": "relation_dev"
+      },
+      "1": {
+        "support": 1986,
+        "alpha": 0.95,
+        "source": "relation_dev"
+      },
+      "2": {
+        "support": 810,
+        "alpha": 0.45,
+        "source": "relation_dev"
+      },
+      "3": {
+        "support": 2490,
+        "alpha": 0.4,
+        "source": "relation_dev"
+      },
+      "4": {
+        "support": 2238,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "5": {
+        "support": 774,
+        "alpha": 0.6,
+        "source": "relation_dev"
+      },
+      "6": {
+        "support": 1110,
+        "alpha": 0.4,
+        "source": "relation_dev"
+      },
+      "7": {
+        "support": 84,
+        "alpha": 0.25,
+        "source": "relation_dev"
+      },
+      "8": {
+        "support": 270,
+        "alpha": 0.95,
+        "source": "relation_dev"
+      },
+      "9": {
+        "support": 4674,
+        "alpha": 0.25,
+        "source": "relation_dev"
+      },
+      "10": {
+        "support": 204,
+        "alpha": 0.25,
+        "source": "relation_dev"
+      },
+      "11": {
+        "support": 42,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "12": {
+        "support": 474,
+        "alpha": 0.25,
+        "source": "relation_dev"
+      },
+      "13": {
+        "support": 54,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "14": {
+        "support": 6,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "15": {
+        "support": 60,
+        "alpha": 0.45,
+        "source": "relation_dev"
+      },
+      "16": {
+        "support": 12,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "17": {
+        "support": 120,
+        "alpha": 0.9,
+        "source": "relation_dev"
+      },
+      "18": {
+        "support": 36,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "19": {
+        "support": 6,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "20": {
+        "support": 6,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "21": {
+        "support": 18,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "22": {
+        "support": 12,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "23": {
+        "support": 42,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "24": {
+        "support": 6,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "25": {
+        "support": 12,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      },
+      "26": {
+        "support": 6,
+        "alpha": 0.35,
+        "source": "global_fallback"
+      }
+    }
+  },
+  "results": [
+    {
+      "method": "M-Hyper",
+      "count": 15978,
+      "mrr": 0.3788129883919518,
+      "hits@1": 0.3458505444986857,
+      "hits@3": 0.39654524971836275,
+      "hits@10": 0.43522343221930154,
+      "notes": "fixed expert",
+      "delta_vs_a": 0.0,
+      "oracle_gap_recovery": 0.0
+    },
+    {
+      "method": "AdaMF-MAT",
+      "count": 15978,
+      "mrr": 0.3391167811441864,
+      "hits@1": 0.25172111653523593,
+      "hits@3": 0.40411816247340093,
+      "hits@10": 0.46057078482914005,
+      "notes": "fixed expert",
+      "delta_vs_a": -0.0396962072477654,
+      "oracle_gap_recovery": -1.521705930915374
+    },
+    {
+      "method": "Equal RRF",
+      "count": 15978,
+      "mrr": 0.34525609587755396,
+      "hits@1": 0.265114532482163,
+      "hits@3": 0.4036174740267868,
+      "hits@10": 0.4605081987733133,
+      "notes": "fixed k=60; answer-agnostic ranks",
+      "delta_vs_a": -0.03355689251439786,
+      "oracle_gap_recovery": -1.2863627510692082
+    },
+    {
+      "method": "Query-zscore 0.5",
+      "count": 15978,
+      "mrr": 0.3725413794482512,
+      "hits@1": 0.32006508949805984,
+      "hits@3": 0.4038678182500939,
+      "hits@10": 0.4550006258605583,
+      "notes": "fixed equal weighting",
+      "delta_vs_a": -0.006271608943700602,
+      "oracle_gap_recovery": -0.2404145178516605
+    },
+    {
+      "method": "Global alpha",
+      "count": 15978,
+      "mrr": 0.37239398262272766,
+      "hits@1": 0.31443234447365126,
+      "hits@3": 0.40705970709725875,
+      "hits@10": 0.464263362122919,
+      "notes": "DEV-locked shared alpha",
+      "delta_vs_a": -0.006419005769224162,
+      "oracle_gap_recovery": -0.24606479628247774
+    },
+    {
+      "method": "Relation alpha",
+      "count": 15978,
+      "mrr": 0.3817217968870809,
+      "hits@1": 0.335273501063963,
+      "hits@3": 0.4073100513205658,
+      "hits@10": 0.45812992865189633,
+      "notes": "DEV-locked; low-support fallback to global",
+      "delta_vs_a": 0.0029088084951290893,
+      "oracle_gap_recovery": 0.11150564363259488
+    },
+    {
+      "method": "Oracle",
+      "count": 15978,
+      "mrr": 0.4048996365683747,
+      "hits@1": 0.36243584929277756,
+      "hits@3": 0.42270622105394917,
+      "hits@10": 0.4790336712980348,
+      "notes": "answer-aware upper bound",
+      "delta_vs_a": 0.026086648176422866,
+      "oracle_gap_recovery": 1.0
+    }
+  ],
+  "stability": {
+    "n_seed_stripped_queries": 5326,
+    "observations_per_query": [
+      3
+    ],
+    "unanimous_winner_label_rate": 0.5229064964325948,
+    "expert_b_wins_all_seeds_rate": 0.3178745775441232,
+    "pairwise_seed_label_agreement": 0.6783702591062711,
+    "label_definition": "sign(RR_B - RR_A), with ties as a third label"
+  },
+  "endpoint_reproduction": [
+    {
+      "expert": "A",
+      "seed": 1,
+      "run_dir": "ml\\artifacts\\outputs\\mkg_y_mhyper\\20260903_215952_seed1",
+      "actual_mrr": 0.37886956439605024,
+      "reference_mrr": null,
+      "delta": null
+    },
+    {
+      "expert": "B",
+      "seed": 1,
+      "run_dir": "ml\\artifacts\\outputs\\mkg_y_adamf_mat\\20260904_002716_seed1",
+      "actual_mrr": 0.3308590861832442,
+      "reference_mrr": null,
+      "delta": null
+    },
+    {
+      "expert": "A",
+      "seed": 2,
+      "run_dir": "ml\\artifacts\\outputs\\mkg_y_mhyper\\20260903_220630_seed2",
+      "actual_mrr": 0.3804097413788601,
+      "reference_mrr": null,
+      "delta": null
+    },
+    {
+      "expert": "B",
+      "seed": 2,
+      "run_dir": "ml\\artifacts\\outputs\\mkg_y_adamf_mat\\20260904_020546_seed2",
+      "actual_mrr": 0.34275459938106845,
+      "reference_mrr": null,
+      "delta": null
+    },
+    {
+      "expert": "A",
+      "seed": 3,
+      "run_dir": "ml\\artifacts\\outputs\\mkg_y_mhyper\\20260903_221310_seed3",
+      "actual_mrr": 0.3771596594009443,
+      "reference_mrr": null,
+      "delta": null
+    },
+    {
+      "expert": "B",
+      "seed": 3,
+      "run_dir": "ml\\artifacts\\outputs\\mkg_y_adamf_mat\\20260904_035250_seed3",
+      "actual_mrr": 0.34373665786825264,
+      "reference_mrr": null,
+      "delta": null
+    }
+  ],
+  "information_boundaries": {
+    "fixed_experts": "answer-agnostic",
+    "rrf": "rank-aware, answer-agnostic, fixed",
+    "equal": "score-aware, answer-agnostic, fixed",
+    "global_alpha": "score-aware, answer-agnostic; selected on DEV",
+    "relation_alpha": "score-aware, answer-agnostic; relation-conditioned and selected on DEV",
+    "query_geometry": "answer-agnostic candidate-score statistics; excludes target ids, target/reference scores, ranks, reciprocal ranks, and raw relation ids",
+    "oracle": "answer-aware upper bound"
+  }
+}

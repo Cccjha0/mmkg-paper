@@ -1,0 +1,854 @@
+{
+  "schema_version": 1,
+  "pair_name": "mkgw_mhyper_adamf",
+  "dataset": "mkg_w",
+  "protocol_version": "mmkg_general_v1",
+  "split": "test",
+  "expert_a_name": "M-Hyper",
+  "expert_b_name": "AdaMF-MAT",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "n_rows": 25644,
+  "rrf_k": 60.0,
+  "score_normalization": "query_zscore",
+  "export_alpha_grid": true,
+  "export_x4_features": true,
+  "dev_only_no_test_access": false,
+  "test_rows_opened": null,
+  "filter_fact_scope": "train_dev_test",
+  "query_geometry_fields": [
+    "geometry_direction_tail",
+    "geometry_a_top1",
+    "geometry_a_top5_mean",
+    "geometry_a_top1_top2_margin",
+    "geometry_a_score_std",
+    "geometry_b_top1",
+    "geometry_b_top5_mean",
+    "geometry_b_top1_top2_margin",
+    "geometry_b_score_std",
+    "geometry_top1_delta_a_minus_b",
+    "geometry_top5_delta_a_minus_b",
+    "geometry_margin_delta_a_minus_b",
+    "geometry_std_delta_a_minus_b"
+  ],
+  "selection": {
+    "schema_version": 1,
+    "pair_name": "mkgw_mhyper_adamf",
+    "dataset": "mkg_w",
+    "protocol_version": "mmkg_general_v1",
+    "expert_a_name": "M-Hyper",
+    "expert_b_name": "AdaMF-MAT",
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "score_normalization": "query_zscore",
+    "alpha_grid": [
+      0.0,
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      1.0
+    ],
+    "rrf_k": 60.0,
+    "global_alpha": 1.0,
+    "global_dev_mrr": 0.3528219653667692,
+    "relation_min_support": 60,
+    "relation_alpha": {
+      "0": 1.0,
+      "1": 1.0,
+      "2": 0.95,
+      "3": 1.0,
+      "4": 1.0,
+      "5": 1.0,
+      "6": 1.0,
+      "7": 1.0,
+      "8": 1.0,
+      "9": 0.9,
+      "10": 1.0,
+      "11": 0.95,
+      "12": 1.0,
+      "13": 1.0,
+      "14": 1.0,
+      "15": 0.95,
+      "16": 1.0,
+      "18": 0.3,
+      "19": 1.0,
+      "20": 1.0,
+      "21": 0.9,
+      "22": 1.0,
+      "23": 1.0,
+      "24": 1.0,
+      "25": 1.0,
+      "26": 1.0,
+      "27": 1.0,
+      "28": 1.0,
+      "29": 1.0,
+      "30": 1.0,
+      "31": 0.3,
+      "32": 1.0,
+      "33": 1.0,
+      "34": 1.0,
+      "35": 1.0,
+      "36": 1.0,
+      "37": 1.0,
+      "38": 1.0,
+      "39": 1.0,
+      "40": 0.45,
+      "41": 0.85,
+      "43": 1.0,
+      "44": 0.15,
+      "45": 1.0,
+      "46": 1.0,
+      "48": 1.0,
+      "49": 0.6,
+      "50": 1.0,
+      "51": 1.0,
+      "52": 1.0,
+      "53": 0.05,
+      "54": 1.0,
+      "55": 1.0,
+      "56": 1.0,
+      "57": 0.75,
+      "58": 0.6,
+      "59": 1.0,
+      "61": 1.0,
+      "62": 1.0,
+      "64": 1.0,
+      "65": 1.0,
+      "66": 1.0,
+      "67": 1.0,
+      "68": 1.0,
+      "69": 1.0,
+      "71": 1.0,
+      "72": 0.15,
+      "73": 1.0,
+      "74": 1.0,
+      "75": 1.0,
+      "77": 0.7,
+      "79": 1.0,
+      "80": 1.0,
+      "81": 1.0,
+      "82": 1.0,
+      "84": 1.0,
+      "86": 1.0,
+      "87": 1.0,
+      "88": 1.0,
+      "89": 1.0,
+      "93": 1.0,
+      "94": 1.0,
+      "100": 1.0,
+      "101": 1.0,
+      "104": 1.0,
+      "105": 1.0,
+      "107": 1.0,
+      "109": 1.0,
+      "112": 1.0,
+      "114": 1.0,
+      "116": 1.0,
+      "117": 1.0,
+      "123": 1.0,
+      "127": 1.0,
+      "130": 1.0,
+      "136": 1.0,
+      "138": 1.0,
+      "141": 1.0,
+      "144": 1.0,
+      "147": 1.0,
+      "152": 1.0,
+      "155": 1.0,
+      "160": 1.0,
+      "168": 1.0
+    },
+    "relation_details": {
+      "0": {
+        "support": 4974,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "1": {
+        "support": 804,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "2": {
+        "support": 816,
+        "alpha": 0.95,
+        "source": "relation_dev"
+      },
+      "3": {
+        "support": 852,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "4": {
+        "support": 198,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "5": {
+        "support": 924,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "6": {
+        "support": 348,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "7": {
+        "support": 720,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "8": {
+        "support": 570,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "9": {
+        "support": 426,
+        "alpha": 0.9,
+        "source": "relation_dev"
+      },
+      "10": {
+        "support": 252,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "11": {
+        "support": 1068,
+        "alpha": 0.95,
+        "source": "relation_dev"
+      },
+      "12": {
+        "support": 108,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "13": {
+        "support": 2772,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "14": {
+        "support": 456,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "15": {
+        "support": 246,
+        "alpha": 0.95,
+        "source": "relation_dev"
+      },
+      "16": {
+        "support": 774,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "18": {
+        "support": 1008,
+        "alpha": 0.3,
+        "source": "relation_dev"
+      },
+      "19": {
+        "support": 138,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "20": {
+        "support": 36,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "21": {
+        "support": 756,
+        "alpha": 0.9,
+        "source": "relation_dev"
+      },
+      "22": {
+        "support": 1128,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "23": {
+        "support": 36,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "24": {
+        "support": 24,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "25": {
+        "support": 24,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "26": {
+        "support": 48,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "27": {
+        "support": 78,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "28": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "29": {
+        "support": 450,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "30": {
+        "support": 750,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "31": {
+        "support": 450,
+        "alpha": 0.3,
+        "source": "relation_dev"
+      },
+      "32": {
+        "support": 486,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "33": {
+        "support": 84,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "34": {
+        "support": 552,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "35": {
+        "support": 30,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "36": {
+        "support": 18,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "37": {
+        "support": 246,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "38": {
+        "support": 42,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "39": {
+        "support": 84,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "40": {
+        "support": 90,
+        "alpha": 0.45,
+        "source": "relation_dev"
+      },
+      "41": {
+        "support": 66,
+        "alpha": 0.85,
+        "source": "relation_dev"
+      },
+      "43": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "44": {
+        "support": 78,
+        "alpha": 0.15,
+        "source": "relation_dev"
+      },
+      "45": {
+        "support": 54,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "46": {
+        "support": 66,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "48": {
+        "support": 192,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "49": {
+        "support": 78,
+        "alpha": 0.6,
+        "source": "relation_dev"
+      },
+      "50": {
+        "support": 234,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "51": {
+        "support": 30,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "52": {
+        "support": 24,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "53": {
+        "support": 102,
+        "alpha": 0.05,
+        "source": "relation_dev"
+      },
+      "54": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "55": {
+        "support": 30,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "56": {
+        "support": 288,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "57": {
+        "support": 72,
+        "alpha": 0.75,
+        "source": "relation_dev"
+      },
+      "58": {
+        "support": 198,
+        "alpha": 0.6,
+        "source": "relation_dev"
+      },
+      "59": {
+        "support": 162,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "61": {
+        "support": 102,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "62": {
+        "support": 30,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "64": {
+        "support": 96,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "65": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "66": {
+        "support": 30,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "67": {
+        "support": 48,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "68": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "69": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "71": {
+        "support": 24,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "72": {
+        "support": 162,
+        "alpha": 0.15,
+        "source": "relation_dev"
+      },
+      "73": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "74": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "75": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "77": {
+        "support": 72,
+        "alpha": 0.7,
+        "source": "relation_dev"
+      },
+      "79": {
+        "support": 48,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "80": {
+        "support": 30,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "81": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "82": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "84": {
+        "support": 36,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "86": {
+        "support": 36,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "87": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "88": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "89": {
+        "support": 48,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "93": {
+        "support": 36,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "94": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "100": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "101": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "104": {
+        "support": 42,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "105": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "107": {
+        "support": 18,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "109": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "112": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "114": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "116": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "117": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "123": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "127": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "130": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "136": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "138": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "141": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "144": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "147": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "152": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "155": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "160": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "168": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      }
+    }
+  },
+  "results": [
+    {
+      "method": "M-Hyper",
+      "count": 25644,
+      "mrr": 0.35972093947608075,
+      "hits@1": 0.30201996568398065,
+      "hits@3": 0.38254562470753395,
+      "hits@10": 0.46927156449851815,
+      "notes": "fixed expert",
+      "delta_vs_a": 0.0,
+      "oracle_gap_recovery": 0.0
+    },
+    {
+      "method": "AdaMF-MAT",
+      "count": 25644,
+      "mrr": 0.2963189096948725,
+      "hits@1": 0.2009436905318983,
+      "hits@3": 0.35645765091249415,
+      "hits@10": 0.44883793479956324,
+      "notes": "fixed expert",
+      "delta_vs_a": -0.06340202978120824,
+      "oracle_gap_recovery": -2.0445065672002674
+    },
+    {
+      "method": "Equal RRF",
+      "count": 25644,
+      "mrr": 0.3250847676033804,
+      "hits@1": 0.2339728591483388,
+      "hits@3": 0.37798315395414134,
+      "hits@10": 0.4765637186086414,
+      "notes": "fixed k=60; answer-agnostic ranks",
+      "delta_vs_a": -0.03463617187270035,
+      "oracle_gap_recovery": -1.1169024256917657
+    },
+    {
+      "method": "Query-zscore 0.5",
+      "count": 25644,
+      "mrr": 0.3363899440047821,
+      "hits@1": 0.24828419903291218,
+      "hits@3": 0.3856652628295118,
+      "hits@10": 0.4817891124629543,
+      "notes": "fixed equal weighting",
+      "delta_vs_a": -0.023330995471298632,
+      "oracle_gap_recovery": -0.7523477343706066
+    },
+    {
+      "method": "Global alpha",
+      "count": 25644,
+      "mrr": 0.35972093947608075,
+      "hits@1": 0.30201996568398065,
+      "hits@3": 0.38254562470753395,
+      "hits@10": 0.46927156449851815,
+      "notes": "DEV-locked shared alpha",
+      "delta_vs_a": 0.0,
+      "oracle_gap_recovery": 0.0
+    },
+    {
+      "method": "Relation alpha",
+      "count": 25644,
+      "mrr": 0.35828085949561334,
+      "hits@1": 0.2989003275620028,
+      "hits@3": 0.382116674465762,
+      "hits@10": 0.4698175011698643,
+      "notes": "DEV-locked; low-support fallback to global",
+      "delta_vs_a": -0.0014400799804674125,
+      "oracle_gap_recovery": -0.04643783468004846
+    },
+    {
+      "method": "Oracle",
+      "count": 25644,
+      "mrr": 0.3907318595671962,
+      "hits@1": 0.3265091249415068,
+      "hits@3": 0.4167056621431914,
+      "hits@10": 0.5114646700982686,
+      "notes": "answer-aware upper bound",
+      "delta_vs_a": 0.031010920091115446,
+      "oracle_gap_recovery": 1.0
+    }
+  ],
+  "stability": {
+    "n_seed_stripped_queries": 8548,
+    "observations_per_query": [
+      3
+    ],
+    "unanimous_winner_label_rate": 0.4629153018249883,
+    "expert_b_wins_all_seeds_rate": 0.16682264857276555,
+    "pairwise_seed_label_agreement": 0.6328965839962565,
+    "label_definition": "sign(RR_B - RR_A), with ties as a third label"
+  },
+  "endpoint_reproduction": [
+    {
+      "expert": "A",
+      "seed": 1,
+      "run_dir": "ml\\artifacts\\outputs\\mkg_w_mhyper\\20260902_014323_seed1",
+      "actual_mrr": 0.36061024143331455,
+      "reference_mrr": null,
+      "delta": null
+    },
+    {
+      "expert": "B",
+      "seed": 1,
+      "run_dir": "ml\\artifacts\\outputs\\mkg_w_adamf_mat\\20260902_060855_seed1",
+      "actual_mrr": 0.28789290847837207,
+      "reference_mrr": null,
+      "delta": null
+    },
+    {
+      "expert": "A",
+      "seed": 2,
+      "run_dir": "ml\\artifacts\\outputs\\mkg_w_mhyper\\20260902_015400_seed2",
+      "actual_mrr": 0.35885412183356935,
+      "reference_mrr": null,
+      "delta": null
+    },
+    {
+      "expert": "B",
+      "seed": 2,
+      "run_dir": "ml\\artifacts\\outputs\\mkg_w_adamf_mat\\20260902_083530_seed2",
+      "actual_mrr": 0.30220208553871764,
+      "reference_mrr": null,
+      "delta": null
+    },
+    {
+      "expert": "A",
+      "seed": 3,
+      "run_dir": "ml\\artifacts\\outputs\\mkg_w_mhyper\\20260902_020435_seed3",
+      "actual_mrr": 0.35969845516135995,
+      "reference_mrr": null,
+      "delta": null
+    },
+    {
+      "expert": "B",
+      "seed": 3,
+      "run_dir": "ml\\artifacts\\outputs\\mkg_w_adamf_mat\\20260902_142555_seed3",
+      "actual_mrr": 0.2988617350675429,
+      "reference_mrr": null,
+      "delta": null
+    }
+  ],
+  "information_boundaries": {
+    "fixed_experts": "answer-agnostic",
+    "rrf": "rank-aware, answer-agnostic, fixed",
+    "equal": "score-aware, answer-agnostic, fixed",
+    "global_alpha": "score-aware, answer-agnostic; selected on DEV",
+    "relation_alpha": "score-aware, answer-agnostic; relation-conditioned and selected on DEV",
+    "query_geometry": "answer-agnostic candidate-score statistics; excludes target ids, target/reference scores, ranks, reciprocal ranks, and raw relation ids",
+    "oracle": "answer-aware upper bound"
+  }
+}

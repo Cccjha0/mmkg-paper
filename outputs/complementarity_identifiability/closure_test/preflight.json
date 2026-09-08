@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "experiment": "Three-Dataset Complementarity Closure \u2014 One-Time Confirmatory TEST",
+  "status": "PASS",
+  "contract": {
+    "path": "docs/protocols/COMPLEMENTARITY_CLOSURE_TEST_CONTRACT.json",
+    "sha256": "77ee5051938e6ddfed74942f579ca614480c4c08703b63e116ab131e07c58539"
+  },
+  "pair_count": 9,
+  "dataset_count": 3,
+  "final_x4_configurations": [
+    {
+      "pair_id": "mkgw_mhyper_native",
+      "alpha0": 0.6,
+      "learner": "hist_gbdt",
+      "config": {
+        "l2_regularization": 0.0001,
+        "learning_rate": 0.1,
+        "max_iter": 150,
+        "max_leaf_nodes": 31
+      },
+      "outer_fold_votes": 4
+    },
+    {
+      "pair_id": "mkgw_mhyper_adamf",
+      "alpha0": 1.0,
+      "learner": "hist_gbdt",
+      "config": {
+        "l2_regularization": 0.0,
+        "learning_rate": 0.05,
+        "max_iter": 150,
+        "max_leaf_nodes": 31
+      },
+      "outer_fold_votes": 5
+    },
+    {
+      "pair_id": "mkgw_native_adamf",
+      "alpha0": 0.95,
+      "learner": "hist_gbdt",
+      "config": {
+        "l2_regularization": 0.0,
+        "learning_rate": 0.05,
+        "max_iter": 150,
+        "max_leaf_nodes": 15
+      },
+      "outer_fold_votes": 2
+    },
+    {
+      "pair_id": "db15k_mhyper_native",
+      "alpha0": 1.0,
+      "learner": "hist_gbdt",
+      "config": {
+        "l2_regularization": 0.0,
+        "learning_rate": 0.05,
+        "max_iter": 150,
+        "max_leaf_nodes": 31
+      },
+      "outer_fold_votes": 3
+    },
+    {
+      "pair_id": "db15k_mhyper_adamf",
+      "alpha0": 1.0,
+      "learner": "hist_gbdt",
+      "config": {
+        "l2_regularization": 0.0,
+        "learning_rate": 0.05,
+        "max_iter": 150,
+        "max_leaf_nodes": 31
+      },
+      "outer_fold_votes": 4
+    },
+    {
+      "pair_id": "db15k_native_adamf",
+      "alpha0": 1.0,
+      "learner": "hist_gbdt",
+      "config": {
+        "l2_regularization": 0.0,
+        "learning_rate": 0.05,
+        "max_iter": 150,
+        "max_leaf_nodes": 15
+      },
+      "outer_fold_votes": 3
+    },
+    {
+      "pair_id": "mkg_y_mhyper_native",
+      "alpha0": 0.35,
+      "learner": "hist_gbdt",
+      "config": {
+        "l2_regularization": 0.0,
+        "learning_rate": 0.05,
+        "max_iter": 150,
+        "max_leaf_nodes": 31
+      },
+      "outer_fold_votes": 3
+    },
+    {
+      "pair_id": "mkg_y_mhyper_adamf",
+      "alpha0": 0.35,
+      "learner": "hist_gbdt",
+      "config": {
+        "l2_regularization": 0.0001,
+        "learning_rate": 0.1,
+        "max_iter": 150,
+        "max_leaf_nodes": 15
+      },
+      "outer_fold_votes": 2
+    },
+    {
+      "pair_id": "mkg_y_native_adamf",
+      "alpha0": 0.55,
+      "learner": "linear_huber",
+      "config": {
+        "alpha": 1e-05,
+        "epsilon": 0.1,
+        "max_iter": 80
+      },
+      "outer_fold_votes": 2
+    }
+  ],
+  "verified_source_count": 114,
+  "test_access": 0,
+  "checkpoint_inference": 0,
+  "checkpoint_retraining": 0,
+  "checkpoint_reselection": 0,
+  "policy_tuning": 0
+}

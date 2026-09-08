@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "experiment": "Three-Dataset Complementarity Closure \u2014 One-Time Confirmatory TEST",
+  "split": "test",
+  "dataset": "db15k",
+  "pair_id": "db15k_native_adamf",
+  "representation": "X4",
+  "alpha0": 1.0,
+  "learner": "hist_gbdt",
+  "config": {
+    "l2_regularization": 0.0,
+    "learning_rate": 0.05,
+    "max_iter": 150,
+    "max_leaf_nodes": 15
+  },
+  "configuration_freeze_rule": "Use the modal (learner, hyperparameter configuration) pair among the five already-frozen nested-OOF outer-fold selections. Break a vote tie by higher mean inner probe delta MRR among voting folds, then frozen learner order, then frozen hyperparameter order. Refit that configuration once on all DEV action rows using utility relative to the full-DEV alpha0; TEST labels are never used for fitting or action selection.",
+  "n_dev_queries": 47532,
+  "n_test_queries": 59412,
+  "test_mrr": 0.3150368793544029,
+  "test_global_mrr": 0.31276148478023846,
+  "test_gain": 0.0022753945741644157,
+  "changed_rate": 0.32050764155389483,
+  "negative_transfer_rate": 0.07476604053053255,
+  "positive_transfer_rate": 0.16813101730290178,
+  "sources": [
+    {
+      "path": "docs/protocols/COMPLEMENTARITY_CLOSURE_TEST_CONTRACT.json",
+      "sha256": "77ee5051938e6ddfed74942f579ca614480c4c08703b63e116ab131e07c58539"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/db15k_native_adamf_dev_source_manifest.json",
+      "sha256": "f9001315914573bc95444c27c09def97e1eddf0fea4bac2d1ee81b6f1d96e20a"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/db15k_native_adamf_query_information_manifest.json",
+      "sha256": "c532cb4b267edd2a3371786a69623d2ac00cb4ee5e07ef9fcfb2050db163bfe9"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/runs/db15k_native_adamf/x4/nested_selected/outer_fold_learner_selections.csv",
+      "sha256": "4cd7d51ad14956f6036c6358712601501cc12f5e548368b6bb2809d270537144"
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/selection.json",
+      "sha256": "cce837ceb70ef765e6cc0ac6230b6a5241a7167e10621cb205339dbaa767c499"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/db15k_native_adamf_query_information.npz",
+      "sha256": "1bd556756257095cebdea8ba1d98f6675def2a5feae4da344f326eb054021e4f"
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "0b132d2a13d5df045d71adda1cf6282230f5db26ef18a5d2052caeb58da22bfd"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/closure_test/raw/db15k_native_adamf/test_query_rows.csv",
+      "sha256": "065695a3647e4fab9eef17eb664417c1ea94171d0802e667f87d0a410c661200"
+    }
+  ],
+  "output": {
+    "path": "outputs/complementarity_identifiability/closure_test/x4/db15k_native_adamf/test_x4_policy_rows.csv.gz",
+    "sha256": "f37646c60d2167708ae85d28110204726c42fca3744eb5db32eada67625c2917"
+  },
+  "test_labels_used_for_training_or_action_selection": 0,
+  "test_hyperparameter_selection": 0,
+  "checkpoint_retraining": 0,
+  "expert_checkpoint_reselection": 0
+}

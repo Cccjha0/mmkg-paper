@@ -1,0 +1,1358 @@
+{
+  "schema_version": 1,
+  "pair_name": "db15k_native_adamf",
+  "dataset": "db15k",
+  "protocol_version": "mmkg_general_v1",
+  "split": "test",
+  "expert_a_name": "NativE",
+  "expert_b_name": "AdaMF-MAT",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "n_rows": 59412,
+  "rrf_k": 60.0,
+  "score_normalization": "query_zscore",
+  "export_alpha_grid": true,
+  "export_x4_features": true,
+  "dev_only_no_test_access": false,
+  "test_rows_opened": null,
+  "filter_fact_scope": "train_dev_test",
+  "query_geometry_fields": [
+    "geometry_direction_tail",
+    "geometry_a_top1",
+    "geometry_a_top5_mean",
+    "geometry_a_top1_top2_margin",
+    "geometry_a_score_std",
+    "geometry_b_top1",
+    "geometry_b_top5_mean",
+    "geometry_b_top1_top2_margin",
+    "geometry_b_score_std",
+    "geometry_top1_delta_a_minus_b",
+    "geometry_top5_delta_a_minus_b",
+    "geometry_margin_delta_a_minus_b",
+    "geometry_std_delta_a_minus_b"
+  ],
+  "selection": {
+    "schema_version": 1,
+    "pair_name": "db15k_native_adamf",
+    "dataset": "db15k",
+    "protocol_version": "mmkg_general_v1",
+    "expert_a_name": "NativE",
+    "expert_b_name": "AdaMF-MAT",
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "score_normalization": "query_zscore",
+    "alpha_grid": [
+      0.0,
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      1.0
+    ],
+    "rrf_k": 60.0,
+    "global_alpha": 1.0,
+    "global_dev_mrr": 0.32102191827916066,
+    "relation_min_support": 60,
+    "relation_alpha": {
+      "0": 1.0,
+      "1": 1.0,
+      "2": 0.7,
+      "3": 1.0,
+      "4": 0.95,
+      "5": 0.65,
+      "6": 0.6,
+      "7": 0.3,
+      "8": 0.55,
+      "9": 1.0,
+      "10": 1.0,
+      "11": 0.3,
+      "12": 0.6,
+      "13": 0.7,
+      "14": 1.0,
+      "15": 1.0,
+      "16": 1.0,
+      "17": 0.8,
+      "18": 1.0,
+      "19": 0.95,
+      "20": 1.0,
+      "21": 0.65,
+      "22": 1.0,
+      "23": 0.85,
+      "24": 1.0,
+      "25": 1.0,
+      "26": 1.0,
+      "27": 1.0,
+      "28": 0.65,
+      "29": 1.0,
+      "30": 1.0,
+      "31": 1.0,
+      "32": 1.0,
+      "33": 1.0,
+      "35": 0.5,
+      "36": 0.55,
+      "37": 1.0,
+      "38": 1.0,
+      "39": 1.0,
+      "41": 1.0,
+      "42": 0.7,
+      "43": 0.5,
+      "44": 0.2,
+      "45": 1.0,
+      "46": 1.0,
+      "47": 1.0,
+      "48": 1.0,
+      "49": 0.7,
+      "50": 1.0,
+      "51": 0.2,
+      "52": 1.0,
+      "54": 1.0,
+      "55": 1.0,
+      "56": 0.0,
+      "57": 1.0,
+      "58": 1.0,
+      "59": 1.0,
+      "60": 1.0,
+      "61": 1.0,
+      "62": 1.0,
+      "63": 0.6,
+      "64": 0.75,
+      "65": 1.0,
+      "66": 1.0,
+      "67": 0.45,
+      "68": 1.0,
+      "69": 0.15,
+      "70": 1.0,
+      "71": 0.65,
+      "72": 1.0,
+      "73": 1.0,
+      "74": 0.5,
+      "75": 1.0,
+      "76": 1.0,
+      "77": 1.0,
+      "78": 0.3,
+      "79": 0.15,
+      "80": 1.0,
+      "81": 0.5,
+      "82": 1.0,
+      "83": 1.0,
+      "84": 0.75,
+      "85": 1.0,
+      "87": 1.0,
+      "88": 1.0,
+      "89": 0.55,
+      "90": 1.0,
+      "91": 1.0,
+      "92": 1.0,
+      "93": 1.0,
+      "94": 1.0,
+      "95": 1.0,
+      "96": 1.0,
+      "97": 0.95,
+      "98": 0.35,
+      "99": 1.0,
+      "100": 1.0,
+      "101": 1.0,
+      "102": 1.0,
+      "103": 1.0,
+      "104": 1.0,
+      "105": 1.0,
+      "106": 0.8,
+      "108": 1.0,
+      "109": 1.0,
+      "110": 0.9,
+      "111": 1.0,
+      "112": 1.0,
+      "113": 0.5,
+      "114": 1.0,
+      "115": 1.0,
+      "116": 1.0,
+      "117": 1.0,
+      "119": 1.0,
+      "120": 1.0,
+      "121": 1.0,
+      "122": 1.0,
+      "123": 1.0,
+      "125": 1.0,
+      "129": 1.0,
+      "130": 1.0,
+      "131": 1.0,
+      "132": 0.0,
+      "133": 1.0,
+      "134": 0.95,
+      "135": 1.0,
+      "136": 1.0,
+      "137": 1.0,
+      "139": 1.0,
+      "140": 1.0,
+      "142": 1.0,
+      "143": 1.0,
+      "144": 1.0,
+      "145": 0.45,
+      "146": 1.0,
+      "147": 1.0,
+      "148": 1.0,
+      "151": 1.0,
+      "152": 1.0,
+      "155": 1.0,
+      "156": 1.0,
+      "157": 1.0,
+      "159": 1.0,
+      "160": 1.0,
+      "161": 1.0,
+      "162": 1.0,
+      "164": 1.0,
+      "167": 1.0,
+      "176": 1.0,
+      "177": 0.1,
+      "178": 1.0,
+      "179": 0.9,
+      "184": 1.0,
+      "186": 1.0,
+      "190": 1.0,
+      "195": 1.0,
+      "197": 1.0,
+      "198": 1.0,
+      "200": 1.0,
+      "202": 1.0,
+      "203": 1.0,
+      "204": 1.0,
+      "206": 1.0,
+      "213": 1.0,
+      "216": 1.0,
+      "218": 1.0,
+      "219": 1.0,
+      "220": 1.0,
+      "222": 1.0,
+      "223": 1.0,
+      "224": 1.0,
+      "225": 1.0,
+      "226": 1.0,
+      "229": 1.0,
+      "232": 1.0,
+      "233": 1.0,
+      "234": 1.0,
+      "235": 1.0,
+      "239": 1.0,
+      "240": 1.0,
+      "241": 1.0,
+      "245": 1.0,
+      "246": 1.0,
+      "254": 1.0,
+      "255": 1.0,
+      "258": 1.0,
+      "260": 1.0,
+      "278": 1.0
+    },
+    "relation_details": {
+      "0": {
+        "support": 1746,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "1": {
+        "support": 1506,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "2": {
+        "support": 420,
+        "alpha": 0.7,
+        "source": "relation_dev"
+      },
+      "3": {
+        "support": 138,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "4": {
+        "support": 144,
+        "alpha": 0.95,
+        "source": "relation_dev"
+      },
+      "5": {
+        "support": 840,
+        "alpha": 0.65,
+        "source": "relation_dev"
+      },
+      "6": {
+        "support": 132,
+        "alpha": 0.6,
+        "source": "relation_dev"
+      },
+      "7": {
+        "support": 108,
+        "alpha": 0.3,
+        "source": "relation_dev"
+      },
+      "8": {
+        "support": 60,
+        "alpha": 0.55,
+        "source": "relation_dev"
+      },
+      "9": {
+        "support": 96,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "10": {
+        "support": 42,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "11": {
+        "support": 78,
+        "alpha": 0.3,
+        "source": "relation_dev"
+      },
+      "12": {
+        "support": 3222,
+        "alpha": 0.6,
+        "source": "relation_dev"
+      },
+      "13": {
+        "support": 78,
+        "alpha": 0.7,
+        "source": "relation_dev"
+      },
+      "14": {
+        "support": 492,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "15": {
+        "support": 30,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "16": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "17": {
+        "support": 516,
+        "alpha": 0.8,
+        "source": "relation_dev"
+      },
+      "18": {
+        "support": 234,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "19": {
+        "support": 408,
+        "alpha": 0.95,
+        "source": "relation_dev"
+      },
+      "20": {
+        "support": 102,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "21": {
+        "support": 648,
+        "alpha": 0.65,
+        "source": "relation_dev"
+      },
+      "22": {
+        "support": 42,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "23": {
+        "support": 66,
+        "alpha": 0.85,
+        "source": "relation_dev"
+      },
+      "24": {
+        "support": 30,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "25": {
+        "support": 90,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "26": {
+        "support": 30,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "27": {
+        "support": 306,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "28": {
+        "support": 354,
+        "alpha": 0.65,
+        "source": "relation_dev"
+      },
+      "29": {
+        "support": 24,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "30": {
+        "support": 60,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "31": {
+        "support": 18,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "32": {
+        "support": 78,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "33": {
+        "support": 1008,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "35": {
+        "support": 1428,
+        "alpha": 0.5,
+        "source": "relation_dev"
+      },
+      "36": {
+        "support": 234,
+        "alpha": 0.55,
+        "source": "relation_dev"
+      },
+      "37": {
+        "support": 60,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "38": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "39": {
+        "support": 852,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "41": {
+        "support": 24,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "42": {
+        "support": 174,
+        "alpha": 0.7,
+        "source": "relation_dev"
+      },
+      "43": {
+        "support": 180,
+        "alpha": 0.5,
+        "source": "relation_dev"
+      },
+      "44": {
+        "support": 108,
+        "alpha": 0.2,
+        "source": "relation_dev"
+      },
+      "45": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "46": {
+        "support": 18,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "47": {
+        "support": 2472,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "48": {
+        "support": 54,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "49": {
+        "support": 456,
+        "alpha": 0.7,
+        "source": "relation_dev"
+      },
+      "50": {
+        "support": 162,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "51": {
+        "support": 138,
+        "alpha": 0.2,
+        "source": "relation_dev"
+      },
+      "52": {
+        "support": 18,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "54": {
+        "support": 24,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "55": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "56": {
+        "support": 84,
+        "alpha": 0.0,
+        "source": "relation_dev"
+      },
+      "57": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "58": {
+        "support": 24,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "59": {
+        "support": 42,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "60": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "61": {
+        "support": 246,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "62": {
+        "support": 54,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "63": {
+        "support": 102,
+        "alpha": 0.6,
+        "source": "relation_dev"
+      },
+      "64": {
+        "support": 192,
+        "alpha": 0.75,
+        "source": "relation_dev"
+      },
+      "65": {
+        "support": 342,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "66": {
+        "support": 462,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "67": {
+        "support": 156,
+        "alpha": 0.45,
+        "source": "relation_dev"
+      },
+      "68": {
+        "support": 258,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "69": {
+        "support": 126,
+        "alpha": 0.15,
+        "source": "relation_dev"
+      },
+      "70": {
+        "support": 30,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "71": {
+        "support": 72,
+        "alpha": 0.65,
+        "source": "relation_dev"
+      },
+      "72": {
+        "support": 96,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "73": {
+        "support": 3558,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "74": {
+        "support": 132,
+        "alpha": 0.5,
+        "source": "relation_dev"
+      },
+      "75": {
+        "support": 102,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "76": {
+        "support": 1104,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "77": {
+        "support": 36,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "78": {
+        "support": 96,
+        "alpha": 0.3,
+        "source": "relation_dev"
+      },
+      "79": {
+        "support": 78,
+        "alpha": 0.15,
+        "source": "relation_dev"
+      },
+      "80": {
+        "support": 378,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "81": {
+        "support": 498,
+        "alpha": 0.5,
+        "source": "relation_dev"
+      },
+      "82": {
+        "support": 114,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "83": {
+        "support": 144,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "84": {
+        "support": 96,
+        "alpha": 0.75,
+        "source": "relation_dev"
+      },
+      "85": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "87": {
+        "support": 1260,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "88": {
+        "support": 24,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "89": {
+        "support": 1284,
+        "alpha": 0.55,
+        "source": "relation_dev"
+      },
+      "90": {
+        "support": 1110,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "91": {
+        "support": 1056,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "92": {
+        "support": 168,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "93": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "94": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "95": {
+        "support": 726,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "96": {
+        "support": 18,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "97": {
+        "support": 234,
+        "alpha": 0.95,
+        "source": "relation_dev"
+      },
+      "98": {
+        "support": 126,
+        "alpha": 0.35,
+        "source": "relation_dev"
+      },
+      "99": {
+        "support": 150,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "100": {
+        "support": 78,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "101": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "102": {
+        "support": 678,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "103": {
+        "support": 528,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "104": {
+        "support": 768,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "105": {
+        "support": 576,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "106": {
+        "support": 126,
+        "alpha": 0.8,
+        "source": "relation_dev"
+      },
+      "108": {
+        "support": 138,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "109": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "110": {
+        "support": 204,
+        "alpha": 0.9,
+        "source": "relation_dev"
+      },
+      "111": {
+        "support": 840,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "112": {
+        "support": 54,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "113": {
+        "support": 90,
+        "alpha": 0.5,
+        "source": "relation_dev"
+      },
+      "114": {
+        "support": 54,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "115": {
+        "support": 24,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "116": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "117": {
+        "support": 474,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "119": {
+        "support": 18,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "120": {
+        "support": 24,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "121": {
+        "support": 54,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "122": {
+        "support": 156,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "123": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "125": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "129": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "130": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "131": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "132": {
+        "support": 84,
+        "alpha": 0.0,
+        "source": "relation_dev"
+      },
+      "133": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "134": {
+        "support": 114,
+        "alpha": 0.95,
+        "source": "relation_dev"
+      },
+      "135": {
+        "support": 48,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "136": {
+        "support": 18,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "137": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "139": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "140": {
+        "support": 30,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "142": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "143": {
+        "support": 18,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "144": {
+        "support": 18,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "145": {
+        "support": 90,
+        "alpha": 0.45,
+        "source": "relation_dev"
+      },
+      "146": {
+        "support": 84,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "147": {
+        "support": 36,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "148": {
+        "support": 24,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "151": {
+        "support": 24,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "152": {
+        "support": 132,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "155": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "156": {
+        "support": 96,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "157": {
+        "support": 18,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "159": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "160": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "161": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "162": {
+        "support": 42,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "164": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "167": {
+        "support": 30,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "176": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "177": {
+        "support": 300,
+        "alpha": 0.1,
+        "source": "relation_dev"
+      },
+      "178": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "179": {
+        "support": 66,
+        "alpha": 0.9,
+        "source": "relation_dev"
+      },
+      "184": {
+        "support": 42,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "186": {
+        "support": 24,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "190": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "195": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "197": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "198": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "200": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "202": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "203": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "204": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "206": {
+        "support": 54,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "213": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "216": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "218": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "219": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "220": {
+        "support": 24,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "222": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "223": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "224": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "225": {
+        "support": 102,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "226": {
+        "support": 90,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      },
+      "229": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "232": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "233": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "234": {
+        "support": 18,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "235": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "239": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "240": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "241": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "245": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "246": {
+        "support": 12,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "254": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "255": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "258": {
+        "support": 6,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "260": {
+        "support": 18,
+        "alpha": 1.0,
+        "source": "global_fallback"
+      },
+      "278": {
+        "support": 6252,
+        "alpha": 1.0,
+        "source": "relation_dev"
+      }
+    }
+  },
+  "results": [
+    {
+      "method": "NativE",
+      "count": 59412,
+      "mrr": 0.31276148478026,
+      "hits@1": 0.20681007203931864,
+      "hits@3": 0.37808860162930047,
+      "hits@10": 0.49951188312125494,
+      "notes": "fixed expert",
+      "delta_vs_a": 0.0,
+      "oracle_gap_recovery": 0.0
+    },
+    {
+      "method": "AdaMF-MAT",
+      "count": 59412,
+      "mrr": 0.2825884394797477,
+      "hits@1": 0.15890729145627147,
+      "hits@3": 0.365262909849862,
+      "hits@10": 0.49641486568370025,
+      "notes": "fixed expert",
+      "delta_vs_a": -0.03017304530051229,
+      "oracle_gap_recovery": -0.6733189809847707
+    },
+    {
+      "method": "Equal RRF",
+      "count": 59412,
+      "mrr": 0.2867342512842467,
+      "hits@1": 0.1607924325052178,
+      "hits@3": 0.37106981754527707,
+      "hits@10": 0.51183262640544,
+      "notes": "fixed k=60; answer-agnostic ranks",
+      "delta_vs_a": -0.026027233496013324,
+      "oracle_gap_recovery": -0.5808041634793437
+    },
+    {
+      "method": "Query-zscore 0.5",
+      "count": 59412,
+      "mrr": 0.3002441562840577,
+      "hits@1": 0.17540227563455194,
+      "hits@3": 0.38296977041675084,
+      "hits@10": 0.516629637110348,
+      "notes": "fixed equal weighting",
+      "delta_vs_a": -0.012517328496202296,
+      "oracle_gap_recovery": -0.2793272864496533
+    },
+    {
+      "method": "Global alpha",
+      "count": 59412,
+      "mrr": 0.31276148478026,
+      "hits@1": 0.20681007203931864,
+      "hits@3": 0.37808860162930047,
+      "hits@10": 0.49951188312125494,
+      "notes": "DEV-locked shared alpha",
+      "delta_vs_a": 0.0,
+      "oracle_gap_recovery": 0.0
+    },
+    {
+      "method": "Relation alpha",
+      "count": 59412,
+      "mrr": 0.31272342595359925,
+      "hits@1": 0.20310711640745976,
+      "hits@3": 0.38105096613478756,
+      "hits@10": 0.5063455194236854,
+      "notes": "DEV-locked; low-support fallback to global",
+      "delta_vs_a": -3.8058826660747336e-05,
+      "oracle_gap_recovery": -0.0008492921456706704
+    },
+    {
+      "method": "Oracle",
+      "count": 59412,
+      "mrr": 0.35757389338989454,
+      "hits@1": 0.25427523059314616,
+      "hits@3": 0.41915774590991717,
+      "hits@10": 0.5406651854844139,
+      "notes": "answer-aware upper bound",
+      "delta_vs_a": 0.044812408609634535,
+      "oracle_gap_recovery": 1.0
+    }
+  ],
+  "stability": {
+    "n_seed_stripped_queries": 19804,
+    "observations_per_query": [
+      3
+    ],
+    "unanimous_winner_label_rate": 0.323772975156534,
+    "expert_b_wins_all_seeds_rate": 0.14072914562714603,
+    "pairwise_seed_label_agreement": 0.5259375210395206,
+    "label_definition": "sign(RR_B - RR_A), with ties as a third label"
+  },
+  "endpoint_reproduction": [
+    {
+      "expert": "A",
+      "seed": 1,
+      "run_dir": "ml\\artifacts\\outputs\\db15k_native\\20260831_223530_seed1",
+      "actual_mrr": 0.3144991991264323,
+      "reference_mrr": null,
+      "delta": null
+    },
+    {
+      "expert": "B",
+      "seed": 1,
+      "run_dir": "ml\\artifacts\\outputs\\db15k_adamf_mat\\20260901_030904_seed1",
+      "actual_mrr": 0.284674510557296,
+      "reference_mrr": null,
+      "delta": null
+    },
+    {
+      "expert": "A",
+      "seed": 2,
+      "run_dir": "ml\\artifacts\\outputs\\db15k_native\\20260902_182809_seed2",
+      "actual_mrr": 0.31392474336640785,
+      "reference_mrr": null,
+      "delta": null
+    },
+    {
+      "expert": "B",
+      "seed": 2,
+      "run_dir": "ml\\artifacts\\outputs\\db15k_adamf_mat\\20260903_044823_seed2",
+      "actual_mrr": 0.27357627088803316,
+      "reference_mrr": null,
+      "delta": null
+    },
+    {
+      "expert": "A",
+      "seed": 3,
+      "run_dir": "ml\\artifacts\\outputs\\db15k_native\\20260903_012002_seed3",
+      "actual_mrr": 0.3098605118478625,
+      "reference_mrr": null,
+      "delta": null
+    },
+    {
+      "expert": "B",
+      "seed": 3,
+      "run_dir": "ml\\artifacts\\outputs\\db15k_adamf_mat\\20260903_090422_seed3",
+      "actual_mrr": 0.2895145369938191,
+      "reference_mrr": null,
+      "delta": null
+    }
+  ],
+  "information_boundaries": {
+    "fixed_experts": "answer-agnostic",
+    "rrf": "rank-aware, answer-agnostic, fixed",
+    "equal": "score-aware, answer-agnostic, fixed",
+    "global_alpha": "score-aware, answer-agnostic; selected on DEV",
+    "relation_alpha": "score-aware, answer-agnostic; relation-conditioned and selected on DEV",
+    "query_geometry": "answer-agnostic candidate-score statistics; excludes target ids, target/reference scores, ranks, reciprocal ranks, and raw relation ids",
+    "oracle": "answer-aware upper bound"
+  }
+}

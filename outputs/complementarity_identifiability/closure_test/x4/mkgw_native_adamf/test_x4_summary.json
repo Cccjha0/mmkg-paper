@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "experiment": "Three-Dataset Complementarity Closure \u2014 One-Time Confirmatory TEST",
+  "split": "test",
+  "dataset": "mkg_w",
+  "pair_id": "mkgw_native_adamf",
+  "representation": "X4",
+  "alpha0": 0.95,
+  "learner": "hist_gbdt",
+  "config": {
+    "l2_regularization": 0.0,
+    "learning_rate": 0.05,
+    "max_iter": 150,
+    "max_leaf_nodes": 15
+  },
+  "configuration_freeze_rule": "Use the modal (learner, hyperparameter configuration) pair among the five already-frozen nested-OOF outer-fold selections. Break a vote tie by higher mean inner probe delta MRR among voting folds, then frozen learner order, then frozen hyperparameter order. Refit that configuration once on all DEV action rows using utility relative to the full-DEV alpha0; TEST labels are never used for fitting or action selection.",
+  "n_dev_queries": 25656,
+  "n_test_queries": 25644,
+  "test_mrr": 0.3450246193474329,
+  "test_global_mrr": 0.34436519667675775,
+  "test_gain": 0.0006594226706751892,
+  "changed_rate": 0.26474029012634537,
+  "negative_transfer_rate": 0.06913897987833412,
+  "positive_transfer_rate": 0.08625799407268757,
+  "sources": [
+    {
+      "path": "docs/protocols/COMPLEMENTARITY_CLOSURE_TEST_CONTRACT.json",
+      "sha256": "77ee5051938e6ddfed74942f579ca614480c4c08703b63e116ab131e07c58539"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/mkgw_native_adamf_dev_source_manifest.json",
+      "sha256": "d4e01934588ec2919542b1ed4998d2a0992f300889cf313529f398eda6ff86b0"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/mkgw_native_adamf_query_information_manifest.json",
+      "sha256": "6d73125af4deb012b5d311fdbacac6593d2bd45d39f582456b35ba164215161f"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/runs/mkgw_native_adamf/x4/nested_selected/outer_fold_learner_selections.csv",
+      "sha256": "0c2de5493a8768d459aeaab19a9b2c09626a090d509c5a7e3811f6b324da0408"
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/selection.json",
+      "sha256": "15bd47d17171a3e603c5a5fb2f27bc33875ef6fd7f78a95be3f12f67d3fdfeaf"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/mkgw_native_adamf_query_information.npz",
+      "sha256": "3f7fe2dcb1368197a3955279cbd0bce4990a3cb9b4fd798b2c2e8a4f5a03770d"
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "980197c29b8d0c447e298b862d43064e0b86c088a134347136fa87a64ad877ed"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/closure_test/raw/mkgw_native_adamf/test_query_rows.csv",
+      "sha256": "c7c5e42c770fded95d55b28b99156de443e8f8912d4ed000acc48bdb2297b908"
+    }
+  ],
+  "output": {
+    "path": "outputs/complementarity_identifiability/closure_test/x4/mkgw_native_adamf/test_x4_policy_rows.csv.gz",
+    "sha256": "cfe6b6ec5ec443aabc789e22b4b48190504eb000e7f9ac3d5fabc007a261c80e"
+  },
+  "test_labels_used_for_training_or_action_selection": 0,
+  "test_hyperparameter_selection": 0,
+  "checkpoint_retraining": 0,
+  "expert_checkpoint_reselection": 0
+}

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "experiment": "Three-Dataset Complementarity Closure \u2014 One-Time Confirmatory TEST",
+  "split": "test",
+  "dataset": "db15k",
+  "pair_id": "db15k_mhyper_native",
+  "representation": "X4",
+  "alpha0": 1.0,
+  "learner": "hist_gbdt",
+  "config": {
+    "l2_regularization": 0.0,
+    "learning_rate": 0.05,
+    "max_iter": 150,
+    "max_leaf_nodes": 31
+  },
+  "configuration_freeze_rule": "Use the modal (learner, hyperparameter configuration) pair among the five already-frozen nested-OOF outer-fold selections. Break a vote tie by higher mean inner probe delta MRR among voting folds, then frozen learner order, then frozen hyperparameter order. Refit that configuration once on all DEV action rows using utility relative to the full-DEV alpha0; TEST labels are never used for fitting or action selection.",
+  "n_dev_queries": 47532,
+  "n_test_queries": 59412,
+  "test_mrr": 0.3775017522206033,
+  "test_global_mrr": 0.37456665878777834,
+  "test_gain": 0.0029350934328248846,
+  "changed_rate": 0.42259139567764087,
+  "negative_transfer_rate": 0.13781727597118426,
+  "positive_transfer_rate": 0.19021409816198748,
+  "sources": [
+    {
+      "path": "docs/protocols/COMPLEMENTARITY_CLOSURE_TEST_CONTRACT.json",
+      "sha256": "77ee5051938e6ddfed74942f579ca614480c4c08703b63e116ab131e07c58539"
+    },
+    {
+      "path": "outputs/aacpi/utility_tables/db15k_mhyper_native_dev_source_manifest.json",
+      "sha256": "3d5bd8a8069717933434d2a9dab6053decbe69cbe9b4dc06d74ddc84cab34b6d"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/db15k_mhyper_native_query_information_manifest.json",
+      "sha256": "0c1599312147c9e3a5de7747a0b64ff79f666c4357c37756ec130fcd19c61bed"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/runs/db15k_mhyper_native/x4/nested_selected/outer_fold_learner_selections.csv",
+      "sha256": "726aec0ef2503f42258ec17eeaaebe7b862c1f33bbdbc045f7f3a8eaa3ae9835"
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/full_ranking/selection.json",
+      "sha256": "b0378a6bc3bc7f8ee50dc1f0aeee2d0073df801372d4f657dd35113ed07d2c04"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/exp2_information/assets/db15k_mhyper_native_query_information.npz",
+      "sha256": "5d131ba6e22c67762855337838381d27a661212b52fcbab35a5b4f277a0d1a63"
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "f85d657f7183dc960bba762418ea3695ab0af78b59d45e158e1cd0a34079a081"
+    },
+    {
+      "path": "outputs/complementarity_identifiability/closure_test/raw/db15k_mhyper_native/test_query_rows.csv",
+      "sha256": "efc56e15ef7a010c588df7f111ec6d15e05fd03272a59bbd43d10fc38114fa6e"
+    }
+  ],
+  "output": {
+    "path": "outputs/complementarity_identifiability/closure_test/x4/db15k_mhyper_native/test_x4_policy_rows.csv.gz",
+    "sha256": "bf34ef37abe13b92cb82f4778b97c087e566d47026cc85ec29fc6575bfe17f56"
+  },
+  "test_labels_used_for_training_or_action_selection": 0,
+  "test_hyperparameter_selection": 0,
+  "checkpoint_retraining": 0,
+  "expert_checkpoint_reselection": 0
+}

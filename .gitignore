@@ -83,6 +83,11 @@ outputs/complementarity_identifiability/exp4_cross_seed_transfer/per_query_oracl
 outputs/complementarity_identifiability/exp5_local_identifiability/per_center_knn_metrics.csv.gz
 outputs/complementarity_identifiability/exp5_local_identifiability/neighbors/
 
+# One-time complementarity closure TEST large artifacts (retain manifests/summaries/audit tables in Git)
+outputs/complementarity_identifiability/closure_test/raw/*/checkpoints/
+outputs/complementarity_identifiability/closure_test/raw/*/test_query_rows.csv
+outputs/complementarity_identifiability/closure_test/x4/*/test_x4_policy_rows.csv.gz
+
 # OS
 .DS_Store
 Thumbs.db
