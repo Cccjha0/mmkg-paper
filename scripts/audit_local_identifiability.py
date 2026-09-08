@@ -27,6 +27,12 @@ from scripts.exp2_information_common import (
 
 
 K_VALUES = (5, 10, 20, 50)
+Y_PAIR_IDS = ("mkg_y_mhyper_native", "mkg_y_mhyper_adamf", "mkg_y_native_adamf")
+Y_PAIR_LABELS = {
+    "mkg_y_mhyper_native": "MKG-Y / M-Hyper + NativE",
+    "mkg_y_mhyper_adamf": "MKG-Y / M-Hyper + AdaMF-MAT",
+    "mkg_y_native_adamf": "MKG-Y / NativE + AdaMF-MAT",
+}
 PAIR_LABELS = {
     "mkgw_mhyper_native": "MKG-W / M-Hyper+NativE",
     "mkgw_mhyper_adamf": "MKG-W / M-Hyper+AdaMF",
@@ -35,6 +41,19 @@ PAIR_LABELS = {
     "db15k_mhyper_adamf": "DB15K / M-Hyper+AdaMF",
     "db15k_native_adamf": "DB15K / NativE+AdaMF",
 }
+CORE_PAIR_IDS = PAIR_IDS
+CORE_PAIR_LABELS = PAIR_LABELS
+
+
+def configure_profile(profile: str) -> None:
+    global PAIR_IDS, PAIR_LABELS
+    if profile == "mkg_y":
+        PAIR_IDS = Y_PAIR_IDS
+        PAIR_LABELS = Y_PAIR_LABELS
+    else:
+        PAIR_IDS = CORE_PAIR_IDS
+        PAIR_LABELS = CORE_PAIR_LABELS
+
 SUMMARY_METRICS = (
     "exact_action_agreement",
     "direction_agreement",
@@ -62,12 +81,14 @@ FINAL_CLASSES = (
     "E5_X6_RECOVERY",
     "E5_LOCAL_AMBIGUITY",
     "E5_INTERMEDIATE",
+    "Y_E5_LOCAL_IDENTIFIABILITY_REPLICATION_REPORTED",
 )
 POPCOUNT8 = np.asarray([int(value).bit_count() for value in range(256)], dtype=np.uint8)
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Experiment 5 DEV-only local-identifiability audit")
+    parser.add_argument("--profile", choices=("core", "mkg_y"), default="core")
     parser.add_argument("--mode", choices=("preflight", "systematic", "analyze"), required=True)
     parser.add_argument("--contract", default="docs/protocols/EXP5_LOCAL_IDENTIFIABILITY_CONTRACT.json")
     parser.add_argument("--exp1-root", default="outputs/complementarity_identifiability/exp1_landscape")
@@ -76,7 +97,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--utility-manifest-dir", default="outputs/aacpi/utility_tables")
     parser.add_argument("--output-dir", default="outputs/complementarity_identifiability/exp5_local_identifiability")
     parser.add_argument("--report", default="docs/reports/local_identifiability_action_ambiguity_audit_2026-09-07.md")
-    parser.add_argument("--pair-id", choices=PAIR_IDS)
+    parser.add_argument("--pair-id", choices=(*PAIR_IDS, *Y_PAIR_IDS))
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cuda")
     parser.add_argument("--center-batch-size", type=int, default=512)
     parser.add_argument("--overwrite", action="store_true")
@@ -168,6 +189,23 @@ def verify_declared(path: Path, expected: str, label: str) -> None:
         raise RuntimeError(f"{label} hash mismatch: {path}")
 
 
+def verify_contract_sources(contract: dict) -> int:
+    stack = [contract.get("source_boundaries", {})]
+    verified = 0
+    while stack:
+        value = stack.pop()
+        if isinstance(value, dict) and {"path", "sha256"}.issubset(value):
+            path = Path(value["path"])
+            reject_test_path(path)
+            verify_declared(path, str(value["sha256"]), "frozen Y-E5 source")
+            verified += 1
+        elif isinstance(value, dict):
+            stack.extend(value.values())
+        elif isinstance(value, list):
+            stack.extend(value)
+    return verified
+
+
 def load_pair_assets(
     pair_id: str,
     contract: dict,
@@ -190,7 +228,8 @@ def load_pair_assets(
         "relation_id", "tail_id", "alpha_global", *RR_COLUMNS,
     ]
     frame = pd.read_csv(query_path, usecols=usecols)
-    expected_dataset = "mkg_w" if pair_id.startswith("mkgw") else "db15k"
+    default_dataset = "mkg_w" if pair_id.startswith("mkgw") else "db15k"
+    expected_dataset = str(contract.get("dataset", default_dataset))
     if set(frame.split.astype(str)) != {"dev"} or set(frame.pair_name.astype(str)) != {pair_id} or set(frame.dataset.astype(str)) != {expected_dataset}:
         raise RuntimeError(f"Non-DEV or wrong pair identity in {query_path}")
     if frame.query_id.duplicated().any() or frame[RR_COLUMNS].isna().any().any():
@@ -210,7 +249,8 @@ def load_pair_assets(
     asset_manifest_path = exp2_root / "assets" / f"{pair_id}_query_information_manifest.json"
     asset_manifest = load_json(asset_manifest_path)
     verify_declared(asset_path, asset_manifest["output"]["sha256"], "Experiment 2 X4 asset")
-    expected_fields = representation_features(contract=load_json(Path("docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json")))["X4"]
+    feature_contract = Path(contract.get("x4_feature_contract", "docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json"))
+    expected_fields = representation_features(contract=load_json(feature_contract))["X4"]
     if asset_manifest.get("feature_fields_x4") != expected_fields or len(expected_fields) != 40:
         raise RuntimeError(f"Experiment 2 X4 feature contract mismatch: {pair_id}")
     with np.load(asset_path, allow_pickle=False) as asset:
@@ -756,6 +796,21 @@ def classify(summary: pd.DataFrame, contract: dict) -> tuple[list[str], str, pd.
     local_count = int(local_frame.local_signal_pair.sum())
     supported_datasets = set(local_frame.dataset)
     native_count = int(local_frame.loc[local_frame.pair_id.str.endswith("native_adamf"), "local_signal_pair"].sum())
+    primary = summary.loc[(summary.representation == "X4") & (summary.k == int(contract["primary_display_k"]))]
+    zero_including = int(((primary.neighbor_consensus_utility_ci95_low <= 0) & (primary.neighbor_consensus_utility_ci95_high >= 0)).sum())
+    if contract.get("assessment", {}).get("classification") is False:
+        outcome = str(contract["assessment"]["outcome"])
+        evidence = {
+            "local_signal_pairs": local_count,
+            "supported_datasets": sorted(supported_datasets),
+            "native_adamf_local_signal_pairs": native_count,
+            "x6_status": "X6_FIXED_VECTOR_UNAVAILABLE",
+            "x6_recovery": False,
+            "primary_k_consensus_ci_includes_zero_pairs": zero_including,
+            "descriptive_replication": True,
+        }
+        return [outcome], outcome, local_frame, evidence
+
     local_gate = contract["classification"]["local_identifiable"]
     local_identifiable = (
         local_count >= int(local_gate["minimum_local_signal_pairs"])
@@ -763,8 +818,6 @@ def classify(summary: pd.DataFrame, contract: dict) -> tuple[list[str], str, pd.
         and native_count >= int(local_gate["minimum_native_adamf_local_signal_pairs"])
     )
     x6_recovery = False
-    primary = summary.loc[(summary.representation == "X4") & (summary.k == int(contract["primary_display_k"]))]
-    zero_including = int(((primary.neighbor_consensus_utility_ci95_low <= 0) & (primary.neighbor_consensus_utility_ci95_high >= 0)).sum())
     ambiguity_gate = contract["classification"]["local_ambiguity"]
     local_ambiguity = (
         local_count <= int(ambiguity_gate["maximum_local_signal_pairs"])
@@ -812,7 +865,8 @@ def write_distance_figure(bins: pd.DataFrame, path: Path) -> None:
     parts = svg_start(width, height, "Distance–Purity Curves")
     left, right, top, bottom = 85, 750, 85, 440
     parts.append(f'<rect x="{left}" y="{top}" width="{right-left}" height="{bottom-top}" fill="#fff" stroke="#ddd"/>')
-    colors = {"mkgw_mhyper_native": "#28778e", "mkgw_native_adamf": "#c45d3c"}
+    featured = (PAIR_IDS[0], PAIR_IDS[-1])
+    colors = {featured[0]: "#28778e", featured[1]: "#c45d3c"}
     xscale = lambda value: left + (value - 1) / 9 * (right - left)
     yscale = lambda value: bottom - value * (bottom - top)
     for pair_id, color in colors.items():
@@ -836,8 +890,8 @@ def write_distance_figure(bins: pd.DataFrame, path: Path) -> None:
     svg_text(parts, 790, 155, "X6_FIXED_VECTOR_UNAVAILABLE", 14, fill="#a04b3b")
     svg_text(parts, 790, 185, "Frozen X6 is a variable-size candidate set", 11, fill="#666")
     svg_text(parts, 790, 205, "plus set encoder, not a canonical vector.", 11, fill="#666")
-    svg_text(parts, 790, 265, "MKG-W / M-Hyper+NativE", 11, fill=colors["mkgw_mhyper_native"])
-    svg_text(parts, 790, 292, "MKG-W / NativE+AdaMF", 11, fill=colors["mkgw_native_adamf"])
+    svg_text(parts, 790, 265, PAIR_LABELS[featured[0]], 11, fill=colors[featured[0]])
+    svg_text(parts, 790, 292, PAIR_LABELS[featured[1]], 11, fill=colors[featured[1]])
     parts.append("</svg>")
     path.write_text("\n".join(parts), encoding="utf-8")
 
@@ -935,10 +989,15 @@ def write_report(
 ) -> None:
     primary_k = int(contract["primary_display_k"])
     primary = summary.loc[summary.k == primary_k]
+    pair_total = len(PAIR_IDS)
+    native_total = sum(pair_id.endswith("native_adamf") for pair_id in PAIR_IDS)
+    is_replication = contract.get("assessment", {}).get("classification") is False
+    title = "MKG-Y Y-E5 — X4 Local Identifiability Replication" if is_replication else "Experiment 5 — Local Identifiability / Action Ambiguity Audit"
+    assessment_heading = "Frozen descriptive outcome" if is_replication else "Frozen classification"
     lines = [
-        "# Experiment 5 — Local Identifiability / Action Ambiguity Audit",
+        f"# {title}",
         "",
-        "Date: 2026-09-07",
+        f"Date: {contract.get('effective_date', '2026-09-07')}",
         "Split: DEV only",
         "Frozen prior route: `ROUTE_C_LIMITS`",
         "Experiment 4 status: frozen",
@@ -948,10 +1007,10 @@ def write_report(
         "- X4: available as the exact 40-dimensional frozen Experiment 2 query representation.",
         "- X6: `X6_FIXED_VECTOR_UNAVAILABLE`. Experiment 2 freezes a variable-size candidate set and set encoder, not a canonical target-independent fixed vector. No new encoder, embedding, PCA, or pooling representation was created.",
         "",
-        "## Frozen classification",
+        f"## {assessment_heading}",
         "",
-        f"Recorded classifications: {', '.join(f'`{value}`' for value in recorded)}.",
-        f"Final report classification by frozen precedence: **{final}**.",
+        f"Recorded {'outcome' if is_replication else 'classifications'}: {', '.join(f'`{value}`' for value in recorded)}.",
+        f"Final report {'outcome' if is_replication else 'classification by frozen precedence'}: **{final}**.",
         "",
         "## Primary k=10 results",
         "",
@@ -970,12 +1029,12 @@ def write_report(
         "",
         "A `LOCAL_SIGNAL_PAIR` requires at least two frozen k values to have positive lower confidence bounds for direction-agreement lift, center consensus utility, and consensus-utility lift. Raw purity without matched-baseline advantage does not pass this gate.",
         "",
-        "## Gate evidence",
+        "## Diagnostic evidence" if is_replication else "## Gate evidence",
         "",
-        f"- LOCAL_SIGNAL_PAIR: {evidence['local_signal_pairs']}/6.",
+        f"- LOCAL_SIGNAL_PAIR: {evidence['local_signal_pairs']}/{pair_total}.",
         f"- Supported datasets: {', '.join(evidence['supported_datasets'])}.",
-        f"- NativE+AdaMF local-signal pairs: {evidence['native_adamf_local_signal_pairs']}/2.",
-        f"- X4 k={primary_k} consensus CI includes zero: {evidence['primary_k_consensus_ci_includes_zero_pairs']}/6 pairs.",
+        f"- NativE+AdaMF local-signal pairs: {evidence['native_adamf_local_signal_pairs']}/{native_total}.",
+        f"- X4 k={primary_k} consensus CI includes zero: {evidence['primary_k_consensus_ci_includes_zero_pairs']}/{pair_total} pairs.",
         "- X6 recovery gate: unavailable and therefore false; it is never imputed from set-encoder inputs.",
         "",
         "## Protocol and diagnostics",
@@ -1025,15 +1084,15 @@ def inventory(paths: list[Path], role: str) -> list[dict]:
     return records
 
 
-def source_paths_for_audit(args: argparse.Namespace) -> list[Path]:
+def source_paths_for_audit(args: argparse.Namespace, contract: dict) -> list[Path]:
     exp2_root = Path(args.exp2_root)
     paths = [
         Path(args.contract),
-        Path("docs/protocols/EXP5_LOCAL_IDENTIFIABILITY_PROTOCOL.md"),
-        Path("docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json"),
+        Path(contract.get("protocol_document", "docs/protocols/EXP5_LOCAL_IDENTIFIABILITY_PROTOCOL.md")),
+        Path(contract.get("x4_feature_contract", "docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json")),
         Path(__file__),
         Path("scripts/exp2_information_common.py"),
-        Path("scripts/run_exp5_local_identifiability.ps1"),
+        Path(contract.get("runner_script", "scripts/run_exp5_local_identifiability.ps1")),
         Path(args.exp1_root) / "audit_manifest.json",
         Path(args.exp1_root) / "pair_statistics.csv",
         exp2_root / "audit_manifest.json",
@@ -1131,7 +1190,7 @@ def analyze_outputs(args: argparse.Namespace, contract: dict) -> None:
         "final_classification": final,
         "classification_evidence": evidence,
         "sources_and_outputs": [
-            *inventory(source_paths_for_audit(args), "source"),
+            *inventory(source_paths_for_audit(args, contract), "source"),
             *inventory([*systematic_paths, *neighbor_paths, *final_outputs], "output"),
         ],
         "hash_inventory_note": "audit_manifest.json self-hash excluded to avoid recursive content",
@@ -1157,12 +1216,18 @@ def analyze_outputs(args: argparse.Namespace, contract: dict) -> None:
 
 def main() -> None:
     args = parse_args()
+    configure_profile(args.profile)
     contract = load_contract(Path(args.contract))
+    verified_contract_sources = verify_contract_sources(contract)
     exp1_root, exp2_root, exp4_root = Path(args.exp1_root), Path(args.exp2_root), Path(args.exp4_root)
     exp1_audit = load_json(exp1_root / "audit_manifest.json")
     exp2_audit = load_json(exp2_root / "audit_manifest.json")
     exp4_audit = load_json(exp4_root / "audit_manifest.json")
-    if exp1_audit.get("gate", {}).get("decision") != "GO":
+    if args.profile == "mkg_y":
+        y_e1_ok = exp1_audit.get("assessment", {}).get("outcome") == "Y_E1_AVAILABLE_COMPLEMENTARITY_PRESENT"
+        if not y_e1_ok:
+            raise RuntimeError("MKG-Y Y-E1 replication is not frozen and complete")
+    elif exp1_audit.get("gate", {}).get("decision") != "GO":
         raise RuntimeError("Experiment 1 Available Complementarity gate is not GO")
     if exp2_audit.get("split") != "dev" or int(exp2_audit.get("operational_audit", {}).get("test_access", -1)) != 0:
         raise RuntimeError("Experiment 2 is not a clean DEV-only input")
@@ -1191,8 +1256,8 @@ def main() -> None:
             systematic_sources = [
                 *pair_source_paths,
                 Path(args.contract),
-                Path("docs/protocols/EXP5_LOCAL_IDENTIFIABILITY_PROTOCOL.md"),
-                Path("docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json"),
+                Path(contract.get("protocol_document", "docs/protocols/EXP5_LOCAL_IDENTIFIABILITY_PROTOCOL.md")),
+                Path(contract.get("x4_feature_contract", "docs/protocols/EXP2_INFORMATION_FEATURE_CONTRACT.json")),
                 Path(__file__),
                 Path("scripts/exp2_information_common.py"),
             ]
@@ -1200,6 +1265,7 @@ def main() -> None:
     if args.mode == "preflight":
         print(json.dumps({
             "status": "preflight_ok", "split": "dev", "pairs": preflight,
+            "verified_contract_sources": verified_contract_sources,
             "x6_status": "X6_FIXED_VECTOR_UNAVAILABLE", "test_access": 0, "checkpoint_execution": 0,
         }, indent=2))
 

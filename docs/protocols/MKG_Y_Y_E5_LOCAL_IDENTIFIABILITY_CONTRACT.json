@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "experiment": "MKG-Y Y-E5 X4 Local Identifiability / Action Ambiguity Replication",
+  "status": "frozen_before_systematic_run",
+  "effective_date": "2026-09-08",
+  "split": "dev",
+  "dataset": "mkg_y",
+  "x4_feature_contract": "docs/protocols/MKG_Y_Y_E2_X4_OOF_CONTRACT.json",
+  "protocol_document": "docs/protocols/EXP5_LOCAL_IDENTIFIABILITY_PROTOCOL.md",
+  "runner_script": "scripts/run_mkg_y_y_e5_local_identifiability.ps1",
+  "pair_ids": [
+    "mkg_y_mhyper_native",
+    "mkg_y_mhyper_adamf",
+    "mkg_y_native_adamf"
+  ],
+  "representations": {
+    "X4": {
+      "status": "available",
+      "source": "MKG-Y Y-E2 frozen query_information asset",
+      "dimension": 40,
+      "preprocessing": "outer-training-only z-standardization",
+      "distance": "Euclidean"
+    },
+    "X6": {
+      "status": "X6_FIXED_VECTOR_UNAVAILABLE",
+      "reason": "MKG-Y Y-E2 did not run X6 and exposes no frozen deterministic target-independent fixed vector",
+      "new_encoder_or_pooling": false
+    }
+  },
+  "outer_fold_assignment": {
+    "source": "MKG-Y Y-E2 X4 nested_selected oof_action_predictions.npz",
+    "folds": 5,
+    "stored_encoding": "1..5",
+    "internal_encoding": "stored outer_fold minus one; membership unchanged",
+    "grouping_key": "original_triple_id",
+    "reuse_exact_assignment": true
+  },
+  "alpha_grid": [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0],
+  "oracle_tie_break": ["maximum RR", "nearest alpha0", "smaller alpha"],
+  "neighbor_tie_break": "smaller canonical reference row index after exact Euclidean distance",
+  "k_values": [5, 10, 20, 50],
+  "knn_reference_pool": "all current outer-training rows for the dataset-pair X4 representation",
+  "same_original_triple_excluded_by_outer_group_split": true,
+  "matched_random": {
+    "match_fields": ["dataset", "pair_id", "seed", "direction", "relation_id"],
+    "fallback": "none",
+    "draws": 100,
+    "sampling": "without replacement within each draw",
+    "draw_sharing": "100 deterministic draws frozen per outer-fold matched stratum and evaluated for every supported center in that stratum",
+    "seed": 20260908,
+    "unsupported_when_pool_lt_k": true
+  },
+  "beneficial_set": {
+    "definition": "alpha where RR(alpha)-RR(alpha0) > 0",
+    "both_empty_jaccard": "NA",
+    "both_empty_rate_reported": true
+  },
+  "direction_labels": ["LEFT", "ANCHOR", "RIGHT"],
+  "direction_entropy_normalization": "natural-log entropy divided by log(3)",
+  "consensus_tie_break": ["maximum mean neighbor utility", "nearest alpha0", "smaller alpha"],
+  "distance_purity_bins": {
+    "count": 10,
+    "definition": "fixed empirical deciles of held-out-to-training top-50 neighbor distances within pair",
+    "display_k": 50
+  },
+  "primary_display_k": 10,
+  "bootstrap": {
+    "samples": 10000,
+    "seed": 20260908,
+    "unit": "center original_triple_id",
+    "interval": "percentile 95%",
+    "preserve": ["three seeds", "two directions", "all frozen k values"]
+  },
+  "local_signal_pair": {
+    "minimum_k_satisfying_all": 2,
+    "requirements": [
+      "direction-agreement lift CI lower > 0",
+      "neighbor-consensus utility CI lower > 0",
+      "consensus-utility lift CI lower > 0"
+    ]
+  },
+  "assessment": {
+    "is_progression_gate": false,
+    "classification": false,
+    "outcome": "Y_E5_LOCAL_IDENTIFIABILITY_REPLICATION_REPORTED",
+    "next_replication": "Y-E6"
+  },
+  "source_boundaries": {
+    "y_e1_audit": {"path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/audit_manifest.json", "sha256": "867c7edcc7e0b8947369b442bb06ec4fbd655e436ade1b24ce90cfdeecf894ef"},
+    "available_headroom": {"path": "outputs/complementarity_identifiability/mkg_y_y_e1_landscape/pair_statistics.csv", "sha256": "e931036c92683e0ee0fc8219662f4c4c5b5293a71b6812e79ea2fc66a157e6cd"},
+    "y_e2_audit": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/audit_manifest.json", "sha256": "f5799897478dfda7cfcc49409b0e573fd18d991d6b2161077b7622c632d8622e"},
+    "y_e4_audit": {"path": "outputs/complementarity_identifiability/mkg_y_y_e4_cross_seed_transfer/audit_manifest.json", "sha256": "ab42c9a88ddf6f229e1457e76104364b1039e763fda1810662924858cdc894fc"},
+    "pairs": {
+      "mkg_y_mhyper_native": {
+        "utility_manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_native_dev_source_manifest.json", "sha256": "d5d82cffcb308f5bf44001119447af99375a3f3c66ebec5528d246baf7915a68"},
+        "asset_manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_mhyper_native_query_information_manifest.json", "sha256": "5dc42906b7df566766763d8103af56b3c2813b25132d4dc643746ac112f0efbd"},
+        "asset": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_mhyper_native_query_information.npz", "sha256": "6ad5eaa005bbe5a2d62d7b8dcca4953f40aafaff5fe50471d9b69c77a67575ca"},
+        "fold_source": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/runs/mkg_y_mhyper_native/x4/nested_selected/oof_action_predictions.npz", "sha256": "2576c436b1286b2160af1a88eb13ae8c5e6390fe64a776466a64c16cd2805e87"}
+      },
+      "mkg_y_mhyper_adamf": {
+        "utility_manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_mhyper_adamf_dev_source_manifest.json", "sha256": "777548a3dc647d1e0a1b0484f2ddfb3e2d1a0c4cddbb19585caee2c802be571f"},
+        "asset_manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_mhyper_adamf_query_information_manifest.json", "sha256": "e5674063712537c8f72a1aa4b78931abde489b2a78ece5e559dc86fe14317890"},
+        "asset": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_mhyper_adamf_query_information.npz", "sha256": "6d858809c4789d7149761189de0e8869494d464aae2d94c43683f07bb895b809"},
+        "fold_source": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/runs/mkg_y_mhyper_adamf/x4/nested_selected/oof_action_predictions.npz", "sha256": "d38ada5019a472585b6bbcfc356c52b314cdd36ca9a649491e518f1b93d06a54"}
+      },
+      "mkg_y_native_adamf": {
+        "utility_manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/utility_tables/mkg_y_native_adamf_dev_source_manifest.json", "sha256": "36cfb1ed86bd59efcfe56240b8b78ce838dd28438fd0b031ef5e56240d7b790c"},
+        "asset_manifest": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_native_adamf_query_information_manifest.json", "sha256": "79f506b01221951a79c2a3cfe55a0411557614d536281e447bc7e2bd7d617184"},
+        "asset": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/assets/mkg_y_native_adamf_query_information.npz", "sha256": "1cc7da4d23972b6f2550c39f38b80b3ca79ce627d0171b04eb327014f714d47a"},
+        "fold_source": {"path": "outputs/complementarity_identifiability/mkg_y_y_e2_information/runs/mkg_y_native_adamf/x4/nested_selected/oof_action_predictions.npz", "sha256": "ab9d6cba7132976d4a95815f559cae05a512bd09491181325a97714398e4a122"}
+      }
+    }
+  },
+  "test_access": 0,
+  "new_representation": 0,
+  "supervised_metric_learning": 0,
+  "new_pca": 0,
+  "new_embedding": 0,
+  "new_selector": 0,
+  "neighbor_policy_development": 0,
+  "checkpoint_execution": 0,
+  "output": {
+    "directory": "outputs/complementarity_identifiability/mkg_y_y_e5_local_identifiability",
+    "report": "docs/reports/mkg_y_local_identifiability_audit_2026-09-08.md"
+  }
+}
