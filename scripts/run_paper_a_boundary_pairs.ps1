@@ -170,6 +170,19 @@ function Invoke-DynaSemble {
     )
 }
 
+function Invoke-DynaSembleCommitRebind {
+    param([object]$Spec)
+    $pairRoot = Join-Path $outputRoot "$($Spec.Dataset)/$($Spec.Pair)"
+    Invoke-CheckedPython -CommandArgs @(
+        'scripts/rebind_dynasemble_lock_commit.py',
+        '--lock-json', (Join-Path $pairRoot 'dynasemble/lock.json'),
+        '--protocol-path', $protocol,
+        '--baseline-selection-json', (Join-Path $Spec.Baseline 'selection.json')
+    ) -FailureMessage (
+        "DynaSemble provenance rebind failed: $($Spec.Dataset)/$($Spec.Pair)"
+    )
+}
+
 if (($Python -match '[\\/]') -and -not (Test-Path -LiteralPath $Python)) {
     throw "Python executable not found: $Python"
 }
@@ -197,6 +210,7 @@ if ($Stage -in @('test', 'all')) {
     foreach ($pair in $pairs) {
         $testRows = Resolve-TestRows -Spec $pair
         Invoke-AnchoredTest -Spec $pair -TestRows $testRows
+        Invoke-DynaSembleCommitRebind -Spec $pair
         Invoke-DynaSemble -Spec $pair -CurrentStage 'test' -TestRows $testRows
     }
 }
