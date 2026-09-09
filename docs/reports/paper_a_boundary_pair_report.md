@@ -2,7 +2,7 @@
 
 ## Execution status
 
-The analysis pipeline is implemented and frozen, but the two DynaSemble selectors and exact full-ranking applications have not been run in this local environment. This placeholder is overwritten by `scripts/analyze_paper_a_boundary_pairs.py` after the A100 DEV and TEST stages complete.
+The analysis pipeline is implemented and frozen, but the two DynaSemble selectors and exact full-ranking applications have not been run in this local environment. This placeholder is overwritten by `scripts/analyze_paper_a_boundary_pairs.py` after the A100 DEV and TEST stages complete. Existing closure-test rows are reused when present; otherwise the runner exports the two missing TEST assets from frozen checkpoints without retraining base models.
 
 ## Pre-TEST reliable-primary audit
 

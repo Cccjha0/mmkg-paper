@@ -15,10 +15,12 @@ Before TEST analysis, `scripts/audit_reliable_primary_regime.py` applies the fro
 
 ## Frozen inputs and methods
 
-Existing exact full-ranking rows are reused:
+Existing exact full-ranking rows are reused whenever available:
 
 - DEV: `outputs/<dataset>/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv`;
 - TEST: `outputs/complementarity_identifiability/closure_test/raw/<pair>/test_query_rows.csv`.
+
+The closure-test TEST export is an optional reusable cache, not a required repository input. If it is absent on the A100 host, the boundary runner invokes `eval_heterogeneous_complementarity.py` with the frozen NativE/AdaMF-MAT checkpoints, the existing DEV selection, `--split test`, and `--export-alpha-grid`. It writes the resulting exact rows to `outputs/paper_a_safe_correction/boundary_pairs/<dataset>/native_adamf/test_full_ranking/`. This is inference-only export and does not train either base model.
 
 Frozen NativE and AdaMF-MAT checkpoints are used only where DynaSemble must reconstruct candidate-score statistics. Base MMKGC models are never retrained.
 

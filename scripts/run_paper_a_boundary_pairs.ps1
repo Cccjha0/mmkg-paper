@@ -38,14 +38,14 @@ $pairs = @(
         Dataset = 'mkg_w'; Pair = 'native_adamf'; PairName = 'mkgw_native_adamf_dynasemble'
         A = $mkgwNative; B = $mkgwAdamf
         Baseline = 'outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking'
-        TestRows = 'outputs/complementarity_identifiability/closure_test/raw/mkgw_native_adamf/test_query_rows.csv'
+        ExistingTestRows = 'outputs/complementarity_identifiability/closure_test/raw/mkgw_native_adamf/test_query_rows.csv'
         P3 = 'outputs/mkg_w/anchored_dynamic/native_adamf_seed123/p3_ablation/dev_p3_summary.json'
     },
     [pscustomobject]@{
         Dataset = 'db15k'; Pair = 'native_adamf'; PairName = 'db15k_native_adamf_dynasemble'
         A = $db15kNative; B = $db15kAdamf
         Baseline = 'outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking'
-        TestRows = 'outputs/complementarity_identifiability/closure_test/raw/db15k_native_adamf/test_query_rows.csv'
+        ExistingTestRows = 'outputs/complementarity_identifiability/closure_test/raw/db15k_native_adamf/test_query_rows.csv'
         P3 = 'outputs/db15k/anchored_dynamic/native_adamf_seed123/p3_ablation/dev_p3_summary.json'
     }
 )
@@ -59,6 +59,47 @@ function Invoke-CheckedPython {
 function Assert-Input {
     param([string]$Path)
     if (-not (Test-Path -LiteralPath $Path)) { throw "Required input missing: $Path" }
+}
+
+function Resolve-TestRows {
+    param([object]$Spec)
+    if (Test-Path -LiteralPath $Spec.ExistingTestRows) {
+        Write-Host "[REUSE] Existing exact TEST rows $($Spec.ExistingTestRows)" -ForegroundColor DarkCyan
+        return $Spec.ExistingTestRows
+    }
+
+    $pairRoot = Join-Path $outputRoot "$($Spec.Dataset)/$($Spec.Pair)"
+    $testFullRanking = Join-Path $pairRoot 'test_full_ranking'
+    $testRows = Join-Path $testFullRanking 'test_query_rows.csv'
+    if (Test-Path -LiteralPath $testRows) {
+        Write-Host "[REUSE] Boundary-pair exact TEST rows $testRows" -ForegroundColor DarkCyan
+        return $testRows
+    }
+
+    Write-Host (
+        "[EXPORT] Existing TEST rows are absent; exporting exact full-ranking rows " +
+        "from frozen checkpoints for $($Spec.Dataset)/$($Spec.Pair)"
+    ) -ForegroundColor Cyan
+    $commandArgs = @(
+        'scripts/eval_heterogeneous_complementarity.py',
+        '--pair-name', $Spec.PairName.Replace('_dynasemble', ''),
+        '--expert-a-name', 'NativE',
+        '--expert-b-name', 'AdaMF-MAT',
+        '--split', 'test',
+        '--selection-json', (Join-Path $Spec.Baseline 'selection.json'),
+        '--output-dir', $testFullRanking,
+        '--device', $Device,
+        '--export-alpha-grid'
+    )
+    for ($index = 0; $index -lt 3; $index++) {
+        $commandArgs += @('--run-pair', ($Spec.A[$index] + '::' + $Spec.B[$index]))
+    }
+    if ($NoResume) { $commandArgs += '--no-resume' }
+    Invoke-CheckedPython -CommandArgs $commandArgs -FailureMessage (
+        "Exact TEST row export failed: $($Spec.Dataset)/$($Spec.Pair)"
+    ) | Out-Host
+    Assert-Input $testRows
+    return $testRows
 }
 
 function Invoke-AnchoredDev {
@@ -80,27 +121,28 @@ function Invoke-AnchoredDev {
 }
 
 function Invoke-AnchoredTest {
-    param([object]$Spec)
+    param([object]$Spec, [string]$TestRows)
     $pairRoot = Join-Path $outputRoot "$($Spec.Dataset)/$($Spec.Pair)"
     $devLock = Join-Path $pairRoot 'anchored/dev_lock/anchored_dev_lock.json'
     Assert-Input $devLock
     Invoke-CheckedPython -CommandArgs @(
         'scripts/lock_apply_anchored_dynamic.py', 'apply',
-        '--test-query-rows', $Spec.TestRows,
+        '--test-query-rows', $TestRows,
         '--lock-json', $devLock,
         '--output-dir', (Join-Path $pairRoot 'anchored/test_anchored')
     ) -FailureMessage "Anchored immutable TEST apply failed: $($Spec.Dataset)/$($Spec.Pair)"
 }
 
 function Invoke-DynaSemble {
-    param([object]$Spec, [string]$CurrentStage)
+    param([object]$Spec, [string]$CurrentStage, [string]$TestRows = '')
     $pairRoot = Join-Path $outputRoot "$($Spec.Dataset)/$($Spec.Pair)"
     $dynaRoot = Join-Path $pairRoot 'dynasemble'
     if ($CurrentStage -eq 'dev') {
         $reference = Join-Path $Spec.Baseline 'dev_query_rows.csv'
         $comparison = Join-Path $pairRoot 'anchored/dev_lock/dev_locked_query_rows.csv'
     } else {
-        $reference = $Spec.TestRows
+        if (-not $TestRows) { throw 'TEST rows path is required for DynaSemble TEST.' }
+        $reference = $TestRows
         $comparison = Join-Path $pairRoot 'anchored/test_anchored/test_locked_query_rows.csv'
     }
     Assert-Input $reference
@@ -153,8 +195,9 @@ if ($Stage -in @('dev', 'all')) {
 if ($Stage -in @('test', 'all')) {
     Assert-Input 'outputs/paper_a_safe_correction/reliable_primary/reliable_primary_decisions.csv'
     foreach ($pair in $pairs) {
-        Invoke-AnchoredTest -Spec $pair
-        Invoke-DynaSemble -Spec $pair -CurrentStage 'test'
+        $testRows = Resolve-TestRows -Spec $pair
+        Invoke-AnchoredTest -Spec $pair -TestRows $testRows
+        Invoke-DynaSemble -Spec $pair -CurrentStage 'test' -TestRows $testRows
     }
 }
 
