@@ -570,10 +570,12 @@ def validate_analysis_boundaries(audit: Audit) -> None:
     negative_path = audit.repo_root / "outputs/paper_a_safe_correction/negative_transfer/bootstrap_ci.json"
     confidence_path = audit.repo_root / "outputs/paper_a_safe_correction/confidence_harm/auroc_auprc.json"
     beta_path = audit.repo_root / "outputs/paper_a_safe_correction/beta_sensitivity/beta_sensitivity_audit.json"
+    fallback_path = audit.repo_root / "outputs/paper_a_safe_correction/fallback_audit/fallback_audit.json"
     risk_ok, _ = audit.asset(risk_path, "risk-coverage audit")
     negative_ok, _ = audit.asset(negative_path, "negative-transfer audit")
     confidence_ok, _ = audit.asset(confidence_path, "confidence-to-harm audit")
     beta_ok, _ = audit.asset(beta_path, "beta trust-region sensitivity audit")
+    fallback_ok, _ = audit.asset(fallback_path, "fallback behavior audit")
     if risk_ok:
         risk = read_json(risk_path)
         fixed_grid = risk.get("coverage_grid") == [i / 10 for i in range(11)]
@@ -704,6 +706,85 @@ def validate_analysis_boundaries(audit: Audit) -> None:
             method="Anchored beta diagnostic",
             evidence=[portable(beta_path, audit.repo_root)],
             details="Beta-sensitivity audit asset is missing.",
+        )
+    if fallback_ok:
+        fallback = read_json(fallback_path)
+        problems: list[str] = []
+        flags_ok = (
+            fallback.get("pure_posthoc_mechanism_analysis") is True
+            and fallback.get("formal_fallback_threshold_modified") is False
+            and fallback.get("test_is_diagnostic_only") is True
+            and fallback.get("test_used_for_selection") is False
+            and fallback.get("stored_policy_reconstruction_passed") is True
+            and fallback.get("classification", {}).get("avoided_harm")
+            == "rr_raw < rr_global"
+            and fallback.get("classification", {}).get("missed_benefit")
+            == "rr_raw > rr_global"
+            and fallback.get("classification", {}).get("neutral")
+            == "rr_raw == rr_global"
+        )
+        for name, expected in fallback.get("output_hashes", {}).items():
+            path = fallback_path.parent / name
+            matched, _ = audit.asset(
+                path,
+                "fallback behavior diagnostic output",
+                str(expected),
+                name,
+            )
+            if not matched:
+                problems.append(
+                    f"output missing/hash mismatch: {portable(path, audit.repo_root)}"
+                )
+        for item in fallback.get("source_audit", []):
+            for path_key, hash_key, role in (
+                ("source_rows", "source_rows_sha256", "fallback frozen query rows"),
+                ("dev_lock", "dev_lock_sha256", "fallback DEV lock"),
+            ):
+                path = audit.repo_root / Path(str(item.get(path_key, "")))
+                matched, _ = audit.asset(
+                    path,
+                    role,
+                    item.get(hash_key),
+                    str(item.get(path_key, "")),
+                )
+                if not matched:
+                    problems.append(
+                        f"source missing/hash mismatch: {portable(path, audit.repo_root)}"
+                    )
+            if item.get("stored_policy_reconstruction_passed") is not True:
+                problems.append(
+                    "stored policy reconstruction failed: "
+                    f"{item.get('split')}/{item.get('dataset')}/{item.get('pair')}"
+                )
+            if item.get("counterfactual_confidence_threshold_applied") is not False:
+                problems.append(
+                    "counterfactual still applies confidence fallback: "
+                    f"{item.get('split')}/{item.get('dataset')}/{item.get('pair')}"
+                )
+            if item.get("counterfactual_nonfinite_fallback_only") is not True:
+                problems.append(
+                    "counterfactual fallback contract differs: "
+                    f"{item.get('split')}/{item.get('dataset')}/{item.get('pair')}"
+                )
+        audit.check(
+            "fallback_audit",
+            "FBA01",
+            "Fallback utility uses raw bounded counterfactuals and does not modify the locked threshold",
+            flags_ok and not problems,
+            method="Anchored fallback diagnostic",
+            evidence=[portable(fallback_path, audit.repo_root)],
+            details="; ".join(problems)
+            or "Stored policies reconstruct exactly; the counterfactual removes confidence fallback only; TEST is diagnostic-only; all source, lock, and output hashes match.",
+        )
+    else:
+        audit.check(
+            "fallback_audit",
+            "FBA01",
+            "Fallback utility uses raw bounded counterfactuals and does not modify the locked threshold",
+            False,
+            method="Anchored fallback diagnostic",
+            evidence=[portable(fallback_path, audit.repo_root)],
+            details="Fallback behavior audit asset is missing.",
         )
 
 

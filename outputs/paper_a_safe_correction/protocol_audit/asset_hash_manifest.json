@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "audit_version": "paper_a_protocol_integrity_v1",
-  "generated_at_utc": "2026-09-09T16:57:32.342943+00:00",
+  "generated_at_utc": "2026-09-09T17:14:12.756287+00:00",
   "hash_algorithm": "SHA-256",
   "path_policy": "repository-relative canonical paths; historical machine-local lock paths retained in locked_paths; raw SHA-256 is always reported and LF/CRLF equivalence is accepted only for text assets",
   "assets": [
@@ -751,7 +751,8 @@
       "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/anchored_crossfit/dev_anchored_query_rows.csv",
       "roles": [
         "confidence-to-harm frozen query rows",
-        "beta sensitivity frozen query rows"
+        "beta sensitivity frozen query rows",
+        "fallback frozen query rows"
       ],
       "exists": true,
       "size_bytes": 46346286,
@@ -794,7 +795,8 @@
         "Anchored immutable DEV lock",
         "core ablation locked source",
         "confidence-to-harm DEV lock",
-        "beta sensitivity DEV lock"
+        "beta sensitivity DEV lock",
+        "fallback DEV lock"
       ],
       "exists": true,
       "size_bytes": 2599,
@@ -920,7 +922,8 @@
         "Anchored immutable TEST rows",
         "core ablation locked source",
         "confidence-to-harm frozen query rows",
-        "beta sensitivity frozen query rows"
+        "beta sensitivity frozen query rows",
+        "fallback frozen query rows"
       ],
       "exists": true,
       "size_bytes": 55936927,
@@ -977,7 +980,8 @@
       "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/anchored_crossfit/dev_anchored_query_rows.csv",
       "roles": [
         "confidence-to-harm frozen query rows",
-        "beta sensitivity frozen query rows"
+        "beta sensitivity frozen query rows",
+        "fallback frozen query rows"
       ],
       "exists": true,
       "size_bytes": 46497468,
@@ -1020,7 +1024,8 @@
         "Anchored immutable DEV lock",
         "core ablation locked source",
         "confidence-to-harm DEV lock",
-        "beta sensitivity DEV lock"
+        "beta sensitivity DEV lock",
+        "fallback DEV lock"
       ],
       "exists": true,
       "size_bytes": 2599,
@@ -1146,7 +1151,8 @@
         "Anchored immutable TEST rows",
         "core ablation locked source",
         "confidence-to-harm frozen query rows",
-        "beta sensitivity frozen query rows"
+        "beta sensitivity frozen query rows",
+        "fallback frozen query rows"
       ],
       "exists": true,
       "size_bytes": 56247418,
@@ -1264,7 +1270,8 @@
       "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/anchored_crossfit/dev_anchored_query_rows.csv",
       "roles": [
         "confidence-to-harm frozen query rows",
-        "beta sensitivity frozen query rows"
+        "beta sensitivity frozen query rows",
+        "fallback frozen query rows"
       ],
       "exists": true,
       "size_bytes": 25772599,
@@ -1307,7 +1314,8 @@
         "Anchored immutable DEV lock",
         "core ablation locked source",
         "confidence-to-harm DEV lock",
-        "beta sensitivity DEV lock"
+        "beta sensitivity DEV lock",
+        "fallback DEV lock"
       ],
       "exists": true,
       "size_bytes": 2596,
@@ -1433,7 +1441,8 @@
         "Anchored immutable TEST rows",
         "core ablation locked source",
         "confidence-to-harm frozen query rows",
-        "beta sensitivity frozen query rows"
+        "beta sensitivity frozen query rows",
+        "fallback frozen query rows"
       ],
       "exists": true,
       "size_bytes": 24544314,
@@ -1490,7 +1499,8 @@
       "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/anchored_crossfit/dev_anchored_query_rows.csv",
       "roles": [
         "confidence-to-harm frozen query rows",
-        "beta sensitivity frozen query rows"
+        "beta sensitivity frozen query rows",
+        "fallback frozen query rows"
       ],
       "exists": true,
       "size_bytes": 25932898,
@@ -1533,7 +1543,8 @@
         "Anchored immutable DEV lock",
         "core ablation locked source",
         "confidence-to-harm DEV lock",
-        "beta sensitivity DEV lock"
+        "beta sensitivity DEV lock",
+        "fallback DEV lock"
       ],
       "exists": true,
       "size_bytes": 2599,
@@ -1659,7 +1670,8 @@
         "Anchored immutable TEST rows",
         "core ablation locked source",
         "confidence-to-harm frozen query rows",
-        "beta sensitivity frozen query rows"
+        "beta sensitivity frozen query rows",
+        "fallback frozen query rows"
       ],
       "exists": true,
       "size_bytes": 24703956,
@@ -2879,6 +2891,135 @@
       ],
       "hash_matches_all_expectations": true,
       "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/fallback_audit/fallback_audit.json",
+      "roles": [
+        "fallback behavior audit"
+      ],
+      "exists": true,
+      "size_bytes": 8189,
+      "sha256": "333f258aa262c1f5203646cf174f648bcf404fcdacdf3fe30860465654ee2ead",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/fallback_audit/fallback_by_direction.csv",
+      "roles": [
+        "fallback behavior diagnostic output"
+      ],
+      "exists": true,
+      "size_bytes": 5353,
+      "sha256": "9575251a62426c25907ec1ac126e5ed7ec2b876512e755d0433403b95d8900ae",
+      "expected_hashes": [
+        "9575251a62426c25907ec1ac126e5ed7ec2b876512e755d0433403b95d8900ae"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "fallback_by_direction.csv"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/fallback_audit/fallback_by_seed.csv",
+      "roles": [
+        "fallback behavior diagnostic output"
+      ],
+      "exists": true,
+      "size_bytes": 7549,
+      "sha256": "8cd17274060f92ac4a103cb8db3636d9e4dc6bef89f60c10d09a378e023cd367",
+      "expected_hashes": [
+        "8cd17274060f92ac4a103cb8db3636d9e4dc6bef89f60c10d09a378e023cd367"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "fallback_by_seed.csv"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/fallback_audit/fallback_composition.pdf",
+      "roles": [
+        "fallback behavior diagnostic output"
+      ],
+      "exists": true,
+      "size_bytes": 2793,
+      "sha256": "98a88de9d486805abdc713b5480092062d6f48bb2e5c747bb38390d2707f5cd8",
+      "expected_hashes": [
+        "98a88de9d486805abdc713b5480092062d6f48bb2e5c747bb38390d2707f5cd8"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "fallback_composition.pdf"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/fallback_audit/fallback_counterfactual.csv",
+      "roles": [
+        "fallback behavior diagnostic output"
+      ],
+      "exists": true,
+      "size_bytes": 33014537,
+      "sha256": "cb35c902f97ea5a435ec9062c9a894596e8496c5b1c2be8a4eae5cea35860dac",
+      "expected_hashes": [
+        "cb35c902f97ea5a435ec9062c9a894596e8496c5b1c2be8a4eae5cea35860dac"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "fallback_counterfactual.csv"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/fallback_audit/fallback_rate_vs_delta_mrr.pdf",
+      "roles": [
+        "fallback behavior diagnostic output"
+      ],
+      "exists": true,
+      "size_bytes": 3204,
+      "sha256": "630ed367a5939ec4289c94148f94757988bfe139e8eba7a0df1bdddb0f792583",
+      "expected_hashes": [
+        "630ed367a5939ec4289c94148f94757988bfe139e8eba7a0df1bdddb0f792583"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "fallback_rate_vs_delta_mrr.pdf"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/fallback_audit/fallback_summary.csv",
+      "roles": [
+        "fallback behavior diagnostic output"
+      ],
+      "exists": true,
+      "size_bytes": 2911,
+      "sha256": "9d2be9fb6d845ae3df431c046358fb131b825898f38c8370e142b8a8fd7a1bbc",
+      "expected_hashes": [
+        "9d2be9fb6d845ae3df431c046358fb131b825898f38c8370e142b8a8fd7a1bbc"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "fallback_summary.csv"
+      ]
     },
     {
       "path": "outputs/paper_a_safe_correction/negative_transfer/bootstrap_ci.json",

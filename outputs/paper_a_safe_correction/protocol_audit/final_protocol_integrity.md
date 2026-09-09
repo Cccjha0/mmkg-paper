@@ -4,7 +4,7 @@ DEV for all selection; TEST for immutable final evaluation only.
 
 **Overall status: PASS**
 
-This read-only audit evaluated 75 checks across 12 experiment groups. It changed no method, threshold, orientation, pair definition, or result asset.
+This read-only audit evaluated 76 checks across 13 experiment groups. It changed no method, threshold, orientation, pair definition, or result asset.
 
 ## Experiment status
 
@@ -16,6 +16,7 @@ This read-only audit evaluated 75 checks across 12 experiment groups. It changed
 | core_ablation | PASS |
 | dynasemble_boundary | PASS |
 | dynasemble_main | PASS |
+| fallback_audit | PASS |
 | global_information_boundary | PASS |
 | grouped_folds | PASS |
 | main_static_query_soft_anchored | PASS |
@@ -101,6 +102,7 @@ This read-only audit evaluated 75 checks across 12 experiment groups. It changed
 | N01 | negative_transfer | ALL / ALL | Global / Query-soft / DynaSemble / Anchored | PASS | no_training=True; no_test_driven_changes=True; test_final_only=True. |
 | H01 | confidence_harm | ALL / ALL | Anchored confidence diagnostic | PASS | Confidence threshold is disabled; non-finite fallback only; strict raw-bounded-vs-Global harm label; TEST diagnostic-only; all source, lock, and output hashes match. |
 | B01 | beta_sensitivity | ALL / ALL | Anchored beta diagnostic | PASS | Formal grid is 0.05-0.50; beta=1.0 is diagnostic-only; selection remains the DEV lock; theoretical and core-ablation reproduction checks pass; all source/lock/output hashes match. |
+| FBA01 | fallback_audit | ALL / ALL | Anchored fallback diagnostic | PASS | Stored policies reconstruct exactly; the counterfactual removes confidence fallback only; TEST is diagnostic-only; all source, lock, and output hashes match. |
 | L01 | global_information_boundary | ALL / ALL | ALL | PASS | Protocols and implementations explicitly separate DEV-only selection from locked/immutable TEST apply; method-specific checks independently validate the resulting hashes and parameters. |
 
 ## Failures
