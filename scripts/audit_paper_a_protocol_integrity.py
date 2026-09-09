@@ -568,8 +568,10 @@ def validate_core_ablation(audit: Audit) -> None:
 def validate_analysis_boundaries(audit: Audit) -> None:
     risk_path = audit.repo_root / "outputs/paper_a_safe_correction/risk_coverage/audit.json"
     negative_path = audit.repo_root / "outputs/paper_a_safe_correction/negative_transfer/bootstrap_ci.json"
+    confidence_path = audit.repo_root / "outputs/paper_a_safe_correction/confidence_harm/auroc_auprc.json"
     risk_ok, _ = audit.asset(risk_path, "risk-coverage audit")
     negative_ok, _ = audit.asset(negative_path, "negative-transfer audit")
+    confidence_ok, _ = audit.asset(confidence_path, "confidence-to-harm audit")
     if risk_ok:
         risk = read_json(risk_path)
         fixed_grid = risk.get("coverage_grid") == [i / 10 for i in range(11)]
@@ -583,6 +585,61 @@ def validate_analysis_boundaries(audit: Audit) -> None:
         audit.check("negative_transfer", "N01", "TEST safety metrics are final analysis only and do not select methods or thresholds", passed, method="Global / Query-soft / DynaSemble / Anchored", evidence=[portable(negative_path, audit.repo_root)], details=f"no_training={negative.get('no_model_or_combiner_training')}; no_test_driven_changes={negative.get('no_test_driven_threshold_or_method_changes')}; test_final_only={negative.get('test_is_final_analysis_only')}.")
     else:
         audit.check("negative_transfer", "N01", "TEST safety metrics are final analysis only and do not select methods or thresholds", False, method="Safety analysis", evidence=[portable(negative_path, audit.repo_root)], details="Negative-transfer audit asset is missing.")
+    if confidence_ok:
+        confidence = read_json(confidence_path)
+        problems: list[str] = []
+        flags_ok = (
+            confidence.get("confidence_threshold_applied") is False
+            and confidence.get("nonfinite_fallback_only") is True
+            and confidence.get("test_is_diagnostic_only") is True
+            and confidence.get("test_used_to_modify_threshold_or_method") is False
+            and confidence.get("harm_label")
+            == "1 iff rr_raw_bounded < rr_global (strict comparison)"
+        )
+        for name, expected in confidence.get("output_hashes", {}).items():
+            path = confidence_path.parent / name
+            matched, _ = audit.asset(
+                path,
+                "confidence-to-harm diagnostic output",
+                str(expected),
+                name,
+            )
+            if not matched:
+                problems.append(f"output missing/hash mismatch: {portable(path, audit.repo_root)}")
+        for item in confidence.get("source_audit", []):
+            for path_key, hash_key, role in (
+                ("source_rows", "source_rows_sha256", "confidence-to-harm frozen query rows"),
+                ("lock", "lock_sha256", "confidence-to-harm DEV lock"),
+            ):
+                path = audit.repo_root / Path(str(item.get(path_key, "")))
+                matched, _ = audit.asset(
+                    path,
+                    role,
+                    item.get(hash_key),
+                    str(item.get(path_key, "")),
+                )
+                if not matched:
+                    problems.append(f"source missing/hash mismatch: {portable(path, audit.repo_root)}")
+        audit.check(
+            "confidence_harm",
+            "H01",
+            "Harm is counterfactual raw bounded correction, and TEST is diagnostic only",
+            flags_ok and not problems,
+            method="Anchored confidence diagnostic",
+            evidence=[portable(confidence_path, audit.repo_root)],
+            details="; ".join(problems)
+            or "Confidence threshold is disabled; non-finite fallback only; strict raw-bounded-vs-Global harm label; TEST diagnostic-only; all source, lock, and output hashes match.",
+        )
+    else:
+        audit.check(
+            "confidence_harm",
+            "H01",
+            "Harm is counterfactual raw bounded correction, and TEST is diagnostic only",
+            False,
+            method="Anchored confidence diagnostic",
+            evidence=[portable(confidence_path, audit.repo_root)],
+            details="Confidence-to-harm audit asset is missing.",
+        )
 
 
 def validate_global_test_exclusions(audit: Audit) -> None:

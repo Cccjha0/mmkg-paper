@@ -4,13 +4,14 @@ DEV for all selection; TEST for immutable final evaluation only.
 
 **Overall status: PASS**
 
-This read-only audit evaluated 73 checks across 10 experiment groups. It changed no method, threshold, orientation, pair definition, or result asset.
+This read-only audit evaluated 74 checks across 11 experiment groups. It changed no method, threshold, orientation, pair definition, or result asset.
 
 ## Experiment status
 
 | Experiment | Status |
 |---|---:|
 | boundary_static_query_soft_anchored | PASS |
+| confidence_harm | PASS |
 | core_ablation | PASS |
 | dynasemble_boundary | PASS |
 | dynasemble_main | PASS |
@@ -97,6 +98,7 @@ This read-only audit evaluated 73 checks across 10 experiment groups. It changed
 | C01 | core_ablation | ALL / ALL | Core ablations | PASS | Matched-contract validation passed; no base retraining, TEST selection, or ablation-specific hyperparameter search. |
 | R01 | risk_coverage | ALL / ALL | Anchored Dynamic diagnostic | PASS | fixed_coverage_grid=True; test_used_for_selection=False; test_is_diagnostic_only=True; threshold_modified=False. |
 | N01 | negative_transfer | ALL / ALL | Global / Query-soft / DynaSemble / Anchored | PASS | no_training=True; no_test_driven_changes=True; test_final_only=True. |
+| H01 | confidence_harm | ALL / ALL | Anchored confidence diagnostic | PASS | Confidence threshold is disabled; non-finite fallback only; strict raw-bounded-vs-Global harm label; TEST diagnostic-only; all source, lock, and output hashes match. |
 | L01 | global_information_boundary | ALL / ALL | ALL | PASS | Protocols and implementations explicitly separate DEV-only selection from locked/immutable TEST apply; method-specific checks independently validate the resulting hashes and parameters. |
 
 ## Failures

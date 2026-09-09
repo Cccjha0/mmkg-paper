@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "audit_version": "paper_a_protocol_integrity_v1",
-  "generated_at_utc": "2026-09-09T16:08:29.880665+00:00",
+  "generated_at_utc": "2026-09-09T16:28:47.218323+00:00",
   "hash_algorithm": "SHA-256",
   "path_policy": "repository-relative canonical paths; historical machine-local lock paths retained in locked_paths; raw SHA-256 is always reported and LF/CRLF equivalence is accepted only for text assets",
   "assets": [
@@ -748,6 +748,25 @@
       ]
     },
     {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/anchored_crossfit/dev_anchored_query_rows.csv",
+      "roles": [
+        "confidence-to-harm frozen query rows"
+      ],
+      "exists": true,
+      "size_bytes": 46346286,
+      "sha256": "7b13db8cd4094ec4ce1651fa3a95a1d80f1c9e859d0d26381fe507ada372e066",
+      "expected_hashes": [
+        "7b13db8cd4094ec4ce1651fa3a95a1d80f1c9e859d0d26381fe507ada372e066"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/anchored_crossfit/dev_anchored_query_rows.csv"
+      ]
+    },
+    {
       "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/baseline_crossfit/dev_crossfit_query_rows.csv",
       "roles": [
         "grouped OOF DEV rows",
@@ -772,7 +791,8 @@
       "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/dev_lock/anchored_dev_lock.json",
       "roles": [
         "Anchored immutable DEV lock",
-        "core ablation locked source"
+        "core ablation locked source",
+        "confidence-to-harm DEV lock"
       ],
       "exists": true,
       "size_bytes": 2599,
@@ -896,7 +916,8 @@
       "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/test_anchored/test_locked_query_rows.csv",
       "roles": [
         "Anchored immutable TEST rows",
-        "core ablation locked source"
+        "core ablation locked source",
+        "confidence-to-harm frozen query rows"
       ],
       "exists": true,
       "size_bytes": 55936927,
@@ -950,6 +971,25 @@
       ]
     },
     {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/anchored_crossfit/dev_anchored_query_rows.csv",
+      "roles": [
+        "confidence-to-harm frozen query rows"
+      ],
+      "exists": true,
+      "size_bytes": 46497468,
+      "sha256": "f49663bce80db958d4fbb3d576ed841dc5926387a9d67959533db484d8249dc3",
+      "expected_hashes": [
+        "f49663bce80db958d4fbb3d576ed841dc5926387a9d67959533db484d8249dc3"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/db15k/anchored_dynamic/mhyper_native_seed123/anchored_crossfit/dev_anchored_query_rows.csv"
+      ]
+    },
+    {
       "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/baseline_crossfit/dev_crossfit_query_rows.csv",
       "roles": [
         "grouped OOF DEV rows",
@@ -974,7 +1014,8 @@
       "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/dev_lock/anchored_dev_lock.json",
       "roles": [
         "Anchored immutable DEV lock",
-        "core ablation locked source"
+        "core ablation locked source",
+        "confidence-to-harm DEV lock"
       ],
       "exists": true,
       "size_bytes": 2599,
@@ -1098,7 +1139,8 @@
       "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/test_anchored/test_locked_query_rows.csv",
       "roles": [
         "Anchored immutable TEST rows",
-        "core ablation locked source"
+        "core ablation locked source",
+        "confidence-to-harm frozen query rows"
       ],
       "exists": true,
       "size_bytes": 56247418,
@@ -1213,6 +1255,25 @@
       ]
     },
     {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/anchored_crossfit/dev_anchored_query_rows.csv",
+      "roles": [
+        "confidence-to-harm frozen query rows"
+      ],
+      "exists": true,
+      "size_bytes": 25772599,
+      "sha256": "fbaa2a0faea02aa6191deff8110c6d10e78c1ac1092a4bd83b4926b06160a6b4",
+      "expected_hashes": [
+        "fbaa2a0faea02aa6191deff8110c6d10e78c1ac1092a4bd83b4926b06160a6b4"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/anchored_crossfit/dev_anchored_query_rows.csv"
+      ]
+    },
+    {
       "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/baseline_crossfit/dev_crossfit_query_rows.csv",
       "roles": [
         "grouped OOF DEV rows",
@@ -1237,7 +1298,8 @@
       "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/dev_lock/anchored_dev_lock.json",
       "roles": [
         "Anchored immutable DEV lock",
-        "core ablation locked source"
+        "core ablation locked source",
+        "confidence-to-harm DEV lock"
       ],
       "exists": true,
       "size_bytes": 2596,
@@ -1361,7 +1423,8 @@
       "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/test_anchored/test_locked_query_rows.csv",
       "roles": [
         "Anchored immutable TEST rows",
-        "core ablation locked source"
+        "core ablation locked source",
+        "confidence-to-harm frozen query rows"
       ],
       "exists": true,
       "size_bytes": 24544314,
@@ -1415,6 +1478,25 @@
       ]
     },
     {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/anchored_crossfit/dev_anchored_query_rows.csv",
+      "roles": [
+        "confidence-to-harm frozen query rows"
+      ],
+      "exists": true,
+      "size_bytes": 25932898,
+      "sha256": "e0a98d388819d535c15585165bb4fea18c47a7bb70e31ed0d21902c97dbf7d50",
+      "expected_hashes": [
+        "e0a98d388819d535c15585165bb4fea18c47a7bb70e31ed0d21902c97dbf7d50"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/anchored_crossfit/dev_anchored_query_rows.csv"
+      ]
+    },
+    {
       "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/baseline_crossfit/dev_crossfit_query_rows.csv",
       "roles": [
         "grouped OOF DEV rows",
@@ -1439,7 +1521,8 @@
       "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/dev_lock/anchored_dev_lock.json",
       "roles": [
         "Anchored immutable DEV lock",
-        "core ablation locked source"
+        "core ablation locked source",
+        "confidence-to-harm DEV lock"
       ],
       "exists": true,
       "size_bytes": 2599,
@@ -1563,7 +1646,8 @@
       "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/test_anchored/test_locked_query_rows.csv",
       "roles": [
         "Anchored immutable TEST rows",
-        "core ablation locked source"
+        "core ablation locked source",
+        "confidence-to-harm frozen query rows"
       ],
       "exists": true,
       "size_bytes": 24703956,
@@ -2079,6 +2163,97 @@
       "hash_matches_all_expectations": true,
       "locked_paths": [
         "outputs\\paper_a_safe_correction\\boundary_pairs\\mkg_w\\native_adamf\\test_full_ranking\\test_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/confidence_harm/auroc_auprc.json",
+      "roles": [
+        "confidence-to-harm audit"
+      ],
+      "exists": true,
+      "size_bytes": 13832,
+      "sha256": "d553014838b2f086a49665647de62c0a9765a3a78e960398d61c6529deef700d",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/confidence_harm/confidence_bins.csv",
+      "roles": [
+        "confidence-to-harm diagnostic output"
+      ],
+      "exists": true,
+      "size_bytes": 9315,
+      "sha256": "c068b6f678f7f2015df3aa3ccbf022669997bcdcb01b1da3077bd2b47ec812b0",
+      "expected_hashes": [
+        "c068b6f678f7f2015df3aa3ccbf022669997bcdcb01b1da3077bd2b47ec812b0"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "confidence_bins.csv"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/confidence_harm/confidence_harm_summary.csv",
+      "roles": [
+        "confidence-to-harm diagnostic output"
+      ],
+      "exists": true,
+      "size_bytes": 1991,
+      "sha256": "c50c1f4f0f35777f0f222ab9f1611a734728c958f905811179e100a7fea21331",
+      "expected_hashes": [
+        "c50c1f4f0f35777f0f222ab9f1611a734728c958f905811179e100a7fea21331"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "confidence_harm_summary.csv"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/confidence_harm/confidence_vs_harm.pdf",
+      "roles": [
+        "confidence-to-harm diagnostic output"
+      ],
+      "exists": true,
+      "size_bytes": 6521,
+      "sha256": "6daeb0b995960bb28822aab09bbe045f580f887ee2e7fb9d0b97e4ec079af4f5",
+      "expected_hashes": [
+        "6daeb0b995960bb28822aab09bbe045f580f887ee2e7fb9d0b97e4ec079af4f5"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "confidence_vs_harm.pdf"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/confidence_harm/query_rows.csv",
+      "roles": [
+        "confidence-to-harm diagnostic output"
+      ],
+      "exists": true,
+      "size_bytes": 128709667,
+      "sha256": "33c1e786151ba5e279b0342e7d5126a966f285e749a80e2687190b8e1d32fa24",
+      "expected_hashes": [
+        "33c1e786151ba5e279b0342e7d5126a966f285e749a80e2687190b8e1d32fa24"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "query_rows.csv"
       ]
     },
     {

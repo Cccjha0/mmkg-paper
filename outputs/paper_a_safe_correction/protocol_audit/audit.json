@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "audit_version": "paper_a_protocol_integrity_v1",
-  "generated_at_utc": "2026-09-09T16:08:29.880665+00:00",
+  "generated_at_utc": "2026-09-09T16:28:47.218323+00:00",
   "statement": "DEV for all selection; TEST for immutable final evaluation only.",
   "read_only_audit": true,
   "methods_modified": false,
@@ -16,13 +16,14 @@
     "core_ablation": "PASS",
     "risk_coverage": "PASS",
     "negative_transfer": "PASS",
+    "confidence_harm": "PASS",
     "global_information_boundary": "PASS"
   },
   "summary": {
-    "checks": 73,
-    "passed": 73,
+    "checks": 74,
+    "passed": 74,
     "failed": 0,
-    "experiments": 10
+    "experiments": 11
   },
   "checks": [
     {
@@ -816,6 +817,17 @@
       "status": "PASS",
       "evidence_files": "outputs/paper_a_safe_correction/negative_transfer/bootstrap_ci.json",
       "details": "no_training=True; no_test_driven_changes=True; test_final_only=True."
+    },
+    {
+      "experiment": "confidence_harm",
+      "dataset": "ALL",
+      "pair": "ALL",
+      "method": "Anchored confidence diagnostic",
+      "check_id": "H01",
+      "requirement": "Harm is counterfactual raw bounded correction, and TEST is diagnostic only",
+      "status": "PASS",
+      "evidence_files": "outputs/paper_a_safe_correction/confidence_harm/auroc_auprc.json",
+      "details": "Confidence threshold is disabled; non-finite fallback only; strict raw-bounded-vs-Global harm label; TEST diagnostic-only; all source, lock, and output hashes match."
     },
     {
       "experiment": "global_information_boundary",

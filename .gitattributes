@@ -19,3 +19,4 @@ outputs/complementarity_identifiability/exp5_local_identifiability/pair_k_summar
 outputs/complementarity_identifiability/exp6_stable_headroom/concentration_pair_summary.csv -text whitespace=cr-at-eol
 outputs/complementarity_identifiability/exp6_stable_headroom/final_joint_interpretation.json -text whitespace=cr-at-eol
 outputs/complementarity_identifiability/exp6_stable_headroom/stable_headroom_pair_summary.csv -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/confidence_harm/confidence_vs_harm.pdf -text -diff
