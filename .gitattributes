@@ -20,3 +20,4 @@ outputs/complementarity_identifiability/exp6_stable_headroom/concentration_pair_
 outputs/complementarity_identifiability/exp6_stable_headroom/final_joint_interpretation.json -text whitespace=cr-at-eol
 outputs/complementarity_identifiability/exp6_stable_headroom/stable_headroom_pair_summary.csv -text whitespace=cr-at-eol
 outputs/paper_a_safe_correction/confidence_harm/confidence_vs_harm.pdf -text -diff
+outputs/paper_a_safe_correction/beta_sensitivity/*.pdf -text -diff

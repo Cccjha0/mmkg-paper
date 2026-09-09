@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "audit_version": "paper_a_protocol_integrity_v1",
-  "generated_at_utc": "2026-09-09T16:28:47.218323+00:00",
+  "generated_at_utc": "2026-09-09T16:57:32.342943+00:00",
   "statement": "DEV for all selection; TEST for immutable final evaluation only.",
   "read_only_audit": true,
   "methods_modified": false,
@@ -17,13 +17,14 @@
     "risk_coverage": "PASS",
     "negative_transfer": "PASS",
     "confidence_harm": "PASS",
+    "beta_sensitivity": "PASS",
     "global_information_boundary": "PASS"
   },
   "summary": {
-    "checks": 74,
-    "passed": 74,
+    "checks": 75,
+    "passed": 75,
     "failed": 0,
-    "experiments": 11
+    "experiments": 12
   },
   "checks": [
     {
@@ -828,6 +829,17 @@
       "status": "PASS",
       "evidence_files": "outputs/paper_a_safe_correction/confidence_harm/auroc_auprc.json",
       "details": "Confidence threshold is disabled; non-finite fallback only; strict raw-bounded-vs-Global harm label; TEST diagnostic-only; all source, lock, and output hashes match."
+    },
+    {
+      "experiment": "beta_sensitivity",
+      "dataset": "ALL",
+      "pair": "ALL",
+      "method": "Anchored beta diagnostic",
+      "check_id": "B01",
+      "requirement": "Beta sensitivity varies only the predeclared trust-region radius; TEST does not select beta",
+      "status": "PASS",
+      "evidence_files": "outputs/paper_a_safe_correction/beta_sensitivity/beta_sensitivity_audit.json",
+      "details": "Formal grid is 0.05-0.50; beta=1.0 is diagnostic-only; selection remains the DEV lock; theoretical and core-ablation reproduction checks pass; all source/lock/output hashes match."
     },
     {
       "experiment": "global_information_boundary",

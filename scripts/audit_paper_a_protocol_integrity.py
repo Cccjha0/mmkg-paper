@@ -569,9 +569,11 @@ def validate_analysis_boundaries(audit: Audit) -> None:
     risk_path = audit.repo_root / "outputs/paper_a_safe_correction/risk_coverage/audit.json"
     negative_path = audit.repo_root / "outputs/paper_a_safe_correction/negative_transfer/bootstrap_ci.json"
     confidence_path = audit.repo_root / "outputs/paper_a_safe_correction/confidence_harm/auroc_auprc.json"
+    beta_path = audit.repo_root / "outputs/paper_a_safe_correction/beta_sensitivity/beta_sensitivity_audit.json"
     risk_ok, _ = audit.asset(risk_path, "risk-coverage audit")
     negative_ok, _ = audit.asset(negative_path, "negative-transfer audit")
     confidence_ok, _ = audit.asset(confidence_path, "confidence-to-harm audit")
+    beta_ok, _ = audit.asset(beta_path, "beta trust-region sensitivity audit")
     if risk_ok:
         risk = read_json(risk_path)
         fixed_grid = risk.get("coverage_grid") == [i / 10 for i in range(11)]
@@ -639,6 +641,69 @@ def validate_analysis_boundaries(audit: Audit) -> None:
             method="Anchored confidence diagnostic",
             evidence=[portable(confidence_path, audit.repo_root)],
             details="Confidence-to-harm audit asset is missing.",
+        )
+    if beta_ok:
+        beta = read_json(beta_path)
+        problems: list[str] = []
+        flags_ok = (
+            beta.get("formal_beta_grid")
+            == [round(value * 0.05, 2) for value in range(1, 11)]
+            and same_float(beta.get("diagnostic_beta"), 1.0)
+            and beta.get("diagnostic_beta_participates_in_selection") is False
+            and beta.get("selected_beta_source")
+            == "existing immutable DEV lock only"
+            and beta.get("test_used_for_beta_or_threshold_selection") is False
+            and beta.get("theoretical_check", {}).get("passed") is True
+            and beta.get("core_ablation_test_reproduction", {}).get("passed")
+            is True
+        )
+        for name, expected in beta.get("output_hashes", {}).items():
+            path = beta_path.parent / name
+            matched, _ = audit.asset(
+                path,
+                "beta sensitivity output",
+                str(expected),
+                name,
+            )
+            if not matched:
+                problems.append(
+                    f"output missing/hash mismatch: {portable(path, audit.repo_root)}"
+                )
+        for item in beta.get("source_audit", []):
+            for path_key, hash_key, role in (
+                ("source_rows", "source_rows_sha256", "beta sensitivity frozen query rows"),
+                ("lock", "lock_sha256", "beta sensitivity DEV lock"),
+            ):
+                path = audit.repo_root / Path(str(item.get(path_key, "")))
+                matched, _ = audit.asset(
+                    path,
+                    role,
+                    item.get(hash_key),
+                    str(item.get(path_key, "")),
+                )
+                if not matched:
+                    problems.append(
+                        f"source missing/hash mismatch: {portable(path, audit.repo_root)}"
+                    )
+        audit.check(
+            "beta_sensitivity",
+            "B01",
+            "Beta sensitivity varies only the predeclared trust-region radius; TEST does not select beta",
+            flags_ok and not problems,
+            method="Anchored beta diagnostic",
+            evidence=[portable(beta_path, audit.repo_root)],
+            details="; ".join(problems)
+            or "Formal grid is 0.05-0.50; beta=1.0 is diagnostic-only; selection remains the DEV lock; theoretical and core-ablation reproduction checks pass; all source/lock/output hashes match.",
+        )
+    else:
+        audit.check(
+            "beta_sensitivity",
+            "B01",
+            "Beta sensitivity varies only the predeclared trust-region radius; TEST does not select beta",
+            False,
+            method="Anchored beta diagnostic",
+            evidence=[portable(beta_path, audit.repo_root)],
+            details="Beta-sensitivity audit asset is missing.",
         )
 
 
