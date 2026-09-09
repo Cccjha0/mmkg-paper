@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "config_version": "paper_a_reliable_primary_v1",
+  "selection_timestamp_utc": "2026-09-09T12:08:46.146980+00:00",
+  "TEST_NOT_USED": true,
+  "input_scope": "existing standalone exact filtered DEV query rows only",
+  "selection_rule": {
+    "primary": "model with higher pooled DEV MRR",
+    "reliable_primary_if_and_only_if": [
+      "pooled DEV primary-minus-secondary delta > 0",
+      "all 3 paired-seed deltas > 0",
+      "original-triple clustered bootstrap 95% CI lower bound > 0"
+    ],
+    "post_hoc_mrr_margin": null,
+    "tie_policy": "boundary / non-reliable-primary"
+  },
+  "dev_assets": [
+    {
+      "dataset": "MKG-W",
+      "pair": "M-Hyper vs NativE",
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "8b7dfb913f3a0d00eef156200e4a656f4062f2b2306b85cf8e68130749254b98",
+      "n_rows": 25656,
+      "n_original_triples": 4276,
+      "models": [
+        "M-Hyper",
+        "NativE"
+      ],
+      "split_values": [
+        "dev"
+      ]
+    },
+    {
+      "dataset": "MKG-W",
+      "pair": "M-Hyper vs AdaMF-MAT",
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "e389449b44379ecb18fe248127c6b062b2f5cc7894fb052536a442528ab4287b",
+      "n_rows": 25656,
+      "n_original_triples": 4276,
+      "models": [
+        "M-Hyper",
+        "AdaMF-MAT"
+      ],
+      "split_values": [
+        "dev"
+      ]
+    },
+    {
+      "dataset": "MKG-W",
+      "pair": "NativE vs AdaMF-MAT",
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "980197c29b8d0c447e298b862d43064e0b86c088a134347136fa87a64ad877ed",
+      "n_rows": 25656,
+      "n_original_triples": 4276,
+      "models": [
+        "NativE",
+        "AdaMF-MAT"
+      ],
+      "split_values": [
+        "dev"
+      ]
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "M-Hyper vs NativE",
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "f85d657f7183dc960bba762418ea3695ab0af78b59d45e158e1cd0a34079a081",
+      "n_rows": 47532,
+      "n_original_triples": 7922,
+      "models": [
+        "M-Hyper",
+        "NativE"
+      ],
+      "split_values": [
+        "dev"
+      ]
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "M-Hyper vs AdaMF-MAT",
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "431d98b55b288fff46c7454be1e0e4409e47c75226b8441ec2ec02fe9ba1a6d2",
+      "n_rows": 47532,
+      "n_original_triples": 7922,
+      "models": [
+        "M-Hyper",
+        "AdaMF-MAT"
+      ],
+      "split_values": [
+        "dev"
+      ]
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "NativE vs AdaMF-MAT",
+      "path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "sha256": "0b132d2a13d5df045d71adda1cf6282230f5db26ef18a5d2052caeb58da22bfd",
+      "n_rows": 47532,
+      "n_original_triples": 7922,
+      "models": [
+        "NativE",
+        "AdaMF-MAT"
+      ],
+      "split_values": [
+        "dev"
+      ]
+    }
+  ],
+  "primary_selections": [
+    {
+      "dataset": "MKG-W",
+      "pair": "M-Hyper vs NativE",
+      "primary_model": "M-Hyper",
+      "secondary_model": "NativE",
+      "regime": "reliable-primary"
+    },
+    {
+      "dataset": "MKG-W",
+      "pair": "M-Hyper vs AdaMF-MAT",
+      "primary_model": "M-Hyper",
+      "secondary_model": "AdaMF-MAT",
+      "regime": "reliable-primary"
+    },
+    {
+      "dataset": "MKG-W",
+      "pair": "NativE vs AdaMF-MAT",
+      "primary_model": "NativE",
+      "secondary_model": "AdaMF-MAT",
+      "regime": "reliable-primary"
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "M-Hyper vs NativE",
+      "primary_model": "M-Hyper",
+      "secondary_model": "NativE",
+      "regime": "reliable-primary"
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "M-Hyper vs AdaMF-MAT",
+      "primary_model": "M-Hyper",
+      "secondary_model": "AdaMF-MAT",
+      "regime": "reliable-primary"
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "NativE vs AdaMF-MAT",
+      "primary_model": "NativE",
+      "secondary_model": "AdaMF-MAT",
+      "regime": "reliable-primary"
+    }
+  ],
+  "standalone_mrr_consistency_checks": [
+    {
+      "dataset": "MKG-W",
+      "model": "M-Hyper",
+      "mrr_values": [
+        0.35282196536677,
+        0.35282196536677
+      ],
+      "max_spread": 0.0
+    },
+    {
+      "dataset": "MKG-W",
+      "model": "NativE",
+      "mrr_values": [
+        0.3284429836733619,
+        0.3284429836733619
+      ],
+      "max_spread": 0.0
+    },
+    {
+      "dataset": "MKG-W",
+      "model": "AdaMF-MAT",
+      "mrr_values": [
+        0.2897472977555586,
+        0.2897472977555586
+      ],
+      "max_spread": 0.0
+    },
+    {
+      "dataset": "DB15K",
+      "model": "M-Hyper",
+      "mrr_values": [
+        0.38258701302410913,
+        0.38258701302410913
+      ],
+      "max_spread": 0.0
+    },
+    {
+      "dataset": "DB15K",
+      "model": "NativE",
+      "mrr_values": [
+        0.32102191827913534,
+        0.32102191827913534
+      ],
+      "max_spread": 0.0
+    },
+    {
+      "dataset": "DB15K",
+      "model": "AdaMF-MAT",
+      "mrr_values": [
+        0.2920178720590989,
+        0.2920178720590989
+      ],
+      "max_spread": 0.0
+    }
+  ],
+  "automatic_checks": {
+    "four_main_pairs_all_reliable": true,
+    "native_adamf_boundary_by_dataset": {
+      "MKG-W": false,
+      "DB15K": false
+    },
+    "native_adamf_all_boundary": false
+  },
+  "test_files_read": []
+}

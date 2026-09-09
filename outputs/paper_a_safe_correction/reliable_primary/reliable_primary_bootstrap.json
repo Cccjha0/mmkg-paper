@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "config_version": "paper_a_reliable_primary_v1",
+  "bootstrap_samples": 10000,
+  "bootstrap_seed": 20260909,
+  "confidence_interval": "percentile 95%",
+  "cluster_unit": "original raw triple; all 3 paired seeds and both directions retained",
+  "intervals": [
+    {
+      "dataset": "MKG-W",
+      "pair": "M-Hyper vs NativE",
+      "selected_primary": "M-Hyper",
+      "secondary": "NativE",
+      "point_delta": 0.02437898169340817,
+      "ci95": [
+        0.020242971507078204,
+        0.028682336706247327
+      ],
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all 3 seeds and both directions retained",
+      "seed_deltas": {
+        "1": 0.023881208725637128,
+        "2": 0.026499904545190366,
+        "3": 0.022755831809396995
+      }
+    },
+    {
+      "dataset": "MKG-W",
+      "pair": "M-Hyper vs AdaMF-MAT",
+      "selected_primary": "M-Hyper",
+      "secondary": "AdaMF-MAT",
+      "point_delta": 0.06307466761121144,
+      "ci95": [
+        0.0581926618968203,
+        0.06797626151748817
+      ],
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all 3 seeds and both directions retained",
+      "seed_deltas": {
+        "1": 0.07327039498725113,
+        "2": 0.055613712966231216,
+        "3": 0.060339894880151984
+      }
+    },
+    {
+      "dataset": "MKG-W",
+      "pair": "NativE vs AdaMF-MAT",
+      "selected_primary": "NativE",
+      "secondary": "AdaMF-MAT",
+      "point_delta": 0.03869568591780328,
+      "ci95": [
+        0.03443434807944586,
+        0.0430622396536722
+      ],
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all 3 seeds and both directions retained",
+      "seed_deltas": {
+        "1": 0.049389186261613996,
+        "2": 0.029113808421040846,
+        "3": 0.037584063070755
+      }
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "M-Hyper vs NativE",
+      "selected_primary": "M-Hyper",
+      "secondary": "NativE",
+      "point_delta": 0.0615650947449738,
+      "ci95": [
+        0.058096903078603684,
+        0.06499988162970247
+      ],
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all 3 seeds and both directions retained",
+      "seed_deltas": {
+        "1": 0.06439839582664002,
+        "2": 0.056302485174303384,
+        "3": 0.06399440323397798
+      }
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "M-Hyper vs AdaMF-MAT",
+      "selected_primary": "M-Hyper",
+      "secondary": "AdaMF-MAT",
+      "point_delta": 0.09056914096501018,
+      "ci95": [
+        0.08683677859698044,
+        0.09424857382353147
+      ],
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all 3 seeds and both directions retained",
+      "seed_deltas": {
+        "1": 0.09090092626561073,
+        "2": 0.09815597285881984,
+        "3": 0.08265052377059998
+      }
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "NativE vs AdaMF-MAT",
+      "selected_primary": "NativE",
+      "secondary": "AdaMF-MAT",
+      "point_delta": 0.029004046220036387,
+      "ci95": [
+        0.026139584871417255,
+        0.031849539657686644
+      ],
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all 3 seeds and both directions retained",
+      "seed_deltas": {
+        "1": 0.02650253043897073,
+        "2": 0.04185348768451646,
+        "3": 0.018656120536621974
+      }
+    }
+  ]
+}
