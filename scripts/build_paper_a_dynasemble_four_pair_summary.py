@@ -7,6 +7,11 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
+import numpy as np
+
+
+BOOTSTRAP_SEED = 20260909
+BOOTSTRAP_SAMPLES = 10000
 
 PAIR_SPECS = (
     ("mkg_w", "mhyper_native", "MKG-W", "M-Hyper + NativE"),
@@ -30,6 +35,42 @@ OUTPUT_FIELDS = (
     "anchored_mrr",
     "delta_dynasemble_vs_global",
     "delta_anchored_vs_global",
+)
+
+RISK_FIELDS = (
+    "dataset",
+    "pair",
+    "n_queries",
+    "harm_rate",
+    "improvement_rate",
+    "tie_rate",
+    "mean_delta",
+    "mean_harm_given_harm",
+    "mean_gain_given_gain",
+    "delta_q01",
+    "delta_q05",
+    "delta_q10",
+    "cvar10",
+    "severe_harm_rate_delta_le_minus_0_1",
+    "top1_loss_rate",
+    "top1_gain_rate",
+    "top10_loss_rate",
+    "top10_gain_rate",
+)
+
+SELECTOR_FIELDS = (
+    "dataset",
+    "pair",
+    "seed",
+    "global_mrr",
+    "dynasemble_mrr",
+    "delta_dynasemble_vs_global",
+    "delta_ci95_low",
+    "delta_ci95_high",
+    "weight_mean",
+    "effective_alpha_mean",
+    "weight_zero_fraction",
+    "selector_behavior",
 )
 
 
@@ -57,6 +98,78 @@ def sha256_file(path: Path) -> str:
 
 def mean(rows: list[dict[str, str]], column: str) -> float:
     return sum(float(row[column]) for row in rows) / len(rows)
+
+
+def quantile(sorted_values: list[float], fraction: float) -> float:
+    position = (len(sorted_values) - 1) * fraction
+    lower = int(position)
+    upper = min(lower + 1, len(sorted_values) - 1)
+    weight = position - lower
+    return sorted_values[lower] * (1.0 - weight) + sorted_values[upper] * weight
+
+
+def risk_row(rows: list[dict[str, str]], dataset: str, pair: str) -> dict:
+    deltas = [float(row["rr_dynasemble"]) - float(row["rr_global"]) for row in rows]
+    sorted_deltas = sorted(deltas)
+    harmful = [value for value in deltas if value < 0.0]
+    beneficial = [value for value in deltas if value > 0.0]
+    tail_count = max(1, int(len(deltas) * 0.1 + 0.999999999))
+    top1_losses = sum(
+        int(row["rank_global"]) <= 1 < int(row["rank_dynasemble"]) for row in rows
+    )
+    top1_gains = sum(
+        int(row["rank_dynasemble"]) <= 1 < int(row["rank_global"]) for row in rows
+    )
+    top10_losses = sum(
+        int(row["rank_global"]) <= 10 < int(row["rank_dynasemble"]) for row in rows
+    )
+    top10_gains = sum(
+        int(row["rank_dynasemble"]) <= 10 < int(row["rank_global"]) for row in rows
+    )
+    return {
+        "dataset": dataset,
+        "pair": pair,
+        "n_queries": len(rows),
+        "harm_rate": len(harmful) / len(rows),
+        "improvement_rate": len(beneficial) / len(rows),
+        "tie_rate": (len(rows) - len(harmful) - len(beneficial)) / len(rows),
+        "mean_delta": sum(deltas) / len(deltas),
+        "mean_harm_given_harm": sum(harmful) / len(harmful),
+        "mean_gain_given_gain": sum(beneficial) / len(beneficial),
+        "delta_q01": quantile(sorted_deltas, 0.01),
+        "delta_q05": quantile(sorted_deltas, 0.05),
+        "delta_q10": quantile(sorted_deltas, 0.10),
+        "cvar10": sum(sorted_deltas[:tail_count]) / tail_count,
+        "severe_harm_rate_delta_le_minus_0_1": sum(
+            value <= -0.1 for value in deltas
+        )
+        / len(deltas),
+        "top1_loss_rate": top1_losses / len(rows),
+        "top1_gain_rate": top1_gains / len(rows),
+        "top10_loss_rate": top10_losses / len(rows),
+        "top10_gain_rate": top10_gains / len(rows),
+    }
+
+
+def clustered_bootstrap_delta(rows: list[dict[str, str]]) -> tuple[float, float]:
+    clusters: dict[tuple[int, int, int], list[float]] = defaultdict(list)
+    for row in rows:
+        key = (int(row["head_id"]), int(row["relation_id"]), int(row["tail_id"]))
+        clusters[key].append(
+            float(row["rr_dynasemble"]) - float(row["rr_global"])
+        )
+    values = np.asarray(
+        [sum(cluster) / len(cluster) for cluster in clusters.values()],
+        dtype=np.float64,
+    )
+    generator = np.random.default_rng(BOOTSTRAP_SEED)
+    samples = np.empty(BOOTSTRAP_SAMPLES, dtype=np.float64)
+    chunk_size = 128
+    for start in range(0, BOOTSTRAP_SAMPLES, chunk_size):
+        width = min(chunk_size, BOOTSTRAP_SAMPLES - start)
+        indexes = generator.integers(0, values.size, size=(width, values.size))
+        samples[start : start + width] = values[indexes].mean(axis=1)
+    return float(np.quantile(samples, 0.025)), float(np.quantile(samples, 0.975))
 
 
 def summary_row(
@@ -110,6 +223,8 @@ def main() -> None:
     args = parse_args()
     root = Path(args.root)
     output_rows = []
+    risk_rows = []
+    selector_rows = []
     audit = []
     for dataset_dir, pair_dir, dataset_label, pair_label in PAIR_SPECS:
         pair_root = root / dataset_dir / pair_dir
@@ -138,6 +253,7 @@ def main() -> None:
         if any(row.get("rr_anchored", "") == "" for row in rows):
             raise RuntimeError(f"Missing matched Anchored values under {pair_root}")
         output_rows.append(summary_row(rows, dataset_label, pair_label, "overall", "all"))
+        risk_rows.append(risk_row(rows, dataset_label, pair_label))
         grouped_direction: dict[str, list[dict[str, str]]] = defaultdict(list)
         grouped_seed: dict[str, list[dict[str, str]]] = defaultdict(list)
         grouped_seed_direction: dict[tuple[str, str], list[dict[str, str]]] = defaultdict(list)
@@ -157,15 +273,46 @@ def main() -> None:
                 )
             )
         for seed in ("1", "2", "3"):
+            seed_summary = summary_row(
+                grouped_seed[seed],
+                dataset_label,
+                pair_label,
+                "seed",
+                seed,
+                seed=seed,
+            )
             output_rows.append(
-                summary_row(
-                    grouped_seed[seed],
-                    dataset_label,
-                    pair_label,
-                    "seed",
-                    seed,
-                    seed=seed,
-                )
+                seed_summary
+            )
+            weight_rows = read_rows(pair_root / "test_weight_diagnostics.csv")
+            weight = next(
+                row
+                for row in weight_rows
+                if row["seed"] == seed and row["direction"] == "all"
+            )
+            zero_fraction = float(weight["weight_zero_fraction"])
+            ci95_low, ci95_high = clustered_bootstrap_delta(grouped_seed[seed])
+            selector_rows.append(
+                {
+                    "dataset": dataset_label,
+                    "pair": pair_label,
+                    "seed": seed,
+                    "global_mrr": seed_summary["global_mrr"],
+                    "dynasemble_mrr": seed_summary["dynasemble_mrr"],
+                    "delta_dynasemble_vs_global": seed_summary[
+                        "delta_dynasemble_vs_global"
+                    ],
+                    "delta_ci95_low": ci95_low,
+                    "delta_ci95_high": ci95_high,
+                    "weight_mean": float(weight["weight_mean"]),
+                    "effective_alpha_mean": float(weight["effective_alpha_mean"]),
+                    "weight_zero_fraction": zero_fraction,
+                    "selector_behavior": (
+                        "collapsed_to_secondary"
+                        if zero_fraction == 1.0
+                        else "active"
+                    ),
+                }
             )
             for direction in ("head", "tail"):
                 output_rows.append(
@@ -194,6 +341,18 @@ def main() -> None:
         writer = csv.DictWriter(handle, fieldnames=OUTPUT_FIELDS)
         writer.writeheader()
         writer.writerows(output_rows)
+    with (root / "four_pair_risk_summary.csv").open(
+        "w", encoding="utf-8", newline=""
+    ) as handle:
+        writer = csv.DictWriter(handle, fieldnames=RISK_FIELDS)
+        writer.writeheader()
+        writer.writerows(risk_rows)
+    with (root / "four_pair_selector_summary.csv").open(
+        "w", encoding="utf-8", newline=""
+    ) as handle:
+        writer = csv.DictWriter(handle, fieldnames=SELECTOR_FIELDS)
+        writer.writeheader()
+        writer.writerows(selector_rows)
     (root / "four_pair_summary.md").write_text(
         format_markdown(output_rows), encoding="utf-8"
     )

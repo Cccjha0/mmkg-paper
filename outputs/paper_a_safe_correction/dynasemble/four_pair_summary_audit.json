@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "pairs": [
+    {
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "n_rows": 25644,
+      "lock_sha256": "4367219f681ac2bcfa373e7dd838a138dde9a0095f21bcb39f5f7efb82ef49c6"
+    },
+    {
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "n_rows": 25644,
+      "lock_sha256": "faa9ead15f78f0502cea5dab898b2e1abacec7a6002b6958cc5578d471012649"
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "n_rows": 59412,
+      "lock_sha256": "ad10678bdc1cb2b43e8105d1980202edd49ac7e06be3489844e976a2f75cace1"
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "n_rows": 59412,
+      "lock_sha256": "7ee6c3c608ace74d2afb94abb17cf6a02fedfc18bc33e7e110b56d62004d5a3d"
+    }
+  ]
+}
