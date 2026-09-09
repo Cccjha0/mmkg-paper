@@ -6,11 +6,13 @@ import hashlib
 import json
 import math
 import random
+import subprocess
 import sys
 import time
 from collections import defaultdict
 from pathlib import Path
 
+import numpy as np
 import torch
 from torch import nn
 
@@ -56,7 +58,9 @@ NORMALIZATION = "filtered_query_minmax"
 LEARNED_EXPERT = "M-Hyper"
 FIXED_WEIGHT_EXPERT = "NativE"
 FIXED_WEIGHT = 1.0
-EVALUATOR_VERSION = 2
+EVALUATOR_VERSION = 3
+BOOTSTRAP_SEED = 20260909
+BOOTSTRAP_SAMPLES = 10000
 
 ROW_FIELDS = (
     "pair_name",
@@ -83,12 +87,14 @@ ROW_FIELDS = (
     "rank_dynasemble",
     "rr_dynasemble",
     "rr_oracle",
-    "weight_mhyper",
-    "effective_alpha_mhyper",
-    "feature_mhyper_one_minus_mean",
-    "feature_mhyper_variance",
-    "feature_native_one_minus_mean",
-    "feature_native_variance",
+    "weight_expert_a",
+    "effective_alpha_expert_a",
+    "feature_a_one_minus_mean",
+    "feature_a_variance",
+    "feature_b_one_minus_mean",
+    "feature_b_variance",
+    "rr_query_soft",
+    "rr_anchored",
     "evaluator_version",
     "selector_sha256",
     "baseline_selection_sha256",
@@ -98,11 +104,14 @@ ROW_FIELDS = (
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Faithfully adapt DynaSemble to the frozen OpenBG-IMG M-Hyper + NativE "
-            "expert pair under the repository's exact filtered full-ranking protocol."
+            "Faithfully adapt DynaSemble to paired MMKGC experts under the repository's "
+            "exact filtered full-ranking protocol."
         )
     )
     parser.add_argument("--stage", required=True, choices=("dev", "test"))
+    parser.add_argument("--pair-name", default="openbg_mhyper_native_dynasemble")
+    parser.add_argument("--expert-a-name", default="M-Hyper")
+    parser.add_argument("--expert-b-name", default="NativE")
     parser.add_argument(
         "--run-pair",
         action="append",
@@ -112,6 +121,19 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--baseline-selection-json", required=True)
     parser.add_argument("--reference-query-rows")
+    parser.add_argument(
+        "--comparison-query-rows",
+        help=(
+            "Optional locked Anchored-Dynamic rows used only to attach Query-soft and "
+            "Anchored reciprocal ranks to matched outputs."
+        ),
+    )
+    parser.add_argument(
+        "--lock-filename",
+        default="dev_lock.json",
+        help="DEV lock name; Paper A four-pair runs use lock.json.",
+    )
+    parser.add_argument("--protocol-path")
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--progress-every", type=int, default=25)
@@ -127,15 +149,18 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def frozen_method_config() -> dict:
+def frozen_method_config(
+    learned_expert: str = LEARNED_EXPERT,
+    fixed_weight_expert: str = FIXED_WEIGHT_EXPERT,
+) -> dict:
     return {
         "method": "DynaSemble",
         "source_repository": SOURCE_REPOSITORY,
         "source_commit": SOURCE_COMMIT,
         "source_selector": SOURCE_SELECTOR,
         "source_trainer": SOURCE_TRAINER,
-        "learned_weight_expert": LEARNED_EXPERT,
-        "fixed_weight_expert": FIXED_WEIGHT_EXPERT,
+        "learned_weight_expert": learned_expert,
+        "fixed_weight_expert": fixed_weight_expert,
         "fixed_weight": FIXED_WEIGHT,
         "normalization": NORMALIZATION,
         "features": FEATURE_DEFINITION,
@@ -287,10 +312,10 @@ def train_selector(
             if not subset:
                 continue
             q_cpu = torch.tensor(subset, dtype=torch.long)
-            raw_a, target_a = score_expert_block(
+            raw_a, target_a, _ = score_expert_block(
                 expert_a, q_cpu, direction, true_indexes[direction], device
             )
-            raw_b, target_b = score_expert_block(
+            raw_b, target_b, _ = score_expert_block(
                 expert_b, q_cpu, direction, true_indexes[direction], device
             )
             sampled_a, sampled_b = sample_training_candidates(
@@ -344,13 +369,14 @@ def save_selector(
     selector: ReleasedDynaSembleSelector,
     seed: int,
     training_summary: dict,
+    method_config: dict,
 ) -> str:
     path.parent.mkdir(parents=True, exist_ok=True)
     torch.save(
         {
             "schema_version": 1,
             "seed": seed,
-            "method_config": frozen_method_config(),
+            "method_config": method_config,
             "training_summary": training_summary,
             "state_dict": selector.state_dict(),
         },
@@ -359,11 +385,16 @@ def save_selector(
     return sha256_file(path)
 
 
-def load_selector(path: Path, expected_seed: int, device: str) -> ReleasedDynaSembleSelector:
+def load_selector(
+    path: Path,
+    expected_seed: int,
+    device: str,
+    method_config: dict,
+) -> ReleasedDynaSembleSelector:
     payload = torch.load(path, map_location=device)
     if int(payload.get("seed", -1)) != expected_seed:
         raise RuntimeError(f"Selector seed mismatch in {path}")
-    if payload.get("method_config") != frozen_method_config():
+    if payload.get("method_config") != method_config:
         raise RuntimeError(f"Selector method configuration mismatch in {path}")
     selector = ReleasedDynaSembleSelector().to(device)
     selector.load_state_dict(payload["state_dict"])
@@ -420,6 +451,7 @@ def evaluate_direction(
     progress_every: int,
     selector_hash: str,
     selection_hash: str,
+    pair_name: str,
 ) -> list[dict]:
     selector.eval()
     triples_t = torch.tensor(triples, dtype=torch.long)
@@ -429,8 +461,12 @@ def evaluate_direction(
     started = time.time()
     for batch_index, start in enumerate(range(0, len(triples), outer_batch), start=1):
         q_cpu = triples_t[start : start + outer_batch]
-        raw_a, target_a = score_expert_block(expert_a, q_cpu, direction, true_index, device)
-        raw_b, target_b = score_expert_block(expert_b, q_cpu, direction, true_index, device)
+        raw_a, target_a, _ = score_expert_block(
+            expert_a, q_cpu, direction, true_index, device
+        )
+        raw_b, target_b, _ = score_expert_block(
+            expert_b, q_cpu, direction, true_index, device
+        )
         rank_a = ranks_against_reference(raw_a, target_a)
         rank_b = ranks_against_reference(raw_b, target_b)
         z_a, z_target_a = query_zscore_with_reference(raw_a, target_a)
@@ -450,7 +486,7 @@ def evaluate_direction(
         both_filtered = (~torch.isfinite(normalized_a)) & (~torch.isfinite(normalized_b))
         ensemble = ensemble.masked_fill(both_filtered, float("-inf"))
         rank_dynasemble = ranks_against_reference(ensemble, ensemble_reference)
-        # A zero learned weight is exactly the fixed NativE endpoint. Preserve
+        # A zero learned weight is exactly the fixed expert-B endpoint. Preserve
         # its already-audited rank rather than allowing min-max float rounding
         # to change target/candidate comparisons by one position.
         rank_dynasemble = torch.where(weights == 0.0, rank_b, rank_dynasemble)
@@ -467,7 +503,7 @@ def evaluate_direction(
             weight = float(weights[index])
             rows.append(
                 {
-                    "pair_name": "openbg_mhyper_native_dynasemble",
+                    "pair_name": pair_name,
                     "dataset": expert_a.bundle.name,
                     "protocol_version": expert_a.bundle.protocol_version,
                     "split": split,
@@ -491,12 +527,14 @@ def evaluate_direction(
                     "rank_dynasemble": int(rank_dynasemble[index]),
                     "rr_dynasemble": float(rr_dynasemble[index]),
                     "rr_oracle": float(max(rr_a[index], rr_b[index])),
-                    "weight_mhyper": weight,
-                    "effective_alpha_mhyper": weight / (weight + FIXED_WEIGHT),
-                    "feature_mhyper_one_minus_mean": float(features_a[index, 0]),
-                    "feature_mhyper_variance": float(features_a[index, 1]),
-                    "feature_native_one_minus_mean": float(features_b[index, 0]),
-                    "feature_native_variance": float(features_b[index, 1]),
+                    "weight_expert_a": weight,
+                    "effective_alpha_expert_a": weight / (weight + FIXED_WEIGHT),
+                    "feature_a_one_minus_mean": float(features_a[index, 0]),
+                    "feature_a_variance": float(features_a[index, 1]),
+                    "feature_b_one_minus_mean": float(features_b[index, 0]),
+                    "feature_b_variance": float(features_b[index, 1]),
+                    "rr_query_soft": "",
+                    "rr_anchored": "",
                     "evaluator_version": EVALUATOR_VERSION,
                     "selector_sha256": selector_hash,
                     "baseline_selection_sha256": selection_hash,
@@ -564,26 +602,59 @@ def validate_reference(rows: list[dict], reference_path: Path, split: str) -> di
     }
 
 
-def summarize(rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
-    methods = (
-        ("M-Hyper", "rr_a"),
+def attach_comparison_rows(rows: list[dict], comparison_path: Path) -> dict:
+    comparison_rows = read_rows(comparison_path)
+    comparison = {row["query_id"]: row for row in comparison_rows}
+    if len(comparison) != len(comparison_rows) or len(comparison) != len(rows):
+        raise RuntimeError("Comparison rows do not have a one-to-one query_id mapping")
+    for row in rows:
+        matched = comparison.get(row["query_id"])
+        if matched is None:
+            raise RuntimeError(f"Comparison rows are missing {row['query_id']}")
+        for source, target in (
+            ("rr_query_soft_locked", "rr_query_soft"),
+            ("rr_anchored_locked", "rr_anchored"),
+        ):
+            if source not in matched:
+                raise RuntimeError(f"Comparison rows are missing {source}")
+            row[target] = float(matched[source])
+    return {
+        "path": str(comparison_path),
+        "sha256": sha256_file(comparison_path),
+        "n_rows": len(comparison_rows),
+        "columns_attached": ["rr_query_soft", "rr_anchored"],
+    }
+
+
+def summarize(
+    rows: list[dict], expert_a_name: str, expert_b_name: str
+) -> tuple[list[dict], list[dict], list[dict]]:
+    methods = [
+        (expert_a_name, "rr_a"),
+        (expert_b_name, "rr_b"),
         ("Query-zscore 0.5", "rr_equal"),
         ("DEV-locked Global alpha", "rr_global"),
-        ("DynaSemble", "rr_dynasemble"),
-        ("Oracle", "rr_oracle"),
-    )
+    ]
+    if rows and rows[0].get("rr_query_soft", "") != "":
+        methods.append(("Query-soft", "rr_query_soft"))
+    methods.append(("DynaSemble", "rr_dynasemble"))
+    if rows and rows[0].get("rr_anchored", "") != "":
+        methods.append(("Anchored Dynamic", "rr_anchored"))
+    methods.append(("Oracle", "rr_oracle"))
     anchor = metric([float(row["rr_a"]) for row in rows])["mrr"]
     oracle = metric([float(row["rr_oracle"]) for row in rows])["mrr"]
     gap = oracle - anchor
 
     def result(subset: list[dict], method: str, column: str) -> dict:
         output = metric([float(row[column]) for row in subset])
+        delta = output["mrr"] - metric(
+            [float(row["rr_a"]) for row in subset]
+        )["mrr"]
         output.update(
             {
                 "method": method,
-                "delta_vs_mhyper": output["mrr"] - metric(
-                    [float(row["rr_a"]) for row in subset]
-                )["mrr"],
+                "delta_vs_primary": delta,
+                "delta_vs_mhyper": delta,
             }
         )
         return output
@@ -635,8 +706,8 @@ def weight_diagnostics(rows: list[dict]) -> list[dict]:
                 if int(row["seed"]) == seed
                 and (direction == "all" or row["direction"] == direction)
             ]
-            weights = sorted(float(row["weight_mhyper"]) for row in subset)
-            alphas = [float(row["effective_alpha_mhyper"]) for row in subset]
+            weights = sorted(float(row["weight_expert_a"]) for row in subset)
+            alphas = [float(row["effective_alpha_expert_a"]) for row in subset]
 
             def quantile(fraction: float) -> float:
                 position = (len(weights) - 1) * fraction
@@ -675,27 +746,31 @@ def write_csv(path: Path, rows: list[dict]) -> None:
         writer.writerows(rows)
 
 
-def write_markdown(path: Path, rows: list[dict], split: str) -> None:
+def write_markdown(path: Path, rows: list[dict], split: str, expert_a_name: str) -> None:
     lines = [
-        f"| Method | {split.upper()} MRR | Hits@1 | Hits@3 | Hits@10 | Delta vs. M-Hyper | Oracle gap recovery |",
+        f"| Method | {split.upper()} MRR | Hits@1 | Hits@3 | Hits@10 | Delta vs. {expert_a_name} | Oracle gap recovery |",
         "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for row in rows:
         lines.append(
             f"| {row['method']} | {row['mrr']:.6f} | {row['hits@1']:.6f} | "
             f"{row['hits@3']:.6f} | {row['hits@10']:.6f} | "
-            f"{row['delta_vs_mhyper']:+.6f} | "
+            f"{row['delta_vs_primary']:+.6f} | "
             f"{100.0 * row['oracle_gap_recovery']:.2f}% |"
         )
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def validate_baseline_selection(selection: dict) -> None:
+def validate_baseline_selection(
+    selection: dict,
+    pair_name: str,
+    expert_a_name: str,
+    expert_b_name: str,
+) -> None:
     expected = {
-        "pair_name": "openbg_mhyper_native",
-        "dataset": "openbg_img",
-        "expert_a_name": "M-Hyper",
-        "expert_b_name": "NativE",
+        "pair_name": pair_name.removesuffix("_dynasemble"),
+        "expert_a_name": expert_a_name,
+        "expert_b_name": expert_b_name,
         "score_normalization": "query_zscore",
     }
     for key, value in expected.items():
@@ -703,6 +778,93 @@ def validate_baseline_selection(selection: dict) -> None:
             raise RuntimeError(f"Baseline selection mismatch for {key}: {selection.get(key)!r}")
     if sorted(int(seed) for seed in selection.get("seeds", [])) != [1, 2, 3]:
         raise RuntimeError("Baseline selection must contain exactly expert seeds 1, 2, and 3")
+
+
+def repository_provenance() -> dict:
+    root = Path(__file__).resolve().parents[1]
+
+    def git(*arguments: str) -> str:
+        completed = subprocess.run(
+            ["git", *arguments],
+            cwd=root,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        return completed.stdout.strip()
+
+    return {
+        "repository_commit": git("rev-parse", "HEAD"),
+        "working_tree_dirty": bool(git("status", "--porcelain")),
+        "evaluator_path": str(Path(__file__).resolve()),
+        "evaluator_sha256": sha256_file(Path(__file__).resolve()),
+        "shared_full_ranking_evaluator_path": str(
+            (root / "scripts" / "eval_heterogeneous_complementarity.py").resolve()
+        ),
+        "shared_full_ranking_evaluator_sha256": sha256_file(
+            root / "scripts" / "eval_heterogeneous_complementarity.py"
+        ),
+    }
+
+
+def clustered_bootstrap_interval(
+    rows: list[dict], column: str, reference: str
+) -> dict:
+    clusters = defaultdict(list)
+    for row in rows:
+        key = (int(row["head_id"]), int(row["relation_id"]), int(row["tail_id"]))
+        clusters[key].append(float(row[column]) - float(row[reference]))
+    values = np.asarray(
+        [sum(items) / len(items) for items in clusters.values()], dtype=np.float64
+    )
+    generator = np.random.default_rng(BOOTSTRAP_SEED)
+    samples = np.empty(BOOTSTRAP_SAMPLES, dtype=np.float64)
+    chunk = 128
+    for start in range(0, BOOTSTRAP_SAMPLES, chunk):
+        width = min(chunk, BOOTSTRAP_SAMPLES - start)
+        indexes = generator.integers(0, values.size, size=(width, values.size))
+        samples[start : start + width] = values[indexes].mean(axis=1)
+    return {
+        "column": column,
+        "reference": reference,
+        "n_original_triple_clusters": int(values.size),
+        "bootstrap_samples": BOOTSTRAP_SAMPLES,
+        "bootstrap_seed": BOOTSTRAP_SEED,
+        "mean_delta": float(values.mean()),
+        "ci95_low": float(np.quantile(samples, 0.025)),
+        "ci95_high": float(np.quantile(samples, 0.975)),
+        "cluster_definition": "original triple; all seeds and both directions retained",
+    }
+
+
+def write_clustered_bootstrap(path: Path, rows: list[dict]) -> dict:
+    comparisons = {
+        "dynasemble_vs_primary": clustered_bootstrap_interval(
+            rows, "rr_dynasemble", "rr_a"
+        ),
+        "dynasemble_vs_global": clustered_bootstrap_interval(
+            rows, "rr_dynasemble", "rr_global"
+        ),
+        "dynasemble_vs_query_zscore_0_5": clustered_bootstrap_interval(
+            rows, "rr_dynasemble", "rr_equal"
+        ),
+    }
+    if rows and rows[0].get("rr_query_soft", "") != "":
+        comparisons["dynasemble_vs_query_soft"] = clustered_bootstrap_interval(
+            rows, "rr_dynasemble", "rr_query_soft"
+        )
+    if rows and rows[0].get("rr_anchored", "") != "":
+        comparisons["dynasemble_vs_anchored"] = clustered_bootstrap_interval(
+            rows, "rr_dynasemble", "rr_anchored"
+        )
+    payload = {
+        "schema_version": 1,
+        "split": rows[0]["split"],
+        "pair_name": rows[0]["pair_name"],
+        "comparisons": comparisons,
+    }
+    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return payload
 
 
 def main() -> None:
@@ -714,34 +876,62 @@ def main() -> None:
     output_dir = Path(args.output_dir)
     selector_dir = output_dir / "selectors"
     checkpoint_dir = output_dir / "checkpoints"
-    lock_path = output_dir / "dev_lock.json"
+    lock_path = output_dir / args.lock_filename
     baseline_selection_path = Path(args.baseline_selection_json)
     baseline_selection = json.loads(baseline_selection_path.read_text(encoding="utf-8"))
-    validate_baseline_selection(baseline_selection)
+    validate_baseline_selection(
+        baseline_selection,
+        args.pair_name,
+        args.expert_a_name,
+        args.expert_b_name,
+    )
     baseline_selection_hash = sha256_file(baseline_selection_path)
     global_alpha = float(baseline_selection["global_alpha"])
-    method_config = frozen_method_config()
+    method_config = frozen_method_config(args.expert_a_name, args.expert_b_name)
 
     if args.stage == "test" and not lock_path.exists():
-        raise RuntimeError("TEST is locked until DEV has produced dev_lock.json")
+        raise RuntimeError(f"TEST is locked until DEV has produced {args.lock_filename}")
     if args.stage == "dev" and (output_dir / "test_summary.json").exists():
         raise RuntimeError("Refusing to retrain or relock DynaSemble after TEST output exists")
     lock = json.loads(lock_path.read_text(encoding="utf-8")) if lock_path.exists() else None
     if lock is not None:
+        if lock.get("pair_name") != args.pair_name:
+            raise RuntimeError("Pair name differs from the DEV lock")
         if lock.get("method_config") != method_config:
-            raise RuntimeError("Frozen DynaSemble configuration differs from dev_lock.json")
+            raise RuntimeError("Frozen DynaSemble configuration differs from the DEV lock")
         if lock.get("baseline_selection_sha256") != baseline_selection_hash:
             raise RuntimeError("Baseline DEV selection differs from the locked file")
+        if args.protocol_path:
+            locked_protocol = lock.get("paper_a_protocol") or {}
+            if locked_protocol.get("sha256") != sha256_file(Path(args.protocol_path)):
+                raise RuntimeError("Paper A protocol differs from the DEV lock")
+        locked_source = lock.get("source_provenance")
+        if locked_source is not None:
+            current_source = repository_provenance()
+            for key in (
+                "repository_commit",
+                "evaluator_sha256",
+                "shared_full_ranking_evaluator_sha256",
+            ):
+                if locked_source.get(key) != current_source.get(key):
+                    raise RuntimeError(f"Source provenance differs from the DEV lock: {key}")
 
     all_rows = []
     training_summaries = {}
     selector_hashes = {}
     seen_seeds = set()
     run_manifest = []
+    dataset_name = None
+    protocol_version = None
     for left_path, right_path in run_pairs:
-        expert_a = load_expert("M-Hyper", left_path, device)
-        expert_b = load_expert("NativE", right_path, device)
+        expert_a = load_expert(args.expert_a_name, left_path, device)
+        expert_b = load_expert(args.expert_b_name, right_path, device)
         validate_pair(expert_a, expert_b)
+        current_identity = (expert_a.bundle.name, expert_a.bundle.protocol_version)
+        if dataset_name is None:
+            dataset_name, protocol_version = current_identity
+        elif current_identity != (dataset_name, protocol_version):
+            raise RuntimeError("Run pairs mix datasets or protocol versions")
         seed = int(expert_a.seed)
         if seed in seen_seeds:
             raise RuntimeError(f"Duplicate expert seed {seed}")
@@ -758,13 +948,13 @@ def main() -> None:
                 args.progress_every,
             )
             selector_hash = save_selector(
-                selector_path, selector, seed, training_summary
+                selector_path, selector, seed, training_summary, method_config
             )
             print(f"[TRAIN LOCKED] {selector_path} sha256={selector_hash}", flush=True)
         else:
             if not selector_path.exists():
                 raise RuntimeError(f"Locked selector is missing: {selector_path}")
-            selector = load_selector(selector_path, seed, device)
+            selector = load_selector(selector_path, seed, device, method_config)
             selector_hash = sha256_file(selector_path)
             training_summary = torch.load(selector_path, map_location="cpu")["training_summary"]
         if lock is not None:
@@ -773,13 +963,41 @@ def main() -> None:
                 raise RuntimeError(f"Selector hash mismatch for seed {seed}")
         selector_hashes[str(seed)] = selector_hash
         training_summaries[str(seed)] = training_summary
-        run_manifest.append(
-            {
-                "seed": seed,
-                "mhyper_run": str(Path(left_path)),
-                "native_run": str(Path(right_path)),
-            }
+        legacy_manifest = bool(
+            lock
+            and lock.get("run_manifest")
+            and "mhyper_run" in lock["run_manifest"][0]
         )
+        if legacy_manifest:
+            run_manifest.append(
+                {
+                    "seed": seed,
+                    "mhyper_run": str(Path(left_path)),
+                    "native_run": str(Path(right_path)),
+                }
+            )
+        else:
+            run_manifest.append(
+                {
+                    "seed": seed,
+                    "expert_a_name": args.expert_a_name,
+                    "expert_a_run": str(Path(left_path)),
+                    "expert_a_config_sha256": sha256_file(
+                        Path(left_path) / "config_merged.json"
+                    ),
+                    "expert_a_checkpoint_sha256": sha256_file(
+                        Path(left_path) / "best.ckpt"
+                    ),
+                    "expert_b_name": args.expert_b_name,
+                    "expert_b_run": str(Path(right_path)),
+                    "expert_b_config_sha256": sha256_file(
+                        Path(right_path) / "config_merged.json"
+                    ),
+                    "expert_b_checkpoint_sha256": sha256_file(
+                        Path(right_path) / "best.ckpt"
+                    ),
+                }
+            )
         triples = (
             expert_a.bundle.valid_triples
             if args.stage == "dev"
@@ -821,6 +1039,7 @@ def main() -> None:
                     args.progress_every,
                     selector_hash,
                     baseline_selection_hash,
+                    args.pair_name,
                 )
                 write_rows(checkpoint_path, rows)
                 print(f"[CHECKPOINT] {checkpoint_path}", flush=True)
@@ -833,23 +1052,42 @@ def main() -> None:
 
     if sorted(seen_seeds) != [1, 2, 3]:
         raise RuntimeError(f"Expected expert seeds [1, 2, 3], got {sorted(seen_seeds)}")
+    if baseline_selection.get("dataset") != dataset_name:
+        raise RuntimeError("Baseline selection dataset does not match expert assets")
+    if baseline_selection.get("protocol_version") != protocol_version:
+        raise RuntimeError("Baseline selection protocol does not match expert assets")
+    if lock is not None:
+        if lock.get("dataset") != dataset_name or lock.get("protocol_version") != protocol_version:
+            raise RuntimeError("Dataset or protocol version differs from the DEV lock")
+        if sorted(int(value) for value in lock.get("seeds", [])) != [1, 2, 3]:
+            raise RuntimeError("Selector seeds differ from the DEV lock")
     run_manifest.sort(key=lambda row: row["seed"])
     if lock is not None and lock.get("run_manifest") != run_manifest:
         raise RuntimeError("Expert run manifest differs from the DEV lock")
     pending_lock = None
     if args.stage == "dev" and lock is None:
+        protocol_record = None
+        if args.protocol_path:
+            protocol_path = Path(args.protocol_path)
+            protocol_record = {
+                "path": str(protocol_path),
+                "sha256": sha256_file(protocol_path),
+            }
         pending_lock = {
             "schema_version": 1,
             "lock_purpose": "DEV-only DynaSemble training and configuration lock before TEST",
-            "pair_name": "openbg_mhyper_native_dynasemble",
-            "dataset": "openbg_img",
-            "protocol_version": "openbg_legacy_v1",
+            "pair_name": args.pair_name,
+            "dataset": dataset_name,
+            "protocol_version": protocol_version,
             "seeds": [1, 2, 3],
             "method_config": method_config,
+            "selector_random_seed_policy": "paired expert seed; one selector per seed",
             "baseline_selection_path": str(baseline_selection_path),
             "baseline_selection_sha256": baseline_selection_hash,
             "global_alpha": global_alpha,
             "run_manifest": run_manifest,
+            "source_provenance": repository_provenance(),
+            "paper_a_protocol": protocol_record,
             "selectors": {
                 seed: {
                     "path": str(selector_dir / f"seed{seed}.pt"),
@@ -874,6 +1112,15 @@ def main() -> None:
         reference_audit = validate_reference(
             all_rows, Path(args.reference_query_rows), args.stage
         )
+        if pending_lock is not None:
+            pending_lock["reference_query_rows"] = reference_audit
+    comparison_audit = None
+    if args.comparison_query_rows:
+        comparison_path = Path(args.comparison_query_rows)
+        validate_reference(all_rows, comparison_path, args.stage)
+        comparison_audit = attach_comparison_rows(all_rows, comparison_path)
+        if pending_lock is not None:
+            pending_lock["comparison_query_rows"] = comparison_audit
     if pending_lock is not None:
         output_dir.mkdir(parents=True, exist_ok=True)
         lock_path.write_text(
@@ -882,20 +1129,35 @@ def main() -> None:
         )
         lock = pending_lock
         print(f"[DEV LOCK] {lock_path} sha256={sha256_file(lock_path)}", flush=True)
-    pooled, by_seed, by_direction = summarize(all_rows)
+    pooled, by_seed, by_direction = summarize(
+        all_rows, args.expert_a_name, args.expert_b_name
+    )
     weights = weight_diagnostics(all_rows)
     write_rows(output_dir / f"{args.stage}_query_rows.csv", all_rows)
     write_csv(output_dir / f"{args.stage}_results.csv", pooled)
     write_csv(output_dir / f"{args.stage}_results_by_seed.csv", by_seed)
     write_csv(output_dir / f"{args.stage}_results_by_direction.csv", by_direction)
     write_csv(output_dir / f"{args.stage}_weight_diagnostics.csv", weights)
-    write_markdown(output_dir / f"{args.stage}_results.md", pooled, args.stage)
+    write_markdown(
+        output_dir / f"{args.stage}_results.md",
+        pooled,
+        args.stage,
+        args.expert_a_name,
+    )
+    bootstrap = write_clustered_bootstrap(
+        output_dir / "clustered_bootstrap_ci.json", all_rows
+    )
+    if args.stage == "test":
+        write_csv(output_dir / "results_by_seed.csv", by_seed)
+        write_csv(output_dir / "results_by_direction.csv", by_direction)
     summary = {
         "schema_version": 1,
         "stage": args.stage,
-        "pair_name": "openbg_mhyper_native_dynasemble",
-        "dataset": "openbg_img",
-        "protocol_version": "openbg_legacy_v1",
+        "pair_name": args.pair_name,
+        "dataset": dataset_name,
+        "protocol_version": protocol_version,
+        "expert_a_name": args.expert_a_name,
+        "expert_b_name": args.expert_b_name,
         "n_rows": len(all_rows),
         "seeds": [1, 2, 3],
         "method_config": method_config,
@@ -903,12 +1165,13 @@ def main() -> None:
         "dev_lock_sha256": sha256_file(lock_path),
         "baseline_selection_sha256": baseline_selection_hash,
         "reference_audit": reference_audit,
+        "comparison_audit": comparison_audit,
         "results": pooled,
         "results_by_seed": by_seed,
         "results_by_direction": by_direction,
         "weight_diagnostics": weights,
         "clustered_intervals": {
-            "dynasemble_vs_mhyper": clustered_interval(
+            "dynasemble_vs_primary": clustered_interval(
                 all_rows, "rr_dynasemble", "rr_a"
             ),
             "dynasemble_vs_query_zscore_0_5": clustered_interval(
@@ -918,6 +1181,7 @@ def main() -> None:
                 all_rows, "rr_dynasemble", "rr_global"
             ),
         },
+        "clustered_bootstrap": bootstrap,
         "information_boundary": (
             "DynaSemble selector parameters are fit on DEV only. TEST loads the immutable "
             "DEV lock and per-seed selector hashes; Oracle is reporting-only."
