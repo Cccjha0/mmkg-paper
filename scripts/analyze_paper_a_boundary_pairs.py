@@ -13,7 +13,9 @@ import pandas as pd
 
 
 UNCHANGED_TOLERANCE = 1e-12
-CONFIG_VERSION = "paper_a_boundary_pairs_v1"
+CONFIG_VERSION = "paper_a_boundary_pairs_v2"
+DEFAULT_BOOTSTRAP_SAMPLES = 10_000
+DEFAULT_BOOTSTRAP_SEED = 20260909
 QUERY_GEOMETRY_FIELDS = (
     "geometry_direction_tail",
     "geometry_a_top1",
@@ -62,6 +64,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--report", default="docs/reports/paper_a_boundary_pair_report.md"
     )
+    parser.add_argument("--bootstrap-samples", type=int, default=DEFAULT_BOOTSTRAP_SAMPLES)
+    parser.add_argument("--bootstrap-seed", type=int, default=DEFAULT_BOOTSTRAP_SEED)
     return parser.parse_args()
 
 
@@ -253,6 +257,14 @@ def load_pair(
         "dynasemble_learned_weight_expert": dyna_lock["method_config"][
             "learned_weight_expert"
         ],
+        "dynasemble_zero_weight_seeds": [
+            int(seed)
+            for seed, group in merged.groupby("seed", sort=True)
+            if np.all(
+                group["effective_alpha_expert_a"].to_numpy(dtype=np.float64)
+                <= UNCHANGED_TOLERANCE
+            )
+        ],
     }
     sources = [
         {
@@ -277,6 +289,8 @@ def summarize_method(
     rr_column: str,
     alpha_column: str,
     fallback_column: str | None,
+    bootstrap_samples: int = 0,
+    bootstrap_seed: int = DEFAULT_BOOTSTRAP_SEED,
 ) -> dict:
     rr = frame[rr_column].to_numpy(dtype=np.float64)
     global_rr = frame["rr_global"].to_numpy(dtype=np.float64)
@@ -286,7 +300,7 @@ def summarize_method(
     alpha = frame[alpha_column].to_numpy(dtype=np.float64)
     anchor = frame["alpha_global_locked"].to_numpy(dtype=np.float64)
     deviation = np.abs(alpha - anchor)
-    return {
+    result = {
         "method": method,
         "n_observations": int(len(frame)),
         "mrr": float(rr.mean()),
@@ -303,15 +317,113 @@ def summarize_method(
         "mean_abs_alpha_deviation": float(deviation.mean()),
         "p95_abs_alpha_deviation": float(np.quantile(deviation, 0.95)),
     }
+    if bootstrap_samples:
+        inference = clustered_bootstrap(
+            frame, rr_column, bootstrap_samples, bootstrap_seed
+        )
+        result.update(
+            {
+                "delta_ci95_low": inference["delta_mrr_ci95"][0],
+                "delta_ci95_high": inference["delta_mrr_ci95"][1],
+                "harm_rate_ci95_low": inference["harm_rate_ci95"][0],
+                "harm_rate_ci95_high": inference["harm_rate_ci95"][1],
+                "mean_harm_ci95_low": inference["mean_harm_ci95"][0],
+                "mean_harm_ci95_high": inference["mean_harm_ci95"][1],
+            }
+        )
+    else:
+        result.update(
+            {
+                "delta_ci95_low": None,
+                "delta_ci95_high": None,
+                "harm_rate_ci95_low": None,
+                "harm_rate_ci95_high": None,
+                "mean_harm_ci95_low": None,
+                "mean_harm_ci95_high": None,
+            }
+        )
+    return result
 
 
-def summarize(frame: pd.DataFrame, scope: str, group: str | None = None) -> pd.DataFrame:
+def clustered_bootstrap(
+    frame: pd.DataFrame,
+    rr_column: str,
+    samples: int,
+    seed: int,
+) -> dict:
+    if samples < 1:
+        raise ValueError("bootstrap-samples must be positive")
+    delta = (
+        frame[rr_column].to_numpy(dtype=np.float64)
+        - frame["rr_global"].to_numpy(dtype=np.float64)
+    )
+    work = pd.DataFrame(
+        {
+            "raw_triple_id": frame["raw_triple_id"].to_numpy(),
+            "delta": delta,
+            "n": 1,
+            "harmful": (delta < -UNCHANGED_TOLERANCE).astype(np.int64),
+            "harm_sum": np.where(delta < -UNCHANGED_TOLERANCE, -delta, 0.0),
+        }
+    )
+    clusters = work.groupby("raw_triple_id", sort=True).agg(
+        delta_sum=("delta", "sum"),
+        n=("n", "sum"),
+        harmful_count=("harmful", "sum"),
+        harm_sum=("harm_sum", "sum"),
+    )
+    values = clusters[
+        ["delta_sum", "n", "harmful_count", "harm_sum"]
+    ].to_numpy(dtype=np.float64)
+    generator = np.random.default_rng(seed)
+    delta_samples = np.empty(samples, dtype=np.float64)
+    harm_rate_samples = np.empty(samples, dtype=np.float64)
+    mean_harm_samples = np.full(samples, np.nan, dtype=np.float64)
+    for start in range(0, samples, 128):
+        width = min(128, samples - start)
+        indexes = generator.integers(0, len(values), size=(width, len(values)))
+        totals = values[indexes].sum(axis=1)
+        delta_samples[start : start + width] = totals[:, 0] / totals[:, 1]
+        harm_rate_samples[start : start + width] = totals[:, 2] / totals[:, 1]
+        has_harm = totals[:, 2] > 0
+        chunk = np.full(width, np.nan, dtype=np.float64)
+        chunk[has_harm] = totals[has_harm, 3] / totals[has_harm, 2]
+        mean_harm_samples[start : start + width] = chunk
+
+    def interval(values_: np.ndarray) -> list[float | None]:
+        finite = values_[np.isfinite(values_)]
+        if not len(finite):
+            return [None, None]
+        low, high = np.quantile(finite, [0.025, 0.975])
+        return [float(low), float(high)]
+
+    return {
+        "n_original_triple_clusters": int(len(values)),
+        "delta_mrr_ci95": interval(delta_samples),
+        "harm_rate_ci95": interval(harm_rate_samples),
+        "mean_harm_ci95": interval(mean_harm_samples),
+    }
+
+
+def summarize(
+    frame: pd.DataFrame,
+    scope: str,
+    group: str | None = None,
+    bootstrap_samples: int = 0,
+    bootstrap_seed: int = DEFAULT_BOOTSTRAP_SEED,
+) -> pd.DataFrame:
     rows = []
     groups = [("", frame)] if group is None else frame.groupby(group, sort=True)
     for group_value, subset in groups:
         for method, rr_column, alpha_column, fallback_column in METHODS:
             row = summarize_method(
-                subset, method, rr_column, alpha_column, fallback_column
+                subset,
+                method,
+                rr_column,
+                alpha_column,
+                fallback_column,
+                bootstrap_samples,
+                bootstrap_seed,
             )
             row.update(
                 {
@@ -340,14 +452,15 @@ def fmt(value: float | None, digits: int = 6) -> str:
 
 def result_table(frame: pd.DataFrame) -> list[str]:
     lines = [
-        "| Dataset | Method | MRR | Delta vs Global | Harm % | Mean Harm | Fallback % | Changed-alpha % | Mean abs(alpha-alpha0) | P95 abs(alpha-alpha0) |",
-        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+        "| Dataset | Method | MRR | Delta vs Global [CI95] | Harm % | Mean Harm | Fallback % | Changed-alpha % | Mean abs(alpha-alpha0) | P95 abs(alpha-alpha0) |",
+        "| --- | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for row in frame.itertuples(index=False):
         fallback = "--" if pd.isna(row.fallback_rate) else f"{100 * row.fallback_rate:.2f}"
         lines.append(
             f"| {row.dataset} | {row.method} | {row.mrr:.6f} | "
-            f"{row.delta_vs_global:+.6f} | {100 * row.harm_rate:.2f} | "
+            f"{row.delta_vs_global:+.6f} [{fmt(row.delta_ci95_low)}, "
+            f"{fmt(row.delta_ci95_high)}] | {100 * row.harm_rate:.2f} | "
             f"{fmt(row.mean_harm)} | {fallback} | {100 * row.changed_alpha_rate:.2f} | "
             f"{row.mean_abs_alpha_deviation:.4f} | {row.p95_abs_alpha_deviation:.4f} |"
         )
@@ -412,6 +525,7 @@ def write_report(
                 f"{direction_rows.loc['tail', 'delta_vs_global']:+.6f} |"
             )
     positive_pairs = int((anchored["delta_vs_global"] > 0.0).sum())
+    positive_ci_pairs = int((anchored["delta_ci95_low"] > 0.0).sum())
     anchored_seed = by_seed[by_seed["method"].eq("Anchored Dynamic")]
     anchored_direction = by_direction[by_direction["method"].eq("Anchored Dynamic")]
     lines.extend(
@@ -420,6 +534,7 @@ def write_report(
             "## Boundary-case interpretation",
             "",
             f"Anchored Dynamic is positive against Global on {positive_pairs}/2 stress pairs, "
+            f"with a positive clustered-CI lower bound on {positive_ci_pairs}/2; it is positive on "
             f"{int((anchored_seed['delta_vs_global'] > 0).sum())}/6 pair-seeds, and "
             f"{int((anchored_direction['delta_vs_global'] > 0).sum())}/4 pair-directions. "
             "These observations characterize correction behavior; they do not license a claim "
@@ -427,6 +542,32 @@ def write_report(
             "",
         ]
     )
+    for item in pair_metadata:
+        dataset = item["dataset"]
+        anchor_row = anchored[anchored["dataset"].eq(dataset)].iloc[0]
+        query_row = pooled[
+            pooled["dataset"].eq(dataset) & pooled["method"].eq("Query-soft")
+        ].iloc[0]
+        dyna_row = pooled[
+            pooled["dataset"].eq(dataset) & pooled["method"].eq("DynaSemble")
+        ].iloc[0]
+        zero_seeds = ", ".join(
+            str(seed) for seed in item["dynasemble_zero_weight_seeds"]
+        ) or "none"
+        lines.append(
+            f"- {dataset}: Anchored changes alpha on only "
+            f"{100 * anchor_row['changed_alpha_rate']:.2f}% of observations and falls back "
+            f"on {100 * anchor_row['fallback_rate']:.2f}%. Its Delta MRR is "
+            f"{anchor_row['delta_vs_global']:+.6f} with CI "
+            f"[{anchor_row['delta_ci95_low']:.6f}, {anchor_row['delta_ci95_high']:.6f}]. "
+            f"The harmful-query rate is {100 * anchor_row['harm_rate']:.2f}%, but conditional "
+            f"Mean Harm is {anchor_row['mean_harm']:.6f}; safety comes from refusing most "
+            f"corrections, not from making every accepted correction harmless. Query-soft and "
+            f"DynaSemble have Delta MRR {query_row['delta_vs_global']:+.6f} and "
+            f"{dyna_row['delta_vs_global']:+.6f}; DynaSemble zero-weight collapse occurs in "
+            f"seed(s) {zero_seeds}."
+        )
+    lines.append("")
     if all_reliable:
         lines.append(
             "The proposed explanatory condition—absence of a reliable primary—does not occur "
@@ -489,18 +630,66 @@ def main() -> None:
     seed_parts = []
     direction_parts = []
     for frame in frames:
-        pooled_parts.append(summarize(frame, "pooled"))
+        pooled_parts.append(
+            summarize(
+                frame,
+                "pooled",
+                bootstrap_samples=args.bootstrap_samples,
+                bootstrap_seed=args.bootstrap_seed,
+            )
+        )
         seed_parts.append(summarize(frame, "seed", "seed"))
         direction_parts.append(summarize(frame, "direction", "direction"))
     pooled = pd.concat(pooled_parts, ignore_index=True)
     by_seed = pd.concat(seed_parts, ignore_index=True)
     by_direction = pd.concat(direction_parts, ignore_index=True)
     query_rows = pd.concat(frames, ignore_index=True)
+    selector_summary = (
+        query_rows.groupby(["dataset_label", "pair_label", "seed"], sort=True)
+        .agg(
+            n_observations=("query_id", "size"),
+            effective_alpha_mean=("effective_alpha_expert_a", "mean"),
+            effective_alpha_std=("effective_alpha_expert_a", "std"),
+            zero_weight_fraction=(
+                "effective_alpha_expert_a",
+                lambda values: float(
+                    (np.asarray(values, dtype=np.float64) <= UNCHANGED_TOLERANCE).mean()
+                ),
+            ),
+        )
+        .reset_index()
+        .rename(columns={"dataset_label": "dataset", "pair_label": "pair"})
+    )
 
     output_dir.mkdir(parents=True, exist_ok=True)
     pooled.to_csv(output_dir / "boundary_pair_summary.csv", index=False, quoting=csv.QUOTE_MINIMAL)
     by_seed.to_csv(output_dir / "boundary_pair_results_by_seed.csv", index=False)
     by_direction.to_csv(output_dir / "boundary_pair_results_by_direction.csv", index=False)
+    selector_summary.to_csv(
+        output_dir / "boundary_pair_selector_summary.csv", index=False
+    )
+    bootstrap_payload = {
+        "schema_version": 1,
+        "bootstrap_samples": args.bootstrap_samples,
+        "bootstrap_seed": args.bootstrap_seed,
+        "cluster_unit": "original raw triple; all 3 seeds and both directions retained",
+        "intervals": [
+            {
+                "dataset": row.dataset,
+                "pair": row.pair,
+                "method": row.method,
+                "n_original_triples": int(row.n_original_triples),
+                "delta_mrr_ci95": [row.delta_ci95_low, row.delta_ci95_high],
+                "harm_rate_ci95": [row.harm_rate_ci95_low, row.harm_rate_ci95_high],
+                "mean_harm_ci95": [row.mean_harm_ci95_low, row.mean_harm_ci95_high],
+            }
+            for row in pooled.itertuples(index=False)
+        ],
+    }
+    (output_dir / "boundary_pair_bootstrap.json").write_text(
+        json.dumps(bootstrap_payload, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
     keep_columns = [
         "dataset_label",
         "pair_label",
@@ -539,6 +728,8 @@ def main() -> None:
         "hyperparameter_selection_scope": "DEV only",
         "test_application": "immutable final apply and analysis only",
         "main_method_changed_from_boundary_results": False,
+        "bootstrap_samples": args.bootstrap_samples,
+        "bootstrap_seed": args.bootstrap_seed,
         "reliable_primary_protocol_applied_before_test_analysis": True,
         "pair_metadata": metadata,
         "source_assets": sources,

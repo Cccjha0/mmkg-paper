@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "bootstrap_samples": 10000,
+  "bootstrap_seed": 20260909,
+  "cluster_unit": "original raw triple; all 3 seeds and both directions retained",
+  "intervals": [
+    {
+      "dataset": "MKG-W",
+      "pair": "NativE + AdaMF-MAT",
+      "method": "Strongest standalone",
+      "n_original_triples": 4274,
+      "delta_mrr_ci95": [
+        -0.007643457959419535,
+        -0.005041384517947384
+      ],
+      "harm_rate_ci95": [
+        0.2820932771798471,
+        0.29882233660895335
+      ],
+      "mean_harm_ci95": [
+        0.04094145147835065,
+        0.04880287011809559
+      ]
+    },
+    {
+      "dataset": "MKG-W",
+      "pair": "NativE + AdaMF-MAT",
+      "method": "Query-zscore 0.5",
+      "n_original_triples": 4274,
+      "delta_mrr_ci95": [
+        -0.019973258012230658,
+        -0.014590580494168523
+      ],
+      "harm_rate_ci95": [
+        0.3929184214631103,
+        0.41077834971143345
+      ],
+      "mean_harm_ci95": [
+        0.10067352444706903,
+        0.11128191468674567
+      ]
+    },
+    {
+      "dataset": "MKG-W",
+      "pair": "NativE + AdaMF-MAT",
+      "method": "Global alpha",
+      "n_original_triples": 4274,
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harm_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        NaN,
+        NaN
+      ]
+    },
+    {
+      "dataset": "MKG-W",
+      "pair": "NativE + AdaMF-MAT",
+      "method": "Query-soft",
+      "n_original_triples": 4274,
+      "delta_mrr_ci95": [
+        -0.019755547949724568,
+        -0.01439372031197705
+      ],
+      "harm_rate_ci95": [
+        0.391553579784745,
+        0.4093355170800187
+      ],
+      "mean_harm_ci95": [
+        0.10107657037777736,
+        0.11162812451793712
+      ]
+    },
+    {
+      "dataset": "MKG-W",
+      "pair": "NativE + AdaMF-MAT",
+      "method": "DynaSemble",
+      "n_original_triples": 4274,
+      "delta_mrr_ci95": [
+        -0.042293415115432324,
+        -0.03469159202280091
+      ],
+      "harm_rate_ci95": [
+        0.47562782717204805,
+        0.4937607237560443
+      ],
+      "mean_harm_ci95": [
+        0.13970671341261268,
+        0.1525057005728853
+      ]
+    },
+    {
+      "dataset": "MKG-W",
+      "pair": "NativE + AdaMF-MAT",
+      "method": "Anchored Dynamic",
+      "n_original_triples": 4274,
+      "delta_mrr_ci95": [
+        -0.000248847369685244,
+        0.00042029972345787917
+      ],
+      "harm_rate_ci95": [
+        0.003002651692403681,
+        0.0048354390890656684
+      ],
+      "mean_harm_ci95": [
+        0.08996365511080542,
+        0.17840534629169327
+      ]
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "NativE + AdaMF-MAT",
+      "method": "Strongest standalone",
+      "n_original_triples": 9902,
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harm_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        NaN,
+        NaN
+      ]
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "NativE + AdaMF-MAT",
+      "method": "Query-zscore 0.5",
+      "n_original_triples": 9902,
+      "delta_mrr_ci95": [
+        -0.014386963341050222,
+        -0.010673572931674574
+      ],
+      "harm_rate_ci95": [
+        0.3151888507372248,
+        0.3254224735743621
+      ],
+      "mean_harm_ci95": [
+        0.1380079439119013,
+        0.14628296906600288
+      ]
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "NativE + AdaMF-MAT",
+      "method": "Global alpha",
+      "n_original_triples": 9902,
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harm_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        NaN,
+        NaN
+      ]
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "NativE + AdaMF-MAT",
+      "method": "Query-soft",
+      "n_original_triples": 9902,
+      "delta_mrr_ci95": [
+        -0.012137902913036838,
+        -0.008646919103697283
+      ],
+      "harm_rate_ci95": [
+        0.31101460984312934,
+        0.3212482326802666
+      ],
+      "mean_harm_ci95": [
+        0.131230984037882,
+        0.13911155137777942
+      ]
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "NativE + AdaMF-MAT",
+      "method": "DynaSemble",
+      "n_original_triples": 9902,
+      "delta_mrr_ci95": [
+        -0.03266906294336084,
+        -0.02768659012616466
+      ],
+      "harm_rate_ci95": [
+        0.41710428869588634,
+        0.428213155591463
+      ],
+      "mean_harm_ci95": [
+        0.17311583976236708,
+        0.18171892628317424
+      ]
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "NativE + AdaMF-MAT",
+      "method": "Anchored Dynamic",
+      "n_original_triples": 9902,
+      "delta_mrr_ci95": [
+        0.0003256984211842642,
+        0.0007291113468719062
+      ],
+      "harm_rate_ci95": [
+        0.0033663233016898945,
+        0.004645526156332054
+      ],
+      "mean_harm_ci95": [
+        0.05491229341620677,
+        0.10339276696274391
+      ]
+    }
+  ]
+}

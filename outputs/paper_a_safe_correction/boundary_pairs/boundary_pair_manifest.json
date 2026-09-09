@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "config_version": "paper_a_boundary_pairs_v2",
+  "created_at_utc": "2026-09-09T13:52:41.905284+00:00",
+  "base_models_retrained": false,
+  "hyperparameter_selection_scope": "DEV only",
+  "test_application": "immutable final apply and analysis only",
+  "main_method_changed_from_boundary_results": false,
+  "bootstrap_samples": 10000,
+  "bootstrap_seed": 20260909,
+  "reliable_primary_protocol_applied_before_test_analysis": true,
+  "pair_metadata": [
+    {
+      "dataset": "MKG-W",
+      "pair": "NativE + AdaMF-MAT",
+      "pair_name": "mkgw_native_adamf",
+      "selected_primary": "NativE",
+      "secondary": "AdaMF-MAT",
+      "reliable_primary_regime": "reliable-primary",
+      "dev_primary_delta": 0.0386956859178032,
+      "dev_primary_ci95": [
+        0.0344343480794458,
+        0.0430622396536722
+      ],
+      "dev_all_3_seeds_positive": true,
+      "alpha0": 0.95,
+      "anchored_beta": 0.5,
+      "anchored_confidence_threshold": 0.3,
+      "dynasemble_learned_weight_expert": "NativE",
+      "dynasemble_zero_weight_seeds": [
+        1,
+        3
+      ]
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "NativE + AdaMF-MAT",
+      "pair_name": "db15k_native_adamf",
+      "selected_primary": "NativE",
+      "secondary": "AdaMF-MAT",
+      "reliable_primary_regime": "reliable-primary",
+      "dev_primary_delta": 0.0290040462200363,
+      "dev_primary_ci95": [
+        0.0261395848714172,
+        0.0318495396576866
+      ],
+      "dev_all_3_seeds_positive": true,
+      "alpha0": 1.0,
+      "anchored_beta": 0.5,
+      "anchored_confidence_threshold": 0.2,
+      "dynasemble_learned_weight_expert": "NativE",
+      "dynasemble_zero_weight_seeds": [
+        1,
+        2,
+        3
+      ]
+    }
+  ],
+  "source_assets": [
+    {
+      "role": "dev_only_reliable_primary_decisions",
+      "path": "outputs/paper_a_safe_correction/reliable_primary/reliable_primary_decisions.csv",
+      "sha256": "9f4121bbfd57d656ae24d4545cc921342548db5fdd1cf701e6088dacc8d26496"
+    },
+    {
+      "dataset": "MKG-W",
+      "role": "anchored_test_rows",
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/anchored/test_anchored/test_locked_query_rows.csv",
+      "sha256": "6b72afb0310f6e52b5c6421154af7217994894a47419341946de259dd70864ea"
+    },
+    {
+      "dataset": "MKG-W",
+      "role": "anchored_dev_lock",
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/anchored/dev_lock/anchored_dev_lock.json",
+      "sha256": "50b255c28d901a1a7a9b8939bee380842cd46bc10d6cd18e2810b6376abc6476"
+    },
+    {
+      "dataset": "MKG-W",
+      "role": "dynasemble_test_rows",
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/dynasemble/test_query_rows.csv",
+      "sha256": "2cd1c5b9fe10bab5d413242aeef96cb5392e261e71c29fb4e6434b98a5343ac7"
+    },
+    {
+      "dataset": "MKG-W",
+      "role": "dynasemble_dev_lock",
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/dynasemble/lock.json",
+      "sha256": "a1bc0539c15ec0a3e62ee6a238b7052b190814de3d6b5cf4dbf8133d33d1c494"
+    },
+    {
+      "dataset": "DB15K",
+      "role": "anchored_test_rows",
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/anchored/test_anchored/test_locked_query_rows.csv",
+      "sha256": "135fe8b38a0dc578da50abea30c5405b4842319e42583c64b745d93c019c6f25"
+    },
+    {
+      "dataset": "DB15K",
+      "role": "anchored_dev_lock",
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/anchored/dev_lock/anchored_dev_lock.json",
+      "sha256": "254bce8d6d6f8999992d3dccc760340eb3dfdd25903810281d7fc60a4309357d"
+    },
+    {
+      "dataset": "DB15K",
+      "role": "dynasemble_test_rows",
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/dynasemble/test_query_rows.csv",
+      "sha256": "5415601848e6ec63351875dc9a1ae2fc45234b2f9acc7ce39e13caffcce100cb"
+    },
+    {
+      "dataset": "DB15K",
+      "role": "dynasemble_dev_lock",
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/dynasemble/lock.json",
+      "sha256": "3d4fa52b6646e2762415fb8be9fc26c72cef6c0df9f4cf88bfe0e6975c8ed7cd"
+    }
+  ]
+}

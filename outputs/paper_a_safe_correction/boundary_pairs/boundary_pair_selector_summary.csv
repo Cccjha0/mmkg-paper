@@ -1,0 +1,7 @@
+dataset,pair,seed,n_observations,effective_alpha_mean,effective_alpha_std,zero_weight_fraction
+DB15K,NativE + AdaMF-MAT,1,19804,0.0,0.0,1.0
+DB15K,NativE + AdaMF-MAT,2,19804,0.0,0.0,1.0
+DB15K,NativE + AdaMF-MAT,3,19804,0.0,0.0,1.0
+MKG-W,NativE + AdaMF-MAT,1,8548,0.0,0.0,1.0
+MKG-W,NativE + AdaMF-MAT,2,8548,0.22601667921800253,0.020136716083000706,0.0
+MKG-W,NativE + AdaMF-MAT,3,8548,0.0,0.0,1.0
