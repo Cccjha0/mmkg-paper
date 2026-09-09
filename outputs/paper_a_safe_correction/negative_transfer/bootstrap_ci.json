@@ -1,0 +1,2380 @@
+{
+  "schema_version": 1,
+  "analysis": "Paper A query-level negative transfer relative to Global alpha",
+  "unchanged_tolerance": 1e-12,
+  "bootstrap_samples": 10000,
+  "bootstrap_seed": 20260909,
+  "cluster_unit": "original raw triple; all seeds and both directions retained in pooled analysis",
+  "test_is_final_analysis_only": true,
+  "no_model_or_combiner_training": true,
+  "no_test_driven_threshold_or_method_changes": true,
+  "source_assets": [
+    {
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "split": "test",
+      "role": "anchored_locked_query_rows",
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/test_anchored/test_locked_query_rows.csv",
+      "sha256": "469d2d427b61d3048de03ef485d804e2821c40a8af9a8e5e62d61e2ff4bbd624",
+      "n_rows": 25644
+    },
+    {
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "split": "test",
+      "role": "dynasemble_query_rows",
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_native/test_query_rows.csv",
+      "sha256": "a45e41f105cc1338d225b762c40ab9744e3e6607096054a44512881d9913fa6f",
+      "n_rows": 25644,
+      "max_abs_global_rr_error": 0.0
+    },
+    {
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "split": "test",
+      "role": "anchored_locked_query_rows",
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/test_anchored/test_locked_query_rows.csv",
+      "sha256": "0414041b7cd33267e79f0d7b6c12575f581f7e7ddaa22724c0a041d0cc087e60",
+      "n_rows": 25644
+    },
+    {
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "split": "test",
+      "role": "dynasemble_query_rows",
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_adamf/test_query_rows.csv",
+      "sha256": "10be16a326d9c257cc8fd652e97f9d350edcafef744f3ec4dc88e0d672bca4a7",
+      "n_rows": 25644,
+      "max_abs_global_rr_error": 0.0
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "split": "test",
+      "role": "anchored_locked_query_rows",
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/test_anchored/test_locked_query_rows.csv",
+      "sha256": "2155f299165204d388ad45a509684148a3db3d3fa0dae9370896d2ed42271cfc",
+      "n_rows": 59412
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "split": "test",
+      "role": "dynasemble_query_rows",
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_native/test_query_rows.csv",
+      "sha256": "1c9445674fd66944f582f318d1f396b6eea2b51a7b7597b97a091c4f936e68ed",
+      "n_rows": 59412,
+      "max_abs_global_rr_error": 0.0
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "split": "test",
+      "role": "anchored_locked_query_rows",
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/test_anchored/test_locked_query_rows.csv",
+      "sha256": "77bb9f968099600ff110f110dea8cec197f5891396a055d35bd82542dce06e0c",
+      "n_rows": 59412
+    },
+    {
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "split": "test",
+      "role": "dynasemble_query_rows",
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_adamf/test_query_rows.csv",
+      "sha256": "410fb1d5be984e4823de138377a57f73feeb95d02cb40d4f87643cf4425e7163",
+      "n_rows": 59412,
+      "max_abs_global_rr_error": 0.0
+    }
+  ],
+  "missing_methods": [],
+  "intervals": [
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Global",
+      "scope": "pooled",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Query-soft",
+      "scope": "pooled",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.028470794271862415,
+        -0.024709705394317046
+      ],
+      "harmful_query_rate_ci95": [
+        0.32128147512287075,
+        0.3316501716824884
+      ],
+      "mean_harm_ci95": [
+        0.1420884848885823,
+        0.150549863893317
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "DynaSemble",
+      "scope": "pooled",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.07347383285762801,
+        -0.06775912406126194
+      ],
+      "harmful_query_rate_ci95": [
+        0.46334073924459707,
+        0.4743490372315357
+      ],
+      "mean_harm_ci95": [
+        0.20609416250851606,
+        0.21493660766849298
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Anchored Dynamic",
+      "scope": "pooled",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.00035636189037556356,
+        0.001098980529692055
+      ],
+      "harmful_query_rate_ci95": [
+        0.019204874436140846,
+        0.02191476469400121
+      ],
+      "mean_harm_ci95": [
+        0.03312435254752003,
+        0.048207392326580015
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Global",
+      "scope": "pooled",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Query-soft",
+      "scope": "pooled",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.010505605404320655,
+        -0.007337964182716901
+      ],
+      "harmful_query_rate_ci95": [
+        0.2853632262842523,
+        0.29551269103884736
+      ],
+      "mean_harm_ci95": [
+        0.1041143545381401,
+        0.11157873615679144
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "DynaSemble",
+      "scope": "pooled",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.04347734443756759,
+        -0.03876644002069516
+      ],
+      "harmful_query_rate_ci95": [
+        0.4076954150676631,
+        0.4186195549720595
+      ],
+      "mean_harm_ci95": [
+        0.1649074663035286,
+        0.17313650255913626
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Anchored Dynamic",
+      "scope": "pooled",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0007664909429031636,
+        0.0017783887926513568
+      ],
+      "harmful_query_rate_ci95": [
+        0.09418972598128324,
+        0.10050158217195179
+      ],
+      "mean_harm_ci95": [
+        0.03136656424090684,
+        0.03765983071512989
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Global",
+      "scope": "pooled",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Query-soft",
+      "scope": "pooled",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.009430616919356618,
+        -0.005110392458074487
+      ],
+      "harmful_query_rate_ci95": [
+        0.23272500389954764,
+        0.24762225081890502
+      ],
+      "mean_harm_ci95": [
+        0.10563010231628164,
+        0.1186017214085727
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "DynaSemble",
+      "scope": "pooled",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.05350308966005116,
+        -0.04518766607734999
+      ],
+      "harmful_query_rate_ci95": [
+        0.38812197785056934,
+        0.4059429106223678
+      ],
+      "mean_harm_ci95": [
+        0.1925089417196841,
+        0.2082516814724937
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Anchored Dynamic",
+      "scope": "pooled",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0013820914063837216,
+        0.0026152623331488333
+      ],
+      "harmful_query_rate_ci95": [
+        0.06867103416003743,
+        0.07732802994852597
+      ],
+      "mean_harm_ci95": [
+        0.01992437237817418,
+        0.028972111277470684
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Global",
+      "scope": "pooled",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Query-soft",
+      "scope": "pooled",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.005136763790810457,
+        0.007297323213733311
+      ],
+      "harmful_query_rate_ci95": [
+        0.16651068476056777,
+        0.17941818749025112
+      ],
+      "mean_harm_ci95": [
+        0.031659710131654695,
+        0.03871206867489731
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "DynaSemble",
+      "scope": "pooled",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.01896705805987505,
+        -0.013061671353971264
+      ],
+      "harmful_query_rate_ci95": [
+        0.2995632506629231,
+        0.3158633598502574
+      ],
+      "mean_harm_ci95": [
+        0.13504937945842668,
+        0.14878860224026147
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Anchored Dynamic",
+      "scope": "pooled",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0047175000508320715,
+        0.007035597502059192
+      ],
+      "harmful_query_rate_ci95": [
+        0.19326158165652785,
+        0.20652101856184682
+      ],
+      "mean_harm_ci95": [
+        0.029678376719377814,
+        0.03627064293098547
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Global",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Global",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Global",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Query-soft",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.030458393596167838,
+        -0.025152552688744143
+      ],
+      "harmful_query_rate_ci95": [
+        0.3270551403756817,
+        0.34215310038376084
+      ],
+      "mean_harm_ci95": [
+        0.13902157302466192,
+        0.15007796835114168
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Query-soft",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.03330496545492122,
+        -0.0278110052023317
+      ],
+      "harmful_query_rate_ci95": [
+        0.32665118157947887,
+        0.3416481518885074
+      ],
+      "mean_harm_ci95": [
+        0.14916903038285953,
+        0.16069687080113845
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Query-soft",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.02398879001306437,
+        -0.018809086623824803
+      ],
+      "harmful_query_rate_ci95": [
+        0.30367476267420723,
+        0.31816930923045844
+      ],
+      "mean_harm_ci95": [
+        0.13317030749470385,
+        0.1447817496982286
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "DynaSemble",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.09487038364441149,
+        -0.08645118197458543
+      ],
+      "harmful_query_rate_ci95": [
+        0.5259543526560291,
+        0.542314683902242
+      ],
+      "mean_harm_ci95": [
+        0.2201441076607542,
+        0.23117878790840282
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "DynaSemble",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.040213862690097434,
+        -0.03429661012642985
+      ],
+      "harmful_query_rate_ci95": [
+        0.3409917188446778,
+        0.3559886891537063
+      ],
+      "mean_harm_ci95": [
+        0.16616470508204553,
+        0.17799944056580091
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "DynaSemble",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.0882037033074698,
+        -0.07988715170007156
+      ],
+      "harmful_query_rate_ci95": [
+        0.515653403352858,
+        0.5319632397495455
+      ],
+      "mean_harm_ci95": [
+        0.21530506242973654,
+        0.22627157519175337
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Anchored Dynamic",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0003455118767937981,
+        0.0013903228477790183
+      ],
+      "harmful_query_rate_ci95": [
+        0.02166229044637447,
+        0.0259556150272672
+      ],
+      "mean_harm_ci95": [
+        0.027734935035311475,
+        0.05037897687733873
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Anchored Dynamic",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        5.67983301942432e-05,
+        0.0012549071883122538
+      ],
+      "harmful_query_rate_ci95": [
+        0.02454049686931933,
+        0.02898404362754999
+      ],
+      "mean_harm_ci95": [
+        0.034330212368523495,
+        0.057675769045168454
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Anchored Dynamic",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0002688086786542321,
+        0.0010254695148127952
+      ],
+      "harmful_query_rate_ci95": [
+        0.009644516259341547,
+        0.0127247020803878
+      ],
+      "mean_harm_ci95": [
+        0.018048022477712214,
+        0.04946698077338707
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Global",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Global",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Global",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Query-soft",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.010947670795523966,
+        -0.0064814117373386635
+      ],
+      "harmful_query_rate_ci95": [
+        0.2920622096546152,
+        0.3064027469198142
+      ],
+      "mean_harm_ci95": [
+        0.09772515544601525,
+        0.10778142610267596
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Query-soft",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.009131133997227963,
+        -0.0047397487352509125
+      ],
+      "harmful_query_rate_ci95": [
+        0.2670167642900424,
+        0.2805506463340739
+      ],
+      "mean_harm_ci95": [
+        0.09781497988139412,
+        0.1085521489206694
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Query-soft",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.013586755249711525,
+        -0.008757277953656285
+      ],
+      "harmful_query_rate_ci95": [
+        0.29125429206220965,
+        0.30544334477883256
+      ],
+      "mean_harm_ci95": [
+        0.11188988734267459,
+        0.12262796977521623
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "DynaSemble",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.0647141288810207,
+        -0.056964861309458596
+      ],
+      "harmful_query_rate_ci95": [
+        0.49757624722278326,
+        0.5140880630175723
+      ],
+      "mean_harm_ci95": [
+        0.18247974437007433,
+        0.19264724547199635
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "DynaSemble",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.0006194142015130315,
+        0.0028254972455726457
+      ],
+      "harmful_query_rate_ci95": [
+        0.2251565340335286,
+        0.23808321551201778
+      ],
+      "mean_harm_ci95": [
+        0.06618156299455762,
+        0.07564935846469363
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "DynaSemble",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.06759690343907002,
+        -0.05982159412258802
+      ],
+      "harmful_query_rate_ci95": [
+        0.4938396283579075,
+        0.510149464754595
+      ],
+      "mean_harm_ci95": [
+        0.19020943282268302,
+        0.20072362386487677
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Anchored Dynamic",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0005691843023288858,
+        0.002180644790558145
+      ],
+      "harmful_query_rate_ci95": [
+        0.10098969905069682,
+        0.11007877196525954
+      ],
+      "mean_harm_ci95": [
+        0.02940700463079929,
+        0.03871465476745105
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Anchored Dynamic",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        8.793058573287006e-05,
+        0.0015109609065499983
+      ],
+      "harmful_query_rate_ci95": [
+        0.08331650171682488,
+        0.09169864673803273
+      ],
+      "mean_harm_ci95": [
+        0.027644472654065864,
+        0.03834325273051441
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Anchored Dynamic",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0008196205585573632,
+        0.0024517001073449006
+      ],
+      "harmful_query_rate_ci95": [
+        0.09452635831145223,
+        0.10351444152696425
+      ],
+      "mean_harm_ci95": [
+        0.03117773578119357,
+        0.04153918669252113
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Global",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Global",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Global",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Query-soft",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.013725931098874204,
+        -0.00735586726484739
+      ],
+      "harmful_query_rate_ci95": [
+        0.23373888628919046,
+        0.2542115114646701
+      ],
+      "mean_harm_ci95": [
+        0.10926331388055839,
+        0.12766598846777577
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Query-soft",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.00856335305870175,
+        -0.002471259703452895
+      ],
+      "harmful_query_rate_ci95": [
+        0.22870846981750118,
+        0.2491810949929808
+      ],
+      "mean_harm_ci95": [
+        0.09678984404243846,
+        0.11413979534314564
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Query-soft",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.008989386657733654,
+        -0.002450021473010353
+      ],
+      "harmful_query_rate_ci95": [
+        0.22730463266261114,
+        0.24766027140851662
+      ],
+      "mean_harm_ci95": [
+        0.10316097419635235,
+        0.1213839401620137
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "DynaSemble",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.07916251724751631,
+        -0.06639377434426744
+      ],
+      "harmful_query_rate_ci95": [
+        0.4408048666354703,
+        0.46630790828263924
+      ],
+      "mean_harm_ci95": [
+        0.21681935714364972,
+        0.2361637165012246
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "DynaSemble",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.018680102095696274,
+        -0.01014076242268
+      ],
+      "harmful_query_rate_ci95": [
+        0.2832241459990641,
+        0.3058025269068788
+      ],
+      "mean_harm_ci95": [
+        0.13669249246822557,
+        0.15579204934573435
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "DynaSemble",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.06695998131110995,
+        -0.054815606874093405
+      ],
+      "harmful_query_rate_ci95": [
+        0.4303930744033692,
+        0.4556621431913898
+      ],
+      "mean_harm_ci95": [
+        0.20003271084194313,
+        0.2190348458858431
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Anchored Dynamic",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0011776030861550765,
+        0.0029487647063454166
+      ],
+      "harmful_query_rate_ci95": [
+        0.061534861956013105,
+        0.07276555919513336
+      ],
+      "mean_harm_ci95": [
+        0.014682600335431107,
+        0.02883192460164593
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Anchored Dynamic",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.000869384474888312,
+        0.002769547537746421
+      ],
+      "harmful_query_rate_ci95": [
+        0.07346747777257838,
+        0.085634066448292
+      ],
+      "mean_harm_ci95": [
+        0.01840456444084466,
+        0.03256545947657728
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Anchored Dynamic",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0011165833427112346,
+        0.003093228735979871
+      ],
+      "harmful_query_rate_ci95": [
+        0.06633130556855404,
+        0.07838090781469349
+      ],
+      "mean_harm_ci95": [
+        0.01875739915113686,
+        0.03435730510367753
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Global",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Global",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Global",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Query-soft",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.004926413562222504,
+        0.008445596779941208
+      ],
+      "harmful_query_rate_ci95": [
+        0.16389798783341133,
+        0.18074403369209172
+      ],
+      "mean_harm_ci95": [
+        0.028383665230451844,
+        0.03896127191413028
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Query-soft",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0038147492664750153,
+        0.00726808436491957
+      ],
+      "harmful_query_rate_ci95": [
+        0.16331305568554047,
+        0.18004503977538602
+      ],
+      "mean_harm_ci95": [
+        0.03037618808901182,
+        0.04156077577163593
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Query-soft",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.004593111077146012,
+        0.008225116730250224
+      ],
+      "harmful_query_rate_ci95": [
+        0.1665886757136172,
+        0.18366869443144596
+      ],
+      "mean_harm_ci95": [
+        0.03057905675213637,
+        0.04151044233911583
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "DynaSemble",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.03336973928246587,
+        -0.023976574210274375
+      ],
+      "harmful_query_rate_ci95": [
+        0.3399596396817969,
+        0.36324286382779597
+      ],
+      "mean_harm_ci95": [
+        0.1541518417220543,
+        0.17215250337769233
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "DynaSemble",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.001616821868907718,
+        0.007643365916956319
+      ],
+      "harmful_query_rate_ci95": [
+        0.2151380439868975,
+        0.23444080486663546
+      ],
+      "mean_harm_ci95": [
+        0.07840161487122543,
+        0.09457050593813658
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "DynaSemble",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.028499315948898894,
+        -0.019355010748832634
+      ],
+      "harmful_query_rate_ci95": [
+        0.33551415535797846,
+        0.358446420215255
+      ],
+      "mean_harm_ci95": [
+        0.14750196264903914,
+        0.16528973616827242
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Anchored Dynamic",
+      "seed": 1,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.004199059602060322,
+        0.007824491586982127
+      ],
+      "harmful_query_rate_ci95": [
+        0.1915067852129153,
+        0.20905767430978003
+      ],
+      "mean_harm_ci95": [
+        0.027158163623707193,
+        0.03669766153608465
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Anchored Dynamic",
+      "seed": 2,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0032915412485142416,
+        0.0068402300918727
+      ],
+      "harmful_query_rate_ci95": [
+        0.1903369209171736,
+        0.20788488535329902
+      ],
+      "mean_harm_ci95": [
+        0.027571025674532616,
+        0.03727120273657769
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Anchored Dynamic",
+      "seed": 3,
+      "scope": "seed",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.004633822468388065,
+        0.008475343070192216
+      ],
+      "harmful_query_rate_ci95": [
+        0.19162377164248948,
+        0.20905474964904072
+      ],
+      "mean_harm_ci95": [
+        0.02962931546037663,
+        0.039668170903496905
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Global",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Global",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Query-soft",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.02019009158277757,
+        -0.016015185938535674
+      ],
+      "harmful_query_rate_ci95": [
+        0.3761866289638457,
+        0.39022419713189255
+      ],
+      "mean_harm_ci95": [
+        0.08963717503795401,
+        0.09833462415484552
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Query-soft",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.03761303488058319,
+        -0.03242236214971836
+      ],
+      "harmful_query_rate_ci95": [
+        0.2639189052716623,
+        0.2757018784084023
+      ],
+      "mean_harm_ci95": [
+        0.21430941755712377,
+        0.22724690889085064
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "DynaSemble",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.046475955680721194,
+        -0.04060422097806956
+      ],
+      "harmful_query_rate_ci95": [
+        0.4998308422540901,
+        0.5134652932067596
+      ],
+      "mean_harm_ci95": [
+        0.12378894655226287,
+        0.1336422438726248
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "DynaSemble",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.1017221807375568,
+        -0.0935339182930136
+      ],
+      "harmful_query_rate_ci95": [
+        0.42445970511007874,
+        0.4374200498215849
+      ],
+      "mean_harm_ci95": [
+        0.3002917438456082,
+        0.3132500333853372
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Anchored Dynamic",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.00024153430728820327,
+        0.0011343016926376173
+      ],
+      "harmful_query_rate_ci95": [
+        0.028815727462465496,
+        0.033259274220696154
+      ],
+      "mean_harm_ci95": [
+        0.023127589547640423,
+        0.03790499922357748
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Anchored Dynamic",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.000322424504563438,
+        0.0012155640060900763
+      ],
+      "harmful_query_rate_ci95": [
+        0.008819767050427522,
+        0.011411835992728742
+      ],
+      "mean_harm_ci95": [
+        0.051866307671216416,
+        0.09277310654966427
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Global",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Global",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Query-soft",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.005160155230505285,
+        -0.0015192095840028891
+      ],
+      "harmful_query_rate_ci95": [
+        0.3465629839089746,
+        0.36053322561098766
+      ],
+      "mean_harm_ci95": [
+        0.06466864892599164,
+        0.07208258249995099
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Query-soft",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.0167200678782463,
+        -0.012329686712462457
+      ],
+      "harmful_query_rate_ci95": [
+        0.22153773648421193,
+        0.23305056217599138
+      ],
+      "mean_harm_ci95": [
+        0.16287470895061565,
+        0.17578793274446275
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "DynaSemble",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.020719233397063833,
+        -0.01607869621230496
+      ],
+      "harmful_query_rate_ci95": [
+        0.44741803002760383,
+        0.4614219349626338
+      ],
+      "mean_harm_ci95": [
+        0.08811292792539564,
+        0.09630122316163978
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "DynaSemble",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.06747452145280568,
+        -0.060296618879784145
+      ],
+      "harmful_query_rate_ci95": [
+        0.36544805763145494,
+        0.3781390964788258
+      ],
+      "mean_harm_ci95": [
+        0.25602032199585395,
+        0.269713824262495
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Anchored Dynamic",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0007167629449675056,
+        0.002262925728487882
+      ],
+      "harmful_query_rate_ci95": [
+        0.13852420386453915,
+        0.14838753113849054
+      ],
+      "mean_harm_ci95": [
+        0.028236396948172364,
+        0.03511322735777475
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "method": "Anchored Dynamic",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 9902,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0005004869130517437,
+        0.0016088533589899486
+      ],
+      "harmful_query_rate_ci95": [
+        0.04830673937924998,
+        0.05446711102134249
+      ],
+      "mean_harm_ci95": [
+        0.03595881328381512,
+        0.048997628568010564
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Global",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Global",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Query-soft",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.007532087260490824,
+        -0.0024282340911008665
+      ],
+      "harmful_query_rate_ci95": [
+        0.28466697863047885,
+        0.3049446264233349
+      ],
+      "mean_harm_ci95": [
+        0.062120647142595777,
+        0.07533416874809838
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Query-soft",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.012623504319035585,
+        -0.00642576478377369
+      ],
+      "harmful_query_rate_ci95": [
+        0.17742941818749025,
+        0.1938855092809234
+      ],
+      "mean_harm_ci95": [
+        0.17017118340050078,
+        0.1918652332808858
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "DynaSemble",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.039673046561745744,
+        -0.030876924724597053
+      ],
+      "harmful_query_rate_ci95": [
+        0.4338617220402433,
+        0.4555451567618156
+      ],
+      "mean_harm_ci95": [
+        0.11870134375007804,
+        0.13514280922021205
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "DynaSemble",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.06899931930705183,
+        -0.05769992368216867
+      ],
+      "harmful_query_rate_ci95": [
+        0.33964865075651224,
+        0.3594603026048978
+      ],
+      "mean_harm_ci95": [
+        0.28301445801577935,
+        0.304878854560623
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Anchored Dynamic",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0008467580102471076,
+        0.0021935557282672232
+      ],
+      "harmful_query_rate_ci95": [
+        0.09795468725627826,
+        0.11113710809546093
+      ],
+      "mean_harm_ci95": [
+        0.009916218981619885,
+        0.017269866175542842
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "method": "Anchored Dynamic",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0015073938434172441,
+        0.0035086067858815647
+      ],
+      "harmful_query_rate_ci95": [
+        0.03735766651068476,
+        0.04593667134612385
+      ],
+      "mean_harm_ci95": [
+        0.04031982908429908,
+        0.0637539363635373
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Global",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Global",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0,
+        0.0
+      ],
+      "harmful_query_rate_ci95": [
+        0.0,
+        0.0
+      ],
+      "mean_harm_ci95": [
+        null,
+        null
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Query-soft",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.0024365959778154572,
+        0.005065407280793846
+      ],
+      "harmful_query_rate_ci95": [
+        0.21977850569333957,
+        0.23880829823740446
+      ],
+      "mean_harm_ci95": [
+        0.018972384572526355,
+        0.02584802947880966
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Query-soft",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.006929163119599885,
+        0.010438342938447333
+      ],
+      "harmful_query_rate_ci95": [
+        0.10965527998752145,
+        0.12400756512244578
+      ],
+      "mean_harm_ci95": [
+        0.052730099902821834,
+        0.06784398829387374
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "DynaSemble",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.011408772109514026,
+        -0.0043214807628923785
+      ],
+      "harmful_query_rate_ci95": [
+        0.3416783653096241,
+        0.36312587739822183
+      ],
+      "mean_harm_ci95": [
+        0.0810237936829984,
+        0.09518320069613369
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "DynaSemble",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        -0.02835538232419799,
+        -0.01999902200785213
+      ],
+      "harmful_query_rate_ci95": [
+        0.2535485883637498,
+        0.2724223990017158
+      ],
+      "mean_harm_ci95": [
+        0.20372186976290418,
+        0.22454919995177447
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Anchored Dynamic",
+      "direction": "head",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.001856830610911573,
+        0.004401176052433958
+      ],
+      "harmful_query_rate_ci95": [
+        0.23935228513492435,
+        0.2586180003119638
+      ],
+      "mean_harm_ci95": [
+        0.017765341109575443,
+        0.02385088477571267
+      ]
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "method": "Anchored Dynamic",
+      "direction": "tail",
+      "scope": "direction",
+      "n_original_triple_clusters": 4274,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20260909,
+      "cluster_unit": "original raw triple; all available seeds and directions retained",
+      "delta_mrr_ci95": [
+        0.006669574022780133,
+        0.010504977399244445
+      ],
+      "harmful_query_rate_ci95": [
+        0.14272344408048665,
+        0.15902355326782094
+      ],
+      "mean_harm_ci95": [
+        0.046281780106126366,
+        0.05993968932268253
+      ]
+    }
+  ]
+}
