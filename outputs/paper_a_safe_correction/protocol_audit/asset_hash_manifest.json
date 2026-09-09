@@ -1,0 +1,2719 @@
+{
+  "schema_version": 1,
+  "audit_version": "paper_a_protocol_integrity_v1",
+  "generated_at_utc": "2026-09-09T16:08:29.880665+00:00",
+  "hash_algorithm": "SHA-256",
+  "path_policy": "repository-relative canonical paths; historical machine-local lock paths retained in locked_paths; raw SHA-256 is always reported and LF/CRLF equivalence is accepted only for text assets",
+  "assets": [
+    {
+      "path": "docs/protocols/paper_a_boundary_pair_protocol.md",
+      "roles": [
+        "DynaSemble predeclared protocol",
+        "protocol/code information-boundary evidence"
+      ],
+      "exists": true,
+      "size_bytes": 3004,
+      "sha256": "5b12082e02af1797ebd2964e50a95efe393d4b6bd27a1a9d5a619910e8239714",
+      "expected_hashes": [
+        "d1b64ad61121ff332f9d44446fa26a4bdb9748dd9bb6cbd32bbf5fb01082da6a"
+      ],
+      "accepted_match_modes": [
+        "crlf_normalized",
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "docs\\protocols\\paper_a_boundary_pair_protocol.md"
+      ]
+    },
+    {
+      "path": "docs/protocols/paper_a_dynasemble_four_pair_protocol.md",
+      "roles": [
+        "DynaSemble predeclared protocol",
+        "protocol/code information-boundary evidence"
+      ],
+      "exists": true,
+      "size_bytes": 9562,
+      "sha256": "4f0bcb88ab1aa987a1f0f91fc19fa275ac5b32084c38a0e83c79f2529608e37a",
+      "expected_hashes": [
+        "29d7ad0cc35ec4a43f53de0fcc5dd03d3a9951e42384e49f42570d6be057d145"
+      ],
+      "accepted_match_modes": [
+        "crlf_normalized",
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "docs\\protocols\\paper_a_dynasemble_four_pair_protocol.md"
+      ]
+    },
+    {
+      "path": "docs/protocols/paper_a_reliable_primary_protocol.md",
+      "roles": [
+        "primary selection protocol",
+        "protocol/code information-boundary evidence"
+      ],
+      "exists": true,
+      "size_bytes": 3025,
+      "sha256": "c98bea1cf57e305f963d34ddae6898a561eb9328605511709ec5f69ed9df859f",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_adamf_mat/20260901_030904_seed1/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 66932470,
+      "sha256": "0e306e56c556ef776678850c3ca7258b9e5b90eefb14245a7b3902ad71da1861",
+      "expected_hashes": [
+        "0e306e56c556ef776678850c3ca7258b9e5b90eefb14245a7b3902ad71da1861"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_adamf_mat\\20260901_030904_seed1"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_adamf_mat/20260901_030904_seed1/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 10407,
+      "sha256": "25357d0ae01320f8ac1bc5d2ab53c8018929f84015de0a9f40ff0cb3e9dd80ae",
+      "expected_hashes": [
+        "25357d0ae01320f8ac1bc5d2ab53c8018929f84015de0a9f40ff0cb3e9dd80ae"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_adamf_mat\\20260901_030904_seed1"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 66932470,
+      "sha256": "bcefd66bbbecfb60fb2a29ed8166b7e7f8d337494b539f81fbbd66d262b7ff00",
+      "expected_hashes": [
+        "bcefd66bbbecfb60fb2a29ed8166b7e7f8d337494b539f81fbbd66d262b7ff00"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_adamf_mat\\20260903_044823_seed2"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 10417,
+      "sha256": "8b4c3561b7cd49a64903f8918c42e158fe4d1c4f14e64599d46b53d770b77ce8",
+      "expected_hashes": [
+        "8b4c3561b7cd49a64903f8918c42e158fe4d1c4f14e64599d46b53d770b77ce8"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_adamf_mat\\20260903_044823_seed2"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_adamf_mat/20260903_090422_seed3/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 66932470,
+      "sha256": "391f06d80621a274b02aeea42b744cddc84964427321c8533d2706e1588fd9ad",
+      "expected_hashes": [
+        "391f06d80621a274b02aeea42b744cddc84964427321c8533d2706e1588fd9ad"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_adamf_mat\\20260903_090422_seed3"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_adamf_mat/20260903_090422_seed3/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 10417,
+      "sha256": "f19d6ba3c7d49a30bb4e8820eb2fbc4f64fb0b8ef5c3f829f71482ef9a452140",
+      "expected_hashes": [
+        "f19d6ba3c7d49a30bb4e8820eb2fbc4f64fb0b8ef5c3f829f71482ef9a452140"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_adamf_mat\\20260903_090422_seed3"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 112948670,
+      "sha256": "059b45d53023bf8122ef3b07a4dc4c10660841666afa78823f863105c0d34a27",
+      "expected_hashes": [
+        "059b45d53023bf8122ef3b07a4dc4c10660841666afa78823f863105c0d34a27"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_mhyper\\20260831_221627_seed1"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 10451,
+      "sha256": "7bba01b7b582700727dd9f1d920220de8be61b7d82dcd6cc73ec73dbd43341d1",
+      "expected_hashes": [
+        "7bba01b7b582700727dd9f1d920220de8be61b7d82dcd6cc73ec73dbd43341d1"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_mhyper\\20260831_221627_seed1"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 112948670,
+      "sha256": "bea2dc185952ccdd54091267809ea39d971cd027f596c2f77c89f8d4df6500c9",
+      "expected_hashes": [
+        "bea2dc185952ccdd54091267809ea39d971cd027f596c2f77c89f8d4df6500c9"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_mhyper\\20260902_175015_seed2"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 10461,
+      "sha256": "952fe987bf8cd66497ad9b48e3e49f11b1f3f9df7b16ebeee136c62fcae7fcb0",
+      "expected_hashes": [
+        "952fe987bf8cd66497ad9b48e3e49f11b1f3f9df7b16ebeee136c62fcae7fcb0"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_mhyper\\20260902_175015_seed2"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_mhyper/20260902_180912_seed3/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 112948670,
+      "sha256": "5f128cbd54cb7d97122c686017aa517c7439cca4dfe0b5379092707ee7a29844",
+      "expected_hashes": [
+        "5f128cbd54cb7d97122c686017aa517c7439cca4dfe0b5379092707ee7a29844"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_mhyper\\20260902_180912_seed3"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_mhyper/20260902_180912_seed3/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 10461,
+      "sha256": "88a2895817eb976723d41ddbb223a47ffbb756ebc6a37d44d37218a981abc53a",
+      "expected_hashes": [
+        "88a2895817eb976723d41ddbb223a47ffbb756ebc6a37d44d37218a981abc53a"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_mhyper\\20260902_180912_seed3"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_native/20260831_223530_seed1/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 68938968,
+      "sha256": "2bd4ff09976173f06a07bfac1260d7b9fb8b3b9a72ebcc56d8805688a13e6c79",
+      "expected_hashes": [
+        "2bd4ff09976173f06a07bfac1260d7b9fb8b3b9a72ebcc56d8805688a13e6c79"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_native\\20260831_223530_seed1"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_native/20260831_223530_seed1/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 10484,
+      "sha256": "1d295e9bc891d148eea44d6bd2a0876938f354c75b4c9999973a0fd77b0e0df9",
+      "expected_hashes": [
+        "1d295e9bc891d148eea44d6bd2a0876938f354c75b4c9999973a0fd77b0e0df9"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_native\\20260831_223530_seed1"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_native/20260902_182809_seed2/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 68938968,
+      "sha256": "de24c0ad1a9127d6ef951e16b67f396e16b6d02515acf03ceaa8f6666d39b6a6",
+      "expected_hashes": [
+        "de24c0ad1a9127d6ef951e16b67f396e16b6d02515acf03ceaa8f6666d39b6a6"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_native\\20260902_182809_seed2"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_native/20260902_182809_seed2/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 10494,
+      "sha256": "c51f5f474d244bed3c583749b6e5ab7299a4621cbb3666a2b818f2581b152b0e",
+      "expected_hashes": [
+        "c51f5f474d244bed3c583749b6e5ab7299a4621cbb3666a2b818f2581b152b0e"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_native\\20260902_182809_seed2"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_native/20260903_012002_seed3/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 68938968,
+      "sha256": "5ad6151d9acae60c3c3b1562aa9092d54b10ecaaa88f3ea07468493e1d272355",
+      "expected_hashes": [
+        "5ad6151d9acae60c3c3b1562aa9092d54b10ecaaa88f3ea07468493e1d272355"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_native\\20260903_012002_seed3"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/db15k_native/20260903_012002_seed3/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 10494,
+      "sha256": "21a119dcf44a869d71de0d1a0ee5d2eeb23acd46e525a77f48dd4d71532eaac0",
+      "expected_hashes": [
+        "21a119dcf44a869d71de0d1a0ee5d2eeb23acd46e525a77f48dd4d71532eaac0"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\db15k_native\\20260903_012002_seed3"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_060855_seed1/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 71421558,
+      "sha256": "28781f99687850e5f7ca595bc8a80e320b7231c5fbae58992af6857e9d776828",
+      "expected_hashes": [
+        "28781f99687850e5f7ca595bc8a80e320b7231c5fbae58992af6857e9d776828"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_adamf_mat\\20260902_060855_seed1"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_060855_seed1/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 9864,
+      "sha256": "93a231efa327c5e836013149227d7c7484326ecf699ce060b153551e552f0497",
+      "expected_hashes": [
+        "93a231efa327c5e836013149227d7c7484326ecf699ce060b153551e552f0497"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_adamf_mat\\20260902_060855_seed1"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_083530_seed2/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 71421558,
+      "sha256": "267ea0cddb9eb6dc94e853b65e1f50d276f0800d2aa83a9f6bf2b975b8f93f23",
+      "expected_hashes": [
+        "267ea0cddb9eb6dc94e853b65e1f50d276f0800d2aa83a9f6bf2b975b8f93f23"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_adamf_mat\\20260902_083530_seed2"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_083530_seed2/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 9864,
+      "sha256": "88c5035bc5c51b9ecabf689950b4596dd6e19a8be9d2bfd5fd1c15d053f29284",
+      "expected_hashes": [
+        "88c5035bc5c51b9ecabf689950b4596dd6e19a8be9d2bfd5fd1c15d053f29284"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_adamf_mat\\20260902_083530_seed2"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_142555_seed3/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 71421558,
+      "sha256": "9027b50fe93c066bec46a3c2a7ffb79f406045014c38338103514ba6731b1a18",
+      "expected_hashes": [
+        "9027b50fe93c066bec46a3c2a7ffb79f406045014c38338103514ba6731b1a18"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_adamf_mat\\20260902_142555_seed3"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_142555_seed3/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 9864,
+      "sha256": "2dcb8f5df2e1ae5b7e5b09428267b1e5ebcffcceac7bd03d495fec9ca3c26647",
+      "expected_hashes": [
+        "2dcb8f5df2e1ae5b7e5b09428267b1e5ebcffcceac7bd03d495fec9ca3c26647"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_adamf_mat\\20260902_142555_seed3"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 128817918,
+      "sha256": "4a5cb66cf61d4cf4d68dfabf7c0560333563e7497b79b36872665b42396bbfed",
+      "expected_hashes": [
+        "4a5cb66cf61d4cf4d68dfabf7c0560333563e7497b79b36872665b42396bbfed"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_mhyper\\20260902_014323_seed1"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 9908,
+      "sha256": "7376df5cf5383162ff51832984063274c38d21cf153fbf0d05cac28123ab80ae",
+      "expected_hashes": [
+        "7376df5cf5383162ff51832984063274c38d21cf153fbf0d05cac28123ab80ae"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_mhyper\\20260902_014323_seed1"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_mhyper/20260902_015400_seed2/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 128817918,
+      "sha256": "7d51cbc3ae0fa8ae7d16bb318c5d76affe27caefbcd94f7015c938e58c739337",
+      "expected_hashes": [
+        "7d51cbc3ae0fa8ae7d16bb318c5d76affe27caefbcd94f7015c938e58c739337"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_mhyper\\20260902_015400_seed2"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_mhyper/20260902_015400_seed2/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 9908,
+      "sha256": "08676952cb4528acbf2421cb6c6f8ffe998c0d81134fd18e7abd99221ef31fa3",
+      "expected_hashes": [
+        "08676952cb4528acbf2421cb6c6f8ffe998c0d81134fd18e7abd99221ef31fa3"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_mhyper\\20260902_015400_seed2"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_mhyper/20260902_020435_seed3/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 128817918,
+      "sha256": "42f6d06ba2ec51106a1cf04cf09fb49aab439666fdfd293e1818cf19087ac30f",
+      "expected_hashes": [
+        "42f6d06ba2ec51106a1cf04cf09fb49aab439666fdfd293e1818cf19087ac30f"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_mhyper\\20260902_020435_seed3"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_mhyper/20260902_020435_seed3/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 9908,
+      "sha256": "15b0ac51e56f6d379b6a8a1e77205c5b89a8a546c2d3b13d7a8f38578f805b29",
+      "expected_hashes": [
+        "15b0ac51e56f6d379b6a8a1e77205c5b89a8a546c2d3b13d7a8f38578f805b29"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_mhyper\\20260902_020435_seed3"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_native/20260902_021506_seed1/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 79769560,
+      "sha256": "f44cba3fdd34b3aa06531b41d6ffd5bb2c1ed236e27f37c6109c683e353b3d6c",
+      "expected_hashes": [
+        "f44cba3fdd34b3aa06531b41d6ffd5bb2c1ed236e27f37c6109c683e353b3d6c"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_native\\20260902_021506_seed1"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_native/20260902_021506_seed1/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 9940,
+      "sha256": "31c76aa923716f53fef83ac23aa200d2ab70e81eaa5017dd3726486d083db44d",
+      "expected_hashes": [
+        "31c76aa923716f53fef83ac23aa200d2ab70e81eaa5017dd3726486d083db44d"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_native\\20260902_021506_seed1"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_native/20260902_033610_seed2/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 79769560,
+      "sha256": "b218609bbcfc8b94d56f42c4f3f5493079810d6739e47bc4ad477d6f6bc853fc",
+      "expected_hashes": [
+        "b218609bbcfc8b94d56f42c4f3f5493079810d6739e47bc4ad477d6f6bc853fc"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_native\\20260902_033610_seed2"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_native/20260902_033610_seed2/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 9940,
+      "sha256": "bd3feb87f8b41a5c3633ecfc193352c109556727fa6c8822317dc038959be982",
+      "expected_hashes": [
+        "bd3feb87f8b41a5c3633ecfc193352c109556727fa6c8822317dc038959be982"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_native\\20260902_033610_seed2"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_native/20260902_044121_seed3/best.ckpt",
+      "roles": [
+        "frozen base-model checkpoint"
+      ],
+      "exists": true,
+      "size_bytes": 79769560,
+      "sha256": "e7dc11ecf6e5bfceae94116c58cb0ff988f87985bfeb8c8156969ec2b30b512f",
+      "expected_hashes": [
+        "e7dc11ecf6e5bfceae94116c58cb0ff988f87985bfeb8c8156969ec2b30b512f"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_native\\20260902_044121_seed3"
+      ]
+    },
+    {
+      "path": "ml/artifacts/outputs/mkg_w_native/20260902_044121_seed3/config_merged.json",
+      "roles": [
+        "frozen base-model config"
+      ],
+      "exists": true,
+      "size_bytes": 9940,
+      "sha256": "0afa0b107aa8539892bf6a3cfb595666a08c7bb01b92c4706be544b453eb90d4",
+      "expected_hashes": [
+        "0afa0b107aa8539892bf6a3cfb595666a08c7bb01b92c4706be544b453eb90d4"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "G:\\mmkg-project-research\\ml\\artifacts\\outputs\\mkg_w_native\\20260902_044121_seed3"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/baseline_crossfit/dev_crossfit_query_rows.csv",
+      "roles": [
+        "grouped OOF DEV rows",
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 39445550,
+      "sha256": "10e0425bfa9cfdcf561be2fee78ae16164e07625a0912ff8b047703c88ce02e7",
+      "expected_hashes": [
+        "10e0425bfa9cfdcf561be2fee78ae16164e07625a0912ff8b047703c88ce02e7"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/baseline_crossfit/dev_crossfit_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/dev_lock/anchored_dev_lock.json",
+      "roles": [
+        "Anchored immutable DEV lock",
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 2599,
+      "sha256": "b7ec3d6b524d16cf9c2128a3b84c8881cbe5e6b8ee7c2e5d592c58f756dac55d",
+      "expected_hashes": [
+        "b7ec3d6b524d16cf9c2128a3b84c8881cbe5e6b8ee7c2e5d592c58f756dac55d"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/dev_lock/anchored_dev_lock.json"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/dev_lock/anchored_model.pkl",
+      "roles": [
+        "Anchored locked combiner"
+      ],
+      "exists": true,
+      "size_bytes": 1860,
+      "sha256": "8cc50007c60a1b0c8fc608f2933a022fdb4a0e99bff6ae2092ff58e006958f63",
+      "expected_hashes": [
+        "8cc50007c60a1b0c8fc608f2933a022fdb4a0e99bff6ae2092ff58e006958f63"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "anchored_model.pkl"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "roles": [
+        "primary selection DEV input",
+        "exact filtered DEV rows",
+        "Anchored locked DEV source"
+      ],
+      "exists": true,
+      "size_bytes": 37718006,
+      "sha256": "431d98b55b288fff46c7454be1e0e4409e47c75226b8441ec2ec02fe9ba1a6d2",
+      "expected_hashes": [
+        "431d98b55b288fff46c7454be1e0e4409e47c75226b8441ec2ec02fe9ba1a6d2"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes",
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+        "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\outputs\\db15k\\anchored_dynamic\\mhyper_adamf_seed123\\full_ranking\\dev_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/full_ranking/selection.json",
+      "roles": [
+        "Global alpha DEV selection",
+        "Anchored locked Global selection",
+        "DynaSemble locked Global selection"
+      ],
+      "exists": true,
+      "size_bytes": 22290,
+      "sha256": "4bbac94200d8d11821670e4a183f92975baba5c2531bf13f50aedf0fba64f282",
+      "expected_hashes": [
+        "4bbac94200d8d11821670e4a183f92975baba5c2531bf13f50aedf0fba64f282"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\outputs\\db15k\\anchored_dynamic\\mhyper_adamf_seed123\\full_ranking\\selection.json",
+        "outputs\\db15k\\anchored_dynamic\\mhyper_adamf_seed123\\full_ranking\\selection.json"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/p3_ablation/dev_p3_selected_query_rows.csv",
+      "roles": [
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 10123438,
+      "sha256": "3ff0afa94089c101b1e0ed777e74715d5fd8b8a4d92c7a0273c59fbc75245f71",
+      "expected_hashes": [
+        "3ff0afa94089c101b1e0ed777e74715d5fd8b8a4d92c7a0273c59fbc75245f71"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/p3_ablation/dev_p3_selected_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/p3_ablation/dev_p3_summary.json",
+      "roles": [
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 29174,
+      "sha256": "a9b0b49401405eb43920415e6c7f6716c86a341e66537d1f59ac813f198b0b1a",
+      "expected_hashes": [
+        "a9b0b49401405eb43920415e6c7f6716c86a341e66537d1f59ac813f198b0b1a"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/p3_ablation/dev_p3_summary.json"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/test_anchored/test_locked_query_rows.csv",
+      "roles": [
+        "Anchored immutable TEST rows",
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 55936927,
+      "sha256": "77bb9f968099600ff110f110dea8cec197f5891396a055d35bd82542dce06e0c",
+      "expected_hashes": [
+        "77bb9f968099600ff110f110dea8cec197f5891396a055d35bd82542dce06e0c"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/test_anchored/test_locked_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/test_anchored/test_locked_summary.json",
+      "roles": [
+        "Anchored TEST summary"
+      ],
+      "exists": true,
+      "size_bytes": 10554,
+      "sha256": "ed9cb3d9d4ed3f8fb0e20debaac55fb1da38072f826908ba0fbf34e24bbcc36f",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/test_full_ranking/test_query_rows.csv",
+      "roles": [
+        "exact filtered TEST base rows",
+        "DynaSemble exact filtered TEST reference"
+      ],
+      "exists": true,
+      "size_bytes": 47994324,
+      "sha256": "adbb5dcd4555674c2967f84f382f0919afb69284ed747c2e1e7a80825b057c8d",
+      "expected_hashes": [
+        "adbb5dcd4555674c2967f84f382f0919afb69284ed747c2e1e7a80825b057c8d"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\db15k\\anchored_dynamic\\mhyper_adamf_seed123\\test_full_ranking\\test_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/baseline_crossfit/dev_crossfit_query_rows.csv",
+      "roles": [
+        "grouped OOF DEV rows",
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 39232233,
+      "sha256": "264331124ae4abe5922810af788fe6f38904004a7c6f7e5ec3bb8330c2436ded",
+      "expected_hashes": [
+        "264331124ae4abe5922810af788fe6f38904004a7c6f7e5ec3bb8330c2436ded"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/db15k/anchored_dynamic/mhyper_native_seed123/baseline_crossfit/dev_crossfit_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/dev_lock/anchored_dev_lock.json",
+      "roles": [
+        "Anchored immutable DEV lock",
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 2599,
+      "sha256": "a3ddf0b07697df57140c8a1dacdeb38ee96598272805b9db2a44bd59fa2b57ef",
+      "expected_hashes": [
+        "a3ddf0b07697df57140c8a1dacdeb38ee96598272805b9db2a44bd59fa2b57ef"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/db15k/anchored_dynamic/mhyper_native_seed123/dev_lock/anchored_dev_lock.json"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/dev_lock/anchored_model.pkl",
+      "roles": [
+        "Anchored locked combiner"
+      ],
+      "exists": true,
+      "size_bytes": 1860,
+      "sha256": "5f9fd52e944365945e0e85d90490184196c652afaf09e9afd94ee0a5ecf5adda",
+      "expected_hashes": [
+        "5f9fd52e944365945e0e85d90490184196c652afaf09e9afd94ee0a5ecf5adda"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "anchored_model.pkl"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "roles": [
+        "primary selection DEV input",
+        "exact filtered DEV rows",
+        "Anchored locked DEV source"
+      ],
+      "exists": true,
+      "size_bytes": 37499423,
+      "sha256": "f85d657f7183dc960bba762418ea3695ab0af78b59d45e158e1cd0a34079a081",
+      "expected_hashes": [
+        "f85d657f7183dc960bba762418ea3695ab0af78b59d45e158e1cd0a34079a081"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes",
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/db15k/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+        "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\outputs\\db15k\\anchored_dynamic\\mhyper_native_seed123\\full_ranking\\dev_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/full_ranking/selection.json",
+      "roles": [
+        "Global alpha DEV selection",
+        "Anchored locked Global selection",
+        "DynaSemble locked Global selection"
+      ],
+      "exists": true,
+      "size_bytes": 22324,
+      "sha256": "b0378a6bc3bc7f8ee50dc1f0aeee2d0073df801372d4f657dd35113ed07d2c04",
+      "expected_hashes": [
+        "b0378a6bc3bc7f8ee50dc1f0aeee2d0073df801372d4f657dd35113ed07d2c04"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\outputs\\db15k\\anchored_dynamic\\mhyper_native_seed123\\full_ranking\\selection.json",
+        "outputs\\db15k\\anchored_dynamic\\mhyper_native_seed123\\full_ranking\\selection.json"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/p3_ablation/dev_p3_selected_query_rows.csv",
+      "roles": [
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 10393364,
+      "sha256": "369683865ebf234a3dcca71b16223eb39107f5b1ccb0ee5e87ac3ae69e335296",
+      "expected_hashes": [
+        "369683865ebf234a3dcca71b16223eb39107f5b1ccb0ee5e87ac3ae69e335296"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/db15k/anchored_dynamic/mhyper_native_seed123/p3_ablation/dev_p3_selected_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/p3_ablation/dev_p3_summary.json",
+      "roles": [
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 29056,
+      "sha256": "465ceb5c1e12f4db2fb532e81accd0083eb55f49d49623ee71dcde56ce8c4675",
+      "expected_hashes": [
+        "465ceb5c1e12f4db2fb532e81accd0083eb55f49d49623ee71dcde56ce8c4675"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/db15k/anchored_dynamic/mhyper_native_seed123/p3_ablation/dev_p3_summary.json"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/test_anchored/test_locked_query_rows.csv",
+      "roles": [
+        "Anchored immutable TEST rows",
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 56247418,
+      "sha256": "2155f299165204d388ad45a509684148a3db3d3fa0dae9370896d2ed42271cfc",
+      "expected_hashes": [
+        "2155f299165204d388ad45a509684148a3db3d3fa0dae9370896d2ed42271cfc"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/db15k/anchored_dynamic/mhyper_native_seed123/test_anchored/test_locked_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/test_anchored/test_locked_summary.json",
+      "roles": [
+        "Anchored TEST summary"
+      ],
+      "exists": true,
+      "size_bytes": 10524,
+      "sha256": "0b5485dcffd3fe360198893a3458965a1681445d3a05dcf50dc37e30a50598fe",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/test_full_ranking/test_query_rows.csv",
+      "roles": [
+        "exact filtered TEST base rows",
+        "DynaSemble exact filtered TEST reference"
+      ],
+      "exists": true,
+      "size_bytes": 47930849,
+      "sha256": "ce75a9a1803bc9509e01858f3ca363e65ebf41203b92d998199217d500769422",
+      "expected_hashes": [
+        "ce75a9a1803bc9509e01858f3ca363e65ebf41203b92d998199217d500769422"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\db15k\\anchored_dynamic\\mhyper_native_seed123\\test_full_ranking\\test_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/baseline_crossfit/dev_crossfit_query_rows.csv",
+      "roles": [
+        "grouped OOF DEV rows"
+      ],
+      "exists": true,
+      "size_bytes": 40487606,
+      "sha256": "7fbed1968e10cccd3b7639d613596219be75776db7aea2848ddb41dd2bdb4034",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "roles": [
+        "primary selection DEV input",
+        "exact filtered DEV rows",
+        "Anchored locked DEV source"
+      ],
+      "exists": true,
+      "size_bytes": 38700123,
+      "sha256": "0b132d2a13d5df045d71adda1cf6282230f5db26ef18a5d2052caeb58da22bfd",
+      "expected_hashes": [
+        "0b132d2a13d5df045d71adda1cf6282230f5db26ef18a5d2052caeb58da22bfd"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes",
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+        "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\outputs\\db15k\\anchored_dynamic\\native_adamf_seed123\\full_ranking\\dev_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/db15k/anchored_dynamic/native_adamf_seed123/full_ranking/selection.json",
+      "roles": [
+        "Global alpha DEV selection",
+        "Anchored locked Global selection",
+        "DynaSemble locked Global selection"
+      ],
+      "exists": true,
+      "size_bytes": 22288,
+      "sha256": "cce837ceb70ef765e6cc0ac6230b6a5241a7167e10621cb205339dbaa767c499",
+      "expected_hashes": [
+        "cce837ceb70ef765e6cc0ac6230b6a5241a7167e10621cb205339dbaa767c499"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\outputs\\db15k\\anchored_dynamic\\native_adamf_seed123\\full_ranking\\selection.json",
+        "outputs\\db15k\\anchored_dynamic\\native_adamf_seed123\\full_ranking\\selection.json"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/baseline_crossfit/dev_crossfit_query_rows.csv",
+      "roles": [
+        "grouped OOF DEV rows",
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 21862913,
+      "sha256": "3139c40ce1345d0e4e0d8f495975903c2aa3a49e324e4141ea40847804d2c4e2",
+      "expected_hashes": [
+        "3139c40ce1345d0e4e0d8f495975903c2aa3a49e324e4141ea40847804d2c4e2"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/baseline_crossfit/dev_crossfit_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/dev_lock/anchored_dev_lock.json",
+      "roles": [
+        "Anchored immutable DEV lock",
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 2596,
+      "sha256": "95109445388ea1ffeab17c11b5281880ca3928c827155d2f1e9486dbab93bb0f",
+      "expected_hashes": [
+        "95109445388ea1ffeab17c11b5281880ca3928c827155d2f1e9486dbab93bb0f"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/dev_lock/anchored_dev_lock.json"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/dev_lock/anchored_model.pkl",
+      "roles": [
+        "Anchored locked combiner"
+      ],
+      "exists": true,
+      "size_bytes": 1860,
+      "sha256": "3356e915645b8f371864fb5b0f0717aef8a016de8234d76dcfd5f6bda2566720",
+      "expected_hashes": [
+        "3356e915645b8f371864fb5b0f0717aef8a016de8234d76dcfd5f6bda2566720"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "anchored_model.pkl"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "roles": [
+        "primary selection DEV input",
+        "exact filtered DEV rows",
+        "Anchored locked DEV source"
+      ],
+      "exists": true,
+      "size_bytes": 20881730,
+      "sha256": "e389449b44379ecb18fe248127c6b062b2f5cc7894fb052536a442528ab4287b",
+      "expected_hashes": [
+        "e389449b44379ecb18fe248127c6b062b2f5cc7894fb052536a442528ab4287b"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes",
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/dev_query_rows.csv",
+        "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\outputs\\mkg_w\\anchored_dynamic\\mhyper_adamf_seed123\\full_ranking\\dev_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/full_ranking/selection.json",
+      "roles": [
+        "Global alpha DEV selection",
+        "Anchored locked Global selection",
+        "DynaSemble locked Global selection"
+      ],
+      "exists": true,
+      "size_bytes": 12575,
+      "sha256": "f1c688963e62b52470c30ee722713bb372c51df61421503396cfbc3e5e8ad198",
+      "expected_hashes": [
+        "f1c688963e62b52470c30ee722713bb372c51df61421503396cfbc3e5e8ad198"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\outputs\\mkg_w\\anchored_dynamic\\mhyper_adamf_seed123\\full_ranking\\selection.json",
+        "outputs\\mkg_w\\anchored_dynamic\\mhyper_adamf_seed123\\full_ranking\\selection.json"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/p3_ablation/dev_p3_selected_query_rows.csv",
+      "roles": [
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 5589575,
+      "sha256": "1081da6b2fb8af42b19cc9ce2a7a782a7a22233cafdf6a7119919292a8a23aab",
+      "expected_hashes": [
+        "1081da6b2fb8af42b19cc9ce2a7a782a7a22233cafdf6a7119919292a8a23aab"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/p3_ablation/dev_p3_selected_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/p3_ablation/dev_p3_summary.json",
+      "roles": [
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 29113,
+      "sha256": "8f911fb33e321b81c8438bdf74653f4567e912b4f22904545185f2c451997458",
+      "expected_hashes": [
+        "8f911fb33e321b81c8438bdf74653f4567e912b4f22904545185f2c451997458"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/p3_ablation/dev_p3_summary.json"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/test_anchored/test_locked_query_rows.csv",
+      "roles": [
+        "Anchored immutable TEST rows",
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 24544314,
+      "sha256": "0414041b7cd33267e79f0d7b6c12575f581f7e7ddaa22724c0a041d0cc087e60",
+      "expected_hashes": [
+        "0414041b7cd33267e79f0d7b6c12575f581f7e7ddaa22724c0a041d0cc087e60"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/test_anchored/test_locked_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/test_anchored/test_locked_summary.json",
+      "roles": [
+        "Anchored TEST summary"
+      ],
+      "exists": true,
+      "size_bytes": 10563,
+      "sha256": "7404c684e49687984b79dc064a441c5db45da0e8cb4f33f639113e0799256cf6",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/test_full_ranking/test_query_rows.csv",
+      "roles": [
+        "exact filtered TEST base rows",
+        "DynaSemble exact filtered TEST reference"
+      ],
+      "exists": true,
+      "size_bytes": 20980253,
+      "sha256": "6ba53cc4ee88653ac5e0edf3764d09abd969de6443274b27fea5dc2fe0d9f338",
+      "expected_hashes": [
+        "6ba53cc4ee88653ac5e0edf3764d09abd969de6443274b27fea5dc2fe0d9f338"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\mkg_w\\anchored_dynamic\\mhyper_adamf_seed123\\test_full_ranking\\test_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/baseline_crossfit/dev_crossfit_query_rows.csv",
+      "roles": [
+        "grouped OOF DEV rows",
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 21609641,
+      "sha256": "f33dc8f786de524d41d50b5831485ee246dc5f3531cecf8b30e467ac599c7605",
+      "expected_hashes": [
+        "f33dc8f786de524d41d50b5831485ee246dc5f3531cecf8b30e467ac599c7605"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/baseline_crossfit/dev_crossfit_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/dev_lock/anchored_dev_lock.json",
+      "roles": [
+        "Anchored immutable DEV lock",
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 2599,
+      "sha256": "eee533f2d0b8b1a9a181d348c1df94b3db522b5f7c4a5a398a946b58d201c713",
+      "expected_hashes": [
+        "eee533f2d0b8b1a9a181d348c1df94b3db522b5f7c4a5a398a946b58d201c713"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/dev_lock/anchored_dev_lock.json"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/dev_lock/anchored_model.pkl",
+      "roles": [
+        "Anchored locked combiner"
+      ],
+      "exists": true,
+      "size_bytes": 1860,
+      "sha256": "5f6ed691ac2193b21afedfab6c955a49993ca9e0e89f686ef776e6044ad768c7",
+      "expected_hashes": [
+        "5f6ed691ac2193b21afedfab6c955a49993ca9e0e89f686ef776e6044ad768c7"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "anchored_model.pkl"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+      "roles": [
+        "primary selection DEV input",
+        "exact filtered DEV rows",
+        "Anchored locked DEV source"
+      ],
+      "exists": true,
+      "size_bytes": 20634465,
+      "sha256": "8b7dfb913f3a0d00eef156200e4a656f4062f2b2306b85cf8e68130749254b98",
+      "expected_hashes": [
+        "8b7dfb913f3a0d00eef156200e4a656f4062f2b2306b85cf8e68130749254b98"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes",
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/full_ranking/dev_query_rows.csv",
+        "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\outputs\\mkg_w\\anchored_dynamic\\mhyper_native_seed123\\full_ranking\\dev_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/full_ranking/selection.json",
+      "roles": [
+        "Global alpha DEV selection",
+        "Anchored locked Global selection",
+        "DynaSemble locked Global selection"
+      ],
+      "exists": true,
+      "size_bytes": 12596,
+      "sha256": "28f40889a625e53cf14c69111f2225f1d998019987bf6109a46c06126a43db6c",
+      "expected_hashes": [
+        "28f40889a625e53cf14c69111f2225f1d998019987bf6109a46c06126a43db6c"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\outputs\\mkg_w\\anchored_dynamic\\mhyper_native_seed123\\full_ranking\\selection.json",
+        "outputs\\mkg_w\\anchored_dynamic\\mhyper_native_seed123\\full_ranking\\selection.json"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/p3_ablation/dev_p3_selected_query_rows.csv",
+      "roles": [
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 5719621,
+      "sha256": "3e50f12ef1bb1dba5cab2f47158854410689ba1f25bbcdd5fc35a2e332ac9a85",
+      "expected_hashes": [
+        "3e50f12ef1bb1dba5cab2f47158854410689ba1f25bbcdd5fc35a2e332ac9a85"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/p3_ablation/dev_p3_selected_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/p3_ablation/dev_p3_summary.json",
+      "roles": [
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 28786,
+      "sha256": "5d90aa9dc8aedc4a20212909edce9a122ce471247041aea39b2f214f7f9a0857",
+      "expected_hashes": [
+        "5d90aa9dc8aedc4a20212909edce9a122ce471247041aea39b2f214f7f9a0857"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/p3_ablation/dev_p3_summary.json"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/test_anchored/test_locked_query_rows.csv",
+      "roles": [
+        "Anchored immutable TEST rows",
+        "core ablation locked source"
+      ],
+      "exists": true,
+      "size_bytes": 24703956,
+      "sha256": "469d2d427b61d3048de03ef485d804e2821c40a8af9a8e5e62d61e2ff4bbd624",
+      "expected_hashes": [
+        "469d2d427b61d3048de03ef485d804e2821c40a8af9a8e5e62d61e2ff4bbd624"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/test_anchored/test_locked_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/test_anchored/test_locked_summary.json",
+      "roles": [
+        "Anchored TEST summary"
+      ],
+      "exists": true,
+      "size_bytes": 10587,
+      "sha256": "b36f6644af51927ce8c5524602a26ef3bee4423928ad9165d5cbe3985be7a3ed",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/test_full_ranking/test_query_rows.csv",
+      "roles": [
+        "exact filtered TEST base rows",
+        "DynaSemble exact filtered TEST reference"
+      ],
+      "exists": true,
+      "size_bytes": 20963859,
+      "sha256": "b2ea961b65b278929335bfe27b60267e5db34627560eb3788d70921f6d5a6088",
+      "expected_hashes": [
+        "b2ea961b65b278929335bfe27b60267e5db34627560eb3788d70921f6d5a6088"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\mkg_w\\anchored_dynamic\\mhyper_native_seed123\\test_full_ranking\\test_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/baseline_crossfit/dev_crossfit_query_rows.csv",
+      "roles": [
+        "grouped OOF DEV rows"
+      ],
+      "exists": true,
+      "size_bytes": 22022183,
+      "sha256": "2f823e46a35dc7d048e77bab38d55496d458e44d64ccbbdb728664f1cc05c159",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+      "roles": [
+        "primary selection DEV input",
+        "exact filtered DEV rows",
+        "Anchored locked DEV source"
+      ],
+      "exists": true,
+      "size_bytes": 21016969,
+      "sha256": "980197c29b8d0c447e298b862d43064e0b86c088a134347136fa87a64ad877ed",
+      "expected_hashes": [
+        "980197c29b8d0c447e298b862d43064e0b86c088a134347136fa87a64ad877ed"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes",
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/dev_query_rows.csv",
+        "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\outputs\\mkg_w\\anchored_dynamic\\native_adamf_seed123\\full_ranking\\dev_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/mkg_w/anchored_dynamic/native_adamf_seed123/full_ranking/selection.json",
+      "roles": [
+        "Global alpha DEV selection",
+        "Anchored locked Global selection",
+        "DynaSemble locked Global selection"
+      ],
+      "exists": true,
+      "size_bytes": 12732,
+      "sha256": "15bd47d17171a3e603c5a5fb2f27bc33875ef6fd7f78a95be3f12f67d3fdfeaf",
+      "expected_hashes": [
+        "15bd47d17171a3e603c5a5fb2f27bc33875ef6fd7f78a95be3f12f67d3fdfeaf"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\outputs\\mkg_w\\anchored_dynamic\\native_adamf_seed123\\full_ranking\\selection.json",
+        "outputs\\mkg_w\\anchored_dynamic\\native_adamf_seed123\\full_ranking\\selection.json"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/anchored/dev_lock/anchored_dev_lock.json",
+      "roles": [
+        "Anchored immutable DEV lock"
+      ],
+      "exists": true,
+      "size_bytes": 2597,
+      "sha256": "254bce8d6d6f8999992d3dccc760340eb3dfdd25903810281d7fc60a4309357d",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/anchored/dev_lock/anchored_model.pkl",
+      "roles": [
+        "Anchored locked combiner"
+      ],
+      "exists": true,
+      "size_bytes": 1860,
+      "sha256": "64ca32546c7ac61a1accbab62a0b0eac5177fbfa82ab45a47866e7e289d55725",
+      "expected_hashes": [
+        "64ca32546c7ac61a1accbab62a0b0eac5177fbfa82ab45a47866e7e289d55725"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "anchored_model.pkl"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/anchored/test_anchored/test_locked_query_rows.csv",
+      "roles": [
+        "Anchored immutable TEST rows"
+      ],
+      "exists": true,
+      "size_bytes": 58213680,
+      "sha256": "135fe8b38a0dc578da50abea30c5405b4842319e42583c64b745d93c019c6f25",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/anchored/test_anchored/test_locked_summary.json",
+      "roles": [
+        "Anchored TEST summary"
+      ],
+      "exists": true,
+      "size_bytes": 10566,
+      "sha256": "18adb0e751580f5fc8e9f456aa8f848367bf67bcfd16cafbec68e95efb097f6d",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/dynasemble/dev_query_rows.csv",
+      "roles": [
+        "DynaSemble DEV rows"
+      ],
+      "exists": true,
+      "size_bytes": 24230533,
+      "sha256": "df24817009ad87572c80499535a2922fffe55dad20f6c1fcdf3c18c264045b8d",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/dynasemble/lock.json",
+      "roles": [
+        "DynaSemble immutable DEV lock"
+      ],
+      "exists": true,
+      "size_bytes": 8307,
+      "sha256": "3d4fa52b6646e2762415fb8be9fc26c72cef6c0df9f4cf88bfe0e6975c8ed7cd",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/dynasemble/selectors/seed1.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "b0331331a43aa1753cc5be0dd0bf530f4c3472c37de2de490e664647da12e62a",
+      "expected_hashes": [
+        "b0331331a43aa1753cc5be0dd0bf530f4c3472c37de2de490e664647da12e62a"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\boundary_pairs\\db15k\\native_adamf\\dynasemble\\selectors\\seed1.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/dynasemble/selectors/seed2.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "722d2da8e434feedc3b68211ef6a4a13759462d3085123d7d5a41eb281b379ba",
+      "expected_hashes": [
+        "722d2da8e434feedc3b68211ef6a4a13759462d3085123d7d5a41eb281b379ba"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\boundary_pairs\\db15k\\native_adamf\\dynasemble\\selectors\\seed2.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/dynasemble/selectors/seed3.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "96492df3cdf3aa9427fdcce6373190e2548ff493029cfd91fc4b203cd30b9cf2",
+      "expected_hashes": [
+        "96492df3cdf3aa9427fdcce6373190e2548ff493029cfd91fc4b203cd30b9cf2"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\boundary_pairs\\db15k\\native_adamf\\dynasemble\\selectors\\seed3.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/dynasemble/test_query_rows.csv",
+      "roles": [
+        "DynaSemble TEST rows"
+      ],
+      "exists": true,
+      "size_bytes": 30483625,
+      "sha256": "5415601848e6ec63351875dc9a1ae2fc45234b2f9acc7ce39e13caffcce100cb",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/dynasemble/test_summary.json",
+      "roles": [
+        "DynaSemble TEST summary"
+      ],
+      "exists": true,
+      "size_bytes": 25054,
+      "sha256": "d4bc2580895e4718bb07e67d238d7ef3c4571a9ec4a38443a38f04c223fef042",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/db15k/native_adamf/test_full_ranking/test_query_rows.csv",
+      "roles": [
+        "exact filtered TEST base rows",
+        "DynaSemble exact filtered TEST reference"
+      ],
+      "exists": true,
+      "size_bytes": 50178152,
+      "sha256": "d654acfc43f79d5e8f2469664af580444f3a2b927c6c4e607bbdd8e1804b4ead",
+      "expected_hashes": [
+        "d654acfc43f79d5e8f2469664af580444f3a2b927c6c4e607bbdd8e1804b4ead"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\boundary_pairs\\db15k\\native_adamf\\test_full_ranking\\test_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/anchored/dev_lock/anchored_dev_lock.json",
+      "roles": [
+        "Anchored immutable DEV lock"
+      ],
+      "exists": true,
+      "size_bytes": 2597,
+      "sha256": "50b255c28d901a1a7a9b8939bee380842cd46bc10d6cd18e2810b6376abc6476",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/anchored/dev_lock/anchored_model.pkl",
+      "roles": [
+        "Anchored locked combiner"
+      ],
+      "exists": true,
+      "size_bytes": 1860,
+      "sha256": "94e4532695dcdc640b17112656dedfa9747caf286fbd86f3e1ac4a177283129e",
+      "expected_hashes": [
+        "94e4532695dcdc640b17112656dedfa9747caf286fbd86f3e1ac4a177283129e"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "anchored_model.pkl"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/anchored/test_anchored/test_locked_query_rows.csv",
+      "roles": [
+        "Anchored immutable TEST rows"
+      ],
+      "exists": true,
+      "size_bytes": 25234900,
+      "sha256": "6b72afb0310f6e52b5c6421154af7217994894a47419341946de259dd70864ea",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/anchored/test_anchored/test_locked_summary.json",
+      "roles": [
+        "Anchored TEST summary"
+      ],
+      "exists": true,
+      "size_bytes": 10618,
+      "sha256": "af45ecaa8d1a6f810817589f13681ec4b55c546894c64bfd9b880cbb654a623a",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/dynasemble/dev_query_rows.csv",
+      "roles": [
+        "DynaSemble DEV rows"
+      ],
+      "exists": true,
+      "size_bytes": 13315835,
+      "sha256": "1e739bb65443aac915752c806db0ab5c9a30df1cf90d60717946363205343c9b",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/dynasemble/lock.json",
+      "roles": [
+        "DynaSemble immutable DEV lock"
+      ],
+      "exists": true,
+      "size_bytes": 8307,
+      "sha256": "a1bc0539c15ec0a3e62ee6a238b7052b190814de3d6b5cf4dbf8133d33d1c494",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/dynasemble/selectors/seed1.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "48c36535b71c259183d3597fc1905b148b24190b2ee3e60ca453f6512d8c0082",
+      "expected_hashes": [
+        "48c36535b71c259183d3597fc1905b148b24190b2ee3e60ca453f6512d8c0082"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\boundary_pairs\\mkg_w\\native_adamf\\dynasemble\\selectors\\seed1.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/dynasemble/selectors/seed2.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "71024ad0ce98e0575c02d28f47caaf242dadcac56afa43308a9d568397614fe1",
+      "expected_hashes": [
+        "71024ad0ce98e0575c02d28f47caaf242dadcac56afa43308a9d568397614fe1"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\boundary_pairs\\mkg_w\\native_adamf\\dynasemble\\selectors\\seed2.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/dynasemble/selectors/seed3.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "58aa9ef99240eca86be88179b3887bde3ac34ef0d53a358f19c28a7a9053459c",
+      "expected_hashes": [
+        "58aa9ef99240eca86be88179b3887bde3ac34ef0d53a358f19c28a7a9053459c"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\boundary_pairs\\mkg_w\\native_adamf\\dynasemble\\selectors\\seed3.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/dynasemble/test_query_rows.csv",
+      "roles": [
+        "DynaSemble TEST rows"
+      ],
+      "exists": true,
+      "size_bytes": 13305542,
+      "sha256": "2cd1c5b9fe10bab5d413242aeef96cb5392e261e71c29fb4e6434b98a5343ac7",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/dynasemble/test_summary.json",
+      "roles": [
+        "DynaSemble TEST summary"
+      ],
+      "exists": true,
+      "size_bytes": 25521,
+      "sha256": "c41f6a51e8f43adb07da285dfe500daf8ee9bb929958224fb0f3a23483cfc216",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/boundary_pairs/mkg_w/native_adamf/test_full_ranking/test_query_rows.csv",
+      "roles": [
+        "exact filtered TEST base rows",
+        "DynaSemble exact filtered TEST reference"
+      ],
+      "exists": true,
+      "size_bytes": 21707310,
+      "sha256": "6efc37219d91fcc5d3369435e6032c246f987366b1277512f673cb9816a61948",
+      "expected_hashes": [
+        "6efc37219d91fcc5d3369435e6032c246f987366b1277512f673cb9816a61948"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked",
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\boundary_pairs\\mkg_w\\native_adamf\\test_full_ranking\\test_query_rows.csv"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/core_ablation/audit.json",
+      "roles": [
+        "core ablation audit"
+      ],
+      "exists": true,
+      "size_bytes": 12432,
+      "sha256": "1c9845b1ee718d63be27213cf4c104cf94c4a72fa115e56b86b25186480b7583",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_adamf/dev_query_rows.csv",
+      "roles": [
+        "DynaSemble DEV rows"
+      ],
+      "exists": true,
+      "size_bytes": 24452379,
+      "sha256": "b3714cf46dd5ade0d227a7fb663d68ed591838f36fc42cfd8e262dc3b4f4a1ab",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_adamf/lock.json",
+      "roles": [
+        "DynaSemble immutable DEV lock"
+      ],
+      "exists": true,
+      "size_bytes": 7019,
+      "sha256": "7ee6c3c608ace74d2afb94abb17cf6a02fedfc18bc33e7e110b56d62004d5a3d",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_adamf/selectors/seed1.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "419f6ae808171f0d374438c4d3e047a1c15ddef3768cd005815e8c515b266fed",
+      "expected_hashes": [
+        "419f6ae808171f0d374438c4d3e047a1c15ddef3768cd005815e8c515b266fed"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\dynasemble\\db15k\\mhyper_adamf\\selectors\\seed1.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_adamf/selectors/seed2.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "4d1c05d75ba4a2805394e5f4ec1b67dde8ce61c5f5690acb7131b859291f672b",
+      "expected_hashes": [
+        "4d1c05d75ba4a2805394e5f4ec1b67dde8ce61c5f5690acb7131b859291f672b"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\dynasemble\\db15k\\mhyper_adamf\\selectors\\seed2.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_adamf/selectors/seed3.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "22bdef0856599e6a4c45311988c672a5a3f8175ab875df022912e3b8ce2909c4",
+      "expected_hashes": [
+        "22bdef0856599e6a4c45311988c672a5a3f8175ab875df022912e3b8ce2909c4"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\dynasemble\\db15k\\mhyper_adamf\\selectors\\seed3.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_adamf/test_query_rows.csv",
+      "roles": [
+        "DynaSemble TEST rows"
+      ],
+      "exists": true,
+      "size_bytes": 30764908,
+      "sha256": "410fb1d5be984e4823de138377a57f73feeb95d02cb40d4f87643cf4425e7163",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_adamf/test_summary.json",
+      "roles": [
+        "DynaSemble TEST summary"
+      ],
+      "exists": true,
+      "size_bytes": 25235,
+      "sha256": "4eeedc170f12fec83abc5797d57e26f8ec981d15963cc65a639f4951dba5f937",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_native/dev_query_rows.csv",
+      "roles": [
+        "DynaSemble DEV rows"
+      ],
+      "exists": true,
+      "size_bytes": 24494930,
+      "sha256": "8227aa6534d3f146d2e06a4a5602b59e53af213ce4fb6eac7071b1e49fb5bfb5",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_native/lock.json",
+      "roles": [
+        "DynaSemble immutable DEV lock"
+      ],
+      "exists": true,
+      "size_bytes": 7004,
+      "sha256": "ad10678bdc1cb2b43e8105d1980202edd49ac7e06be3489844e976a2f75cace1",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_native/selectors/seed1.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "52b1e7634f6d8bdab8a23a19d0b7044ced466b6578acf479ac843e1319a427eb",
+      "expected_hashes": [
+        "52b1e7634f6d8bdab8a23a19d0b7044ced466b6578acf479ac843e1319a427eb"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\dynasemble\\db15k\\mhyper_native\\selectors\\seed1.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_native/selectors/seed2.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "9dde81d081e6fde0351b5e07076d2431cfe7b1520957b08231c4ec9db33bd771",
+      "expected_hashes": [
+        "9dde81d081e6fde0351b5e07076d2431cfe7b1520957b08231c4ec9db33bd771"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\dynasemble\\db15k\\mhyper_native\\selectors\\seed2.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_native/selectors/seed3.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "6ea0b9031069bfe110c7286c4c587b77be5224c70f639bd27e2fb5caa9d60ea5",
+      "expected_hashes": [
+        "6ea0b9031069bfe110c7286c4c587b77be5224c70f639bd27e2fb5caa9d60ea5"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\dynasemble\\db15k\\mhyper_native\\selectors\\seed3.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_native/test_query_rows.csv",
+      "roles": [
+        "DynaSemble TEST rows"
+      ],
+      "exists": true,
+      "size_bytes": 30813048,
+      "sha256": "1c9445674fd66944f582f318d1f396b6eea2b51a7b7597b97a091c4f936e68ed",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_native/test_summary.json",
+      "roles": [
+        "DynaSemble TEST summary"
+      ],
+      "exists": true,
+      "size_bytes": 25238,
+      "sha256": "bbd58f3a407325b6250d924622521eb8301b7c5ef18050c6e7fe4c96ce2ea155",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_adamf/dev_query_rows.csv",
+      "roles": [
+        "DynaSemble DEV rows"
+      ],
+      "exists": true,
+      "size_bytes": 13315169,
+      "sha256": "000c49e0956ca754808cc90915cf9e572d32eb8a440d520c2c0fe9ab6f4cd073",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_adamf/lock.json",
+      "roles": [
+        "DynaSemble immutable DEV lock"
+      ],
+      "exists": true,
+      "size_bytes": 7017,
+      "sha256": "faa9ead15f78f0502cea5dab898b2e1abacec7a6002b6958cc5578d471012649",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_adamf/selectors/seed1.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "6c1431af31fe164554b7211c2d916cb75409dc3832b17012781b7f7c17ba29b0",
+      "expected_hashes": [
+        "6c1431af31fe164554b7211c2d916cb75409dc3832b17012781b7f7c17ba29b0"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\dynasemble\\mkg_w\\mhyper_adamf\\selectors\\seed1.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_adamf/selectors/seed2.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "6c20e358a1f823a86dadbc60c680e054e011521371aca4d793cc0231f2ebfa21",
+      "expected_hashes": [
+        "6c20e358a1f823a86dadbc60c680e054e011521371aca4d793cc0231f2ebfa21"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\dynasemble\\mkg_w\\mhyper_adamf\\selectors\\seed2.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_adamf/selectors/seed3.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "020f36690f1f7a71421768548dd0d3dc56afb74097dfbb555036427380641a10",
+      "expected_hashes": [
+        "020f36690f1f7a71421768548dd0d3dc56afb74097dfbb555036427380641a10"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\dynasemble\\mkg_w\\mhyper_adamf\\selectors\\seed3.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_adamf/test_query_rows.csv",
+      "roles": [
+        "DynaSemble TEST rows"
+      ],
+      "exists": true,
+      "size_bytes": 13302639,
+      "sha256": "10be16a326d9c257cc8fd652e97f9d350edcafef744f3ec4dc88e0d672bca4a7",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_adamf/test_summary.json",
+      "roles": [
+        "DynaSemble TEST summary"
+      ],
+      "exists": true,
+      "size_bytes": 25262,
+      "sha256": "e1f5a688105867739bfa25d8112b0678d23227558a77a8a10bd7bcd0920f309e",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_native/dev_query_rows.csv",
+      "roles": [
+        "DynaSemble DEV rows"
+      ],
+      "exists": true,
+      "size_bytes": 13253718,
+      "sha256": "7ffe3642defbe659ac4c7314e8f2e51adc92dc039bfe34c6ff5bb8f04335d25c",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_native/lock.json",
+      "roles": [
+        "DynaSemble immutable DEV lock"
+      ],
+      "exists": true,
+      "size_bytes": 7003,
+      "sha256": "4367219f681ac2bcfa373e7dd838a138dde9a0095f21bcb39f5f7efb82ef49c6",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_native/selectors/seed1.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "8f192c89cf9df27d13de16025ebe11acf00a703ced353fde27a9beb7ec73b71f",
+      "expected_hashes": [
+        "8f192c89cf9df27d13de16025ebe11acf00a703ced353fde27a9beb7ec73b71f"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\dynasemble\\mkg_w\\mhyper_native\\selectors\\seed1.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_native/selectors/seed2.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "63f119b7020725ba9f54ac9bc86fedfa47274b613479116c6f3e32fa7dcc115b",
+      "expected_hashes": [
+        "63f119b7020725ba9f54ac9bc86fedfa47274b613479116c6f3e32fa7dcc115b"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\dynasemble\\mkg_w\\mhyper_native\\selectors\\seed2.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_native/selectors/seed3.pt",
+      "roles": [
+        "DynaSemble DEV-trained selector"
+      ],
+      "exists": true,
+      "size_bytes": 5364,
+      "sha256": "39318728f14d56913d7ef8abc64ccb20ab683b16b0b64ad56f842736984b946f",
+      "expected_hashes": [
+        "39318728f14d56913d7ef8abc64ccb20ab683b16b0b64ad56f842736984b946f"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "outputs\\paper_a_safe_correction\\dynasemble\\mkg_w\\mhyper_native\\selectors\\seed3.pt"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_native/test_query_rows.csv",
+      "roles": [
+        "DynaSemble TEST rows"
+      ],
+      "exists": true,
+      "size_bytes": 13243101,
+      "sha256": "a45e41f105cc1338d225b762c40ab9744e3e6607096054a44512881d9913fa6f",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/dynasemble/mkg_w/mhyper_native/test_summary.json",
+      "roles": [
+        "DynaSemble TEST summary"
+      ],
+      "exists": true,
+      "size_bytes": 25411,
+      "sha256": "2b649d1d055f8a0fda11393475b63ebe373182ac9cfc66e05cedf3c754efc179",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/negative_transfer/bootstrap_ci.json",
+      "roles": [
+        "negative-transfer audit"
+      ],
+      "exists": true,
+      "size_bytes": 66570,
+      "sha256": "b6112acca5b3068bb9ee303b9aab46549d6bd6b798649f9cacb4430c1fb5de31",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/reliable_primary/reliable_primary_decisions.csv",
+      "roles": [
+        "primary selection decisions"
+      ],
+      "exists": true,
+      "size_bytes": 2759,
+      "sha256": "9f4121bbfd57d656ae24d4545cc921342548db5fdd1cf701e6088dacc8d26496",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/reliable_primary/reliable_primary_manifest.json",
+      "roles": [
+        "primary selection manifest"
+      ],
+      "exists": true,
+      "size_bytes": 5866,
+      "sha256": "0743270f1d45fb7b9fd91168023317d3ba9c15828af0bbf30f9490d74b3b8a80",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/risk_coverage/audit.json",
+      "roles": [
+        "risk-coverage audit"
+      ],
+      "exists": true,
+      "size_bytes": 7618,
+      "sha256": "aab1360d68f2eb600b2a24f2a88c1b5eb7e69b3720aaf5ec34e749e88c7a0583",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "scripts/ablate_paper_a_core_safety_components.py",
+      "roles": [
+        "core ablation implementation"
+      ],
+      "exists": true,
+      "size_bytes": 34445,
+      "sha256": "89fbbac9507897a4991a65fd713d6f1b7c10c3657a3f91bcfdb41d6866c4aa37",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "scripts/audit_reliable_primary_regime.py",
+      "roles": [
+        "primary selection implementation",
+        "protocol/code information-boundary evidence"
+      ],
+      "exists": true,
+      "size_bytes": 16378,
+      "sha256": "2d739c432f02e8a09a27539e4268c17fe0cc06eac22c761503bc8364c6857165",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "scripts/crossfit_anchored_dynamic.py",
+      "roles": [
+        "protocol/code information-boundary evidence"
+      ],
+      "exists": true,
+      "size_bytes": 20069,
+      "sha256": "05a652bc927006da4ca1d30848f3ce0213d8c58fb818acbd63c44759f4907f22",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "scripts/eval_heterogeneous_complementarity.py",
+      "roles": [
+        "protocol/code information-boundary evidence"
+      ],
+      "exists": true,
+      "size_bytes": 49807,
+      "sha256": "d6cb20da0758ba1c973346945465cd47aee36dacacfeb35c4437c3553b7ffe9a",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "scripts/eval_openbg_dynasemble.py",
+      "roles": [
+        "protocol/code information-boundary evidence"
+      ],
+      "exists": true,
+      "size_bytes": 47664,
+      "sha256": "8ae1753eff6e78c9a0f4fe6d8aafd25cc8cc206ad7f1ec2717c61b5c22ae5293",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "scripts/lock_apply_anchored_dynamic.py",
+      "roles": [
+        "protocol/code information-boundary evidence"
+      ],
+      "exists": true,
+      "size_bytes": 17840,
+      "sha256": "2abb4e195d3d34d244d49c135aed475ae30814162f5ab3cb8e18bd486ab8ca5c",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    }
+  ]
+}
