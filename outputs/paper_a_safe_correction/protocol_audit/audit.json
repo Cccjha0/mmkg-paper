@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "audit_version": "paper_a_protocol_integrity_v1",
-  "generated_at_utc": "2026-09-09T17:14:12.756287+00:00",
+  "generated_at_utc": "2026-09-09T17:46:31.660668+00:00",
   "statement": "DEV for all selection; TEST for immutable final evaluation only.",
   "read_only_audit": true,
   "methods_modified": false,
@@ -19,13 +19,14 @@
     "confidence_harm": "PASS",
     "beta_sensitivity": "PASS",
     "fallback_audit": "PASS",
+    "correction_magnitude": "PASS",
     "global_information_boundary": "PASS"
   },
   "summary": {
-    "checks": 76,
-    "passed": 76,
+    "checks": 77,
+    "passed": 77,
     "failed": 0,
-    "experiments": 13
+    "experiments": 14
   },
   "checks": [
     {
@@ -852,6 +853,17 @@
       "status": "PASS",
       "evidence_files": "outputs/paper_a_safe_correction/fallback_audit/fallback_audit.json",
       "details": "Stored policies reconstruct exactly; the counterfactual removes confidence fallback only; TEST is diagnostic-only; all source, lock, and output hashes match."
+    },
+    {
+      "experiment": "correction_magnitude",
+      "dataset": "ALL",
+      "pair": "ALL",
+      "method": "Anchored correction-magnitude diagnostic",
+      "check_id": "CM01",
+      "requirement": "Correction magnitude is a read-only decomposition of frozen final alpha and RR outcomes",
+      "status": "PASS",
+      "evidence_files": "outputs/paper_a_safe_correction/correction_magnitude/correction_magnitude_audit.json",
+      "details": "Alpha deltas reconstruct; fallback returns to the anchor; magnitude buckets are exhaustive and additive; TEST is diagnostic-only; all source, lock, and output hashes match."
     },
     {
       "experiment": "global_information_boundary",

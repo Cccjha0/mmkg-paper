@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "audit_version": "paper_a_protocol_integrity_v1",
-  "generated_at_utc": "2026-09-09T17:14:12.756287+00:00",
+  "generated_at_utc": "2026-09-09T17:46:31.660668+00:00",
   "hash_algorithm": "SHA-256",
   "path_policy": "repository-relative canonical paths; historical machine-local lock paths retained in locked_paths; raw SHA-256 is always reported and LF/CRLF equivalence is accepted only for text assets",
   "assets": [
@@ -752,7 +752,8 @@
       "roles": [
         "confidence-to-harm frozen query rows",
         "beta sensitivity frozen query rows",
-        "fallback frozen query rows"
+        "fallback frozen query rows",
+        "magnitude frozen query rows"
       ],
       "exists": true,
       "size_bytes": 46346286,
@@ -796,7 +797,8 @@
         "core ablation locked source",
         "confidence-to-harm DEV lock",
         "beta sensitivity DEV lock",
-        "fallback DEV lock"
+        "fallback DEV lock",
+        "magnitude DEV lock"
       ],
       "exists": true,
       "size_bytes": 2599,
@@ -923,7 +925,8 @@
         "core ablation locked source",
         "confidence-to-harm frozen query rows",
         "beta sensitivity frozen query rows",
-        "fallback frozen query rows"
+        "fallback frozen query rows",
+        "magnitude frozen query rows"
       ],
       "exists": true,
       "size_bytes": 55936927,
@@ -981,7 +984,8 @@
       "roles": [
         "confidence-to-harm frozen query rows",
         "beta sensitivity frozen query rows",
-        "fallback frozen query rows"
+        "fallback frozen query rows",
+        "magnitude frozen query rows"
       ],
       "exists": true,
       "size_bytes": 46497468,
@@ -1025,7 +1029,8 @@
         "core ablation locked source",
         "confidence-to-harm DEV lock",
         "beta sensitivity DEV lock",
-        "fallback DEV lock"
+        "fallback DEV lock",
+        "magnitude DEV lock"
       ],
       "exists": true,
       "size_bytes": 2599,
@@ -1152,7 +1157,8 @@
         "core ablation locked source",
         "confidence-to-harm frozen query rows",
         "beta sensitivity frozen query rows",
-        "fallback frozen query rows"
+        "fallback frozen query rows",
+        "magnitude frozen query rows"
       ],
       "exists": true,
       "size_bytes": 56247418,
@@ -1271,7 +1277,8 @@
       "roles": [
         "confidence-to-harm frozen query rows",
         "beta sensitivity frozen query rows",
-        "fallback frozen query rows"
+        "fallback frozen query rows",
+        "magnitude frozen query rows"
       ],
       "exists": true,
       "size_bytes": 25772599,
@@ -1315,7 +1322,8 @@
         "core ablation locked source",
         "confidence-to-harm DEV lock",
         "beta sensitivity DEV lock",
-        "fallback DEV lock"
+        "fallback DEV lock",
+        "magnitude DEV lock"
       ],
       "exists": true,
       "size_bytes": 2596,
@@ -1442,7 +1450,8 @@
         "core ablation locked source",
         "confidence-to-harm frozen query rows",
         "beta sensitivity frozen query rows",
-        "fallback frozen query rows"
+        "fallback frozen query rows",
+        "magnitude frozen query rows"
       ],
       "exists": true,
       "size_bytes": 24544314,
@@ -1500,7 +1509,8 @@
       "roles": [
         "confidence-to-harm frozen query rows",
         "beta sensitivity frozen query rows",
-        "fallback frozen query rows"
+        "fallback frozen query rows",
+        "magnitude frozen query rows"
       ],
       "exists": true,
       "size_bytes": 25932898,
@@ -1544,7 +1554,8 @@
         "core ablation locked source",
         "confidence-to-harm DEV lock",
         "beta sensitivity DEV lock",
-        "fallback DEV lock"
+        "fallback DEV lock",
+        "magnitude DEV lock"
       ],
       "exists": true,
       "size_bytes": 2599,
@@ -1671,7 +1682,8 @@
         "core ablation locked source",
         "confidence-to-harm frozen query rows",
         "beta sensitivity frozen query rows",
-        "fallback frozen query rows"
+        "fallback frozen query rows",
+        "magnitude frozen query rows"
       ],
       "exists": true,
       "size_bytes": 24703956,
@@ -2423,6 +2435,97 @@
       ],
       "hash_matches_all_expectations": true,
       "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/correction_magnitude/correction_magnitude_audit.json",
+      "roles": [
+        "correction-magnitude audit"
+      ],
+      "exists": true,
+      "size_bytes": 7820,
+      "sha256": "d00a20fac47f8c3fd50b278306358f3c6fd826fabae04494f2d6014c46038d54",
+      "expected_hashes": [],
+      "accepted_match_modes": [
+        "raw_bytes_unlocked"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": []
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/correction_magnitude/correction_magnitude_buckets.csv",
+      "roles": [
+        "correction-magnitude diagnostic output"
+      ],
+      "exists": true,
+      "size_bytes": 37259,
+      "sha256": "73815922503cbaf510216acb64747898a3f93e170b1d4e6e950e2ce985e3d196",
+      "expected_hashes": [
+        "73815922503cbaf510216acb64747898a3f93e170b1d4e6e950e2ce985e3d196"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "correction_magnitude_buckets.csv"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/correction_magnitude/correction_magnitude_by_direction.csv",
+      "roles": [
+        "correction-magnitude diagnostic output"
+      ],
+      "exists": true,
+      "size_bytes": 5511,
+      "sha256": "a75010e3064861cd98f55645b6dbbc8e3b9f81adf9fd69be4b1bd2db256d1c3a",
+      "expected_hashes": [
+        "a75010e3064861cd98f55645b6dbbc8e3b9f81adf9fd69be4b1bd2db256d1c3a"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "correction_magnitude_by_direction.csv"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/correction_magnitude/correction_magnitude_by_seed.csv",
+      "roles": [
+        "correction-magnitude diagnostic output"
+      ],
+      "exists": true,
+      "size_bytes": 7772,
+      "sha256": "b7d3cbaa32e153093db07ca12d7e7a31948f229451b57d91ae13e8c3e595cd00",
+      "expected_hashes": [
+        "b7d3cbaa32e153093db07ca12d7e7a31948f229451b57d91ae13e8c3e595cd00"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "correction_magnitude_by_seed.csv"
+      ]
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/correction_magnitude/correction_magnitude_summary.csv",
+      "roles": [
+        "correction-magnitude diagnostic output"
+      ],
+      "exists": true,
+      "size_bytes": 2894,
+      "sha256": "68ac564356f70391b8c92ff3d8f5f0a08e3c980be64c852b3ebb82c062a64d93",
+      "expected_hashes": [
+        "68ac564356f70391b8c92ff3d8f5f0a08e3c980be64c852b3ebb82c062a64d93"
+      ],
+      "accepted_match_modes": [
+        "raw_bytes"
+      ],
+      "hash_matches_all_expectations": true,
+      "locked_paths": [
+        "correction_magnitude_summary.csv"
+      ]
     },
     {
       "path": "outputs/paper_a_safe_correction/dynasemble/db15k/mhyper_adamf/dev_query_rows.csv",

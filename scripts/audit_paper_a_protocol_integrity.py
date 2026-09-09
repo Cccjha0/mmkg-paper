@@ -571,11 +571,13 @@ def validate_analysis_boundaries(audit: Audit) -> None:
     confidence_path = audit.repo_root / "outputs/paper_a_safe_correction/confidence_harm/auroc_auprc.json"
     beta_path = audit.repo_root / "outputs/paper_a_safe_correction/beta_sensitivity/beta_sensitivity_audit.json"
     fallback_path = audit.repo_root / "outputs/paper_a_safe_correction/fallback_audit/fallback_audit.json"
+    magnitude_path = audit.repo_root / "outputs/paper_a_safe_correction/correction_magnitude/correction_magnitude_audit.json"
     risk_ok, _ = audit.asset(risk_path, "risk-coverage audit")
     negative_ok, _ = audit.asset(negative_path, "negative-transfer audit")
     confidence_ok, _ = audit.asset(confidence_path, "confidence-to-harm audit")
     beta_ok, _ = audit.asset(beta_path, "beta trust-region sensitivity audit")
     fallback_ok, _ = audit.asset(fallback_path, "fallback behavior audit")
+    magnitude_ok, _ = audit.asset(magnitude_path, "correction-magnitude audit")
     if risk_ok:
         risk = read_json(risk_path)
         fixed_grid = risk.get("coverage_grid") == [i / 10 for i in range(11)]
@@ -785,6 +787,94 @@ def validate_analysis_boundaries(audit: Audit) -> None:
             method="Anchored fallback diagnostic",
             evidence=[portable(fallback_path, audit.repo_root)],
             details="Fallback behavior audit asset is missing.",
+        )
+    if magnitude_ok:
+        magnitude = read_json(magnitude_path)
+        problems: list[str] = []
+        flags_ok = (
+            magnitude.get("alpha_delta_definition") == "alpha_final - alpha0"
+            and same_float(magnitude.get("exact_anchor_tolerance"), 1e-12)
+            and magnitude.get("magnitude_buckets")
+            == ["0", "(0,0.05]", "(0.05,0.10]", "(0.10,0.20]", ">0.20"]
+            and magnitude.get("pure_posthoc_analysis") is True
+            and magnitude.get("model_or_policy_parameters_modified") is False
+            and magnitude.get("test_used_for_selection") is False
+            and magnitude.get("test_is_diagnostic_only") is True
+            and magnitude.get("source_reconstruction_passed") is True
+            and magnitude.get("bucket_partition_and_reconciliation_passed") is True
+        )
+        for name, expected in magnitude.get("output_hashes", {}).items():
+            path = magnitude_path.parent / name
+            matched, _ = audit.asset(
+                path,
+                "correction-magnitude diagnostic output",
+                str(expected),
+                name,
+            )
+            if not matched:
+                problems.append(
+                    f"output missing/hash mismatch: {portable(path, audit.repo_root)}"
+                )
+        for item in magnitude.get("source_audit", []):
+            for path_key, hash_key, role in (
+                ("source_rows", "source_rows_sha256", "magnitude frozen query rows"),
+                ("dev_lock", "dev_lock_sha256", "magnitude DEV lock"),
+            ):
+                path = audit.repo_root / Path(str(item.get(path_key, "")))
+                matched, _ = audit.asset(
+                    path,
+                    role,
+                    item.get(hash_key),
+                    str(item.get(path_key, "")),
+                )
+                if not matched:
+                    problems.append(
+                        f"source missing/hash mismatch: {portable(path, audit.repo_root)}"
+                    )
+            if item.get("stored_alpha_delta_reconstruction_passed") is not True:
+                problems.append(
+                    "alpha-delta reconstruction failed: "
+                    f"{item.get('split')}/{item.get('dataset')}/{item.get('pair')}"
+                )
+            if item.get("fallback_returns_exact_anchor") is not True:
+                problems.append(
+                    "fallback exact-anchor check failed: "
+                    f"{item.get('split')}/{item.get('dataset')}/{item.get('pair')}"
+                )
+            if item.get("exact_anchor_returns_global_rr") is not True:
+                problems.append(
+                    "exact-anchor RR reconciliation failed: "
+                    f"{item.get('split')}/{item.get('dataset')}/{item.get('pair')}"
+                )
+            if item.get("final_alpha_exact_grid_check") is not True:
+                problems.append(
+                    "final-alpha grid check failed: "
+                    f"{item.get('split')}/{item.get('dataset')}/{item.get('pair')}"
+                )
+            if item.get("bucket_partition_passed") is not True:
+                problems.append(
+                    "magnitude bucket partition failed: "
+                    f"{item.get('split')}/{item.get('dataset')}/{item.get('pair')}"
+                )
+        audit.check(
+            "correction_magnitude",
+            "CM01",
+            "Correction magnitude is a read-only decomposition of frozen final alpha and RR outcomes",
+            flags_ok and not problems,
+            method="Anchored correction-magnitude diagnostic",
+            evidence=[portable(magnitude_path, audit.repo_root)],
+            details="; ".join(problems)
+            or "Alpha deltas reconstruct; fallback returns to the anchor; magnitude buckets are exhaustive and additive; TEST is diagnostic-only; all source, lock, and output hashes match.",
+        )
+    else:
+        audit.check(
+            "correction_magnitude",
+            "CM01",
+            "Correction magnitude is a read-only decomposition of frozen final alpha and RR outcomes",
+            False,
+            method="Anchored correction-magnitude diagnostic",
+            evidence=[portable(magnitude_path, audit.repo_root)],
+            details="Correction-magnitude audit asset is missing.",
         )
 
 
