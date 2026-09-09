@@ -1,0 +1,308 @@
+{
+  "schema_version": 1,
+  "analysis": "strictly matched Paper A core safety-component ablation",
+  "variants": {
+    "A_full_anchored": "Full selected beta and confidence threshold from existing DEV protocol",
+    "B_no_anchor_query_soft": "current Query-soft logistic baseline",
+    "C_no_bound": "same as Full with beta fixed to 1.0",
+    "D_no_fallback": "same as Full with confidence threshold fixed to 0"
+  },
+  "no_base_model_training": true,
+  "test_selection_or_tuning": false,
+  "ablation_specific_hyperparameter_search": false,
+  "matched_contract_validation_passed": true,
+  "source_audit": [
+    {
+      "split": "dev",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "source_query_rows": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/baseline_crossfit/dev_crossfit_query_rows.csv",
+      "source_query_rows_sha256": "f33dc8f786de524d41d50b5831485ee246dc5f3531cecf8b30e467ac599c7605",
+      "source_p3_summary": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/p3_ablation/dev_p3_summary.json",
+      "source_p3_summary_sha256": "5d90aa9dc8aedc4a20212909edce9a122ce471247041aea39b2f214f7f9a0857",
+      "source_p3_full_rows": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/p3_ablation/dev_p3_selected_query_rows.csv",
+      "source_p3_full_rows_sha256": "3e50f12ef1bb1dba5cab2f47158854410689ba1f25bbcdd5fc35a2e332ac9a85",
+      "fold_seed": 20260901,
+      "random_state": 20260902,
+      "model": "same P3 full_geometry logistic combiner per fold",
+      "full_selection": "original training-fold beta/threshold selection protocol",
+      "selected_by_fold": [
+        {
+          "fold": 1,
+          "alpha0": 0.6,
+          "beta": 0.5,
+          "confidence_threshold": 0.1,
+          "train_observations": 20538,
+          "heldout_observations": 5118
+        },
+        {
+          "fold": 2,
+          "alpha0": 0.6,
+          "beta": 0.45,
+          "confidence_threshold": 0.0,
+          "train_observations": 20496,
+          "heldout_observations": 5160
+        },
+        {
+          "fold": 3,
+          "alpha0": 0.55,
+          "beta": 0.5,
+          "confidence_threshold": 0.0,
+          "train_observations": 20514,
+          "heldout_observations": 5142
+        },
+        {
+          "fold": 4,
+          "alpha0": 0.6,
+          "beta": 0.5,
+          "confidence_threshold": 0.0,
+          "train_observations": 20502,
+          "heldout_observations": 5154
+        },
+        {
+          "fold": 5,
+          "alpha0": 0.6,
+          "beta": 0.5,
+          "confidence_threshold": 0.1,
+          "train_observations": 20574,
+          "heldout_observations": 5082
+        }
+      ],
+      "reference_reconstruction_passed": true
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + NativE",
+      "source_query_rows": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/test_anchored/test_locked_query_rows.csv",
+      "source_query_rows_sha256": "469d2d427b61d3048de03ef485d804e2821c40a8af9a8e5e62d61e2ff4bbd624",
+      "source_lock": "outputs/mkg_w/anchored_dynamic/mhyper_native_seed123/dev_lock/anchored_dev_lock.json",
+      "source_lock_sha256": "eee533f2d0b8b1a9a181d348c1df94b3db522b5f7c4a5a398a946b58d201c713",
+      "alpha0": 0.6,
+      "beta": 0.5,
+      "confidence_threshold": 0.0,
+      "model": "existing final DEV-locked full_geometry logistic combiner outputs",
+      "reference_reconstruction_passed": true,
+      "test_selection_or_tuning": false
+    },
+    {
+      "split": "dev",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "source_query_rows": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/baseline_crossfit/dev_crossfit_query_rows.csv",
+      "source_query_rows_sha256": "3139c40ce1345d0e4e0d8f495975903c2aa3a49e324e4141ea40847804d2c4e2",
+      "source_p3_summary": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/p3_ablation/dev_p3_summary.json",
+      "source_p3_summary_sha256": "8f911fb33e321b81c8438bdf74653f4567e912b4f22904545185f2c451997458",
+      "source_p3_full_rows": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/p3_ablation/dev_p3_selected_query_rows.csv",
+      "source_p3_full_rows_sha256": "1081da6b2fb8af42b19cc9ce2a7a782a7a22233cafdf6a7119919292a8a23aab",
+      "fold_seed": 20260901,
+      "random_state": 20260902,
+      "model": "same P3 full_geometry logistic combiner per fold",
+      "full_selection": "original training-fold beta/threshold selection protocol",
+      "selected_by_fold": [
+        {
+          "fold": 1,
+          "alpha0": 1.0,
+          "beta": 0.45,
+          "confidence_threshold": 0.1,
+          "train_observations": 20538,
+          "heldout_observations": 5118
+        },
+        {
+          "fold": 2,
+          "alpha0": 1.0,
+          "beta": 0.5,
+          "confidence_threshold": 0.1,
+          "train_observations": 20496,
+          "heldout_observations": 5160
+        },
+        {
+          "fold": 3,
+          "alpha0": 1.0,
+          "beta": 0.5,
+          "confidence_threshold": 0.1,
+          "train_observations": 20514,
+          "heldout_observations": 5142
+        },
+        {
+          "fold": 4,
+          "alpha0": 1.0,
+          "beta": 0.5,
+          "confidence_threshold": 0.1,
+          "train_observations": 20502,
+          "heldout_observations": 5154
+        },
+        {
+          "fold": 5,
+          "alpha0": 1.0,
+          "beta": 0.45,
+          "confidence_threshold": 0.1,
+          "train_observations": 20574,
+          "heldout_observations": 5082
+        }
+      ],
+      "reference_reconstruction_passed": true
+    },
+    {
+      "split": "test",
+      "dataset": "MKG-W",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "source_query_rows": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/test_anchored/test_locked_query_rows.csv",
+      "source_query_rows_sha256": "0414041b7cd33267e79f0d7b6c12575f581f7e7ddaa22724c0a041d0cc087e60",
+      "source_lock": "outputs/mkg_w/anchored_dynamic/mhyper_adamf_seed123/dev_lock/anchored_dev_lock.json",
+      "source_lock_sha256": "95109445388ea1ffeab17c11b5281880ca3928c827155d2f1e9486dbab93bb0f",
+      "alpha0": 1.0,
+      "beta": 0.5,
+      "confidence_threshold": 0.1,
+      "model": "existing final DEV-locked full_geometry logistic combiner outputs",
+      "reference_reconstruction_passed": true,
+      "test_selection_or_tuning": false
+    },
+    {
+      "split": "dev",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "source_query_rows": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/baseline_crossfit/dev_crossfit_query_rows.csv",
+      "source_query_rows_sha256": "264331124ae4abe5922810af788fe6f38904004a7c6f7e5ec3bb8330c2436ded",
+      "source_p3_summary": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/p3_ablation/dev_p3_summary.json",
+      "source_p3_summary_sha256": "465ceb5c1e12f4db2fb532e81accd0083eb55f49d49623ee71dcde56ce8c4675",
+      "source_p3_full_rows": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/p3_ablation/dev_p3_selected_query_rows.csv",
+      "source_p3_full_rows_sha256": "369683865ebf234a3dcca71b16223eb39107f5b1ccb0ee5e87ac3ae69e335296",
+      "fold_seed": 20260901,
+      "random_state": 20260902,
+      "model": "same P3 full_geometry logistic combiner per fold",
+      "full_selection": "original training-fold beta/threshold selection protocol",
+      "selected_by_fold": [
+        {
+          "fold": 1,
+          "alpha0": 1.0,
+          "beta": 0.5,
+          "confidence_threshold": 0.0,
+          "train_observations": 38052,
+          "heldout_observations": 9480
+        },
+        {
+          "fold": 2,
+          "alpha0": 1.0,
+          "beta": 0.5,
+          "confidence_threshold": 0.0,
+          "train_observations": 38046,
+          "heldout_observations": 9486
+        },
+        {
+          "fold": 3,
+          "alpha0": 1.0,
+          "beta": 0.5,
+          "confidence_threshold": 0.1,
+          "train_observations": 38016,
+          "heldout_observations": 9516
+        },
+        {
+          "fold": 4,
+          "alpha0": 1.0,
+          "beta": 0.5,
+          "confidence_threshold": 0.0,
+          "train_observations": 37992,
+          "heldout_observations": 9540
+        },
+        {
+          "fold": 5,
+          "alpha0": 1.0,
+          "beta": 0.5,
+          "confidence_threshold": 0.0,
+          "train_observations": 38022,
+          "heldout_observations": 9510
+        }
+      ],
+      "reference_reconstruction_passed": true
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + NativE",
+      "source_query_rows": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/test_anchored/test_locked_query_rows.csv",
+      "source_query_rows_sha256": "2155f299165204d388ad45a509684148a3db3d3fa0dae9370896d2ed42271cfc",
+      "source_lock": "outputs/db15k/anchored_dynamic/mhyper_native_seed123/dev_lock/anchored_dev_lock.json",
+      "source_lock_sha256": "a3ddf0b07697df57140c8a1dacdeb38ee96598272805b9db2a44bd59fa2b57ef",
+      "alpha0": 1.0,
+      "beta": 0.5,
+      "confidence_threshold": 0.0,
+      "model": "existing final DEV-locked full_geometry logistic combiner outputs",
+      "reference_reconstruction_passed": true,
+      "test_selection_or_tuning": false
+    },
+    {
+      "split": "dev",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "source_query_rows": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/baseline_crossfit/dev_crossfit_query_rows.csv",
+      "source_query_rows_sha256": "10e0425bfa9cfdcf561be2fee78ae16164e07625a0912ff8b047703c88ce02e7",
+      "source_p3_summary": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/p3_ablation/dev_p3_summary.json",
+      "source_p3_summary_sha256": "a9b0b49401405eb43920415e6c7f6716c86a341e66537d1f59ac813f198b0b1a",
+      "source_p3_full_rows": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/p3_ablation/dev_p3_selected_query_rows.csv",
+      "source_p3_full_rows_sha256": "3ff0afa94089c101b1e0ed777e74715d5fd8b8a4d92c7a0273c59fbc75245f71",
+      "fold_seed": 20260901,
+      "random_state": 20260902,
+      "model": "same P3 full_geometry logistic combiner per fold",
+      "full_selection": "original training-fold beta/threshold selection protocol",
+      "selected_by_fold": [
+        {
+          "fold": 1,
+          "alpha0": 1.0,
+          "beta": 0.5,
+          "confidence_threshold": 0.3,
+          "train_observations": 38052,
+          "heldout_observations": 9480
+        },
+        {
+          "fold": 2,
+          "alpha0": 1.0,
+          "beta": 0.5,
+          "confidence_threshold": 0.2,
+          "train_observations": 38046,
+          "heldout_observations": 9486
+        },
+        {
+          "fold": 3,
+          "alpha0": 1.0,
+          "beta": 0.5,
+          "confidence_threshold": 0.2,
+          "train_observations": 38016,
+          "heldout_observations": 9516
+        },
+        {
+          "fold": 4,
+          "alpha0": 1.0,
+          "beta": 0.5,
+          "confidence_threshold": 0.3,
+          "train_observations": 37992,
+          "heldout_observations": 9540
+        },
+        {
+          "fold": 5,
+          "alpha0": 1.0,
+          "beta": 0.5,
+          "confidence_threshold": 0.2,
+          "train_observations": 38022,
+          "heldout_observations": 9510
+        }
+      ],
+      "reference_reconstruction_passed": true
+    },
+    {
+      "split": "test",
+      "dataset": "DB15K",
+      "pair": "M-Hyper + AdaMF-MAT",
+      "source_query_rows": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/test_anchored/test_locked_query_rows.csv",
+      "source_query_rows_sha256": "77bb9f968099600ff110f110dea8cec197f5891396a055d35bd82542dce06e0c",
+      "source_lock": "outputs/db15k/anchored_dynamic/mhyper_adamf_seed123/dev_lock/anchored_dev_lock.json",
+      "source_lock_sha256": "b7ec3d6b524d16cf9c2128a3b84c8881cbe5e6b8ee7c2e5d592c58f756dac55d",
+      "alpha0": 1.0,
+      "beta": 0.5,
+      "confidence_threshold": 0.3,
+      "model": "existing final DEV-locked full_geometry logistic combiner outputs",
+      "reference_reconstruction_passed": true,
+      "test_selection_or_tuning": false
+    }
+  ]
+}

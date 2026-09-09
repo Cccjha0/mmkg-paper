@@ -1,0 +1,9 @@
+split,variant_id,variant,positive_pairs,total_pairs,all_4_pairs_positive,positive_pair_seeds,total_pair_seeds,all_12_pair_seeds_positive,positive_pair_directions,total_pair_directions,all_8_pair_directions_positive
+dev,A_full_anchored,Full Anchored,4,4,True,12,12,True,8,8,True
+dev,B_no_anchor_query_soft,No Anchor / Query-soft,1,4,False,3,12,False,2,8,False
+dev,C_no_bound,No Bound,4,4,True,12,12,True,8,8,True
+dev,D_no_fallback,No Fallback,3,4,False,10,12,False,6,8,False
+test,A_full_anchored,Full Anchored,4,4,True,12,12,True,8,8,True
+test,B_no_anchor_query_soft,No Anchor / Query-soft,1,4,False,3,12,False,2,8,False
+test,C_no_bound,No Bound,4,4,True,12,12,True,8,8,True
+test,D_no_fallback,No Fallback,3,4,False,10,12,False,6,8,False
