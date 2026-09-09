@@ -112,7 +112,7 @@ function Invoke-DynaSembleStage {
 if (($Python -match '[\\/]') -and -not (Test-Path -LiteralPath $Python)) {
     throw "Python executable not found: $Python"
 }
-& $Python -c "import torch; assert torch.cuda.is_available() or '$Device' -ne 'cuda'; print('Torch:', torch.__version__); print('CUDA:', torch.cuda.is_available())"
+& $Python -c "import sys, torch; requested = sys.argv[1]; assert torch.cuda.is_available() or requested != 'cuda', 'CUDA unavailable'; print('Torch:', torch.__version__); print('CUDA:', torch.cuda.is_available())" $Device
 if ($LASTEXITCODE -ne 0) { throw 'Runtime check failed.' }
 
 $stages = if ($Stage -eq 'all') { @('dev', 'test') } else { @($Stage) }
