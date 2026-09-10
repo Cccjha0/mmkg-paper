@@ -113,3 +113,14 @@ paper_a_draft/*.toc
 
 # local rerun plans and bulky boundary evidence; commit concise reports instead
 outputs/paper_a_safe_correction/information_boundary/reexport_plan.json
+
+# Corrected B07/C04 rerun: retain lightweight manifests and summary tables
+outputs/paper_a_safe_correction/information_boundary_v2/**/*query_rows.csv
+outputs/paper_a_safe_correction/information_boundary_v2/**/*.pkl
+outputs/paper_a_safe_correction/information_boundary_v2/**/*.pt
+outputs/paper_a_safe_correction/information_boundary_v2/**/checkpoints/
+/paper_a_draft.zip
+
+# D01-D03 server caches, traces, models and query outputs; curated report is separate
+/outputs/paper_a_safe_correction/dynasemble_controls*/
+/outputs/paper_a_safe_correction/dynasemble_controls*_review.zip

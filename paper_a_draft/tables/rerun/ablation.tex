@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering\small
+\caption{Frozen TEST counterfactuals. The classifier, anchor and other control remain fixed; no TEST fitting or selection is performed. Mean harm conditions on a harmful observation.}
+\label{tab:rerun-ablation}
+\begin{tabular}{llrrr}
+\toprule
+Pair & Variant & $\Delta$MRR & Harm (\%) & Mean harm\\
+\midrule
+W-N & Full & +0.002447 & 15.150 & 0.036061\\
+W-N & $\beta=1$ & +0.002400 & 17.848 & 0.049465\\
+W-N & $\tau=0$ & +0.002436 & 22.633 & 0.032716\\
+W-A & Full & +0.001014 & 3.619 & 0.039379\\
+W-A & $\beta=1$ & +0.002184 & 4.746 & 0.054256\\
+W-A & $\tau=0$ & +0.001046 & 6.614 & 0.032922\\
+D-N & Full & -0.000081 & 1.424 & 0.043363\\
+D-N & $\beta=1$ & -0.000314 & 2.262 & 0.098292\\
+D-N & $\tau=0$ & -0.000147 & 5.326 & 0.027641\\
+D-A & Full & +0.000212 & 0.094 & 0.051276\\
+D-A & $\beta=1$ & +0.000324 & 0.116 & 0.047449\\
+D-A & $\tau=0$ & -0.002989 & 8.561 & 0.074461\\
+\bottomrule
+\end{tabular}
+\end{table}

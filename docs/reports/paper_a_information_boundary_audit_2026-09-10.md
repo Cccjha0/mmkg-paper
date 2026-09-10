@@ -1,5 +1,7 @@
 # Paper A：B07 / C04 特征与 filtered 答案边界核验
 
+> 历史首次审计记录。后续六组主重评及四组 DynaSemble 重训练已取得并核验；当前结论和数值见 [修复后重评报告](G:/mmkg-project-research/docs/reports/paper_a_information_boundary_rerun_review_2026-09-10.md)。下文“待重跑”描述保留首次审计时点，不代表当前进度。
+
 日期：2026-09-10。**结论：确认存在 gold 相关信息进入特征，不能仅修改措辞关闭。代码修复与单测已完成；全量重导出、重拟合、重评尚未完成，投稿仍阻断。**
 
 | 风险 | 本次结论 | 关闭状态 |

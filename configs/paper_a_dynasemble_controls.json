@@ -1,0 +1,97 @@
+{
+  "source_commit": "48d66b915f64899798f736129fa8c4d0a40fdb78",
+  "pairs": [
+    {
+      "pair": "mkgw_mhyper_native",
+      "dataset": "mkg_w",
+      "expert_a_name": "M-Hyper",
+      "expert_b_name": "NativE",
+      "runs": [
+        {
+          "seed": 1,
+          "expert_a_run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1",
+          "expert_b_run": "ml/artifacts/outputs/mkg_w_native/20260902_021506_seed1"
+        },
+        {
+          "seed": 2,
+          "expert_a_run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_015400_seed2",
+          "expert_b_run": "ml/artifacts/outputs/mkg_w_native/20260902_033610_seed2"
+        },
+        {
+          "seed": 3,
+          "expert_a_run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_020435_seed3",
+          "expert_b_run": "ml/artifacts/outputs/mkg_w_native/20260902_044121_seed3"
+        }
+      ]
+    },
+    {
+      "pair": "mkgw_mhyper_adamf",
+      "dataset": "mkg_w",
+      "expert_a_name": "M-Hyper",
+      "expert_b_name": "AdaMF-MAT",
+      "runs": [
+        {
+          "seed": 1,
+          "expert_a_run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1",
+          "expert_b_run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_060855_seed1"
+        },
+        {
+          "seed": 2,
+          "expert_a_run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_015400_seed2",
+          "expert_b_run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_083530_seed2"
+        },
+        {
+          "seed": 3,
+          "expert_a_run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_020435_seed3",
+          "expert_b_run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_142555_seed3"
+        }
+      ]
+    },
+    {
+      "pair": "db15k_mhyper_native",
+      "dataset": "db15k",
+      "expert_a_name": "M-Hyper",
+      "expert_b_name": "NativE",
+      "runs": [
+        {
+          "seed": 1,
+          "expert_a_run": "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1",
+          "expert_b_run": "ml/artifacts/outputs/db15k_native/20260831_223530_seed1"
+        },
+        {
+          "seed": 2,
+          "expert_a_run": "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2",
+          "expert_b_run": "ml/artifacts/outputs/db15k_native/20260902_182809_seed2"
+        },
+        {
+          "seed": 3,
+          "expert_a_run": "ml/artifacts/outputs/db15k_mhyper/20260902_180912_seed3",
+          "expert_b_run": "ml/artifacts/outputs/db15k_native/20260903_012002_seed3"
+        }
+      ]
+    },
+    {
+      "pair": "db15k_mhyper_adamf",
+      "dataset": "db15k",
+      "expert_a_name": "M-Hyper",
+      "expert_b_name": "AdaMF-MAT",
+      "runs": [
+        {
+          "seed": 1,
+          "expert_a_run": "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1",
+          "expert_b_run": "ml/artifacts/outputs/db15k_adamf_mat/20260901_030904_seed1"
+        },
+        {
+          "seed": 2,
+          "expert_a_run": "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2",
+          "expert_b_run": "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2"
+        },
+        {
+          "seed": 3,
+          "expert_a_run": "ml/artifacts/outputs/db15k_mhyper/20260902_180912_seed3",
+          "expert_b_run": "ml/artifacts/outputs/db15k_adamf_mat/20260903_090422_seed3"
+        }
+      ]
+    }
+  ]
+}

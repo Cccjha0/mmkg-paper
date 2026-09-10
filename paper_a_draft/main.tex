@@ -1,0 +1,401 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx,booktabs,array,tabularx}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{placeins}
+\usepackage{flafter,float}
+\newfloat{algorithm}{tbp}{loa}
+\floatname{algorithm}{Algorithm}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue]{hyperref}
+\usepackage[font=small,labelfont=bf]{caption}
+\newtheorem{proposition}{Proposition}
+\newcommand{\adc}{\textsc{ADC}}
+\newcommand{\RR}{\operatorname{RR}}
+\newcommand{\MRR}{\operatorname{MRR}}
+\newcommand{\clip}{\operatorname{clip}}
+\newcommand{\ind}{\mathbf{1}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Agrid}{\mathcal{A}}
+\setlength{\emergencystretch}{2em}
+\setlength{\parskip}{3pt}
+\setlist{nosep,leftmargin=*}
+\renewcommand{\arraystretch}{1.12}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\renewcommand{\topfraction}{.90}
+\renewcommand{\bottomfraction}{.80}
+\renewcommand{\textfraction}{.08}
+\renewcommand{\floatpagefraction}{.75}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+\title{Anchored Dynamic Correction:\\Conservative Score-Level Fusion for\\Multimodal Knowledge Graph Completion}
+\author{}
+\date{Working draft --- September 2026}
+
+\begin{document}
+\maketitle
+\begin{quote}
+\textbf{Corrected research draft: B07/C04 rerun reviewed, 10 September 2026.}
+Six MKG-W/DB15K pairs and four DynaSemble transfers have been regenerated using unfiltered inference features and normalization. The tables in this draft use the corrected exports. The former all-pairs-positive claim is withdrawn. The historical DynaSemble transfer also has training-statistics and initialization-order differences from the public code; D01--D03 healthy-training and role-swap controls are prepared but have not yet run. Its collapsed results cannot establish superiority over a normally trained dynamic baseline. OpenBG discovery results, timing measurements, and historical confidence/sensitivity figures are excluded pending separate regeneration. Continuous numerical repeatability is qualified in Appendix~\ref{app:information-boundary}; this is not a submission-ready certification.
+\end{quote}
+\begin{abstract}
+Independently trained multimodal knowledge graph completion models can provide complementary rankings even when their overall accuracy differs substantially. We introduce Anchored Dynamic Correction (ADC), which converts a query-level model-preference signal into a bounded adjustment around a development-selected static weight, with confidence-based fallback to that reference. Candidate-distribution features and normalization are computed before known-answer filtering, independently of the designated gold. After correcting a gold-dependent filtering error and rerunning all six MKG-W/DB15K pairs, ADC has positive TEST MRR increments in three of four primary pairs: 0.002447, 0.001014, and 0.000212, each with a positive lower bound in an original-triple clustered bootstrap interval. The remaining pair has an increment of $-0.000081$ with an interval spanning zero. Direct probability weighting improves one of the four pairs. Fixed-policy ablations show that the bound reduces harm frequency in all four primary pairs, while its effect on mean accuracy and conditional harm severity varies. Fallback changes a negative increment into a positive one for DB15K with M-Hyper and AdaMF-MAT. The results support selective, pair-dependent benefits of reference-relative correction, without establishing universal improvement.
+\end{abstract}
+\noindent\textbf{Keywords:} multimodal knowledge graph completion; model combination; dynamic score correction; negative transfer; selective adaptation.
+
+\section{Introduction}
+
+Multimodal knowledge graph completion (MMKGC) predicts missing facts using graph structure and entity-associated modalities. Recent models differ in how they preserve modality-specific information, combine modalities, and represent their interactions. AdaMF-MAT couples adaptive fusion with modality adversarial training, NativE develops relation-guided adaptive fusion, and M-Hyper combines independent and fused representations through hypercomplex interactions~\citep{adamf,native,mhyper}. These designs produce independently usable scoring models with different strengths. Once several such models have been trained, their candidate scores provide an additional opportunity to improve completion without retraining their representations.
+
+A globally weaker model can still contribute useful ranking information. In the corrected MKG-W evaluation, M-Hyper achieves a TEST mean reciprocal rank (MRR) of 0.359721, while NativE achieves 0.338037. Their development-selected static combination reaches 0.364665. This complementarity motivates query-dependent combination: the relative value of the two models can vary across queries, so one shared weight can leave useful opportunities unexploited.
+
+Learning query-dependent weights introduces a second problem: the policy must decide how much to trust its own preference signal relative to an already effective ranking. Predicting which standalone model has the better rank supplies a convenient supervised signal, but converting this prediction directly into a mixture weight can substantially increase the influence of a weaker model. In our four primary evaluation pairs, a direct probability-weighting policy improves on the validation-selected Global baseline in one pair and degrades in three. The strongest static solution is the pure primary endpoint in three of those pairs. This setting makes preservation of the reference ranking central to successful adaptation.
+
+We address this problem with \emph{Anchored Dynamic Correction} (\adc). The method first selects a static reference weight on the development split (DEV). A logistic model then summarizes query-level score geometry into a model-preference signal. Instead of treating that signal as the final mixture weight, \adc\ maps it to a bounded offset from the reference and uses confidence-based fallback to retain the reference on selected queries. This construction separates the choice of a reliable starting solution from the amount of query-specific adjustment.
+
+Our experiments evaluate both net utility and harmful corrections. MKG-W is the designated confirmatory dataset and DB15K supplies a secondary replication. The corrected results yield positive TEST increments in three of four main pairs, ten of twelve pair--seed cells, and seven of eight pair--direction cells. The DB15K M-Hyper + NativE result is close to zero and slightly negative. Increasing the radius raises harm frequency in all four pairs, but its accuracy effect varies. Fallback is particularly valuable for DB15K with M-Hyper and AdaMF-MAT, where it changes a negative adaptation increment into a positive final increment.
+
+This paper makes three contributions:
+\begin{enumerate}
+\item We characterize fixed-model score combination in a strong-primary MMKGC setting, showing how useful complementarity coexists with unstable direct dynamic weighting.
+\item We introduce \adc, which converts a score-geometry preference signal into a bounded correction around a DEV-selected static reference, with selective fallback.
+\item We evaluate correction utility together with query-level harm, seed and direction consistency, and component effects, identifying both the benefits and limitations of the correction controls.
+\end{enumerate}
+
+\section{Related Work}
+
+\paragraph{Multimodal scoring models.}
+MMKGC methods combine relational evidence with entity modalities using different representation and optimization strategies. AdaMF-MAT addresses modality imbalance through adaptive weighting and adversarial augmentation~\citep{adamf}. NativE introduces relation-guided dual adaptive fusion and collaborative modality adversarial training for heterogeneous modality conditions~\citep{native}. M-Hyper organizes independent and fused modality representations in a hypercomplex model~\citep{mhyper}. These methods motivate the scoring-model pairs in our evaluation: each supplies a complete candidate ranking, and the learned representations remain fixed during combination.
+
+\paragraph{Modality ensembles and dynamic model combination.}
+MoSE learns modality-split representations and combines their predictions during inference~\citep{mose}. Its ensemble operates on predictors constructed within a multimodal representation framework. DynaSemble learns query-dependent weights from candidate-score distributions for separately trained textual and structural KGC models~\citep{dynasemble}. This establishes query-dependent score ensembling as an existing approach to KGC. Our focus is the control of adaptation when a DEV-selected reference already assigns high weight to a more reliable primary. \adc\ makes that reference explicit in the policy, and our experiments compare the resulting correction behavior with both direct probability weighting and a released-code DynaSemble transfer.
+
+\paragraph{Selective prediction.}
+Selective prediction associates a prediction system with an acceptance or rejection decision. SelectiveNet, for example, jointly learns prediction and selection to improve the risk--coverage trade-off~\citep{selectivenet}. \adc\ uses selection at a different decision level: a rejected adjustment returns to an existing ranking, so every query still receives a prediction. The relevant utility is the change in reciprocal rank relative to that reference. Our coverage analysis therefore measures which corrections are accepted, how many actually alter the mixture, and what gains or losses are produced.
+
+\section{Problem Formulation}
+\label{sec:problem}
+
+Let a knowledge graph contain triples $(h,r,t)$ over entities $\mathcal E$ and relations $\mathcal R$, with modality features attached to entities. A tail query is $(h,r,?)$ and a head query is $(?,r,t)$. Two independently trained, frozen scoring models produce $s_p(q,e)$ and $s_s(q,e)$ for each candidate $e\in\mathcal E$. The subscripts denote the primary and secondary models. We orient all scores so that a larger score indicates greater plausibility.
+
+\paragraph{Primary selection.}
+We select the primary using standalone DEV MRR. The evaluated \emph{reliable-primary} regime requires a positive pooled primary-minus-secondary DEV difference, a positive difference in each of three paired seeds, and a positive lower bound of an original-triple clustered bootstrap 95\% interval. All six evaluated MKG-W/DB15K pairs meet these criteria. This definition establishes the empirical reliability asymmetry used to organize the experiments.
+
+\paragraph{Score normalization and combination.}
+Let $\widetilde s_p$ and $\widetilde s_s$ be query-wise standardized candidate scores. On the finite candidate support of a model, the transformation is
+\begin{equation}
+\widetilde s_m(q,e)=\frac{s_m(q,e)-\mu_m(q)}{\sigma_m(q)+\epsilon},
+\qquad \epsilon=10^{-8},
+\label{eq:zscore}
+\end{equation}
+where $\mu_m$ and $\sigma_m$ are the population mean and standard deviation of the unfiltered all-entity candidate scores. In the corrected protocol, neither the designated gold nor the evaluation fact index enters these statistics. Known-answer filtering is applied only to evaluation copies after normalization; exact standalone endpoint ranks are preserved. We define a mixture by
+\begin{equation}
+s_\alpha(q,e)=\alpha\widetilde s_p(q,e)+(1-\alpha)\widetilde s_s(q,e),
+\quad \alpha\in[0,1].
+\label{eq:mixture}
+\end{equation}
+Throughout the paper, $\alpha$ is the \emph{primary weight}; $\alpha=1$ recovers the primary model.
+
+\paragraph{Reference-relative utility.}
+Given a static reference $\alpha_0$, we assess a dynamic policy by its query-level reciprocal-rank change
+\begin{equation}
+\Delta_i=\RR_{\mathrm{policy},i}-\RR_{\alpha_0,i}.
+\label{eq:delta}
+\end{equation}
+An observation $i$ identifies an original triple, a paired model seed, and a prediction direction. A positive mean $\Delta_i$ indicates useful adaptation; a negative individual $\Delta_i$ is a harmful correction. This formulation makes average utility and the incidence of harm separate experimental quantities.
+
+\section{Anchored Dynamic Correction}
+\label{sec:method}
+
+\subsection{DEV-selected static reference}
+\adc\ begins with a Global weight selected by exact filtered DEV MRR:
+\begin{equation}
+\alpha_0\in\arg\max_{\alpha\in\Agrid}\MRR_{\mathrm{DEV}}(s_\alpha),
+\qquad \Agrid=\{0,0.05,\ldots,1\}.
+\label{eq:anchor}
+\end{equation}
+The reference can be an interior mixture or a standalone endpoint. Its role is operational: the policy retains it whenever adaptation is rejected, and all changes are expressed relative to it. Figure~\ref{fig:method} summarizes the resulting pipeline.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{figures/method_overview.pdf}
+\caption{Anchored Dynamic Correction. Frozen scorers provide the static ranking and query geometry. The learned preference signal proposes a bounded offset; confidence fallback retains the static weight when adjustment is rejected. The final weight is mapped to the exact-ranking grid before full-entity evaluation.}
+\label{fig:method}
+\end{figure}
+
+\subsection{A winner-supervised preference signal}
+\label{sec:signal}
+We describe each query with 13 score-geometry features: prediction direction; each model's top-1 score, top-5 mean, top-1/top-2 margin, and score standard deviation; and the four corresponding primary-minus-secondary differences. These statistics summarize the concentration and disagreement of the models' candidate distributions. In the corrected protocol, feature extraction accepts only the two unfiltered score matrices and the prediction direction; it has no gold, reference-score, or filter-index input.
+
+On DEV, we construct the binary target
+\begin{equation}
+y_i=\ind[\RR_{p,i}>\RR_{s,i}],
+\label{eq:label}
+\end{equation}
+excluding equal-RR observations from classifier fitting. A median imputer and standard scaler precede a balanced logistic regression. With transformed features $x(q)$, the decision and probability are
+\begin{equation}
+g(q)=w^\top x(q)+b,
+\qquad p_A(q)=\sigma(g(q)).
+\label{eq:signal}
+\end{equation}
+The classifier has 13 coefficients and one intercept. Its training target represents standalone model preference; the policy mapping determines how that preference changes the reference mixture. DEV answers supply supervision, while inference uses candidate-distribution statistics and direction.
+
+\subsection{Bounded adjustment and fallback}
+The preference signal produces the raw bounded proposal
+\begin{equation}
+\alpha_{\mathrm{raw}}(q)=\clip\!\left(\alpha_0+\beta\tanh(g(q)),0,1\right),
+\label{eq:raw}
+\end{equation}
+where $\beta$ controls the radius of adjustment around the reference. We use the confidence score $c(q)=|2p_A(q)-1|$ to decide whether to apply the proposal:
+\begin{equation}
+\alpha_{\mathrm{cont}}(q)=
+\begin{cases}
+\alpha_0, & c(q)<\tau\ \text{or the feature vector is non-finite},\\
+\alpha_{\mathrm{raw}}(q), & \text{otherwise}.
+\end{cases}
+\label{eq:fallback}
+\end{equation}
+The final applied weight is $\widehat\alpha(q)=\Pi_{\Agrid}(\alpha_{\mathrm{cont}}(q))$. Projection selects the nearest grid value, breaking equal distances first toward the anchor and then toward the smaller weight. Exact ranks are precomputed at every grid weight, so this step discretizes the action while retaining full-entity ranking.
+
+The DEV search uses $\beta\in\{0.05,0.10,\ldots,0.50\}$ and $\tau\in\{0,0.1,0.2,0.3\}$. The selected pair maximizes DEV MRR; ties favor smaller $\beta$ and then larger $\tau$. The model, preprocessing, reference, grids, and selected parameters are serialized before TEST application. Algorithm~\ref{alg:policy} gives the inference procedure.
+
+\begin{algorithm}[htbp]
+\centering
+\caption{Inference procedure for a locked ADC policy.}
+\label{alg:policy}
+\begin{tabularx}{\linewidth}{rX}
+\toprule
+Input & Frozen candidate scores, query direction, fitted preprocessing and classifier, and locked $\alpha_0,\beta,\tau,\Agrid$.\\
+\midrule
+1 & Extract score geometry $\phi(q)$ and flag non-finite features.\\
+2 & Apply the fitted preprocessing; compute $g(q)$, $p_A(q)$, and $c(q)$.\\
+3 & Compute $\alpha_{\mathrm{raw}}$ using Eq.~\eqref{eq:raw}.\\
+4 & If non-finite or $c(q)<\tau$, set the proposal to $\alpha_0$.\\
+5 & Map the proposal to $\widehat\alpha\in\Agrid$ using the nearest-grid rule.\\
+6 & Combine the standardized scores using Eq.~\eqref{eq:mixture}; return the ranking.\\
+\bottomrule
+\end{tabularx}
+\end{algorithm}
+
+\subsection{Score perturbation induced by the radius}
+Let $d(q,e)=\widetilde s_p(q,e)-\widetilde s_s(q,e)$. The mixture admits the identity
+\begin{equation}
+s_\alpha(q,e)-s_{\alpha_0}(q,e)=(\alpha-\alpha_0)d(q,e).
+\label{eq:identity}
+\end{equation}
+
+\begin{proposition}[Bounded candidate-score perturbation]
+For the continuous policy in Eq.~\eqref{eq:fallback},
+\begin{equation}
+\left|s_{\alpha_{\mathrm{cont}}}(q,e)-s_{\alpha_0}(q,e)\right|
+\leq\beta|d(q,e)|.
+\label{eq:bound}
+\end{equation}
+The same inequality holds after nearest-grid projection when the clipped interval endpoints $\max(0,\alpha_0-\beta)$ and $\min(1,\alpha_0+\beta)$ lie on the grid, as in the evaluated configurations.
+\end{proposition}
+\begin{proof}
+The magnitude of $\beta\tanh(g)$ is at most $\beta$. Projection onto $[0,1]$ cannot increase distance from $\alpha_0\in[0,1]$, and fallback sets that distance to zero. Grid-aligned interval endpoints ensure that the nearest grid point remains inside the interval. Applying Eq.~\eqref{eq:identity} completes the proof.
+\end{proof}
+
+The bound gives $\beta$ a direct interpretation in score space: it limits movement in proportion to inter-model disagreement. Candidate ordering also depends on the reference margins. Appendix~\ref{app:bound} gives a sufficient margin condition for preserving an ordering. We evaluate the actual ranking consequences through both utility and harm metrics.
+
+\FloatBarrier
+\section{Experimental Setup}
+\label{sec:setup}
+
+\subsection{Datasets, models, and evaluation roles}
+The corrected study evaluates MKG-W and DB15K. Earlier discovery work used OpenBG-IMG~\citep{openbg}; its numerical results are excluded here because that dataset is outside the completed boundary rerun. The four main pairs combine M-Hyper with NativE or AdaMF-MAT on each dataset. Two additional pairs combine NativE and AdaMF-MAT, with NativE selected as primary by the DEV rule. All comparisons use three paired seeds and both head and tail prediction.
+
+MKG-W is the confirmatory dataset in the locked experimental workflow. DB15K supplies a secondary replication because its TEST split had been evaluated in earlier score-ensemble experiments. The correction feature family, grids, and pair-specific parameters are selected on DEV before the reported TEST application. Additional pairs and mechanism analyses use their recorded frozen policies. Table~\ref{tab:data} reports the actual observation sets represented in the score exports.
+
+\begin{table}[tbp]
+\centering\small
+\caption{Evaluation scope. Counts refer to original triples in the exported DEV and TEST observations; each contributes three seeds and two directions. These are the effective evaluation sets, rather than published raw-dataset totals.}
+\label{tab:data}
+\begin{tabular}{lrrrl}
+\toprule
+Dataset & DEV triples & TEST triples & TEST rows/pair & Role\\
+\midrule
+MKG-W & 4,276 & 4,274 & 25,644 & Confirmatory\\
+DB15K & 7,922 & 9,902 & 59,412 & Replication\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The processed MKG-W and DB15K candidate universes contain 15,000 and 12,842 entities, respectively. Every method in a pair uses identical query observations, candidate entities, and filtering conventions. All base-model parameters remain frozen during combiner fitting. The manuscript package records the source paths and checksums of the result snapshots used for tables and figures.
+
+\paragraph{Filtering scope and information boundary.}
+The default shared evaluator builds known-answer sets from the union of TRAIN, DEV, and TEST for both DEV and TEST evaluation, including DEV checkpoint evaluation. This is evaluation-side access to known facts, not use of TEST triples as positive training examples. Base-model supervision and training negative filters use TRAIN only. Combiner labels and selection metrics are computed on DEV observations; their filtered ranks use the declared evaluation union. The separate strict DEV-only export option uses TRAIN$\cup$DEV and does not open TEST rows. In the corrected protocol, neither evaluation filter is available to inference features or candidate normalization. DynaSemble's supervised DEV negative sampler uses TRAIN$\cup$DEV, excluding TEST. For each evaluation observation the current gold is retained and all other known answers are excluded. Details and pseudocode appear in Appendix~\ref{app:information-boundary}.
+
+\subsection{Comparison methods}
+\paragraph{Standalone and static policies.}
+We report both standalone models, equal query-wise z-score averaging, Global, and Relation. Relation selects a relation-specific weight on DEV, with the shared weight used for low-support relations. Equal reciprocal-rank fusion (RRF, $k=60$) supplies a rank-based comparison in the accompanying static result snapshots. Global is the reference for every correction metric. The expert-selection Oracle, $\max(\RR_p,\RR_s)$ per query, is used as a diagnostic of standalone ranking complementarity.
+
+\paragraph{Dynamic policies.}
+Query-soft applies $\alpha(q)=p_A(q)$ using the same type of 13-feature logistic preference model and exact weight grid. It supplies a direct weighting comparison to \adc. The historical DynaSemble transfer adapts the released score-distribution mechanism~\citep{dynasemble} to the same frozen model pairs with a four-input selector. Its layer-wise initialization distributions follow the public code, but the random-number consumption order differs. It also computes training statistics after negative sampling, whereas the public code computes distribution statistics before gathering loss candidates. These deviations and the observed collapse limit the comparison. Source-aligned, healthy-training and role-swap controls are pending; the existing three-seed transfer is retained as a failure case.
+
+\paragraph{Component variants.}
+\emph{No local bound} fixes $\beta=1$ while retaining the full policy's model, $\alpha_0$, and threshold. The tanh mapping and $[0,1]$ clipping remain active. \emph{No fallback} fixes $\tau=0$ while retaining $\alpha_0$, $\beta$, and the model; non-finite features still return to the reference. These variants inherit the corresponding full policy settings without additional TEST selection. Query-soft changes the complete mapping from preference to action, including the reference-relative construction and confidence fallback.
+
+\subsection{DEV fitting and TEST application}
+We evaluate the policy family with five-fold grouped cross-fitting on DEV. An original triple is the grouping unit, and all three seeds and both directions remain in one fold. Each outer training fold selects its Global weight, fits its feature preprocessing and logistic classifier, and selects $\beta$ and $\tau$ using only that training portion. Performance is measured on held-out triples. The formal expanded-policy DEV evaluation is reported in Appendix~\ref{app:dev}.
+
+After this evaluation, the classifier is refitted on full DEV and the final reference and policy parameters are locked. TEST applies the serialized policy without refitting. The deployed radii are 0.45, 0.50, 0.20, and 0.50 for W-N, W-A, D-N, and D-A; thresholds are 0.1, 0.1, 0.2, and 0.3. Corresponding primary-weight anchors are 0.55, 1, 1, and 1. The exact feature order and selection rules appear in Appendix~\ref{app:implementation}.
+
+\subsection{Metrics and statistical analysis}
+We report exact filtered MRR and Hits@1/3/10. For the change $\Delta_i$ in Eq.~\eqref{eq:delta}, harm rate and benefit rate are the fractions of all evaluated observations with negative and positive changes. Conditional mean harm and benefit quantify their magnitudes:
+\begin{align}
+H&=N^{-1}\sum_i\ind[\Delta_i<0], & B&=N^{-1}\sum_i\ind[\Delta_i>0],\\
+L&=\E[-\Delta_i\mid\Delta_i<0], & G&=\E[\Delta_i\mid\Delta_i>0].
+\end{align}
+These quantities yield the decomposition
+\begin{equation}
+\Delta\MRR=B\,G-H\,L.
+\label{eq:utility-harm}
+\end{equation}
+We additionally report final-weight changes, fallback frequency, and mean absolute deviation from the reference. Conditional means are left undefined when their conditioning event is empty.
+
+The main \adc\ effect intervals use 10,000 percentile clustered-bootstrap resamples with seed 20260910. Each resampling unit is an original triple containing all six seed--direction observations. This preserves within-triple dependence. DynaSemble, fixed-policy ablations, and additional-pair reports use the same clustering unit, resample count, and seed. Pair-level intervals quantify triple-sampling uncertainty conditional on the fitted models and observed seeds. Positive pair, seed, and direction counts summarize sign consistency.
+
+\FloatBarrier
+\section{Results}
+
+\subsection{Corrected reference-relative utility}
+\label{sec:main-results}
+Table~\ref{tab:rerun-main} compares the corrected TEST MRR values. Global selects an interior primary weight of 0.55 for W-N and the pure primary endpoint for W-A, D-N, and D-A. W-N improves from standalone M-Hyper's 0.359721 MRR to 0.364665 with Global. Relation reaches the largest point estimate in this pair; ADC does not dominate all static comparisons.
+
+ADC increments over Global are $+0.002447$, $+0.001014$, $-0.000081$, and $+0.000212$ for W-N, W-A, D-N, and D-A. The three positive effects have bootstrap intervals above zero; D-N's interval spans zero (Table~\ref{tab:rerun-effects}). This replaces the historical claim of improvement in every pair. Ten of twelve main-pair seed increments and seven of eight direction increments are positive. Both negative seed increments and the negative direction increment occur in D-N. Appendix~\ref{app:ranking} reports every cell, including the additional pairs.
+
+Query-soft improves only W-N, where its MRR is 0.366543, compared with 0.367112 for ADC. It degrades the other three pairs. DynaSemble has negative pooled effects in all four primary pairs after its selectors are retrained with TRAIN$\cup$DEV negative filters. These comparisons support the value of the complete ADC mapping in this setting; they do not isolate the anchor from the bound and fallback.
+\input{tables/rerun/main.tex}
+\input{tables/rerun/effects.tex}
+
+\subsection{The radius reduces harm frequency, with mixed accuracy effects}
+\label{sec:bound-results}
+The fixed $\beta=1$ counterfactual increases harmful-query frequency in all four primary pairs (Table~\ref{tab:rerun-ablation}). Its accuracy effect is mixed. Relative to the full policy, it lowers the W-N increment from 0.002447 to 0.002400 and makes the D-N increment more negative, from $-0.000081$ to $-0.000314$. It increases the W-A and D-A increments. Conditional mean harm also varies: it rises in three pairs but falls in D-A. Thus the corrected evidence supports reduced harm frequency under the deployed radius, but not a universal trade of lower accuracy for lower harm severity.
+
+W-N and D-N select radii below the search maximum, at 0.45 and 0.20. W-A and D-A select 0.50. These DEV locks are retained throughout the TEST comparisons; no parameter is changed in response to the corrected TEST results.
+\input{tables/rerun/ablation.tex}
+
+\subsection{Fallback utility depends on the pair}
+\label{sec:fallback-results}
+D-A provides the clearest fallback benefit. With its classifier, reference and radius fixed, removing confidence fallback gives $-0.002989$ MRR relative to Global and an 8.561\% harm rate. The deployed policy gives $+0.000212$ MRR with a 0.094\% harm rate. The difference is approximately $+0.003201$ MRR. For W-A, fallback slightly reduces the mean increment, from 0.001046 to 0.001014, while reducing harm frequency. W-N and D-N also retain nonzero fallback thresholds in the corrected locks. The findings do not imply that preference confidence is a calibrated predictor of harmful adaptation.
+
+\subsection{Additional model pairs}
+\label{sec:scope-cost}
+The NativE + AdaMF-MAT pairs yield increments of $+0.000139$ on MKG-W and $-0.000015$ on DB15K. Both original-triple bootstrap intervals span zero (Table~\ref{tab:rerun-effects}). Neither result establishes a reliable incremental improvement at this precision. Their parameters and seed/direction results are included in the appendices.
+
+\FloatBarrier
+\section{Discussion and Limitations}
+\label{sec:discussion}
+
+\paragraph{Why the reference matters.}
+A fixed reference separates established performance from the policy's additional intervention. This is especially consequential at the primary endpoint, where equal or direct probability weighting can introduce substantial secondary influence. The matched preference-model comparison demonstrates the value of the complete reference-relative policy mapping. Because Query-soft also changes the local bound and fallback behavior, the comparison identifies a policy-design effect rather than the isolated causal contribution of an anchor alone.
+
+\paragraph{Preference supervision and correction utility.}
+The classifier learns whether one standalone model ranks an answer better than another. Improvement over an interior mixture is a different target, and the size of an RR improvement is absent from the binary label. This mismatch provides a concrete explanation for why a preference signal can be useful for correction while weak at predicting harm. It also motivates future work on learning reference-relative utility without increasing sensitivity to rare, high-cost training outcomes.
+
+\paragraph{Meaning of conservative adaptation.}
+The score perturbation bound and empirical harm reductions describe complementary aspects of the method. The radius bounds movement in normalized score space; the experiments measure the resulting changes in ranking. Harm remains present in the full policy, with rates of approximately 0.094\%--15.150\% across the main pairs. The current search optimizes DEV MRR within a restricted action family, and the preference confidence is uncalibrated. An explicit probabilistic harm constraint would require a different selection objective and statistical analysis.
+
+\paragraph{Generalization and computation.}
+The evidence covers two main evaluation datasets, three base architectures, three paired seeds, and six model pairs, with the historical OpenBG numerical results excluded from this corrected draft. The reliable-primary rule holds in all six main and additional pairs, so its necessity for successful correction remains an open question. DB15K has the secondary-replication status described in Section~\ref{sec:setup}. Inference requires both scorers even for queries that eventually fall back, since the policy uses their candidate distributions. Efficient feature extraction and score reuse are therefore important practical directions.
+
+\section{Conclusion}
+Anchored Dynamic Correction combines fixed MMKGC scorers around a DEV-selected reference using a bounded proposal and confidence fallback. After correcting the feature/filter boundary and refitting the affected policies, three of four primary pairs have positive TEST increments with intervals above zero; the remaining pair is close to zero and slightly negative. The radius reduces harm frequency in these pairs, while its accuracy and conditional-severity effects vary. Fallback preserves a positive net increment for D-A. These results support pair-dependent benefits of controlled adaptation and place limits on claims of consistent improvement.
+\FloatBarrier
+\clearpage
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\clearpage
+\appendix
+\section{Implementation Details}
+\label{app:implementation}
+
+\paragraph{Features.}
+The 13-dimensional vector is ordered as follows: tail-direction indicator; primary top-1, top-5 mean, top-1/top-2 margin, and score standard deviation; the corresponding four secondary statistics; then primary-minus-secondary differences of these four statistics. In the corrected implementation, geometry is extracted from an owned copy of the unfiltered all-entity score matrix before both masking and mixture normalization. The geometry standard deviation uses the sample correction; mixture z-score uses population variance. The feature routine sanitizes non-finite model outputs for computing statistics; evaluation-mask sentinels are not permitted inputs. The policy separately flags non-finite resulting feature vectors for fallback. Tied standalone RR labels are excluded from fitting.
+
+\subsection{Gold and filtering boundary}
+\label{app:information-boundary}
+For tail prediction define $K(q)=\{e:(h,r,e)\in F\}$, and for head prediction define $K(q)=\{e:(e,r,t)\in F\}$, where $F$ is the declared evaluation fact union. Only ranking uses $K(q)\setminus\{y\}$ for the current gold $y$. A separately scored gold reference is transformed using statistics of the unfiltered candidate distribution and is never a selector input. Ranking uses $1+\sum_e\ind[s(q,e)>s(q,y)]$ (strict-greater ties); endpoint weights reuse the standalone expert ranks.
+
+Head scoring calls each model's directional interface. M-Hyper maps $(e,r,t)$ to $(t,r^{-1},e)$ internally, with inverse relation ID $r+|\mathcal R|$ for a base relation. NativE and AdaMF-MAT directly score $(e,r,t)$. The head filter remains indexed by the original $(r,t)$ and candidate head IDs in all cases. Canonical preprocessing rejects within-split duplicate triples and exact cross-split overlaps. Filter indexes are sets, so repeated facts have no additional masking effect. The low-level reader and evaluator do not silently deduplicate observations; bypassing canonical preprocessing would retain their multiplicity.
+
+\begin{quote}\small
+\textbf{Inference (no gold or filter input):}\\
+1. Score every entity for the observable query with both frozen experts.\\
+2. Extract geometry and compute normalization statistics from the full unfiltered score vectors.\\
+3. Apply the frozen selector, bound, fallback, and weight grid to obtain $\alpha(q)$.\\
+4. Combine the normalized scores (preserve the original expert at endpoints).\\[3pt]
+\textbf{Evaluation only:}\\
+5. Copy the candidate scores; mask $K(q)\setminus\{y\}$, always retaining $y$.\\
+6. Score/transform the gold reference separately and compute its strict-greater rank.\\[3pt]
+\textbf{DEV supervision only:}\\
+7. Form preference labels and selection metrics from DEV filtered ranks; fit preprocessing and the selector on the designated DEV training fold. TEST never refits them.
+\end{quote}
+Masking normalized expert copies before a fixed row-wise interpolation is equivalent to masking the combined scores for the shared filter. The copies cannot flow back into geometry or normalization. Regression tests vary the designated gold and the fact index through the actual export path and require identical geometry and policy weights for an unchanged observable query, while allowing the evaluation rank to change. The completed rerun covers six MKG-W/DB15K pairs and four retrained DynaSemble transfers. Across all six pairs, deployed ADC and Query-soft grid weights are exactly equal within every multi-gold observable-query group in both DEV and TEST. Some exported geometry and continuous outputs differ slightly across repeated observations: the largest ADC continuous-weight span is $4.21\times10^{-7}$ and the largest DynaSemble learned-weight span is $2.39\times10^{-7}$. These observations are reported separately from exact grid-weight invariance. Controlled gold/filter intervention tests pass, but the exports alone do not establish the cause of these numerical differences or bitwise repeatability under arbitrary batching. No post-hoc averaging across golds was applied.
+
+\paragraph{Classifier.}
+The implementation uses median imputation, feature standardization, and \texttt{LogisticRegression} with \texttt{class\_weight=balanced}, \texttt{solver=liblinear}, \texttt{max\_iter=2000}, and default $C=1$. The final model random state is 20260902; outer-fold fits use their recorded deterministic offsets. Fitted imputation and scaling statistics are reused on held-out and TEST observations. Confidence is the absolute distance of the predicted preference probability from 0.5, scaled to $[0,1]$.
+
+\paragraph{Grouping and selection.}
+Five-fold assignments use deterministic relation-stratified SHA-256 ordering and round-robin allocation of original triples, with fold seed 20260901. The six observations of a triple share a fold. The outer training data supply the static anchor, classifier, and training-portion MRR used to select the bounded policy. This is selection within each outer training fold; it does not introduce an additional inner cross-validation loop. The final full-DEV fit selects from the same expanded grids and serializes all parameters and source hashes.
+
+\input{tables/rerun/locks.tex}
+
+\paragraph{Grid application and endpoints.}
+Continuous weights are mapped to the closest element of $\Agrid$. Ties use the lexicographic order of distance to the proposed value, distance to $\alpha_0$, and weight value. At $\alpha=0$ or 1, the evaluator uses the corresponding exact standalone endpoint rank. The candidate set remains the full entity universe throughout. Relation weights use a minimum support of 60 DEV observations, with low-support relations assigned the Global weight.
+
+\section{Formal Grouped DEV Evaluation}
+\label{app:dev}
+Table~\ref{tab:rerun-dev} uses the corrected expanded-policy out-of-fold records, with the six observations of each original triple assigned to one fold. Each held-out fold applies training-fold selection and fitting. These values are distinct from full-DEV resubstitution scores. D-N has a slightly negative pooled OOF increment, and D-A has mixed seed/direction signs; the former all-positive DEV statement is withdrawn.
+\input{tables/rerun/dev.tex}
+
+\section{Ranking Metrics and Consistency}
+\label{app:ranking}
+Tables~\ref{tab:rerun-hits} and~\ref{tab:rerun-consistency} use corrected TEST records. Differences are calculated before rounding. Positive signs are descriptive summaries conditional on these fitted models and seeds.
+\input{tables/rerun/hits.tex}
+\input{tables/rerun/consistency.tex}
+\FloatBarrier
+
+\section{Additional Bounds and Diagnostic Definitions}
+\label{app:bound}
+For two candidates $e_1,e_2$, define the reference margin
+\begin{equation}
+m_0=s_{\alpha_0}(q,e_1)-s_{\alpha_0}(q,e_2).
+\end{equation}
+The change in this margin is $(\alpha-\alpha_0)[d(q,e_1)-d(q,e_2)]$. Consequently, if
+\begin{equation}
+m_0>\beta|d(q,e_1)-d(q,e_2)|,
+\end{equation}
+the ordering $e_1\succ e_2$ is preserved for the evaluated bounded policy. Preserving the reference top candidate requires this inequality against every alternative. For grids whose interval endpoints are not aligned, nearest-grid projection adds at most half the grid spacing to the distance bound; the present spacing is 0.05.
+
+\paragraph{Coverage.}
+Within each pair, queries are ordered by decreasing $c(q)$ with deterministic query-ID tie-breaking. A requested fraction receives the raw bounded proposal, while the remainder keeps $\alpha_0$. Harm is reported over all pair observations. Thus increasing requested coverage accumulates harmful observations under a fixed proposal; net MRR and effective weight-change rates capture the additional outcome and action information. Four-pair pooled diagnostics are micro-averages and are presented only as descriptive summaries.
+
+\paragraph{Fallback accounting.}
+On a query assigned to confidence fallback, compare the raw bounded RR with Global. A lower raw RR contributes to avoided loss, a higher one contributes to sacrificed gain, and an equal one is neutral. The net utility is
+\begin{equation}
+U_{\mathrm{fb}}=\sum_{i\in\mathcal F}(\RR_{\alpha_0,i}-\RR_{\mathrm{raw},i}),
+\end{equation}
+where $\mathcal F$ is the confidence-fallback subset. $U_{\mathrm{fb}}/N$ is the full-minus-no-fallback MRR difference. Non-finite fallback remains active in both policies.
+
+\section{DynaSemble Transfer and Reproducibility}
+\label{app:dynasemble}
+The transferred selector uses a 4--16--16--1 network with 369 trainable parameters, final ReLU, and a fixed secondary coefficient. In all four corrected primary pairs, seeds 1 and 3 assign zero learned primary weight to every TEST observation; seed 2 remains active. This describes the released transfer on these MMKGC pairs, rather than a general claim about DynaSemble. The fixed positive secondary coefficient also means that the pure-primary endpoint is approached only as the learned primary coefficient grows without bound.
+
+\label{app:efficiency}
+Corrected timing is not reported: the historical measurements preceded the information-boundary fix and are excluded. The corrected path retains unfiltered candidate scores for feature construction and normalization; masking and gold-reference ranking are evaluation work. Confidence calibration, radius curves and coverage curves from the historical snapshot are likewise excluded from the evidence in this draft.
+
+The rerun audit verifies source export/model/selector hashes, DEV/TEST identity separation, observation coverage, endpoint consistency, and reproduction of the fixed full-policy counterfactual. Each MKG-W DEV/TEST export contains 25,656/25,644 observations; DB15K contains 47,532/59,412. Main and additional-pair TEST intervals are recomputed from original-triple clusters using 10,000 resamples and seed 20260910. The accompanying \texttt{rerun\_source\_manifest.json} binds the corrected tables to their inputs. Historical snapshots and the old audit remain archived and do not supply the numerical tables in this draft.
+
+\FloatBarrier
+\end{document}

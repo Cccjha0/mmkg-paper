@@ -1,0 +1,46 @@
+{
+  "commit": "48d66b915f64899798f736129fa8c4d0a40fdb78",
+  "clean": true,
+  "files": {
+    "NBFNet/script/selector.py": {
+      "sha256_bytes": "2568beeca73d837a510958dfc79e1bd4fbb3324c4f4f3b6fb1c47b7d6b89d51d",
+      "sha256_lf": "6f7690c99435df6963a77d78b81d833c7647c163d7a6a474a586eb7c6b28011d",
+      "url": "https://github.com/dair-iitd/KGC-Ensemble/blob/48d66b915f64899798f736129fa8c4d0a40fdb78/NBFNet/script/selector.py",
+      "feature_function_lines": [
+        85,
+        105
+      ]
+    },
+    "NBFNet/script/train_selector.py": {
+      "sha256_bytes": "e181e8cd3b6bb4f33878ecb48df82a5279a6ee35b282c535d5379ff9a430233d",
+      "sha256_lf": "6af802a31ae62908259bcb574c1ef42a11fba11c27bbf007c9a4fa167742781b",
+      "url": "https://github.com/dair-iitd/KGC-Ensemble/blob/48d66b915f64899798f736129fa8c4d0a40fdb78/NBFNet/script/train_selector.py"
+    },
+    "NBFNet/nbfnet/util.py": {
+      "sha256_bytes": "b06ca40de562d8aabd652c034c38fb9da90d84c206e5638728b2a7d9cb805eef",
+      "sha256_lf": "9e6819ae52dcefce042fae623e2cc6e5395f0ad41319a7c5415ed1be7a306542",
+      "url": "https://github.com/dair-iitd/KGC-Ensemble/blob/48d66b915f64899798f736129fa8c4d0a40fdb78/NBFNet/nbfnet/util.py"
+    },
+    "NBFNet/nbfnet/tasks.py": {
+      "sha256_bytes": "9247ff035ae9d20c23bc95884c296ec68e13917c290bd3a662db0f175afff233",
+      "sha256_lf": "b445ff6a370002b1771dace83a3ddacde18b17282af485a5a03173e3f42d044e",
+      "url": "https://github.com/dair-iitd/KGC-Ensemble/blob/48d66b915f64899798f736129fa8c4d0a40fdb78/NBFNet/nbfnet/tasks.py"
+    },
+    "NBFNet/config/wn18rr.yaml": {
+      "sha256_bytes": "a946c4318ea82140c6adafcc2d023ae0a3cc1a1debd5420841bb91e2038341d9",
+      "sha256_lf": "58d44f6312d042ff39465faccf600ea244a8ccdb043b6959a32dc8975a8905e5",
+      "url": "https://github.com/dair-iitd/KGC-Ensemble/blob/48d66b915f64899798f736129fa8c4d0a40fdb78/NBFNet/config/wn18rr.yaml"
+    },
+    "NBFNet/config/fb15k237.yaml": {
+      "sha256_bytes": "6c734cfb8c38416c5d07d6b6a779b712ad58f5e7852146b6cdb700216805c7fd",
+      "sha256_lf": "b79b5fa735bbd437bc81b78c0defd5fb6288834f9f5ab249ebd46965980de799",
+      "url": "https://github.com/dair-iitd/KGC-Ensemble/blob/48d66b915f64899798f736129fa8c4d0a40fdb78/NBFNet/config/fb15k237.yaml"
+    },
+    "NBFNet/config/codex.yaml": {
+      "sha256_bytes": "5f70959aeac41fd9d12b1d7ad533864ffd63e4775560f8f8127119b34151ed0e",
+      "sha256_lf": "b9c0db30cf7aa77452f7161b10ca9c4bc31c4a9c08be31b6a734f663519a8bce",
+      "url": "https://github.com/dair-iitd/KGC-Ensemble/blob/48d66b915f64899798f736129fa8c4d0a40fdb78/NBFNet/config/codex.yaml"
+    }
+  },
+  "scope": "Tensor-core snippets; training/data/initialization changes are enumerated separately in the protocol table."
+}

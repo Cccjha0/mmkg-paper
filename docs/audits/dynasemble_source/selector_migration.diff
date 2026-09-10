@@ -1,0 +1,37 @@
+--- upstream/first_selector_MLP
++++ local/ControlSelector_core
+@@ -1,11 +1,23 @@
+-        mlp = []
+-        mlp.append(nn.Linear(input_dim, hidden_dims[0]))
+-        for i in range(num_layers - 1):
+-            layer = nn.Linear(hidden_dims[i], hidden_dims[i+1])
+-            if (cfg.model.init != 0.0):
+-                torch.nn.init.uniform_(layer.weight, 0.0, cfg.model.init)
+-            mlp.append(layer)
+-            mlp.append(nn.ReLU())
+-        mlp.append(nn.Linear(hidden_dims[-1], 1))
+-        mlp.append(nn.ReLU())
+-        self.mlp = nn.Sequential(*mlp)
++def __init__(self, variant: str):
++        super().__init__()
++        if variant not in VARIANTS:
++            raise ValueError(variant)
++        self.variant = variant
++        # Exact upstream layer order: there is no ReLU after the first Linear.
++        first = nn.Linear(4, 16)
++        second = nn.Linear(16, 16)
++        # Preserve upstream RNG consumption: initialize the hidden weight before
++        # constructing the output Linear, not after building the whole Sequential.
++        nn.init.uniform_(second.weight, 0., 2.)
++        self.layers = nn.Sequential(first, second, nn.ReLU(), nn.Linear(16, 1))
++        if variant != "R1_source":
++            # Same output weights and initial effective ratio for the repaired arms.
++            nn.init.uniform_(self.layers[3].weight, -1e-3, 1e-3)
++            nn.init.constant_(self.layers[3].bias, 1. if variant == "R2_init" else math.log(math.expm1(1.)))
++
++def preactivation(self, features):
++        return self.layers(features).squeeze(-1)
++
++def forward(self, features):
++        z = self.preactivation(features)
++        return torch.relu(z) if self.variant in ("R1_source", "R2_init") else torch.nn.functional.softplus(z)
