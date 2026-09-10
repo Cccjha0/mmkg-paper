@@ -12,6 +12,7 @@ import torch
 
 from ml.training.src.data.dataset_spec import MMKG_GENERAL_V1, OPENBG_LEGACY_V1
 from router.query_geometry import QUERY_GEOMETRY_FIELDS, query_geometry_rows, query_geometry_tensor
+from router.information_boundary import SCORE_INFORMATION_CONTRACT
 from scripts.ablate_anchored_dynamic import (
     FEATURE_GROUPS,
     apply_probability_shrinkage,
@@ -159,6 +160,7 @@ def test_anchored_crossfit_cli_writes_dynamic_expert_labels() -> None:
                 signal = 1.0 if target_alpha > 0.6 else -1.0
                 row = {
                     "pair_name": "toy_pair",
+                    "score_information_contract": SCORE_INFORMATION_CONTRACT,
                     "dataset": "toy",
                     "split": "dev",
                     "query_key": f"{direction}|r={relation}|h={h}|t={tail}",
@@ -210,6 +212,7 @@ def test_anchored_crossfit_cli_writes_dynamic_expert_labels() -> None:
             json.dumps(
                 {
                     "pair_name": "toy_pair",
+                    "score_information_contract": SCORE_INFORMATION_CONTRACT,
                     "dataset": "toy",
                     "expert_a_name": "Expert Alpha",
                     "expert_b_name": "Expert Beta",

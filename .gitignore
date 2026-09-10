@@ -94,3 +94,22 @@ Thumbs.db
 
 # macOS junk folders
 __MACOSX__/
+
+# local agent scratch space and vendored/runtime caches
+/.codex_tmp/
+/tmp/
+/external/
+
+# generated manuscript/build bundles (keep source .tex/.md files reviewable)
+paper_a_draft/.build/
+paper_a_draft/*.pdf
+paper_a_draft/*.zip
+paper_a_draft/*.aux
+paper_a_draft/*.bbl
+paper_a_draft/*.blg
+paper_a_draft/*.log
+paper_a_draft/*.out
+paper_a_draft/*.toc
+
+# local rerun plans and bulky boundary evidence; commit concise reports instead
+outputs/paper_a_safe_correction/information_boundary/reexport_plan.json

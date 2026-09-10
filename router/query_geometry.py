@@ -28,8 +28,9 @@ def query_geometry_tensor(
     """Return answer-agnostic score geometry for two expert candidate matrices.
 
     The API deliberately accepts neither target ids nor reference/target scores.
-    Filtered candidate masks are permitted because they are determined from the
-    observed query and the evaluation fact index, not the hidden answer score.
+    Callers MUST supply unfiltered all-entity scores. A gold-preserving filtered
+    mask depends on the designated answer and must never reach this routine.
+    Non-finite model outputs are sanitized; this is not permission to pass masks.
     """
     if scores_a.ndim != 2 or scores_b.ndim != 2:
         raise ValueError("Expert score matrices must be two-dimensional.")

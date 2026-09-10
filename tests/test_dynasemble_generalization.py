@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 import torch
 from torch import nn
+from router.information_boundary import SCORE_INFORMATION_CONTRACT, require_score_information_contract
 
 from scripts.eval_openbg_dynasemble import (
     ReleasedDynaSembleSelector,
@@ -79,14 +80,19 @@ def test_clustered_bootstrap_is_reproducible_and_clusters_seeds_directions() -> 
     assert first["mean_delta"] == pytest.approx((0.1 - 0.05 + 0.2) / 3)
 
 
-def test_openbg_frozen_config_matches_existing_lock_if_present() -> None:
+def test_openbg_legacy_lock_requires_reexport_if_present() -> None:
     lock_path = Path(
         "outputs/openbg_img/openbg_dynasemble_test/mhyper_native/dev_lock.json"
     )
     if not lock_path.exists():
         pytest.skip("OpenBG lock is not present in this checkout")
     lock = json.loads(lock_path.read_text(encoding="utf-8"))
-    assert lock["method_config"] == frozen_method_config("M-Hyper", "NativE")
+    config = lock["method_config"]
+    if config.get("score_information_contract") == SCORE_INFORMATION_CONTRACT:
+        assert config == frozen_method_config("M-Hyper", "NativE")
+    else:
+        with pytest.raises(ValueError, match="re-export"):
+            require_score_information_contract(config)
 
 
 @pytest.mark.parametrize(

@@ -19,6 +19,7 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from router.query_geometry import QUERY_GEOMETRY_FIELDS
+from router.information_boundary import SCORE_INFORMATION_CONTRACT, require_score_information_contract, require_unfiltered_rows
 from scripts.crossfit_anchored_dynamic import (
     apply_policy,
     apply_query_soft,
@@ -341,6 +342,8 @@ def main() -> None:
     out_dir = Path(args.output_dir)
     rows = read_csv(query_path)
     selection = json.loads(selection_path.read_text(encoding="utf-8"))
+    require_score_information_contract(selection)
+    require_unfiltered_rows(rows)
     if not rows or {row["split"] for row in rows} != {"dev"}:
         raise RuntimeError("P3 ablation requires non-empty DEV query rows")
     if {row["pair_name"] for row in rows} != {selection["pair_name"]}:
@@ -743,6 +746,7 @@ def main() -> None:
     write_markdown(out_dir / "dev_p3_results.md", results)
     summary = {
         "schema_version": 1,
+        "score_information_contract": SCORE_INFORMATION_CONTRACT,
         "pair_name": selection["pair_name"],
         "dataset": selection["dataset"],
         "source_query_rows": str(query_path),

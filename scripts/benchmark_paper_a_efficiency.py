@@ -221,6 +221,9 @@ def validate_protocol_args(args: argparse.Namespace) -> None:
 def preflight_assets(
     repo_root: Path, specs: tuple[dict[str, Any], ...]
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    if str(repo_root) not in sys.path:
+        sys.path.insert(0, str(repo_root))
+    from router.information_boundary import require_score_information_contract
     workers: list[dict[str, Any]] = []
     assets: list[dict[str, Any]] = []
     for spec in specs:
@@ -242,6 +245,8 @@ def preflight_assets(
             )
         dyna_lock = read_json(dyna_lock_path)
         anchor_lock = read_json(anchor_lock_path)
+        require_score_information_contract(anchor_lock)
+        require_score_information_contract(dyna_lock.get("method_config", {}))
         if list(dyna_lock.get("seeds", [])) != [1, 2, 3]:
             raise RuntimeError(f"Unexpected seeds in {dyna_lock_path}")
         if dyna_lock.get("method_config", {}).get("evaluation") != (
@@ -439,11 +444,13 @@ def run_worker(spec: dict[str, Any]) -> dict[str, Any]:
     if str(repo_root) not in sys.path:
         sys.path.insert(0, str(repo_root))
     from router.query_geometry import query_geometry_tensor
+    from router.information_boundary import require_score_information_contract
     from scripts.ablate_anchored_dynamic import model_outputs
     from scripts.eval_heterogeneous_complementarity import (
         endpoint_safe_mixed_ranks,
+        filtered_copy,
+        filtered_zscore_with_reference,
         load_expert,
-        query_zscore_with_reference,
         ranks_against_reference,
         score_expert_block,
         validate_pair,
@@ -491,6 +498,7 @@ def run_worker(spec: dict[str, Any]) -> dict[str, Any]:
         )
     if method.endswith("Anchored Dynamic"):
         anchor_lock = read_json(Path(spec["anchor_lock_path"]))
+        require_score_information_contract(anchor_lock)
         if sha256_file(Path(spec["anchor_model_path"])) != anchor_lock["model_sha256"]:
             raise RuntimeError("Anchored model hash drift in worker")
         with Path(spec["anchor_model_path"]).open("rb") as handle:
@@ -531,17 +539,17 @@ def run_worker(spec: dict[str, Any]) -> dict[str, Any]:
                 q_cpu = triples_tensor[start : start + outer_batch]
 
                 def score_stage() -> tuple[Any, ...]:
-                    raw_a, target_a, _ = score_expert_block(
-                        expert_a, q_cpu, direction, true_index, device
+                    raw_a, target_a, unfiltered_a = score_expert_block(
+                        expert_a, q_cpu, direction, true_index, device, retain_unfiltered=expert_b is not None
                     )
                     rank_a = ranks_against_reference(raw_a, target_a)
                     if expert_b is None:
                         return raw_a, target_a, rank_a
-                    raw_b, target_b, _ = score_expert_block(
-                        expert_b, q_cpu, direction, true_index, device
+                    raw_b, target_b, unfiltered_b = score_expert_block(
+                        expert_b, q_cpu, direction, true_index, device, retain_unfiltered=True
                     )
                     rank_b = ranks_against_reference(raw_b, target_b)
-                    return raw_a, target_a, rank_a, raw_b, target_b, rank_b
+                    return unfiltered_a, target_a, rank_a, unfiltered_b, target_b, rank_b
 
                 scored, elapsed = timed_stage(torch, device, score_stage)
                 scoring_s += elapsed
@@ -555,8 +563,8 @@ def run_worker(spec: dict[str, Any]) -> dict[str, Any]:
 
                 if method.endswith("Global alpha"):
                     def feature_stage() -> tuple[Any, ...]:
-                        z_a, z_target_a = query_zscore_with_reference(raw_a, target_a)
-                        z_b, z_target_b = query_zscore_with_reference(raw_b, target_b)
+                        z_a, z_target_a = filtered_zscore_with_reference(raw_a, target_a, q_cpu, direction, true_index)
+                        z_b, z_target_b = filtered_zscore_with_reference(raw_b, target_b, q_cpu, direction, true_index)
                         return z_a, z_target_a, z_b, z_target_b
 
                     features, elapsed = timed_stage(torch, device, feature_stage)
@@ -613,6 +621,7 @@ def run_worker(spec: dict[str, Any]) -> dict[str, Any]:
                             ~torch.isfinite(features[2])
                         )
                         ensemble = ensemble.masked_fill(both_filtered, float("-inf"))
+                        ensemble = filtered_copy(ensemble, q_cpu, direction, true_index)
                         result = ranks_against_reference(ensemble, reference)
                         return torch.where(weights == 0.0, rank_b, result)
 
@@ -620,8 +629,8 @@ def run_worker(spec: dict[str, Any]) -> dict[str, Any]:
                 elif method.endswith("Anchored Dynamic"):
                     def feature_stage() -> tuple[Any, ...]:
                         geometry = query_geometry_tensor(raw_a, raw_b, direction)
-                        z_a, z_target_a = query_zscore_with_reference(raw_a, target_a)
-                        z_b, z_target_b = query_zscore_with_reference(raw_b, target_b)
+                        z_a, z_target_a = filtered_zscore_with_reference(raw_a, target_a, q_cpu, direction, true_index)
+                        z_b, z_target_b = filtered_zscore_with_reference(raw_b, target_b, q_cpu, direction, true_index)
                         return geometry, z_a, z_target_a, z_b, z_target_b
 
                     features, elapsed = timed_stage(torch, device, feature_stage)

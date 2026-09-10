@@ -14,6 +14,7 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from router.query_geometry import QUERY_GEOMETRY_FIELDS
+from router.information_boundary import SCORE_INFORMATION_CONTRACT, require_score_information_contract, require_unfiltered_rows
 from scripts.ablate_anchored_dynamic import fit_geometry_model, model_outputs
 from scripts.crossfit_anchored_dynamic import (
     apply_policy,
@@ -296,6 +297,9 @@ def lock_policy(args: argparse.Namespace) -> None:
     selection = read_json(selection_path)
     crossfit = read_json(crossfit_path)
     rows = read_csv(query_path)
+    require_score_information_contract(selection)
+    require_score_information_contract(crossfit)
+    require_unfiltered_rows(rows)
     alphas = tuple(float(value) for value in selection["alpha_grid"])
     validate_rows(rows, split="dev", metadata=selection, alphas=alphas)
 
@@ -368,6 +372,8 @@ def lock_policy(args: argparse.Namespace) -> None:
         pickle.dump(model, handle, protocol=pickle.HIGHEST_PROTOCOL)
     lock = {
         "schema_version": 1,
+        "score_information_contract": SCORE_INFORMATION_CONTRACT,
+        "dev_filter_fact_scope": selection["dev_filter_fact_scope"],
         "pair_name": selection["pair_name"],
         "dataset": selection["dataset"],
         "protocol_version": selection["protocol_version"],
@@ -425,6 +431,8 @@ def apply_locked_policy(args: argparse.Namespace) -> None:
     out_dir = Path(args.output_dir)
     lock = read_json(lock_path)
     rows = read_csv(query_path)
+    require_score_information_contract(lock)
+    require_unfiltered_rows(rows)
     alphas = tuple(float(value) for value in lock["alpha_grid"])
     validate_rows(rows, split="test", metadata=lock, alphas=alphas)
     if tuple(lock["query_geometry_fields"]) != tuple(QUERY_GEOMETRY_FIELDS):

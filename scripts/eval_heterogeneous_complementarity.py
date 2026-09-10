@@ -26,6 +26,7 @@ from ml.training.src.eval.filtered_ranking import (
 from ml.training.src.models.build_model import build_model
 from ml.training.src.utils.seed import set_seed
 from router.query_geometry import QUERY_GEOMETRY_FIELDS, query_geometry_rows
+from router.information_boundary import SCORE_INFORMATION_CONTRACT, require_score_information_contract
 from router.score_combination import normalize_candidate_scores
 from scripts.aacpi_phase3a_common import R1_ADDITIONS, R3_ADDITIONS, cross_expert_features
 from scripts.aacpi_phase4a_common import C1_ADDITIONS, C2_ADDITIONS
@@ -315,6 +316,15 @@ def direction_scorer(model, direction: str):
     return scorer if scorer is not None else model.score
 
 
+def evaluation_fact_indexes(bundle, *, include_test: bool = True) -> dict:
+    """Build evaluation truth, or TRAIN+DEV truth for strict DEV/selector training."""
+    facts = bundle.train_triples + bundle.valid_triples
+    if include_test:
+        facts = facts + bundle.test_triples
+    tails, heads = build_true_facts(facts)
+    return {"tail": prepare_true_tails_index(tails), "head": prepare_true_heads_index(heads)}
+
+
 def filter_scores_(
     scores: torch.Tensor,
     q_cpu: torch.LongTensor,
@@ -357,7 +367,12 @@ def score_expert_block(
     *,
     retain_unfiltered: bool = False,
 ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor | None]:
-    """Score one outer query block using the expert's original eval batch shapes."""
+    """Return (FILTERED evaluation scores, gold references, optional UNFILTERED scores).
+
+    Only the third return value may feed features or normalization. Candidate
+    construction replaces the hidden entity; gold scoring and masking are
+    evaluation-only branches. Retained scores own storage before masking.
+    """
     scorer = direction_scorer(expert.model, direction)
     matrices = []
     unfiltered_matrices = []
@@ -417,6 +432,7 @@ def query_zscore_with_reference(
     reference: torch.Tensor,
     eps: float = 1e-8,
 ) -> tuple[torch.Tensor, torch.Tensor]:
+    """Normalize UNFILTERED candidates; transform gold only for evaluation."""
     finite = torch.isfinite(scores)
     values = torch.where(finite, scores, torch.zeros_like(scores))
     count = finite.sum(dim=1, keepdim=True).clamp_min(1)
@@ -428,6 +444,27 @@ def query_zscore_with_reference(
     normalized = normalized.masked_fill(~finite, float("-inf"))
     normalized_reference = (reference.reshape(-1, 1) - mean) / scale
     return normalized, normalized_reference.reshape(-1)
+
+
+def filtered_copy(scores, q_cpu, direction, true_index):
+    """Evaluation-only mask on owned storage; never mutate inference inputs."""
+    result = scores.clone()
+    filter_scores_(result, q_cpu, 0, direction, true_index)
+    return result
+
+
+def filtered_zscore_with_reference(scores, reference, q_cpu, direction, true_index):
+    normalized, normalized_reference = query_zscore_with_reference(scores, reference)
+    return filtered_copy(normalized, q_cpu, direction, true_index), normalized_reference
+
+
+def unfiltered_rrf_ranks(scores_a, scores_b, target_a, target_b, q_cpu, direction, true_index, k):
+    """Build RRF from full candidate rankings, then filter only the final rank."""
+    candidate = competition_rank_scores(scores_a, k) + competition_rank_scores(scores_b, k)
+    rank_a = ranks_against_reference(scores_a, target_a)
+    rank_b = ranks_against_reference(scores_b, target_b)
+    reference = 1.0 / (k + rank_a.to(torch.float64)) + 1.0 / (k + rank_b.to(torch.float64))
+    return ranks_against_reference(filtered_copy(candidate, q_cpu, direction, true_index), reference)
 
 
 def competition_rank_scores(scores: torch.Tensor, k: float) -> torch.Tensor:
@@ -566,6 +603,7 @@ def checkpoint_is_valid(
         and row.get("expert_a_name") == expert_a_name
         and row.get("expert_b_name") == expert_b_name
         and row.get("filter_fact_scope", "train_dev_test") == filter_fact_scope
+        and row.get("score_information_contract") == SCORE_INFORMATION_CONTRACT
         and math.isclose(float(row.get("rrf_k", "nan")), rrf_k, rel_tol=0.0, abs_tol=1e-12)
         and all(math.isfinite(float(row.get(field, "nan"))) for field in QUERY_GEOMETRY_FIELDS)
         for row in rows
@@ -626,23 +664,24 @@ def evaluate_unit(
     for batch_index, start in enumerate(range(0, len(triples), outer_batch), start=1):
         end = min(len(triples), start + outer_batch)
         q_cpu = triples_t[start:end]
-        raw_a, target_a, unfiltered_a = score_expert_block(
-            expert_a, q_cpu, direction, true_index, device, retain_unfiltered=export_x4_features
+        filtered_a, target_a, unfiltered_a = score_expert_block(
+            expert_a, q_cpu, direction, true_index, device, retain_unfiltered=True
         )
-        raw_b, target_b, unfiltered_b = score_expert_block(
-            expert_b, q_cpu, direction, true_index, device, retain_unfiltered=export_x4_features
+        filtered_b, target_b, unfiltered_b = score_expert_block(
+            expert_b, q_cpu, direction, true_index, device, retain_unfiltered=True
         )
-        rank_a = ranks_against_reference(raw_a, target_a)
-        rank_b = ranks_against_reference(raw_b, target_b)
+        rank_a = ranks_against_reference(filtered_a, target_a)
+        rank_b = ranks_against_reference(filtered_b, target_b)
         rr_a = reciprocal(rank_a)
         rr_b = reciprocal(rank_b)
-        rank_rrf = rrf_ranks(raw_a, raw_b, rank_a, rank_b, rrf_k)
+        rank_rrf = unfiltered_rrf_ranks(unfiltered_a, unfiltered_b, target_a, target_b,
+                                      q_cpu, direction, true_index, rrf_k)
         rr_rrf = reciprocal(rank_rrf)
-        z_a, z_target_a = query_zscore_with_reference(raw_a, target_a)
-        z_b, z_target_b = query_zscore_with_reference(raw_b, target_b)
+        z_a, z_target_a = filtered_zscore_with_reference(unfiltered_a, target_a, q_cpu, direction, true_index)
+        z_b, z_target_b = filtered_zscore_with_reference(unfiltered_b, target_b, q_cpu, direction, true_index)
         rank_equal = mixed_ranks(z_a, z_b, z_target_a, z_target_b, 0.5)
         rr_equal = reciprocal(rank_equal)
-        geometry_rows = query_geometry_rows(raw_a, raw_b, direction)
+        geometry_rows = query_geometry_rows(unfiltered_a, unfiltered_b, direction)
         x4_rows = None
         if export_x4_features:
             if x4_context is None or unfiltered_a is None or unfiltered_b is None:
@@ -736,6 +775,7 @@ def evaluate_unit(
                 "rr_equal": float(rr_equal[index]),
                 "rrf_k": float(rrf_k),
                 "filter_fact_scope": filter_fact_scope,
+                "score_information_contract": SCORE_INFORMATION_CONTRACT,
             }
             row.update(geometry_rows[index])
             if x4_rows is not None:
@@ -994,6 +1034,7 @@ def main() -> None:
         if not args.selection_json:
             raise ValueError("--selection-json is required for TEST")
         selection = read_json(Path(args.selection_json))
+        require_score_information_contract(selection)
         if selection.get("pair_name") != args.pair_name:
             raise RuntimeError("Selection pair_name does not match this TEST run")
         if selection.get("expert_a_name") != args.expert_a_name or selection.get("expert_b_name") != args.expert_b_name:
@@ -1059,14 +1100,7 @@ def main() -> None:
         filter_fact_scope = (
             "train_dev" if args.dev_only_no_test_access else "train_dev_test"
         )
-        truth_triples = expert_a.bundle.train_triples + expert_a.bundle.valid_triples
-        if not args.dev_only_no_test_access:
-            truth_triples += expert_a.bundle.test_triples
-        true_tails, true_heads = build_true_facts(truth_triples)
-        true_indexes = {
-            "tail": prepare_true_tails_index(true_tails),
-            "head": prepare_true_heads_index(true_heads),
-        }
+        true_indexes = evaluation_fact_indexes(expert_a.bundle, include_test=not args.dev_only_no_test_access)
         for direction in ("head", "tail"):
             checkpoint = checkpoint_dir / f"{args.split}_seed{expert_a.seed}_{direction}.csv"
             cached = read_rows(checkpoint) if checkpoint.exists() and not args.no_resume else []
@@ -1141,6 +1175,8 @@ def main() -> None:
         selected = select_policies(all_rows, alphas, args.relation_min_support)
         selection = {
             "schema_version": 1,
+            "score_information_contract": SCORE_INFORMATION_CONTRACT,
+            "dev_filter_fact_scope": "train_dev" if args.dev_only_no_test_access else "train_dev_test",
             "pair_name": args.pair_name,
             "dataset": dataset_name,
             "protocol_version": protocol_version,
@@ -1179,6 +1215,7 @@ def main() -> None:
     write_markdown(out_dir / f"{args.split}_results.md", overall, args.split)
     summary = {
         "schema_version": 1,
+        "score_information_contract": SCORE_INFORMATION_CONTRACT,
         "pair_name": args.pair_name,
         "dataset": dataset_name,
         "protocol_version": protocol_version,
@@ -1208,7 +1245,7 @@ def main() -> None:
             "global_alpha": "score-aware, answer-agnostic; selected on DEV",
             "relation_alpha": "score-aware, answer-agnostic; relation-conditioned and selected on DEV",
             "query_geometry": (
-                "answer-agnostic candidate-score statistics; excludes target ids, "
+                "unfiltered pre-mask candidate-score statistics; excludes filter facts, target ids, "
                 "target/reference scores, ranks, reciprocal ranks, and raw relation ids"
             ),
             "oracle": "answer-aware upper bound",

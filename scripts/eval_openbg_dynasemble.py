@@ -19,18 +19,16 @@ from torch import nn
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from ml.training.src.data.build_true_facts import build_true_facts
-from ml.training.src.eval.filtered_ranking import (
-    prepare_true_heads_index,
-    prepare_true_tails_index,
-)
+from router.information_boundary import SCORE_INFORMATION_CONTRACT, require_score_information_contract
 from scripts.eval_heterogeneous_complementarity import (
     endpoint_safe_mixed_ranks,
+    evaluation_fact_indexes,
+    filtered_copy,
+    filtered_zscore_with_reference,
     load_expert,
     metric,
     parse_run_pairs,
     query_identifiers,
-    query_zscore_with_reference,
     ranks_against_reference,
     reciprocal,
     resolve_device,
@@ -54,11 +52,11 @@ NUM_EPOCHS = 1
 INIT_LOW = 0.0
 INIT_HIGH = 2.0
 FEATURE_DEFINITION = "released_code_one_minus_mean_plus_unbiased_variance"
-NORMALIZATION = "filtered_query_minmax"
+NORMALIZATION = "unfiltered_query_minmax_then_eval_filter"
 LEARNED_EXPERT = "M-Hyper"
 FIXED_WEIGHT_EXPERT = "NativE"
 FIXED_WEIGHT = 1.0
-EVALUATOR_VERSION = 3
+EVALUATOR_VERSION = 4
 BOOTSTRAP_SEED = 20260909
 BOOTSTRAP_SAMPLES = 10000
 
@@ -155,6 +153,9 @@ def frozen_method_config(
 ) -> dict:
     return {
         "method": "DynaSemble",
+        "score_information_contract": SCORE_INFORMATION_CONTRACT,
+        "inference_features": "unfiltered all-entity score distributions",
+        "negative_filter_scope": "train_dev",
         "source_repository": SOURCE_REPOSITORY,
         "source_commit": SOURCE_COMMIT,
         "source_selector": SOURCE_SELECTOR,
@@ -264,16 +265,8 @@ def sample_training_candidates(
     return torch.stack(sampled_a), torch.stack(sampled_b)
 
 
-def true_indexes_for_expert(expert) -> dict:
-    true_tails, true_heads = build_true_facts(
-        expert.bundle.train_triples
-        + expert.bundle.valid_triples
-        + expert.bundle.test_triples
-    )
-    return {
-        "tail": prepare_true_tails_index(true_tails),
-        "head": prepare_true_heads_index(true_heads),
-    }
+def true_indexes_for_expert(expert, *, include_test: bool = True) -> dict:
+    return evaluation_fact_indexes(expert.bundle, include_test=include_test)
 
 
 def train_selector(
@@ -283,6 +276,8 @@ def train_selector(
     device: str,
     progress_every: int,
 ) -> tuple[ReleasedDynaSembleSelector, dict]:
+    # Supervised negative sampling may use DEV labels, never TEST facts.
+    true_indexes = true_indexes_for_expert(expert_a, include_test=False)
     seed = int(expert_a.seed)
     torch.manual_seed(seed)
     if device == "cuda":
@@ -391,6 +386,7 @@ def load_selector(
     device: str,
     method_config: dict,
 ) -> ReleasedDynaSembleSelector:
+    require_score_information_contract(method_config)
     payload = torch.load(path, map_location=device)
     if int(payload.get("seed", -1)) != expected_seed:
         raise RuntimeError(f"Selector seed mismatch in {path}")
@@ -433,6 +429,7 @@ def checkpoint_valid(
         and row["direction"] == direction
         and row["selector_sha256"] == selector_hash
         and row["baseline_selection_sha256"] == selection_hash
+        and int(row.get("evaluator_version", -1)) == EVALUATOR_VERSION
         for row in rows
     )
 
@@ -461,30 +458,31 @@ def evaluate_direction(
     started = time.time()
     for batch_index, start in enumerate(range(0, len(triples), outer_batch), start=1):
         q_cpu = triples_t[start : start + outer_batch]
-        raw_a, target_a, _ = score_expert_block(
-            expert_a, q_cpu, direction, true_index, device
+        filtered_a, target_a, unfiltered_a = score_expert_block(
+            expert_a, q_cpu, direction, true_index, device, retain_unfiltered=True
         )
-        raw_b, target_b, _ = score_expert_block(
-            expert_b, q_cpu, direction, true_index, device
+        filtered_b, target_b, unfiltered_b = score_expert_block(
+            expert_b, q_cpu, direction, true_index, device, retain_unfiltered=True
         )
-        rank_a = ranks_against_reference(raw_a, target_a)
-        rank_b = ranks_against_reference(raw_b, target_b)
-        z_a, z_target_a = query_zscore_with_reference(raw_a, target_a)
-        z_b, z_target_b = query_zscore_with_reference(raw_b, target_b)
+        rank_a = ranks_against_reference(filtered_a, target_a)
+        rank_b = ranks_against_reference(filtered_b, target_b)
+        z_a, z_target_a = filtered_zscore_with_reference(unfiltered_a, target_a, q_cpu, direction, true_index)
+        z_b, z_target_b = filtered_zscore_with_reference(unfiltered_b, target_b, q_cpu, direction, true_index)
         rank_equal = endpoint_safe_mixed_ranks(
             z_a, z_b, z_target_a, z_target_b, 0.5, rank_a, rank_b
         )
         rank_global = endpoint_safe_mixed_ranks(
             z_a, z_b, z_target_a, z_target_b, global_alpha, rank_a, rank_b
         )
-        normalized_a, normalized_target_a, features_a = normalize_and_features(raw_a, target_a)
-        normalized_b, normalized_target_b, features_b = normalize_and_features(raw_b, target_b)
+        normalized_a, normalized_target_a, features_a = normalize_and_features(unfiltered_a, target_a)
+        normalized_b, normalized_target_b, features_b = normalize_and_features(unfiltered_b, target_b)
         features = torch.cat((features_a, features_b), dim=1)
         weights = selector(features.to(device)).reshape(-1).cpu()
         ensemble = weights.unsqueeze(1) * normalized_a + FIXED_WEIGHT * normalized_b
         ensemble_reference = weights * normalized_target_a + FIXED_WEIGHT * normalized_target_b
         both_filtered = (~torch.isfinite(normalized_a)) & (~torch.isfinite(normalized_b))
         ensemble = ensemble.masked_fill(both_filtered, float("-inf"))
+        ensemble = filtered_copy(ensemble, q_cpu, direction, true_index)
         rank_dynasemble = ranks_against_reference(ensemble, ensemble_reference)
         # A zero learned weight is exactly the fixed expert-B endpoint. Preserve
         # its already-audited rank rather than allowing min-max float rounding
@@ -879,6 +877,7 @@ def main() -> None:
     lock_path = output_dir / args.lock_filename
     baseline_selection_path = Path(args.baseline_selection_json)
     baseline_selection = json.loads(baseline_selection_path.read_text(encoding="utf-8"))
+    require_score_information_contract(baseline_selection)
     validate_baseline_selection(
         baseline_selection,
         args.pair_name,

@@ -1,0 +1,18 @@
+{
+  "audit": "B07_C04",
+  "date": "2026-09-10",
+  "score_information_contract": "unfiltered_features_and_normalization_v2",
+  "regression_tests": {
+    "status": "passed",
+    "passed": 37,
+    "command": "E:/develop/Miniconda3/python.exe -m pytest tests/test_paper_a_information_boundary.py ml/training/tests/test_filtered_ranking_optimization.py ml/training/tests/test_mhyper_reciprocal.py ml/training/tests/test_protocol_isolation.py ml/training/tests/test_anchored_dynamic.py tests/test_paper_a_efficiency_benchmark.py tests/test_dynasemble_generalization.py -q -p no:tmpdir",
+    "runtime": "PyTorch 2.7.0 CPU; CUDA unavailable in this Python environment"
+  },
+  "rerun_command_argument_parsing": {"passed": 44},
+  "latex_references": "passed; all references resolve to unique labels in source",
+  "pdf_rebuilt": false,
+  "legacy_efficiency_lock_preflight": "rejected as intended: missing new score information contract",
+  "full_reexport_attempt": "blocked: missing canonical processed datasets; expert load fails on missing manifest.json",
+  "new_full_dataset_metrics_produced": false,
+  "submission_risks_closed": false
+}
