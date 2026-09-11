@@ -1,0 +1,722 @@
+[
+  {
+    "run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1",
+    "model": "M-Hyper",
+    "seed": 1,
+    "training": {
+      "engine": "one_vs_all",
+      "lr": 0.1,
+      "batch_size": 1000,
+      "neg_ratio": 10,
+      "adv_temperature": 2.0,
+      "epochs": 200,
+      "eval_every": 5,
+      "early_stop_patience": null,
+      "termination_policy": "fixed_budget",
+      "sampler": "none",
+      "optimizer": "adagrad",
+      "wn3_weight": 0.005
+    },
+    "model_settings": {
+      "name": "mmkg_mhyper",
+      "num_relations": 169,
+      "rank": 128,
+      "init_size": 0.001,
+      "noise_preserve_ratio": 0.2,
+      "pca_init": true,
+      "pca_fit_scope": "train_entities",
+      "faithful_upstream_reconstruction": true
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/mkg_w_native/20260902_021506_seed1",
+    "model": "NativE",
+    "seed": 1,
+    "training": {
+      "engine": "adversarial_gp",
+      "lr": 0.0001,
+      "batch_size": 1024,
+      "neg_ratio": 128,
+      "adv_temperature": 2.0,
+      "epochs": 1000,
+      "eval_every": 5,
+      "early_stop_patience": 10,
+      "termination_policy": "dev_early_stop",
+      "sampler": "bernoulli_filtered",
+      "generator_lr": 0.0001,
+      "mu": 0.0001,
+      "regularization_weight": 1e-05,
+      "gradient_penalty_coefficient": 0.1,
+      "generator_noise_dim": 64,
+      "generator_hidden_dim": 512
+    },
+    "model_settings": {
+      "name": "mmkg_native",
+      "num_relations": 169,
+      "dim": 250,
+      "margin": 4.0,
+      "epsilon": 2.0
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_015400_seed2",
+    "model": "M-Hyper",
+    "seed": 2,
+    "training": {
+      "engine": "one_vs_all",
+      "lr": 0.1,
+      "batch_size": 1000,
+      "neg_ratio": 10,
+      "adv_temperature": 2.0,
+      "epochs": 200,
+      "eval_every": 5,
+      "early_stop_patience": null,
+      "termination_policy": "fixed_budget",
+      "sampler": "none",
+      "optimizer": "adagrad",
+      "wn3_weight": 0.005
+    },
+    "model_settings": {
+      "name": "mmkg_mhyper",
+      "num_relations": 169,
+      "rank": 128,
+      "init_size": 0.001,
+      "noise_preserve_ratio": 0.2,
+      "pca_init": true,
+      "pca_fit_scope": "train_entities",
+      "faithful_upstream_reconstruction": true
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/mkg_w_native/20260902_033610_seed2",
+    "model": "NativE",
+    "seed": 2,
+    "training": {
+      "engine": "adversarial_gp",
+      "lr": 0.0001,
+      "batch_size": 1024,
+      "neg_ratio": 128,
+      "adv_temperature": 2.0,
+      "epochs": 1000,
+      "eval_every": 5,
+      "early_stop_patience": 10,
+      "termination_policy": "dev_early_stop",
+      "sampler": "bernoulli_filtered",
+      "generator_lr": 0.0001,
+      "mu": 0.0001,
+      "regularization_weight": 1e-05,
+      "gradient_penalty_coefficient": 0.1,
+      "generator_noise_dim": 64,
+      "generator_hidden_dim": 512
+    },
+    "model_settings": {
+      "name": "mmkg_native",
+      "num_relations": 169,
+      "dim": 250,
+      "margin": 4.0,
+      "epsilon": 2.0
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_020435_seed3",
+    "model": "M-Hyper",
+    "seed": 3,
+    "training": {
+      "engine": "one_vs_all",
+      "lr": 0.1,
+      "batch_size": 1000,
+      "neg_ratio": 10,
+      "adv_temperature": 2.0,
+      "epochs": 200,
+      "eval_every": 5,
+      "early_stop_patience": null,
+      "termination_policy": "fixed_budget",
+      "sampler": "none",
+      "optimizer": "adagrad",
+      "wn3_weight": 0.005
+    },
+    "model_settings": {
+      "name": "mmkg_mhyper",
+      "num_relations": 169,
+      "rank": 128,
+      "init_size": 0.001,
+      "noise_preserve_ratio": 0.2,
+      "pca_init": true,
+      "pca_fit_scope": "train_entities",
+      "faithful_upstream_reconstruction": true
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/mkg_w_native/20260902_044121_seed3",
+    "model": "NativE",
+    "seed": 3,
+    "training": {
+      "engine": "adversarial_gp",
+      "lr": 0.0001,
+      "batch_size": 1024,
+      "neg_ratio": 128,
+      "adv_temperature": 2.0,
+      "epochs": 1000,
+      "eval_every": 5,
+      "early_stop_patience": 10,
+      "termination_policy": "dev_early_stop",
+      "sampler": "bernoulli_filtered",
+      "generator_lr": 0.0001,
+      "mu": 0.0001,
+      "regularization_weight": 1e-05,
+      "gradient_penalty_coefficient": 0.1,
+      "generator_noise_dim": 64,
+      "generator_hidden_dim": 512
+    },
+    "model_settings": {
+      "name": "mmkg_native",
+      "num_relations": 169,
+      "dim": 250,
+      "margin": 4.0,
+      "epsilon": 2.0
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_060855_seed1",
+    "model": "AdaMF-MAT",
+    "seed": 1,
+    "training": {
+      "engine": "adversarial",
+      "lr": 2e-05,
+      "batch_size": 1024,
+      "neg_ratio": 128,
+      "adv_temperature": 2.0,
+      "epochs": 1000,
+      "eval_every": 5,
+      "early_stop_patience": 10,
+      "termination_policy": "dev_early_stop",
+      "sampler": "bernoulli_filtered",
+      "generator_lr": 0.0001,
+      "mu": 0.0,
+      "generator_noise_dim": 64,
+      "generator_hidden_dim": 512
+    },
+    "model_settings": {
+      "name": "mmkg_adamf_mat",
+      "num_relations": 169,
+      "dim": 200,
+      "margin": 12.0,
+      "epsilon": 2.0
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_083530_seed2",
+    "model": "AdaMF-MAT",
+    "seed": 2,
+    "training": {
+      "engine": "adversarial",
+      "lr": 2e-05,
+      "batch_size": 1024,
+      "neg_ratio": 128,
+      "adv_temperature": 2.0,
+      "epochs": 1000,
+      "eval_every": 5,
+      "early_stop_patience": 10,
+      "termination_policy": "dev_early_stop",
+      "sampler": "bernoulli_filtered",
+      "generator_lr": 0.0001,
+      "mu": 0.0,
+      "generator_noise_dim": 64,
+      "generator_hidden_dim": 512
+    },
+    "model_settings": {
+      "name": "mmkg_adamf_mat",
+      "num_relations": 169,
+      "dim": 200,
+      "margin": 12.0,
+      "epsilon": 2.0
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_142555_seed3",
+    "model": "AdaMF-MAT",
+    "seed": 3,
+    "training": {
+      "engine": "adversarial",
+      "lr": 2e-05,
+      "batch_size": 1024,
+      "neg_ratio": 128,
+      "adv_temperature": 2.0,
+      "epochs": 1000,
+      "eval_every": 5,
+      "early_stop_patience": 10,
+      "termination_policy": "dev_early_stop",
+      "sampler": "bernoulli_filtered",
+      "generator_lr": 0.0001,
+      "mu": 0.0,
+      "generator_noise_dim": 64,
+      "generator_hidden_dim": 512
+    },
+    "model_settings": {
+      "name": "mmkg_adamf_mat",
+      "num_relations": 169,
+      "dim": 200,
+      "margin": 12.0,
+      "epsilon": 2.0
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1",
+    "model": "M-Hyper",
+    "seed": 1,
+    "training": {
+      "engine": "one_vs_all",
+      "lr": 0.1,
+      "batch_size": 1000,
+      "neg_ratio": 10,
+      "adv_temperature": 2.0,
+      "epochs": 200,
+      "eval_every": 5,
+      "early_stop_patience": null,
+      "termination_policy": "fixed_budget",
+      "sampler": "none",
+      "optimizer": "adagrad",
+      "wn3_weight": 0.005
+    },
+    "model_settings": {
+      "name": "mmkg_mhyper",
+      "num_relations": 279,
+      "rank": 128,
+      "init_size": 0.001,
+      "noise_preserve_ratio": 0.2,
+      "pca_init": true,
+      "pca_fit_scope": "train_entities",
+      "faithful_upstream_reconstruction": true
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/db15k_native/20260831_223530_seed1",
+    "model": "NativE",
+    "seed": 1,
+    "training": {
+      "engine": "adversarial_gp",
+      "lr": 0.0001,
+      "batch_size": 1024,
+      "neg_ratio": 128,
+      "adv_temperature": 2.0,
+      "epochs": 1000,
+      "eval_every": 5,
+      "early_stop_patience": 10,
+      "termination_policy": "dev_early_stop",
+      "sampler": "bernoulli_filtered",
+      "generator_lr": 0.0001,
+      "mu": 0.0001,
+      "regularization_weight": 1e-05,
+      "gradient_penalty_coefficient": 0.1,
+      "generator_noise_dim": 64,
+      "generator_hidden_dim": 512
+    },
+    "model_settings": {
+      "name": "mmkg_native",
+      "num_relations": 279,
+      "dim": 250,
+      "margin": 12.0,
+      "epsilon": 2.0
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2",
+    "model": "M-Hyper",
+    "seed": 2,
+    "training": {
+      "engine": "one_vs_all",
+      "lr": 0.1,
+      "batch_size": 1000,
+      "neg_ratio": 10,
+      "adv_temperature": 2.0,
+      "epochs": 200,
+      "eval_every": 5,
+      "early_stop_patience": null,
+      "termination_policy": "fixed_budget",
+      "sampler": "none",
+      "optimizer": "adagrad",
+      "wn3_weight": 0.005
+    },
+    "model_settings": {
+      "name": "mmkg_mhyper",
+      "num_relations": 279,
+      "rank": 128,
+      "init_size": 0.001,
+      "noise_preserve_ratio": 0.2,
+      "pca_init": true,
+      "pca_fit_scope": "train_entities",
+      "faithful_upstream_reconstruction": true
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/db15k_native/20260902_182809_seed2",
+    "model": "NativE",
+    "seed": 2,
+    "training": {
+      "engine": "adversarial_gp",
+      "lr": 0.0001,
+      "batch_size": 1024,
+      "neg_ratio": 128,
+      "adv_temperature": 2.0,
+      "epochs": 1000,
+      "eval_every": 5,
+      "early_stop_patience": 10,
+      "termination_policy": "dev_early_stop",
+      "sampler": "bernoulli_filtered",
+      "generator_lr": 0.0001,
+      "mu": 0.0001,
+      "regularization_weight": 1e-05,
+      "gradient_penalty_coefficient": 0.1,
+      "generator_noise_dim": 64,
+      "generator_hidden_dim": 512
+    },
+    "model_settings": {
+      "name": "mmkg_native",
+      "num_relations": 279,
+      "dim": 250,
+      "margin": 12.0,
+      "epsilon": 2.0
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/db15k_mhyper/20260902_180912_seed3",
+    "model": "M-Hyper",
+    "seed": 3,
+    "training": {
+      "engine": "one_vs_all",
+      "lr": 0.1,
+      "batch_size": 1000,
+      "neg_ratio": 10,
+      "adv_temperature": 2.0,
+      "epochs": 200,
+      "eval_every": 5,
+      "early_stop_patience": null,
+      "termination_policy": "fixed_budget",
+      "sampler": "none",
+      "optimizer": "adagrad",
+      "wn3_weight": 0.005
+    },
+    "model_settings": {
+      "name": "mmkg_mhyper",
+      "num_relations": 279,
+      "rank": 128,
+      "init_size": 0.001,
+      "noise_preserve_ratio": 0.2,
+      "pca_init": true,
+      "pca_fit_scope": "train_entities",
+      "faithful_upstream_reconstruction": true
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/db15k_native/20260903_012002_seed3",
+    "model": "NativE",
+    "seed": 3,
+    "training": {
+      "engine": "adversarial_gp",
+      "lr": 0.0001,
+      "batch_size": 1024,
+      "neg_ratio": 128,
+      "adv_temperature": 2.0,
+      "epochs": 1000,
+      "eval_every": 5,
+      "early_stop_patience": 10,
+      "termination_policy": "dev_early_stop",
+      "sampler": "bernoulli_filtered",
+      "generator_lr": 0.0001,
+      "mu": 0.0001,
+      "regularization_weight": 1e-05,
+      "gradient_penalty_coefficient": 0.1,
+      "generator_noise_dim": 64,
+      "generator_hidden_dim": 512
+    },
+    "model_settings": {
+      "name": "mmkg_native",
+      "num_relations": 279,
+      "dim": 250,
+      "margin": 12.0,
+      "epsilon": 2.0
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/db15k_adamf_mat/20260901_030904_seed1",
+    "model": "AdaMF-MAT",
+    "seed": 1,
+    "training": {
+      "engine": "adversarial",
+      "lr": 2e-05,
+      "batch_size": 1024,
+      "neg_ratio": 128,
+      "adv_temperature": 2.0,
+      "epochs": 1000,
+      "eval_every": 5,
+      "early_stop_patience": 10,
+      "termination_policy": "dev_early_stop",
+      "sampler": "bernoulli_filtered",
+      "generator_lr": 0.0001,
+      "mu": 0.0,
+      "generator_noise_dim": 64,
+      "generator_hidden_dim": 512
+    },
+    "model_settings": {
+      "name": "mmkg_adamf_mat",
+      "num_relations": 279,
+      "dim": 250,
+      "margin": 12.0,
+      "epsilon": 2.0
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2",
+    "model": "AdaMF-MAT",
+    "seed": 2,
+    "training": {
+      "engine": "adversarial",
+      "lr": 2e-05,
+      "batch_size": 1024,
+      "neg_ratio": 128,
+      "adv_temperature": 2.0,
+      "epochs": 1000,
+      "eval_every": 5,
+      "early_stop_patience": 10,
+      "termination_policy": "dev_early_stop",
+      "sampler": "bernoulli_filtered",
+      "generator_lr": 0.0001,
+      "mu": 0.0,
+      "generator_noise_dim": 64,
+      "generator_hidden_dim": 512
+    },
+    "model_settings": {
+      "name": "mmkg_adamf_mat",
+      "num_relations": 279,
+      "dim": 250,
+      "margin": 12.0,
+      "epsilon": 2.0
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  },
+  {
+    "run": "ml/artifacts/outputs/db15k_adamf_mat/20260903_090422_seed3",
+    "model": "AdaMF-MAT",
+    "seed": 3,
+    "training": {
+      "engine": "adversarial",
+      "lr": 2e-05,
+      "batch_size": 1024,
+      "neg_ratio": 128,
+      "adv_temperature": 2.0,
+      "epochs": 1000,
+      "eval_every": 5,
+      "early_stop_patience": 10,
+      "termination_policy": "dev_early_stop",
+      "sampler": "bernoulli_filtered",
+      "generator_lr": 0.0001,
+      "mu": 0.0,
+      "generator_noise_dim": 64,
+      "generator_hidden_dim": 512
+    },
+    "model_settings": {
+      "name": "mmkg_adamf_mat",
+      "num_relations": 279,
+      "dim": 250,
+      "margin": 12.0,
+      "epsilon": 2.0
+    },
+    "embedding": {
+      "d": 256
+    },
+    "evaluation": {
+      "filtered": true,
+      "chunk_size": 4096,
+      "dev_eval_limit": null,
+      "direction": "both",
+      "query_batch_size": 32,
+      "run_test": false
+    }
+  }
+]

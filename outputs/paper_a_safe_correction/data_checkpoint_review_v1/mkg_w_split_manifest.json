@@ -1,0 +1,247 @@
+{
+  "training_manifest": {
+    "alignment": {
+      "feature_key_map": {
+        "path": "data\\datasets\\mkg_w\\raw\\feature_key_map.tsv",
+        "sha256": "7b4c3cf816ef31352e391ac4f634f219c74fa9db5ea4487ca576500cf726920c"
+      }
+    },
+    "counts": {
+      "entities": 15000,
+      "relations": 169,
+      "test": 4274,
+      "train": 34196,
+      "valid": 4276
+    },
+    "cross_modal_similarity": {
+      "declaration": "explicit_preprocessing_argument",
+      "shared_embedding_space": false,
+      "type": "none"
+    },
+    "dataset": "mkg_w",
+    "feature_sources": {
+      "image": {
+        "encoder": "BEIT_16-224 (from supplied filename)",
+        "path": "data\\datasets\\MKG_W_img_BEIT_16-224.h5",
+        "sha256": "20c87f77f552da78a613cd3ed56649b0c175c4e205c69b278dce686ba0a7dec1"
+      },
+      "text": {
+        "encoder": "unknown (upstream HDF5 metadata not provided)",
+        "path": "data\\datasets\\MKG_W_description_sentences.h5",
+        "sha256": "9e4815cdd660e00fe85e4ad0f2a671b28f7e158b651c4d43fffe2ca07888c987"
+      }
+    },
+    "features": {
+      "image": {
+        "aligned_entities": 14224,
+        "coverage": 0.9482666666666667,
+        "dimension": 383,
+        "entities_with_multiple_keys": 0,
+        "hdf5_keys": 14951,
+        "missing_entities": 776,
+        "numeric_health": {
+          "all_finite": true,
+          "finite_max": 80.72107696533203,
+          "finite_min": -190.25628662109375,
+          "nonfinite_key_examples": [],
+          "nonfinite_values": 0,
+          "total_values": 137429592
+        },
+        "pooling": "mean",
+        "shared_keys": 1
+      },
+      "text": {
+        "aligned_entities": 13333,
+        "coverage": 0.8888666666666667,
+        "dimension": 384,
+        "entities_with_multiple_keys": 0,
+        "hdf5_keys": 14149,
+        "missing_entities": 1667,
+        "numeric_health": {
+          "all_finite": true,
+          "finite_max": 0.30997511744499207,
+          "finite_min": -0.2930624186992645,
+          "nonfinite_key_examples": [],
+          "nonfinite_values": 0,
+          "total_values": 18496896
+        },
+        "pooling": "mean",
+        "shared_keys": 1
+      }
+    },
+    "hashes": {
+      "canonical_features": {
+        "has_img": "9371bf06267acd0f7d0725b028b700fa683b91a915fc311b99245267c079e4b4",
+        "has_text": "6e8205816f3a86804eeec9d40fcabe1cd34ad7bc199190b1c92a5b2f302d9f55",
+        "img_feat": "e2a0be09fc48138e5109ca643dcc15a1d9372f26fcdc45b54c1fed534012d95a",
+        "text_feat": "415c8433c361dd57af5ce05037454836c619d28c4af04371338b73bc683a12d9"
+      },
+      "entity_mapping": "fedb476bfee8c053936d22f15d2f3b60c4bc3b6cb672301c2c567ad5f11500e5",
+      "relation_mapping": "8eb7011fa29154e702b3293ba76181ccc4df88b703e7a87e0eccdb4d32d153b5",
+      "splits": {
+        "test": "1a7fc2ee545925732e999e075ad69726eee55d507f300fb7c5bc22d476fcd11d",
+        "train": "61e60a55886675a9144b9725f9b7451e3002a49bbf9429c50e322c4d943f2fb3",
+        "valid": "03d25d880788492632516c3a419f4d92b4c59216123a89201819e1203075f254"
+      }
+    },
+    "missing_examples": {
+      "image": [
+        "http://www.wikidata.org/entity/Q3857815",
+        "http://www.wikidata.org/entity/Q7459924",
+        "http://www.wikidata.org/entity/Q6124275",
+        "http://www.wikidata.org/entity/Q2466764",
+        "http://www.wikidata.org/entity/Q5196992",
+        "http://www.wikidata.org/entity/Q1030652",
+        "http://www.wikidata.org/entity/Q12129012",
+        "http://www.wikidata.org/entity/Q4043633",
+        "http://www.wikidata.org/entity/Q846810",
+        "http://www.wikidata.org/entity/Q2924921",
+        "http://www.wikidata.org/entity/Q5980566",
+        "http://www.wikidata.org/entity/Q1358159",
+        "http://www.wikidata.org/entity/Q7723249",
+        "http://www.wikidata.org/entity/Q726634",
+        "http://www.wikidata.org/entity/Q1708667",
+        "http://www.wikidata.org/entity/Q595915",
+        "http://www.wikidata.org/entity/Q482626",
+        "http://www.wikidata.org/entity/Q6506",
+        "http://www.wikidata.org/entity/Q5891",
+        "http://www.wikidata.org/entity/Q4004589"
+      ],
+      "text": [
+        "http://www.wikidata.org/entity/Q3857815",
+        "http://www.wikidata.org/entity/Q61",
+        "http://www.wikidata.org/entity/Q7459924",
+        "http://www.wikidata.org/entity/Q76884",
+        "http://www.wikidata.org/entity/Q4919072",
+        "http://www.wikidata.org/entity/Q44320",
+        "http://www.wikidata.org/entity/Q2665674",
+        "http://www.wikidata.org/entity/Q4055443",
+        "http://www.wikidata.org/entity/Q20814652",
+        "http://www.wikidata.org/entity/Q6124275",
+        "http://www.wikidata.org/entity/Q3487718",
+        "http://www.wikidata.org/entity/Q134969",
+        "http://www.wikidata.org/entity/Q16976993",
+        "http://www.wikidata.org/entity/Q3831182",
+        "http://www.wikidata.org/entity/Q2466764",
+        "http://www.wikidata.org/entity/Q5196992",
+        "http://www.wikidata.org/entity/Q787091",
+        "http://www.wikidata.org/entity/Q4527002",
+        "http://www.wikidata.org/entity/Q863661",
+        "http://www.wikidata.org/entity/Q6772265"
+      ]
+    },
+    "protocol": "mmkg_general_v1",
+    "source": "official OpenKE benchmark files (repository external mirror)",
+    "source_counts": {
+      "test": 4274,
+      "train": 34196,
+      "valid": 4276
+    },
+    "source_lock": {
+      "lock_path": "docs\\EXTERNAL_SOURCES_LOCK.json",
+      "lock_sha256": "a95fc0dc779fd320f7598358d8bc573a4af6ebf0a25e694d6f9d2df9e9946644",
+      "source_repository": {
+        "commit": "c72291c3d571b36c754897935d21718aa4568fe7",
+        "name": "native",
+        "url": "https://github.com/zjukg/NATIVE.git"
+      },
+      "verified_files": {
+        "entity2id": {
+          "bytes": 687265,
+          "path": "external\\NATIVE\\benchmarks\\MKG-W\\entity2id.txt",
+          "sha256": "fb45af79a8ef99b50406f8744855993950b0968306f3615a07ab8379ed0dc3b9"
+        },
+        "feature_key_map": {
+          "bytes": 834296,
+          "path": "data\\datasets\\mkg_w\\raw\\feature_key_map.tsv",
+          "sha256": "7b4c3cf816ef31352e391ac4f634f219c74fa9db5ea4487ca576500cf726920c"
+        },
+        "image_h5": {
+          "bytes": 554792032,
+          "path": "data\\datasets\\MKG_W_img_BEIT_16-224.h5",
+          "sha256": "20c87f77f552da78a613cd3ed56649b0c175c4e205c69b278dce686ba0a7dec1"
+        },
+        "relation2id": {
+          "bytes": 6826,
+          "path": "external\\NATIVE\\benchmarks\\MKG-W\\relation2id.txt",
+          "sha256": "fdbe3725b027b4e6d3d136e7a3f32aa31698b499e447919dc473d71c6b9f1092"
+        },
+        "test": {
+          "bytes": 57029,
+          "path": "external\\NATIVE\\benchmarks\\MKG-W\\test2id.txt",
+          "sha256": "aa1206dd573739452fb28d092afe4ce09c14dc8b78a24e1f3991c2672604d2f1"
+        },
+        "text_h5": {
+          "bytes": 78853653,
+          "path": "data\\datasets\\MKG_W_description_sentences.h5",
+          "sha256": "9e4815cdd660e00fe85e4ad0f2a671b28f7e158b651c4d43fffe2ca07888c987"
+        },
+        "train": {
+          "bytes": 451029,
+          "path": "external\\NATIVE\\benchmarks\\MKG-W\\train2id.txt",
+          "sha256": "162472571a7dce5eae63bd84204a700eef8383c4aaba14f235286b951772d24d"
+        },
+        "valid": {
+          "bytes": 57236,
+          "path": "external\\NATIVE\\benchmarks\\MKG-W\\valid2id.txt",
+          "sha256": "6663fda7fd976447000999c16a3e7faf1f7f12e9a59eeda060f16fdff22e2073"
+        }
+      }
+    },
+    "source_split_integrity": {
+      "duplicates": {
+        "test": 0,
+        "train": 0,
+        "valid": 0
+      },
+      "exact_overlaps": {
+        "train_test": 0,
+        "train_valid": 0,
+        "valid_test": 0
+      }
+    },
+    "split": "official",
+    "split_construction": {
+      "canonical_integrity": {
+        "duplicates": {
+          "test": 0,
+          "train": 0,
+          "valid": 0
+        },
+        "exact_overlaps": {
+          "train_test": 0,
+          "train_valid": 0,
+          "valid_test": 0
+        }
+      },
+      "name": "official",
+      "source_test": "pinned test2id.txt",
+      "source_train": "pinned train2id.txt",
+      "source_valid": "pinned valid2id.txt"
+    },
+    "status": "pass"
+  },
+  "reconstructed_tsv_line_endings": {
+    "train": "CRLF",
+    "valid": "CRLF",
+    "test": "CRLF"
+  },
+  "source_integrity_recomputed": {
+    "duplicates": {
+      "train": 0,
+      "valid": 0,
+      "test": 0
+    },
+    "exact_overlaps": {
+      "train_valid": 0,
+      "train_test": 0,
+      "valid_test": 0
+    }
+  },
+  "row_index_convention": "zero-based data row (OpenKE header excluded); exports join by head/relation/tail within seed and direction, not textual query_id order",
+  "deduplication_policy": "reject canonical duplicates/overlaps; exclude entire DB15K source valid; no silent deduplication",
+  "raw_hdf5_available_locally": {
+    "image": true,
+    "text": true
+  }
+}

@@ -216,25 +216,18 @@ The bound gives $\beta$ a direct interpretation in score space: it limits moveme
 \label{sec:setup}
 
 \subsection{Datasets, models, and evaluation roles}
-The corrected study evaluates MKG-W and DB15K. Earlier discovery work used OpenBG-IMG~\citep{openbg}; its numerical results are excluded here because that dataset is outside the completed boundary rerun. The four main pairs combine M-Hyper with NativE or AdaMF-MAT on each dataset. Two additional pairs combine NativE and AdaMF-MAT, with NativE selected as primary by the DEV rule. All comparisons use three paired seeds and both head and tail prediction.
+The corrected study evaluates MKG-W~\citep{mkgw_origin} and DB15K, derived from MMKG~\citep{mmkg_origin}. Our exact split and mapping files come from the NativE repository at commit \texttt{c72291c3d571}; Appendix~\ref{app:data-checkpoint} separates these files from published statistics and records their preprocessing. Earlier discovery work used OpenBG-IMG~\citep{openbg}; its numerical results are excluded here because that dataset is outside the completed boundary rerun. The four main pairs combine M-Hyper with NativE or AdaMF-MAT on each dataset. Two additional pairs combine NativE and AdaMF-MAT, with NativE selected as primary by the DEV rule. All comparisons use three paired seeds and both head and tail prediction.
 
 MKG-W is the confirmatory dataset in the locked experimental workflow. DB15K supplies a secondary replication because its TEST split had been evaluated in earlier score-ensemble experiments. The correction feature family, grids, and pair-specific parameters are selected on DEV before the reported TEST application. Additional pairs and mechanism analyses use their recorded frozen policies. Table~\ref{tab:data} reports the actual observation sets represented in the score exports.
 
-\begin{table}[tbp]
-\centering\small
-\caption{Evaluation scope. Counts refer to original triples in the exported DEV and TEST observations; each contributes three seeds and two directions. These are the effective evaluation sets, rather than published raw-dataset totals.}
-\label{tab:data}
-\begin{tabular}{lrrrl}
-\toprule
-Dataset & DEV triples & TEST triples & TEST rows/pair & Role\\
-\midrule
-MKG-W & 4,276 & 4,274 & 25,644 & Confirmatory\\
-DB15K & 7,922 & 9,902 & 59,412 & Replication\\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{tables/data_checkpoint/datasets.tex}
+
+DB15K DEV is a deterministic 10\% holdout of the pinned 79,222-triple TRAIN, leaving 71,300 training triples. The pinned 9,904-row valid file is excluded as a whole because it has duplicate rows and exact overlap with TRAIN and TEST; its exclusion is not modality-based sampling. The pinned 9,902-triple TEST is retained. These filenames differ from the valid/TEST counts printed in M-Hyper Table~7, so our DEV is not the published validation set. MKG-W retains all three pinned splits. The reconstruction audit verifies every effective split hash and every exported triple, with no additional export exclusions.
 
 The processed MKG-W and DB15K candidate universes contain 15,000 and 12,842 entities, respectively. Every method in a pair uses identical TEST query observations, candidate entities, and filtering conventions. New DynaSemble controls cross the three base seeds with selector seeds 11, 23 and 37; historical R0 uses its original three paired runs. All base-model parameters remain frozen during combiner fitting. The manuscript package records source paths and checksums for the tables.
+
+\paragraph{Base-model comparability.}
+All methods within a dataset share the same canonical modality tensors, with explicit missingness masks and no deletion of entities lacking a modality. Table~\ref{tab:data-modalities} reports actual coverage and input dimensions. The frozen M-Hyper runs use the released README's rank-128, Adagrad, 200-epoch configuration with DEV-only checkpoint selection. All six runs complete that budget; their best DEV epochs are 15--55, and no later evaluation exceeds them. Appendix~\ref{app:data-checkpoint} reports all 18 base-model histories and the public-code comparison. M-Hyper's TEST MRR is below the published values, but the splits, modality inputs and evaluation details are not protocol-equivalent. ``Strong primary'' therefore means stronger within the tested, shared-input model pool; it does not assert reproduction of public SOTA performance or optimal hyperparameter tuning.
 
 \paragraph{Filtering scope and information boundary.}
 The default shared evaluator builds known-answer sets from TRAIN$\cup$DEV$\cup$TEST for both DEV and TEST evaluation, including the historical ADC/R0 development evaluations. This is evaluation-side access to known facts, not use of TEST triples as positive training examples. Base-model supervision and training negative filters use TRAIN only. New DynaSemble controls instead use the strict DEV loader, which does not open TEST and evaluates DEV with TRAIN$\cup$DEV. Their inner-fold negative sampler uses TRAIN$\cup$DEV-fit; final refitting uses TRAIN$\cup$DEV. All methods evaluate TEST with the full fact union. Thus new and historical DEV scores have different filtering scopes and are not directly comparable. Neither evaluation filter enters inference features or candidate normalization. The current gold is always retained while other known answers are excluded from ranking. Details and pseudocode appear in Appendix~\ref{app:information-boundary}.
@@ -395,6 +388,58 @@ Five-fold assignments use deterministic relation-stratified SHA-256 ordering and
 \paragraph{Grid application and endpoints.}
 Continuous weights are mapped to the closest element of $\Agrid$. Ties use the lexicographic order of distance to the proposed value, distance to $\alpha_0$, and weight value. At $\alpha=0$ or 1, the evaluator uses the corresponding exact standalone endpoint rank. The candidate set remains the full entity universe throughout. Relation weights use a minimum support of 60 DEV observations, with low-support relations assigned the Global weight.
 
+\section{Dataset Lineage and Base-Checkpoint Comparability}
+\label{app:data-checkpoint}
+
+\subsection{Raw files, canonical splits and score exports}
+The pinned NativE source is \texttt{c72291c3d571b36c754897935d21718aa4568fe7}. OpenKE data rows are ordered $(h,t,r)$; preprocessing converts them to $(h,r,t)$ while preserving entity/relation IDs. The DB15K source valid file has 9,904 rows but 7,481 unique triples: 2,423 are repeated occurrences beyond the first. Of its unique triples, 6,584 also occur in source TRAIN and 824 in source TEST; the latter two sets are disjoint. These counts concern this exact mirror file, not an assertion about every release or the original paper's execution. We exclude the entire source valid file, including its 73 remaining unique triples, from supervision, checkpoint selection and evaluation filters.
+
+The replacement DEV has 7,922 triples selected from source TRAIN using relation quotas, stable SHA-256 ordering with seed 2025, and checks that every held-out entity and relation retains TRAIN support. A second ordering with seed 2026 fills any unfilled quotas. TRAIN and DEV preserve their relative source row order; TEST is unchanged. Both resulting datasets have zero within-split duplicates and zero cross-split exact overlap. No row is removed for absent text or images. The source-row ledgers explicitly record the destination split and row index, including every excluded source-valid occurrence.
+
+\begin{quote}\small\ttfamily
+Verify pinned bytes, IDs and OpenKE row counts.\\
+Audit source duplicates and intersections.\\
+MKG-W: preserve TRAIN, valid, TEST.\\
+DB15K: exclude source valid; partition source TRAIN\\
+\hspace*{1em}with fixed relation/coverage holdout; preserve TEST.\\
+Reject dirty canonical splits; verify their saved hashes.\\
+For each split, seed and direction: join export by (h,r,t);\\
+\hspace*{1em}require every canonical triple exactly once and correct gold ID.\\
+Check checkpoint feature hashes and logged DEV maximum;\\
+\hspace*{1em}match checkpoint/config hashes to later score-cache manifests.
+\end{quote}
+
+The audit covers DEV and TEST exports for all six pairs: 25,656/25,644 observations per MKG-W pair and 47,532/59,412 per DB15K pair. All cells contain exactly the canonical triples with no missing, extra or duplicate observations. Original-to-canonical ledgers, complete split manifests and the 12 export checks accompany the paper. Canonical split hashes are reproduced byte-for-byte, including the saved TSV line endings; equality of counts alone is not the criterion.
+
+\subsection{Modality sources and missing values}
+\input{tables/data_checkpoint/modalities.tex}
+The supplied inputs are \texttt{MKG\_W\_img\_BEIT\_16-224.h5}, \texttt{MKG\_W\_description\_sentences.h5}, \texttt{MMKB\_img\_BEIT\_16-224.h5} and \texttt{MMKB\_description\_sentences.h5}. Their SHA-256 digests and alignment-file digests are recorded in the split manifests. MKG-W uses a fixed Wikidata-ID to title crosswalk; DB15K text uses resource basenames and image alignment uses the official SameAs links to Freebase MIDs. Four DB15K entities have multiple aligned image keys, whose rows are pooled together. Pooling is an arithmetic mean over the aligned source rows; there is no alignment by file iteration order.
+
+Effective image/text coverage is 94.83\%/88.89\% on MKG-W and 99.81\%/70.69\% on DB15K. Missing entity counts are 776/1,667 and 24/3,764, respectively. Unavailable raw rows are zero-filled and accompanied by explicit Boolean masks derived from key availability, not from testing whether a feature vector is zero. The general-protocol adapters mask unavailable projected modalities; M-Hyper also masks their independent embeddings. They do not add a learned missing-modality vector. Structural participation and candidate eligibility are retained.
+
+The image encoder label BEIT-16/224 is inferred only from the supplied filenames. The text encoder/version and the original feature download provenance are not recorded, so we do not relabel these inputs as BERT or claim exact encoder reproducibility. Source HDF5 files are unavailable in the local review workspace; their recorded hashes are retained, while the canonical feature tensors, dimensions, coverage, finite values and zero-filled missing rows are independently checked inside all 18 actual checkpoints. This verifies the inputs used by the frozen models, not the original feature extraction pipeline. Recovering encoder provenance remains a documentation limitation.
+
+\subsection{Training settings, selection and convergence evidence}
+\input{tables/data_checkpoint/training.tex}
+M-Hyper uses reciprocal training triples, full-entity cross-entropy, weighted N3 regularization of 0.005, and the released reconstruction plus consistency losses. The configuration has initialization scale 0.001 and noise fraction 0.2. Its raw input dimensions are distinct from rank 128; the general configuration's \texttt{embedding.d=256} is not substituted for the model-specific rank. The generic negative-ratio field is inactive under the one-versus-all engine. NativE and AdaMF-MAT use Adam with 128 TRAIN-filtered Bernoulli negatives and adversarial temperature 2. NativE uses generator LR $10^{-4}$, $\mu=10^{-4}$, regularization $10^{-5}$ and gradient-penalty coefficient 0.1. AdaMF-MAT has $\mu=0$ in the selected runs, hence no weighted synthetic-negative contribution. Their model dimensions are 250 for NativE and 200/250 for AdaMF-MAT on MKG-W/DB15K; margins are 4/12 for NativE and 12 for AdaMF-MAT. Full merged settings are supplied per run.
+
+The trainer saves a checkpoint only on strict improvement in full, bidirectional DEV MRR. M-Hyper trains for 200 epochs without early stopping. The other engines allow at most 1,000 epochs and stop after ten unsuccessful DEV evaluations (50 epochs); every recorded run satisfies its declared stopping rule. TEST evaluation is disabled during these training runs. These are the actual frozen configurations, not a new hyperparameter search or a claim that the published search budget was reproduced.
+
+\input{tables/data_checkpoint/checkpoints.tex}
+All six M-Hyper losses decrease between the first and last logged evaluations; every best DEV point is followed by at least 29 further evaluations without improvement. This supports checkpoint adequacy within the declared budget and argues against simple premature truncation. It does not prove global convergence or exclude gains from different features or tuning. Every base-model checkpoint has finite parameters and the same dataset-specific feature hashes. Since checkpoints are plain state dictionaries without saved epoch fields, epoch provenance rests on the training save rule, the history maximum, the matching exported DEV metric and the exact checkpoint hash in later cache manifests; we do not claim to have independently replayed every training trajectory. The historical \texttt{metrics\_seed1.csv} basename is shared by several run folders; seeds are taken from each merged configuration, which agrees with the frozen run map.
+
+\subsection{Published result versus the pinned transfer}
+\input{tables/data_checkpoint/public_comparison.tex}
+The upstream code inspected is M-Hyper commit \texttt{cb390b6a54e08a6ac76d664cf2c2f6e1ff13ff76}. Its README configuration matches our M-Hyper optimizer, rank, learning rate, batch size, regularizer and epoch/evaluation budget. The paper additionally describes candidate hyperparameter ranges; we do not assume the README identifies the run that produced its headline result. The following implementation differences are material to comparability:
+\begin{itemize}
+\item \textbf{Split and checkpoint path.} Upstream \texttt{src/datasets.py} loads \texttt{test.pickle} for both valid and test; \texttt{src/run.py} chooses a checkpoint on that valid key. Our loader uses the distinct canonical DEV above. This finding describes the pinned code, not proof of how the published result was obtained.
+\item \textbf{Features and initialization.} Upstream reads supplied image/text tensors and applies PCA over their full entity matrices. Our shared input contract uses the recorded tensors and missingness masks; PCA fits only TRAIN-visible entities with the corresponding modality. DB15K dimensions and MKG-W coverage differ from the paper's statistics (Table~\ref{tab:data-modalities}). These differences invalidate an exact reproduction claim even when structural split counts agree.
+\item \textbf{Scoring and filtering.} Both implementations use reciprocal head prediction and full-entity ranking. Upstream constructs filters from its train/valid/test files, saves the gold score, removes the gold alongside other known answers with a finite sentinel and counts competing scores with $\geq$. Our evaluator retains gold and counts strictly greater scores after masking other known answers; exact ties can therefore yield different ranks. Our fact union uses the canonical splits, not the discarded DB15K source-valid file.
+\item \textbf{Loss details.} The transfer retains the public reconstruction target's final structural term and its unweighted sum of reconstruction and consistency losses, including the public omission of the computed independence terms from the returned auxiliary loss. These are code-level choices; equality to every paper equation is not inferred from the model name.
+\end{itemize}
+The gap cannot be assigned quantitatively to the holdout, feature changes, PCA scope, ties or checkpoint path without controlled reruns. No TEST-driven tuning or new checkpoint is introduced. The evidence establishes internally comparable, actively trained frozen experts, while external SOTA reproduction remains outside the claim.
+
+\FloatBarrier
 \section{Formal Grouped DEV Evaluation}
 \label{app:dev}
 Table~\ref{tab:rerun-dev} uses the corrected expanded-policy out-of-fold records, with the six observations of each original triple assigned to one fold. Each held-out fold applies training-fold selection and fitting. These values are distinct from full-DEV resubstitution scores. D-N has a slightly negative pooled OOF increment, and D-A has mixed seed/direction signs; the former all-positive DEV statement is withdrawn.

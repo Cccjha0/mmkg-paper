@@ -1,0 +1,13 @@
+pair,split,triples,rows,missing,extra,duplicate_keys
+mkgw_mhyper_native,valid,4276,25656,0,0,0
+mkgw_mhyper_native,test,4274,25644,0,0,0
+mkgw_mhyper_adamf,valid,4276,25656,0,0,0
+mkgw_mhyper_adamf,test,4274,25644,0,0,0
+db15k_mhyper_native,valid,7922,47532,0,0,0
+db15k_mhyper_native,test,9902,59412,0,0,0
+db15k_mhyper_adamf,valid,7922,47532,0,0,0
+db15k_mhyper_adamf,test,9902,59412,0,0,0
+mkgw_native_adamf,valid,4276,25656,0,0,0
+mkgw_native_adamf,test,4274,25644,0,0,0
+db15k_native_adamf,valid,7922,47532,0,0,0
+db15k_native_adamf,test,9902,59412,0,0,0

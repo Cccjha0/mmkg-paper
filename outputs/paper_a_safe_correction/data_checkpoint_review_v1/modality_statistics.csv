@@ -1,0 +1,5 @@
+dataset,modality,entities,relations,aligned_entities,missing_entities,coverage,dimension,encoder_provenance
+mkg_w,image,15000,169,14224,776,0.9482666666666667,383,BEIT_16-224 (from supplied filename)
+mkg_w,text,15000,169,13333,1667,0.8888666666666667,384,unknown (upstream HDF5 metadata not provided)
+db15k,image,12842,279,12818,24,0.9981311322223952,383,BEIT_16-224 (from supplied filename)
+db15k,text,12842,279,9078,3764,0.7068992368789908,384,unknown (upstream HDF5 metadata not provided)

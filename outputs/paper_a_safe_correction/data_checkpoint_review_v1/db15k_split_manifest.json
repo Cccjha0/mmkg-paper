@@ -1,0 +1,253 @@
+{
+  "training_manifest": {
+    "alignment": {
+      "db15k_same_as": {
+        "disambiguation": "pool all official SameAs MIDs present in image HDF5",
+        "entities_with_multiple_mids": 4,
+        "path": "data\\datasets\\db15k\\raw\\DB15K_SameAsLink.txt",
+        "sha256": "329f13f5834eff712ab7fcaa214407d3f48bcaa9b6c48e5fcae632994e070141"
+      }
+    },
+    "counts": {
+      "entities": 12842,
+      "relations": 279,
+      "test": 9902,
+      "train": 71300,
+      "valid": 7922
+    },
+    "cross_modal_similarity": {
+      "declaration": "explicit_preprocessing_argument",
+      "shared_embedding_space": false,
+      "type": "none"
+    },
+    "dataset": "db15k",
+    "feature_sources": {
+      "image": {
+        "encoder": "BEIT_16-224 (from supplied filename)",
+        "path": "data\\datasets\\MMKB_img_BEIT_16-224.h5",
+        "sha256": "6063ab03c5041d3d74099811dd417f62732b43aa53269bd7d167e0bc16734961"
+      },
+      "text": {
+        "encoder": "unknown (upstream HDF5 metadata not provided)",
+        "path": "data\\datasets\\MMKB_description_sentences.h5",
+        "sha256": "b7519b90a55624fb78d2e946bad9fde210650e7789931bea3d9e662001ac547a"
+      }
+    },
+    "features": {
+      "image": {
+        "aligned_entities": 12818,
+        "coverage": 0.9981311322223952,
+        "dimension": 383,
+        "entities_with_multiple_keys": 4,
+        "hdf5_keys": 14845,
+        "missing_entities": 24,
+        "numeric_health": {
+          "all_finite": true,
+          "finite_max": 84.26941680908203,
+          "finite_min": -195.43446350097656,
+          "nonfinite_key_examples": [],
+          "nonfinite_values": 0,
+          "total_values": 136455240
+        },
+        "pooling": "mean",
+        "shared_keys": 0
+      },
+      "text": {
+        "aligned_entities": 9078,
+        "coverage": 0.7068992368789908,
+        "dimension": 384,
+        "entities_with_multiple_keys": 0,
+        "hdf5_keys": 9083,
+        "missing_entities": 3764,
+        "numeric_health": {
+          "all_finite": true,
+          "finite_max": 0.30997511744499207,
+          "finite_min": -0.2998579740524292,
+          "nonfinite_key_examples": [],
+          "nonfinite_values": 0,
+          "total_values": 20195712
+        },
+        "pooling": "mean",
+        "shared_keys": 0
+      }
+    },
+    "hashes": {
+      "canonical_features": {
+        "has_img": "faea0cecfef35f2865d797ec5350ebe4d610b0bb5d66c1979212e34c080a1ea4",
+        "has_text": "3f069c07bcad303b81ab2f126ef81a13fb074a95374a7739aa3d9052b0c4f2eb",
+        "img_feat": "1ce7fd06bb4bc77e5416259034e4eb80b2c5ce153a085b60050c6f466236fea0",
+        "text_feat": "8c718b3dc4a42e0513e19cfe774e89bd0b8dd685bc613cadc6c09c926c08ec74"
+      },
+      "entity_mapping": "704509c1150afd9a6645aa39dfacba87dca13837060d8229cd7670557a381a09",
+      "relation_mapping": "bb55baff6b64611e62e6e55565bf298d5af50a03fec3614bb763396256b0780c",
+      "splits": {
+        "test": "e421b4b686597ca02d094388ac85c18ff85e83cd6e57dce65d4582e00462a493",
+        "train": "df9faa7bcba6856ad718432f7141e453fb001b2f9e5aa6580e8d1a9756987435",
+        "valid": "4bfaee6744dc4cb9fb1952e822c3d9d3fef405252432876201a2e9d210d8fff8"
+      }
+    },
+    "missing_examples": {
+      "image": [
+        "<http://dbpedia.org/resource/Arabic>",
+        "<http://dbpedia.org/resource/Ulm>",
+        "<http://dbpedia.org/resource/Tempe,_Arizona>",
+        "<http://dbpedia.org/resource/Kansas>",
+        "<http://dbpedia.org/resource/Laos>",
+        "<http://dbpedia.org/resource/Tunis>",
+        "<http://dbpedia.org/resource/DVD>",
+        "<http://dbpedia.org/resource/Tunisia>",
+        "<http://dbpedia.org/resource/Canton,_Ohio>",
+        "<http://dbpedia.org/resource/Ferrara>",
+        "<http://dbpedia.org/resource/Pavia>",
+        "<http://dbpedia.org/resource/Moscow,_Idaho>",
+        "<http://dbpedia.org/resource/Pony_Canyon>",
+        "<http://dbpedia.org/resource/Provo,_Utah>",
+        "<http://dbpedia.org/resource/Naples,_Florida>",
+        "<http://dbpedia.org/resource/Iowa_City,_Iowa>",
+        "<http://dbpedia.org/resource/Mauritania>",
+        "<http://dbpedia.org/resource/Dothan,_Alabama>",
+        "<http://dbpedia.org/resource/Yuma,_Arizona>",
+        "<http://dbpedia.org/resource/Enid,_Oklahoma>"
+      ],
+      "text": [
+        "<http://dbpedia.org/resource/Franciaország>",
+        "<http://dbpedia.org/resource/Pedagogy>",
+        "<http://dbpedia.org/resource/Saint_Petersburg_State_University>",
+        "<http://dbpedia.org/resource/Unitary_state>",
+        "<http://dbpedia.org/resource/Spaniards>",
+        "<http://dbpedia.org/resource/Cultivation>",
+        "<http://dbpedia.org/resource/Health_care>",
+        "<http://dbpedia.org/resource/Ulm>",
+        "<http://dbpedia.org/resource/Kingdom_of_Prussia>",
+        "<http://dbpedia.org/resource/Gold_Medal_of_the_Royal_Astronomical_Society>",
+        "<http://dbpedia.org/resource/Conceptual_art>",
+        "<http://dbpedia.org/resource/Nathanael_Greene>",
+        "<http://dbpedia.org/resource/Eastern_European_Time>",
+        "<http://dbpedia.org/resource/Film_producer>",
+        "<http://dbpedia.org/resource/New_York_City>",
+        "<http://dbpedia.org/resource/Public_company>",
+        "<http://dbpedia.org/resource/Mac_OS>",
+        "<http://dbpedia.org/resource/Absurdism>",
+        "<http://dbpedia.org/resource/Fyodor_Dostoyevsky>",
+        "<http://dbpedia.org/resource/Slovenia>"
+      ]
+    },
+    "protocol": "mmkg_general_v1",
+    "source": "official OpenKE benchmark files (repository external mirror)",
+    "source_counts": {
+      "test": 9902,
+      "train": 79222,
+      "valid": 9904
+    },
+    "source_lock": {
+      "lock_path": "docs\\EXTERNAL_SOURCES_LOCK.json",
+      "lock_sha256": "a95fc0dc779fd320f7598358d8bc573a4af6ebf0a25e694d6f9d2df9e9946644",
+      "source_repository": {
+        "commit": "c72291c3d571b36c754897935d21718aa4568fe7",
+        "name": "native",
+        "url": "https://github.com/zjukg/NATIVE.git"
+      },
+      "verified_files": {
+        "entity2id": {
+          "bytes": 687334,
+          "path": "external\\NATIVE\\benchmarks\\DB15K\\entity2id.txt",
+          "sha256": "7f316dc359c55292bc7d616f00409093db27e054d50f35bb478b660e0fcdd769"
+        },
+        "image_h5": {
+          "bytes": 551681896,
+          "path": "data\\datasets\\MMKB_img_BEIT_16-224.h5",
+          "sha256": "6063ab03c5041d3d74099811dd417f62732b43aa53269bd7d167e0bc16734961"
+        },
+        "relation2id": {
+          "bytes": 12871,
+          "path": "external\\NATIVE\\benchmarks\\DB15K\\relation2id.txt",
+          "sha256": "053c946194d79046afe6d17ceeb7f20e103900da6759830decf4ffd3c14eeb3a"
+        },
+        "same_as": {
+          "bytes": 875463,
+          "path": "data\\datasets\\db15k\\raw\\DB15K_SameAsLink.txt",
+          "sha256": "329f13f5834eff712ab7fcaa214407d3f48bcaa9b6c48e5fcae632994e070141"
+        },
+        "test": {
+          "bytes": 138595,
+          "path": "external\\NATIVE\\benchmarks\\DB15K\\test2id.txt",
+          "sha256": "b6ac229c242ea31eb9f442d8dce4054ff17fd64aecc8344f73fb04636fccc157"
+        },
+        "text_h5": {
+          "bytes": 84013072,
+          "path": "data\\datasets\\MMKB_description_sentences.h5",
+          "sha256": "b7519b90a55624fb78d2e946bad9fde210650e7789931bea3d9e662001ac547a"
+        },
+        "train": {
+          "bytes": 1109531,
+          "path": "external\\NATIVE\\benchmarks\\DB15K\\train2id.txt",
+          "sha256": "5ce5372a0775e68f6b15ac42326a7cc65313883a3d9d3a3ebda1ef7ace299809"
+        },
+        "valid": {
+          "bytes": 137607,
+          "path": "external\\NATIVE\\benchmarks\\DB15K\\valid2id.txt",
+          "sha256": "d3353283d7ff2aa36a3c0494a57f78ebff922ebedd0c1fcd9bf537ffc0ed97de"
+        }
+      }
+    },
+    "source_split_integrity": {
+      "duplicates": {
+        "test": 0,
+        "train": 0,
+        "valid": 2423
+      },
+      "exact_overlaps": {
+        "train_test": 0,
+        "train_valid": 6584,
+        "valid_test": 824
+      }
+    },
+    "split": "db15k_train_holdout_v1",
+    "split_construction": {
+      "canonical_integrity": {
+        "duplicates": {
+          "test": 0,
+          "train": 0,
+          "valid": 0
+        },
+        "exact_overlaps": {
+          "train_test": 0,
+          "train_valid": 0,
+          "valid_test": 0
+        }
+      },
+      "name": "db15k_train_holdout_v1",
+      "seed": 2025,
+      "selection": "relation_stratified_stable_sha256_with_train_entity_relation_coverage",
+      "source_test": "pinned test2id.txt preserved",
+      "source_train": "pinned train2id.txt",
+      "source_valid": "pinned valid2id.txt audited but excluded because of exact leakage",
+      "target_valid_count": 7922,
+      "valid_fraction": 0.1
+    },
+    "status": "pass"
+  },
+  "reconstructed_tsv_line_endings": {
+    "train": "CRLF",
+    "valid": "CRLF",
+    "test": "CRLF"
+  },
+  "source_integrity_recomputed": {
+    "duplicates": {
+      "train": 0,
+      "valid": 2423,
+      "test": 0
+    },
+    "exact_overlaps": {
+      "train_valid": 6584,
+      "train_test": 0,
+      "valid_test": 824
+    }
+  },
+  "row_index_convention": "zero-based data row (OpenKE header excluded); exports join by head/relation/tail within seed and direction, not textual query_id order",
+  "deduplication_policy": "reject canonical duplicates/overlaps; exclude entire DB15K source valid; no silent deduplication",
+  "raw_hdf5_available_locally": {
+    "image": true,
+    "text": true
+  }
+}

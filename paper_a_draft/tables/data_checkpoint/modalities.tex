@@ -1,0 +1,15 @@
+\begin{table}[tbp]
+\centering\small
+\caption{Published and effective modality inputs. Counts are entities with aligned features; dimensions are before model projection. Published rows come from M-Hyper Table 7~\citep{mhyper}. Effective rows are checked against the feature buffers in every frozen checkpoint; missing modalities do not remove entities or triples.}
+\label{tab:data-modalities}
+\begin{tabular}{llrrrr}
+\toprule
+Dataset & Source & Image count & Image dim. & Text count & Text dim.\\
+\midrule
+MKG-W & Published & 14,463 & 383 & 14,123 & 384\\
+MKG-W & Effective & 14,224 & 383 & 13,333 & 384\\
+DB15K & Published & 12,818 & 4096 & 9,078 & 768\\
+DB15K & Effective & 12,818 & 383 & 9,078 & 384\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,17 @@
+\begin{table}[tbp]
+\centering\footnotesize
+\caption{Settings actually used by the frozen base models, shared across three seeds. Size is the model-specific rank (M-Hyper) or dimension (others), not raw feature dimension. All evaluate full DEV every five epochs. The last column is the fixed budget, or epoch cap / patience in DEV evaluations.}
+\label{tab:data-training}
+\begin{tabular}{llrrrrl}
+\toprule
+Dataset & Model & Size & LR & Batch & Negatives & Epoch / stopping\\
+\midrule
+MKG-W & M-Hyper & 128 & 0.1 & 1000 & all entities & 200 fixed\\
+MKG-W & NativE & 250 & 0.0001 & 1024 & 128 & 1,000 / 10 checks\\
+MKG-W & AdaMF-MAT & 200 & 2e-05 & 1024 & 128 & 1,000 / 10 checks\\
+DB15K & M-Hyper & 128 & 0.1 & 1000 & all entities & 200 fixed\\
+DB15K & NativE & 250 & 0.0001 & 1024 & 128 & 1,000 / 10 checks\\
+DB15K & AdaMF-MAT & 250 & 2e-05 & 1024 & 128 & 1,000 / 10 checks\\
+\bottomrule
+\end{tabular}
+\end{table}

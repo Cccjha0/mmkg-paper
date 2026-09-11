@@ -1,0 +1,29 @@
+\begin{table}[tbp]
+\centering\footnotesize
+\caption{All base-model training histories. Best is the first maximum of full DEV MRR; last is the actual final evaluated epoch. Loss shows the first and last logged averages and is not comparable across engines. Exported DEV MRR agrees with each log maximum within $4.20\times10^{-8}$. Checkpoint hashes also match the later DynaSemble cache records. No TEST value selects an epoch.}
+\label{tab:data-checkpoints}
+\begin{tabular}{llrrrrrl}
+\toprule
+Dataset & Model & Seed & Best ep. & Best DEV & Last ep. & Last DEV & Loss\\
+\midrule
+MKG-W & M-Hyper & 1 & 15 & 0.352740 & 200 & 0.349935 & 2.746/2.016\\
+MKG-W & M-Hyper & 2 & 25 & 0.352830 & 200 & 0.350654 & 2.738/2.016\\
+MKG-W & M-Hyper & 3 & 20 & 0.352896 & 200 & 0.349855 & 2.745/2.015\\
+MKG-W & NativE & 1 & 205 & 0.328859 & 255 & 0.326864 & 0.637/0.179\\
+MKG-W & NativE & 2 & 155 & 0.326330 & 205 & 0.323386 & 0.649/0.184\\
+MKG-W & NativE & 3 & 225 & 0.330140 & 275 & 0.325928 & 0.656/0.179\\
+MKG-W & AdaMF-MAT & 1 & 645 & 0.279470 & 695 & 0.276790 & 2.981/0.084\\
+MKG-W & AdaMF-MAT & 2 & 850 & 0.297217 & 900 & 0.290903 & 4.470/0.059\\
+MKG-W & AdaMF-MAT & 3 & 750 & 0.292556 & 800 & 0.279516 & 3.518/0.070\\
+DB15K & M-Hyper & 1 & 25 & 0.384129 & 200 & 0.378360 & 3.111/2.333\\
+DB15K & M-Hyper & 2 & 40 & 0.382037 & 200 & 0.379183 & 3.111/2.329\\
+DB15K & M-Hyper & 3 & 55 & 0.381594 & 200 & 0.375938 & 3.112/2.332\\
+DB15K & NativE & 1 & 420 & 0.319731 & 470 & 0.317469 & 1.463/0.094\\
+DB15K & NativE & 2 & 620 & 0.325735 & 670 & 0.321036 & 1.460/0.090\\
+DB15K & NativE & 3 & 310 & 0.317600 & 360 & 0.316511 & 1.465/0.098\\
+DB15K & AdaMF-MAT & 1 & 665 & 0.293228 & 715 & 0.288221 & 1.664/0.125\\
+DB15K & AdaMF-MAT & 2 & 545 & 0.283881 & 595 & 0.280283 & 1.994/0.138\\
+DB15K & AdaMF-MAT & 3 & 810 & 0.298944 & 860 & 0.294812 & 1.971/0.115\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -47,6 +47,21 @@ for rel,sha in matched['sources'].items():
 for rel,sha in matched['tables'].items():
     assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
 bound_tables|={ROOT/rel for rel in matched['tables']}
+data_checkpoint=json.loads((ROOT/'data_checkpoint_source_manifest.json').read_text(encoding='utf-8'))
+assert data_checkpoint['version']=='data_checkpoint_review_v1'
+for rel,sha in data_checkpoint['sources'].items():
+    # Stream checkpoints and exports; do not read every large source at once.
+    digest=hashlib.sha256()
+    with (ROOT.parent/rel).open('rb') as handle:
+        for block in iter(lambda:handle.read(1024*1024),b''): digest.update(block)
+    assert digest.hexdigest()==sha,rel
+for rel,sha in data_checkpoint['tables'].items():
+    assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in data_checkpoint['tables']}
+data_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/data_checkpoint_review_v1/audit.json').read_text())
+assert data_audit['status']=='data_checkpoint_checks_passed' and not data_audit['failures']
+assert data_audit['runs_checked']==18 and data_audit['exports_checked']==12
+assert data_audit['test_used_for_selection'] is False
 matched_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/matched_alternatives_v1/test_audit.json').read_text())
 assert matched_audit['status']=='matched_alternative_checks_passed' and not matched_audit['failures']
 assert matched_audit['test_used_for_selection'] is False
@@ -86,11 +101,12 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
+        'data_checkpoint_checks_passed':True,
         'checks':'active input paths, references, rerun source/table hashes, audit status, no placeholders, page bounds: PASS',
         'page_details':page_info}
 (ROOT/'verification.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')

@@ -1,0 +1,28 @@
+{
+  "version": "data_checkpoint_reference_v1",
+  "review_date": "2026-09-12",
+  "mhyper_paper": {
+    "url": "https://aclanthology.org/2026.acl-long.1289.pdf",
+    "statistics_locator": "Appendix F, Table 7, PDF page 16",
+    "metrics_locator": "Table 1, PDF page 7; percentages divided by 100",
+    "statistics": {
+      "mkg_w": {"entities": 15000, "relations": 169, "train": 34196, "valid": 4276, "test": 4274, "image_count": 14463, "image_dim": 383, "text_count": 14123, "text_dim": 384, "mrr": 0.3702},
+      "db15k": {"entities": 12842, "relations": 279, "train": 79222, "valid": 9902, "test": 9904, "image_count": 12818, "image_dim": 4096, "text_count": 9078, "text_dim": 768, "mrr": 0.4125}
+    }
+  },
+  "dataset_origins": {
+    "mkg_w": "https://doi.org/10.1145/3503161.3548388",
+    "db15k": "https://doi.org/10.1007/978-3-030-21348-0_30"
+  },
+  "public_code": {
+    "mhyper": {"url": "https://github.com/zjukg/M-Hyper", "commit": "cb390b6a54e08a6ac76d664cf2c2f6e1ff13ff76"},
+    "split_source": {"url": "https://github.com/zjukg/NATIVE", "commit": "c72291c3d571b36c754897935d21718aa4568fe7"}
+  },
+  "interpretation_constraints": [
+    "Published counts are contextual reference data, never substituted for observed preprocessing statistics.",
+    "The pinned OpenKE valid/test filenames differ from M-Hyper Table 7 labels; no claim that paper table is erroneous or that the underlying triples are identical.",
+    "Pinned M-Hyper datasets.py aliases valid to test.pickle; this is a code finding, not evidence about the execution that produced the paper.",
+    "Public versus local MRR differences are descriptive and not causal decompositions.",
+    "No base-model configuration, checkpoint or combiner is selected or changed using this audit's TEST values."
+  ]
+}
