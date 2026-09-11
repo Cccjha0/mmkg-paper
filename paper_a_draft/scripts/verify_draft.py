@@ -62,6 +62,13 @@ data_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/data_checkpo
 assert data_audit['status']=='data_checkpoint_checks_passed' and not data_audit['failures']
 assert data_audit['runs_checked']==18 and data_audit['exports_checked']==12
 assert data_audit['test_used_for_selection'] is False
+feature_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/data_checkpoint_review_v1/feature_provenance_audit.json').read_text())
+assert feature_audit['status']=='source_identity_evidence_checks_passed' and not feature_audit['failures']
+assert feature_audit['source_files_checked']==6 and feature_audit['sampled_objects_checked']==20
+assert feature_audit['encoder_provenance_established'] is False
+assert feature_audit['released_feature_download_source_documented'] is True
+assert feature_audit['nonempty_root_attribute_maps']==feature_audit['nonempty_sampled_object_attribute_maps']==0
+assert feature_audit['test_used_for_selection'] is False
 matched_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/matched_alternatives_v1/test_audit.json').read_text())
 assert matched_audit['status']=='matched_alternative_checks_passed' and not matched_audit['failures']
 assert matched_audit['test_used_for_selection'] is False
@@ -107,6 +114,8 @@ report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findal
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
         'data_checkpoint_checks_passed':True,
+        'source_feature_return_verified':True,'encoder_provenance_established':False,
+        'released_feature_download_source_documented':True,
         'checks':'active input paths, references, rerun source/table hashes, audit status, no placeholders, page bounds: PASS',
         'page_details':page_info}
 (ROOT/'verification.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')

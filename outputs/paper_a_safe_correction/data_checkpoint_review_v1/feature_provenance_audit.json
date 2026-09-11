@@ -1,0 +1,91 @@
+{
+  "version": "feature_provenance_return_review_v1",
+  "status": "source_identity_evidence_checks_passed",
+  "source_files_checked": 6,
+  "hdf5_files_checked": 4,
+  "sampled_objects_checked": 20,
+  "nonempty_root_attribute_maps": 0,
+  "nonempty_sampled_object_attribute_maps": 0,
+  "encoder_provenance_established": false,
+  "released_feature_download_source_documented": true,
+  "raw_files_rehashed_locally": false,
+  "scorers_executed": false,
+  "test_used_for_selection": false,
+  "checks": [
+    {
+      "dataset": "mkg_w",
+      "kind": "feature_key_map",
+      "sha256": "7b4c3cf816ef31352e391ac4f634f219c74fa9db5ea4487ca576500cf726920c",
+      "bytes": 834296,
+      "prior_lock_matches": true
+    },
+    {
+      "dataset": "mkg_w",
+      "kind": "image_h5",
+      "sha256": "20c87f77f552da78a613cd3ed56649b0c175c4e205c69b278dce686ba0a7dec1",
+      "bytes": 554792032,
+      "prior_lock_matches": true,
+      "root_key_count": 14951,
+      "sampled_objects": 5,
+      "feature_dimension": 383,
+      "root_attributes_empty": true,
+      "sampled_attributes_empty": true
+    },
+    {
+      "dataset": "mkg_w",
+      "kind": "text_h5",
+      "sha256": "9e4815cdd660e00fe85e4ad0f2a671b28f7e158b651c4d43fffe2ca07888c987",
+      "bytes": 78853653,
+      "prior_lock_matches": true,
+      "root_key_count": 14149,
+      "sampled_objects": 5,
+      "feature_dimension": 384,
+      "root_attributes_empty": true,
+      "sampled_attributes_empty": true
+    },
+    {
+      "dataset": "db15k",
+      "kind": "image_h5",
+      "sha256": "6063ab03c5041d3d74099811dd417f62732b43aa53269bd7d167e0bc16734961",
+      "bytes": 551681896,
+      "prior_lock_matches": true,
+      "root_key_count": 14845,
+      "sampled_objects": 5,
+      "feature_dimension": 383,
+      "root_attributes_empty": true,
+      "sampled_attributes_empty": true
+    },
+    {
+      "dataset": "db15k",
+      "kind": "same_as",
+      "sha256": "329f13f5834eff712ab7fcaa214407d3f48bcaa9b6c48e5fcae632994e070141",
+      "bytes": 875463,
+      "prior_lock_matches": true
+    },
+    {
+      "dataset": "db15k",
+      "kind": "text_h5",
+      "sha256": "b7519b90a55624fb78d2e946bad9fde210650e7789931bea3d9e662001ac547a",
+      "bytes": 84013072,
+      "prior_lock_matches": true,
+      "root_key_count": 9083,
+      "sampled_objects": 5,
+      "feature_dimension": 384,
+      "root_attributes_empty": true,
+      "sampled_attributes_empty": true
+    }
+  ],
+  "failures": [],
+  "evidence_scope": "Server-reported file hashes/sizes are independently compared with the prior source lock and training manifests. Source bytes remain on the server.",
+  "metadata_scope": "Root attributes plus five objects per HDF5; no assertion about uninspected objects or original encoding/download history.",
+  "remaining_requirement": "Original encoder/checkpoint/version and extraction settings are unresolved; this limits extraction-level reproducibility, not the documented use of released frozen feature files.",
+  "sources": {
+    "outputs/paper_a_safe_correction/data_checkpoint_feature_provenance.json": "9ceb09af6357bce0f252f6ad6b9605b210fdb44bd69b82f0e51c3cc139854474",
+    "docs/EXTERNAL_SOURCES_LOCK.json": "29d3a90e5fc2697b518edbfa4f09c7306ff5a8671befa0481552fab80fb1b13e",
+    "outputs/paper_a_safe_correction/data_checkpoint_review_v1/mkg_w_split_manifest.json": "5825390b7a2b2236325f8a9d90243cefeaab747cdb71adc24252240ca7c8a62d",
+    "outputs/paper_a_safe_correction/data_checkpoint_review_v1/db15k_split_manifest.json": "e519a4fcf01e963f8b94ef133ae2348797e84aad04826d07ce303e566386b364",
+    "outputs/paper_a_safe_correction/data_checkpoint_review_v1/feature_download_source.json": "6cbb7d763d9c2d9f7e9af4e12757d327bb5fca4c3b4a92e7f3fb11fb48f1426a",
+    "scripts/audit_paper_a_feature_provenance.py": "379d6006d0c53b572aae6c5d07001adb9f31521f59c16bac4540ef4ff293069d",
+    "scripts/collect_paper_a_feature_provenance.py": "becab494e563243af3ab746c1534946fa8b790678cd22e71c74100abff4e7b5e"
+  }
+}

@@ -84,6 +84,13 @@ def main():
     table("public_comparison.tex", r"M-Hyper published MRR (Table 1~\citep{mhyper}) and this study's three-seed mean. Differences are descriptive: neither row is an identical-protocol reproduction, and no causal share is assigned to any implementation difference.",
           "tab:data-public", "lrrrl", "Dataset & Published & This study & Difference & Interpretation", rows)
     sources = dict(audit["sources"])
+    feature_audit_path = OUT / "feature_provenance_audit.json"
+    feature_audit = json.loads(feature_audit_path.read_text(encoding="utf-8"))
+    assert feature_audit["status"] == "source_identity_evidence_checks_passed"
+    assert not feature_audit["failures"] and feature_audit["source_files_checked"] == 6
+    for rel, digest in feature_audit["sources"].items():
+        assert sha(ROOT / rel) == digest, rel
+    sources.update(feature_audit["sources"])
     for path in list(OUT.iterdir()) + [reference_path, Path(__file__)]:
         if path.is_file():
             sources[path.relative_to(ROOT).as_posix()] = sha(path)

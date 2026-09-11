@@ -1,0 +1,244 @@
+{
+  "status": "source_hashes_verified",
+  "records": [
+    {
+      "dataset": "mkg_w",
+      "kind": "feature_key_map",
+      "path": "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\data\\datasets\\mkg_w\\raw\\feature_key_map.tsv",
+      "exists": true,
+      "expected_sha256": "7b4c3cf816ef31352e391ac4f634f219c74fa9db5ea4487ca576500cf726920c",
+      "bytes": 834296,
+      "sha256": "7b4c3cf816ef31352e391ac4f634f219c74fa9db5ea4487ca576500cf726920c",
+      "hash_matches": true
+    },
+    {
+      "dataset": "mkg_w",
+      "kind": "image_h5",
+      "path": "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\data\\datasets\\MKG_W_img_BEIT_16-224.h5",
+      "exists": true,
+      "expected_sha256": "20c87f77f552da78a613cd3ed56649b0c175c4e205c69b278dce686ba0a7dec1",
+      "bytes": 554792032,
+      "sha256": "20c87f77f552da78a613cd3ed56649b0c175c4e205c69b278dce686ba0a7dec1",
+      "hash_matches": true,
+      "root_attributes": {},
+      "root_key_count": 14951,
+      "first_five_objects": [
+        {
+          "key": "!Kung_language",
+          "shape": [
+            24,
+            383
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "%22Heroes%22_(David_Bowie_song)",
+          "shape": [
+            24,
+            383
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "'71_(film)",
+          "shape": [
+            24,
+            383
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "'Fore_She_Was_Mama",
+          "shape": [
+            24,
+            383
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "'Round_Midnight_(1963_Betty_Carter_album)",
+          "shape": [
+            24,
+            383
+          ],
+          "attributes": {}
+        }
+      ]
+    },
+    {
+      "dataset": "mkg_w",
+      "kind": "text_h5",
+      "path": "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\data\\datasets\\MKG_W_description_sentences.h5",
+      "exists": true,
+      "expected_sha256": "9e4815cdd660e00fe85e4ad0f2a671b28f7e158b651c4d43fffe2ca07888c987",
+      "bytes": 78853653,
+      "sha256": "9e4815cdd660e00fe85e4ad0f2a671b28f7e158b651c4d43fffe2ca07888c987",
+      "hash_matches": true,
+      "root_attributes": {},
+      "root_key_count": 14149,
+      "first_five_objects": [
+        {
+          "key": "%22Heroes%22_(David_Bowie_song)",
+          "shape": [
+            6,
+            384
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "'71_(film)",
+          "shape": [
+            6,
+            384
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "'Fore_She_Was_Mama",
+          "shape": [
+            4,
+            384
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "'Round_Midnight_(1963_Betty_Carter_album)",
+          "shape": [
+            1,
+            384
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "'Til_There_Was_You",
+          "shape": [
+            2,
+            384
+          ],
+          "attributes": {}
+        }
+      ]
+    },
+    {
+      "dataset": "db15k",
+      "kind": "image_h5",
+      "path": "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\data\\datasets\\MMKB_img_BEIT_16-224.h5",
+      "exists": true,
+      "expected_sha256": "6063ab03c5041d3d74099811dd417f62732b43aa53269bd7d167e0bc16734961",
+      "bytes": 551681896,
+      "sha256": "6063ab03c5041d3d74099811dd417f62732b43aa53269bd7d167e0bc16734961",
+      "hash_matches": true,
+      "root_attributes": {},
+      "root_key_count": 14845,
+      "first_five_objects": [
+        {
+          "key": "m.010016",
+          "shape": [
+            24,
+            383
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "m.0100mt",
+          "shape": [
+            24,
+            383
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "m.0102t4",
+          "shape": [
+            24,
+            383
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "m.0104lr",
+          "shape": [
+            24,
+            383
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "m.0105y2",
+          "shape": [
+            24,
+            383
+          ],
+          "attributes": {}
+        }
+      ]
+    },
+    {
+      "dataset": "db15k",
+      "kind": "same_as",
+      "path": "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\data\\datasets\\db15k\\raw\\DB15K_SameAsLink.txt",
+      "exists": true,
+      "expected_sha256": "329f13f5834eff712ab7fcaa214407d3f48bcaa9b6c48e5fcae632994e070141",
+      "bytes": 875463,
+      "sha256": "329f13f5834eff712ab7fcaa214407d3f48bcaa9b6c48e5fcae632994e070141",
+      "hash_matches": true
+    },
+    {
+      "dataset": "db15k",
+      "kind": "text_h5",
+      "path": "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\data\\datasets\\MMKB_description_sentences.h5",
+      "exists": true,
+      "expected_sha256": "b7519b90a55624fb78d2e946bad9fde210650e7789931bea3d9e662001ac547a",
+      "bytes": 84013072,
+      "sha256": "b7519b90a55624fb78d2e946bad9fde210650e7789931bea3d9e662001ac547a",
+      "hash_matches": true,
+      "root_attributes": {},
+      "root_key_count": 9083,
+      "first_five_objects": [
+        {
+          "key": "1._FC_Nürnberg",
+          "shape": [
+            9,
+            384
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "10th_Screen_Actors_Guild_Awards",
+          "shape": [
+            2,
+            384
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "11",
+          "shape": [
+            5,
+            384
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "111th_United_States_Congress",
+          "shape": [
+            7,
+            384
+          ],
+          "attributes": {}
+        },
+        {
+          "key": "127_Hours",
+          "shape": [
+            6,
+            384
+          ],
+          "attributes": {}
+        }
+      ]
+    }
+  ],
+  "scorers_executed": false,
+  "test_used_for_selection": false,
+  "interpretation": "Attributes are evidence only. Empty metadata does not identify an encoder or its download origin."
+}

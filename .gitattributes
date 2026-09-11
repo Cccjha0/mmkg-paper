@@ -49,3 +49,6 @@ docs/protocols/paper_a_data_checkpoint_reference.json -text whitespace=cr-at-eol
 outputs/paper_a_safe_correction/data_checkpoint_review_v1/** -text whitespace=cr-at-eol
 paper_a_draft/tables/data_checkpoint/** -text whitespace=cr-at-eol
 paper_a_draft/data_checkpoint_source_manifest.json -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/data_checkpoint_feature_provenance.json -text whitespace=cr-at-eol
+scripts/audit_paper_a_feature_provenance.py -text whitespace=cr-at-eol
+scripts/collect_paper_a_feature_provenance.py -text whitespace=cr-at-eol

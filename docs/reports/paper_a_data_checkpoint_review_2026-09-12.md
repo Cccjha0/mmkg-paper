@@ -7,10 +7,10 @@
 | 风险 | 本次结论 | 状态 |
 |---|---|---|
 | C01 有效 split 与公开 split 不一致 | 原文件哈希、构造代码、训练 manifest、全部导出三元组已形成完整链条；DB15K DEV 是从 TRAIN 留出，TEST 没有另行抽样 | 最低关闭条件已满足 |
-| C02 实际数据元信息 | 原始/有效统计、关系数、TRAIN 数、模态维度/覆盖率、对齐与缺失策略已补入 PDF；checkpoint 中的真实输入已重验 | 数据报告已补齐；文本编码器版本、下载来源尚不能关闭 |
+| C02 实际数据元信息 | 实际统计、对齐/缺失策略、checkpoint 特征已核验；服务器六份原始输入指纹一致；用户下载说明与 MMRNS 官方仓库、发布目录对应 | 使用发布的预计算特征这一设定下，最低报告条件已满足；原始编码器重建仍是限制 |
 | C03 基础模型低于公开值 | 公共论文/固定代码/当前迁移的差异已列明；六个 M-Hyper 跑满 200 epoch，最佳 DEV 位于 15–55 epoch；18 个模型的导出 DEV 与日志最优值吻合 | 当前协议下 checkpoint 合理性的最低证据已满足；不声称公开 SOTA 复现 |
 
-**未解信息不以猜测填补。** 文本特征 manifest 明确写 `unknown (upstream HDF5 metadata not provided)`；BEIT 图像编码器名称也仅来自文件名。现有证据不能恢复原始编码器版本、抽取参数和下载链路。剩余工作是来源核查，不是为追赶公开 TEST MRR 重新调参。
+**未解信息不以猜测填补。** 下载来源已补充为 MMRNS 官方仓库链接的预计算 HDF5 发布目录，见文末补证。文本特征 manifest 仍明确写 `unknown (upstream HDF5 metadata not provided)`；BEIT 图像编码器名称也仅来自文件名。原始编码器具体版本和抽取参数尚不能恢复，因此不声称从原始图文重新抽取特征可复现；这不改变已明确采用发布特征、记录精确文件哈希的实验设定，也不触发 TEST 追分。
 
 ## C01：数量流水账
 
@@ -94,9 +94,9 @@ M-Hyper 六个 run 的最佳 DEV/最终 epoch：
 
 主脚本 `scripts/audit_paper_a_data_checkpoint.py` 只读输入，不执行 scorer；`scripts/build_paper_a_data_checkpoint_assets.py` 生成五张正式表格及来源 manifest。21 项测试涵盖重复/漏样/错 gold/错三元组/错 RR 拒绝、split 哈希顺序和行尾、非最佳 epoch 拒绝、训练中断拒绝，以及现有 preprocess/PCA/逆关系/候选一致性测试。最初 pytest 临时目录被 Windows 沙箱拒绝访问；同组测试在正常权限下运行后 **21 passed**，没有修改测试规避错误。
 
-更新后的 PDF 为 32 页、28 张表、3 幅图、9 条参考文献；全部 2,494 个来源哈希、表格依赖、审计状态、引用和页面边界检查通过。数据流水账、模态表和 checkpoint 页已做视觉检查，编译无 overfull 或未解析引用。此前各轮风险修复的数值审计也继续通过。
+首次 C01–C03 核验后的 PDF 为 32 页、28 张表、3 幅图、9 条参考文献；当时全部 2,494 个来源哈希、表格依赖、审计状态、引用和页面边界检查通过。数据流水账、模态表和 checkpoint 页已做视觉检查，编译无 overfull 或未解析引用。服务器与下载来源补证在此基础上继续增加来源绑定。
 
-本轮不需要 GPU 重训。若服务器还保留原始 HDF5，可先收集其中可能存在的 encoder 元信息，PowerShell：
+本轮不需要 GPU 重训。此前用于收集服务器原始 HDF5 元信息的 PowerShell 指令如下，现已执行并回传，无需重复运行：
 
 ```powershell
 Set-Location 'G:\mmkg-project-research'
@@ -104,4 +104,44 @@ git pull --ff-only
 python scripts/collect_paper_a_feature_provenance.py --output outputs/paper_a_safe_correction/data_checkpoint_feature_provenance.json
 ```
 
-回传上述小 JSON 即可。该脚本只读取文件哈希、HDF5 attributes 和少量对象的 shape，不执行训练、评分或 TEST 选参。若 metadata 为空，它仍不能恢复编码器；届时需要原下载记录或特征生成脚本才能完整关闭 C02 的编码器来源项。不要把服务器缺失的原文件替换成同名的新下载文件来冒充既有来源。
+该脚本只读取文件哈希、HDF5 attributes 和少量对象的 shape，不执行训练、评分或 TEST 选参。回传结果及其证据范围见下一节。
+
+## 服务器回传补证
+
+已核验 `outputs/paper_a_safe_correction/data_checkpoint_feature_provenance.json`。验证脚本不只读取其中的 `status` 或 `hash_matches`，而是将实际回传的 SHA-256、字节数逐项与**此前锁定的** `docs/EXTERNAL_SOURCES_LOCK.json` 及两个训练 split manifest 比对，并要求 dataset/kind 恰好组成六个预期条目，拒绝缺项、重复和额外项。
+
+| 数据集 | 文件类型 | 字节数 | HDF5 root keys | 抽查对象特征维度 | 与原锁一致 |
+|---|---|---:|---:|---:|---|
+| MKG-W | 图像 HDF5 | 554,792,032 | 14,951 | 383 | 是 |
+| MKG-W | 文本 HDF5 | 78,853,653 | 14,149 | 384 | 是 |
+| MKG-W | QID/title crosswalk | 834,296 | — | — | 是 |
+| DB15K | 图像 HDF5 | 551,681,896 | 14,845 | 383 | 是 |
+| DB15K | 文本 HDF5 | 84,013,072 | 9,083 | 384 | 是 |
+| DB15K | SameAs 对齐文件 | 875,463 | — | — | 是 |
+
+四个 HDF5 的 `root_attributes` 全为空，每个文件抽查的前五个对象也都没有 attributes，共 20 个对象。root-key 数与原 manifest 的 HDF5 key 统计一致；它不是对齐后的实体覆盖数。抽查对象的第二维与实际 383/384 维特征一致。
+
+**该 JSON 能确认原始文件身份记录一致，不能单独确认编码器或下载来源。** 哈希和字节数由服务器回传，本地独立比对旧记录；原 HDF5 未回传，不能声称本地重新散列了这些源文件。也不能把根节点和 20 个对象为空外推为文件中任何位置都不存在元信息。OpenBG 自己的文本缓存脚本不适用于 MKG-W/DB15K，不能用它的模型名填补这里的未知项。下载来源通过用户随后提供的链接和下述官方材料另行确认。
+
+新增 `scripts/audit_paper_a_feature_provenance.py` 和 `data_checkpoint_review_v1/feature_provenance_audit.json`；正式来源 manifest 绑定原始回传 JSON、收集脚本、验证脚本、下载来源记录与验证结果。新增测试拒绝“自报 expected/actual 相同却不符旧锁”的哈希、错误字节数、缺失/重复条目、错误维度、错误 key 数、TEST 选参标记及不匹配的下载目录/文件映射；与前轮数据审计测试合计 **20 passed**。
+
+C01/C03 的既有关闭结论不变，实验分数及 checkpoint 未改变。无需重复同一 metadata 收集指令，也没有由此触发重训的依据。
+
+## 用户下载说明与官方发布目录
+
+用户确认四个 `.h5` 直接从 [MMRNS-Datasets 文件夹](https://drive.google.com/drive/folders/1sFC-P9RKnikqNXjmLcj0IX7x5zvRs-Yj) 下载。进一步核验发现，[MMRNS 官方 README](https://github.com/quqxui/MMRNS/blob/a4a41fc8f991df768e1dceb1b113685641e70693/README.md#datasets) 的数据下载链接指向**完全相同的 folder ID**。本次固定的源码 commit 是 `a4a41fc8f991df768e1dceb1b113685641e70693`；这表明发布项目归属，不表示这些输入由本研究重新编码。
+
+[emb_data 子目录](https://drive.google.com/drive/folders/1MAzRC0kEbnwlGe7EIZdqWyhUfDQotndB) 确实列出全部四个文件，目录显示大小与服务器字节数换算后的值一致：
+
+| 文件 | 发布目录显示大小 | Google Drive 文件 ID |
+|---|---:|---|
+| MKG_W_description_sentences.h5 | 75.2 MB | `1C0VrxuhzTY7m5mGSZeqmTJ1gr2ZUgbSt` |
+| MKG_W_img_BEIT_16-224.h5 | 529.1 MB | `1jBW5aTV6nRSyGSy9m2DuGrBl5SjlX8PA` |
+| MMKB_description_sentences.h5 | 80.1 MB | `19XMPd1nRCtKGvjEBmysux04YFVpLy0OA` |
+| MMKB_img_BEIT_16-224.h5 | 526.1 MB | `16PCQGg3ZHHDVyySskaoFIoU9ykwTWp93` |
+
+来源链为：用户确认直接下载 → 官方 README 的同一发布目录 → 目录中的四个文件名及显示大小 → 服务器实际文件 SHA-256 → 此前训练 manifest/18 个 checkpoint 的 canonical 输入哈希。目录显示的 MB 与按 `bytes / 1024^2` 保留一位小数一致。此次没有重新下载并散列远端四个大文件，因此**不把显示大小和名称相同说成独立验证了远端内容 SHA-256，也不声称查明了历史远端文件 revision**。精确使用版本仍由本研究保存的 SHA-256 固定。
+
+`feature_download_source.json` 保存用户下载说明、官方仓库/commit/README、文件夹及四个 file ID、显示大小、既有文件哈希、网页观察哈希和证据限制。此处建立的是使用发布特征的可追溯来源。C02 要求的数据统计、模态特征来源与缺失值策略现已齐全，其最低报告条件可关闭；编码器具体 checkpoint、版本和生成配置仍未知，作为**特征抽取层面的复现限制**保留，不能据此虚写 BERT 或任何具体模型版本。
+
+补证后的最终 PDF 为 33 页、28 张表、3 幅图；全部 2,499 个来源绑定检查通过，编译无溢出或未解析引用。更新页已重新渲染并视觉检查，20 项相关单测通过，原有各轮数值审计仍通过。

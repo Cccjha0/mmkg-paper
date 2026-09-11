@@ -1,0 +1,81 @@
+{
+  "version": "feature_download_source_evidence_v1",
+  "review_date": "2026-09-12",
+  "maintainer_statement": {
+    "source": "user reply in current review thread",
+    "direct_h5_download": true,
+    "folder_url": "https://drive.google.com/drive/folders/1sFC-P9RKnikqNXjmLcj0IX7x5zvRs-Yj"
+  },
+  "public_repository": {
+    "url": "https://github.com/quqxui/MMRNS",
+    "commit": "a4a41fc8f991df768e1dceb1b113685641e70693",
+    "readme_url": "https://github.com/quqxui/MMRNS/blob/a4a41fc8f991df768e1dceb1b113685641e70693/README.md#datasets",
+    "readme_sha256": "c525ea7123affcf832b15a9ba7bff88897534179fd0ac4daa67f1ad15a3f94d9",
+    "observed_download_url": "https://drive.google.com/drive/folders/1sFC-P9RKnikqNXjmLcj0IX7x5zvRs-Yj?usp=drive_link"
+  },
+  "folder": {
+    "url": "https://drive.google.com/drive/folders/1sFC-P9RKnikqNXjmLcj0IX7x5zvRs-Yj",
+    "observed_title": "MMRNS-Datasets",
+    "embedding_subfolder_url": "https://drive.google.com/drive/folders/1MAzRC0kEbnwlGe7EIZdqWyhUfDQotndB",
+    "observed_subfolder_title": "emb_data"
+  },
+  "files": [
+    {
+      "dataset": "mkg_w",
+      "kind": "text_h5",
+      "filename": "MKG_W_description_sentences.h5",
+      "drive_file_id": "1C0VrxuhzTY7m5mGSZeqmTJ1gr2ZUgbSt",
+      "url": "https://drive.google.com/file/d/1C0VrxuhzTY7m5mGSZeqmTJ1gr2ZUgbSt/view",
+      "displayed_size": "75.2 MB",
+      "server_bytes": 78853653,
+      "server_sha256": "9e4815cdd660e00fe85e4ad0f2a671b28f7e158b651c4d43fffe2ca07888c987",
+      "remote_content_sha256_verified": false
+    },
+    {
+      "dataset": "mkg_w",
+      "kind": "image_h5",
+      "filename": "MKG_W_img_BEIT_16-224.h5",
+      "drive_file_id": "1jBW5aTV6nRSyGSy9m2DuGrBl5SjlX8PA",
+      "url": "https://drive.google.com/file/d/1jBW5aTV6nRSyGSy9m2DuGrBl5SjlX8PA/view",
+      "displayed_size": "529.1 MB",
+      "server_bytes": 554792032,
+      "server_sha256": "20c87f77f552da78a613cd3ed56649b0c175c4e205c69b278dce686ba0a7dec1",
+      "remote_content_sha256_verified": false
+    },
+    {
+      "dataset": "db15k",
+      "kind": "text_h5",
+      "filename": "MMKB_description_sentences.h5",
+      "drive_file_id": "19XMPd1nRCtKGvjEBmysux04YFVpLy0OA",
+      "url": "https://drive.google.com/file/d/19XMPd1nRCtKGvjEBmysux04YFVpLy0OA/view",
+      "displayed_size": "80.1 MB",
+      "server_bytes": 84013072,
+      "server_sha256": "b7519b90a55624fb78d2e946bad9fde210650e7789931bea3d9e662001ac547a",
+      "remote_content_sha256_verified": false
+    },
+    {
+      "dataset": "db15k",
+      "kind": "image_h5",
+      "filename": "MMKB_img_BEIT_16-224.h5",
+      "drive_file_id": "16PCQGg3ZHHDVyySskaoFIoU9ykwTWp93",
+      "url": "https://drive.google.com/file/d/16PCQGg3ZHHDVyySskaoFIoU9ykwTWp93/view",
+      "displayed_size": "526.1 MB",
+      "server_bytes": 551681896,
+      "server_sha256": "6063ab03c5041d3d74099811dd417f62732b43aa53269bd7d167e0bc16734961",
+      "remote_content_sha256_verified": false
+    }
+  ],
+  "encoder_version_established": false,
+  "evidence_limits": [
+    "This records the maintainer-reported download source, the official README link and the observed public file listing.",
+    "Public file names and rounded displayed sizes match; remote HDF5 contents were not re-downloaded or hashed in this review.",
+    "Exact used-file hashes are established by prior locks and the returned server report; the listing does not establish a historical remote revision.",
+    "Encoder/checkpoint/version and original feature-extraction configuration remain unconfirmed."
+  ],
+  "observation_document_sha256": {
+    "source_folder.html": "e49cd2de14328fbcc17440966e4db225857a9cb9ea2efd377ce42c731e402b48",
+    "embedding_folder.html": "35de27de1c70c7fd3534c2f9949e2e08e5364474258dcdddd9a6f8dae9906690",
+    "mmrns_readme.md": "c525ea7123affcf832b15a9ba7bff88897534179fd0ac4daa67f1ad15a3f94d9",
+    "mmrns_commit.json": "e428871d340035c11243cb9f940a4f09751da252589f0076c43ff6952065c62c"
+  }
+}
