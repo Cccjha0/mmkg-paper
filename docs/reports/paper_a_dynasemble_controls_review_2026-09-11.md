@@ -2,31 +2,43 @@
 
 **核心结论：健康 DynaSemble 改变了比较结果。** DEV 选择的 R3 在 W-N、D-N 的 MRR 高于 ADC；ADC 在 W-A、D-A 更高，且四组相对 Global 的 harm rate 均更低。不能继续用历史塌缩版本支持“ADC 优于正常动态集成”或统一 SOTA 的结论。
 
-本次只读取回传结果、检查小型 selector 参数并复算统计；未在本机运行真实 scorer、训练或大 bootstrap。输入为 `outputs/paper_a_safe_correction/dynasemble_controls_v1_review/`。实验代码 commit 为 `1c0dbcb2aa0e06702add55cc8bd8f7574eb92dfd`，服务器 Python 3.9.1 / PyTorch 2.6.0+cu126 / NumPy 2.0.2 / A100-SXM4-40GB。
+本次读取回传结果、检查小型 selector 参数、复算统计并重放冻结 selector 前向；未在本机运行真实 scorer、训练或大 bootstrap。输入为 `outputs/paper_a_safe_correction/dynasemble_controls_v1_review/` 及补包 `dynasemble_controls_v1_cache_evidence/`。实验代码 commit 为 `1c0dbcb2aa0e06702add55cc8bd8f7574eb92dfd`，服务器 Python 3.9.1 / PyTorch 2.6.0+cu126 / NumPy 2.0.2 / A100-SXM4-40GB。
 
 ## 关闭状态
 
 | 风险 | 本次已完成 | 状态 |
 |---|---|---|
-| D01：塌缩基线 | 保留 R0 全部失败 seed；五个新版本各 3 base × 3 selector seeds；DEV 调参、训练健康和完整 TEST 比较已完成 | 实验条件满足；健康版本进入主表。最终证据归档仍待下述小型 cache 补包 |
-| D02：论文/公开代码/迁移 | 固定公开 commit、逐项对照和实际 core diff；R1 上游参数/前向/loss/梯度一致性单测；服务器源码与 commit 哈希一致 | 代码核查条件满足；不能称完全复现原论文实验 |
-| D03：固定系数偏置 | R4 使用 R3 同一 DEV 配置/预算，全部 seed 保留；系数比例、gold rank、完整排序探针齐全；已修改绝对端点表述 | 实验与文字条件满足；没有证据表明交换角色是一项有效修复 |
+| D01：塌缩基线 | 保留 R0 全部失败 seed；五个新版本各 3 base × 3 selector seeds；DEV 调参、训练健康和完整 TEST 比较已完成；补包与权重重放通过 | 按既定最低条件关闭；健康版本已进入主表 |
+| D02：论文/公开代码/迁移 | 固定公开 commit、逐项对照和实际 core diff；R1 上游参数/前向/loss/梯度一致性单测；服务器源码与 commit 哈希一致 | 按既定最低条件关闭；不能称完全复现原论文实验 |
+| D03：固定系数偏置 | R4 使用 R3 同一 DEV 配置/预算，全部 seed 保留；系数比例、gold rank、完整排序探针齐全；已修改绝对端点表述 | 按既定最低条件关闭；没有证据表明交换角色是一项有效修复 |
 
-**不将三项整体标为最终关闭：** 原打包器排除了整个 `cache` 目录，连 manifest、DEV 原始行序和四维 feature 数组也没有保留。现有 `complete.json` 可以证明记录的 fit/validation 整数索引互斥、覆盖完整、跨 base/selector 一致；旧 DEV CSV 已按三元组键重排，不能用它独立还原这些整数索引对应的原始三元组。补回现成的小文件即可完成这一步和 selector 特征重放，无需重训。
+**补包核验完成，D01–D03 按本轮既定最低关闭条件关闭。** 原打包器遗漏的24份 cache manifest、DEV/TEST 原始行索引和四维 feature 数组现已回传，共72个文件、15,287,400字节。全部文件与原 DEV/TEST 锁及 manifest 的哈希一致；按实际原始三元组重建的折分配与全部训练记录一致，fit/validation 互斥、覆盖完整，head/tail 与各 base/selector 重复保持同折。180个冻结 selector 的全部2,551,680个 TEST 权重已在 CPU 上重放通过，无需重训。
+
+这是上述三项问题的关闭，不是对整篇论文可投稿或所有历史实验有效性的认证。完整候选分数、normalization 和排名的独立重算仍需服务器大 cache；本次没有声称完成这一额外工作。
 
 这批实验是在已查看历史 TEST 后针对问题设计的补充实验；内部设置只用 DEV 选择，不将整项研究称为新盲测确认。W-A 选中 10 轮、1e-4 的网格边界，本次保留这个预定预算，不根据 TEST 追加搜索或选方向。
 
 ## 核验范围与证据
 
-审计脚本：`scripts/audit_paper_a_dynasemble_review.py`。机器可读结果：`outputs/paper_a_safe_correction/dynasemble_review_audit/audit.json`，`status=review_artifact_checks_passed`，`small_cache_evidence_verified=false`。后者必须保留，不能把前者解释为全部候选分数已独立重算。
+审计脚本：`scripts/audit_paper_a_dynasemble_review.py`。机器可读结果：`outputs/paper_a_safe_correction/dynasemble_review_audit/audit.json`，`status=review_artifact_checks_passed`，`small_cache_evidence_verified=true`，无失败项。此标志表示小型 cache 证据和 selector 重放核验通过，不能解释为全部候选分数已独立重算。
 
-- 4 个 DEV lock、4 个 TEST-start lock 绑定、1,903 个输入文件哈希；记录源码与执行 commit 的 LF 规范化哈希一致。
+- 4 个 DEV lock、4 个 TEST-start lock 绑定、1,975 个输入文件哈希（含72个补包文件）；记录源码与执行 commit 的 LF 规范化哈希一致。
 - 324 条 CV 轨迹（每组 81 条），1,296 个 held-out checkpoint 记录；每个学习率/轮数组合包含所有 3 base × 3 selector × 3 folds。
 - 180 个最终 selector、504 份模型与 trace、全部逐层梯度/参数更新、最终健康标志及 180 行 health summary 相互一致。模型均可安全加载，参数均有限。
 - 独立复算 DEV 观测数加权 MRR、tie-break 和四个配置选择；R1/R2/R3-fixed 固定一轮；R4 与 R3 的配置、seed 和预算一致。
 - 180 份 TEST CSV 与 sidecar/锁/模型绑定一致；完整查询覆盖、无重复；gold 实体、rank 与 RR 一致。基础 A/B 端点与 B07/C04 v2 的 ADC 导出逐查询完全一致。
 - 36 行方法 point summary、456 个 base × selector × direction 单元、harm/benefit/unchanged 及条件幅度全部从逐查询结果复算通过。R0 三个 seed 全部保留，没有将它复制为九个独立运行。
 - 每个完整排序探针的选择可由 observable query hash 重建；探针不依据策略表现或 gold 分数选择。
+- 12份 DEV 与12份 TEST cache 的专家资产、split、query 身份和 feature 哈希均一致；DEV manifest 不包含 TEST 数据文件，DEV 过滤为 TRAIN∪DEV，TEST 为全事实 union。全部12份 DEV 的原始三元组折分配完成独立重建。
+
+| 组合 | 最终 selector 数 | 重放 TEST 权重数 | CPU 重放与服务器导出的最大绝对差 |
+|---|---:|---:|---:|
+| W-N | 45 | 384,660 | 4.768372e-7 |
+| W-A | 45 | 384,660 | 3.814697e-6 |
+| D-N | 45 | 891,180 | 2.861023e-6 |
+| D-A | 45 | 891,180 | 3.814697e-6 |
+
+重放使用此前已提交审计脚本中的 `atol=2e-5, rtol=2e-6`，没有根据本次结果放宽容差。重放权重仅使用已绑定的四维缓存特征与冻结参数，不将 gold/filter 传入 selector。全部通过数值容差核验，**不声称 CPU 与 GPU 输出逐 bit 相等**。补包核验后，方法汇总、所有 seed/direction 值和训练健康汇总的文件字节与补包前一致。
 
 局限：未重放完整候选排名和 normalization；输入数据/原始 cache 大数组的字节核查依赖服务器执行路径。TEST 的先后顺序由锁绑定和代码屏障支持，没有外部时间戳证明。10,000 次 bootstrap 区间为经哈希核验的服务器产物；本机复算 point metrics 和完整 seed/direction 矩阵，没有再次运行大 bootstrap。
 
@@ -78,7 +90,7 @@ R3 的 36 次最终训练中，最小逐层 epoch 更新范数为 .001064，最�
 
 论文对初始化的概括、mean 与代码 1−mean、10,000 negatives 与 YAML 的 9,999+gold、论文 validation 与默认 loader dataset[0] 映射 TRAIN，以及 best_epoch 记录但未自动 reload 的差异均已显式列明。未猜测作者曾手工调换 split。迁移保留本项目双模型宽度16、batch16；不能称所有上游三模型 YAML 参数原样复制。R2 和 R3/R4 的输出初始化/激活变更单列。
 
-本次运行 `tests/test_dynasemble_controls.py` 与新增审计回归测试共 **19 passed**，覆盖公开 core 的参数/前向/loss/梯度一致性、特征在采样前且不接收 gold/filter、端点与角色、完整 synthetic pipeline，以及审计器拒绝缺 seed、重复 CV 记录和跨折/方向错误；补包测试验证72文件字节保真及拒绝被修改的数组。
+此前实现与结果审计阶段的 `tests/test_dynasemble_controls.py` 及审计回归测试共 **19 passed**，覆盖公开 core 的参数/前向/loss/梯度一致性、特征在采样前且不接收 gold/filter、端点与角色、完整 synthetic pipeline，以及审计器拒绝缺 seed、重复 CV 记录和跨折/方向错误；补包测试验证72文件字节保真及拒绝被修改的数组。本轮执行实际回传补包的全量审计和权重重放。
 
 ## D03：交换固定对象的诊断
 
@@ -95,27 +107,17 @@ R4 使用 R3 同一配置，**未额外调到“反向最优”**；差值为描
 
 每个新 selector 每方向32个 observable-query hash 探针，共 180×64=11,520 个 probe observations；与 normalized primary 的完整未过滤弱序（包含 ties）相同的计数为0。不同模型反复评估同一批 query，不能称11,520个独立query；该样本也不证明所有 query 或所有有限 w 均不能恢复 primary 排序。gold rank 比较对象是 raw primary filtered rank，两种检查口径已分别标注。
 
-新版本同 observable-query 的 learned-weight 最大自然跨度为 `3.814697265625e-6`；W-N 的 R3/R4 为精确相同，其他组有微小连续数值差别。此结果不能单独证明差别由 gold 引起，也不能声称全部连续输出逐 bit 相同。保留已有受控 gold/filter 干预单测；补包后可用同一缓存 feature 重放权重，不跨 gold 后处理平均。
+新版本同 observable-query 的 learned-weight 最大自然跨度为 `3.814697265625e-6`；W-N 的 R3/R4 为精确相同，其他组有微小连续数值差别。此结果不能单独证明差别由 gold 引起，也不能声称全部连续输出逐 bit 相同。已有受控 gold/filter 干预单测与本次缓存 feature 重放提供不同层次的检查；均未跨 gold 后处理平均。
 
-## 无需重训的最后补包
+## 补包已完成：复核命令
 
-在**保留原实验 cache 的服务器仓库**执行以下 PowerShell 命令。新脚本只读取既有24份 cache 的 `manifest.json`、`queries.npy`、`features.npy`，共72个小文件；不启动实验，也不改变旧 lock。读取旧结果的脚本不要求当前 HEAD 等于训练 commit，不要重新运行原 `Dev/Test` 阶段来生成补包。
-
-```powershell
-git pull --ff-only
-python scripts/export_paper_a_dynasemble_cache_evidence.py --root outputs/paper_a_safe_correction/dynasemble_controls_v1
-```
-
-回传 `outputs/paper_a_safe_correction/dynasemble_controls_v1_cache_evidence.zip`。这是核验证据补充，不是补实验。
-
-收到后可在本机仓库解压并运行（Python 路径可换为包含 torch/numpy/pandas 的环境）：
+证据保存在 `outputs/paper_a_safe_correction/dynasemble_controls_v1_cache_evidence/`。此次执行以下只读核验，Python 环境包含 torch/numpy/pandas；不再需要用户补包或重新运行原 `Dev/Test` 阶段：
 
 ```powershell
-Expand-Archive -LiteralPath outputs/paper_a_safe_correction/dynasemble_controls_v1_cache_evidence.zip -DestinationPath outputs/paper_a_safe_correction/dynasemble_controls_v1_cache_evidence
 python scripts/audit_paper_a_dynasemble_review.py --cache-evidence-root outputs/paper_a_safe_correction/dynasemble_controls_v1_cache_evidence
 ```
 
-审计器会核对补包与原 DEV/TEST lock 的 hash，重建全部原始三元组折分配，并用缓存四维特征和冻结 selector 在 CPU 上重放180份权重。成功后更新审计状态和稿件中的待补包说明；完整候选排名的独立重放仍需原服务器大 cache。
+审计状态和稿件中的待补包说明已更新；可用 `scripts/build_paper_a_dynasemble_review_tables.py` 重建表格及来源 manifest。原实验协议和锁没有修改，完整候选排名的独立重放仍需原服务器大 cache。
 
 ## 已修改的论文位置
 

@@ -35,6 +35,7 @@ bound_tables={ROOT/'tables/rerun'/name for name in manifest['tables']}|{ROOT/rel
 assert set(tex_files[1:])<=bound_tables
 dyna_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/dynasemble_review_audit/audit.json').read_text())
 assert dyna_audit['status']=='review_artifact_checks_passed' and not dyna_audit['failures']
+assert dyna_audit['small_cache_evidence_verified'], 'D01-D03 closure requires verified cache identities and selector replay'
 audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/information_boundary_rerun_audit/audit.json').read_text())
 assert audit['status']=='artifact_checks_passed_with_continuous_repeatability_caveat'
 assert not audit['failures']
