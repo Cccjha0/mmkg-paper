@@ -69,6 +69,21 @@ assert feature_audit['encoder_provenance_established'] is False
 assert feature_audit['released_feature_download_source_documented'] is True
 assert feature_audit['nonempty_root_attribute_maps']==feature_audit['nonempty_sampled_object_attribute_maps']==0
 assert feature_audit['test_used_for_selection'] is False
+history=json.loads((ROOT/'history_source_manifest.json').read_text(encoding='utf-8'))
+assert history['version']=='test_history_review_v1'
+for rel,sha in history['sources'].items():
+    assert hashlib.sha256((ROOT.parent/rel).read_bytes()).hexdigest()==sha,rel
+for rel,sha in history['tables'].items():
+    assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in history['tables']}
+history_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/test_history_review_v1/audit.json').read_text())
+assert history_audit['status']=='history_evidence_checks_passed' and not history_audit['failures']
+assert history_audit['timeline_events']==15
+assert history_audit['historical_policy_bindings_checked']==4 and history_audit['corrected_policy_bindings_checked']==6
+assert history_audit['current_confirmatory_status']=={'MKG-W':False,'DB15K':False}
+assert not history_audit['historical_test_influence_on_design_excluded']
+assert all(v is None for v in history_audit['first_human_test_inspection_time'].values())
+assert history_audit['test_used_for_new_selection'] is False
 matched_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/matched_alternatives_v1/test_audit.json').read_text())
 assert matched_audit['status']=='matched_alternative_checks_passed' and not matched_audit['failures']
 assert matched_audit['test_used_for_selection'] is False
@@ -108,14 +123,15 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
         'data_checkpoint_checks_passed':True,
         'source_feature_return_verified':True,'encoder_provenance_established':False,
         'released_feature_download_source_documented':True,
+        'test_history_evidence_checks_passed':True,'current_confirmatory_status':history_audit['current_confirmatory_status'],
         'checks':'active input paths, references, rerun source/table hashes, audit status, no placeholders, page bounds: PASS',
         'page_details':page_info}
 (ROOT/'verification.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')

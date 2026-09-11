@@ -1,0 +1,76 @@
+[
+  {
+    "object": "Feature family / learner",
+    "evidence": [
+      "E03",
+      "E04",
+      "E11"
+    ],
+    "supported": "13 geometry fields and logistic implementation are versioned; P3 evaluates feature subsets; corrected geometry is versioned separately.",
+    "limit": "Complete family choice before first TEST inspection is not established; corrected computation postdates exposure."
+  },
+  {
+    "object": "Action grid and radius cap",
+    "evidence": [
+      "E01",
+      "E03",
+      "E04",
+      "E06",
+      "E14"
+    ],
+    "supported": "Alpha grid is 0:0.05:1; beta cap changes from 0.20 to 0.50; legacy locks carry the full grids.",
+    "limit": "No independent pre-inspection cap freeze or calibrated safety rationale; wider-radius analysis is retrospective."
+  },
+  {
+    "object": "OOF grouping and selection",
+    "evidence": [
+      "E02",
+      "E03",
+      "E04",
+      "E10"
+    ],
+    "supported": "Five folds group seeds and directions by original triple; code and selected P3 source hashes are recorded.",
+    "limit": "Grouped DEV validation does not certify TEST-blind choice of the validation scheme or design."
+  },
+  {
+    "object": "Main pairs and primary rule",
+    "evidence": [
+      "E01",
+      "E06",
+      "E08",
+      "E09"
+    ],
+    "supported": "Four main M-Hyper pairs are explicit with September 3 results; the six-pair DEV primary rule is committed September 9.",
+    "limit": "Earlier OpenBG expert choices do not preregister this dataset/pair frame; a later DEV-only audit cannot prove it was chosen blind."
+  },
+  {
+    "object": "Legacy final parameters",
+    "evidence": [
+      "E05",
+      "E06"
+    ],
+    "supported": "Four complete DEV policies, serialized model hashes and TEST-embedded policies match their committed result manifest.",
+    "limit": "Lock receipts and outcomes were recorded together; no trusted first-view timestamp establishes complete pre-exposure freezing."
+  },
+  {
+    "object": "Corrected final parameters",
+    "evidence": [
+      "E07",
+      "E11",
+      "E12"
+    ],
+    "supported": "Six current lock/model/TEST receipt bindings match the rerun source manifest; all four main and two additional pairs are retained.",
+    "limit": "This repairs the feature boundary and supports reproducible execution on previously viewed TEST, not fresh confirmation."
+  },
+  {
+    "object": "Supplementary families / budgets",
+    "evidence": [
+      "E12",
+      "E13",
+      "E14",
+      "E15"
+    ],
+    "supported": "DynaSemble repairs, radius and matched-action studies have their own recorded protocols and DEV choices.",
+    "limit": "Their design follows TEST inspection; within-study DEV selection cannot remove program-level adaptive design uncertainty."
+  }
+]

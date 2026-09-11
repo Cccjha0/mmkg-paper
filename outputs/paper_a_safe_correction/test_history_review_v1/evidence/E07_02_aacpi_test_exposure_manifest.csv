@@ -1,0 +1,7 @@
+dataset,expert_pair,test_previously_accessed,evidence_role,aacpi_development_allowed,notes
+MKG-W,M-Hyper + NativE,yes,retrospective / secondary,no,"Pair-specific full-ranking, Global/relation/Oracle, Query-soft, and Anchored Dynamic v1 TEST outputs exist; not eligible for AACPI method selection."
+MKG-W,M-Hyper + AdaMF-MAT,yes,retrospective / secondary,no,"Pair-specific full-ranking, Global/relation/Oracle, Query-soft, and Anchored Dynamic v1 TEST outputs exist; not eligible for AACPI method selection."
+MKG-W,NativE + AdaMF-MAT,yes (dataset-level),retrospective / secondary,no,"No pair-specific TEST output was found in the current branch assets, but the MKG-W TEST split and outcome landscape were previously accessed; it is not untouched confirmatory evidence."
+DB15K,M-Hyper + NativE,yes,retrospective / secondary,no,"Pair-specific full-ranking, Global/relation/Oracle, Query-soft, and Anchored Dynamic v1 TEST outputs exist; not eligible for AACPI method selection."
+DB15K,M-Hyper + AdaMF-MAT,yes,retrospective / secondary,no,"Pair-specific full-ranking, Global/relation/Oracle, Query-soft, and Anchored Dynamic v1 TEST outputs exist; not eligible for AACPI method selection."
+DB15K,NativE + AdaMF-MAT,yes (dataset-level),retrospective / secondary,no,"No pair-specific TEST output was found in the current branch assets, but the DB15K TEST split and outcome landscape were previously accessed; it is not untouched confirmatory evidence."

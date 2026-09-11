@@ -1,0 +1,38 @@
+[
+  {
+    "claim": "MKG-W confirms the pre-specified complete ADC design",
+    "disposition": "withdraw",
+    "replacement": "Primary retrospective evaluation on MKG-W",
+    "reason": "No complete independently timestamped design freeze before first TEST inspection; corrected workflow postdates documented exposure."
+  },
+  {
+    "claim": "DB15K is an independent replication",
+    "disposition": "withdraw",
+    "replacement": "Secondary external evaluation on DB15K, conducted retrospectively",
+    "reason": "Earlier DB15K score-ensemble TEST use is documented; external denotes a second dataset, not independence from the research program."
+  },
+  {
+    "claim": "No historical TEST outcome influenced method, features or pair choice",
+    "disposition": "not established",
+    "replacement": "Recorded selection routines use DEV labels; the available record cannot exclude indirect design influence from already viewed TEST outcomes.",
+    "reason": "No immutable complete decision diary/access log; contemporaneous reports contain an author assertion but not independent evidence."
+  },
+  {
+    "claim": "77 passing checks restore holdout independence",
+    "disposition": "withdraw inference",
+    "replacement": "The archived 77 checks establish only their recorded execution-consistency conditions.",
+    "reason": "Neither checks nor hashes encode researcher knowledge; the subsequent information-boundary repair also limits the old audit's scope."
+  },
+  {
+    "claim": "Current TEST application uses serialized DEV parameters",
+    "disposition": "retain with scope",
+    "replacement": "All six current complete policies and model hashes match the recorded TEST applications; this is execution identity, not pre-inspection design independence.",
+    "reason": "Direct policy/model binding checks, distinct from the missing chronology evidence."
+  },
+  {
+    "claim": "Bootstrap intervals provide confirmation after adaptive design",
+    "disposition": "withdraw inference",
+    "replacement": "Pointwise conditional descriptive intervals do not account for historical TEST reuse or adaptive method/pair/family choice.",
+    "reason": "The resampling holds the fitted models and observed design fixed."
+  }
+]

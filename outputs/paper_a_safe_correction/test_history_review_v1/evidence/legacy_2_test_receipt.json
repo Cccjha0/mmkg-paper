@@ -1,0 +1,362 @@
+{
+  "schema_version": 1,
+  "pair_name": "mkgw_mhyper_adamf",
+  "dataset": "mkg_w",
+  "protocol_version": "mmkg_general_v1",
+  "split": "test",
+  "expert_a_name": "M-Hyper",
+  "expert_b_name": "AdaMF-MAT",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "policy": {
+    "schema_version": 1,
+    "pair_name": "mkgw_mhyper_adamf",
+    "dataset": "mkg_w",
+    "protocol_version": "mmkg_general_v1",
+    "expert_a_name": "M-Hyper",
+    "expert_b_name": "AdaMF-MAT",
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "formula": "clip(alpha0 + beta * tanh(g(phi(q))), 0, 1)",
+    "model": "median imputation + standard scaling + balanced logistic regression",
+    "label": "expert A has strictly larger reciprocal rank; ties excluded from fitting",
+    "alpha_application": "rounded to nearest exact-ranking alpha grid value",
+    "alpha_grid": [
+      0.0,
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      1.0
+    ],
+    "alpha0": 1.0,
+    "beta": 0.5,
+    "confidence_threshold": 0.1,
+    "beta_grid": [
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5
+    ],
+    "confidence_threshold_grid": [
+      0.0,
+      0.1,
+      0.2,
+      0.3
+    ],
+    "selected_full_dev_mrr": 0.355338713235307,
+    "random_state": 20260902,
+    "query_geometry_fields": [
+      "geometry_direction_tail",
+      "geometry_a_top1",
+      "geometry_a_top5_mean",
+      "geometry_a_top1_top2_margin",
+      "geometry_a_score_std",
+      "geometry_b_top1",
+      "geometry_b_top5_mean",
+      "geometry_b_top1_top2_margin",
+      "geometry_b_score_std",
+      "geometry_top1_delta_a_minus_b",
+      "geometry_top5_delta_a_minus_b",
+      "geometry_margin_delta_a_minus_b",
+      "geometry_std_delta_a_minus_b"
+    ],
+    "source_dev_query_rows": "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\outputs\\mkg_w\\anchored_dynamic\\mhyper_adamf_seed123\\full_ranking\\dev_query_rows.csv",
+    "source_dev_query_rows_sha256": "e389449b44379ecb18fe248127c6b062b2f5cc7894fb052536a442528ab4287b",
+    "source_selection_json": "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\outputs\\mkg_w\\anchored_dynamic\\mhyper_adamf_seed123\\full_ranking\\selection.json",
+    "source_selection_json_sha256": "f1c688963e62b52470c30ee722713bb372c51df61421503396cfbc3e5e8ad198",
+    "source_crossfit_summary": "C:\\Users\\vipuser\\Desktop\\mmkg-paper\\outputs\\mkg_w\\anchored_dynamic\\mhyper_adamf_seed123\\p3_ablation\\dev_p3_summary.json",
+    "source_crossfit_summary_sha256": "8f911fb33e321b81c8438bdf74653f4567e912b4f22904545185f2c451997458",
+    "model_file": "anchored_model.pkl",
+    "model_sha256": "3356e915645b8f371864fb5b0f0717aef8a016de8234d76dcfd5f6bda2566720",
+    "selection_boundary": "all fitting and hyperparameter selection use DEV only"
+  },
+  "results": [
+    {
+      "count": 25644,
+      "mrr": 0.35972093947608075,
+      "hits@1": 0.30201996568398065,
+      "hits@3": 0.38254562470753395,
+      "hits@10": 0.46927156449851815,
+      "method": "M-Hyper",
+      "delta_vs_global": 0.0,
+      "notes": "fixed expert"
+    },
+    {
+      "count": 25644,
+      "mrr": 0.2963189096948725,
+      "hits@1": 0.2009436905318983,
+      "hits@3": 0.35645765091249415,
+      "hits@10": 0.44883793479956324,
+      "method": "AdaMF-MAT",
+      "delta_vs_global": -0.06340202978120824,
+      "notes": "fixed expert"
+    },
+    {
+      "count": 25644,
+      "mrr": 0.35972093947608075,
+      "hits@1": 0.30201996568398065,
+      "hits@3": 0.38254562470753395,
+      "hits@10": 0.46927156449851815,
+      "method": "Global alpha",
+      "delta_vs_global": 0.0,
+      "notes": "DEV-locked static anchor"
+    },
+    {
+      "count": 25644,
+      "mrr": 0.35828085949561334,
+      "hits@1": 0.2989003275620028,
+      "hits@3": 0.382116674465762,
+      "hits@10": 0.4698175011698643,
+      "method": "Relation alpha",
+      "delta_vs_global": -0.0014400799804674125,
+      "notes": "DEV-locked diagnostic"
+    },
+    {
+      "count": 25644,
+      "mrr": 0.352470384286632,
+      "hits@1": 0.27823272500389956,
+      "hits@3": 0.38769302760879737,
+      "hits@10": 0.4834659179535174,
+      "method": "Query-soft logistic",
+      "delta_vs_global": -0.007250555189448726,
+      "notes": "DEV-locked no-anchor ablation"
+    },
+    {
+      "count": 25644,
+      "mrr": 0.36170520659022115,
+      "hits@1": 0.30233192949617843,
+      "hits@3": 0.38461238496334427,
+      "hits@10": 0.4737560442988613,
+      "method": "Anchored dynamic",
+      "delta_vs_global": 0.0019842671141404034,
+      "notes": "DEV-locked primary method"
+    },
+    {
+      "count": 25644,
+      "mrr": 0.3907318595671962,
+      "hits@1": 0.3265091249415068,
+      "hits@3": 0.4167056621431914,
+      "hits@10": 0.5114646700982686,
+      "method": "Oracle",
+      "delta_vs_global": 0.031010920091115446,
+      "notes": "answer-aware upper bound"
+    }
+  ],
+  "results_by_seed": [
+    {
+      "seed": 1,
+      "method": "M-Hyper",
+      "count": 8548,
+      "mrr": 0.36061024143331455,
+      "hits@1": 0.3020589611605054,
+      "hits@3": 0.3826626111371081,
+      "hits@10": 0.4713383247543285,
+      "delta_vs_global": 0.0
+    },
+    {
+      "seed": 1,
+      "method": "AdaMF-MAT",
+      "count": 8548,
+      "mrr": 0.28789290847837207,
+      "hits@1": 0.18893308376228357,
+      "hits@3": 0.35037435657463734,
+      "hits@10": 0.4429106223678053,
+      "delta_vs_global": -0.07271733295494248
+    },
+    {
+      "seed": 1,
+      "method": "Global alpha",
+      "count": 8548,
+      "mrr": 0.36061024143331455,
+      "hits@1": 0.3020589611605054,
+      "hits@3": 0.3826626111371081,
+      "hits@10": 0.4713383247543285,
+      "delta_vs_global": 0.0
+    },
+    {
+      "seed": 1,
+      "method": "Query-soft logistic",
+      "count": 8548,
+      "mrr": 0.35008676532636296,
+      "hits@1": 0.27281235376696306,
+      "hits@3": 0.3883949461862424,
+      "hits@10": 0.4836218998596163,
+      "delta_vs_global": -0.01052347610695159
+    },
+    {
+      "seed": 1,
+      "method": "Anchored dynamic",
+      "count": 8548,
+      "mrr": 0.36266772061993535,
+      "hits@1": 0.30229293401965374,
+      "hits@3": 0.38465138043986896,
+      "hits@10": 0.47613476836686947,
+      "delta_vs_global": 0.002057479186620803
+    },
+    {
+      "seed": 1,
+      "method": "Oracle",
+      "count": 8548,
+      "mrr": 0.39063689808948404,
+      "hits@1": 0.3240524099204492,
+      "hits@3": 0.4182264857276556,
+      "hits@10": 0.5133364529714554,
+      "delta_vs_global": 0.030026656656169493
+    },
+    {
+      "seed": 2,
+      "method": "M-Hyper",
+      "count": 8548,
+      "mrr": 0.35885412183356935,
+      "hits@1": 0.30147402901263454,
+      "hits@3": 0.3819606925596631,
+      "hits@10": 0.4680627047262518,
+      "delta_vs_global": 0.0
+    },
+    {
+      "seed": 2,
+      "method": "AdaMF-MAT",
+      "count": 8548,
+      "mrr": 0.30220208553871764,
+      "hits@1": 0.20858680393074402,
+      "hits@3": 0.3612540945250351,
+      "hits@10": 0.45273748245203554,
+      "delta_vs_global": -0.056652036294851715
+    },
+    {
+      "seed": 2,
+      "method": "Global alpha",
+      "count": 8548,
+      "mrr": 0.35885412183356935,
+      "hits@1": 0.30147402901263454,
+      "hits@3": 0.3819606925596631,
+      "hits@10": 0.4680627047262518,
+      "delta_vs_global": 0.0
+    },
+    {
+      "seed": 2,
+      "method": "Query-soft logistic",
+      "count": 8548,
+      "mrr": 0.3533215721562292,
+      "hits@1": 0.28088441740758074,
+      "hits@3": 0.38617220402433317,
+      "hits@10": 0.48104819840898455,
+      "delta_vs_global": -0.005532549677340126
+    },
+    {
+      "seed": 2,
+      "method": "Anchored dynamic",
+      "count": 8548,
+      "mrr": 0.36066291805345485,
+      "hits@1": 0.30182498830135707,
+      "hits@3": 0.3837154890032756,
+      "hits@10": 0.47215722976134766,
+      "delta_vs_global": 0.0018087962198855
+    },
+    {
+      "seed": 2,
+      "method": "Oracle",
+      "count": 8548,
+      "mrr": 0.38985456236614713,
+      "hits@1": 0.32732802994852594,
+      "hits@3": 0.41424894712213384,
+      "hits@10": 0.5085400093589144,
+      "delta_vs_global": 0.031000440532577778
+    },
+    {
+      "seed": 3,
+      "method": "M-Hyper",
+      "count": 8548,
+      "mrr": 0.35969845516135995,
+      "hits@1": 0.30252690687880207,
+      "hits@3": 0.3830135704258306,
+      "hits@10": 0.46841366401497425,
+      "delta_vs_global": 0.0
+    },
+    {
+      "seed": 3,
+      "method": "AdaMF-MAT",
+      "count": 8548,
+      "mrr": 0.2988617350675429,
+      "hits@1": 0.20531118390266728,
+      "hits@3": 0.35774450163781,
+      "hits@10": 0.45086569957884887,
+      "delta_vs_global": -0.060836720093817076
+    },
+    {
+      "seed": 3,
+      "method": "Global alpha",
+      "count": 8548,
+      "mrr": 0.35969845516135995,
+      "hits@1": 0.30252690687880207,
+      "hits@3": 0.3830135704258306,
+      "hits@10": 0.46841366401497425,
+      "delta_vs_global": 0.0
+    },
+    {
+      "seed": 3,
+      "method": "Query-soft logistic",
+      "count": 8548,
+      "mrr": 0.3540028153773107,
+      "hits@1": 0.2810014038371549,
+      "hits@3": 0.38851193261581657,
+      "hits@10": 0.48572765559195136,
+      "delta_vs_global": -0.0056956397840492445
+    },
+    {
+      "seed": 3,
+      "method": "Anchored dynamic",
+      "count": 8548,
+      "mrr": 0.3617849810972715,
+      "hits@1": 0.30287786616752455,
+      "hits@3": 0.38547028544688816,
+      "hits@10": 0.47297613476836686,
+      "delta_vs_global": 0.0020865259359115207
+    },
+    {
+      "seed": 3,
+      "method": "Oracle",
+      "count": 8548,
+      "mrr": 0.39170411824595275,
+      "hits@1": 0.32814693495554514,
+      "hits@3": 0.4176415535797847,
+      "hits@10": 0.5125175479644362,
+      "delta_vs_global": 0.032005663084592795
+    }
+  ],
+  "diagnostics": {
+    "n_rows": 25644,
+    "fallback_rate": 0.24220090469505537,
+    "saturation_rate": 0.5036265793167992,
+    "changed_from_anchor_rate": 0.3562626735298705
+  },
+  "interpretation_boundary": "The combiner model, alpha anchor, beta, and confidence threshold were selected using DEV only. TEST outcomes are used only for final reporting."
+}

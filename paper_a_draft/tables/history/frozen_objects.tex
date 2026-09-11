@@ -1,0 +1,18 @@
+\begin{table}[tbp]
+\centering\footnotesize
+\caption{Frozen-object inventory and the scope of each claim. Record IDs refer to Tables~\ref{tab:history-1}--\ref{tab:history-2}. Matching a policy to a TEST receipt does not establish that its design preceded the first inspection of that TEST split.}
+\label{tab:history-objects}
+\begin{tabularx}{\linewidth}{@{}p{.23\linewidth}X@{}}
+\toprule
+Object / records & Supported boundary and limitation\\
+\midrule
+Feature family / learner\newline E03, E04, E11 & 13 geometry fields and logistic implementation are versioned; P3 evaluates feature subsets; corrected geometry is versioned separately. \emph{Limit:} Complete family choice before first TEST inspection is not established; corrected computation postdates exposure.\\[3pt]
+Action grid and radius cap\newline E01, E03, E04, E06, E14 & Alpha grid is 0:0.05:1; beta cap changes from 0.20 to 0.50; legacy locks carry the full grids. \emph{Limit:} No independent pre-inspection cap freeze or calibrated safety rationale; wider-radius analysis is retrospective.\\[3pt]
+OOF grouping and selection\newline E02, E03, E04, E10 & Five folds group seeds and directions by original triple; code and selected P3 source hashes are recorded. \emph{Limit:} Grouped DEV validation does not certify TEST-blind choice of the validation scheme or design.\\[3pt]
+Main pairs and primary rule\newline E01, E06, E08, E09 & Four main M-Hyper pairs are explicit with September 3 results; the six-pair DEV primary rule is committed September 9. \emph{Limit:} Earlier OpenBG expert choices do not preregister this dataset/pair frame; a later DEV-only audit cannot prove it was chosen blind.\\[3pt]
+Legacy final parameters\newline E05, E06 & Four complete DEV policies, serialized model hashes and TEST-embedded policies match their committed result manifest. \emph{Limit:} Lock receipts and outcomes were recorded together; no trusted first-view timestamp establishes complete pre-exposure freezing.\\[3pt]
+Corrected final parameters\newline E07, E11, E12 & Six current lock/model/TEST receipt bindings match the rerun source manifest; all four main and two additional pairs are retained. \emph{Limit:} This repairs the feature boundary and supports reproducible execution on previously viewed TEST, not fresh confirmation.\\[3pt]
+Supplementary families / budgets\newline E12, E13, E14, E15 & DynaSemble repairs, radius and matched-action studies have their own recorded protocols and DEV choices. \emph{Limit:} Their design follows TEST inspection; within-study DEV selection cannot remove program-level adaptive design uncertainty.\\[3pt]
+\bottomrule
+\end{tabularx}
+\end{table}
