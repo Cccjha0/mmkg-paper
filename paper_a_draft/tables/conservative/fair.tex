@@ -1,0 +1,43 @@
+\begin{table}[htbp]
+\centering\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\caption{Common TEST reference and risk definitions. $U=\Delta\mathrm{MRR}$; $L_-=E[\max(-\Delta\mathrm{RR},0)]$; $H$ is harm frequency; $C$ is conditional mean loss; $I_\alpha$ is weight-change frequency; $D_\alpha$ is mean absolute weight displacement. Global has zero risk relative to itself and undefined $C$. Dyna R3 uses min-max rather than z-score coefficients, so $I_\alpha,D_\alpha$ are not comparable and are omitted. All historical and repaired Dyna variants are included in the supplementary CSV.}
+\label{tab:conservative-fair}
+\begin{tabular}{llrrrrrr}
+\toprule
+Pair & Method & $U$ & $L_-$ & $H$ (\%) & $C$ & $I_\alpha$ (\%) & $D_\alpha$\\
+\midrule
+W-N & Global & +0.000000 & 0.000000 & 0.000 & -- & 0.00 & 0.0000\\
+W-N & Relation & +0.004256 & 0.014430 & 26.821 & 0.05380 & 100.00 & 0.3050\\
+W-N & Query-soft & +0.001878 & 0.005369 & 16.355 & 0.03283 & 79.79 & 0.0826\\
+W-N & ADC & +0.002447 & 0.005463 & 15.150 & 0.03606 & 63.33 & 0.1210\\
+W-N & $\beta=1$ & +0.002400 & 0.008829 & 17.848 & 0.04946 & 63.33 & 0.2460\\
+W-N & $\tau=0$ & +0.002436 & 0.007405 & 22.633 & 0.03272 & 89.10 & 0.1365\\
+W-N & Dyna R3 & +0.004865 & 0.007913 & 16.823 & 0.04704 & -- & --\\
+\midrule
+W-A & Global & +0.000000 & 0.000000 & 0.000 & -- & 0.00 & 0.0000\\
+W-A & Relation & -0.001048 & 0.004536 & 4.508 & 0.10063 & 20.59 & 0.0689\\
+W-A & Query-soft & -0.019103 & 0.038637 & 26.361 & 0.14657 & 100.00 & 0.4829\\
+W-A & ADC & +0.001014 & 0.001425 & 3.619 & 0.03938 & 20.29 & 0.0400\\
+W-A & $\beta=1$ & +0.002184 & 0.002575 & 4.746 & 0.05426 & 20.29 & 0.0800\\
+W-A & $\tau=0$ & +0.001046 & 0.002177 & 6.614 & 0.03292 & 39.60 & 0.0523\\
+W-A & Dyna R3 & -0.000646 & 0.003637 & 11.010 & 0.03303 & -- & --\\
+\midrule
+D-N & Global & +0.000000 & 0.000000 & 0.000 & -- & 0.00 & 0.0000\\
+D-N & Relation & -0.000075 & 0.008052 & 10.528 & 0.07648 & 45.07 & 0.1388\\
+D-N & Query-soft & -0.013577 & 0.035751 & 30.073 & 0.11888 & 100.00 & 0.4911\\
+D-N & ADC & -0.000081 & 0.000617 & 1.424 & 0.04336 & 7.87 & 0.0080\\
+D-N & $\beta=1$ & -0.000314 & 0.002224 & 2.262 & 0.09829 & 7.87 & 0.0360\\
+D-N & $\tau=0$ & -0.000147 & 0.001472 & 5.326 & 0.02764 & 33.90 & 0.0214\\
+D-N & Dyna R3 & +0.000417 & 0.004275 & 16.281 & 0.02625 & -- & --\\
+\midrule
+D-A & Global & +0.000000 & 0.000000 & 0.000 & -- & 0.00 & 0.0000\\
+D-A & Relation & -0.001388 & 0.003884 & 3.992 & 0.09728 & 17.19 & 0.0493\\
+D-A & Query-soft & -0.035807 & 0.057061 & 34.550 & 0.16515 & 100.00 & 0.4939\\
+D-A & ADC & +0.000212 & 0.000048 & 0.094 & 0.05128 & 0.45 & 0.0014\\
+D-A & $\beta=1$ & +0.000324 & 0.000055 & 0.116 & 0.04745 & 0.45 & 0.0027\\
+D-A & $\tau=0$ & -0.002989 & 0.006374 & 8.561 & 0.07446 & 43.35 & 0.0465\\
+D-A & Dyna R3 & -0.002214 & 0.005057 & 14.661 & 0.03449 & -- & --\\
+\bottomrule
+\end{tabular}
+\end{table}

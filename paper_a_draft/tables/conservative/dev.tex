@@ -1,0 +1,16 @@
+\begin{table}[htbp]
+\centering\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\caption{Grouped held-out DEV comparison of restricted ($\beta\leq0.50$) and wider ($\beta\leq1.00$) finite families. Each fold selects $\beta,\tau$ by training-portion MRR with the same fitted classifier and anchor. $U$ is net RR utility, $L_-$ is unconditional mean RR loss, and $H$ is harm frequency. No new policy is applied to TEST.}
+\label{tab:conservative-dev}
+\begin{tabular}{lrrrrrr}
+\toprule
+Pair & $U_{.50}$ & $U_{1.00}$ & $L_{-,.50}$ & $L_{-,1.00}$ & $H_{.50}$ (\%) & $H_{1.00}$ (\%)\\
+\midrule
+W-N & +0.003070 & +0.004063 & 0.004701 & 0.006269 & 14.96 & 16.80\\
+W-A & +0.001204 & +0.002078 & 0.001476 & 0.002481 & 3.75 & 4.63\\
+D-N & -0.000009 & -0.000009 & 0.000512 & 0.000512 & 1.65 & 1.65\\
+D-A & +0.000036 & +0.000071 & 0.000125 & 0.000135 & 0.09 & 0.11\\
+\bottomrule
+\end{tabular}
+\end{table}

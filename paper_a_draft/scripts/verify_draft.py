@@ -32,7 +32,20 @@ for rel,sha in dyna['sources'].items():
 for rel,sha in dyna['tables'].items():
     assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
 bound_tables={ROOT/'tables/rerun'/name for name in manifest['tables']}|{ROOT/rel for rel in dyna['tables']}
+conservative=json.loads((ROOT/'conservative_source_manifest.json').read_text(encoding='utf-8'))
+assert conservative['version']=='conservative_radius_review_v1'
+for rel,sha in conservative['sources'].items():
+    assert hashlib.sha256((ROOT.parent/rel).read_bytes()).hexdigest()==sha,rel
+for collection in ('tables','figures'):
+    for rel,sha in conservative[collection].items():
+        assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in conservative['tables']}
 assert set(tex_files[1:])<=bound_tables
+radius_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/conservative_radius_review/audit.json').read_text())
+assert radius_audit['status']=='conservative_radius_checks_passed' and not radius_audit['failures']
+assert radius_audit['test_used_for_new_selection'] is False
+assert len(radius_audit['pair_checks'])==4
+assert all(c['five_fold_actions_rr_fallback_reproduced'] for c in radius_audit['pair_checks'])
 dyna_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/dynasemble_review_audit/audit.json').read_text())
 assert dyna_audit['status']=='review_artifact_checks_passed' and not dyna_audit['failures']
 assert dyna_audit['small_cache_evidence_verified'], 'D01-D03 closure requires verified cache identities and selector replay'
@@ -62,9 +75,10 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
+        'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'checks':'active input paths, references, rerun source/table hashes, audit status, no placeholders, page bounds: PASS',
         'page_details':page_info}
 (ROOT/'verification.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')

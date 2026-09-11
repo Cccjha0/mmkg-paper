@@ -1,5 +1,7 @@
 # Paper A Bounded-Correction / Beta Trust-Region Report
 
+> Historical, pre-B07 snapshot; superseded on 2026-09-11 by [the corrected A03/B04/D08 review](paper_a_conservative_radius_review_2026-09-11.md). The numerical claims below do not describe the corrected feature boundary. In particular, the new radii are not all 0.50, beta=1 does not improve TEST MRR in all pairs, and the radius is an action bound, not a calibrated RR-risk budget. This archived text supplies no current manuscript evidence.
+
 ## Main answer
 
 Beta has a direct operational meaning: it bounds how far the fused score of every candidate can move away from the DEV-selected Global anchor, scaled by the candidate's inter-expert score disagreement. Empirically, all 10 formal beta values remain net-positive in 8/8 pair/split curves, which is a wide sign-stable performance region. This stability does not imply constant risk: Harm Rate is monotone non-decreasing in 8/8 curves and mean alpha deviation in 8/8. Relative to the locked beta, `beta=1.0` raises Delta MRR in 8/8 cases, but also raises harm frequency in 8/8 and conditional Mean Harm in 8/8. The local bound therefore acts as a risk budget even when a wider correction range improves mean MRR.

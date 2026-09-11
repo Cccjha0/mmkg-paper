@@ -29,3 +29,10 @@ paper_a_draft/tables/rerun/** -text whitespace=cr-at-eol
 paper_a_draft/tables/dynasemble/** -text whitespace=cr-at-eol
 paper_a_draft/rerun_source_manifest.json -text whitespace=cr-at-eol
 paper_a_draft/dynasemble_source_manifest.json -text whitespace=cr-at-eol
+docs/protocols/paper_a_conservative_radius_review.md -text whitespace=cr-at-eol
+scripts/analyze_paper_a_conservative_radius.py -text whitespace=cr-at-eol
+scripts/build_paper_a_conservative_assets.py -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/conservative_radius_review/** -text whitespace=cr-at-eol
+paper_a_draft/tables/conservative/** -text whitespace=cr-at-eol
+paper_a_draft/conservative_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/figures/conservative/*.pdf -text -diff

@@ -42,11 +42,12 @@
 \begin{document}
 \maketitle
 \begin{quote}
-\textbf{Corrected research draft: DynaSemble controls reviewed, 11 September 2026.}
+\textbf{Corrected research draft: conservative-radius review, 11 September 2026.}
 Six MKG-W/DB15K pairs use the corrected feature/filter boundary. DynaSemble controls include 324 DEV training trajectories and 180 final selectors, retaining the historical failed transfer. The healthy DEV-selected transfer exceeds ADC in two main pairs; ADC has lower harm frequency in all four. Claims based on the collapsed transfer alone are withdrawn. The requested D01--D03 checks are complete: the cache supplement verifies original-triple DEV fold identities and reproduces all 2,551,680 TEST selector weights within the predeclared numerical tolerance. These supplementary experiments follow historical TEST inspection. OpenBG, timing and historical confidence/sensitivity figures remain excluded. This is not a submission-ready certification.
+The A03/B04/D08 analysis defines conservative as reference-anchored, bounded action; adds grouped DEV comparisons of two radius families; and reports common utility, loss and intervention measures without changing any TEST lock.
 \end{quote}
 \begin{abstract}
-Independently trained multimodal knowledge graph completion models can provide complementary rankings even when their overall accuracy differs substantially. We introduce Anchored Dynamic Correction (ADC), which converts a query-level model-preference signal into a bounded adjustment around a development-selected static weight, with confidence-based fallback to that reference. Candidate-distribution features and normalization are computed before known-answer filtering, independently of the designated gold. After correcting a gold-dependent filtering error and rerunning all six MKG-W/DB15K pairs, ADC has positive TEST MRR increments in three of four primary pairs: 0.002447, 0.001014, and 0.000212, each with a positive lower bound in an original-triple clustered bootstrap interval. The remaining pair has an increment of $-0.000081$ with an interval spanning zero. A healthy DEV-selected DynaSemble transfer exceeds ADC in two pairs, while ADC has lower harmful-query frequency in all four. Fixed-policy ablations show that the bound reduces harm frequency, while its effect on mean accuracy and conditional harm severity varies. Fallback changes a negative increment into a positive one for DB15K with M-Hyper and AdaMF-MAT. The evidence supports pair-dependent correction benefits and an empirical accuracy--harm comparison, rather than uniform accuracy superiority.
+Independently trained multimodal knowledge graph completion models can provide complementary rankings even when their overall accuracy differs substantially. We introduce Anchored Dynamic Correction (ADC), which converts a query-level model-preference signal into a bounded adjustment around a development-selected static weight, with confidence-based fallback. Here conservative means reference-anchored, bounded action: the radius limits coefficient and associated score perturbations, without guaranteeing infrequent changes or bounded reciprocal-rank harm. Features and normalization precede known-answer filtering, independently of the designated gold. The corrected evaluation gives positive TEST MRR increments in three of four primary pairs: 0.002447, 0.001014, and 0.000212, each with a positive lower original-triple bootstrap bound. The remaining increment is $-0.000081$, with an interval spanning zero. Healthy DEV-selected DynaSemble exceeds ADC in two pairs; ADC has lower harm frequency and unconditional mean loss in all four, but higher conditional loss in three. Wider radius selection improves held-out DEV utility in three pairs while increasing mean loss. On W-N, ADC improves utility and harm frequency over Query-soft but slightly increases mean loss. Global has zero reference-relative loss by construction. The evidence establishes empirical, metric-specific trade-offs within a restricted action family, not a ranking-risk guarantee or uniform superiority.
 \end{abstract}
 \noindent\textbf{Keywords:} multimodal knowledge graph completion; model combination; dynamic score correction; negative transfer; selective adaptation.
 
@@ -59,6 +60,7 @@ A globally weaker model can still contribute useful ranking information. In the 
 Learning query-dependent weights introduces a second problem: the policy must decide how much to trust its own preference signal relative to an already effective ranking. Predicting which standalone model has the better rank supplies a convenient supervised signal, but converting this prediction directly into a mixture weight can substantially increase the influence of a weaker model. In our four primary evaluation pairs, a direct probability-weighting policy improves on the validation-selected Global baseline in one pair and degrades in three. The strongest static solution is the pure primary endpoint in three of those pairs. This setting makes preservation of the reference ranking central to successful adaptation.
 
 We address this problem with \emph{Anchored Dynamic Correction} (\adc). The method first selects a static reference weight on the development split (DEV). A logistic model then summarizes query-level score geometry into a model-preference signal. Instead of treating that signal as the final mixture weight, \adc\ maps it to a bounded offset from the reference and uses confidence-based fallback to retain the reference on selected queries. This construction separates the choice of a reliable starting solution from the amount of query-specific adjustment.
+We use \emph{conservative} for this testable reference-and-radius construction. It does not mean that few queries change or that reciprocal-rank losses are unlikely. Those outcomes require separate empirical comparisons against named policies and risk measures; Global itself has zero reference-relative harm.
 
 Our experiments evaluate both net utility and harmful corrections. MKG-W is the designated confirmatory dataset in the original workflow and DB15K supplies a secondary replication. The corrected results yield positive TEST increments in three of four main pairs, ten of twelve pair--seed cells, and seven of eight pair--direction cells. The DB15K M-Hyper + NativE result is close to zero and slightly negative. A supplementary DynaSemble study preserves failed runs and adds healthy training and role-swap controls; its DEV-selected baseline has higher MRR than ADC in two pairs, with higher harm frequency in all four. This study follows historical TEST inspection and does not constitute fresh blind confirmation. Increasing the ADC radius raises harm frequency, but its accuracy effect varies. Fallback changes a negative increment into a positive one for DB15K with M-Hyper and AdaMF-MAT.
 
@@ -78,7 +80,7 @@ MMKGC methods combine relational evidence with entity modalities using different
 MoSE learns modality-split representations and combines their predictions during inference~\citep{mose}. Its ensemble operates on predictors constructed within a multimodal representation framework. DynaSemble learns query-dependent weights from candidate-score distributions for separately trained textual and structural KGC models~\citep{dynasemble}. This establishes query-dependent score ensembling as an existing approach to KGC. Our focus is the control of adaptation when a DEV-selected reference already assigns high weight to a more reliable primary. \adc\ makes that reference explicit in the policy, and our experiments compare the resulting correction behavior with direct probability weighting, the historical DynaSemble transfer, and healthy-training controls.
 
 \paragraph{Selective prediction.}
-Selective prediction associates a prediction system with an acceptance or rejection decision. SelectiveNet, for example, jointly learns prediction and selection to improve the risk--coverage trade-off~\citep{selectivenet}. \adc\ uses selection at a different decision level: a rejected adjustment returns to an existing ranking, so every query still receives a prediction. The relevant utility is the change in reciprocal rank relative to that reference. Our coverage analysis therefore measures which corrections are accepted, how many actually alter the mixture, and what gains or losses are produced.
+Selective prediction associates a prediction system with an acceptance or rejection decision. SelectiveNet, for example, jointly learns prediction and selection to improve the risk--coverage trade-off~\citep{selectivenet}. \adc\ uses selection at a different decision level: a rejected adjustment returns to an existing ranking, so every query still receives a prediction. We measure reference-relative reciprocal-rank changes alongside the frequency and magnitude of weight changes. Preference confidence is not a calibrated estimate of correction risk.
 
 \section{Problem Formulation}
 \label{sec:problem}
@@ -184,7 +186,9 @@ Input & Frozen candidate scores, query direction, fitted preprocessing and class
 \end{tabularx}
 \end{algorithm}
 
-\subsection{Score perturbation induced by the radius}
+\subsection{A testable meaning of conservative}
+\label{sec:conservative-definition}
+The policy is \emph{reference-anchored} because fallback returns exactly to a fixed DEV-selected $\alpha_0$, and \emph{bounded-action} because every applied weight satisfies $|\widehat\alpha(q)-\alpha_0|\leq\beta$ for the evaluated, grid-aligned radii. These are deterministic properties of the action rule. They do not bound the fraction of changed weights or the probability or magnitude of RR harm. We reserve claims of lower empirical harm for specified comparators and metrics.
 Let $d(q,e)=\widetilde s_p(q,e)-\widetilde s_s(q,e)$. The mixture admits the identity
 \begin{equation}
 s_\alpha(q,e)-s_{\alpha_0}(q,e)=(\alpha-\alpha_0)d(q,e).
@@ -204,7 +208,7 @@ The same inequality holds after nearest-grid projection when the clipped interva
 The magnitude of $\beta\tanh(g)$ is at most $\beta$. Projection onto $[0,1]$ cannot increase distance from $\alpha_0\in[0,1]$, and fallback sets that distance to zero. Grid-aligned interval endpoints ensure that the nearest grid point remains inside the interval. Applying Eq.~\eqref{eq:identity} completes the proof.
 \end{proof}
 
-The bound gives $\beta$ a direct interpretation in score space: it limits movement in proportion to inter-model disagreement. Candidate ordering also depends on the reference margins. Appendix~\ref{app:bound} gives a sufficient margin condition for preserving an ordering. We evaluate the actual ranking consequences through both utility and harm metrics.
+The bound gives $\beta$ a direct interpretation in score space: it limits movement in proportion to inter-model disagreement. It is not an absolute, data-independent score bound, since $d$ varies with the scores. Candidate ordering also depends on the reference margins. An arbitrarily small perturbation can reverse a near tie and reduce a gold answer's RR from 1 to $1/2$. Appendix~\ref{app:bound} gives a sufficient margin condition for preserving an ordering. Without such margin information, this proposition supplies neither a nontrivial RR-loss bound tending to zero with $\beta$ nor a probabilistic harm guarantee.
 
 \FloatBarrier
 \section{Experimental Setup}
@@ -248,21 +252,23 @@ Query-soft applies $\alpha(q)=p_A(q)$ using the same 13-feature logistic prefere
 We evaluate the policy family with five-fold grouped cross-fitting on DEV. An original triple is the grouping unit, and all three seeds and both directions remain in one fold. Each outer training fold selects its Global weight, fits its feature preprocessing and logistic classifier, and selects $\beta$ and $\tau$ using only that training portion. Performance is measured on held-out triples. The formal expanded-policy DEV evaluation is reported in Appendix~\ref{app:dev}.
 
 After this evaluation, the classifier is refitted on full DEV and the final reference and policy parameters are locked. TEST applies the serialized policy without refitting. The deployed radii are 0.45, 0.50, 0.20, and 0.50 for W-N, W-A, D-N, and D-A; thresholds are 0.1, 0.1, 0.2, and 0.3. Corresponding primary-weight anchors are 0.55, 1, 1, and 1. The exact feature order and selection rules appear in Appendix~\ref{app:implementation}.
+The upper limit 0.50 is a historical design restriction on the searched action family. There is no documented calibration connecting it to a tolerable RR loss or harm probability. Selection maximizes DEV MRR within that family, not over all radii. To examine the restriction, a supplementary analysis reconstructs all 20 original fold models and verifies their selected parameters and held-out predictions before comparing caps 0.50 and 1.00. Both families choose $\beta,\tau$ using training-portion MRR, with identical classifiers, anchors and tie-breaking. Held-out DEV outcomes assess the resulting trade-off. The wider family and full radius curves do not choose any new TEST policy (Appendix~\ref{app:radius-review}). This analysis follows historical TEST inspection and is descriptive.
 
 \subsection{Metrics and statistical analysis}
 We report exact filtered MRR and Hits@1/3/10. For the change $\Delta_i$ in Eq.~\eqref{eq:delta}, harm rate and benefit rate are the fractions of all evaluated observations with negative and positive changes. Conditional mean harm and benefit quantify their magnitudes:
 \begin{align}
 H&=N^{-1}\sum_i\ind[\Delta_i<0], & B&=N^{-1}\sum_i\ind[\Delta_i>0],\\
-L&=\E[-\Delta_i\mid\Delta_i<0], & G&=\E[\Delta_i\mid\Delta_i>0].
+C&=\E[-\Delta_i\mid\Delta_i<0], & G&=\E[\Delta_i\mid\Delta_i>0].
 \end{align}
 These quantities yield the decomposition
 \begin{equation}
-\Delta\MRR=B\,G-H\,L.
+U=\Delta\MRR=L_+-L_-,\qquad L_-=\E[\max(-\Delta_i,0)]=H C,\quad L_+=B G.
 \label{eq:utility-harm}
 \end{equation}
-We additionally report final-weight changes, fallback frequency, and mean absolute deviation from the reference. Conditional means are left undefined when their conditioning event is empty.
+The unconditional mean loss $L_-$ counts every observation, including zeros, and jointly reflects harm frequency and severity. Conditional means are undefined when their event is empty; Global has $U=L_-=H=0$ and undefined $C$. For policies using the same z-score coefficient coordinate, we report weight-change frequency $I_\alpha=\Pr(\widehat\alpha\ne\alpha_0)$ and mean displacement $D_\alpha=\E|\widehat\alpha-\alpha_0|$. DynaSemble's min-max coefficient ratio cannot be subtracted directly from the z-score Global weight; its $I_\alpha,D_\alpha$ are omitted. The common outcome-change measure $J=\Pr(\Delta_i\ne0)$ is the gold-answer rank-change rate, not a full-order change rate. All probabilities and expectations here are empirical averages over the declared observations.
 
 The main \adc\ effect intervals use 10,000 percentile clustered-bootstrap resamples with seed 20260910. Each resampling unit is an original triple containing all six base-seed--direction observations. New DynaSemble controls first average reciprocal ranks across selector repetitions within each base-seed--direction observation, then use the same original-triple clusters. Harm rates use actual selector observations before this averaging. Pair-level intervals quantify triple-sampling uncertainty conditional on the fitted models and observed seeds, not uncertainty from retraining or choosing the experimental design. They are pointwise intervals without correction for multiple comparisons. Complete seed/direction matrices supplement the pooled results.
+The supplementary loss and intervention comparisons also use actual selector observations before averaging: otherwise opposite-signed changes could cancel and understate loss. They add no confidence intervals or statistical risk constraints; any dominance statement concerns observed point estimates.
 
 \FloatBarrier
 \section{Results}
@@ -283,16 +289,27 @@ R3 exceeds ADC by 0.002418 on W-N and 0.000499 on D-N, with positive lower bound
 ADC has lower harm frequency relative to Global in all four pairs: 15.150\%, 3.619\%, 1.424\% and 0.094\%, compared with R3's 16.823\%, 11.010\%, 16.281\% and 14.661\%. The finding supports an empirical accuracy--harm comparison, not uniform MRR superiority or a probabilistic safety guarantee. The methods also differ in normalization, features, supervision and search budget, so this is not an isolated test of boundedness. W-N's R3 primary ratio varies only slightly across queries (mean within-selector SD approximately 0.001); its accuracy gain alone does not demonstrate that query dependence is necessary.
 \input{tables/dynasemble/effects.tex}
 
-\subsection{The radius reduces harm frequency, with mixed accuracy effects}
+\subsection{Radius restriction: DEV trade-offs and frozen TEST ablations}
 \label{sec:bound-results}
 The fixed $\beta=1$ counterfactual increases harmful-query frequency in all four primary pairs (Table~\ref{tab:rerun-ablation}). Its accuracy effect is mixed. Relative to the full policy, it lowers the W-N increment from 0.002447 to 0.002400 and makes the D-N increment more negative, from $-0.000081$ to $-0.000314$. It increases the W-A and D-A increments. Conditional mean harm also varies: it rises in three pairs but falls in D-A. Thus the corrected evidence supports reduced harm frequency under the deployed radius, but not a universal trade of lower accuracy for lower harm severity.
 
 W-N and D-N select radii below the search maximum, at 0.45 and 0.20. W-A and D-A select 0.50. These DEV locks are retained throughout the TEST comparisons; no parameter is changed in response to the corrected TEST results.
 \input{tables/rerun/ablation.tex}
 
+Table~\ref{tab:conservative-dev} compares the two radius families on grouped held-out DEV. Expanding the cap improves utility in W-N, W-A and D-A while increasing both unconditional loss and harm frequency; D-N selects the same policies. In D-A, conditional loss instead decreases, illustrating that risk measures need not move together. The restricted cap is therefore an explicit design choice with a measured utility cost, not a globally optimal or calibrated conservative radius. D-N's slightly negative held-out utility and positive loss also fail to improve on Global's zero-change point. All fold choices and fixed-radius curves appear in Appendix~\ref{app:radius-review}.
+\input{tables/conservative/dev.tex}
+
 \subsection{Fallback utility depends on the pair}
 \label{sec:fallback-results}
 D-A provides the clearest fallback benefit. With its classifier, reference and radius fixed, removing confidence fallback gives $-0.002989$ MRR relative to Global and an 8.561\% harm rate. The deployed policy gives $+0.000212$ MRR with a 0.094\% harm rate. The difference is approximately $+0.003201$ MRR. For W-A, fallback slightly reduces the mean increment, from 0.001046 to 0.001014, while reducing harm frequency. W-N and D-N also retain nonzero fallback thresholds in the corrected locks. The findings do not imply that preference confidence is a calibrated predictor of harmful adaptation.
+
+\subsection{Fair utility, loss and intervention comparisons}
+\label{sec:fair-risk}
+All policies are compared to the same Global ranking using $U,L_-,H,C,I_\alpha,D_\alpha$ (Table~\ref{tab:conservative-fair}); Figure~\ref{fig:fair-risk} displays utility and unconditional loss with answer-rank change frequency. ADC cannot improve on Global's zero reference-relative risk. On D-N, Global has both higher observed utility and lower loss than ADC; the small ADC decrement remains statistically unresolved by its existing interval.
+
+W-N exposes a trade-off obscured by harm frequency alone. ADC has higher MRR and fewer harmed observations than Query-soft (15.150\% versus 16.355\%), but slightly larger unconditional mean loss (0.005463 versus 0.005369) and conditional loss (0.03606 versus 0.03283). It changes fewer weights (63.33\% versus 79.79\%) while moving them farther on average over all observations (0.12098 versus 0.08257). Thus neither policy dominates all these criteria. Relation and healthy Dyna R3 achieve greater W-N utility at greater unconditional loss than ADC.
+
+Compared with the frozen $\beta=1$ policy, ADC has lower unconditional loss and harm frequency in every pair, but D-A has greater conditional loss. Their weight-change frequencies are identical in all four pairs; the radius reduces displacement rather than the number of interventions in this comparison. Against healthy R3, ADC likewise has lower unconditional loss in all pairs but greater conditional loss in W-A, D-N and D-A. These are empirical comparisons on named measures, not a claim to minimize every notion of harm. The supplementary data retain all twelve methods per pair, including every historical and repaired Dyna variant and every observed seed.
 
 \subsection{Additional model pairs}
 \label{sec:scope-cost}
@@ -309,13 +326,13 @@ A fixed reference separates established performance from the policy's additional
 The classifier learns whether one standalone model ranks an answer better than another. Improvement over an interior mixture is a different target, and the size of an RR improvement is absent from the binary label. This mismatch provides a concrete explanation for why a preference signal can be useful for correction while weak at predicting harm. It also motivates future work on learning reference-relative utility without increasing sensitivity to rare, high-cost training outcomes.
 
 \paragraph{Meaning of conservative adaptation.}
-The score perturbation bound and empirical harm reductions describe complementary aspects of the method. The radius bounds movement in normalized score space; the experiments measure the resulting changes in ranking. Harm remains present in the full policy, with rates of approximately 0.094\%--15.150\% across the main pairs. The current search optimizes DEV MRR within a restricted action family, and the preference confidence is uncalibrated. An explicit probabilistic harm constraint would require a different selection objective and statistical analysis.
+Conservative denotes the reference-anchored, bounded-action rule in Section~\ref{sec:conservative-definition}. It does not mean rare or harmless intervention: W-N changes 63.33\% of weights and harms 15.150\% of observations. The radius limits coefficient movement and the associated score perturbation; empirical ranking losses remain separate. ADC reduces selected loss measures relative to the frozen larger-radius policy and healthy R3, but it cannot dominate Global's zero loss and does not dominate Query-soft on every W-N risk measure. The 0.50 cap restricts an MRR-optimized DEV family without an explicit risk tolerance. Wider DEV selection improves utility in three pairs at increased unconditional loss, which supplies a trade-off rather than a uniquely justified optimum. Neither this analysis nor preference confidence provides a probabilistic safety guarantee.
 
 \paragraph{Generalization and computation.}
 The evidence covers two main evaluation datasets, three base architectures, three paired seeds, and six model pairs, with the historical OpenBG numerical results excluded from this corrected draft. The reliable-primary rule holds in all six main and additional pairs, so its necessity for successful correction remains an open question. DB15K has the secondary-replication status described in Section~\ref{sec:setup}. Inference requires both scorers even for queries that eventually fall back, since the policy uses their candidate distributions. Efficient feature extraction and score reuse are therefore important practical directions.
 
 \section{Conclusion}
-Anchored Dynamic Correction combines fixed MMKGC scorers around a DEV-selected reference using a bounded proposal and confidence fallback. After correcting the feature/filter boundary and refitting the affected policies, three of four primary pairs have positive TEST increments with intervals above zero; the remaining pair is close to zero and slightly negative. Healthy DynaSemble exceeds ADC in two pairs, while ADC yields lower harm frequency in all four. The ADC radius reduces harm frequency, with mixed accuracy and conditional-severity effects; fallback preserves a positive net increment for D-A. These results support pair-dependent utility and harm control, not uniform accuracy superiority.
+Anchored Dynamic Correction combines fixed MMKGC scorers around a DEV-selected reference using a bounded proposal and confidence fallback. Conservative refers to this action constraint, not an RR-risk guarantee. Three of four primary pairs have positive corrected TEST increments with intervals above zero; D-N is close to zero and slightly negative. Healthy DynaSemble exceeds ADC in two pairs; ADC has lower harm frequency and unconditional loss in all four, with mixed conditional-severity comparisons. Wider radius selection improves held-out DEV utility in three pairs at greater mean loss. Global's zero-risk point and the W-N Query-soft trade-off prevent a universal risk-dominance claim. The results support pair-dependent, metric-specific empirical benefits within a restricted action family.
 \FloatBarrier
 \clearpage
 \bibliographystyle{plainnat}
@@ -384,8 +401,8 @@ m_0>\beta|d(q,e_1)-d(q,e_2)|,
 \end{equation}
 the ordering $e_1\succ e_2$ is preserved for the evaluated bounded policy. Preserving the reference top candidate requires this inequality against every alternative. For grids whose interval endpoints are not aligned, nearest-grid projection adds at most half the grid spacing to the distance bound; the present spacing is 0.05.
 
-\paragraph{Coverage.}
-Within each pair, queries are ordered by decreasing $c(q)$ with deterministic query-ID tie-breaking. A requested fraction receives the raw bounded proposal, while the remainder keeps $\alpha_0$. Harm is reported over all pair observations. Thus increasing requested coverage accumulates harmful observations under a fixed proposal; net MRR and effective weight-change rates capture the additional outcome and action information. Four-pair pooled diagnostics are micro-averages and are presented only as descriptive summaries.
+\paragraph{Limits of the bound.}
+A regression test constructs normalized score vectors with a near-tied gold and competitor, then verifies that a weight displacement of $10^{-6}$ respects the score bound yet changes gold RR from 1 to $1/2$. Separate tests match grid projection against the production tie rule, verify Global's zero unconditional loss, and demonstrate why selector repetitions must not be averaged before loss calculation. These check action semantics and metric arithmetic; they do not certify population ranking risk.
 
 \paragraph{Fallback accounting.}
 On a query assigned to confidence fallback, compare the raw bounded RR with Global. A lower raw RR contributes to avoided loss, a higher one contributes to sacrificed gain, and an equal one is neutral. The net utility is
@@ -393,6 +410,31 @@ On a query assigned to confidence fallback, compare the raw bounded RR with Glob
 U_{\mathrm{fb}}=\sum_{i\in\mathcal F}(\RR_{\alpha_0,i}-\RR_{\mathrm{raw},i}),
 \end{equation}
 where $\mathcal F$ is the confidence-fallback subset. $U_{\mathrm{fb}}/N$ is the full-minus-no-fallback MRR difference. Non-finite fallback remains active in both policies.
+
+\FloatBarrier
+\section{DEV Radius and Common Risk Diagnostics}
+\label{app:radius-review}
+The supplementary protocol fixes $\beta\in\{0,0.05,\ldots,1\}$ and $\tau\in\{0,0.1,0.2,0.3\}$. The zero-radius point is Global and is reported separately from the original nonzero-radius selection family. Twenty small logistic fold models reproduce the original anchors, selected parameters, held-out applied weights, RR and fallback decisions before evaluating the wider family. The analysis reuses corrected exact-rank grid exports, with no scorer retraining. Its historical ADC DEV ranks retain the evaluation filtering scope described in Section~\ref{sec:setup}; the selectors receive no TEST training examples or inference features from filters.
+
+Table~\ref{tab:conservative-folds} gives every selected fold radius. Figure~\ref{fig:dev-radius} fixes each fold's original selected threshold while varying its radius on held-out triples; these curves differ from joint training-portion $\beta,\tau$ selection in Table~\ref{tab:conservative-dev}. The supplementary CSV also includes the full-DEV fitted-model surface over all 84 radius/threshold points per pair, explicitly marked as resubstitution. The 21-point held-out curves are descriptive; selecting their pooled maximum would not supply an unbiased performance estimate. No new radius or threshold from either diagnostic is applied to TEST.
+\input{tables/conservative/folds.tex}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{figures/conservative/dev_radius.pdf}
+\caption{Grouped held-out DEV radius curves, with each fold's threshold fixed at its original restricted-family selection. Blue shows net utility; red shows unconditional mean loss; blue marker area increases with weight-change frequency. The vertical line marks the historical cap 0.50. All 21 radii are shown, including Global at zero; curves are descriptive, not a new TEST selection rule.}
+\label{fig:dev-radius}
+\end{figure}
+\FloatBarrier
+
+Table~\ref{tab:conservative-fair} reports the shared risk and action definitions for static, matched-feature, frozen-ablation and healthy dynamic comparisons. The accompanying data contain 48 pair--method summaries and complete seed/direction records, retaining all R0/R1/R2/R3-fixed/R3/R4 observations. For R3, each of nine selectors contributes equally within the paired design. DynaSemble's coefficient-coordinate mismatch is handled by leaving weight interventions undefined, not by equating a min-max ratio to a z-score weight. Figure~\ref{fig:fair-risk} instead uses the comparable answer-rank change frequency. Sources, outputs and figure/table bytes are bound in \texttt{conservative\_source\_manifest.json}.
+\input{tables/conservative/fair.tex}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{figures/conservative/test_utility_loss.pdf}
+\caption{Frozen TEST utility versus unconditional mean RR loss, both relative to Global. Marker area increases with gold-answer rank-change frequency $J$, which is comparable across normalization schemes but does not measure full-order changes. Global lies at zero utility and zero loss by construction. All pairs use the same five displayed comparators. Insets in the three endpoint-anchor pairs magnify Global, ADC and $\beta=1$; the table and supplementary data provide additional policies and precise values.}
+\label{fig:fair-risk}
+\end{figure}
+\FloatBarrier
 
 \section{DynaSemble Transfer and Reproducibility}
 \label{app:dynasemble}
@@ -440,7 +482,7 @@ Each of the 180 new TEST exports contains 64 observable-query-hash-selected comp
 The review binds 1,975 supplied files, checks 504 model/trace pairs, reconstructs the selected DEV configurations, and recomputes all 36 method point summaries and 456 base--selector--direction cells. Every TEST endpoint agrees with the corrected ADC export. The 72-file supplement contains manifests, original query rows and four-dimensional features for 24 DEV/TEST caches, all verified against the original locks. Reconstructed original-triple DEV folds match every fit/validation record, preserving disjointness and grouping across directions and seeds. CPU replay of all 180 frozen selectors reproduces 2,551,680 TEST weights with maximum absolute difference $3.82\times10^{-6}$, within the predeclared absolute/relative tolerances $2\times10^{-5}$ and $2\times10^{-6}$. Bitwise CPU/GPU equality is not claimed. Full candidate normalization and ranking replay still require the server score cache. The reported 10,000-resample intervals are retained, hash-verified server results, not rerun by this local audit. The source-bound \texttt{dynasemble\_source\_manifest.json} accompanies the new tables. This supplementary analysis follows historical TEST inspection and does not select further variants using TEST.
 
 \label{app:efficiency}
-Corrected timing is not reported: the historical measurements preceded the information-boundary fix and are excluded. The corrected path retains unfiltered candidate scores for feature construction and normalization; masking and gold-reference ranking are evaluation work. Confidence calibration, radius curves and coverage curves from the historical snapshot are likewise excluded from the evidence in this draft.
+Corrected timing is not reported: the historical measurements preceded the information-boundary fix and are excluded. The corrected path retains unfiltered candidate scores for feature construction and normalization; masking and gold-reference ranking are evaluation work. Confidence calibration, radius curves and coverage curves from the historical snapshot are likewise excluded. Appendix~\ref{app:radius-review} supplies new radius diagnostics computed from the corrected exports.
 
 The B07/C04 rerun audit verifies export/model/selector hashes, split separation, coverage, endpoints and fixed-policy counterfactuals. MKG-W DEV/TEST exports contain 25,656/25,644 observations; DB15K contains 47,532/59,412. Their TEST intervals use 10,000 original-triple resamples with seed 20260910. The accompanying \texttt{rerun\_source\_manifest.json} binds the corrected tables to their inputs; historical snapshots remain archived and supply no numerical tables here.
 

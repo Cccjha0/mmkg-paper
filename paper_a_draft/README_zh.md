@@ -1,8 +1,8 @@
 # Paper A 英文论文初稿
 
-**修复后工作稿（2026-09-10）：** 六个 MKG-W/DB15K 组合与四组 DynaSemble 已完成重导出/重拟合/重评；正文、7 张新表及 `main.pdf` 已更新。当前主结论为四主组合中三组正增益，D-N 的区间跨零。ADC/Query-soft 最终网格权重通过多 gold query 一致性检查；部分连续输出仍有约 1e-7 数值差异，未宣称任意批次下逐位一致。完整关闭口径见 `../docs/reports/paper_a_information_boundary_rerun_review_2026-09-10.md`。
+**修复后工作稿（2026-09-11）：** B07/C04 边界重评、D01–D03 健康 DynaSemble 对照和 A03/B04/D08 保守半径分析已写入正文。当前 ADC 四主组合中三组正增益，D-N 的区间跨零；健康 R3 在两组 MRR 高于 ADC。Conservative 只指参考锚定与有界动作，不指 RR 风险保证。更宽半径族提高三组留出 DEV 效用，同时增加无条件损失；所有 TEST 锁保持不变。详见 [边界核验](../docs/reports/paper_a_information_boundary_rerun_review_2026-09-10.md)、[Dyna 核验](../docs/reports/paper_a_dynasemble_controls_review_2026-09-11.md)及[保守半径核验](../docs/reports/paper_a_conservative_radius_review_2026-09-11.md)。
 
-LaTeX 编译所需文件在本目录内；重新出表和来源核验需要仓库中的 `information_boundary_v2` 原始导出。原始 processed 数据仍未复制到本机，但分析新导出和编译无需重新运行基础模型。目录外的旧 zip 尚未更新。
+LaTeX 编译所需文件在本目录内；重新分析和来源核验需要 `information_boundary_v2` 原始导出以及回传的 Dyna 对照与缓存证据。编译无需重新运行基础模型。目录外的旧 zip 尚未更新。
 
 ## 阅读与编辑
 
@@ -10,9 +10,9 @@ LaTeX 编译所需文件在本目录内；重新出表和来源核验需要仓�
 - `main.tex`：论文主文件。
 - `references.bib`：7 条已核实的关键参考文献。
 - `main.bbl`：本次编译生成的参考文献，可用于归档。
-- `figures/method_overview.pdf`：当前唯一保留的方法示意图；旧经验诊断图不再引用。
-- `tables/rerun/`：从修复后导出生成的 7 个表格片段；正文另含数据集计数表。
-- `rerun_source_manifest.json`：当前表格及重评资产的 SHA-256。
+- `figures/method_overview.pdf`：方法示意图；`figures/conservative/` 为修复后 DEV 半径、TEST 效用—损失图。旧经验诊断图不再引用。
+- `tables/rerun/`、`tables/dynasemble/`、`tables/conservative/`：分别保存边界重评、Dyna 对照及本轮共同风险表。只以 `main.tex` 实际引用的片段计入当前稿。
+- `rerun_source_manifest.json`、`dynasemble_source_manifest.json`、`conservative_source_manifest.json`：三轮证据与表图的 SHA-256。
 - `data/`、`tables/` 下的旧表、`source_manifest.json`、`notes/`：历史快照，不作为 v2 数值证据。
 - `scripts/`：编译、生成图表、核验和打包脚本。
 - `verification.json`：最近一次自动检查结果；`.build/qa/` 为本地逐页版面检查图，不打入交付压缩包。
@@ -42,16 +42,17 @@ pdflatex main.tex
 
 ## 重新生成图表
 
-在仓库根目录运行以下命令；仅读取新导出、生成表格和文稿，不重训模型或修改 TEST 参数：
+在仓库根目录运行以下命令可从已核验汇总重新出表和编译，不训练模型或修改 TEST 参数：
 
 ```powershell
-python scripts/audit_paper_a_boundary_rerun.py --finalize-only
 python scripts/build_paper_a_boundary_rerun_tables.py
+python scripts/build_paper_a_dynasemble_review_tables.py
+python scripts/build_paper_a_conservative_assets.py
 python paper_a_draft/scripts/compile.py
 python paper_a_draft/scripts/verify_draft.py
 ```
 
-如需重新计算 bootstrap，运行审计脚本时省略 `--finalize-only`。`verify_draft.py` 需要 PyMuPDF 和 Pillow，审计/出表需要 numpy、pandas、torch、scikit-learn；本地使用 `E:/develop/Miniconda3/python.exe`。旧 `build_assets.py` 和 `snapshot_sources.py` 仅处理历史快照，不是当前出表入口。W-N/W-A 分别为 MKG-W 的 M-Hyper+NativE / M-Hyper+AdaMF-MAT，D-N/D-A 对应 DB15K；W-NA/D-NA 为两数据集的 NativE+AdaMF-MAT。
+若要重算本轮 DEV 半径与风险汇总，先运行 `scripts/analyze_paper_a_conservative_radius.py`；它只重建 20 个轻量 CPU 逻辑回归折模型。`verify_draft.py` 需要 PyMuPDF 和 Pillow，审计/出表需要 numpy、pandas、torch、scikit-learn、matplotlib；本地使用 `E:/develop/Miniconda3/python.exe`。旧 `build_assets.py` 和 `snapshot_sources.py` 仅处理历史快照，不是当前出表入口。W-N/W-A 分别为 MKG-W 的 M-Hyper+NativE / M-Hyper+AdaMF-MAT，D-N/D-A 对应 DB15K；W-NA/D-NA 为两数据集的 NativE+AdaMF-MAT。
 
 ## 写作和证据处理
 
@@ -64,8 +65,10 @@ python paper_a_draft/scripts/verify_draft.py
 3. MKG-W 为原协议声明的确认性验证，DB15K 为次级复现。
 4. 新 TEST 区间均从修复后逐查询记录计算，使用原始三元组聚类、10,000 次 percentile bootstrap 和 seed 20260910；旧方法间比较区间不沿用。
 5. 正式 DEV 表来自修复后的 expanded-policy P3 held-out 记录，不混入 full-DEV resubstitution。新消融固定原 DEV 锁，仅改变 beta 或 tau，不依据 TEST 重调参。
-6. 尚未重新验证的 A100 时间、OpenBG 结果、confidence/radius/coverage 诊断已从当前正文移除。需要恢复这些主张时再单独补运行。
+6. 尚未重新验证的 A100 时间、OpenBG 结果、历史 confidence/radius/coverage 诊断已移除；本轮新增的 DEV 半径诊断来自修正后导出。
 7. 数据集表报告实际导出观测所覆盖的 DEV/TEST triples。DB15K 导出 DEV 为 7,922；原预处理审计中的 raw valid 总数 9,904 是另一计数口径。
+8. 0.50 是历史限定搜索族的上界，未被校准为风险水平；当前最终半径分别为 .45、.50、.20、.50。新增 DEV 分析不改变 TEST 选择。
+9. Global 的参考相对损失为零。ADC 相对 R3 四组受损频率与无条件损失较低，但三组条件损失更高；W-N 相对 Query-soft 也不构成所有风险量的支配。
 
 本文是修复后的研究工作稿，不是无条件投稿认证。仍需按目标期刊整理体例，并妥善处理报告列出的连续数值重复性限制。修改前的正文保留在 `.build/main_before_boundary_rerun.tex`。
 
@@ -81,4 +84,4 @@ python paper_a_draft/scripts/verify_draft.py
 
 ## 数值来源补充
 
-当前证据为 `outputs/paper_a_safe_correction/information_boundary_rerun_audit/` 的审计、方法汇总、固定消融及 `manuscript_details.json`。原有“77 项审计”属于历史版本，不用于证明新结果；本次边界/协议/审计单测共 43 项通过，当前文档检查记录在 `verification.json`。
+当前汇总证据位于 `outputs/paper_a_safe_correction/` 下的 `information_boundary_rerun_audit/`、`dynasemble_review_audit/`、`conservative_radius_review/`。原有“77 项审计”属于历史版本；各轮测试和证据范围分别记录在上述核验报告，本轮新增五项边界/指标测试通过。当前文档检查记录在 `verification.json`，逐页 PNG 位于 `.build/qa/`。

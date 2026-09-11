@@ -124,3 +124,6 @@ outputs/paper_a_safe_correction/information_boundary_v2/**/checkpoints/
 # D01-D03 server caches, traces, models and query outputs; curated report is separate
 /outputs/paper_a_safe_correction/dynasemble_controls*/
 /outputs/paper_a_safe_correction/dynasemble_controls*_review.zip
+
+# Raster previews are regenerated from the committed conservative-analysis PDFs.
+/paper_a_draft/figures/conservative/*.png
