@@ -1,6 +1,6 @@
 # Paper A 英文论文初稿
 
-**修复后工作稿（2026-09-11）：** B07/C04 边界重评、D01–D03 健康 DynaSemble 对照和 A03/B04/D08 保守半径分析已写入正文。当前 ADC 四主组合中三组正增益，D-N 的区间跨零；健康 R3 在两组 MRR 高于 ADC。Conservative 只指参考锚定与有界动作，不指 RR 风险保证。更宽半径族提高三组留出 DEV 效用，同时增加无条件损失；所有 TEST 锁保持不变。详见 [边界核验](../docs/reports/paper_a_information_boundary_rerun_review_2026-09-10.md)、[Dyna 核验](../docs/reports/paper_a_dynasemble_controls_review_2026-09-11.md)及[保守半径核验](../docs/reports/paper_a_conservative_radius_review_2026-09-11.md)。
+**修复后工作稿（2026-09-12）：** B07/C04 边界重评、D01–D03 健康 DynaSemble、A03/B04/D08 保守半径及 A02/D04–D06 匹配替代方案已写入正文。新增六族共享同一拟合对象、每族41个候选并允许Global；ADC相对纯收缩三组MRR较高，但Clip-g四组TEST点估计均略高于ADC，特定tanh优势尚未建立。新静态表与单列Oracle数值完整。原ADC/Dyna结果保留，新动作先锁DEV再评价TEST。详见 [匹配替代方案核验](../docs/reports/paper_a_matched_alternatives_review_2026-09-12.md)、[边界核验](../docs/reports/paper_a_information_boundary_rerun_review_2026-09-10.md)、[Dyna核验](../docs/reports/paper_a_dynasemble_controls_review_2026-09-11.md)及[保守半径核验](../docs/reports/paper_a_conservative_radius_review_2026-09-11.md)。
 
 LaTeX 编译所需文件在本目录内；重新分析和来源核验需要 `information_boundary_v2` 原始导出以及回传的 Dyna 对照与缓存证据。编译无需重新运行基础模型。目录外的旧 zip 尚未更新。
 
@@ -11,8 +11,8 @@ LaTeX 编译所需文件在本目录内；重新分析和来源核验需要 `inf
 - `references.bib`：7 条已核实的关键参考文献。
 - `main.bbl`：本次编译生成的参考文献，可用于归档。
 - `figures/method_overview.pdf`：方法示意图；`figures/conservative/` 为修复后 DEV 半径、TEST 效用—损失图。旧经验诊断图不再引用。
-- `tables/rerun/`、`tables/dynasemble/`、`tables/conservative/`：分别保存边界重评、Dyna 对照及本轮共同风险表。只以 `main.tex` 实际引用的片段计入当前稿。
-- `rerun_source_manifest.json`、`dynasemble_source_manifest.json`、`conservative_source_manifest.json`：三轮证据与表图的 SHA-256。
+- `tables/rerun/`、`tables/dynasemble/`、`tables/conservative/`、`tables/matched/`：边界重评、Dyna、保守风险及匹配映射/完整静态表。只以 `main.tex` 实际引用的片段计入当前稿。
+- `rerun_source_manifest.json`、`dynasemble_source_manifest.json`、`conservative_source_manifest.json`、`matched_source_manifest.json`：四轮证据与表图的 SHA-256。
 - `data/`、`tables/` 下的旧表、`source_manifest.json`、`notes/`：历史快照，不作为 v2 数值证据。
 - `scripts/`：编译、生成图表、核验和打包脚本。
 - `verification.json`：最近一次自动检查结果；`.build/qa/` 为本地逐页版面检查图，不打入交付压缩包。
@@ -48,11 +48,14 @@ pdflatex main.tex
 python scripts/build_paper_a_boundary_rerun_tables.py
 python scripts/build_paper_a_dynasemble_review_tables.py
 python scripts/build_paper_a_conservative_assets.py
+python scripts/build_paper_a_matched_assets.py
 python paper_a_draft/scripts/compile.py
 python paper_a_draft/scripts/verify_draft.py
 ```
 
 若要重算本轮 DEV 半径与风险汇总，先运行 `scripts/analyze_paper_a_conservative_radius.py`；它只重建 20 个轻量 CPU 逻辑回归折模型。`verify_draft.py` 需要 PyMuPDF 和 Pillow，审计/出表需要 numpy、pandas、torch、scikit-learn、matplotlib；本地使用 `E:/develop/Miniconda3/python.exe`。旧 `build_assets.py` 和 `snapshot_sources.py` 仅处理历史快照，不是当前出表入口。W-N/W-A 分别为 MKG-W 的 M-Hyper+NativE / M-Hyper+AdaMF-MAT，D-N/D-A 对应 DB15K；W-NA/D-NA 为两数据集的 NativE+AdaMF-MAT。
+
+匹配替代方案采用 `scripts/analyze_paper_a_matched_alternatives.py lock-dev` 和独立的 `apply-test` 两阶段；已有TEST审核时拒绝覆盖DEV锁。正常重新出表不需重跑这两阶段。初次Relation审核的float32表示修正、原锁及选择完全一致的证明保留在结果目录的 `provenance/`。
 
 ## 写作和证据处理
 
@@ -69,6 +72,8 @@ python paper_a_draft/scripts/verify_draft.py
 7. 数据集表报告实际导出观测所覆盖的 DEV/TEST triples。DB15K 导出 DEV 为 7,922；原预处理审计中的 raw valid 总数 9,904 是另一计数口径。
 8. 0.50 是历史限定搜索族的上界，未被校准为风险水平；当前最终半径分别为 .45、.50、.20、.50。新增 DEV 分析不改变 TEST 选择。
 9. Global 的参考相对损失为零。ADC 相对 R3 四组受损频率与无条件损失较低，但三组条件损失更高；W-N 相对 Query-soft 也不构成所有风险量的支配。
+10. ADC与Query-soft共享相同拟合对象；新对照进一步匹配候选数。Clip-g在四组TEST点估计略高于ADC，因此不宣称tanh独特优势。新比较没有新增置信区间，不据小差异宣称显著。
+11. RRF、Relation、两个专家、等权与Global均有PDF数值。专家Oracle只在两专家选择集合内取答案知情最大值，不能上界混合分数。
 
 本文是修复后的研究工作稿，不是无条件投稿认证。仍需按目标期刊整理体例，并妥善处理报告列出的连续数值重复性限制。修改前的正文保留在 `.build/main_before_boundary_rerun.tex`。
 
@@ -84,4 +89,4 @@ python paper_a_draft/scripts/verify_draft.py
 
 ## 数值来源补充
 
-当前汇总证据位于 `outputs/paper_a_safe_correction/` 下的 `information_boundary_rerun_audit/`、`dynasemble_review_audit/`、`conservative_radius_review/`。原有“77 项审计”属于历史版本；各轮测试和证据范围分别记录在上述核验报告，本轮新增五项边界/指标测试通过。当前文档检查记录在 `verification.json`，逐页 PNG 位于 `.build/qa/`。
+当前汇总证据位于 `outputs/paper_a_safe_correction/` 下的 `information_boundary_rerun_audit/`、`dynasemble_review_audit/`、`conservative_radius_review/`、`matched_alternatives_v1/`。各轮测试和证据范围分别记录在核验报告；匹配映射新增10项测试通过，前轮保守风险5项测试通过。当前文档检查记录在 `verification.json`，逐页 PNG 位于 `.build/qa/`。

@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{Combiner search budgets, excluding frozen base-model training. $R$ is the count of eligible relations. The six matched families share the 13-feature logistic fit and 21-point anchor search; they perform no extra learner tuning or early stopping. Logistic convergence uses max\_iter=2000; R3 records all checkpoints through epoch 10 and selects by DEV. Dyna comparisons differ in inputs and learners and are not mapping-only controls.}
+\label{tab:matched-budget}
+\begin{tabular}{lll}
+\toprule
+Method & Action / training search & Selection and stopping\\
+\midrule
+Fixed scorers / Equal / RRF & None & Fixed parameters; no search\\
+Global & 21 weights & Max DEV MRR; shared by all maps\\
+Relation & $21R$ weights & Per-relation DEV MRR; support $\geq60$\\
+Query-soft & 1 map & Same fitted logistic; no action search\\
+Original ADC & $10\times4=40$ & Strength / gate; no explicit Global\\
+Each new family & 41 maps & 40 active + Global; same-object DEV MRR\\
+R0 / R1 / R2 / R3-fixed & 1 setting each & One epoch; LR $5\times10^{-5}$\\
+R3 & $3\times4=12$ settings & Grouped DEV CV; 81 trajectories/pair\\
+R4 & Inherited R3 setting & No orientation-specific retuning\\
+\bottomrule
+\end{tabular}
+\end{table}

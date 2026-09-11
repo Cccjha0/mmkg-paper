@@ -1,0 +1,266 @@
+{
+  "version": "matched_alternatives_v1",
+  "status": "all_dev_locks_complete",
+  "failures": [],
+  "protocol_sha256": "240eee15accf6df7e48aafea6174cd497ec449c1817b0463c78310df135424db",
+  "phase": "DEV only; no TEST query rows opened",
+  "families": [
+    "ADC+Global",
+    "Shrink",
+    "Shrink-gate",
+    "Linear-p",
+    "Clip-g",
+    "Linear-g"
+  ],
+  "configurations_per_family": 41,
+  "pairs": {
+    "mkgw_mhyper_native": {
+      "alpha0": 0.55,
+      "actions": {
+        "ADC+Global": {
+          "family": "ADC+Global",
+          "strength": 0.45,
+          "tau": 0.1
+        },
+        "Shrink": {
+          "family": "Shrink",
+          "strength": 0.8,
+          "tau": 0.0
+        },
+        "Shrink-gate": {
+          "family": "Shrink-gate",
+          "strength": 0.8,
+          "tau": 0.0
+        },
+        "Linear-p": {
+          "family": "Linear-p",
+          "strength": 0.5,
+          "tau": 0.0
+        },
+        "Clip-g": {
+          "family": "Clip-g",
+          "strength": 0.5,
+          "tau": 0.1
+        },
+        "Linear-g": {
+          "family": "Linear-g",
+          "strength": 0.5,
+          "tau": 0.1
+        }
+      },
+      "model_file": "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_native/dev_lock/anchored_model.pkl",
+      "model_sha256": "391d792d2cde80880f24bac9045c0bdbd96fe813ad1aaf7851936644813cbbe3",
+      "historical_lock_sha256": "afbf00b5c527f237e9eda563f011fd373a497fb51de1c4ef85596e7ac29134c3",
+      "classifier_n_iter": [
+        4
+      ]
+    },
+    "mkgw_mhyper_adamf": {
+      "alpha0": 1.0,
+      "actions": {
+        "ADC+Global": {
+          "family": "ADC+Global",
+          "strength": 0.5,
+          "tau": 0.1
+        },
+        "Shrink": {
+          "family": "Shrink",
+          "strength": 0.0,
+          "tau": 0.0
+        },
+        "Shrink-gate": {
+          "family": "Shrink-gate",
+          "strength": 0.0,
+          "tau": 0.0
+        },
+        "Linear-p": {
+          "family": "Linear-p",
+          "strength": 0.4,
+          "tau": 0.1
+        },
+        "Clip-g": {
+          "family": "Clip-g",
+          "strength": 0.5,
+          "tau": 0.1
+        },
+        "Linear-g": {
+          "family": "Linear-g",
+          "strength": 0.5,
+          "tau": 0.1
+        }
+      },
+      "model_file": "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_adamf/dev_lock/anchored_model.pkl",
+      "model_sha256": "085d0660d46c92d75179363fd28533c26c6c18b834dea07d702fd990cfa9913e",
+      "historical_lock_sha256": "1c4df74d6f2bb370d974d0e58b31a6d833e7e2f10a4803adb9752f3659fb9081",
+      "classifier_n_iter": [
+        5
+      ]
+    },
+    "db15k_mhyper_native": {
+      "alpha0": 1.0,
+      "actions": {
+        "ADC+Global": {
+          "family": "ADC+Global",
+          "strength": 0.2,
+          "tau": 0.2
+        },
+        "Shrink": {
+          "family": "Shrink",
+          "strength": 0.0,
+          "tau": 0.0
+        },
+        "Shrink-gate": {
+          "family": "Shrink-gate",
+          "strength": 0.3,
+          "tau": 0.3
+        },
+        "Linear-p": {
+          "family": "Linear-p",
+          "strength": 0.4,
+          "tau": 0.2
+        },
+        "Clip-g": {
+          "family": "Clip-g",
+          "strength": 0.2,
+          "tau": 0.2
+        },
+        "Linear-g": {
+          "family": "Linear-g",
+          "strength": 0.2,
+          "tau": 0.2
+        }
+      },
+      "model_file": "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_native/dev_lock/anchored_model.pkl",
+      "model_sha256": "fb3f2f5759cae633b2c7f5dc7233c0e8f509b55b04ed351a518c024f77deb263",
+      "historical_lock_sha256": "f99414fd08f4203db4c5b12717f65c2646e64a5110a2b39b7d9f58576eda4f3d",
+      "classifier_n_iter": [
+        6
+      ]
+    },
+    "db15k_mhyper_adamf": {
+      "alpha0": 1.0,
+      "actions": {
+        "ADC+Global": {
+          "family": "ADC+Global",
+          "strength": 0.5,
+          "tau": 0.3
+        },
+        "Shrink": {
+          "family": "Shrink",
+          "strength": 0.0,
+          "tau": 0.0
+        },
+        "Shrink-gate": {
+          "family": "Shrink-gate",
+          "strength": 0.9,
+          "tau": 0.3
+        },
+        "Linear-p": {
+          "family": "Linear-p",
+          "strength": 0.35,
+          "tau": 0.3
+        },
+        "Clip-g": {
+          "family": "Clip-g",
+          "strength": 0.5,
+          "tau": 0.3
+        },
+        "Linear-g": {
+          "family": "Linear-g",
+          "strength": 0.5,
+          "tau": 0.3
+        }
+      },
+      "model_file": "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_adamf/dev_lock/anchored_model.pkl",
+      "model_sha256": "ed33e59e4a2fce3564a01e93e23fdc35d07fc5cfd60bfaead354448272d1227f",
+      "historical_lock_sha256": "2e44c157d65cb0005cb9b44d27f8af33cdb4832844a7228f692eb3f298347719",
+      "classifier_n_iter": [
+        5
+      ]
+    }
+  },
+  "replay": [
+    {
+      "pair": "mkgw_mhyper_native",
+      "fold_models_replayed": 5,
+      "original_fold_choices_replayed": true,
+      "oof_adc_querysoft_replayed": true,
+      "full_dev_same_model_replayed": true,
+      "dev_grid_gold_repeat_invariant": true,
+      "model_sha256": "391d792d2cde80880f24bac9045c0bdbd96fe813ad1aaf7851936644813cbbe3"
+    },
+    {
+      "pair": "mkgw_mhyper_adamf",
+      "fold_models_replayed": 5,
+      "original_fold_choices_replayed": true,
+      "oof_adc_querysoft_replayed": true,
+      "full_dev_same_model_replayed": true,
+      "dev_grid_gold_repeat_invariant": true,
+      "model_sha256": "085d0660d46c92d75179363fd28533c26c6c18b834dea07d702fd990cfa9913e"
+    },
+    {
+      "pair": "db15k_mhyper_native",
+      "fold_models_replayed": 5,
+      "original_fold_choices_replayed": true,
+      "oof_adc_querysoft_replayed": true,
+      "full_dev_same_model_replayed": true,
+      "dev_grid_gold_repeat_invariant": true,
+      "model_sha256": "fb3f2f5759cae633b2c7f5dc7233c0e8f509b55b04ed351a518c024f77deb263"
+    },
+    {
+      "pair": "db15k_mhyper_adamf",
+      "fold_models_replayed": 5,
+      "original_fold_choices_replayed": true,
+      "oof_adc_querysoft_replayed": true,
+      "full_dev_same_model_replayed": true,
+      "dev_grid_gold_repeat_invariant": true,
+      "model_sha256": "ed33e59e4a2fce3564a01e93e23fdc35d07fc5cfd60bfaead354448272d1227f"
+    }
+  ],
+  "runtime": {
+    "python": "3.13.11 | packaged by Anaconda, Inc. | (main, Dec 10 2025, 21:21:58) [MSC v.1929 64 bit (AMD64)]",
+    "sklearn": "1.7.1",
+    "numpy": "2.4.2"
+  },
+  "sources": {
+    "docs/protocols/paper_a_matched_alternatives.md": "240eee15accf6df7e48aafea6174cd497ec449c1817b0463c78310df135424db",
+    "router/matched_actions.py": "a68890263d5fa089cde0365ac050ae1f979d3b9b6c7e40ea0148eb87863f2253",
+    "scripts/analyze_paper_a_matched_alternatives.py": "685cb17730d35e98f6df6fcdee5a5a7509f8f6e1a2aa98dad8b8ec0949b4e805",
+    "scripts/analyze_paper_a_conservative_radius.py": "c58b537a2b593ab9efd5235da1417f57f0994e2ac9eab57276a0cd5e0647b863",
+    "scripts/ablate_anchored_dynamic.py": "3baaefb56ddfb04906b7c5545242e4237c3ea407337c7ab9b278e37006ff26f4",
+    "scripts/crossfit_anchored_dynamic.py": "73a63d93f172b55a1dee61c4f4db7374d27047aa2594745196ebf314bfb85c87",
+    "scripts/crossfit_heterogeneous_dev_policies.py": "2aa17ce7650ec2a624d19b687013f606bc4b2eae9d90ad9805c1d4f5113ef948",
+    "scripts/lock_apply_anchored_dynamic.py": "d6328868a6d3a1d86983be22e749c2337a3e3e55ba644e4c8aeedff7b05b0d91",
+    "scripts/eval_heterogeneous_complementarity.py": "9e288b93c674934f930170483348503cbfb283afaebce99504e6b7287d911e88",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_native/dev_lock/anchored_dev_lock.json": "afbf00b5c527f237e9eda563f011fd373a497fb51de1c4ef85596e7ac29134c3",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_native/dev_lock/dev_locked_query_rows.csv": "a4c89985f92f97259ee54db1c8277190753f30075581d1924a5e51ada9616028",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_native/dev_lock/anchored_model.pkl": "391d792d2cde80880f24bac9045c0bdbd96fe813ad1aaf7851936644813cbbe3",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_native/baseline_crossfit/dev_crossfit_query_rows.csv": "fc7775b1d6ad67531430dad9fbc92b5db45a82f0b70cd05d472c79cef41e4add",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_native/p3_ablation/dev_p3_selected_query_rows.csv": "af90dd936a683544b0233f7fa5f81b53930a53c85ff829491dbf48c7b3e33d69",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_native/p3_ablation/dev_p3_selected_by_fold.csv": "090037bad93ae5bb94f5c8dd655dad7b88ddf678b0369925bf27d3f78c4f8ba7",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_adamf/dev_lock/anchored_dev_lock.json": "1c4df74d6f2bb370d974d0e58b31a6d833e7e2f10a4803adb9752f3659fb9081",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_adamf/dev_lock/dev_locked_query_rows.csv": "eb19087c29c2c1fed195bf55d05b0dafc65eb35ee5227477bb6041cae01c3b6a",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_adamf/dev_lock/anchored_model.pkl": "085d0660d46c92d75179363fd28533c26c6c18b834dea07d702fd990cfa9913e",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_adamf/baseline_crossfit/dev_crossfit_query_rows.csv": "ac97e54fbf3f100f6f39e628eb5c4f9a05ba37b780d503da8e9fdfa41598cad9",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_adamf/p3_ablation/dev_p3_selected_query_rows.csv": "f7c2bba5580fae3b38a9315c40f4987cd8f251f1e49aaf9c0ece980f40479743",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_adamf/p3_ablation/dev_p3_selected_by_fold.csv": "a2fad68e4f067c45c8c3f14aaca1ab3a07e6ab5959f865f9167a3720a6ecb8c2",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_native/dev_lock/anchored_dev_lock.json": "f99414fd08f4203db4c5b12717f65c2646e64a5110a2b39b7d9f58576eda4f3d",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_native/dev_lock/dev_locked_query_rows.csv": "59d694565266c681c6954bbd4d8105b3be0eb8d452c640d3e24b055d6ecbc74d",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_native/dev_lock/anchored_model.pkl": "fb3f2f5759cae633b2c7f5dc7233c0e8f509b55b04ed351a518c024f77deb263",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_native/baseline_crossfit/dev_crossfit_query_rows.csv": "8c8e5f0422738256752ab126c73e36b21ef7eac969a5fc6b54443cc3306c2244",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_native/p3_ablation/dev_p3_selected_query_rows.csv": "b698cce4455f75652d0dd9d4261ea6610c463402e7da703e770f0b33418dc37e",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_native/p3_ablation/dev_p3_selected_by_fold.csv": "f8e4cfdf1bbd97ffea6355e9d53bad81151d7e849dd580137062d1239e8a25e6",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_adamf/dev_lock/anchored_dev_lock.json": "2e44c157d65cb0005cb9b44d27f8af33cdb4832844a7228f692eb3f298347719",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_adamf/dev_lock/dev_locked_query_rows.csv": "1968531879059cfc784429bbb4e1e141a43b4b2ec643c6ef002fb853ec471449",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_adamf/dev_lock/anchored_model.pkl": "ed33e59e4a2fce3564a01e93e23fdc35d07fc5cfd60bfaead354448272d1227f",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_adamf/baseline_crossfit/dev_crossfit_query_rows.csv": "ddf06dbcb1a7166433933a597f031e211735b648b9af04aa7ff62e7d5a607c1b",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_adamf/p3_ablation/dev_p3_selected_query_rows.csv": "388f50067fff9d22a252c3c1a71d9de1cbdb4f9f62d04d4a5f4215959b4acf1a",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_adamf/p3_ablation/dev_p3_selected_by_fold.csv": "c30b59fa04e4cb2be857558bd84e702203fb4103a430252526e84e16737ae12b"
+  },
+  "outputs": {
+    "dev_candidates.csv": "64d7acfbcce69bb2886ce8d3ff37134f0032b25f5586d17fc907b906d10243db",
+    "dev_choices.csv": "5662a00f589c36c19a6d2338844ce6f053cf53d98bd8126d06a7f6decb71cf64",
+    "dev_oof_summary.csv": "b0884dc6d04a690ddb53e154e906707fc77e0f5e3341a2fa89eaa6778362bd39",
+    "dev_oof_seed_direction.csv": "abcf86556f020dee0fdb8b4d9f76f49f55a2cc238eb240a6e404611ce728ec4c"
+  }
+}

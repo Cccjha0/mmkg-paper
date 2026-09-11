@@ -36,3 +36,10 @@ outputs/paper_a_safe_correction/conservative_radius_review/** -text whitespace=c
 paper_a_draft/tables/conservative/** -text whitespace=cr-at-eol
 paper_a_draft/conservative_source_manifest.json -text whitespace=cr-at-eol
 paper_a_draft/figures/conservative/*.pdf -text -diff
+docs/protocols/paper_a_matched_alternatives.md -text whitespace=cr-at-eol
+router/matched_actions.py -text whitespace=cr-at-eol
+scripts/analyze_paper_a_matched_alternatives.py -text whitespace=cr-at-eol
+scripts/build_paper_a_matched_assets.py -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/matched_alternatives_v1/** -text whitespace=cr-at-eol
+paper_a_draft/tables/matched/** -text whitespace=cr-at-eol
+paper_a_draft/matched_source_manifest.json -text whitespace=cr-at-eol

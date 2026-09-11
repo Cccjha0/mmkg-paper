@@ -1,0 +1,50 @@
+{
+  "shared_features": 13,
+  "preference_model": "same median imputer + scaler + balanced liblinear logistic C=1",
+  "max_iter": 2000,
+  "full_model_n_iter": {
+    "mkgw_mhyper_native": [
+      4
+    ],
+    "mkgw_mhyper_adamf": [
+      5
+    ],
+    "db15k_mhyper_native": [
+      6
+    ],
+    "db15k_mhyper_adamf": [
+      5
+    ]
+  },
+  "reconstructed_fold_models": 20,
+  "shared_global_grid_points": 21,
+  "new_family_configurations": {
+    "ADC+Global": 41,
+    "Shrink": 41,
+    "Shrink-gate": 41,
+    "Linear-p": 41,
+    "Clip-g": 41,
+    "Linear-g": 41
+  },
+  "family_specific_refits": 0,
+  "original_adc_configurations": 40,
+  "query_soft_configurations": 1,
+  "relation_eligible_counts": {
+    "mkgw_mhyper_native": 46,
+    "mkgw_mhyper_adamf": 46,
+    "db15k_mhyper_native": 91,
+    "db15k_mhyper_adamf": 91,
+    "mkgw_native_adamf": 46,
+    "db15k_native_adamf": 91
+  },
+  "relation_grid_points_per_eligible_relation": 21,
+  "dynasemble_r3": {
+    "learning_rates": 3,
+    "checkpoints": 4,
+    "folds": 3,
+    "base_selector_combinations": 9,
+    "cv_trajectories_per_pair": 81,
+    "epoch_cap": 10
+  },
+  "stopping": "logistic convergence or max_iter; no family-specific early stopping; Dyna fixed epochs/checkpoints"
+}

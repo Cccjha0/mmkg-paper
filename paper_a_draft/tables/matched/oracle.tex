@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{Answer-aware expert-selection diagnostic, reported separately from deployable methods. Oracle is the per-observation maximum of the two standalone RRs. It is neither deployable nor an upper bound on score fusion: an interior mixture can rank the gold above both experts. The final column is only the observed gap to Global.}
+\label{tab:matched-oracle}
+\begin{tabular}{lrr}
+\toprule
+Pair & Expert oracle MRR & Oracle$-$Global\\
+\midrule
+W-N & 0.401902 & +0.037237\\
+W-A & 0.390732 & +0.031011\\
+D-N & 0.409286 & +0.034719\\
+D-A & 0.405001 & +0.030434\\
+W-NA & 0.377348 & +0.033221\\
+D-NA & 0.357574 & +0.044812\\
+\bottomrule
+\end{tabular}
+\end{table}

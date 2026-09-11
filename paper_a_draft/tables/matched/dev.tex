@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{Grouped held-out DEV MRR with shared fitted preference objects. Each new family selects from 41 configurations on the outer training portion, including explicit Global. Full-DEV selection scores are excluded here.}
+\label{tab:matched-dev}
+\begin{tabular}{lrrrr}
+\toprule
+Method & W-N & W-A & D-N & D-A\\
+\midrule
+Global & 0.355750 & 0.352822 & 0.382587 & 0.382587\\
+Query-soft & 0.357689 & 0.332687 & 0.368714 & 0.346493\\
+ADC original & 0.358821 & 0.354026 & 0.382578 & 0.382623\\
+ADC + Global & 0.358821 & 0.354026 & 0.382578 & 0.382623\\
+Shrink & 0.357168 & 0.352712 & 0.382587 & 0.382587\\
+Shrink-gate & 0.357116 & 0.352822 & 0.382479 & 0.382742\\
+Linear-p & 0.358220 & 0.353435 & 0.382560 & 0.382609\\
+Clip-g & 0.359154 & 0.354103 & 0.382658 & 0.382566\\
+Linear-g & 0.359154 & 0.354102 & 0.382658 & 0.382566\\
+\bottomrule
+\end{tabular}
+\end{table}

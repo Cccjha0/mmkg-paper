@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{Full-DEV action locks: strength, threshold [number of distinct applied-weight vectors among 41 tested configurations]. Strength zero denotes explicit Global. Strength means $\lambda$ for shrinkage, $\gamma$ for Linear-g and $\beta$ otherwise. Distinct-vector counts expose configurations that coincide after grid projection; all candidate scores and all 120 fold selections are supplied.}
+\label{tab:matched-locks}
+\begin{tabular}{lrrrr}
+\toprule
+Family & W-N & W-A & D-N & D-A\\
+\midrule
+ADC + Global & 0.450, 0.1 [38] & 0.500, 0.1 [38] & 0.200, 0.2 [38] & 0.500, 0.3 [37]\\
+Shrink & 0.800, 0.0 [38] & 0.000, 0.0 [40] & 0.000, 0.0 [40] & 0.000, 0.0 [40]\\
+Shrink-gate & 0.800, 0.0 [37] & 0.000, 0.0 [41] & 0.300, 0.3 [41] & 0.900, 0.3 [41]\\
+Linear-p & 0.500, 0.0 [33] & 0.400, 0.1 [33] & 0.400, 0.2 [33] & 0.350, 0.3 [31]\\
+Clip-g & 0.500, 0.1 [38] & 0.500, 0.1 [38] & 0.200, 0.2 [38] & 0.500, 0.3 [38]\\
+Linear-g & 0.500, 0.1 [38] & 0.500, 0.1 [38] & 0.200, 0.2 [38] & 0.500, 0.3 [38]\\
+\bottomrule
+\end{tabular}
+\end{table}

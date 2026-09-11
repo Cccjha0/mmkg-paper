@@ -1,0 +1,43 @@
+\begin{table}[htbp]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{Matched TEST utility, loss and action measures relative to Global. Definitions are those of Section~\ref{sec:fair-risk}: $U$ is net utility, $L_-$ unconditional loss, $H$ harm frequency, $C$ conditional loss, $I_\alpha$ weight-change frequency and $D_\alpha$ mean displacement. All displayed maps use the same z-score coordinate. Global has undefined $C$.}
+\label{tab:matched-risk}
+\begin{tabular}{llrrrrrr}
+\toprule
+Pair & Method & $U$ & $L_-$ & $H$ (\%) & $C$ & $I_\alpha$ (\%) & $D_\alpha$\\
+\midrule
+W-N & Global & +0.000000 & 0.000000 & 0.000 & -- & 0.00 & 0.0000\\
+W-N & ADC + Global & +0.002447 & 0.005463 & 15.150 & 0.03606 & 63.33 & 0.1210\\
+W-N & Shrink & +0.001496 & 0.004874 & 15.033 & 0.03243 & 75.07 & 0.0645\\
+W-N & Shrink-gate & +0.001496 & 0.004874 & 15.033 & 0.03243 & 75.07 & 0.0645\\
+W-N & Linear-p & +0.001854 & 0.005843 & 18.854 & 0.03099 & 80.69 & 0.0811\\
+W-N & Clip-g & +0.002558 & 0.005836 & 15.606 & 0.03740 & 63.33 & 0.1462\\
+W-N & Linear-g & +0.002558 & 0.005836 & 15.606 & 0.03740 & 63.33 & 0.1462\\
+\midrule
+W-A & Global & +0.000000 & 0.000000 & 0.000 & -- & 0.00 & 0.0000\\
+W-A & ADC + Global & +0.001014 & 0.001425 & 3.619 & 0.03938 & 20.29 & 0.0400\\
+W-A & Shrink & +0.000000 & 0.000000 & 0.000 & -- & 0.00 & 0.0000\\
+W-A & Shrink-gate & +0.000000 & 0.000000 & 0.000 & -- & 0.00 & 0.0000\\
+W-A & Linear-p & +0.000905 & 0.000598 & 3.018 & 0.01981 & 20.29 & 0.0176\\
+W-A & Clip-g & +0.001262 & 0.001461 & 3.705 & 0.03944 & 20.29 & 0.0440\\
+W-A & Linear-g & +0.001262 & 0.001462 & 3.705 & 0.03946 & 20.29 & 0.0441\\
+\midrule
+D-N & Global & +0.000000 & 0.000000 & 0.000 & -- & 0.00 & 0.0000\\
+D-N & ADC + Global & -0.000081 & 0.000617 & 1.424 & 0.04336 & 7.87 & 0.0080\\
+D-N & Shrink & +0.000000 & 0.000000 & 0.000 & -- & 0.00 & 0.0000\\
+D-N & Shrink-gate & -0.000044 & 0.000139 & 3.053 & 0.00454 & 5.63 & 0.0061\\
+D-N & Linear-p & -0.000070 & 0.000607 & 1.426 & 0.04260 & 7.87 & 0.0081\\
+D-N & Clip-g & -0.000068 & 0.000608 & 1.426 & 0.04267 & 7.87 & 0.0081\\
+D-N & Linear-g & -0.000068 & 0.000608 & 1.429 & 0.04257 & 7.87 & 0.0081\\
+\midrule
+D-A & Global & +0.000000 & 0.000000 & 0.000 & -- & 0.00 & 0.0000\\
+D-A & ADC + Global & +0.000212 & 0.000048 & 0.094 & 0.05128 & 0.45 & 0.0014\\
+D-A & Shrink & +0.000000 & 0.000000 & 0.000 & -- & 0.00 & 0.0000\\
+D-A & Shrink-gate & +0.000267 & 0.000201 & 2.319 & 0.00867 & 3.64 & 0.0116\\
+D-A & Linear-p & +0.000068 & 0.000035 & 0.088 & 0.03994 & 0.45 & 0.0005\\
+D-A & Clip-g & +0.000240 & 0.000047 & 0.093 & 0.05128 & 0.45 & 0.0016\\
+D-A & Linear-g & +0.000240 & 0.000047 & 0.093 & 0.05128 & 0.45 & 0.0016\\
+\bottomrule
+\end{tabular}
+\end{table}

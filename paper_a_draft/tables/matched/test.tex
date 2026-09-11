@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{TEST MRR for matched action maps. Six new families share the same frozen preference object, features, anchor and ranking grid, with 41 DEV candidate configurations each. All four pairs are locked before TEST application. ADC + Global admits a zero-action candidate; its final choices match original ADC. These new comparisons are descriptive point estimates.}
+\label{tab:matched-test}
+\begin{tabular}{lrrrr}
+\toprule
+Method & W-N & W-A & D-N & D-A\\
+\midrule
+Global & 0.364665 & 0.359721 & 0.374567 & 0.374567\\
+Query-soft & 0.366543 & 0.340618 & 0.360990 & 0.338760\\
+ADC original & 0.367112 & 0.360735 & 0.374485 & 0.374778\\
+ADC + Global & 0.367112 & 0.360735 & 0.374485 & 0.374778\\
+Shrink & 0.366161 & 0.359721 & 0.374567 & 0.374567\\
+Shrink-gate & 0.366161 & 0.359721 & 0.374523 & 0.374834\\
+Linear-p & 0.366519 & 0.360626 & 0.374496 & 0.374634\\
+Clip-g & 0.367223 & 0.360983 & 0.374498 & 0.374806\\
+Linear-g & 0.367223 & 0.360983 & 0.374499 & 0.374807\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,12 @@
+{
+  "status": "all_actions_and_dev_scores_unchanged",
+  "initial_lock_sha256": "a1ae07136a9dc0903cf4cbece0821625019bfcb739f854feba211e8d937c2f20",
+  "current_lock_sha256": "ad6bdf676e8fd16072aadc80d4baea85a85b1f16ed589fc7cd851b456897cef7",
+  "changed_source": [
+    "scripts/analyze_paper_a_matched_alternatives.py"
+  ],
+  "reason": "Reproduce evaluator float32 Relation coefficient serialization; first apply stopped before any new map TEST result.",
+  "family_parameters_identical": true,
+  "all_dev_output_hashes_identical": true,
+  "source_diff": "--- initial locked source\n+++ Relation float32 validation fix\n@@ -258,7 +258,9 @@\n         close(frame.rr_rrf, 1/frame.rank_rrf, 'RRF rank/RR mismatch')\n         selection = inputs.obj(folder/'full_ranking/selection.json')\n         require(selection['global_alpha'] == anchor and selection['relation_min_support'] == 60, 'Static DEV lock mismatch')\n-        expected_relation = frame.relation_id.astype(str).map(selection['relation_alpha']).fillna(anchor).to_numpy()\n+        # The evaluator creates a torch tensor in z_a.dtype (float32 here), then\n+        # serializes each tensor scalar. Reproduce that cast; do not relax RR checks.\n+        expected_relation = frame.relation_id.astype(str).map(selection['relation_alpha']).fillna(anchor).to_numpy().astype(np.float32).astype(np.float64)\n         close(frame.alpha_relation, expected_relation, 'Relation TEST policy differs from DEV lock')\n         for method, col in [('Primary', 'rr_a'), ('Secondary', 'rr_b'), ('Equal-z', 'rr_equal'),\n                             ('RRF', 'rr_rrf'), ('Global', 'rr_global'), ('Relation', 'rr_relation'),\n"
+}
