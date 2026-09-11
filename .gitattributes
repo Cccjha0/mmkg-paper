@@ -22,3 +22,10 @@ outputs/complementarity_identifiability/exp6_stable_headroom/stable_headroom_pai
 outputs/paper_a_safe_correction/confidence_harm/confidence_vs_harm.pdf -text -diff
 outputs/paper_a_safe_correction/beta_sensitivity/*.pdf -text -diff
 outputs/paper_a_safe_correction/fallback_audit/*.pdf -text -diff
+# These manifests bind file bytes; preserve their CSV/TeX line endings on checkout.
+outputs/paper_a_safe_correction/information_boundary_rerun_audit/** -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/dynasemble_review_audit/** -text whitespace=cr-at-eol
+paper_a_draft/tables/rerun/** -text whitespace=cr-at-eol
+paper_a_draft/tables/dynasemble/** -text whitespace=cr-at-eol
+paper_a_draft/rerun_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/dynasemble_source_manifest.json -text whitespace=cr-at-eol

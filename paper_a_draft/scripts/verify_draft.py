@@ -25,7 +25,16 @@ for rel,sha in manifest['sources'].items():
     assert hashlib.sha256((ROOT.parent/rel).read_bytes()).hexdigest()==sha,rel
 for name,sha in manifest['tables'].items():
     assert hashlib.sha256((ROOT/'tables/rerun'/name).read_bytes()).hexdigest()==sha,name
-assert all('/rerun/' in p.as_posix() for p in tex_files[1:])
+dyna=json.loads((ROOT/'dynasemble_source_manifest.json').read_text(encoding='utf-8'))
+assert dyna['version']=='dynasemble_controls_v1_review'
+for rel,sha in dyna['sources'].items():
+    assert hashlib.sha256((ROOT.parent/rel).read_bytes()).hexdigest()==sha,rel
+for rel,sha in dyna['tables'].items():
+    assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables={ROOT/'tables/rerun'/name for name in manifest['tables']}|{ROOT/rel for rel in dyna['tables']}
+assert set(tex_files[1:])<=bound_tables
+dyna_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/dynasemble_review_audit/audit.json').read_text())
+assert dyna_audit['status']=='review_artifact_checks_passed' and not dyna_audit['failures']
 audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/information_boundary_rerun_audit/audit.json').read_text())
 assert audit['status']=='artifact_checks_passed_with_continuous_repeatability_caveat'
 assert not audit['failures']
@@ -52,8 +61,9 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(manifest['sources']),
-        'result_version':'information_boundary_v2',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review',
+        'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'checks':'active input paths, references, rerun source/table hashes, audit status, no placeholders, page bounds: PASS',
         'page_details':page_info}
 (ROOT/'verification.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')

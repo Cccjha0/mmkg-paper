@@ -1,0 +1,16 @@
+\begin{table}[htbp]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\caption{R3 DEV-selected settings and TEST variation. Weight SD is the range over nine selectors, each measured across its queries; ratio SD is the mean of the nine within-selector SDs. Selected CV MRR is a selection score, not an unbiased estimate after model selection. All 180 final fits and 324 CV trajectories have finite parameters and positive parameter updates in every layer in every epoch.}
+\label{tab:dyna-selection}
+\begin{tabular}{llrrlr}
+\toprule
+Pair & LR & Epochs & CV MRR & Weight SD range & Ratio SD\\
+\midrule
+W-N & $10^{-5}$ & 1 & 0.352361 & 0.0032--0.0058 & 0.0010\\
+W-A & $10^{-4}$ & 10 & 0.343739 & 0.6545--0.8177 & 0.0031\\
+D-N & $5\times10^{-5}$ & 3 & 0.370354 & 0.2457--0.4108 & 0.0070\\
+D-A & $10^{-4}$ & 5 & 0.368916 & 0.7155--0.9441 & 0.0035\\
+\bottomrule
+\end{tabular}
+\end{table}
