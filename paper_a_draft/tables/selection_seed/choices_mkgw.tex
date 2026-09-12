@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{MKG-W selection choices. Cells give $\beta/\tau$. R is original training resubstitution; I is inner-OOF selection. Folds 1--5 are the original outer holdouts. Full uses full DEV, with I choices reported only as diagnostics and never applied to TEST. The anchor and final preference object are shared across the four settings in a row; each inner fold fits its own anchor/preprocessing/classifier for selecting I. Complete inner scopes, sample counts, identities and all 2,952 selection scores accompany the tables.}
+\label{tab:selection-choices-mkgw}
+\begin{tabular}{llrrrrr}
+\toprule
+Pair & Fold & $\alpha_0$ & R-40 & I-40 & R-41 & I-41\\
+\midrule
+W-N & Full & 0.55 & 0.45/0.1 & 0.50/0.1 & 0.45/0.1 & 0.50/0.1\\
+W-N & 1 & 0.60 & 0.50/0.1 & 0.35/0.0 & 0.50/0.1 & 0.35/0.0\\
+W-N & 2 & 0.60 & 0.50/0.1 & 0.50/0.0 & 0.50/0.1 & 0.50/0.0\\
+W-N & 3 & 0.55 & 0.50/0.1 & 0.50/0.1 & 0.50/0.1 & 0.50/0.1\\
+W-N & 4 & 0.55 & 0.50/0.1 & 0.50/0.0 & 0.50/0.1 & 0.50/0.0\\
+W-N & 5 & 0.55 & 0.45/0.1 & 0.50/0.0 & 0.45/0.1 & 0.50/0.0\\
+W-A & Full & 1.00 & 0.50/0.1 & 0.50/0.1 & 0.50/0.1 & 0.50/0.1\\
+W-A & 1 & 1.00 & 0.50/0.1 & 0.50/0.1 & 0.50/0.1 & 0.50/0.1\\
+W-A & 2 & 1.00 & 0.50/0.1 & 0.50/0.1 & 0.50/0.1 & 0.50/0.1\\
+W-A & 3 & 1.00 & 0.50/0.1 & 0.50/0.1 & 0.50/0.1 & 0.50/0.1\\
+W-A & 4 & 1.00 & 0.50/0.1 & 0.50/0.1 & 0.50/0.1 & 0.50/0.1\\
+W-A & 5 & 1.00 & 0.50/0.1 & 0.50/0.1 & 0.50/0.1 & 0.50/0.1\\
+W-NA & Full & 0.95 & 0.50/0.2 & 0.40/0.2 & 0.50/0.2 & 0.40/0.2\\
+W-NA & 1 & 0.95 & 0.50/0.2 & 0.50/0.2 & 0.50/0.2 & 0.50/0.2\\
+W-NA & 2 & 0.95 & 0.40/0.2 & 0.50/0.2 & 0.40/0.2 & 0.50/0.2\\
+W-NA & 3 & 0.95 & 0.45/0.2 & 0.45/0.3 & 0.45/0.2 & 0.45/0.3\\
+W-NA & 4 & 0.95 & 0.45/0.2 & 0.40/0.2 & 0.45/0.2 & 0.40/0.2\\
+W-NA & 5 & 0.95 & 0.45/0.2 & 0.40/0.2 & 0.45/0.2 & 0.40/0.2\\
+\bottomrule
+\end{tabular}
+\end{table}

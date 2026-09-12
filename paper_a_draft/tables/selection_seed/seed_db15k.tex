@@ -1,0 +1,52 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{DB15K absolute TEST MRR for every available method and all three base seeds. Each seed averages both directions and all original triples; mean is the unweighted average of the three seed MRRs and SD uses divisor $3-1$. R3 first averages its three selector repetitions within a base seed, so it still contributes three base-seed MRRs. R0 retains the failed transfer. Methods absent from an additional pair remain absent; no seed is deleted. The accompanying CSV reports all 456 seed/direction cells and 70 paired ADC-minus-comparator seed dispersions. The mean of every row reproduces the complete main comparison.}
+\label{tab:selection-seeds-db15k}
+\begin{tabular}{llrrrrr}
+\toprule
+Pair & Method & Seed 1 & Seed 2 & Seed 3 & Mean & SD\\
+\midrule
+D-N & Primary & 0.375373 & 0.374811 & 0.373516 & 0.374567 & 0.000953\\
+D-N & Secondary & 0.314499 & 0.313925 & 0.309861 & 0.312761 & 0.002529\\
+D-N & Equal-z & 0.360649 & 0.363519 & 0.358064 & 0.360744 & 0.002728\\
+D-N & RRF & 0.356177 & 0.353638 & 0.353074 & 0.354296 & 0.001653\\
+D-N & Global & 0.375373 & 0.374811 & 0.373516 & 0.374567 & 0.000953\\
+D-N & Relation & 0.375394 & 0.374909 & 0.373172 & 0.374491 & 0.001168\\
+D-N & Query-soft & 0.361747 & 0.363923 & 0.357300 & 0.360990 & 0.003376\\
+D-N & Shrink & 0.375373 & 0.374811 & 0.373516 & 0.374567 & 0.000953\\
+D-N & Shrink-gate & 0.375404 & 0.374737 & 0.373428 & 0.374523 & 0.001005\\
+D-N & Linear-p & 0.375273 & 0.374821 & 0.373395 & 0.374496 & 0.000981\\
+D-N & Clip-g & 0.375273 & 0.374821 & 0.373401 & 0.374498 & 0.000977\\
+D-N & Linear-g & 0.375274 & 0.374821 & 0.373401 & 0.374499 & 0.000977\\
+D-N & R0 & 0.314499 & 0.375306 & 0.309861 & 0.333222 & 0.036519\\
+D-N & R3 & 0.375998 & 0.374934 & 0.374020 & 0.374984 & 0.000990\\
+D-N & ADC & 0.375273 & 0.374821 & 0.373363 & 0.374485 & 0.000998\\
+\addlinespace
+D-A & Primary & 0.375373 & 0.374811 & 0.373516 & 0.374567 & 0.000953\\
+D-A & Secondary & 0.284675 & 0.273576 & 0.289515 & 0.282588 & 0.008171\\
+D-A & Equal-z & 0.338735 & 0.333483 & 0.342107 & 0.338108 & 0.004346\\
+D-A & RRF & 0.326802 & 0.321618 & 0.331933 & 0.326784 & 0.005158\\
+D-A & Global & 0.375373 & 0.374811 & 0.373516 & 0.374567 & 0.000953\\
+D-A & Relation & 0.373848 & 0.373152 & 0.372536 & 0.373179 & 0.000656\\
+D-A & Query-soft & 0.339389 & 0.334214 & 0.342678 & 0.338760 & 0.004267\\
+D-A & Shrink & 0.375373 & 0.374811 & 0.373516 & 0.374567 & 0.000953\\
+D-A & Shrink-gate & 0.375596 & 0.375203 & 0.373702 & 0.374834 & 0.001000\\
+D-A & Linear-p & 0.375429 & 0.374957 & 0.373517 & 0.374634 & 0.000996\\
+D-A & Clip-g & 0.375574 & 0.375207 & 0.373638 & 0.374806 & 0.001028\\
+D-A & Linear-g & 0.375574 & 0.375207 & 0.373640 & 0.374807 & 0.001027\\
+D-A & R0 & 0.284675 & 0.339659 & 0.289515 & 0.304616 & 0.030444\\
+D-A & R3 & 0.373089 & 0.371934 & 0.372035 & 0.372353 & 0.000640\\
+D-A & ADC & 0.375566 & 0.375149 & 0.373619 & 0.374778 & 0.001025\\
+\addlinespace
+D-NA & Primary & 0.314499 & 0.313925 & 0.309861 & 0.312761 & 0.002529\\
+D-NA & Secondary & 0.284675 & 0.273576 & 0.289515 & 0.282588 & 0.008171\\
+D-NA & Equal-z & 0.300924 & 0.297313 & 0.302979 & 0.300405 & 0.002868\\
+D-NA & RRF & 0.286720 & 0.280910 & 0.287335 & 0.284988 & 0.003545\\
+D-NA & Global & 0.314499 & 0.313925 & 0.309861 & 0.312761 & 0.002529\\
+D-NA & Relation & 0.313577 & 0.313186 & 0.311414 & 0.312726 & 0.001152\\
+D-NA & Query-soft & 0.300865 & 0.297886 & 0.302764 & 0.300505 & 0.002459\\
+D-NA & ADC & 0.314460 & 0.313863 & 0.309916 & 0.312747 & 0.002469\\
+\addlinespace
+\bottomrule
+\end{tabular}
+\end{table}

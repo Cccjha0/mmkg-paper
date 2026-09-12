@@ -203,3 +203,13 @@ docs/reports/paper_a_alignment_training_review_2026-09-12.md -text whitespace=cr
 outputs/paper_a_safe_correction/alignment_training_v1/** -text whitespace=cr-at-eol
 paper_a_draft/alignment_training_source_manifest.json -text whitespace=cr-at-eol
 paper_a_draft/tables/alignment_training/** -text whitespace=cr-at-eol
+
+# C09/C10 fixed outer-fold sensitivity and descriptive base-seed dispersion.
+scripts/analyze_paper_a_selection_seed.py -text whitespace=cr-at-eol
+scripts/build_paper_a_selection_seed_assets.py -text whitespace=cr-at-eol
+tests/test_selection_seed_diagnostics.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_selection_seed_review.md -text whitespace=cr-at-eol
+docs/reports/paper_a_selection_seed_review_2026-09-12.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/selection_seed_v1/** -text whitespace=cr-at-eol
+paper_a_draft/selection_seed_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/tables/selection_seed/** -text whitespace=cr-at-eol

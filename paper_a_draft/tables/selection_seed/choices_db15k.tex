@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{DB15K selection choices. Cells give $\beta/\tau$. R is original training resubstitution; I is inner-OOF selection. Folds 1--5 are the original outer holdouts. Full uses full DEV, with I choices reported only as diagnostics and never applied to TEST. The anchor and final preference object are shared across the four settings in a row; each inner fold fits its own anchor/preprocessing/classifier for selecting I. Complete inner scopes, sample counts, identities and all 2,952 selection scores accompany the tables.}
+\label{tab:selection-choices-db15k}
+\begin{tabular}{llrrrrr}
+\toprule
+Pair & Fold & $\alpha_0$ & R-40 & I-40 & R-41 & I-41\\
+\midrule
+D-N & Full & 1.00 & 0.20/0.2 & 0.20/0.0 & 0.20/0.2 & 0.20/0.0\\
+D-N & 1 & 1.00 & 0.20/0.1 & 0.25/0.1 & 0.20/0.1 & 0.25/0.1\\
+D-N & 2 & 1.00 & 0.20/0.2 & 0.20/0.2 & 0.20/0.2 & 0.20/0.2\\
+D-N & 3 & 1.00 & 0.25/0.3 & 0.20/0.3 & 0.25/0.3 & 0.20/0.3\\
+D-N & 4 & 1.00 & 0.20/0.2 & 0.20/0.2 & 0.20/0.2 & 0.20/0.2\\
+D-N & 5 & 1.00 & 0.20/0.2 & 0.20/0.2 & 0.20/0.2 & 0.20/0.2\\
+D-A & Full & 1.00 & 0.50/0.3 & 0.35/0.3 & 0.50/0.3 & 0.35/0.3\\
+D-A & 1 & 1.00 & 0.20/0.3 & 0.20/0.3 & 0.20/0.3 & 0.20/0.3\\
+D-A & 2 & 1.00 & 0.50/0.3 & 0.30/0.3 & 0.50/0.3 & 0.30/0.3\\
+D-A & 3 & 1.00 & 0.50/0.3 & 0.50/0.3 & 0.50/0.3 & 0.50/0.3\\
+D-A & 4 & 1.00 & 0.30/0.3 & 0.50/0.3 & 0.30/0.3 & 0.50/0.3\\
+D-A & 5 & 1.00 & 0.50/0.3 & 0.50/0.3 & 0.50/0.3 & 0.50/0.3\\
+D-NA & Full & 1.00 & 0.45/0.1 & 0.45/0.1 & 0.45/0.1 & 0.45/0.1\\
+D-NA & 1 & 1.00 & 0.30/0.1 & 0.30/0.1 & 0.30/0.1 & 0.30/0.1\\
+D-NA & 2 & 1.00 & 0.40/0.1 & 0.50/0.3 & 0.40/0.1 & 0.50/0.3\\
+D-NA & 3 & 1.00 & 0.50/0.1 & 0.45/0.1 & 0.50/0.1 & 0.45/0.1\\
+D-NA & 4 & 1.00 & 0.45/0.1 & 0.45/0.1 & 0.45/0.1 & 0.45/0.1\\
+D-NA & 5 & 1.00 & 0.45/0.1 & 0.10/0.1 & 0.45/0.1 & 0.10/0.1\\
+\bottomrule
+\end{tabular}
+\end{table}

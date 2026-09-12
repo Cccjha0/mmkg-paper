@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Fixed DEV selection-layer sensitivity. R selects radius/gate from fitted outer-training preferences; I uses three inner grouped holdouts within the same outer training portion. Both are evaluated on the same original five outer holdouts. Forty means the original 40 configurations; 41 adds explicit Global. The I$-$R effect and unconditional losses $L_R/L_I$ use $10^{-4}$ RR units; intervention $I_R/I_I$ is a percentage. Brackets are 95\% paired original-triple bootstrap intervals (2,000 draws), conditional on frozen experts, fits, choices and folds. They omit model-development and fitting uncertainty. No new TEST policy is applied.}
+\label{tab:selection-dev}
+\begin{tabular}{llrrlrr}
+\toprule
+Pair & Grid & R MRR & I MRR & I$-$R [95\% CI] & $I_R/I_I$ & $L_R/L_I$\\
+\midrule
+W-N & 40 & 0.358821 & 0.358700 & -1.20 [-6.89,+4.56] & 63.29/83.93 & 47.01/62.63\\
+W-N & 41 & 0.358821 & 0.358700 & -1.20 [-6.89,+4.56] & 63.29/83.93 & 47.01/62.63\\
+W-A & 40 & 0.354026 & 0.354026 & +0.00 [+0.00,+0.00] & 19.48/19.48 & 14.76/14.76\\
+W-A & 41 & 0.354026 & 0.354026 & +0.00 [+0.00,+0.00] & 19.48/19.48 & 14.76/14.76\\
+D-N & 40 & 0.382578 & 0.382573 & -0.05 [-0.80,+0.68] & 10.11/10.11 & 5.12/5.69\\
+D-N & 41 & 0.382578 & 0.382573 & -0.05 [-0.80,+0.68] & 10.11/10.11 & 5.12/5.69\\
+D-A & 40 & 0.382623 & 0.382635 & +0.11 [-0.03,+0.30] & 0.36/0.36 & 1.25/1.22\\
+D-A & 41 & 0.382623 & 0.382635 & +0.11 [-0.03,+0.30] & 0.36/0.36 & 1.25/1.22\\
+W-NA & 40 & 0.335339 & 0.335379 & +0.40 [-1.79,+2.46] & 4.01/3.38 & 8.73/6.79\\
+W-NA & 41 & 0.335339 & 0.335379 & +0.40 [-1.79,+2.46] & 4.01/3.38 & 8.73/6.79\\
+D-NA & 40 & 0.321052 & 0.321037 & -0.16 [-1.13,+0.95] & 3.85/2.13 & 3.93/1.86\\
+D-NA & 41 & 0.321052 & 0.321037 & -0.16 [-1.13,+0.95] & 3.85/2.13 & 3.93/1.86\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -218,6 +218,30 @@ assert r'\label{app:ties-harm}' in main and r'\label{eq:harm-raw-proposal}' in m
 assert 'all four AP lifts are negative' in main and 'same-population prevalence' in main
 assert '79.44\\%' in main and '20.97\\%' in main
 
+selection_seed=json.loads((ROOT/'selection_seed_source_manifest.json').read_text(encoding='utf-8'))
+assert selection_seed['version']=='selection_seed_v1'
+for rel,sha in selection_seed['sources'].items():
+    digest=hashlib.sha256()
+    with (ROOT.parent/rel).open('rb') as handle:
+        for block in iter(lambda:handle.read(1024*1024),b''): digest.update(block)
+    assert digest.hexdigest()==sha,rel
+for rel,sha in selection_seed['tables'].items():
+    assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in selection_seed['tables']}
+selection_dir=ROOT.parent/'outputs/paper_a_safe_correction/selection_seed_v1'
+selection_dev=json.loads((selection_dir/'dev_complete.json').read_text())
+selection_test=json.loads((selection_dir/'seed_complete.json').read_text())
+assert selection_dev['status']=='selection_hierarchy_checks_passed'
+assert selection_dev['additional_logistic_fits']==108 and selection_dev['outer_fits_replayed']==30
+assert selection_dev['full_dev_locks_replayed']==6 and selection_dev['outer_folds']==5 and selection_dev['inner_folds']==3
+assert not any(selection_dev[k] for k in ('test_policy_applied','test_opened','base_scorer_runs','original_results_replaced','development_adaptivity_removed'))
+assert selection_test['status']=='seed_dispersion_checks_passed' and selection_test['sd_ddof']==1
+assert selection_test['method_pair_cells']==76 and selection_test['seed_metrics']==228
+assert selection_test['paired_effects']==70 and selection_test['seed_direction_cells']==456
+assert not any(selection_test[k] for k in ('new_training_runs','new_test_policy_applied','seed_sd_is_population_ci','selector_fits_independent_across_base_seeds'))
+assert r'\label{app:selection-hierarchy}' in main and r'\label{app:seed-dispersion}' in main
+assert '32.26\\%' in main and '32.16\\%' in main and 'does not itself use outer-holdout labels' in main
+
 alignment_training=json.loads((ROOT/'alignment_training_source_manifest.json').read_text(encoding='utf-8'))
 assert alignment_training['version']=='alignment_training_v1'
 for rel,sha in alignment_training['sources'].items():
@@ -447,8 +471,8 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])|set(ties_harm['sources'])|set(rejection['sources'])|set(alignment_training['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1 + ties_harm_review_v1 + rejection_controls_v1 + alignment_training_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])|set(ties_harm['sources'])|set(rejection['sources'])|set(alignment_training['sources'])|set(selection_seed['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1 + ties_harm_review_v1 + rejection_controls_v1 + alignment_training_v1 + selection_seed_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
@@ -471,6 +495,7 @@ report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findal
         'adc_dyna_fitting_information_matched':False,'unseen_checkpoint_transfer_evaluated':False,
         'winner_signal_checks_passed':True,'winner_direction_diagnostic_rows':474732,
         'ties_harm_checks_passed':True,'tie_seed_direction_cells':72,'harm_population_cells':36,
+        'selection_hierarchy_checks_passed':True,'inner_sensitivity_logistic_fits':108,'seed_dispersion_checks_passed':True,'absolute_seed_mrr_rows':228,
         'alignment_training_checks_passed':True,'base_checkpoint_count':18,'historical_training_execution_commit_established':False,
         'rejection_controls_checks_passed':True,'matched_rejection_rows':84,'direct_gate_effect_rows':12,
         'harm_cluster_bootstrap_replicates':2000,'class_weight_control_small_fits':60,'class_weight_control_new_test_policy':False,
