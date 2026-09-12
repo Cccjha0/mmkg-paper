@@ -132,3 +132,7 @@ outputs/paper_a_safe_correction/information_boundary_v2/**/checkpoints/
 /outputs/paper_a_safe_correction/matched_alternatives_v1/query_rows/
 # Regenerate complementarity figure previews from the tracked PDF/source.
 /paper_a_draft/figures/complementarity/*.png
+
+# B02 matched feature dimensions: keep locks/summaries, regenerate fitted models and rows.
+/outputs/paper_a_safe_correction/feature_dimension_review_v1/models/
+/outputs/paper_a_safe_correction/feature_dimension_review_v1/query_rows/

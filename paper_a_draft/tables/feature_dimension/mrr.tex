@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{Matched feature dimensions on four primary pairs. Both use the same grouped five-fold DEV scheme, random states, labels, $C=1$ fitting and static anchors. Each ADC dimension selects from 41 identical action configurations, including Global; Query-soft shares its dimension-specific fit. DEV is held-out OOF, TEST follows all eight final locks. Differences are 13D minus 9D, without new confidence intervals. Historical TEST inspection makes this a retrospective diagnostic.}
+\label{tab:dimension-mrr}
+\begin{tabular}{llrrrrrr}
+\toprule
+Pair & Policy & DEV 9D & DEV 13D & TEST 9D & TEST 13D & $\Delta$DEV & $\Delta$TEST\\
+\midrule
+W-N & ADC & 0.358819 & 0.358821 & 0.367121 & 0.367112 & $+1.75\times10^{-6}$ & $-9.35\times10^{-6}$\\
+W-N & Query-soft & 0.357694 & 0.357689 & 0.366541 & 0.366543 & $-4.88\times10^{-6}$ & $+1.74\times10^{-6}$\\
+W-A & ADC & 0.354000 & 0.354026 & 0.360734 & 0.360735 & $+2.57\times10^{-5}$ & $+1.13\times10^{-6}$\\
+W-A & Query-soft & 0.332599 & 0.332687 & 0.340625 & 0.340618 & $+8.81\times10^{-5}$ & $-6.99\times10^{-6}$\\
+D-N & ADC & 0.382578 & 0.382578 & 0.374485 & 0.374485 & $+9.97\times10^{-9}$ & $+4.49\times10^{-7}$\\
+D-N & Query-soft & 0.368683 & 0.368714 & 0.360987 & 0.360990 & $+3.15\times10^{-5}$ & $+2.98\times10^{-6}$\\
+D-A & ADC & 0.382605 & 0.382623 & 0.374778 & 0.374778 & $+1.89\times10^{-5}$ & $+1.02\times10^{-8}$\\
+D-A & Query-soft & 0.346491 & 0.346493 & 0.338729 & 0.338760 & $+2.30\times10^{-6}$ & $+3.08\times10^{-5}$\\
+\bottomrule
+\end{tabular}
+\end{table}

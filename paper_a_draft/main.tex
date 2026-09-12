@@ -14,7 +14,7 @@
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue]{hyperref}
 \usepackage[font=small,labelfont=bf]{caption}
-\newtheorem{proposition}{Proposition}
+\newtheorem{proposition}{Property}
 \newcommand{\adc}{\textsc{ADC}}
 \newcommand{\RR}{\operatorname{RR}}
 \newcommand{\MRR}{\operatorname{MRR}}
@@ -103,13 +103,13 @@ Let a knowledge graph contain triples $(h,r,t)$ over entities $\mathcal E$ and r
 We select the primary using standalone DEV MRR. The evaluated \emph{reliable-primary} regime requires a positive pooled primary-minus-secondary DEV difference, a positive difference in each of three paired seeds, and a positive lower bound of an original-triple clustered bootstrap 95\% interval. All six evaluated MKG-W/DB15K pairs meet these criteria. This definition establishes the empirical reliability asymmetry used to organize the experiments.
 
 \paragraph{Score normalization and combination.}
-Let $\widetilde s_p$ and $\widetilde s_s$ be query-wise standardized candidate scores. On the finite candidate support of a model, the transformation is
+Let $\widetilde s_p$ and $\widetilde s_s$ be query-wise standardized candidate scores. Each model uses its own unfiltered finite set $F_m(q)=\{e\in\mathcal E:s_m(q,e)\text{ is finite}\}$; entity IDs align, but these sets need not coincide. For $n_m=|F_m(q)|>0$, define $\mu_m=n_m^{-1}\sum_{e\in F_m}s_m(q,e)$ and the population standard deviation $\sigma_m=[n_m^{-1}\sum_{e\in F_m}(s_m(q,e)-\mu_m)^2]^{1/2}$. For $e\in F_m$, the transformation is
 \begin{equation}
 \widetilde s_m(q,e)=\frac{s_m(q,e)-\mu_m(q)}{\sigma_m(q)+\epsilon},
 \qquad \epsilon=10^{-8},
 \label{eq:zscore}
 \end{equation}
-where $\mu_m$ and $\sigma_m$ are the population mean and standard deviation of the unfiltered all-entity candidate scores. In the corrected protocol, neither the designated gold nor the evaluation fact index enters these statistics. Known-answer filtering is applied only to evaluation copies after normalization; exact standalone endpoint ranks are preserved. We define a mixture by
+where $\epsilon=10^{-8}$ is added after the square root, not inside the variance or as a lower clamp. Non-finite entries become $-\infty$; a constant finite support becomes zero on that support, and an empty support becomes an all-$-\infty$ row. Neither the designated gold nor the evaluation fact index enters these statistics. Known-answer filtering is applied only to evaluation copies after normalization; exact standalone endpoint ranks are preserved. Appendix~\ref{app:normalization} gives the pseudocode, floating-point and abnormal-row limitations. We define a mixture by
 \begin{equation}
 s_\alpha(q,e)=\alpha\widetilde s_p(q,e)+(1-\alpha)\widetilde s_s(q,e),
 \quad \alpha\in[0,1].
@@ -159,7 +159,7 @@ g(q)=w^\top x(q)+b,
 \qquad p_A(q)=\sigma(g(q)).
 \label{eq:signal}
 \end{equation}
-The classifier has 13 coefficients and one intercept: 14 trainable selector parameters, excluding preprocessing state and both frozen scorers. This count does not measure feature-extraction or end-to-end cost. Its training target represents standalone model preference; the policy mapping determines how that preference changes the reference mixture. DEV answers supply supervision, while inference uses candidate-distribution statistics and direction.
+The classifier has 13 coefficients and one intercept: 14 trainable selector parameters, excluding preprocessing state and both frozen scorers. The four difference coordinates are linear combinations of the eight expert statistics on complete inputs in exact arithmetic, so these are not 13 independent signals. They change the effective L2 regularization geometry after scaling, rather than expanding the affine prediction space; independent imputation can break the dependency (Appendix~\ref{app:feature-dimension}). This count does not measure feature-extraction or end-to-end cost. Its training target represents standalone model preference; the policy mapping determines how that preference changes the reference mixture. DEV answers supply supervision, while inference uses candidate-distribution statistics and direction.
 
 \subsection{Bounded adjustment and fallback}
 The preference signal produces the raw bounded proposal
@@ -208,7 +208,7 @@ s_\alpha(q,e)-s_{\alpha_0}(q,e)=(\alpha-\alpha_0)d(q,e).
 \end{equation}
 
 \begin{proposition}[Bounded candidate-score perturbation]
-For the continuous policy in Eq.~\eqref{eq:fallback},
+For a candidate whose two normalized scores are finite, the continuous policy in Eq.~\eqref{eq:fallback} satisfies
 \begin{equation}
 \left|s_{\alpha_{\mathrm{cont}}}(q,e)-s_{\alpha_0}(q,e)\right|
 \leq\beta|d(q,e)|.
@@ -220,7 +220,7 @@ The same inequality holds after nearest-grid projection when the clipped interva
 The magnitude of $\beta\tanh(g)$ is at most $\beta$. Projection onto $[0,1]$ cannot increase distance from $\alpha_0\in[0,1]$, and fallback sets that distance to zero. Grid-aligned interval endpoints ensure that the nearest grid point remains inside the interval. Applying Eq.~\eqref{eq:identity} completes the proof.
 \end{proof}
 
-The bound gives $\beta$ a direct interpretation in score space: it limits movement in proportion to inter-model disagreement. It is not an absolute, data-independent score bound, since $d$ varies with the scores. Candidate ordering also depends on the reference margins. An arbitrarily small perturbation can reverse a near tie and reduce a gold answer's RR from 1 to $1/2$. Appendix~\ref{app:bound} gives a sufficient margin condition for preserving an ordering. Without such margin information, this proposition supplies neither a nontrivial RR-loss bound tending to zero with $\beta$ nor a probabilistic harm guarantee.
+This elementary property follows from the linear-mixture identity and $|\tanh(g)|\leq1$; it documents the action constraint rather than supplying a new ranking-risk theorem. The bound gives $\beta$ a direct interpretation in score space: it limits movement in proportion to inter-model disagreement. It is not an absolute, data-independent score bound, since $d$ varies with the scores. Candidate ordering also depends on the reference margins. An arbitrarily small perturbation can reverse a near tie and reduce a gold answer's RR from 1 to $1/2$. Appendix~\ref{app:bound} gives a sufficient margin condition for preserving an ordering. Without such margin information, this property supplies neither a nontrivial RR-loss bound tending to zero with $\beta$ nor a probabilistic harm guarantee. Non-finite normalized entries fall outside the finite-score algebra.
 
 \FloatBarrier
 \section{Experimental Setup}
@@ -312,6 +312,8 @@ The nearest logit alternatives are stronger accuracy comparators. Clip-g and Lin
 Grouped held-out DEV results show Clip-g above ADC on W-N, W-A and D-N, with lower utility on D-A; Shrink-gate is above ADC on D-A. Appendix~\ref{app:matched} supplies all fold selections, pairwise differences and risk measures. We retain the original ADC policies and report every family rather than adopting a replacement based on TEST.
 \input{tables/matched/test.tex}
 
+A separate dimension-matched check removes the four redundant difference coordinates while retaining the action family, DEV folds, random states and 41-configuration budget (Table~\ref{tab:dimension-mrr}). The absolute TEST ADC difference between 13D and 9D is at most $9.35\times10^{-6}$ across the four primary pairs, with 9D slightly higher on W-N. The results do not establish a consistent accuracy advantage for the extra coordinates. Appendix~\ref{app:feature-dimension} relates these small changes to parameterization and regularization, without claiming that 13D adds independent linear signals.
+
 \subsection{Healthy DynaSemble changes the accuracy comparison}
 R3 exceeds ADC by 0.002418 on W-N and 0.000499 on D-N, with positive lower bounds in the conditional pointwise bootstrap intervals. ADC exceeds R3 by 0.001660 on W-A and 0.002426 on D-A (Table~\ref{tab:dyna-effects}). R3 improves on Global in W-N and has a small positive D-N effect whose interval spans zero; it remains below Global on W-A and D-A. All failed historical seeds remain in R0, while every new final run has nonzero weights and actual updates in every layer.
 
@@ -391,6 +393,24 @@ Anchored Dynamic Correction offers a bounded way to adjust an effective static m
 \section{Implementation Details}
 \label{app:implementation}
 
+\subsection{Exact score normalization and exceptional inputs}
+\label{app:normalization}
+The export module is \texttt{scripts/\allowbreak eval\_\allowbreak heterogeneous\_\allowbreak complementarity.py}. Candidate construction uses \texttt{score\_expert\_block}. The unfiltered rows pass to \texttt{query\_zscore\_with\_reference}, followed by \texttt{filtered\_copy} and \texttt{endpoint\_safe\_mixed\_ranks}. The candidate output agrees with \texttt{normalize\_candidate\_scores} in \texttt{query\_zscore} mode; the separate generic \texttt{combine\_expert\_scores} helper uses a different finite-fill rule and is not this paper's ranking path.
+For each model and each unfiltered row $s$, compute:
+\begin{quote}\small
+$f_e\leftarrow\operatorname{isfinite}(s_e)$, $n\leftarrow\max(1,\sum_e f_e)$.\\
+$\mu\leftarrow\sum_e\operatorname{where}(f_e,s_e,0)/n$.\\
+$v_e\leftarrow\operatorname{where}(f_e,s_e-\mu,0)$.\\
+$\sigma\leftarrow\sqrt{\sum_e v_e^2/n}$, $a\leftarrow\sigma+10^{-8}$.\\
+$z_e\leftarrow\operatorname{where}(f_e,v_e/a,-\infty)$.\\
+Only in evaluation: $z_y^{\rm ref}\leftarrow(s_y^{\rm ref}-\mu)/a$, then filter owned candidate copies while retaining the current gold.
+\end{quote}
+NaN, $+\infty$ and $-\infty$ are all excluded from the moments and become $-\infty$ in $z$. The finite sets are computed independently, not intersected or united across experts. With finite moment arithmetic in the evaluated float32 dtype, one finite value or any constant finite support gives $\sigma=0$ and finite entries map to zero. With no finite values the clamped count gives $\mu=\sigma=0$ internally, but every output remains $-\infty$. The candidate normalization is row-wise and invariant to which gold or other batch rows are supplied. Arithmetic retains the incoming tensor dtype; it does not upcast moments, so sufficiently extreme finite values can overflow. Lower-precision dtypes are not covered by this numerical audit.
+
+For an interior weight $0<\alpha<1$, the actual ranking path directly interpolates normalized copies: a candidate missing from either expert's finite support is therefore at $-\infty$. Shared answer masks also remain $-\infty$. At weights 0 and 1, the path explicitly substitutes the original expert rank, avoiding $0\cdot(-\infty)$ and preserving endpoint evaluation. A separately scored gold is transformed using the same moments, not included as an extra sample.
+
+These rules define normalization even for degenerate rows, but they do not provide reliable abnormal-input recovery. The legacy gold transform and strict-greater rank function do not reject non-finite references: an all-non-finite row with NaN gold can return rank 1 because every comparison is false. Such output is not valid accuracy evidence. An independent test records this counterexample. The retained feature tables cannot certify that raw scores were always finite, because geometry sanitization can hide non-finite scores. A full frozen-checkpoint raw-score audit is prepared but remains pending; abnormal-input ranking robustness is not claimed.
+
 \paragraph{Features.}
 The 13-dimensional vector is ordered as follows: tail-direction indicator; primary top-1, top-5 mean, top-1/top-2 margin, and score standard deviation; the corresponding four secondary statistics; then primary-minus-secondary differences of these four statistics. In the corrected implementation, geometry is extracted from an owned copy of the unfiltered all-entity score matrix before both masking and mixture normalization. The geometry standard deviation uses the sample correction; mixture z-score uses population variance. The feature routine sanitizes non-finite model outputs for computing statistics; evaluation-mask sentinels are not permitted inputs. The policy separately flags non-finite resulting feature vectors for fallback. Tied standalone RR labels are excluded from fitting.
 
@@ -416,6 +436,8 @@ Masking normalized expert copies before a fixed row-wise interpolation is equiva
 
 \paragraph{Classifier.}
 The implementation uses median imputation, feature standardization, and \texttt{LogisticRegression} with \texttt{class\_weight=balanced}, \texttt{solver=liblinear}, \texttt{max\_iter=2000}, and default $C=1$. The final model random state is 20260902; outer-fold fits use their recorded deterministic offsets. Fitted imputation and scaling statistics are reused on held-out and TEST observations. Confidence is the absolute distance of the predicted preference probability from 0.5, scaled to $[0,1]$.
+
+The geometry standard-deviation coordinate uses \texttt{torch.std} with sample correction 1, unlike population normalization above. Top-5 means use $\min(5,|\mathcal E|)$ candidates; geometry requires at least two candidates. Its existing sanitizer uses the finite minimum/maximum over the entire supplied expert batch, with low=min$-1$ and high=max$+1$, or $-100,100$ when the batch has no finite values; NaN/$-\infty$ become low and $+\infty$ becomes high. Thus abnormal geometry can depend on other batch rows even though normalization does not. At classifier input, remaining non-finite coordinates are converted to NaN for column-median imputation and separately flagged for Global fallback. That flag does not detect raw anomalies already sanitized upstream. No batch-invariance or safe-fallback claim is made for such abnormal inputs.
 
 \paragraph{Grouping and selection.}
 Five-fold assignments use deterministic relation-stratified SHA-256 ordering and round-robin allocation of original triples, with fold seed 20260901. The six observations of a triple share a fold. The outer training data supply the static anchor, classifier, and training-portion MRR used to select the bounded policy. This is selection within each outer training fold; it does not introduce an additional inner cross-validation loop. The final full-DEV fit selects from the same expanded grids and serializes all parameters and source hashes.
@@ -550,15 +572,16 @@ Tables~\ref{tab:rerun-hits} and~\ref{tab:rerun-consistency} use corrected TEST r
 
 \section{Additional Bounds and Diagnostic Definitions}
 \label{app:bound}
-For two candidates $e_1,e_2$, define the reference margin
+For two candidates $e_1,e_2$ with finite normalized scores from both experts, define the reference margin
 \begin{equation}
 m_0=s_{\alpha_0}(q,e_1)-s_{\alpha_0}(q,e_2).
 \end{equation}
 The change in this margin is $(\alpha-\alpha_0)[d(q,e_1)-d(q,e_2)]$. Consequently, if
 \begin{equation}
 m_0>\beta|d(q,e_1)-d(q,e_2)|,
+\label{eq:margin-sufficient}
 \end{equation}
-the ordering $e_1\succ e_2$ is preserved for the evaluated bounded policy. Preserving the reference top candidate requires this inequality against every alternative. For grids whose interval endpoints are not aligned, nearest-grid projection adds at most half the grid spacing to the distance bound; the present spacing is 0.05.
+the ordering $e_1\succ e_2$ is preserved for the evaluated bounded policy. This is a sufficient certificate, not a necessary condition: failing it does not imply that the realized correction changes the order. To certify preservation of the reference top candidate by this argument, it suffices to check the inequality against every alternative; this does not certify the rest of the ranking. Preserving every strict pairwise order requires the corresponding conditions for all such pairs. No claim is made that these conditions hold for every query. For grids whose interval endpoints are not aligned, nearest-grid projection adds at most half the grid spacing to the distance bound; the present spacing is 0.05.
 
 \paragraph{Limits of the bound.}
 A regression test constructs normalized score vectors with a near-tied gold and competitor, then verifies that a weight displacement of $10^{-6}$ respects the score bound yet changes gold RR from 1 to $1/2$. Separate tests match grid projection against the production tie rule, verify Global's zero unconditional loss, and demonstrate why selector repetitions must not be averaged before loss calculation. These check action semantics and metric arithmetic; they do not certify population ranking risk.
@@ -626,6 +649,23 @@ Table~\ref{tab:matched-paired} reports every ADC-versus-alternative difference, 
 \input{tables/matched/static.tex}
 \input{tables/matched/oracle.tex}
 The oracle diagnostic only maximizes over the two standalone experts. A unit test with equal-normalized score distributions gives each expert a gold rank of 2 while their equal mixture gives rank 1, demonstrating why this oracle cannot bound score fusion. All static TEST ranks come from the corrected shared evaluator and their original DEV settings. The source-bound \texttt{matched\_source\_manifest.json} links this supplement to its locks, inputs, complete results and generated tables.
+\FloatBarrier
+
+\section{Redundant Difference Coordinates and Matched Dimensions}
+\label{app:feature-dimension}
+Let $x_9$ contain direction and the eight per-expert statistics. In exact arithmetic on complete inputs, $x_{13}=Dx_9$, where $D$ stacks the $9\times9$ identity and four rows computing the corresponding A-minus-B statistics. Thus $w_{13}^{\top}x_{13}+b=(D^{\top}w_{13})^{\top}x_9+b$: the added coordinates do not enlarge the affine function class. After column standardization, write $[z_{13};1]=M[z_9;1]$, including the centering offset. Since $M$ has full column rank, the minimal squared coefficient norm representing an effective augmented 9D coefficient $v$ is
+\begin{equation}
+\min_{M^{\top}w=v}\|w\|_2^2=v^{\top}(M^{\top}M)^{-1}v.
+\label{eq:redundant-penalty}
+\end{equation}
+This differs from isotropic 9D L2 regularization. The augmented expression includes the unit synthetic intercept penalized by the evaluated liblinear configuration. As a simple unscaled example, features $(a,b,a-b)$ induce a minimum penalty $(2v_a^2+2v_av_b+2v_b^2)/3$, rather than $v_a^2+v_b^2$. These identities explain a possible parameterization effect; they do not attribute every observed MRR difference solely to regularization.
+
+Column-wise median imputation can break the exact dependency: medians of $a,b,a-b$ need not satisfy the subtraction identity. Remaining non-finite input coordinates are imputed during fitting and flagged for fallback during inference. In the four-pair cache used here, all exported 13D DEV/TEST rows are finite, so imputation does not create the observed differences. Stored float32 subtractions leave residuals up to $1.91\times10^{-6}$; collapsing fitted 13D classifiers to nine raw affine coordinates changes audited decisions by at most $3.17\times10^{-7}$. This numerical residue is not evidence of four independent signals, nor does finite exported geometry certify finite raw scores.
+
+Both dimensions use the same median/scaling pipeline, balanced winner-label logistic loss, $C=1$, liblinear solver, maximum 2,000 iterations, training examples, five grouped DEV folds and random states. Each dimension searches the same 41 ADC configurations, including Global; Query-soft uses that dimension's fitted model without extra tuning. All eight full-DEV pair/dimension locks precede the separate TEST application. The experiment uses 44 small model fits and four reused original full-DEV models; convergence takes at most seven iterations. The runtime is scikit-learn 1.7.1 and the original pickles are 1.7.2. Separate DEV-only refits quantify their small numerical differences and reproduce every one of the 42 DEV action vectors (41 ADC candidates plus Query-soft); the original full-DEV/TEST outputs and grouped OOF ADC ranks are also replayed. This documents numerical compatibility without a bitwise cross-version claim.
+\input{tables/feature_dimension/mrr.tex}
+\input{tables/feature_dimension/risk.tex}
+ADC's 13D-minus-9D TEST effects have mixed signs and are very small; Query-soft's signs also vary. The supplied records include all paired seeds and directions, selected actions, non-finite counts, dependency residuals and fitting iterations. Equal nominal $C$ matches the fitting setting, not the induced regularization metric. We do not isolate regularization from solver/rounding effects, claim a new significance result, or select a replacement dimension from TEST. The comparison remains retrospective and concerns the four primary pairs only.
 \FloatBarrier
 
 \section{DynaSemble Transfer and Reproducibility}

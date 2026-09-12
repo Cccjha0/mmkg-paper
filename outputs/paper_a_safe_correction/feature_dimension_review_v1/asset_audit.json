@@ -1,0 +1,20 @@
+{
+  "status": "feature_dimension_assets_verified",
+  "incomplete_feature_rows": 0,
+  "dev_candidate_evaluations": 1968,
+  "fitted_models": 44,
+  "reused_full_models": 4,
+  "full_13d_runtime_verification_fits": 4,
+  "max_n_iter": 7,
+  "max_difference_residual": 1.9073486328125e-06,
+  "max_collapsed_decision_error": 3.163897486224698e-07,
+  "raw_score_finiteness_certified": false,
+  "test_used_for_selection": false,
+  "runtime": {
+    "python": "3.13.11",
+    "numpy": "2.4.2",
+    "sklearn": "1.7.1"
+  },
+  "historical_model_sklearn": "1.7.2",
+  "runtime_note": "Historical pickle version differs; full DEV/TEST outputs and original OOF ADC ranks were replayed with strict tolerances. No cross-version bitwise guarantee."
+}

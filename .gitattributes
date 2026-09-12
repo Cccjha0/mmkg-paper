@@ -75,3 +75,15 @@ docs/reports/paper_a_claims_cost_review_2026-09-12.md -text whitespace=cr-at-eol
 outputs/paper_a_safe_correction/claims_cost_review_v1/** -text whitespace=cr-at-eol
 paper_a_draft/tables/claims_cost/** -text whitespace=cr-at-eol
 paper_a_draft/claims_cost_source_manifest.json -text whitespace=cr-at-eol
+
+# B01-B03 numerical definitions and the hash-bound matched-dimension review.
+router/feature_redundancy.py -text whitespace=cr-at-eol
+scripts/analyze_paper_a_feature_dimension.py -text whitespace=cr-at-eol
+scripts/audit_paper_a_feature_fit_runtime.py -text whitespace=cr-at-eol
+scripts/audit_paper_a_raw_score_contract.py -text whitespace=cr-at-eol
+scripts/build_paper_a_feature_dimension_assets.py -text whitespace=cr-at-eol
+tests/test_score_definition_and_redundancy.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_feature_dimension_review.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/feature_dimension_review_v1/** -text whitespace=cr-at-eol
+paper_a_draft/tables/feature_dimension/** -text whitespace=cr-at-eol
+paper_a_draft/feature_dimension_source_manifest.json -text whitespace=cr-at-eol
