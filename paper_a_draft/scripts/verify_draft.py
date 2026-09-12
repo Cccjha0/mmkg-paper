@@ -125,9 +125,26 @@ abstract=main.split(r'\begin{abstract}',1)[1].split(r'\end{abstract}',1)[0]
 conclusion=main.split(r'\section{Conclusion}',1)[1].split(r'\FloatBarrier',1)[0]
 for section in (abstract,conclusion):
     assert 'four primary' in section and 'two additional' in section
-    assert '+0.000139' in section and '-0.000015' in section
-    assert 'spanning zero' in section and 'Relation' in section and 'W-N' in section
-    assert '6.20--11.83' in section and 'timing' in section
+    assert re.search(r'span(?:ning)? zero',section) and 'Relation' in section and 'W-N' in section
+    assert 'slightly negative' in section and 'timing' in section
+# The abstract uses rounded absolute MRR percentage points; full precision stays
+# in the results and conclusion. Check the unit conversion against bound effects.
+with (ROOT.parent/'outputs/paper_a_safe_correction/claims_cost_review_v1/paired_effects.csv').open(encoding='utf-8') as handle:
+    effects=list(csv.DictReader(handle))
+primary_global=[r for r in effects if r['comparator']=='Global' and r['label'] in ('W-N','W-A','D-N','D-A')]
+positive=[float(r['delta_adc_minus_comparator']) for r in primary_global if float(r['ci_low'])>0]
+assert len(primary_global)==4 and len(positive)==3
+headline=f'{100*min(positive):.2f}--{100*max(positive):.2f} MRR percentage points'
+assert headline in abstract and 'three paired base seeds' in abstract
+assert 'both additional-pair intervals span zero' in abstract
+assert 'lower unconditional mean reciprocal-rank loss relative to Global' in abstract
+with (ROOT.parent/'outputs/paper_a_safe_correction/claims_cost_review_v1/historical_cost.csv').open(encoding='utf-8') as handle:
+    ratios=[float(r['adc_over_primary']) for r in csv.DictReader(handle)]
+assert f'{min(ratios):.1f}--{max(ratios):.1f} times primary-only' in abstract
+assert 'historical pre-repair' in abstract and 'corrected timing is unavailable' in abstract
+assert '+0.000139' in conclusion and '-0.000015' in conclusion and '6.20--11.83' in conclusion
+assert not re.search(r'\d+\.\d{6}',abstract)
+assert 'requires a query-dependent policy' not in abstract.lower()
 assert ROOT/'tables/claims_cost/main.tex' in tex_files
 matched_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/matched_alternatives_v1/test_audit.json').read_text())
 assert matched_audit['status']=='matched_alternative_checks_passed' and not matched_audit['failures']
