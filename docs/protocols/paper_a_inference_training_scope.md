@@ -1,0 +1,11 @@
+# B11/B12: offline rank caches and selector training scope
+
+This is a read-only protocol/code/metadata audit of the existing results. It does not fit scientific models, score checkpoints, retune policies, change TEST results, or estimate deployment latency.
+
+Verify the six final ADC locks against their original source manifests. Reconstruct DEV row counts, unique triples, base-seed/direction coverage and non-tied winner-label fitting subsets. Check the saved scaler's sample count and moments against the pooled non-tied rows. Reconstruct the five original-triple folds and report their fitting counts without refitting. A selector object is shared across seeds, directions, Query-soft and action-only variants; the fitted objects are not averaged at serving time.
+
+For Dyna R0, verify the three per-base-seed selector hashes and recorded training-query counts in each of four primary-pair locks. For R1/R2/R3-fixed/R3/R4, verify all 180 final completion signatures, their single-base cache bindings, fit IDs, model hashes, and the 324 R3 CV training-portion signatures. Count available directional cache rows separately from loss rows: the training loop assigns one direction per triple per epoch, using a within-batch half split. Different selector seeds change initialization, ordering, and negatives; they do not pool the other base seeds' features into a network. Hyperparameter selection and reported metric aggregation can pool observations while model fitting remains separate.
+
+Confirm that all matched action families reference the same original full-DEV model hash. Report information and objective differences rather than infer equal training budgets from small parameter counts.
+
+Keep inference and assessment distinct. The guarded feature-to-weight entry point requires only 13 observable features plus the frozen model/lock. Tests remove or corrupt all gold/RR/cache/seed metadata while retaining the feature values. Offline rank-table lookup is allowed for training-portion parameter selection and labeled evaluation, never as a required serving input. Algorithm 1 must output one selected candidate-score vector and an ordering/top-k, with gold-aware filtered RR computation stated separately. Candidate extraction and scorer loading are outside the feature-to-weight helper.

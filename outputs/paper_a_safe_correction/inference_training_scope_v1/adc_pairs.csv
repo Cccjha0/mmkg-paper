@@ -1,0 +1,7 @@
+pair,label,dev_triples,available_directional_rows,fit_rows,excluded_ties,base_seeds,full_selectors,full_geometry_oof_selectors,model_sha256,pooled_preprocessing_count_and_moments_verified
+mkgw_mhyper_native,W-N,4276,25656,19567,6089,3,1,5,391d792d2cde80880f24bac9045c0bdbd96fe813ad1aaf7851936644813cbbe3,True
+mkgw_mhyper_adamf,W-A,4276,25656,20564,5092,3,1,5,085d0660d46c92d75179363fd28533c26c6c18b834dea07d702fd990cfa9913e,True
+db15k_mhyper_native,D-N,7922,47532,37005,10527,3,1,5,fb3f2f5759cae633b2c7f5dc7233c0e8f509b55b04ed351a518c024f77deb263,True
+db15k_mhyper_adamf,D-A,7922,47532,38925,8607,3,1,5,ed33e59e4a2fce3564a01e93e23fdc35d07fc5cfd60bfaead354448272d1227f,True
+mkgw_native_adamf,W-NA,4276,25656,20522,5134,3,1,5,29f59b586358c0c79c3a24cc066e813efa722535c3317a2722e3126fe3e8755a,True
+db15k_native_adamf,D-NA,7922,47532,38515,9017,3,1,5,84e64d485199d6c6228575a5771e214a5816b11304326c30f60ee655d4adfb10,True

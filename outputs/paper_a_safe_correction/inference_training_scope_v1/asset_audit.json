@@ -1,0 +1,81 @@
+{
+  "status": "inference_scope_assets_verified",
+  "adc_pairs": 6,
+  "method_groups": 10,
+  "adc_fit_rows": [
+    19567,
+    20564,
+    37005,
+    38925,
+    20522,
+    38515
+  ],
+  "methods": [
+    [
+      "Primary / Secondary",
+      "Base checkpoints trained on TRAIN; checkpoint and primary-role selection on DEV.",
+      "0 selectors; 3 base checkpoints per expert.",
+      "1 base checkpoint."
+    ],
+    [
+      "Equal / Equal RRF",
+      "No combiner fitting; fixed $\\alpha=0.5$ or RRF $k=60$.",
+      "0 fitted combiners.",
+      "1 checkpoint pair and fixed rule."
+    ],
+    [
+      "Global / Relation",
+      "Pooled $6N$ DEV rows, including endpoint ties; MRR selection.",
+      "1 weight / relation map; 5 corresponding OOF states.",
+      "1 checkpoint pair and its weight / map."
+    ],
+    [
+      "ADC / Query-soft",
+      "Pooled $6N$ DEV rows; fit preprocessing and logistic on non-tied endpoint winners.",
+      "1 shared final model; 5 shared OOF models.",
+      "1 checkpoint pair and the shared model; apply the chosen map."
+    ],
+    [
+      "Action / grid variants",
+      "Same fitted signal and training rows as full ADC, including matched shrinkage and linear maps.",
+      "Reuse the ADC model within each fold and full fit; no fit per action candidate.",
+      "1 checkpoint pair and the shared model with one locked action rule."
+    ],
+    [
+      "Feature variants",
+      "Same pooled non-tied rows; change feature coordinates only.",
+      "5 OOF fits per feature family; final 9D/13D comparison: 1 model per dimension.",
+      "1 checkpoint pair and the chosen feature model. P3-only feature variants have no TEST fit."
+    ],
+    [
+      "Dyna R0",
+      "One base seed per network; $N$ directional loss rows in its single epoch.",
+      "3 final networks: 1 per base seed; no selector repeats.",
+      "1 checkpoint pair and its corresponding network."
+    ],
+    [
+      "Dyna R1 / R2 / R3-fixed",
+      "One base seed per network; $2N$ cache rows, $N$ loss rows in one epoch.",
+      "9 final networks per variant: 3 base seeds times 3 selector seeds.",
+      "1 checkpoint pair and 1 network; repetitions are separate runs."
+    ],
+    [
+      "Dyna R3 / R4",
+      "One base seed per network; $N$ loss rows per epoch. R3 pools held-out metrics for setting selection; R4 inherits them.",
+      "9 final networks per variant; R3 additionally has 81 CV trajectories per pair.",
+      "1 checkpoint pair and 1 network; no averaging of networks at serving."
+    ],
+    [
+      "Endpoint Oracle",
+      "Uses the gold-dependent better standalone RR per observation.",
+      "0 selectors; diagnostic only.",
+      "Not deployable."
+    ]
+  ],
+  "tables": {
+    "tables/inference_scope/methods.tex": "4ef3e7aa79f8e7ae648665cb4e189eaa653d42944a99aebbffcfbed40dbe1408",
+    "tables/inference_scope/samples.tex": "bd171ca9a794c7fb2f4a8cc1eb423caabbff2d45bfd591292bf418aee0854ad7"
+  },
+  "rank_cache_required_for_inference": false,
+  "training_information_matched_between_adc_and_dyna": false
+}

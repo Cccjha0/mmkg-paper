@@ -161,6 +161,36 @@ assert [r['label'] for r in endpoint_audit['full_dev_anchor_checks'] if r['chang
 endpoint_assets=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/endpoint_contract_return_review_v1/asset_audit.json').read_text())
 assert endpoint_assets['status']=='endpoint_assets_verified' and len(endpoint_assets['tables'])==3
 
+scope=json.loads((ROOT/'inference_scope_source_manifest.json').read_text(encoding='utf-8'))
+assert scope['version']=='inference_training_scope_v1'
+for rel,sha in scope['sources'].items():
+    digest=hashlib.sha256()
+    with (ROOT.parent/rel).open('rb') as handle:
+        for block in iter(lambda:handle.read(1024*1024),b''): digest.update(block)
+    assert digest.hexdigest()==sha,rel
+for rel,sha in scope['tables'].items():
+    assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in scope['tables']}
+scope_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/inference_training_scope_v1/audit.json').read_text())
+assert scope_audit['status']=='inference_training_scope_checks_passed'
+assert scope_audit['adc_final_models']==6 and scope_audit['adc_full_geometry_oof_scopes']==30
+assert scope_audit['dyna_historical_final_models']==12 and scope_audit['dyna_new_final_models']==180
+assert scope_audit['dyna_cv_trajectories']==324
+assert scope_audit['scientific_model_fits']==scope_audit['base_model_scoring_runs']==0
+for key in ('test_used_for_selection','results_replaced','seed_is_selector_feature',
+            'rank_cache_required_for_inference','checkpoint_generalization_tested',
+            'training_information_matched_between_adc_and_dyna'):
+    assert not scope_audit[key],key
+assert all(p['pooled_preprocessing_count_and_moments_verified'] and p['full_selectors']==1 for p in scope_audit['adc_pairs'])
+assert [p['fit_rows'] for p in scope_audit['adc_pairs']]==[19567,20564,37005,38925,20522,38515]
+scope_assets=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/inference_training_scope_v1/asset_audit.json').read_text())
+assert scope_assets['status']=='inference_scope_assets_verified' and scope_assets['method_groups']==10
+assert scope_assets['tables']==scope['tables']
+policy_algorithm=main.split(r'\begin{algorithm}',1)[1].split(r'\end{algorithm}',1)[0]
+assert 'No gold or rank cache' in policy_algorithm and 'Return the weight and candidate scores' in policy_algorithm
+assert 'return the corresponding standalone rank' not in policy_algorithm
+assert 'one shared selector' in main and 'not three independently fitted ADC selectors' in main
+assert r'\ref{tab:inference-method-scope}' in main and r'\label{app:inference-cache}' in main
 grid=json.loads((ROOT/'grid_sensitivity_source_manifest.json').read_text(encoding='utf-8'))
 assert grid['version']=='grid_sensitivity_return_review_v1'
 for rel,sha in grid['sources'].items():
@@ -309,8 +339,8 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
@@ -328,6 +358,9 @@ report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findal
         'real_normalized_endpoint_equivalence_established':False,
         'endpoint_return_checks_passed':True,'normalized_endpoint_difference_rows':1293,
         'primary_fixed_policy_endpoint_effects_unchanged':True,'whole_workflow_endpoint_invariance_established':False,
+        'inference_training_scope_checks_passed':True,'rank_cache_required_for_inference':False,
+        'adc_final_selectors':6,'dyna_historical_final_selectors':12,'dyna_new_final_selectors':180,
+        'adc_dyna_fitting_information_matched':False,'unseen_checkpoint_transfer_evaluated':False,
         'raw_score_finiteness_certified':raw_review['raw_score_finiteness_certified'],
         'raw_score_finiteness_scope':raw_review['scope'],
         'historical_raw_bitwise_equality_established':False,'abnormal_input_robustness_established':False,

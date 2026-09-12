@@ -1,0 +1,16 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{5pt}
+\caption{Actual final ADC training scope. The imputer medians, scaler means and stored sample counts match the pooled non-tied rows in every saved model. Each row corresponds to one final classifier, shared across three base seeds and two directions. Excluding ties applies to classifier fitting, not MRR selection or evaluation. For Dyna controls on the first four pairs, each individual network has only its own base-seed scores and uses $N$ directional loss rows per epoch; these are a different loss and training unit, not directly equivalent samples.}
+\label{tab:inference-fit-counts}
+\begin{tabular}{lrrrr}
+\toprule Pair & DEV triples $N$ & Pooled rows $6N$ & Classifier fit rows & Excluded ties \\
+\midrule
+W-N & 4,276 & 25,656 & 19,567 & 6,089\\
+W-A & 4,276 & 25,656 & 20,564 & 5,092\\
+D-N & 7,922 & 47,532 & 37,005 & 10,527\\
+D-A & 7,922 & 47,532 & 38,925 & 8,607\\
+W-NA & 4,276 & 25,656 & 20,522 & 5,134\\
+D-NA & 7,922 & 47,532 & 38,515 & 9,017\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -146,3 +146,13 @@ outputs/paper_a_safe_correction/endpoint_contract_audit_v1_return/** -text white
 outputs/paper_a_safe_correction/endpoint_contract_return_review_v1/** -text whitespace=cr-at-eol
 paper_a_draft/endpoint_contract_source_manifest.json -text whitespace=cr-at-eol
 paper_a_draft/tables/endpoint_contract/** -text whitespace=cr-at-eol
+
+# B11/B12 feature-only inference and audited selector fitting scope.
+scripts/audit_paper_a_inference_training_scope.py -text whitespace=cr-at-eol
+scripts/build_paper_a_inference_scope_assets.py -text whitespace=cr-at-eol
+tests/test_inference_training_scope.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_inference_training_scope.md -text whitespace=cr-at-eol
+docs/reports/paper_a_inference_training_scope_review_2026-09-12.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/inference_training_scope_v1/** -text whitespace=cr-at-eol
+paper_a_draft/inference_scope_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/tables/inference_scope/** -text whitespace=cr-at-eol
