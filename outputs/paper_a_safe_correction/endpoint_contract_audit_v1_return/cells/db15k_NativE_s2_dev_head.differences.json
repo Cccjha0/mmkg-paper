@@ -1,0 +1,32 @@
+[
+  {
+    "split_index": 2570,
+    "triple": [
+      10498,
+      110,
+      694
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 7276,
+    "triple": [
+      8343,
+      39,
+      4753
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 7699,
+    "triple": [
+      1967,
+      67,
+      2543
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  }
+]

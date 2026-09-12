@@ -1,0 +1,15 @@
+{
+  "status": "endpoint_assets_verified",
+  "expert_split_rows": 12,
+  "policy_convention_rows": 144,
+  "dev_anchor_rows": 6,
+  "primary_test_effects_unchanged_at_1e_12": true,
+  "normalized_endpoint_equivalence": false,
+  "training_runs": 0,
+  "test_used_for_selection": false,
+  "tables": {
+    "tables/endpoint_contract/experts.tex": "0461bb7b8aa733ebde741ccc4d1a0378d8c97fa375f05f15ff5b86dab1040e4d",
+    "tables/endpoint_contract/policies.tex": "f0605710da24063e2ef3fc84d036764da0c7adb8fe3d39d35fc92bedf0c43778",
+    "tables/endpoint_contract/anchors.tex": "b59bd1885b78180bfb0314b93709f268d10b6df4a08e583ef6957e365e699348"
+  }
+}

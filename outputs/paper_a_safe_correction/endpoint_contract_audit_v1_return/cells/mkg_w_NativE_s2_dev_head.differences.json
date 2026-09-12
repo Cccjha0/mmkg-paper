@@ -1,0 +1,882 @@
+[
+  {
+    "split_index": 47,
+    "triple": [
+      1803,
+      1,
+      205
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 57,
+    "triple": [
+      12269,
+      14,
+      3537
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 77,
+    "triple": [
+      724,
+      29,
+      4750
+    ],
+    "raw_rank": 3,
+    "normalized_rank": 2
+  },
+  {
+    "split_index": 136,
+    "triple": [
+      2040,
+      6,
+      19
+    ],
+    "raw_rank": 17,
+    "normalized_rank": 16
+  },
+  {
+    "split_index": 144,
+    "triple": [
+      2106,
+      22,
+      1638
+    ],
+    "raw_rank": 5,
+    "normalized_rank": 4
+  },
+  {
+    "split_index": 150,
+    "triple": [
+      373,
+      29,
+      2832
+    ],
+    "raw_rank": 3,
+    "normalized_rank": 2
+  },
+  {
+    "split_index": 219,
+    "triple": [
+      5033,
+      8,
+      6174
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 232,
+    "triple": [
+      7067,
+      0,
+      4141
+    ],
+    "raw_rank": 11,
+    "normalized_rank": 10
+  },
+  {
+    "split_index": 378,
+    "triple": [
+      727,
+      4,
+      19
+    ],
+    "raw_rank": 18,
+    "normalized_rank": 17
+  },
+  {
+    "split_index": 391,
+    "triple": [
+      2399,
+      18,
+      5315
+    ],
+    "raw_rank": 30,
+    "normalized_rank": 29
+  },
+  {
+    "split_index": 426,
+    "triple": [
+      7878,
+      11,
+      2816
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 564,
+    "triple": [
+      5153,
+      18,
+      3767
+    ],
+    "raw_rank": 7,
+    "normalized_rank": 6
+  },
+  {
+    "split_index": 679,
+    "triple": [
+      12731,
+      5,
+      1542
+    ],
+    "raw_rank": 3,
+    "normalized_rank": 2
+  },
+  {
+    "split_index": 732,
+    "triple": [
+      10880,
+      8,
+      10879
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 742,
+    "triple": [
+      1788,
+      1,
+      5525
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 813,
+    "triple": [
+      13152,
+      0,
+      2682
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 841,
+    "triple": [
+      14303,
+      1,
+      3034
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 861,
+    "triple": [
+      9492,
+      15,
+      76
+    ],
+    "raw_rank": 15,
+    "normalized_rank": 14
+  },
+  {
+    "split_index": 870,
+    "triple": [
+      1713,
+      29,
+      340
+    ],
+    "raw_rank": 3,
+    "normalized_rank": 2
+  },
+  {
+    "split_index": 949,
+    "triple": [
+      10151,
+      8,
+      14347
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 995,
+    "triple": [
+      2047,
+      56,
+      6019
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1062,
+    "triple": [
+      5329,
+      7,
+      1001
+    ],
+    "raw_rank": 15,
+    "normalized_rank": 14
+  },
+  {
+    "split_index": 1160,
+    "triple": [
+      11508,
+      5,
+      3075
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1240,
+    "triple": [
+      10545,
+      22,
+      305
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1259,
+    "triple": [
+      1605,
+      15,
+      76
+    ],
+    "raw_rank": 15,
+    "normalized_rank": 14
+  },
+  {
+    "split_index": 1267,
+    "triple": [
+      5089,
+      14,
+      5088
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1290,
+    "triple": [
+      814,
+      29,
+      2684
+    ],
+    "raw_rank": 3,
+    "normalized_rank": 2
+  },
+  {
+    "split_index": 1300,
+    "triple": [
+      7845,
+      1,
+      2521
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1371,
+    "triple": [
+      9372,
+      5,
+      90
+    ],
+    "raw_rank": 3,
+    "normalized_rank": 2
+  },
+  {
+    "split_index": 1421,
+    "triple": [
+      12428,
+      3,
+      2025
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1446,
+    "triple": [
+      13300,
+      32,
+      1233
+    ],
+    "raw_rank": 4,
+    "normalized_rank": 3
+  },
+  {
+    "split_index": 1465,
+    "triple": [
+      11682,
+      13,
+      463
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1470,
+    "triple": [
+      8844,
+      8,
+      9542
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1528,
+    "triple": [
+      9263,
+      15,
+      76
+    ],
+    "raw_rank": 19,
+    "normalized_rank": 18
+  },
+  {
+    "split_index": 1529,
+    "triple": [
+      5381,
+      8,
+      5380
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1532,
+    "triple": [
+      6940,
+      0,
+      342
+    ],
+    "raw_rank": 19,
+    "normalized_rank": 18
+  },
+  {
+    "split_index": 1549,
+    "triple": [
+      10794,
+      7,
+      2716
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1560,
+    "triple": [
+      4948,
+      50,
+      474
+    ],
+    "raw_rank": 5,
+    "normalized_rank": 4
+  },
+  {
+    "split_index": 1657,
+    "triple": [
+      500,
+      8,
+      499
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1660,
+    "triple": [
+      296,
+      29,
+      3399
+    ],
+    "raw_rank": 3,
+    "normalized_rank": 2
+  },
+  {
+    "split_index": 1756,
+    "triple": [
+      7985,
+      18,
+      4295
+    ],
+    "raw_rank": 3,
+    "normalized_rank": 2
+  },
+  {
+    "split_index": 1779,
+    "triple": [
+      11406,
+      0,
+      2682
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1850,
+    "triple": [
+      11986,
+      8,
+      5914
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1888,
+    "triple": [
+      11616,
+      14,
+      14508
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1950,
+    "triple": [
+      4703,
+      0,
+      1069
+    ],
+    "raw_rank": 7,
+    "normalized_rank": 6
+  },
+  {
+    "split_index": 1964,
+    "triple": [
+      977,
+      15,
+      76
+    ],
+    "raw_rank": 5,
+    "normalized_rank": 4
+  },
+  {
+    "split_index": 1971,
+    "triple": [
+      12571,
+      22,
+      4737
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1999,
+    "triple": [
+      6086,
+      49,
+      767
+    ],
+    "raw_rank": 30,
+    "normalized_rank": 29
+  },
+  {
+    "split_index": 2056,
+    "triple": [
+      6815,
+      18,
+      1109
+    ],
+    "raw_rank": 10,
+    "normalized_rank": 9
+  },
+  {
+    "split_index": 2078,
+    "triple": [
+      2101,
+      16,
+      11841
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 2087,
+    "triple": [
+      11858,
+      16,
+      811
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 2138,
+    "triple": [
+      11224,
+      50,
+      1583
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 2168,
+    "triple": [
+      3244,
+      5,
+      100
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 2170,
+    "triple": [
+      9954,
+      53,
+      1885
+    ],
+    "raw_rank": 8,
+    "normalized_rank": 7
+  },
+  {
+    "split_index": 2216,
+    "triple": [
+      8954,
+      22,
+      4360
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 2354,
+    "triple": [
+      4053,
+      22,
+      5730
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 2405,
+    "triple": [
+      6477,
+      18,
+      1335
+    ],
+    "raw_rank": 9,
+    "normalized_rank": 8
+  },
+  {
+    "split_index": 2426,
+    "triple": [
+      6319,
+      1,
+      5552
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 2668,
+    "triple": [
+      12635,
+      37,
+      6757
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 2745,
+    "triple": [
+      4419,
+      1,
+      4420
+    ],
+    "raw_rank": 4,
+    "normalized_rank": 3
+  },
+  {
+    "split_index": 2818,
+    "triple": [
+      1938,
+      15,
+      61
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 2836,
+    "triple": [
+      3383,
+      22,
+      3384
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 2866,
+    "triple": [
+      7523,
+      1,
+      1295
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 2916,
+    "triple": [
+      4358,
+      14,
+      2742
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 2958,
+    "triple": [
+      992,
+      7,
+      1494
+    ],
+    "raw_rank": 27,
+    "normalized_rank": 26
+  },
+  {
+    "split_index": 2985,
+    "triple": [
+      5505,
+      18,
+      1109
+    ],
+    "raw_rank": 28,
+    "normalized_rank": 27
+  },
+  {
+    "split_index": 3010,
+    "triple": [
+      10828,
+      14,
+      7695
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 3048,
+    "triple": [
+      11067,
+      48,
+      4707
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 3177,
+    "triple": [
+      2429,
+      22,
+      518
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 3196,
+    "triple": [
+      4468,
+      8,
+      13673
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 3419,
+    "triple": [
+      340,
+      29,
+      536
+    ],
+    "raw_rank": 3,
+    "normalized_rank": 2
+  },
+  {
+    "split_index": 3425,
+    "triple": [
+      6028,
+      22,
+      1162
+    ],
+    "raw_rank": 4,
+    "normalized_rank": 3
+  },
+  {
+    "split_index": 3430,
+    "triple": [
+      4671,
+      8,
+      10924
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 3546,
+    "triple": [
+      5356,
+      5,
+      455
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 3566,
+    "triple": [
+      4221,
+      5,
+      3835
+    ],
+    "raw_rank": 18,
+    "normalized_rank": 17
+  },
+  {
+    "split_index": 3740,
+    "triple": [
+      14444,
+      75,
+      14490
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 3784,
+    "triple": [
+      3262,
+      6,
+      3263
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 3821,
+    "triple": [
+      1713,
+      20,
+      86
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 3822,
+    "triple": [
+      5182,
+      1,
+      5730
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 3841,
+    "triple": [
+      13376,
+      8,
+      7413
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 3870,
+    "triple": [
+      10043,
+      5,
+      545
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 3883,
+    "triple": [
+      13513,
+      64,
+      198
+    ],
+    "raw_rank": 3,
+    "normalized_rank": 2
+  },
+  {
+    "split_index": 3918,
+    "triple": [
+      8201,
+      1,
+      4478
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 3956,
+    "triple": [
+      3493,
+      22,
+      364
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 3971,
+    "triple": [
+      9803,
+      14,
+      11711
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 3989,
+    "triple": [
+      7989,
+      22,
+      946
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 4045,
+    "triple": [
+      10871,
+      5,
+      3668
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 4138,
+    "triple": [
+      10828,
+      8,
+      8324
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  }
+]

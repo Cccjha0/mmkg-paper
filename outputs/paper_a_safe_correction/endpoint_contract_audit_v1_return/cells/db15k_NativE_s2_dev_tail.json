@@ -1,0 +1,85 @@
+{
+  "run": "ml/artifacts/outputs/db15k_native/20260902_182809_seed2",
+  "dataset": "db15k",
+  "model": "NativE",
+  "seed": 2,
+  "split": "dev",
+  "direction": "tail",
+  "checkpoint_sha256": "de24c0ad1a9127d6ef951e16b67f396e16b6d02515acf03ceaa8f6666d39b6a6",
+  "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+  "totals": {
+    "rows": 7922,
+    "export_vs_shared_mismatches": 0,
+    "alpha_one_vs_shared_mismatches": 0,
+    "alpha_zero_vs_shared_mismatches": 0,
+    "normalized_vs_raw_mismatches": 5,
+    "raw_nonfinite_rows": 0,
+    "normalized_nonfinite_gold_rows": 0,
+    "raw_rr_sum": 3435.6425398050656,
+    "normalized_rr_sum": 3438.1425398050656,
+    "raw_contract_exception_rows": 0
+  },
+  "examples": [
+    {
+      "split_index": 2570,
+      "triple": [
+        10498,
+        110,
+        694
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 5689,
+      "triple": [
+        4842,
+        156,
+        4841
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 5861,
+      "triple": [
+        4463,
+        4,
+        4464
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 7276,
+      "triple": [
+        8343,
+        39,
+        4753
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 7440,
+      "triple": [
+        5748,
+        39,
+        5747
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    }
+  ],
+  "differences_file": "db15k_NativE_s2_dev_tail.differences.json",
+  "differences_sha256": "f4b6b6edf69c2b9c4a3c7a28e9590043a5a9d90e7ffc3d591faa6e4056c01d51",
+  "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+  "chunk_size": 4096,
+  "query_batch_size": 32,
+  "runtime": {
+    "torch": "2.6.0+cu126",
+    "cuda": "12.6",
+    "device": "NVIDIA A100-SXM4-40GB"
+  },
+  "completed_at_utc": "2026-09-12T10:17:27.055856+00:00"
+}

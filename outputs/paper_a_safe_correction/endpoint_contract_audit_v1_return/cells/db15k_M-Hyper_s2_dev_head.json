@@ -1,0 +1,34 @@
+{
+  "run": "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2",
+  "dataset": "db15k",
+  "model": "M-Hyper",
+  "seed": 2,
+  "split": "dev",
+  "direction": "head",
+  "checkpoint_sha256": "bea2dc185952ccdd54091267809ea39d971cd027f596c2f77c89f8d4df6500c9",
+  "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+  "totals": {
+    "rows": 7922,
+    "export_vs_shared_mismatches": 0,
+    "alpha_one_vs_shared_mismatches": 0,
+    "alpha_zero_vs_shared_mismatches": 0,
+    "normalized_vs_raw_mismatches": 0,
+    "raw_nonfinite_rows": 0,
+    "normalized_nonfinite_gold_rows": 0,
+    "raw_rr_sum": 1929.8439869671056,
+    "normalized_rr_sum": 1929.8439869671056,
+    "raw_contract_exception_rows": 0
+  },
+  "examples": [],
+  "differences_file": "db15k_M-Hyper_s2_dev_head.differences.json",
+  "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+  "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+  "chunk_size": 4096,
+  "query_batch_size": 32,
+  "runtime": {
+    "torch": "2.6.0+cu126",
+    "cuda": "12.6",
+    "device": "NVIDIA A100-SXM4-40GB"
+  },
+  "completed_at_utc": "2026-09-12T10:14:45.168452+00:00"
+}

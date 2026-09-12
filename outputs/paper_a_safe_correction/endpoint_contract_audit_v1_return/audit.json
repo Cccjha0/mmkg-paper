@@ -1,0 +1,4824 @@
+{
+  "status": "endpoint_difference_review_required",
+  "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+  "cells": [
+    {
+      "run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1",
+      "dataset": "mkg_w",
+      "model": "M-Hyper",
+      "seed": 1,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "4a5cb66cf61d4cf4d68dfabf7c0560333563e7497b79b36872665b42396bbfed",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 802.97035579269,
+        "normalized_rr_sum": 802.97035579269,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "mkg_w_M-Hyper_s1_dev_head.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T09:56:45.502822+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1",
+      "dataset": "mkg_w",
+      "model": "M-Hyper",
+      "seed": 1,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "4a5cb66cf61d4cf4d68dfabf7c0560333563e7497b79b36872665b42396bbfed",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2213.661947590806,
+        "normalized_rr_sum": 2213.661947590806,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "mkg_w_M-Hyper_s1_dev_tail.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T09:56:55.581134+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1",
+      "dataset": "mkg_w",
+      "model": "M-Hyper",
+      "seed": 1,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "4a5cb66cf61d4cf4d68dfabf7c0560333563e7497b79b36872665b42396bbfed",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 1,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 789.4868721708064,
+        "normalized_rr_sum": 789.4868722475612,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 3538,
+          "triple": [
+            12499,
+            0,
+            1486
+          ],
+          "raw_rank": 3610,
+          "normalized_rank": 3609
+        }
+      ],
+      "differences_file": "mkg_w_M-Hyper_s1_test_head.differences.json",
+      "differences_sha256": "3fac28a76128f5c4a9a19f205e0cfdc2e185cba53d1ed2b5e2567e269bf702d1",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T09:57:06.534243+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1",
+      "dataset": "mkg_w",
+      "model": "M-Hyper",
+      "seed": 1,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "4a5cb66cf61d4cf4d68dfabf7c0560333563e7497b79b36872665b42396bbfed",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2293.0094716011677,
+        "normalized_rr_sum": 2293.0094716011677,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "mkg_w_M-Hyper_s1_test_tail.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T09:57:16.565321+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_native/20260902_021506_seed1",
+      "dataset": "mkg_w",
+      "model": "NativE",
+      "seed": 1,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "f44cba3fdd34b3aa06531b41d6ffd5bb2c1ed236e27f37c6109c683e353b3d6c",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 96,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 770.237251474157,
+        "normalized_rr_sum": 799.0389684058767,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 87,
+          "triple": [
+            10511,
+            0,
+            5470
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 142,
+          "triple": [
+            9735,
+            1,
+            379
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 157,
+          "triple": [
+            8375,
+            16,
+            1287
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 195,
+          "triple": [
+            6021,
+            34,
+            1389
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 455,
+          "triple": [
+            369,
+            2,
+            242
+          ],
+          "raw_rank": 13,
+          "normalized_rank": 12
+        },
+        {
+          "split_index": 617,
+          "triple": [
+            966,
+            5,
+            17
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 646,
+          "triple": [
+            4274,
+            0,
+            2293
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 650,
+          "triple": [
+            11707,
+            7,
+            2716
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 814,
+          "triple": [
+            9369,
+            14,
+            3694
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 861,
+          "triple": [
+            9492,
+            15,
+            76
+          ],
+          "raw_rank": 18,
+          "normalized_rank": 17
+        }
+      ],
+      "differences_file": "mkg_w_NativE_s1_dev_head.differences.json",
+      "differences_sha256": "3f3575bdbf8bf524ac017d243537d3b8b199c0c297a10c6a23a4e972441b78fe",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T09:57:49.018884+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_native/20260902_021506_seed1",
+      "dataset": "mkg_w",
+      "model": "NativE",
+      "seed": 1,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "f44cba3fdd34b3aa06531b41d6ffd5bb2c1ed236e27f37c6109c683e353b3d6c",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 98,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2042.162954887689,
+        "normalized_rr_sum": 2083.6212882210225,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 64,
+          "triple": [
+            2480,
+            0,
+            2481
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 87,
+          "triple": [
+            10511,
+            0,
+            5470
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 118,
+          "triple": [
+            1275,
+            3,
+            7552
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 325,
+          "triple": [
+            4479,
+            5,
+            761
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 328,
+          "triple": [
+            764,
+            3,
+            263
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 351,
+          "triple": [
+            7566,
+            1,
+            721
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 364,
+          "triple": [
+            13220,
+            14,
+            13219
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 461,
+          "triple": [
+            2909,
+            15,
+            61
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 529,
+          "triple": [
+            10696,
+            14,
+            1539
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 577,
+          "triple": [
+            9721,
+            24,
+            11505
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        }
+      ],
+      "differences_file": "mkg_w_NativE_s1_dev_tail.differences.json",
+      "differences_sha256": "a54c88c0009b5acf9f3bb34e2fda779166c95028ed9255b4eefa330cae976dbd",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T09:58:20.072447+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_native/20260902_021506_seed1",
+      "dataset": "mkg_w",
+      "model": "NativE",
+      "seed": 1,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "f44cba3fdd34b3aa06531b41d6ffd5bb2c1ed236e27f37c6109c683e353b3d6c",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 97,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 759.1502637252452,
+        "normalized_rr_sum": 787.6561068025063,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 75,
+          "triple": [
+            6120,
+            0,
+            397
+          ],
+          "raw_rank": 12,
+          "normalized_rank": 11
+        },
+        {
+          "split_index": 95,
+          "triple": [
+            1181,
+            18,
+            1109
+          ],
+          "raw_rank": 34,
+          "normalized_rank": 33
+        },
+        {
+          "split_index": 117,
+          "triple": [
+            7510,
+            1,
+            5230
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 140,
+          "triple": [
+            9254,
+            26,
+            2296
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 202,
+          "triple": [
+            8954,
+            1,
+            205
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 233,
+          "triple": [
+            1935,
+            8,
+            4144
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 259,
+          "triple": [
+            9923,
+            26,
+            5352
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 271,
+          "triple": [
+            11908,
+            8,
+            4315
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 303,
+          "triple": [
+            11000,
+            14,
+            408
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 330,
+          "triple": [
+            6206,
+            111,
+            1378
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_NativE_s1_test_head.differences.json",
+      "differences_sha256": "e26129f2671f59567b52f86f184c4dd4ffac7dc22f7a1661d9301674b3d2d9a9",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T09:58:51.643574+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_native/20260902_021506_seed1",
+      "dataset": "mkg_w",
+      "model": "NativE",
+      "seed": 1,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "f44cba3fdd34b3aa06531b41d6ffd5bb2c1ed236e27f37c6109c683e353b3d6c",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 120,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2121.3150764710135,
+        "normalized_rr_sum": 2175.148409804346,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 91,
+          "triple": [
+            6840,
+            22,
+            1687
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 134,
+          "triple": [
+            6078,
+            84,
+            10917
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 140,
+          "triple": [
+            9254,
+            26,
+            2296
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 161,
+          "triple": [
+            7745,
+            22,
+            721
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 233,
+          "triple": [
+            1935,
+            8,
+            4144
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 256,
+          "triple": [
+            9966,
+            14,
+            9965
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 271,
+          "triple": [
+            11908,
+            8,
+            4315
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 298,
+          "triple": [
+            14227,
+            8,
+            14226
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 306,
+          "triple": [
+            8933,
+            3,
+            263
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 312,
+          "triple": [
+            4142,
+            58,
+            4143
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_NativE_s1_test_tail.differences.json",
+      "differences_sha256": "6d645f684d069506fa77e214ecd9f9e206a58b5f5e5e602bcdfba5aaed0e4c20",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T09:59:23.112203+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_015400_seed2",
+      "dataset": "mkg_w",
+      "model": "M-Hyper",
+      "seed": 2,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "7d51cbc3ae0fa8ae7d16bb318c5d76affe27caefbcd94f7015c938e58c739337",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 804.1911598995408,
+        "normalized_rr_sum": 804.1911598995408,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "mkg_w_M-Hyper_s2_dev_head.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T09:59:36.221628+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_015400_seed2",
+      "dataset": "mkg_w",
+      "model": "M-Hyper",
+      "seed": 2,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "7d51cbc3ae0fa8ae7d16bb318c5d76affe27caefbcd94f7015c938e58c739337",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2213.2141962442734,
+        "normalized_rr_sum": 2213.2141962442734,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "mkg_w_M-Hyper_s2_dev_tail.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T09:59:46.815207+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_015400_seed2",
+      "dataset": "mkg_w",
+      "model": "M-Hyper",
+      "seed": 2,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "7d51cbc3ae0fa8ae7d16bb318c5d76affe27caefbcd94f7015c938e58c739337",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 785.3166854964646,
+        "normalized_rr_sum": 785.3166854964646,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "mkg_w_M-Hyper_s2_test_head.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T09:59:57.753198+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_015400_seed2",
+      "dataset": "mkg_w",
+      "model": "M-Hyper",
+      "seed": 2,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "7d51cbc3ae0fa8ae7d16bb318c5d76affe27caefbcd94f7015c938e58c739337",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2282.1683479368953,
+        "normalized_rr_sum": 2282.1683479368953,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "mkg_w_M-Hyper_s2_test_tail.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:00:08.017874+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_native/20260902_033610_seed2",
+      "dataset": "mkg_w",
+      "model": "NativE",
+      "seed": 2,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "b218609bbcfc8b94d56f42c4f3f5493079810d6739e47bc4ad477d6f6bc853fc",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 88,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 749.7997458815329,
+        "normalized_rr_sum": 779.0013718368912,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 47,
+          "triple": [
+            1803,
+            1,
+            205
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 57,
+          "triple": [
+            12269,
+            14,
+            3537
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 77,
+          "triple": [
+            724,
+            29,
+            4750
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 136,
+          "triple": [
+            2040,
+            6,
+            19
+          ],
+          "raw_rank": 17,
+          "normalized_rank": 16
+        },
+        {
+          "split_index": 144,
+          "triple": [
+            2106,
+            22,
+            1638
+          ],
+          "raw_rank": 5,
+          "normalized_rank": 4
+        },
+        {
+          "split_index": 150,
+          "triple": [
+            373,
+            29,
+            2832
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 219,
+          "triple": [
+            5033,
+            8,
+            6174
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 232,
+          "triple": [
+            7067,
+            0,
+            4141
+          ],
+          "raw_rank": 11,
+          "normalized_rank": 10
+        },
+        {
+          "split_index": 378,
+          "triple": [
+            727,
+            4,
+            19
+          ],
+          "raw_rank": 18,
+          "normalized_rank": 17
+        },
+        {
+          "split_index": 391,
+          "triple": [
+            2399,
+            18,
+            5315
+          ],
+          "raw_rank": 30,
+          "normalized_rank": 29
+        }
+      ],
+      "differences_file": "mkg_w_NativE_s2_dev_head.differences.json",
+      "differences_sha256": "4cf26a38a06b45b05b5953ad61c5702fc24fa59227a1610971732bf1eb9d7cd7",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:00:40.665271+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_native/20260902_033610_seed2",
+      "dataset": "mkg_w",
+      "model": "NativE",
+      "seed": 2,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "b218609bbcfc8b94d56f42c4f3f5493079810d6739e47bc4ad477d6f6bc853fc",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 99,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2040.9784265918126,
+        "normalized_rr_sum": 2083.292712306098,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 47,
+          "triple": [
+            1803,
+            1,
+            205
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 57,
+          "triple": [
+            12269,
+            14,
+            3537
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 77,
+          "triple": [
+            724,
+            29,
+            4750
+          ],
+          "raw_rank": 4,
+          "normalized_rank": 3
+        },
+        {
+          "split_index": 105,
+          "triple": [
+            6866,
+            16,
+            12990
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 150,
+          "triple": [
+            373,
+            29,
+            2832
+          ],
+          "raw_rank": 4,
+          "normalized_rank": 3
+        },
+        {
+          "split_index": 169,
+          "triple": [
+            14401,
+            16,
+            338
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 219,
+          "triple": [
+            5033,
+            8,
+            6174
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 232,
+          "triple": [
+            7067,
+            0,
+            4141
+          ],
+          "raw_rank": 4,
+          "normalized_rank": 3
+        },
+        {
+          "split_index": 329,
+          "triple": [
+            8634,
+            18,
+            2094
+          ],
+          "raw_rank": 12,
+          "normalized_rank": 11
+        },
+        {
+          "split_index": 391,
+          "triple": [
+            2399,
+            18,
+            5315
+          ],
+          "raw_rank": 7,
+          "normalized_rank": 6
+        }
+      ],
+      "differences_file": "mkg_w_NativE_s2_dev_tail.differences.json",
+      "differences_sha256": "6e8d39a2323fe2dbd3b05b03feeeb45bd9ac335d48d0dec4866cd116df447670",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:01:11.837644+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_native/20260902_033610_seed2",
+      "dataset": "mkg_w",
+      "model": "NativE",
+      "seed": 2,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "b218609bbcfc8b94d56f42c4f3f5493079810d6739e47bc4ad477d6f6bc853fc",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 101,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 744.682893234808,
+        "normalized_rr_sum": 774.8683738248727,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 25,
+          "triple": [
+            4252,
+            0,
+            6816
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 85,
+          "triple": [
+            3377,
+            5,
+            1041
+          ],
+          "raw_rank": 11,
+          "normalized_rank": 10
+        },
+        {
+          "split_index": 96,
+          "triple": [
+            7403,
+            31,
+            2557
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 105,
+          "triple": [
+            9040,
+            29,
+            5928
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 106,
+          "triple": [
+            10037,
+            6,
+            1022
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 127,
+          "triple": [
+            9205,
+            18,
+            1370
+          ],
+          "raw_rank": 4,
+          "normalized_rank": 3
+        },
+        {
+          "split_index": 170,
+          "triple": [
+            3188,
+            22,
+            1824
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 223,
+          "triple": [
+            4335,
+            29,
+            2184
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 251,
+          "triple": [
+            11346,
+            78,
+            4553
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 256,
+          "triple": [
+            9966,
+            14,
+            9965
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_NativE_s2_test_head.differences.json",
+      "differences_sha256": "7e3bfcd41a1babe0b3cbb7b4fe427ff3bd4a96cc6a7ad0a50e5bc0187455f09d",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:01:43.526179+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_native/20260902_033610_seed2",
+      "dataset": "mkg_w",
+      "model": "NativE",
+      "seed": 2,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "b218609bbcfc8b94d56f42c4f3f5493079810d6739e47bc4ad477d6f6bc853fc",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 97,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2139.6284158167896,
+        "normalized_rr_sum": 2183.7355586739322,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 25,
+          "triple": [
+            4252,
+            0,
+            6816
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 39,
+          "triple": [
+            125,
+            29,
+            2298
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 84,
+          "triple": [
+            5284,
+            0,
+            1401
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 85,
+          "triple": [
+            3377,
+            5,
+            1041
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 96,
+          "triple": [
+            7403,
+            31,
+            2557
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 105,
+          "triple": [
+            9040,
+            29,
+            5928
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 127,
+          "triple": [
+            9205,
+            18,
+            1370
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 223,
+          "triple": [
+            4335,
+            29,
+            2184
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 256,
+          "triple": [
+            9966,
+            14,
+            9965
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 371,
+          "triple": [
+            12630,
+            22,
+            1356
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_NativE_s2_test_tail.differences.json",
+      "differences_sha256": "bc57c2862a0ad148ef35ab7c36c20a73ef05ae3669a84ae4db6ccdecff2f276c",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:02:14.982340+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_020435_seed3",
+      "dataset": "mkg_w",
+      "model": "M-Hyper",
+      "seed": 3,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "42f6d06ba2ec51106a1cf04cf09fb49aab439666fdfd293e1818cf19087ac30f",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 819.0684003212959,
+        "normalized_rr_sum": 819.0684003212959,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "mkg_w_M-Hyper_s3_dev_head.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:02:27.338545+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_020435_seed3",
+      "dataset": "mkg_w",
+      "model": "M-Hyper",
+      "seed": 3,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "42f6d06ba2ec51106a1cf04cf09fb49aab439666fdfd293e1818cf19087ac30f",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2198.894283601247,
+        "normalized_rr_sum": 2198.894283601247,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "mkg_w_M-Hyper_s3_dev_tail.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:02:37.326748+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_020435_seed3",
+      "dataset": "mkg_w",
+      "model": "M-Hyper",
+      "seed": 3,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "42f6d06ba2ec51106a1cf04cf09fb49aab439666fdfd293e1818cf19087ac30f",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 786.5043913248533,
+        "normalized_rr_sum": 786.5043913248533,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "mkg_w_M-Hyper_s3_test_head.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:02:48.261844+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_mhyper/20260902_020435_seed3",
+      "dataset": "mkg_w",
+      "model": "M-Hyper",
+      "seed": 3,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "42f6d06ba2ec51106a1cf04cf09fb49aab439666fdfd293e1818cf19087ac30f",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2288.1980033944533,
+        "normalized_rr_sum": 2288.1980033944533,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "mkg_w_M-Hyper_s3_test_tail.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:02:58.621389+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_native/20260902_044121_seed3",
+      "dataset": "mkg_w",
+      "model": "NativE",
+      "seed": 3,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "e7dc11ecf6e5bfceae94116c58cb0ff988f87985bfeb8c8156969ec2b30b512f",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 113,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 766.5841679315106,
+        "normalized_rr_sum": 804.6526904131516,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 0,
+          "triple": [
+            5075,
+            5,
+            198
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 77,
+          "triple": [
+            724,
+            29,
+            4750
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 95,
+          "triple": [
+            14365,
+            14,
+            8916
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 100,
+          "triple": [
+            3129,
+            18,
+            2094
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 150,
+          "triple": [
+            373,
+            29,
+            2832
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 181,
+          "triple": [
+            13028,
+            8,
+            13027
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 212,
+          "triple": [
+            9968,
+            66,
+            6735
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 315,
+          "triple": [
+            826,
+            1,
+            1881
+          ],
+          "raw_rank": 4,
+          "normalized_rank": 3
+        },
+        {
+          "split_index": 347,
+          "triple": [
+            4968,
+            14,
+            12955
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 426,
+          "triple": [
+            7878,
+            11,
+            2816
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_NativE_s3_dev_head.differences.json",
+      "differences_sha256": "c2c70626ddf2a96cb58711496abf799b89b67487ed3107e684d33d752168ddb9",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:03:31.214289+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_native/20260902_044121_seed3",
+      "dataset": "mkg_w",
+      "model": "NativE",
+      "seed": 3,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "e7dc11ecf6e5bfceae94116c58cb0ff988f87985bfeb8c8156969ec2b30b512f",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 98,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2056.77064235707,
+        "normalized_rr_sum": 2097.6039756904024,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 8,
+          "triple": [
+            6556,
+            56,
+            9068
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 33,
+          "triple": [
+            5382,
+            21,
+            256
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 77,
+          "triple": [
+            724,
+            29,
+            4750
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 87,
+          "triple": [
+            10511,
+            0,
+            5470
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 100,
+          "triple": [
+            3129,
+            18,
+            2094
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 181,
+          "triple": [
+            13028,
+            8,
+            13027
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 212,
+          "triple": [
+            9968,
+            66,
+            6735
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 267,
+          "triple": [
+            6395,
+            11,
+            2810
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 347,
+          "triple": [
+            4968,
+            14,
+            12955
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 387,
+          "triple": [
+            9267,
+            10,
+            944
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_NativE_s3_dev_tail.differences.json",
+      "differences_sha256": "144d182d471733e38aac875b5a84240e3dd2c99043eaa3a4037bcd9a81c493de",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:04:02.450003+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_native/20260902_044121_seed3",
+      "dataset": "mkg_w",
+      "model": "NativE",
+      "seed": 3,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "e7dc11ecf6e5bfceae94116c58cb0ff988f87985bfeb8c8156969ec2b30b512f",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 78,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 773.7631473572123,
+        "normalized_rr_sum": 798.0137899563256,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 95,
+          "triple": [
+            1181,
+            18,
+            1109
+          ],
+          "raw_rank": 29,
+          "normalized_rank": 28
+        },
+        {
+          "split_index": 113,
+          "triple": [
+            7401,
+            14,
+            9613
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 134,
+          "triple": [
+            6078,
+            84,
+            10917
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 140,
+          "triple": [
+            9254,
+            26,
+            2296
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 154,
+          "triple": [
+            2987,
+            22,
+            1356
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        },
+        {
+          "split_index": 193,
+          "triple": [
+            7421,
+            37,
+            1573
+          ],
+          "raw_rank": 7,
+          "normalized_rank": 6
+        },
+        {
+          "split_index": 202,
+          "triple": [
+            8954,
+            1,
+            205
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 217,
+          "triple": [
+            6561,
+            0,
+            721
+          ],
+          "raw_rank": 8,
+          "normalized_rank": 7
+        },
+        {
+          "split_index": 439,
+          "triple": [
+            10738,
+            8,
+            7001
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 451,
+          "triple": [
+            5796,
+            1,
+            1435
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_NativE_s3_test_head.differences.json",
+      "differences_sha256": "9a620cba9480006247294f3b817623ca599d5b02bd4868fd7734232490114695",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:04:34.143749+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_native/20260902_044121_seed3",
+      "dataset": "mkg_w",
+      "model": "NativE",
+      "seed": 3,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "e7dc11ecf6e5bfceae94116c58cb0ff988f87985bfeb8c8156969ec2b30b512f",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 97,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2130.0727185659325,
+        "normalized_rr_sum": 2172.12953674775,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 45,
+          "triple": [
+            12924,
+            8,
+            10989
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 95,
+          "triple": [
+            1181,
+            18,
+            1109
+          ],
+          "raw_rank": 5,
+          "normalized_rank": 4
+        },
+        {
+          "split_index": 118,
+          "triple": [
+            14014,
+            64,
+            961
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 144,
+          "triple": [
+            3888,
+            10,
+            114
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 150,
+          "triple": [
+            7266,
+            37,
+            1573
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 190,
+          "triple": [
+            3275,
+            0,
+            33
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 221,
+          "triple": [
+            11028,
+            22,
+            5715
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 233,
+          "triple": [
+            1935,
+            8,
+            4144
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 298,
+          "triple": [
+            14227,
+            8,
+            14226
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 316,
+          "triple": [
+            11514,
+            22,
+            8621
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_NativE_s3_test_tail.differences.json",
+      "differences_sha256": "93a6682b07688018cc93918f2d308743fdc73ce7dfe699b2ba837612b4212042",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:05:05.569327+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_060855_seed1",
+      "dataset": "mkg_w",
+      "model": "AdaMF-MAT",
+      "seed": 1,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "28781f99687850e5f7ca595bc8a80e320b7231c5fbae58992af6857e9d776828",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 4,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 571.4865740231901,
+        "normalized_rr_sum": 573.4865740231901,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 61,
+          "triple": [
+            4236,
+            8,
+            4235
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 1657,
+          "triple": [
+            500,
+            8,
+            499
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 2916,
+          "triple": [
+            4358,
+            14,
+            2742
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3766,
+          "triple": [
+            8878,
+            8,
+            9365
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_AdaMF-MAT_s1_dev_head.differences.json",
+      "differences_sha256": "2be70eac4f985371a5dfce9ef198d942840ad7f98d910f6710b49b704707d5ba",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:05:27.940394+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_060855_seed1",
+      "dataset": "mkg_w",
+      "model": "AdaMF-MAT",
+      "seed": 1,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "28781f99687850e5f7ca595bc8a80e320b7231c5fbae58992af6857e9d776828",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 1,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1818.5373114293334,
+        "normalized_rr_sum": 1819.0373114293334,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 1115,
+          "triple": [
+            7269,
+            1,
+            1041
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_AdaMF-MAT_s1_dev_tail.differences.json",
+      "differences_sha256": "8d30e3174f3095aad0669af872d1463175218650e6a4186ea5302f7ab1bb0b80",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:05:48.549743+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_060855_seed1",
+      "dataset": "mkg_w",
+      "model": "AdaMF-MAT",
+      "seed": 1,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "28781f99687850e5f7ca595bc8a80e320b7231c5fbae58992af6857e9d776828",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 2,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 560.9757176811396,
+        "normalized_rr_sum": 561.9757176811396,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 134,
+          "triple": [
+            6078,
+            84,
+            10917
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3057,
+          "triple": [
+            8445,
+            14,
+            8444
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_AdaMF-MAT_s1_test_head.differences.json",
+      "differences_sha256": "0ca51181256ab05f2ad4be3ce1797c28dabcb3c8a2628186832f94f6942bd799",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:06:09.550059+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_060855_seed1",
+      "dataset": "mkg_w",
+      "model": "AdaMF-MAT",
+      "seed": 1,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "28781f99687850e5f7ca595bc8a80e320b7231c5fbae58992af6857e9d776828",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 2,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1899.932863991987,
+        "normalized_rr_sum": 1900.932863991987,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 3057,
+          "triple": [
+            8445,
+            14,
+            8444
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3501,
+          "triple": [
+            7995,
+            14,
+            3323
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_AdaMF-MAT_s1_test_tail.differences.json",
+      "differences_sha256": "aa494a431c8be598fbd52620829b516240c4be902c53f92988f0c447d780efcd",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:06:29.971945+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_083530_seed2",
+      "dataset": "mkg_w",
+      "model": "AdaMF-MAT",
+      "seed": 2,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "267ea0cddb9eb6dc94e853b65e1f50d276f0800d2aa83a9f6bf2b975b8f93f23",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 9,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 643.0883246073848,
+        "normalized_rr_sum": 647.5883246073848,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 529,
+          "triple": [
+            10696,
+            14,
+            1539
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 781,
+          "triple": [
+            4497,
+            8,
+            4496
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 1428,
+          "triple": [
+            8777,
+            8,
+            3401
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 1753,
+          "triple": [
+            2174,
+            46,
+            2869
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 2415,
+          "triple": [
+            4613,
+            14,
+            3619
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 2697,
+          "triple": [
+            14409,
+            8,
+            14408
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3520,
+          "triple": [
+            7674,
+            5,
+            1041
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3767,
+          "triple": [
+            9174,
+            14,
+            4047
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 4253,
+          "triple": [
+            14256,
+            8,
+            14255
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_AdaMF-MAT_s2_dev_head.differences.json",
+      "differences_sha256": "ea653a8602944a4cb0acd61e4da4bba8dd708ab035edba529a568da4ee10ff80",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:06:52.066885+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_083530_seed2",
+      "dataset": "mkg_w",
+      "model": "AdaMF-MAT",
+      "seed": 2,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "267ea0cddb9eb6dc94e853b65e1f50d276f0800d2aa83a9f6bf2b975b8f93f23",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 5,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1898.7085582492202,
+        "normalized_rr_sum": 1901.2085582492202,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 529,
+          "triple": [
+            10696,
+            14,
+            1539
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 1470,
+          "triple": [
+            8844,
+            8,
+            9542
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 2263,
+          "triple": [
+            4596,
+            8,
+            6798
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 2428,
+          "triple": [
+            7021,
+            8,
+            7020
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3767,
+          "triple": [
+            9174,
+            14,
+            4047
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_AdaMF-MAT_s2_dev_tail.differences.json",
+      "differences_sha256": "deb2b3d117ecee91d41e06f568c6ac7c2e393cd90ec1f05f7c1548c1784c478d",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:07:12.343585+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_083530_seed2",
+      "dataset": "mkg_w",
+      "model": "AdaMF-MAT",
+      "seed": 2,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "267ea0cddb9eb6dc94e853b65e1f50d276f0800d2aa83a9f6bf2b975b8f93f23",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 4,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 618.5206547517678,
+        "normalized_rr_sum": 620.5206547517678,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 271,
+          "triple": [
+            11908,
+            8,
+            4315
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3307,
+          "triple": [
+            8606,
+            14,
+            7036
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3676,
+          "triple": [
+            11043,
+            8,
+            11655
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 4148,
+          "triple": [
+            14335,
+            14,
+            14334
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_AdaMF-MAT_s2_test_head.differences.json",
+      "differences_sha256": "42f9ccdba0ea4026f12eb934b23234c1dadb1a8343056bcd09419d87742df2c2",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:07:32.900166+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_083530_seed2",
+      "dataset": "mkg_w",
+      "model": "AdaMF-MAT",
+      "seed": 2,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "267ea0cddb9eb6dc94e853b65e1f50d276f0800d2aa83a9f6bf2b975b8f93f23",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 6,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1964.702772433195,
+        "normalized_rr_sum": 1967.702772433195,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 1372,
+          "triple": [
+            12609,
+            14,
+            12608
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 1786,
+          "triple": [
+            5818,
+            14,
+            12713
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 1807,
+          "triple": [
+            1427,
+            14,
+            14175
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 2206,
+          "triple": [
+            9674,
+            8,
+            8879
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3307,
+          "triple": [
+            8606,
+            14,
+            7036
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3348,
+          "triple": [
+            418,
+            34,
+            553
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_AdaMF-MAT_s2_test_tail.differences.json",
+      "differences_sha256": "00fd990aa3bf2565df330cb47d821a935172c4c61d5916e97a04896674d63fe5",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:07:53.118634+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_142555_seed3",
+      "dataset": "mkg_w",
+      "model": "AdaMF-MAT",
+      "seed": 3,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "9027b50fe93c066bec46a3c2a7ffb79f406045014c38338103514ba6731b1a18",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 8,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 615.1755979928257,
+        "normalized_rr_sum": 619.1755979928258,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 831,
+          "triple": [
+            644,
+            14,
+            12320
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 1204,
+          "triple": [
+            12675,
+            14,
+            12674
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 1716,
+          "triple": [
+            3415,
+            8,
+            3414
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 2015,
+          "triple": [
+            5001,
+            8,
+            5000
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 2679,
+          "triple": [
+            10768,
+            8,
+            10767
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3767,
+          "triple": [
+            9174,
+            14,
+            4047
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3812,
+          "triple": [
+            10497,
+            8,
+            10496
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3946,
+          "triple": [
+            4337,
+            8,
+            13426
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_AdaMF-MAT_s3_dev_head.differences.json",
+      "differences_sha256": "a5f546f209924b72c9a2b414ba57f9e19963895438ef3b18ba304c24e24297bd",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:08:15.279506+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_142555_seed3",
+      "dataset": "mkg_w",
+      "model": "AdaMF-MAT",
+      "seed": 3,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "9027b50fe93c066bec46a3c2a7ffb79f406045014c38338103514ba6731b1a18",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4276,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 7,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1886.7603049146576,
+        "normalized_rr_sum": 1890.2603049146576,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 219,
+          "triple": [
+            5033,
+            8,
+            6174
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 831,
+          "triple": [
+            644,
+            14,
+            12320
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 1647,
+          "triple": [
+            11846,
+            14,
+            11845
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 1716,
+          "triple": [
+            3415,
+            8,
+            3414
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 2325,
+          "triple": [
+            11612,
+            8,
+            11611
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 2672,
+          "triple": [
+            10264,
+            14,
+            10263
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3767,
+          "triple": [
+            9174,
+            14,
+            4047
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_AdaMF-MAT_s3_dev_tail.differences.json",
+      "differences_sha256": "9b3fb90a0b25182079a25ee10ad988a5c09cf6797adf2813959fdd2c3c0dadd2",
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:08:35.580744+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_142555_seed3",
+      "dataset": "mkg_w",
+      "model": "AdaMF-MAT",
+      "seed": 3,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "9027b50fe93c066bec46a3c2a7ffb79f406045014c38338103514ba6731b1a18",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 3,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 603.2356656940976,
+        "normalized_rr_sum": 604.7356656940976,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 2134,
+          "triple": [
+            14343,
+            14,
+            14342
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3914,
+          "triple": [
+            10500,
+            8,
+            10839
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 4101,
+          "triple": [
+            12552,
+            8,
+            10142
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_AdaMF-MAT_s3_test_head.differences.json",
+      "differences_sha256": "4d8901ffdd9b1a9403f99632d777ce60999be9e0a677ed8545bf0bb836344561",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:08:56.122665+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_142555_seed3",
+      "dataset": "mkg_w",
+      "model": "AdaMF-MAT",
+      "seed": 3,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "9027b50fe93c066bec46a3c2a7ffb79f406045014c38338103514ba6731b1a18",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 4274,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 3,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1951.4344456632534,
+        "normalized_rr_sum": 1952.9344456632534,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 271,
+          "triple": [
+            11908,
+            8,
+            4315
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 2301,
+          "triple": [
+            11264,
+            8,
+            11263
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3214,
+          "triple": [
+            13544,
+            14,
+            7720
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "mkg_w_AdaMF-MAT_s3_test_tail.differences.json",
+      "differences_sha256": "d077bd24920256f2e6703a0d325f39dbc6a861cfd5d260ad0c20abbca2c143c6",
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:09:16.643434+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1",
+      "dataset": "db15k",
+      "model": "M-Hyper",
+      "seed": 1,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "059b45d53023bf8122ef3b07a4dc4c10660841666afa78823f863105c0d34a27",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1940.254998564192,
+        "normalized_rr_sum": 1940.254998564192,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_M-Hyper_s1_dev_head.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:09:36.534088+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1",
+      "dataset": "db15k",
+      "model": "M-Hyper",
+      "seed": 1,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "059b45d53023bf8122ef3b07a4dc4c10660841666afa78823f863105c0d34a27",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 4145.890865659172,
+        "normalized_rr_sum": 4145.890865659172,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_M-Hyper_s1_dev_tail.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:09:53.065552+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1",
+      "dataset": "db15k",
+      "model": "M-Hyper",
+      "seed": 1,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "059b45d53023bf8122ef3b07a4dc4c10660841666afa78823f863105c0d34a27",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 2,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2342.149726404808,
+        "normalized_rr_sum": 2342.6498632037137,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 9889,
+          "triple": [
+            354,
+            95,
+            1880
+          ],
+          "raw_rank": 86,
+          "normalized_rank": 85
+        },
+        {
+          "split_index": 9897,
+          "triple": [
+            2327,
+            47,
+            1752
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_M-Hyper_s1_test_head.differences.json",
+      "differences_sha256": "4c889341cf833f47ebb8fe6e2dbb5e46b020495d326d01401dba7b8216338d0e",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:10:15.017906+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1",
+      "dataset": "db15k",
+      "model": "M-Hyper",
+      "seed": 1,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "059b45d53023bf8122ef3b07a4dc4c10660841666afa78823f863105c0d34a27",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 5091.7451123432165,
+        "normalized_rr_sum": 5091.7451123432165,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_M-Hyper_s1_test_tail.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:10:35.733876+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_native/20260831_223530_seed1",
+      "dataset": "db15k",
+      "model": "NativE",
+      "seed": 1,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "2bd4ff09976173f06a07bfac1260d7b9fb8b3b9a72ebcc56d8805688a13e6c79",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1686.5722037804896,
+        "normalized_rr_sum": 1686.5722037804896,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_NativE_s1_dev_head.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:11:27.844811+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_native/20260831_223530_seed1",
+      "dataset": "db15k",
+      "model": "NativE",
+      "seed": 1,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "2bd4ff09976173f06a07bfac1260d7b9fb8b3b9a72ebcc56d8805688a13e6c79",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 2,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 3379.245476965594,
+        "normalized_rr_sum": 3380.245476965594,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 716,
+          "triple": [
+            828,
+            0,
+            828
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 6485,
+          "triple": [
+            4078,
+            156,
+            2481
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_NativE_s1_dev_tail.differences.json",
+      "differences_sha256": "f00ef44d194257937818e689c2997cffba6483e6f9d7aa837b38b48c0620ea6f",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:12:17.986927+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_native/20260831_223530_seed1",
+      "dataset": "db15k",
+      "model": "NativE",
+      "seed": 1,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "2bd4ff09976173f06a07bfac1260d7b9fb8b3b9a72ebcc56d8805688a13e6c79",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 5,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2065.7388931397045,
+        "normalized_rr_sum": 2068.2388931397045,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 3417,
+          "triple": [
+            5740,
+            4,
+            1921
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3611,
+          "triple": [
+            5880,
+            33,
+            5879
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 5413,
+          "triple": [
+            9208,
+            67,
+            272
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 5580,
+          "triple": [
+            9025,
+            68,
+            3429
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 6190,
+          "triple": [
+            4378,
+            67,
+            1819
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_NativE_s1_test_head.differences.json",
+      "differences_sha256": "034d16d56291fc27bc760b6d4f185b7faa76ad532721ff4eb7c0fce5fca7491b",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:13:21.654802+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_native/20260831_223530_seed1",
+      "dataset": "db15k",
+      "model": "NativE",
+      "seed": 1,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "2bd4ff09976173f06a07bfac1260d7b9fb8b3b9a72ebcc56d8805688a13e6c79",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 1,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 4162.603246360235,
+        "normalized_rr_sum": 4163.103246360235,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 5799,
+          "triple": [
+            4085,
+            0,
+            4085
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_NativE_s1_test_tail.differences.json",
+      "differences_sha256": "59161184c7ea0a91948d84190dbe9ee5ae374f65d0d3f96adbb91e778aa5635f",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:14:24.699912+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2",
+      "dataset": "db15k",
+      "model": "M-Hyper",
+      "seed": 2,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "bea2dc185952ccdd54091267809ea39d971cd027f596c2f77c89f8d4df6500c9",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1929.8439869671056,
+        "normalized_rr_sum": 1929.8439869671056,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_M-Hyper_s2_dev_head.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:14:45.168452+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2",
+      "dataset": "db15k",
+      "model": "M-Hyper",
+      "seed": 2,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "bea2dc185952ccdd54091267809ea39d971cd027f596c2f77c89f8d4df6500c9",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 4123.155350162723,
+        "normalized_rr_sum": 4123.155350162723,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_M-Hyper_s2_dev_tail.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:15:02.027444+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2",
+      "dataset": "db15k",
+      "model": "M-Hyper",
+      "seed": 2,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "bea2dc185952ccdd54091267809ea39d971cd027f596c2f77c89f8d4df6500c9",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2365.6020227828953,
+        "normalized_rr_sum": 2365.6020227828953,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_M-Hyper_s2_test_head.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:15:24.433581+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2",
+      "dataset": "db15k",
+      "model": "M-Hyper",
+      "seed": 2,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "bea2dc185952ccdd54091267809ea39d971cd027f596c2f77c89f8d4df6500c9",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 5057.155858392102,
+        "normalized_rr_sum": 5057.155858392102,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_M-Hyper_s2_test_tail.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:15:45.276722+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_native/20260902_182809_seed2",
+      "dataset": "db15k",
+      "model": "NativE",
+      "seed": 2,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "de24c0ad1a9127d6ef951e16b67f396e16b6d02515acf03ceaa8f6666d39b6a6",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 3,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1725.300222223104,
+        "normalized_rr_sum": 1726.800222223104,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 2570,
+          "triple": [
+            10498,
+            110,
+            694
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 7276,
+          "triple": [
+            8343,
+            39,
+            4753
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 7699,
+          "triple": [
+            1967,
+            67,
+            2543
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_NativE_s2_dev_head.differences.json",
+      "differences_sha256": "24de54d37abc3625696e1282ed8b3887e79c4deb0c21052baf6f2b175633602b",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:16:37.193947+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_native/20260902_182809_seed2",
+      "dataset": "db15k",
+      "model": "NativE",
+      "seed": 2,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "de24c0ad1a9127d6ef951e16b67f396e16b6d02515acf03ceaa8f6666d39b6a6",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 5,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 3435.6425398050656,
+        "normalized_rr_sum": 3438.1425398050656,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 2570,
+          "triple": [
+            10498,
+            110,
+            694
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 5689,
+          "triple": [
+            4842,
+            156,
+            4841
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 5861,
+          "triple": [
+            4463,
+            4,
+            4464
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 7276,
+          "triple": [
+            8343,
+            39,
+            4753
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 7440,
+          "triple": [
+            5748,
+            39,
+            5747
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_NativE_s2_dev_tail.differences.json",
+      "differences_sha256": "f4b6b6edf69c2b9c4a3c7a28e9590043a5a9d90e7ffc3d591faa6e4056c01d51",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:17:27.055856+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_native/20260902_182809_seed2",
+      "dataset": "db15k",
+      "model": "NativE",
+      "seed": 2,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "de24c0ad1a9127d6ef951e16b67f396e16b6d02515acf03ceaa8f6666d39b6a6",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 6,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2056.494509699374,
+        "normalized_rr_sum": 2059.494509699374,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 732,
+          "triple": [
+            10782,
+            67,
+            3429
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 1855,
+          "triple": [
+            5888,
+            4,
+            5889
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3610,
+          "triple": [
+            741,
+            20,
+            3118
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 6812,
+          "triple": [
+            2761,
+            39,
+            2754
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 7477,
+          "triple": [
+            5671,
+            4,
+            574
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 9738,
+          "triple": [
+            2900,
+            4,
+            2899
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_NativE_s2_test_head.differences.json",
+      "differences_sha256": "ed466b3f05ac374b1d21d431c51cb256c455338d2d3f9636b956d2584415a93e",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:18:30.351169+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_native/20260902_182809_seed2",
+      "dataset": "db15k",
+      "model": "NativE",
+      "seed": 2,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "de24c0ad1a9127d6ef951e16b67f396e16b6d02515acf03ceaa8f6666d39b6a6",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 8,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 4160.471107929068,
+        "normalized_rr_sum": 4164.137774595735,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 348,
+          "triple": [
+            2122,
+            0,
+            2122
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 3458,
+          "triple": [
+            2346,
+            4,
+            2347
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 4546,
+          "triple": [
+            8862,
+            82,
+            7508
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 5701,
+          "triple": [
+            390,
+            39,
+            391
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 8090,
+          "triple": [
+            135,
+            21,
+            385
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 8109,
+          "triple": [
+            8583,
+            67,
+            2392
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 8813,
+          "triple": [
+            6949,
+            20,
+            70
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 9287,
+          "triple": [
+            4840,
+            156,
+            5813
+          ],
+          "raw_rank": 3,
+          "normalized_rank": 2
+        }
+      ],
+      "differences_file": "db15k_NativE_s2_test_tail.differences.json",
+      "differences_sha256": "8b09efe09f9730755edc4e7da6c988e995cc1b4d1aae95331c2f2ef8385b42a3",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:19:33.111404+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_mhyper/20260902_180912_seed3",
+      "dataset": "db15k",
+      "model": "M-Hyper",
+      "seed": 3,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "5f128cbd54cb7d97122c686017aa517c7439cca4dfe0b5379092707ee7a29844",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1917.2618262143021,
+        "normalized_rr_sum": 1917.2618262143021,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_M-Hyper_s3_dev_head.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:19:53.160800+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_mhyper/20260902_180912_seed3",
+      "dataset": "db15k",
+      "model": "M-Hyper",
+      "seed": 3,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "5f128cbd54cb7d97122c686017aa517c7439cca4dfe0b5379092707ee7a29844",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 1,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 4128.718875494458,
+        "normalized_rr_sum": 4128.719009148562,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 1851,
+          "triple": [
+            4719,
+            33,
+            136
+          ],
+          "raw_rank": 87,
+          "normalized_rank": 86
+        }
+      ],
+      "differences_file": "db15k_M-Hyper_s3_dev_tail.differences.json",
+      "differences_sha256": "ae676d03e8038b8a15d976128b3c6f2543918a4925bea13cb08dfe821b998d80",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:20:09.746711+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_mhyper/20260902_180912_seed3",
+      "dataset": "db15k",
+      "model": "M-Hyper",
+      "seed": 3,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "5f128cbd54cb7d97122c686017aa517c7439cca4dfe0b5379092707ee7a29844",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2339.2827596191205,
+        "normalized_rr_sum": 2339.2827596191205,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_M-Hyper_s3_test_head.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:20:31.542818+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_mhyper/20260902_180912_seed3",
+      "dataset": "db15k",
+      "model": "M-Hyper",
+      "seed": 3,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "5f128cbd54cb7d97122c686017aa517c7439cca4dfe0b5379092707ee7a29844",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 5057.818852357354,
+        "normalized_rr_sum": 5057.818852357354,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_M-Hyper_s3_test_tail.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:20:52.223506+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_native/20260903_012002_seed3",
+      "dataset": "db15k",
+      "model": "NativE",
+      "seed": 3,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "5ad6151d9acae60c3c3b1562aa9092d54b10ecaaa88f3ea07468493e1d272355",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 2,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1672.1243322176267,
+        "normalized_rr_sum": 1673.1243322176267,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 5689,
+          "triple": [
+            4842,
+            156,
+            4841
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 7699,
+          "triple": [
+            1967,
+            67,
+            2543
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_NativE_s3_dev_head.differences.json",
+      "differences_sha256": "c801fec800b75a73b824abd5fef838dc62cb08a00097c5544db4785a23c9befb",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:21:44.300461+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_native/20260903_012002_seed3",
+      "dataset": "db15k",
+      "model": "NativE",
+      "seed": 3,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "5ad6151d9acae60c3c3b1562aa9092d54b10ecaaa88f3ea07468493e1d272355",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 3359.9290446519844,
+        "normalized_rr_sum": 3359.9290446519844,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_NativE_s3_dev_tail.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:22:34.634551+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_native/20260903_012002_seed3",
+      "dataset": "db15k",
+      "model": "NativE",
+      "seed": 3,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "5ad6151d9acae60c3c3b1562aa9092d54b10ecaaa88f3ea07468493e1d272355",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 1,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 2044.7415925643206,
+        "normalized_rr_sum": 2045.2415925643206,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 4505,
+          "triple": [
+            5811,
+            156,
+            5812
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_NativE_s3_test_head.differences.json",
+      "differences_sha256": "df8ac3b9d1b61a7925b1423448d40f98cd8024ca398dea90926abe386cf76751",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:23:37.400780+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_native/20260903_012002_seed3",
+      "dataset": "db15k",
+      "model": "NativE",
+      "seed": 3,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "5ad6151d9acae60c3c3b1562aa9092d54b10ecaaa88f3ea07468493e1d272355",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 2,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 4091.7359840708273,
+        "normalized_rr_sum": 4092.7359840708273,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 189,
+          "triple": [
+            11943,
+            117,
+            4662
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 8109,
+          "triple": [
+            8583,
+            67,
+            2392
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_NativE_s3_test_tail.differences.json",
+      "differences_sha256": "865c8bd46137adebde72b008089d209a35ac473e8f28703f556b2d0a34fde45e",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:24:39.760101+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_adamf_mat/20260901_030904_seed1",
+      "dataset": "db15k",
+      "model": "AdaMF-MAT",
+      "seed": 1,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "0e306e56c556ef776678850c3ca7258b9e5b90eefb14245a7b3902ad71da1861",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 1,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1473.3853609342511,
+        "normalized_rr_sum": 1473.8853609342511,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 2222,
+          "triple": [
+            190,
+            0,
+            190
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_AdaMF-MAT_s1_dev_head.differences.json",
+      "differences_sha256": "4532c90e2a1855a40b84368e909ea66bccf6e28ee2ae9d00fd291d9bdf58a71a",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:25:18.541120+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_adamf_mat/20260901_030904_seed1",
+      "dataset": "db15k",
+      "model": "AdaMF-MAT",
+      "seed": 1,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "0e306e56c556ef776678850c3ca7258b9e5b90eefb14245a7b3902ad71da1861",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 3172.52622753678,
+        "normalized_rr_sum": 3172.52622753678,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_AdaMF-MAT_s1_dev_tail.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:25:54.914754+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_adamf_mat/20260901_030904_seed1",
+      "dataset": "db15k",
+      "model": "AdaMF-MAT",
+      "seed": 1,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "0e306e56c556ef776678850c3ca7258b9e5b90eefb14245a7b3902ad71da1861",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 1,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1797.7866815849975,
+        "normalized_rr_sum": 1798.2866815849975,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 5799,
+          "triple": [
+            4085,
+            0,
+            4085
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_AdaMF-MAT_s1_test_head.differences.json",
+      "differences_sha256": "59161184c7ea0a91948d84190dbe9ee5ae374f65d0d3f96adbb91e778aa5635f",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:26:41.071669+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_adamf_mat/20260901_030904_seed1",
+      "dataset": "db15k",
+      "model": "AdaMF-MAT",
+      "seed": 1,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "0e306e56c556ef776678850c3ca7258b9e5b90eefb14245a7b3902ad71da1861",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 2,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 3839.907325491777,
+        "normalized_rr_sum": 3840.907325491777,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 1440,
+          "triple": [
+            5034,
+            278,
+            12776
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 7946,
+          "triple": [
+            8596,
+            278,
+            12776
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_AdaMF-MAT_s1_test_tail.differences.json",
+      "differences_sha256": "5ba3b72414d3df0cb422c3babb0a74d3058a19539560e314d71efd5e7d86f0d3",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:27:26.238867+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2",
+      "dataset": "db15k",
+      "model": "AdaMF-MAT",
+      "seed": 2,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "bcefd66bbbecfb60fb2a29ed8166b7e7f8d337494b539f81fbbd66d262b7ff00",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1401.9092619439498,
+        "normalized_rr_sum": 1401.9092619439498,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_AdaMF-MAT_s2_dev_head.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:28:05.163889+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2",
+      "dataset": "db15k",
+      "model": "AdaMF-MAT",
+      "seed": 2,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "bcefd66bbbecfb60fb2a29ed8166b7e7f8d337494b539f81fbbd66d262b7ff00",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 4,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 3095.9068412107404,
+        "normalized_rr_sum": 3097.4901745440743,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 3153,
+          "triple": [
+            7400,
+            278,
+            12776
+          ],
+          "raw_rank": 4,
+          "normalized_rank": 3
+        },
+        {
+          "split_index": 5496,
+          "triple": [
+            10361,
+            278,
+            12776
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 5847,
+          "triple": [
+            4767,
+            278,
+            12776
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 6954,
+          "triple": [
+            1440,
+            278,
+            12776
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_AdaMF-MAT_s2_dev_tail.differences.json",
+      "differences_sha256": "bf6b8bba537c9912a9aff9fa4ba2684b1f067b6a7d14bf328944ff03988fa2a9",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:28:41.363850+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2",
+      "dataset": "db15k",
+      "model": "AdaMF-MAT",
+      "seed": 2,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "bcefd66bbbecfb60fb2a29ed8166b7e7f8d337494b539f81fbbd66d262b7ff00",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1686.7497194250382,
+        "normalized_rr_sum": 1686.7497194250382,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_AdaMF-MAT_s2_test_head.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:29:27.189895+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2",
+      "dataset": "db15k",
+      "model": "AdaMF-MAT",
+      "seed": 2,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "bcefd66bbbecfb60fb2a29ed8166b7e7f8d337494b539f81fbbd66d262b7ff00",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 6,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 3731.154749241642,
+        "normalized_rr_sum": 3734.154749241642,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 379,
+          "triple": [
+            9348,
+            278,
+            12776
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 1945,
+          "triple": [
+            6963,
+            278,
+            12776
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 4253,
+          "triple": [
+            9425,
+            278,
+            12776
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 6842,
+          "triple": [
+            9772,
+            278,
+            12776
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 7200,
+          "triple": [
+            6107,
+            278,
+            12776
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 9708,
+          "triple": [
+            10656,
+            278,
+            12776
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_AdaMF-MAT_s2_test_tail.differences.json",
+      "differences_sha256": "ba5ba52955711be652f84381771153dc7f4cee64d1c8fbf67fadc07cbb92c914",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:30:12.603337+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_adamf_mat/20260903_090422_seed3",
+      "dataset": "db15k",
+      "model": "AdaMF-MAT",
+      "seed": 3,
+      "split": "dev",
+      "direction": "head",
+      "checkpoint_sha256": "391f06d80621a274b02aeea42b744cddc84964427321c8533d2706e1588fd9ad",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1528.2671767703453,
+        "normalized_rr_sum": 1528.2671767703453,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_AdaMF-MAT_s3_dev_head.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:30:51.962169+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_adamf_mat/20260903_090422_seed3",
+      "dataset": "db15k",
+      "model": "AdaMF-MAT",
+      "seed": 3,
+      "split": "dev",
+      "direction": "tail",
+      "checkpoint_sha256": "391f06d80621a274b02aeea42b744cddc84964427321c8533d2706e1588fd9ad",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 7922,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 1,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 3208.198626317028,
+        "normalized_rr_sum": 3208.698626317028,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 7045,
+          "triple": [
+            9788,
+            278,
+            12776
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_AdaMF-MAT_s3_dev_tail.differences.json",
+      "differences_sha256": "8b90b53654d89c9af5deb6c480e01e763b2b3d5845a67403b9ff5241954edb58",
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:31:28.680239+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_adamf_mat/20260903_090422_seed3",
+      "dataset": "db15k",
+      "model": "AdaMF-MAT",
+      "seed": 3,
+      "split": "test",
+      "direction": "head",
+      "checkpoint_sha256": "391f06d80621a274b02aeea42b744cddc84964427321c8533d2706e1588fd9ad",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 0,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 1855.3431822353036,
+        "normalized_rr_sum": 1855.3431822353036,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [],
+      "differences_file": "db15k_AdaMF-MAT_s3_test_head.differences.json",
+      "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:32:15.230138+00:00"
+    },
+    {
+      "run": "ml/artifacts/outputs/db15k_adamf_mat/20260903_090422_seed3",
+      "dataset": "db15k",
+      "model": "AdaMF-MAT",
+      "seed": 3,
+      "split": "test",
+      "direction": "tail",
+      "checkpoint_sha256": "391f06d80621a274b02aeea42b744cddc84964427321c8533d2706e1588fd9ad",
+      "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+      "totals": {
+        "rows": 9902,
+        "export_vs_shared_mismatches": 0,
+        "alpha_one_vs_shared_mismatches": 0,
+        "alpha_zero_vs_shared_mismatches": 0,
+        "normalized_vs_raw_mismatches": 3,
+        "raw_nonfinite_rows": 0,
+        "normalized_nonfinite_gold_rows": 0,
+        "raw_rr_sum": 3878.2027083903567,
+        "normalized_rr_sum": 3879.7027083903567,
+        "raw_contract_exception_rows": 0
+      },
+      "examples": [
+        {
+          "split_index": 1385,
+          "triple": [
+            9461,
+            278,
+            12776
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 5719,
+          "triple": [
+            6941,
+            278,
+            12776
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        },
+        {
+          "split_index": 6403,
+          "triple": [
+            5840,
+            156,
+            2483
+          ],
+          "raw_rank": 2,
+          "normalized_rank": 1
+        }
+      ],
+      "differences_file": "db15k_AdaMF-MAT_s3_test_tail.differences.json",
+      "differences_sha256": "a715da69c0e5e56ae546ae66de505a5c09e52a09b902bb8b3f99435b4d6873e8",
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+      "chunk_size": 4096,
+      "query_batch_size": 32,
+      "runtime": {
+        "torch": "2.6.0+cu126",
+        "cuda": "12.6",
+        "device": "NVIDIA A100-SXM4-40GB"
+      },
+      "completed_at_utc": "2026-09-12T10:33:01.378561+00:00"
+    }
+  ],
+  "totals": {
+    "rows": 474732,
+    "export_vs_shared_mismatches": 0,
+    "alpha_one_vs_shared_mismatches": 0,
+    "alpha_zero_vs_shared_mismatches": 0,
+    "normalized_vs_raw_mismatches": 1293,
+    "raw_nonfinite_rows": 0,
+    "normalized_nonfinite_gold_rows": 0,
+    "raw_rr_sum": 155353.20586055238,
+    "normalized_rr_sum": 155850.07320947052,
+    "raw_contract_exception_rows": 0
+  },
+  "training_runs": 0,
+  "policy_selection": false,
+  "historical_results_replaced": false,
+  "note": "Exact deployed endpoints use raw standalone ranks. Normalized equivalence is checked empirically, not assumed."
+}

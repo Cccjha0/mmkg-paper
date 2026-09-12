@@ -1,0 +1,135 @@
+{
+  "run": "ml/artifacts/outputs/mkg_w_native/20260902_021506_seed1",
+  "dataset": "mkg_w",
+  "model": "NativE",
+  "seed": 1,
+  "split": "dev",
+  "direction": "tail",
+  "checkpoint_sha256": "f44cba3fdd34b3aa06531b41d6ffd5bb2c1ed236e27f37c6109c683e353b3d6c",
+  "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+  "totals": {
+    "rows": 4276,
+    "export_vs_shared_mismatches": 0,
+    "alpha_one_vs_shared_mismatches": 0,
+    "alpha_zero_vs_shared_mismatches": 0,
+    "normalized_vs_raw_mismatches": 98,
+    "raw_nonfinite_rows": 0,
+    "normalized_nonfinite_gold_rows": 0,
+    "raw_rr_sum": 2042.162954887689,
+    "normalized_rr_sum": 2083.6212882210225,
+    "raw_contract_exception_rows": 0
+  },
+  "examples": [
+    {
+      "split_index": 64,
+      "triple": [
+        2480,
+        0,
+        2481
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 87,
+      "triple": [
+        10511,
+        0,
+        5470
+      ],
+      "raw_rank": 3,
+      "normalized_rank": 2
+    },
+    {
+      "split_index": 118,
+      "triple": [
+        1275,
+        3,
+        7552
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 325,
+      "triple": [
+        4479,
+        5,
+        761
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 328,
+      "triple": [
+        764,
+        3,
+        263
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 351,
+      "triple": [
+        7566,
+        1,
+        721
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 364,
+      "triple": [
+        13220,
+        14,
+        13219
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 461,
+      "triple": [
+        2909,
+        15,
+        61
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 529,
+      "triple": [
+        10696,
+        14,
+        1539
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 577,
+      "triple": [
+        9721,
+        24,
+        11505
+      ],
+      "raw_rank": 3,
+      "normalized_rank": 2
+    }
+  ],
+  "differences_file": "mkg_w_NativE_s1_dev_tail.differences.json",
+  "differences_sha256": "a54c88c0009b5acf9f3bb34e2fda779166c95028ed9255b4eefa330cae976dbd",
+  "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+  "chunk_size": 4096,
+  "query_batch_size": 32,
+  "runtime": {
+    "torch": "2.6.0+cu126",
+    "cuda": "12.6",
+    "device": "NVIDIA A100-SXM4-40GB"
+  },
+  "completed_at_utc": "2026-09-12T09:58:20.072447+00:00"
+}

@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{4pt}
+\caption{Un-overridden normalized versus raw standalone endpoints. $n_{\ne}$ counts changed gold ranks; $\Delta$ is normalized-minus-raw MRR in $10^{-4}$ units. Each MKG-W model has 25,656/25,644 DEV/TEST observations; DB15K has 47,532/59,412. All 1,293 differences improve normalized RR. Shared raw and deployed endpoint ranks agree on all 474,732 rows; all raw-score exception counts are zero. Values displayed as zero can contain changes below the shown precision.}
+\label{tab:endpoint-experts}
+\begin{tabular}{llrrrr}
+\toprule
+Dataset & Expert & DEV $n_{\ne}$ & DEV $\Delta$ & TEST $n_{\ne}$ & TEST $\Delta$\\
+\midrule
+MKG-W & M-Hyper & 0 & +0.000 & 1 & +0.000\\
+MKG-W & NativE & 592 & +86.014 & 590 & +86.936\\
+MKG-W & AdaMF-MAT & 34 & +6.626 & 20 & +3.900\\
+DB15K & M-Hyper & 1 & +0.000 & 2 & +0.084\\
+DB15K & NativE & 12 & +1.262 & 23 & +1.880\\
+DB15K & AdaMF-MAT & 6 & +0.543 & 12 & +1.010\\
+\bottomrule
+\end{tabular}
+\end{table}

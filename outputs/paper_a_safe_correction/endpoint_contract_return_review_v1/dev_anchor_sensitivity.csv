@@ -1,0 +1,7 @@
+pair,label,original_anchor,normalized_endpoint_grid_anchor,changed,supervision_category_changes,dev_rows,alternative_applied_to_test
+mkgw_mhyper_native,W-N,0.55,0.55,False,429,25656,False
+mkgw_mhyper_adamf,W-A,1.0,1.0,False,34,25656,False
+db15k_mhyper_native,D-N,1.0,1.0,False,12,47532,False
+db15k_mhyper_adamf,D-A,1.0,1.0,False,5,47532,False
+mkgw_native_adamf,W-NA,0.95,1.0,True,489,25656,False
+db15k_native_adamf,D-NA,1.0,1.0,False,17,47532,False

@@ -1,0 +1,34 @@
+{
+  "run": "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2",
+  "dataset": "db15k",
+  "model": "AdaMF-MAT",
+  "seed": 2,
+  "split": "test",
+  "direction": "head",
+  "checkpoint_sha256": "bcefd66bbbecfb60fb2a29ed8166b7e7f8d337494b539f81fbbd66d262b7ff00",
+  "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+  "totals": {
+    "rows": 9902,
+    "export_vs_shared_mismatches": 0,
+    "alpha_one_vs_shared_mismatches": 0,
+    "alpha_zero_vs_shared_mismatches": 0,
+    "normalized_vs_raw_mismatches": 0,
+    "raw_nonfinite_rows": 0,
+    "normalized_nonfinite_gold_rows": 0,
+    "raw_rr_sum": 1686.7497194250382,
+    "normalized_rr_sum": 1686.7497194250382,
+    "raw_contract_exception_rows": 0
+  },
+  "examples": [],
+  "differences_file": "db15k_AdaMF-MAT_s2_test_head.differences.json",
+  "differences_sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+  "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+  "chunk_size": 4096,
+  "query_batch_size": 32,
+  "runtime": {
+    "torch": "2.6.0+cu126",
+    "cuda": "12.6",
+    "device": "NVIDIA A100-SXM4-40GB"
+  },
+  "completed_at_utc": "2026-09-12T10:29:27.189895+00:00"
+}

@@ -1,0 +1,75 @@
+{
+  "run": "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2",
+  "dataset": "db15k",
+  "model": "AdaMF-MAT",
+  "seed": 2,
+  "split": "dev",
+  "direction": "tail",
+  "checkpoint_sha256": "bcefd66bbbecfb60fb2a29ed8166b7e7f8d337494b539f81fbbd66d262b7ff00",
+  "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+  "totals": {
+    "rows": 7922,
+    "export_vs_shared_mismatches": 0,
+    "alpha_one_vs_shared_mismatches": 0,
+    "alpha_zero_vs_shared_mismatches": 0,
+    "normalized_vs_raw_mismatches": 4,
+    "raw_nonfinite_rows": 0,
+    "normalized_nonfinite_gold_rows": 0,
+    "raw_rr_sum": 3095.9068412107404,
+    "normalized_rr_sum": 3097.4901745440743,
+    "raw_contract_exception_rows": 0
+  },
+  "examples": [
+    {
+      "split_index": 3153,
+      "triple": [
+        7400,
+        278,
+        12776
+      ],
+      "raw_rank": 4,
+      "normalized_rank": 3
+    },
+    {
+      "split_index": 5496,
+      "triple": [
+        10361,
+        278,
+        12776
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 5847,
+      "triple": [
+        4767,
+        278,
+        12776
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 6954,
+      "triple": [
+        1440,
+        278,
+        12776
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    }
+  ],
+  "differences_file": "db15k_AdaMF-MAT_s2_dev_tail.differences.json",
+  "differences_sha256": "bf6b8bba537c9912a9aff9fa4ba2684b1f067b6a7d14bf328944ff03988fa2a9",
+  "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+  "chunk_size": 4096,
+  "query_batch_size": 32,
+  "runtime": {
+    "torch": "2.6.0+cu126",
+    "cuda": "12.6",
+    "device": "NVIDIA A100-SXM4-40GB"
+  },
+  "completed_at_utc": "2026-09-12T10:28:41.363850+00:00"
+}

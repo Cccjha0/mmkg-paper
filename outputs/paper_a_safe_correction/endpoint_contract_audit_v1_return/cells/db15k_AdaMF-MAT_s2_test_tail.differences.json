@@ -1,0 +1,62 @@
+[
+  {
+    "split_index": 379,
+    "triple": [
+      9348,
+      278,
+      12776
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 1945,
+    "triple": [
+      6963,
+      278,
+      12776
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 4253,
+    "triple": [
+      9425,
+      278,
+      12776
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 6842,
+    "triple": [
+      9772,
+      278,
+      12776
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 7200,
+    "triple": [
+      6107,
+      278,
+      12776
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  },
+  {
+    "split_index": 9708,
+    "triple": [
+      10656,
+      278,
+      12776
+    ],
+    "raw_rank": 2,
+    "normalized_rank": 1
+  }
+]

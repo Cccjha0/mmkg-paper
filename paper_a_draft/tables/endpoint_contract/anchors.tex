@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{4pt}
+\caption{DEV-only convention diagnostic on the complete 21-weight grid. Replace endpoint columns only, then apply the same Global tie rule. Winner/tie changes count differences in the three standalone-supervision categories if those endpoint ranks also defined the labels. These full-DEV diagnostics do not estimate OOF performance. The alternative anchor is not applied to TEST, and no selector is refitted.}
+\label{tab:endpoint-anchors}
+\begin{tabular}{lrrr}
+\toprule
+Pair & Original anchor & Z-grid anchor & Winner/tie changes\\
+\midrule
+W-N & 0.55 & 0.55 & 429\\
+W-A & 1.00 & 1.00 & 34\\
+D-N & 1.00 & 1.00 & 12\\
+D-A & 1.00 & 1.00 & 5\\
+W-NA & 0.95 & 1.00 & 489\\
+D-NA & 1.00 & 1.00 & 17\\
+\bottomrule
+\end{tabular}
+\end{table}

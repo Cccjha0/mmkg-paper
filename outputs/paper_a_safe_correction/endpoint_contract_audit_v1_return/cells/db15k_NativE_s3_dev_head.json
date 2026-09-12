@@ -1,0 +1,55 @@
+{
+  "run": "ml/artifacts/outputs/db15k_native/20260903_012002_seed3",
+  "dataset": "db15k",
+  "model": "NativE",
+  "seed": 3,
+  "split": "dev",
+  "direction": "head",
+  "checkpoint_sha256": "5ad6151d9acae60c3c3b1562aa9092d54b10ecaaa88f3ea07468493e1d272355",
+  "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+  "totals": {
+    "rows": 7922,
+    "export_vs_shared_mismatches": 0,
+    "alpha_one_vs_shared_mismatches": 0,
+    "alpha_zero_vs_shared_mismatches": 0,
+    "normalized_vs_raw_mismatches": 2,
+    "raw_nonfinite_rows": 0,
+    "normalized_nonfinite_gold_rows": 0,
+    "raw_rr_sum": 1672.1243322176267,
+    "normalized_rr_sum": 1673.1243322176267,
+    "raw_contract_exception_rows": 0
+  },
+  "examples": [
+    {
+      "split_index": 5689,
+      "triple": [
+        4842,
+        156,
+        4841
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 7699,
+      "triple": [
+        1967,
+        67,
+        2543
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    }
+  ],
+  "differences_file": "db15k_NativE_s3_dev_head.differences.json",
+  "differences_sha256": "c801fec800b75a73b824abd5fef838dc62cb08a00097c5544db4785a23c9befb",
+  "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+  "chunk_size": 4096,
+  "query_batch_size": 32,
+  "runtime": {
+    "torch": "2.6.0+cu126",
+    "cuda": "12.6",
+    "device": "NVIDIA A100-SXM4-40GB"
+  },
+  "completed_at_utc": "2026-09-12T10:21:44.300461+00:00"
+}

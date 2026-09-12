@@ -1,0 +1,55 @@
+{
+  "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_060855_seed1",
+  "dataset": "mkg_w",
+  "model": "AdaMF-MAT",
+  "seed": 1,
+  "split": "test",
+  "direction": "head",
+  "checkpoint_sha256": "28781f99687850e5f7ca595bc8a80e320b7231c5fbae58992af6857e9d776828",
+  "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+  "totals": {
+    "rows": 4274,
+    "export_vs_shared_mismatches": 0,
+    "alpha_one_vs_shared_mismatches": 0,
+    "alpha_zero_vs_shared_mismatches": 0,
+    "normalized_vs_raw_mismatches": 2,
+    "raw_nonfinite_rows": 0,
+    "normalized_nonfinite_gold_rows": 0,
+    "raw_rr_sum": 560.9757176811396,
+    "normalized_rr_sum": 561.9757176811396,
+    "raw_contract_exception_rows": 0
+  },
+  "examples": [
+    {
+      "split_index": 134,
+      "triple": [
+        6078,
+        84,
+        10917
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 3057,
+      "triple": [
+        8445,
+        14,
+        8444
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    }
+  ],
+  "differences_file": "mkg_w_AdaMF-MAT_s1_test_head.differences.json",
+  "differences_sha256": "0ca51181256ab05f2ad4be3ce1797c28dabcb3c8a2628186832f94f6942bd799",
+  "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+  "chunk_size": 4096,
+  "query_batch_size": 32,
+  "runtime": {
+    "torch": "2.6.0+cu126",
+    "cuda": "12.6",
+    "device": "NVIDIA A100-SXM4-40GB"
+  },
+  "completed_at_utc": "2026-09-12T10:06:09.550059+00:00"
+}

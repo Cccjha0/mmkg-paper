@@ -1,0 +1,13 @@
+# B10 returned differences: fixed-policy sensitivity
+
+2026-09-12, after opening the returned endpoint audit. This is a retrospective analysis, not a new pre-TEST commitment. The return reports 1,293 normalized/raw rank differences; this protocol fixes how they will be checked and reported without choosing a favorable convention from TEST.
+
+Verify the original server revision, full source inventory (recording only exact bytes or whole-file Python newline conversion), checkpoint/config identities, 72 unique cells, canonical triple ordering, difference-file hashes, counts, examples and reciprocal-rank conservation. Keep all returned differences, including ones unfavorable to any method. Do not infer which candidate caused a tie from rank-only records.
+
+Join each difference to every relevant original six-pair DEV/TEST export. Require its raw rank to match the historical standalone rank exactly; compare all per-cell raw RR sums as a further replay check. These checks do not establish equality of every unreturned raw score or every unchanged rank.
+
+For Global, ADC, Query-soft and Relation, hold the original full-DEV locks and every action fixed. Substitute the audited normalized rank only where the applied action is exactly 0 or 1. Keep all interior mixture ranks unchanged; Equal and RRF are unchanged controls. Report both conventions for all six pairs on DEV and TEST, including all three seeds and both directions. Report MRR, change relative to the corresponding Global, unconditional loss, harm rate and changed-row counts. DEV here is full-fit replay, not an OOF generalization estimate. This is endpoint-dispatch sensitivity, not retraining under a new ranking convention or new confidence intervals.
+
+As a separate DEV-only diagnostic, replace the two endpoint columns of the existing 21-column ranking grid and replay the same Global tie rule, reporting whether its maximizer changes. Also count changes in the standalone-winner/tie supervision categories. Do not apply an alternative DEV anchor to TEST, refit a classifier, alter a threshold or replace the reported convention. An anchor change limits any claim that the entire training/selection workflow is invariant.
+
+Retain the original raw-standalone endpoint convention, which matches the shared evaluator by construction and was used in the historical results. Disclose the normalized/raw failure and its measured effect. If the fixed-policy primary conclusions change, flag the affected claim for further reevaluation; otherwise do not represent local robustness as universal endpoint equivalence or whole-workflow robustness.

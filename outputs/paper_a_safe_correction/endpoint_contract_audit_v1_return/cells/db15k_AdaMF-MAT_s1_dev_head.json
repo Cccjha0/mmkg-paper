@@ -1,0 +1,45 @@
+{
+  "run": "ml/artifacts/outputs/db15k_adamf_mat/20260901_030904_seed1",
+  "dataset": "db15k",
+  "model": "AdaMF-MAT",
+  "seed": 1,
+  "split": "dev",
+  "direction": "head",
+  "checkpoint_sha256": "0e306e56c556ef776678850c3ca7258b9e5b90eefb14245a7b3902ad71da1861",
+  "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+  "totals": {
+    "rows": 7922,
+    "export_vs_shared_mismatches": 0,
+    "alpha_one_vs_shared_mismatches": 0,
+    "alpha_zero_vs_shared_mismatches": 0,
+    "normalized_vs_raw_mismatches": 1,
+    "raw_nonfinite_rows": 0,
+    "normalized_nonfinite_gold_rows": 0,
+    "raw_rr_sum": 1473.3853609342511,
+    "normalized_rr_sum": 1473.8853609342511,
+    "raw_contract_exception_rows": 0
+  },
+  "examples": [
+    {
+      "split_index": 2222,
+      "triple": [
+        190,
+        0,
+        190
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    }
+  ],
+  "differences_file": "db15k_AdaMF-MAT_s1_dev_head.differences.json",
+  "differences_sha256": "4532c90e2a1855a40b84368e909ea66bccf6e28ee2ae9d00fd291d9bdf58a71a",
+  "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21",
+  "chunk_size": 4096,
+  "query_batch_size": 32,
+  "runtime": {
+    "torch": "2.6.0+cu126",
+    "cuda": "12.6",
+    "device": "NVIDIA A100-SXM4-40GB"
+  },
+  "completed_at_utc": "2026-09-12T10:25:18.541120+00:00"
+}

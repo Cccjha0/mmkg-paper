@@ -1,0 +1,65 @@
+{
+  "run": "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_142555_seed3",
+  "dataset": "mkg_w",
+  "model": "AdaMF-MAT",
+  "seed": 3,
+  "split": "test",
+  "direction": "tail",
+  "checkpoint_sha256": "9027b50fe93c066bec46a3c2a7ffb79f406045014c38338103514ba6731b1a18",
+  "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+  "totals": {
+    "rows": 4274,
+    "export_vs_shared_mismatches": 0,
+    "alpha_one_vs_shared_mismatches": 0,
+    "alpha_zero_vs_shared_mismatches": 0,
+    "normalized_vs_raw_mismatches": 3,
+    "raw_nonfinite_rows": 0,
+    "normalized_nonfinite_gold_rows": 0,
+    "raw_rr_sum": 1951.4344456632534,
+    "normalized_rr_sum": 1952.9344456632534,
+    "raw_contract_exception_rows": 0
+  },
+  "examples": [
+    {
+      "split_index": 271,
+      "triple": [
+        11908,
+        8,
+        4315
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 2301,
+      "triple": [
+        11264,
+        8,
+        11263
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 3214,
+      "triple": [
+        13544,
+        14,
+        7720
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    }
+  ],
+  "differences_file": "mkg_w_AdaMF-MAT_s3_test_tail.differences.json",
+  "differences_sha256": "d077bd24920256f2e6703a0d325f39dbc6a861cfd5d260ad0c20abbca2c143c6",
+  "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40",
+  "chunk_size": 4096,
+  "query_batch_size": 32,
+  "runtime": {
+    "torch": "2.6.0+cu126",
+    "cuda": "12.6",
+    "device": "NVIDIA A100-SXM4-40GB"
+  },
+  "completed_at_utc": "2026-09-12T10:09:16.643434+00:00"
+}

@@ -1,0 +1,95 @@
+{
+  "run": "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2",
+  "dataset": "db15k",
+  "model": "AdaMF-MAT",
+  "seed": 2,
+  "split": "test",
+  "direction": "tail",
+  "checkpoint_sha256": "bcefd66bbbecfb60fb2a29ed8166b7e7f8d337494b539f81fbbd66d262b7ff00",
+  "plan_sha256": "05521ae0cd856b9ada67b46c747a63227691ca53d9f879e20fb9062b306bd518",
+  "totals": {
+    "rows": 9902,
+    "export_vs_shared_mismatches": 0,
+    "alpha_one_vs_shared_mismatches": 0,
+    "alpha_zero_vs_shared_mismatches": 0,
+    "normalized_vs_raw_mismatches": 6,
+    "raw_nonfinite_rows": 0,
+    "normalized_nonfinite_gold_rows": 0,
+    "raw_rr_sum": 3731.154749241642,
+    "normalized_rr_sum": 3734.154749241642,
+    "raw_contract_exception_rows": 0
+  },
+  "examples": [
+    {
+      "split_index": 379,
+      "triple": [
+        9348,
+        278,
+        12776
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 1945,
+      "triple": [
+        6963,
+        278,
+        12776
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 4253,
+      "triple": [
+        9425,
+        278,
+        12776
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 6842,
+      "triple": [
+        9772,
+        278,
+        12776
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 7200,
+      "triple": [
+        6107,
+        278,
+        12776
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    },
+    {
+      "split_index": 9708,
+      "triple": [
+        10656,
+        278,
+        12776
+      ],
+      "raw_rank": 2,
+      "normalized_rank": 1
+    }
+  ],
+  "differences_file": "db15k_AdaMF-MAT_s2_test_tail.differences.json",
+  "differences_sha256": "ba5ba52955711be652f84381771153dc7f4cee64d1c8fbf67fadc07cbb92c914",
+  "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+  "chunk_size": 4096,
+  "query_batch_size": 32,
+  "runtime": {
+    "torch": "2.6.0+cu126",
+    "cuda": "12.6",
+    "device": "NVIDIA A100-SXM4-40GB"
+  },
+  "completed_at_utc": "2026-09-12T10:30:12.603337+00:00"
+}

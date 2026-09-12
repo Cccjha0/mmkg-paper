@@ -135,3 +135,14 @@ docs/protocols/paper_a_inference_endpoint_contract_review.md -text whitespace=cr
 docs/reports/paper_a_inference_endpoint_contract_review_2026-09-12.md -text whitespace=cr-at-eol
 outputs/paper_a_safe_correction/inference_contract_review_v1/** -text whitespace=cr-at-eol
 paper_a_draft/inference_contract_source_manifest.json -text whitespace=cr-at-eol
+
+# B10 small returned receipts/differences and the independently checked sensitivity.
+scripts/review_paper_a_endpoint_contract.py -text whitespace=cr-at-eol
+scripts/build_paper_a_endpoint_assets.py -text whitespace=cr-at-eol
+tests/test_endpoint_contract_return.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_endpoint_return_review.md -text whitespace=cr-at-eol
+docs/reports/paper_a_endpoint_contract_return_review_2026-09-12.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/endpoint_contract_audit_v1_return/** -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/endpoint_contract_return_review_v1/** -text whitespace=cr-at-eol
+paper_a_draft/endpoint_contract_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/tables/endpoint_contract/** -text whitespace=cr-at-eol
