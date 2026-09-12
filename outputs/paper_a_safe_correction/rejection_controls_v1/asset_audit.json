@@ -1,0 +1,13 @@
+{
+  "status": "rejection_assets_verified",
+  "matched_rows": 84,
+  "fallback_rows": 12,
+  "random_rows": 24,
+  "tables": {
+    "tables/rejection/fallback.tex": "1e5790deb870cb727e8dd24589ccbfa0e2478190c3b8934abd333859926106b7",
+    "tables/rejection/matched_dev_oof.tex": "83f8260df59388f7004cc80ccde459e97eb3b5d1e455907f3a20e8736c06bf39",
+    "tables/rejection/matched_test.tex": "434758b4ebca7a9931f761c9444adcf73c9fe3258af85ddc3c2383b4dee6c780",
+    "tables/rejection/random_spread.tex": "6585859b5ee1eefa7bbcb2895c07c83dbdd3cb6963fb41ed95a904a3dcca6508"
+  },
+  "test_used_for_selection": false
+}

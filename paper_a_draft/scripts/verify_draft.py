@@ -217,6 +217,33 @@ assert ties_harm_assets['harm_population_rows']==36
 assert r'\label{app:ties-harm}' in main and r'\label{eq:harm-raw-proposal}' in main
 assert 'all four AP lifts are negative' in main and 'same-population prevalence' in main
 assert '79.44\\%' in main and '20.97\\%' in main
+
+rejection=json.loads((ROOT/'rejection_source_manifest.json').read_text(encoding='utf-8'))
+assert rejection['version']=='rejection_controls_v1'
+for rel,sha in rejection['sources'].items():
+    digest=hashlib.sha256()
+    with (ROOT.parent/rel).open('rb') as handle:
+        for block in iter(lambda:handle.read(1024*1024),b''): digest.update(block)
+    assert digest.hexdigest()==sha,rel
+for rel,sha in rejection['tables'].items():
+    assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in rejection['tables']}
+rejection_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/rejection_controls_v1/audit.json').read_text())
+assert rejection_audit['status']=='rejection_controls_checks_passed' and not rejection_audit['failures']
+assert len(rejection_audit['checks'])==12 and sum(c['observations'] for c in rejection_audit['checks'])==474732
+assert rejection_audit['selector_fits']==rejection_audit['scorer_runs']==0
+assert rejection_audit['bootstrap_replicates']==rejection_audit['random_gate_replicates']==2000
+assert rejection_audit['controls_condition_on_observed_workload'] and rejection_audit['random_rows_are_exact_expectations']
+assert rejection_audit['all_random_draws_match_intervention_count'] and rejection_audit['shape_random_draws_match_signed_direction_histogram']
+for key in ('test_used_for_selection','new_gate_selected','historical_results_replaced'):
+    assert not rejection_audit[key],key
+assert all(c['all_actions_and_rr_replayed'] and c['whole_query_decisions_verified'] and c['gold_replacement_invariant']
+           and c['intervention_counts_exact'] and c['shape_histograms_exact'] and c['prior_results_reconciled'] for c in rejection_audit['checks'])
+rejection_assets=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/rejection_controls_v1/asset_audit.json').read_text())
+assert rejection_assets['status']=='rejection_assets_verified' and rejection_assets['tables']==rejection['tables']
+assert rejection_assets['matched_rows']==84 and rejection_assets['fallback_rows']==12 and rejection_assets['random_rows']==24
+assert r'\label{app:rejection}' in main and 'five of six TEST ADC-minus-Random-shape intervals span zero' in main
+assert 'conditional policy component' in main and 'whose benefit is pair-dependent' in main
 scope=json.loads((ROOT/'inference_scope_source_manifest.json').read_text(encoding='utf-8'))
 assert scope['version']=='inference_training_scope_v1'
 for rel,sha in scope['sources'].items():
@@ -395,8 +422,8 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])|set(ties_harm['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1 + ties_harm_review_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])|set(ties_harm['sources'])|set(rejection['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1 + ties_harm_review_v1 + rejection_controls_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
@@ -419,6 +446,7 @@ report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findal
         'adc_dyna_fitting_information_matched':False,'unseen_checkpoint_transfer_evaluated':False,
         'winner_signal_checks_passed':True,'winner_direction_diagnostic_rows':474732,
         'ties_harm_checks_passed':True,'tie_seed_direction_cells':72,'harm_population_cells':36,
+        'rejection_controls_checks_passed':True,'matched_rejection_rows':84,'direct_gate_effect_rows':12,
         'harm_cluster_bootstrap_replicates':2000,'class_weight_control_small_fits':60,'class_weight_control_new_test_policy':False,
         'natural_winner_probability_or_harm_calibration_established':False,
         'raw_score_finiteness_certified':raw_review['raw_score_finiteness_certified'],

@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Direct gate effects, retaining all six pairs and both splits. F is original full ADC; 0 sets only $\tau=0$ with the same fitted margin, anchor, radius, clipping and projection. $I_F/I_0$ gives actual nonzero weight percentages; $U_F,U_0$ are mean RR changes relative to the common anchor in $10^{-4}$ units. The last column is the paired $\RR_F-\RR_0$ effect in those units, with a conditional 95\% interval from 2,000 original-triple bootstrap draws retaining all seeds/directions. DEV uses original held-out folds, hence threshold ranges; TEST uses original full-DEV locks. Intervals concern the direct difference, not two separate effects versus Global. Positive, null and negative values are all retained.}
+\label{tab:rejection-fallback}
+\begin{tabular}{lllrrrr}
+\toprule
+Pair & Split & $\tau$ & $I_F/I_0$ (\%) & $U_F$ & $U_0$ & F$-$0 [95\% CI]\\
+\midrule
+W-N & DEV & 0.10 & 63.29/89.89 & +30.70 & +31.29 & -0.59 [-5.49,+4.27]\\
+W-N & TEST & 0.10 & 63.33/89.10 & +24.47 & +24.36 & +0.10 [-4.44,+4.83]\\
+W-A & DEV & 0.10 & 19.48/38.84 & +12.04 & +8.05 & +3.98 [+1.17,+6.91]\\
+W-A & TEST & 0.10 & 20.29/39.60 & +10.14 & +10.46 & -0.33 [-3.39,+2.68]\\
+D-N & DEV & 0.10--0.30 & 10.11/35.33 & -0.09 & +0.57 & -0.66 [-3.02,+1.75]\\
+D-N & TEST & 0.20 & 7.87/33.90 & -0.81 & -1.47 & +0.66 [-1.20,+2.60]\\
+D-A & DEV & 0.30 & 0.36/40.39 & +0.36 & -21.00 & +21.36 [+15.81,+26.63]\\
+D-A & TEST & 0.30 & 0.45/43.35 & +2.12 & -29.89 & +32.01 [+26.60,+37.59]\\
+W-NA & DEV & 0.20 & 4.01/76.63 & +1.47 & -33.93 & +35.40 [+24.23,+46.81]\\
+W-NA & TEST & 0.20 & 3.61/79.09 & +1.39 & -32.50 & +33.89 [+22.62,+46.05]\\
+D-NA & DEV & 0.10 & 3.85/26.04 & +0.31 & -10.01 & +10.32 [+7.16,+13.55]\\
+D-NA & TEST & 0.10 & 4.07/28.40 & -0.15 & -6.63 & +6.49 [+3.64,+9.37]\\
+\bottomrule
+\end{tabular}
+\end{table}

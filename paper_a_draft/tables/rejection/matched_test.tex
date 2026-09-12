@@ -1,0 +1,53 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{TEST rejection controls at exactly matched nonzero intervention counts. Every realized gate retains whole observable queries and matches ADC within seed, fold and query-repetition-count strata; all rows therefore have the same $I$ within a pair. Random-I and Random-shape are exact expectations, not selected draws. Random-shape also matches direction-by-signed-displacement histograms and mean $D=|\Delta\alpha|$ in every realization. Head-/Tail-first use direction only; Low-A-gap and Gap-agree use unfiltered normalized score gaps. All four fixed rules are reported without selecting a winner. $U,L_-$ and paired ADC-minus-row effects use $10^{-4}$ RR units; $H$ is harm percentage over all observations. Brackets are conditional 95\% original-triple bootstrap intervals, with observed-workload allocations fixed.}
+\label{tab:rejection-test}
+\begin{tabular}{llrrrrrr}
+\toprule
+Pair & Gate & $I$ (\%) & $D$ & $U$ & $H$ (\%) & $L_-$ & ADC$-$row [95\% CI]\\
+\midrule
+W-N & ADC & 63.33 & 0.1210 & +24.47 & 15.15 & 54.63 & --\\
+W-N & Random-I & 63.33 & 0.0993 & +17.81 & 16.16 & 52.35 & +6.66 [+2.59,+10.81]\\
+W-N & Head-first & 63.33 & 0.1002 & +17.46 & 16.29 & 48.47 & +7.01 [+0.78,+12.98]\\
+W-N & Tail-first & 63.33 & 0.0982 & +20.72 & 15.71 & 56.52 & +3.74 [-2.25,+10.04]\\
+W-N & Low-A-gap & 63.33 & 0.0842 & +8.06 & 16.38 & 56.94 & +16.40 [+9.28,+23.62]\\
+W-N & Gap-agree & 63.33 & 0.1060 & +22.97 & 16.00 & 49.11 & +1.50 [-4.39,+7.62]\\
+W-N & Random-shape & 63.33 & 0.1210 & +23.84 & 15.28 & 54.10 & +0.62 [-1.26,+2.57]\\
+W-A & ADC & 20.29 & 0.0400 & +10.14 & 3.62 & 14.25 & --\\
+W-A & Random-I & 20.29 & 0.0335 & +6.54 & 3.47 & 10.15 & +3.59 [+0.69,+6.73]\\
+W-A & Head-first & 20.29 & 0.0334 & +2.60 & 3.67 & 7.97 & +7.54 [+3.28,+12.06]\\
+W-A & Tail-first & 20.29 & 0.0334 & +10.65 & 3.26 & 9.71 & -0.51 [-4.06,+3.25]\\
+W-A & Low-A-gap & 20.29 & 0.0354 & +14.14 & 3.40 & 8.25 & -4.00 [-7.84,-0.15]\\
+W-A & Gap-agree & 20.29 & 0.0374 & +10.45 & 3.63 & 15.07 & -0.31 [-2.86,+2.24]\\
+W-A & Random-shape & 20.29 & 0.0400 & +10.84 & 3.68 & 13.99 & -0.70 [-1.95,+0.47]\\
+D-N & ADC & 7.87 & 0.0080 & -0.81 & 1.42 & 6.17 & --\\
+D-N & Random-I & 7.87 & 0.0054 & -0.60 & 1.23 & 4.15 & -0.21 [-1.47,+1.05]\\
+D-N & Head-first & 7.87 & 0.0058 & -0.25 & 1.32 & 4.20 & -0.56 [-2.10,+0.91]\\
+D-N & Tail-first & 7.87 & 0.0049 & +0.09 & 1.11 & 3.66 & -0.91 [-2.79,+0.94]\\
+D-N & Low-A-gap & 7.87 & 0.0057 & -0.22 & 1.27 & 4.55 & -0.59 [-2.33,+1.16]\\
+D-N & Gap-agree & 7.87 & 0.0059 & +0.08 & 1.40 & 4.90 & -0.89 [-2.49,+0.72]\\
+D-N & Random-shape & 7.87 & 0.0080 & -0.63 & 1.42 & 6.04 & -0.18 [-0.66,+0.30]\\
+D-A & ADC & 0.45 & 0.0014 & +2.12 & 0.09 & 0.48 & --\\
+D-A & Random-I & 0.45 & 0.0005 & -0.36 & 0.08 & 0.79 & +2.48 [+1.09,+4.16]\\
+D-A & Head-first & 0.45 & 0.0006 & -0.69 & 0.11 & 0.97 & +2.81 [+1.31,+4.61]\\
+D-A & Tail-first & 0.45 & 0.0004 & -0.57 & 0.08 & 0.95 & +2.68 [+1.10,+4.40]\\
+D-A & Low-A-gap & 0.45 & 0.0005 & -0.36 & 0.08 & 1.00 & +2.48 [+0.92,+4.25]\\
+D-A & Gap-agree & 0.45 & 0.0012 & +0.89 & 0.11 & 1.03 & +1.23 [+0.36,+2.22]\\
+D-A & Random-shape & 0.45 & 0.0014 & +2.10 & 0.09 & 0.48 & +0.02 [+0.01,+0.04]\\
+W-NA & ADC & 3.61 & 0.0081 & +1.39 & 0.92 & 8.50 & --\\
+W-NA & Random-I & 3.61 & 0.0030 & -1.76 & 0.82 & 7.01 & +3.15 [-0.68,+7.08]\\
+W-NA & Head-first & 3.61 & 0.0020 & -1.93 & 1.18 & 5.76 & +3.32 [-1.56,+8.09]\\
+W-NA & Tail-first & 3.61 & 0.0035 & -3.37 & 0.73 & 8.74 & +4.76 [+0.05,+9.45]\\
+W-NA & Low-A-gap & 3.61 & 0.0028 & +0.17 & 1.20 & 5.72 & +1.22 [-2.95,+5.32]\\
+W-NA & Gap-agree & 3.61 & 0.0028 & -3.72 & 0.92 & 8.70 & +5.11 [+0.43,+9.98]\\
+W-NA & Random-shape & 3.61 & 0.0081 & +1.77 & 0.93 & 8.36 & -0.38 [-1.99,+1.23]\\
+D-NA & ADC & 4.07 & 0.0047 & -0.15 & 0.59 & 4.50 & --\\
+D-NA & Random-I & 4.07 & 0.0028 & -0.92 & 0.44 & 3.69 & +0.78 [-0.47,+1.99]\\
+D-NA & Head-first & 4.07 & 0.0031 & -1.56 & 0.62 & 3.48 & +1.41 [-0.07,+2.91]\\
+D-NA & Tail-first & 4.07 & 0.0027 & -1.58 & 0.38 & 4.73 & +1.43 [-0.33,+3.15]\\
+D-NA & Low-A-gap & 4.07 & 0.0029 & +2.21 & 0.53 & 3.77 & -2.35 [-4.27,-0.41]\\
+D-NA & Gap-agree & 4.07 & 0.0030 & -0.74 & 0.50 & 4.08 & +0.59 [-1.06,+2.20]\\
+D-NA & Random-shape & 4.07 & 0.0047 & -0.29 & 0.60 & 4.64 & +0.14 [-0.71,+0.93]\\
+\bottomrule
+\end{tabular}
+\end{table}

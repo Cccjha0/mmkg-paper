@@ -181,3 +181,14 @@ paper_a_draft/tables/ties_harm/** -text whitespace=cr-at-eol
 # Preserve the existing historical bytes now referenced by this audit.
 docs/reports/paper_a_confidence_harm_report.md -text whitespace=cr-at-eol
 outputs/paper_a_safe_correction/confidence_harm/confidence_harm_summary.csv -text whitespace=cr-at-eol
+
+# B17/B18 fixed-budget rejection controls and direct paired gate effects.
+router/rejection_diagnostics.py -text whitespace=cr-at-eol
+scripts/analyze_paper_a_rejection_controls.py -text whitespace=cr-at-eol
+scripts/build_paper_a_rejection_assets.py -text whitespace=cr-at-eol
+tests/test_rejection_diagnostics.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_rejection_controls.md -text whitespace=cr-at-eol
+docs/reports/paper_a_rejection_controls_review_2026-09-12.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/rejection_controls_v1/** -text whitespace=cr-at-eol
+paper_a_draft/rejection_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/tables/rejection/** -text whitespace=cr-at-eol
