@@ -1,0 +1,14 @@
+\begin{table}[htbp]
+\centering\footnotesize
+\caption{Setting provenance for MKG-W/DB15K (slash-separated values in that order), complementing Table~\ref{tab:data-training}. Numerical agreement with an upstream command is distinguished from local protocol changes and DEV checkpoint selection. A historical base-hyperparameter search ledger is not established. AdaMF names the retained AdaMF-MAT adapter with $\mu=0$; its generator does not contribute to the base-model gradient. Its dataset scripts specify LR $2\times10^{-5}$, although its README example gives $10^{-4}$.}
+\label{tab:training-origins}
+\begin{tabular}{p{.13\linewidth}p{.40\linewidth}p{.37\linewidth}}
+\toprule
+Model & Released numerical anchor & Local protocol adaptations\\
+\midrule
+M-Hyper & README: rank 128, Adagrad 0.1, batch 1,000, N3 0.005, 200 epochs, evaluation every 5 & Shared HDF5/masks; TRAIN-available PCA; canonical DEV and strict-$>$ evaluator\\
+NativE & Dataset scripts: dimension 250, margin 4/12, LR and generator LR $10^{-4}$, 128 negatives, $\mu=10^{-4}$, cap 1,000 & Fixed raw feature buffers; availability masks; shared sampler/evaluator; patience 10 DEV checks\\
+AdaMF & Dataset scripts: dimension 200/250, margin 12, LR $2\!\times\!10^{-5}$, 128 negatives, $\mu=0$, cap 1,000 & Fixed raw feature buffers; availability masks; shared sampler/evaluator; patience 10 DEV checks\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+\centering\footnotesize
+\caption{DB15K frozen checkpoints. Epochs are first maximum DEV / final logged epoch. Concatenate the two SHA-256 lines in each cell. The machine-readable inventory supplies the exact run path, full merged configuration and its independent digest, feature/split manifest and best DEV MRR. These are identifiers of the used artifacts, not a claim of a public checkpoint download or bitwise reproducible retraining.}
+\label{tab:training-hashes-db15k}
+\begin{tabular}{llrl}
+\toprule
+Model & Seed & Epochs & Checkpoint SHA-256\\
+\midrule
+M-Hyper & 1 & 25/200 & \shortstack[l]{\texttt{059b45d53023bf8122ef3b07a4dc4c10}\\\texttt{660841666afa78823f863105c0d34a27}}\\[3pt]
+M-Hyper & 2 & 40/200 & \shortstack[l]{\texttt{bea2dc185952ccdd54091267809ea39d}\\\texttt{971cd027f596c2f77c89f8d4df6500c9}}\\[3pt]
+M-Hyper & 3 & 55/200 & \shortstack[l]{\texttt{5f128cbd54cb7d97122c686017aa517c}\\\texttt{7439cca4dfe0b5379092707ee7a29844}}\\[3pt]
+NativE & 1 & 420/470 & \shortstack[l]{\texttt{2bd4ff09976173f06a07bfac1260d7b9}\\\texttt{fb8b3b9a72ebcc56d8805688a13e6c79}}\\[3pt]
+NativE & 2 & 620/670 & \shortstack[l]{\texttt{de24c0ad1a9127d6ef951e16b67f396e}\\\texttt{16b6d02515acf03ceaa8f6666d39b6a6}}\\[3pt]
+NativE & 3 & 310/360 & \shortstack[l]{\texttt{5ad6151d9acae60c3c3b1562aa9092d5}\\\texttt{4b10ecaaa88f3ea07468493e1d272355}}\\[3pt]
+AdaMF & 1 & 665/715 & \shortstack[l]{\texttt{0e306e56c556ef776678850c3ca7258b}\\\texttt{9e5b90eefb14245a7b3902ad71da1861}}\\[3pt]
+AdaMF & 2 & 545/595 & \shortstack[l]{\texttt{bcefd66bbbecfb60fb2a29ed8166b7e7}\\\texttt{f8d337494b539f81fbbd66d262b7ff00}}\\[3pt]
+AdaMF & 3 & 810/860 & \shortstack[l]{\texttt{391f06d80621a274b02aeea42b744cdd}\\\texttt{c84964427321c8533d2706e1588fd9ad}}\\[3pt]
+\bottomrule
+\end{tabular}
+\end{table}

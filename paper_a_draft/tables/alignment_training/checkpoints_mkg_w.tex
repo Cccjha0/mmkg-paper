@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+\centering\footnotesize
+\caption{MKG-W frozen checkpoints. Epochs are first maximum DEV / final logged epoch. Concatenate the two SHA-256 lines in each cell. The machine-readable inventory supplies the exact run path, full merged configuration and its independent digest, feature/split manifest and best DEV MRR. These are identifiers of the used artifacts, not a claim of a public checkpoint download or bitwise reproducible retraining.}
+\label{tab:training-hashes-mkg_w}
+\begin{tabular}{llrl}
+\toprule
+Model & Seed & Epochs & Checkpoint SHA-256\\
+\midrule
+M-Hyper & 1 & 15/200 & \shortstack[l]{\texttt{4a5cb66cf61d4cf4d68dfabf7c056033}\\\texttt{3563e7497b79b36872665b42396bbfed}}\\[3pt]
+M-Hyper & 2 & 25/200 & \shortstack[l]{\texttt{7d51cbc3ae0fa8ae7d16bb318c5d76af}\\\texttt{fe27caefbcd94f7015c938e58c739337}}\\[3pt]
+M-Hyper & 3 & 20/200 & \shortstack[l]{\texttt{42f6d06ba2ec51106a1cf04cf09fb49a}\\\texttt{ab439666fdfd293e1818cf19087ac30f}}\\[3pt]
+NativE & 1 & 205/255 & \shortstack[l]{\texttt{f44cba3fdd34b3aa06531b41d6ffd5bb}\\\texttt{2c1ed236e27f37c6109c683e353b3d6c}}\\[3pt]
+NativE & 2 & 155/205 & \shortstack[l]{\texttt{b218609bbcfc8b94d56f42c4f3f54930}\\\texttt{79810d6739e47bc4ad477d6f6bc853fc}}\\[3pt]
+NativE & 3 & 225/275 & \shortstack[l]{\texttt{e7dc11ecf6e5bfceae94116c58cb0ff9}\\\texttt{88f87985bfeb8c8156969ec2b30b512f}}\\[3pt]
+AdaMF & 1 & 645/695 & \shortstack[l]{\texttt{28781f99687850e5f7ca595bc8a80e32}\\\texttt{0b7231c5fbae58992af6857e9d776828}}\\[3pt]
+AdaMF & 2 & 850/900 & \shortstack[l]{\texttt{267ea0cddb9eb6dc94e853b65e1f50d2}\\\texttt{76f0800d2aa83a9f6bf2b975b8f93f23}}\\[3pt]
+AdaMF & 3 & 750/800 & \shortstack[l]{\texttt{9027b50fe93c066bec46a3c2a7ffb79f}\\\texttt{406045014c38338103514ba6731b1a18}}\\[3pt]
+\bottomrule
+\end{tabular}
+\end{table}

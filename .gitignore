@@ -154,3 +154,6 @@ outputs/paper_a_safe_correction/information_boundary_v2/**/checkpoints/
 # B10 operational scoring receipts/difference rows; commit the reviewed summary after return.
 /outputs/paper_a_safe_correction/endpoint_contract_audit_v1/
 /outputs/paper_a_safe_correction/endpoint_contract_audit_v1_return.zip*
+
+# Optional C06 server reconstruction artifacts; preserve the frozen inventory separately.
+/outputs/base_model_rebuilds/

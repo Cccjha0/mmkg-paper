@@ -1,0 +1,16 @@
+{
+  "status": "alignment_training_checks_passed",
+  "checkpoints": 18,
+  "datasets": 2,
+  "mapping_checks": 36,
+  "support_checks": 18,
+  "reciprocal_checkpoint_checks": 6,
+  "raw_score_cells": 72,
+  "raw_score_exceptions": 0,
+  "historical_execution_commit_established": false,
+  "training_runs": 0,
+  "full_candidate_scorer_runs": 0,
+  "historical_results_replaced": false,
+  "reconstruction_commit": "f2e8198d24d5dde56476fc768a56436adf72e2ba",
+  "local_source_files": 66
+}

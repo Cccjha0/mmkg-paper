@@ -192,3 +192,14 @@ docs/reports/paper_a_rejection_controls_review_2026-09-12.md -text whitespace=cr
 outputs/paper_a_safe_correction/rejection_controls_v1/** -text whitespace=cr-at-eol
 paper_a_draft/rejection_source_manifest.json -text whitespace=cr-at-eol
 paper_a_draft/tables/rejection/** -text whitespace=cr-at-eol
+
+# C05/C06 mapping identity, training source/configuration and checkpoint inventory.
+scripts/audit_paper_a_alignment_training.py -text whitespace=cr-at-eol
+scripts/build_paper_a_alignment_training_assets.py -text whitespace=cr-at-eol
+scripts/rebuild_paper_a_base_model.py -text whitespace=cr-at-eol
+tests/test_alignment_training_contract.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_alignment_training.md -text whitespace=cr-at-eol
+docs/reports/paper_a_alignment_training_review_2026-09-12.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/alignment_training_v1/** -text whitespace=cr-at-eol
+paper_a_draft/alignment_training_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/tables/alignment_training/** -text whitespace=cr-at-eol
