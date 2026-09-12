@@ -1,0 +1,35 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Locked TEST. Absolute Global/ADC MRR and signed contributions for a fixed relation partition. Both directions and all three seeds are pooled: $T_g$ is group original-triple support and $N_g=6T_g$ is group observation support; $N$ is the whole-pair count. $U_g$ is the conditional ADC--Global difference; $C_g=(N_g/N)U_g$ is its contribution to the whole pair. Both use $10^{-4}$ units, and $\sum_g C_g=U$ is checked at full precision. Empty groups have undefined MRR and zero contribution. $0^{+}$/$0^{-}$ marks a nonzero value below display precision, while 0 is exact. Values are descriptive; no group significance or causal claim is made. The four groups use 0, 1--99, 100--999 and at least 1,000 effective TRAIN triples per relation. These are support bins, not semantic families. All bins and effect signs are retained; no outcome sorting is used.}
+\label{tab:group-frequency_test}
+\begin{tabular}{llrrrrrr}
+\toprule
+Pair & TRAIN bin & $T_g$ & $N_g$ & Global & ADC & $U_g$ & $C_g$\\
+\midrule
+W-N & Train-zero & 0 & 0 & -- & -- & -- & 0\\
+W-N & 1-99 & 263 & 1,578 & 0.4427 & 0.4434 & +7.01 & +0.43\\
+W-N & 100-999 & 1,512 & 9,072 & 0.4230 & 0.4273 & +42.87 & +15.17\\
+W-N & 1000+ & 2,499 & 14,994 & 0.3211 & 0.3226 & +15.17 & +8.87\\
+W-A & Train-zero & 0 & 0 & -- & -- & -- & 0\\
+W-A & 1-99 & 263 & 1,578 & 0.4238 & 0.4260 & +21.90 & +1.35\\
+W-A & 100-999 & 1,512 & 9,072 & 0.4161 & 0.4168 & +6.57 & +2.32\\
+W-A & 1000+ & 2,499 & 14,994 & 0.3189 & 0.3200 & +11.06 & +6.47\\
+D-N & Train-zero & 7 & 42 & 0.0018 & 0.0018 & 0 & 0\\
+D-N & 1-99 & 398 & 2,388 & 0.3812 & 0.3808 & -3.18 & -0.13\\
+D-N & 100-999 & 2,884 & 17,304 & 0.4256 & 0.4257 & +0.32 & +0.09\\
+D-N & 1000+ & 6,613 & 39,678 & 0.3523 & 0.3522 & -1.17 & -0.78\\
+D-A & Train-zero & 7 & 42 & 0.0018 & 0.0018 & 0 & 0\\
+D-A & 1-99 & 398 & 2,388 & 0.3812 & 0.3822 & +9.99 & +0.40\\
+D-A & 100-999 & 2,884 & 17,304 & 0.4256 & 0.4257 & +0.19 & +0.06\\
+D-A & 1000+ & 6,613 & 39,678 & 0.3523 & 0.3525 & +2.48 & +1.66\\
+W-NA & Train-zero & 0 & 0 & -- & -- & -- & 0\\
+W-NA & 1-99 & 263 & 1,578 & 0.3988 & 0.3988 & -0.03 & $0^{-}$\\
+W-NA & 100-999 & 1,512 & 9,072 & 0.3935 & 0.3935 & +0.74 & +0.26\\
+W-NA & 1000+ & 2,499 & 14,994 & 0.3085 & 0.3087 & +1.93 & +1.13\\
+D-NA & Train-zero & 7 & 42 & 0.0016 & 0.0018 & +1.37 & $0^{+}$\\
+D-NA & 1-99 & 398 & 2,388 & 0.3126 & 0.3129 & +2.58 & +0.10\\
+D-NA & 100-999 & 2,884 & 17,304 & 0.3522 & 0.3521 & -1.30 & -0.38\\
+D-NA & 1000+ & 6,613 & 39,678 & 0.2959 & 0.2959 & +0.19 & +0.13\\
+\bottomrule
+\end{tabular}
+\end{table}

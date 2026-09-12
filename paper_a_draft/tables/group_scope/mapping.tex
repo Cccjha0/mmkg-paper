@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Named relation groups fixed using effective base-model TRAIN support only. R1--R5 are the five largest counts within each dataset, with ascending canonical relation ID breaking count ties. Other contains every remaining relation; the same map applies to all three pairs and both splits. Identifier is the terminal component of the canonical relation IRI, not an inferred semantic label; full IRIs and all 448 relation IDs are supplied in the mapping CSV. MKG-W uses 34,196 effective TRAIN triples; DB15K uses 71,300 after removing its 7,922 DEV holdout. No TEST metric determines membership or display order.}
+\label{tab:group-mapping}
+\begin{tabular}{llrlr}
+\toprule
+Dataset & Group & Relation ID & Identifier & TRAIN triples\\
+\midrule
+MKG-W & R1 & 0 & \texttt{P161} & 6,521\\
+MKG-W & R2 & 13 & \texttt{P31} & 3,691\\
+MKG-W & R3 & 22 & \texttt{P57} & 1,484\\
+MKG-W & R4 & 11 & \texttt{P86} & 1,317\\
+MKG-W & R5 & 18 & \texttt{P54} & 1,282\\
+DB15K & R1 & 278 & \texttt{type} & 9,380\\
+DB15K & R2 & 73 & \texttt{starring} & 5,332\\
+DB15K & R3 & 12 & \texttt{birthPlace} & 4,828\\
+DB15K & R4 & 47 & \texttt{genre} & 3,705\\
+DB15K & R5 & 0 & \texttt{seeAlso} & 2,613\\
+\bottomrule
+\end{tabular}
+\end{table}

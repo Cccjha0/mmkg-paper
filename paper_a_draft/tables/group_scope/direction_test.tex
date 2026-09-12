@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Locked TEST absolute direction metrics on all six fixed pairs. $T$ counts original triples within the direction, and $N=3T$ counts paired-seed observations. These are not counts of independent query keys. Global and ADC MRR pool all three seeds with equal row weight; $U=$ADC--Global uses $10^{-4}$ MRR units, computed before display rounding. Negative directions are retained. This is a descriptive breakdown; no new directional significance claim is made. DEV uses each fold\textquotesingle s fitted policy and reference, whereas TEST uses the final DEV-locked objects.}
+\label{tab:group-direction_test}
+\begin{tabular}{llrrrrr}
+\toprule
+Pair & Direction & $T$ & $N$ & Global MRR & ADC MRR & $U$\\
+\midrule
+W-N & head & 4,274 & 12,822 & 0.1928 & 0.1939 & +11.17\\
+W-N & tail & 4,274 & 12,822 & 0.5365 & 0.5403 & +37.77\\
+W-A & head & 4,274 & 12,822 & 0.1842 & 0.1848 & +6.30\\
+W-A & tail & 4,274 & 12,822 & 0.5353 & 0.5367 & +13.97\\
+D-N & head & 9,902 & 29,706 & 0.2372 & 0.2370 & -1.88\\
+D-N & tail & 9,902 & 29,706 & 0.5119 & 0.5119 & +0.25\\
+D-A & head & 9,902 & 29,706 & 0.2372 & 0.2376 & +3.36\\
+D-A & tail & 9,902 & 29,706 & 0.5119 & 0.5120 & +0.87\\
+W-NA & head & 4,274 & 12,822 & 0.1819 & 0.1819 & -0.55\\
+W-NA & tail & 4,274 & 12,822 & 0.5063 & 0.5066 & +3.33\\
+D-NA & head & 9,902 & 29,706 & 0.2076 & 0.2074 & -1.64\\
+D-NA & tail & 9,902 & 29,706 & 0.4179 & 0.4181 & +1.34\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -279,6 +279,54 @@ assert all(float(r['lo'])<=0<=float(r['hi']) for r in query_effects if r['compar
 assert r'\label{app:query-isolation}' in main and 'transductive query distribution' in main
 assert 'Zero inclusion does not establish equivalence' in main and 'all 82' in main
 
+group_scope=json.loads((ROOT/'group_scope_source_manifest.json').read_text(encoding='utf-8'))
+assert group_scope['version']=='group_scope_v1'
+for rel,sha in group_scope['sources'].items():
+    digest=hashlib.sha256()
+    with (ROOT.parent/rel).open('rb') as handle:
+        for block in iter(lambda:handle.read(1024*1024),b''):digest.update(block)
+    assert digest.hexdigest()==sha,rel
+for rel,sha in group_scope['tables'].items():
+    assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in group_scope['tables']}
+group_scope_dir=ROOT.parent/'outputs/paper_a_safe_correction/group_scope_v1'
+group_scope_audit=json.loads((group_scope_dir/'audit.json').read_text())
+assert group_scope_audit['status']=='group_scope_checks_passed' and not group_scope_audit['failures']
+assert group_scope_audit['observations']==474732 and group_scope_audit['relation_rows']==5229
+assert group_scope_audit['relation_map_rows']==448 and group_scope_audit['group_map_written_before_outcomes']
+assert not any(group_scope_audit[k] for k in ('selector_fits','scorer_runs','new_policy_selection','test_used_for_group_selection',
+    'historical_results_replaced','new_confidence_intervals'))
+assert all(c['original_absolute_mrr_reconciled'] and c['original_direction_mrr_reconciled']
+    and c['later_utility_reconciled'] and c['group_contributions_reconciled'] for c in group_scope_audit['checks'])
+assert [c['effective_train_triples'] for c in group_scope_audit['training_checks']]==[34196,71300]
+group_scope_records={}
+for name,count in [('directions',24),('groups',120),('group_directions',240),('concentration',12),('relation_map',448)]:
+    with (group_scope_dir/(name+'.csv')).open(encoding='utf-8') as handle:group_scope_records[name]=list(csv.DictReader(handle))
+    assert len(group_scope_records[name])==count
+for name,multiplier in [('directions',3),('groups',6),('group_directions',3)]:
+    for r in group_scope_records[name]:
+        assert int(r['n_observations'])==multiplier*int(r['n_triples'])
+        if int(r['n_observations']):
+            assert abs(float(r['adc_mrr'])-float(r['global_mrr'])-float(r['delta_mrr']))<1e-12
+            assert abs(float(r['mean_gain'])-float(r['mean_loss'])-float(r['delta_mrr']))<1e-12
+        else:assert r['global_mrr']==r['adc_mrr']=='' and float(r['delta_contribution'])==0
+for r in group_scope_records['concentration']:
+    groups=[g for g in group_scope_records['groups'] if g['pair']==r['pair'] and g['split']==r['split'] and g['partition']=='frequency']
+    assert abs(sum(float(g['delta_contribution']) for g in groups)-float(r['top_contribution'])-float(r['other_contribution']))<1e-12
+assert any(float(r['delta_mrr'])<0 for r in group_scope_records['groups'] if r['delta_mrr'])
+for dataset,split,count in [('mkg_w','dev_oof',6),('mkg_w','test',0),('db15k','dev_oof',0),('db15k','test',42)]:
+    rows=[r for r in group_scope_records['groups'] if r['dataset']==dataset and r['split']==split
+        and r['partition']=='frequency' and r['group']=='Train-zero']
+    assert len(rows)==3 and all(int(r['n_observations'])==count for r in rows)
+assert 'one original DEV triple (six observations) and no TEST observations' in main
+group_decision=json.loads((group_scope_dir/'scope_decision.json').read_text())
+assert group_decision['choice']=='narrow_two_benchmark_retrospective' and group_decision['evaluated_benchmarks']==2
+assert group_decision['independent_confirmation_sets']==group_decision['new_unexposed_datasets']==group_decision['new_heldout_pairs']==0
+assert not group_decision['broad_benchmark_robustness_established'] and not group_decision['requires_server_run']
+assert r'\label{sec:group-outcomes}' in main and r'\label{app:group-scope}' in main
+assert 'These are not three independent confirmation sets' in main
+assert 'broad cross-benchmark robustness' in main.split(r'\end{abstract}',1)[0]
+
 scope_boundary=json.loads((ROOT/'scope_boundary_source_manifest.json').read_text(encoding='utf-8'))
 assert scope_boundary['version']=='scope_boundary_v1'
 for rel,sha in scope_boundary['sources'].items():
@@ -663,8 +711,8 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])|set(ties_harm['sources'])|set(rejection['sources'])|set(alignment_training['sources'])|set(selection_seed['sources'])|set(query_pair['sources'])|set(outcome_risk['sources'])|set(coverage_quality['sources'])|set(component_ablation['sources'])|set(scope_boundary['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1 + ties_harm_review_v1 + rejection_controls_v1 + alignment_training_v1 + selection_seed_v1 + query_pair_v1 + outcome_risk_v1 + coverage_quality_v1 + component_ablation_v1 + scope_boundary_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])|set(ties_harm['sources'])|set(rejection['sources'])|set(alignment_training['sources'])|set(selection_seed['sources'])|set(query_pair['sources'])|set(outcome_risk['sources'])|set(coverage_quality['sources'])|set(component_ablation['sources'])|set(scope_boundary['sources'])|set(group_scope['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1 + ties_harm_review_v1 + rejection_controls_v1 + alignment_training_v1 + selection_seed_v1 + query_pair_v1 + outcome_risk_v1 + coverage_quality_v1 + component_ablation_v1 + scope_boundary_v1 + group_scope_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
@@ -687,6 +735,7 @@ report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findal
         'adc_dyna_fitting_information_matched':False,'unseen_checkpoint_transfer_evaluated':False,
         'winner_signal_checks_passed':True,'winner_direction_diagnostic_rows':474732,
         'ties_harm_checks_passed':True,'tie_seed_direction_cells':72,'harm_population_cells':36,
+        'group_scope_checks_passed':True,'absolute_direction_cells':24,'group_scope_choice':'narrow_two_benchmark_retrospective',
         'scope_boundary_checks_passed':True,'scope_boundary_dev_strata':24,'global_primary_necessity_established':False,
         'component_ablation_checks_passed':True,'component_ablation_native_rows':96,'component_ablation_effect_rows':144,'component_ablation_bootstrap_replicates':10000,
         'coverage_quality_checks_passed':True,'coverage_quality_curve_rows':528,'coverage_quality_random_replicates':512,'coverage_quality_ap_rows':48,

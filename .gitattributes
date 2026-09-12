@@ -268,3 +268,14 @@ docs/reports/paper_a_scope_boundary_review_2026-09-13.md -text whitespace=cr-at-
 outputs/paper_a_safe_correction/scope_boundary_v1/** -text whitespace=cr-at-eol
 paper_a_draft/scope_boundary_source_manifest.json -text whitespace=cr-at-eol
 paper_a_draft/tables/scope_boundary/** -text whitespace=cr-at-eol
+
+# E05/E06 absolute group metrics and explicit two-benchmark scope.
+router/group_scope_diagnostics.py -text whitespace=cr-at-eol
+scripts/analyze_paper_a_group_scope.py -text whitespace=cr-at-eol
+scripts/build_paper_a_group_scope_assets.py -text whitespace=cr-at-eol
+tests/test_group_scope_diagnostics.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_group_scope_review.md -text whitespace=cr-at-eol
+docs/reports/paper_a_group_scope_review_2026-09-13.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/group_scope_v1/** -text whitespace=cr-at-eol
+paper_a_draft/group_scope_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/tables/group_scope/** -text whitespace=cr-at-eol

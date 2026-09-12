@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Contribution of the five TRAIN-most-supported relations. N-share uses the whole pair\textquotesingle s observation count; gain/loss shares use sums of positive RR gains and RR losses separately, rather than a ratio to near-zero net utility. $C_5$ and $C_{Other}$ use $10^{-4}$ MRR units and sum to the pair\textquotesingle s net increment. This measures concentration in prechosen frequent relations, not the greatest achievable concentration after selecting TEST winners. Each dataset has shared supports across its three pairs; those repeated workloads are not independent datasets.}
+\label{tab:group-concentration}
+\begin{tabular}{llrrrrr}
+\toprule
+Pair & Split & N-share (\%) & Gain share (\%) & Loss share (\%) & $C_5$ & $C_{Other}$\\
+\midrule
+W-N & DEV-OOF & 42.68 & 36.34 & 37.73 & +10.51 & +20.20\\
+W-N & TEST & 41.39 & 36.53 & 35.95 & +9.26 & +15.21\\
+W-A & DEV-OOF & 42.68 & 29.78 & 20.56 & +4.94 & +7.09\\
+W-A & TEST & 41.39 & 35.61 & 26.36 & +4.93 & +5.21\\
+D-N & DEV-OOF & 36.29 & 26.28 & 27.16 & -0.07 & -0.02\\
+D-N & TEST & 36.50 & 20.73 & 23.95 & -0.37 & -0.44\\
+D-A & DEV-OOF & 36.29 & 59.08 & 44.29 & +0.40 & -0.04\\
+D-A & TEST & 36.50 & 69.96 & 39.04 & +1.63 & +0.49\\
+W-NA & DEV-OOF & 42.68 & 27.04 & 30.46 & +0.10 & +1.37\\
+W-NA & TEST & 41.39 & 21.87 & 25.21 & +0.02 & +1.37\\
+D-NA & DEV-OOF & 36.29 & 30.02 & 33.88 & -0.06 & +0.37\\
+D-NA & TEST & 36.50 & 26.26 & 28.10 & -0.12 & -0.03\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,17 @@
+{
+  "choice": "narrow_two_benchmark_retrospective",
+  "regime": "reliable-primary",
+  "primary_pairs": 4,
+  "additional_pairs": 2,
+  "datasets": {
+    "MKG-W": "primary retrospective evaluation",
+    "DB15K": "secondary external retrospective evaluation",
+    "OpenBG-IMG": "historical discovery; excluded from corrected numerical evaluation"
+  },
+  "evaluated_benchmarks": 2,
+  "independent_confirmation_sets": 0,
+  "new_unexposed_datasets": 0,
+  "new_heldout_pairs": 0,
+  "broad_benchmark_robustness_established": false,
+  "requires_server_run": false
+}
