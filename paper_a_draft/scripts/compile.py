@@ -20,8 +20,11 @@ for i,args in enumerate([
     if res.returncode:
         print(output[-6500:])
         raise SystemExit(res.returncode)
+    if i == 1:
+        # pdfLaTeX can prefer the source-directory .bbl to the output directory.
+        # Publish BibTeX's fresh output before the reference-resolving passes.
+        shutil.copy2(BUILD/'main.bbl',ROOT/'main.bbl')
 shutil.copy2(BUILD/'main.pdf',ROOT/'main.pdf')
-shutil.copy2(BUILD/'main.bbl',ROOT/'main.bbl')
 log=(BUILD/'main.log').read_text(encoding='utf-8',errors='replace')
 warnings=[line for line in log.splitlines() if any(s in line for s in ['Overfull','undefined','Warning:'])]
 print('\n'.join(warnings) or 'Compilation clean: no overfull boxes or unresolved references.')

@@ -128,7 +128,7 @@ for section in (abstract,conclusion):
     assert re.search(r'span(?:ning)? zero',section) and 'Relation' in section and 'W-N' in section
     assert 'slightly negative' in section and 'timing' in section
 # The abstract uses rounded absolute MRR percentage points; full precision stays
-# in the results and conclusion. Check the unit conversion against bound effects.
+# in the results. Check the unit conversion against bound effects.
 with (ROOT.parent/'outputs/paper_a_safe_correction/claims_cost_review_v1/paired_effects.csv').open(encoding='utf-8') as handle:
     effects=list(csv.DictReader(handle))
 primary_global=[r for r in effects if r['comparator']=='Global' and r['label'] in ('W-N','W-A','D-N','D-A')]
@@ -142,7 +142,11 @@ with (ROOT.parent/'outputs/paper_a_safe_correction/claims_cost_review_v1/histori
     ratios=[float(r['adc_over_primary']) for r in csv.DictReader(handle)]
 assert f'{min(ratios):.1f}--{max(ratios):.1f} times primary-only' in abstract
 assert 'historical pre-repair' in abstract and 'corrected timing is unavailable' in abstract
-assert '+0.000139' in conclusion and '-0.000015' in conclusion and '6.20--11.83' in conclusion
+# The conclusion states conditional use rather than repeating the result table;
+# retain adverse evidence and an explicit link to all six paired intervals.
+assert r'\ref{tab:claims-intervals}' in conclusion
+assert 'both additional-pair intervals span zero' in conclusion
+assert 'historical pre-repair timing' in conclusion and 'corrected end-to-end timing remains unmeasured' in conclusion
 assert not re.search(r'\d+\.\d{6}',abstract)
 assert 'requires a query-dependent policy' not in abstract.lower()
 assert ROOT/'tables/claims_cost/main.tex' in tex_files
