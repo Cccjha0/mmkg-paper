@@ -188,6 +188,35 @@ assert winner_assets['contingency_rows']==36 and winner_assets['probability_rows
 assert r'\label{eq:weighted-preference}' in main and r'\label{eq:winner-direction}' in main
 assert 'not automatically the natural probability' in main and 'zero miss rates' in main
 assert '5.57\\%' in main and '5.60\\%' in main and '7.66\\%' in main
+
+ties_harm=json.loads((ROOT/'ties_harm_source_manifest.json').read_text(encoding='utf-8'))
+assert ties_harm['version']=='ties_harm_review_v1'
+for rel,sha in ties_harm['sources'].items():
+    digest=hashlib.sha256()
+    with (ROOT.parent/rel).open('rb') as handle:
+        for block in iter(lambda:handle.read(1024*1024),b''): digest.update(block)
+    assert digest.hexdigest()==sha,rel
+for rel,sha in ties_harm['tables'].items():
+    assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in ties_harm['tables']}
+ties_harm_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/ties_harm_review_v1/audit.json').read_text())
+assert ties_harm_audit['status']=='ties_harm_checks_passed' and not ties_harm_audit['failures']
+assert len(ties_harm_audit['checks'])==12 and sum(c['observations'] for c in ties_harm_audit['checks'])==474732
+assert ties_harm_audit['selector_fits']==ties_harm_audit['scorer_runs']==0
+assert ties_harm_audit['bootstrap_replicates']==2000 and ties_harm_audit['population_cells']==36
+assert ties_harm_audit['seed_direction_cells']==72 and ties_harm_audit['full_triple_cluster_bootstrap']
+for key in ('new_policy_selection','test_used_for_selection','historical_results_replaced','calibrated_harm_probability'):
+    assert not ties_harm_audit[key],key
+for check in ties_harm_audit['checks']:
+    assert check['original_policy_and_fallback_replayed'] and check['grid_endpoints_and_rr_replayed']
+    assert check['tie_partition_and_previous_results_reconciled'] and check['raw_executed_subset_verified']
+ties_harm_assets=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/ties_harm_review_v1/asset_audit.json').read_text())
+assert ties_harm_assets['status']=='ties_harm_assets_verified' and ties_harm_assets['tables']==ties_harm['tables']
+assert ties_harm_assets['pooled_tie_rows']==12 and ties_harm_assets['seed_direction_tie_rows']==72
+assert ties_harm_assets['harm_population_rows']==36
+assert r'\label{app:ties-harm}' in main and r'\label{eq:harm-raw-proposal}' in main
+assert 'all four AP lifts are negative' in main and 'same-population prevalence' in main
+assert '79.44\\%' in main and '20.97\\%' in main
 scope=json.loads((ROOT/'inference_scope_source_manifest.json').read_text(encoding='utf-8'))
 assert scope['version']=='inference_training_scope_v1'
 for rel,sha in scope['sources'].items():
@@ -366,8 +395,8 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])|set(ties_harm['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1 + ties_harm_review_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
@@ -389,7 +418,8 @@ report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findal
         'adc_final_selectors':6,'dyna_historical_final_selectors':12,'dyna_new_final_selectors':180,
         'adc_dyna_fitting_information_matched':False,'unseen_checkpoint_transfer_evaluated':False,
         'winner_signal_checks_passed':True,'winner_direction_diagnostic_rows':474732,
-        'class_weight_control_small_fits':60,'class_weight_control_new_test_policy':False,
+        'ties_harm_checks_passed':True,'tie_seed_direction_cells':72,'harm_population_cells':36,
+        'harm_cluster_bootstrap_replicates':2000,'class_weight_control_small_fits':60,'class_weight_control_new_test_policy':False,
         'natural_winner_probability_or_harm_calibration_established':False,
         'raw_score_finiteness_certified':raw_review['raw_score_finiteness_certified'],
         'raw_score_finiteness_scope':raw_review['scope'],

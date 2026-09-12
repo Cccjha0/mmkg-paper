@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Endpoint RR ties under the original ADC policies. $n_T$ counts tied observations, $T$ is their percentage of all observations, and $I_T,H_T,B_T$ are weight-change, harm and benefit percentages within all ties, including unchanged ties. $U_T$ is mean ADC-minus-anchor RR within ties, $L_T$ their unconditional mean loss, and $C_T=(n_T/n)U_T$ their contribution to overall utility; these three columns use $10^{-4}$ RR units. DEV uses original grouped held-out policies, TEST original locks. Three seeds and both directions are pooled; equality is the exact endpoint RR criterion excluded from classifier fitting.}
+\label{tab:ties-pooled}
+\begin{tabular}{llrrrrrrrr}
+\toprule
+Pair & Split & $n_T$ & $T$ (\%) & $I_T$ (\%) & $H_T$ (\%) & $B_T$ (\%) & $U_T$ & $L_T$ & $C_T$\\
+\midrule
+W-N & DEV & 6,089 & 23.73 & 79.45 & 0.92 & 0.74 & -0.66 & 10.64 & -0.16\\
+W-N & TEST & 6,186 & 24.12 & 79.44 & 0.78 & 1.02 & +3.34 & 13.06 & +0.81\\
+W-A & DEV & 5,092 & 19.85 & 4.54 & 0.08 & 0.43 & +8.61 & 0.84 & +1.71\\
+W-A & TEST & 5,218 & 20.35 & 4.27 & 0.10 & 0.59 & +12.78 & 0.88 & +2.60\\
+D-N & DEV & 10,527 & 22.15 & 7.84 & 0.12 & 0.22 & +2.02 & 1.12 & +0.45\\
+D-N & TEST & 12,832 & 21.60 & 6.21 & 0.09 & 0.17 & +1.84 & 0.85 & +0.40\\
+D-A & DEV & 8,607 & 18.11 & 0.17 & 0.00 & 0.01 & +0.10 & 0.00 & +0.02\\
+D-A & TEST & 10,403 & 17.51 & 0.26 & 0.01 & 0.02 & +0.13 & 0.08 & +0.02\\
+W-NA & DEV & 5,134 & 20.01 & 4.01 & 0.12 & 0.19 & -0.77 & 3.38 & -0.15\\
+W-NA & TEST & 5,208 & 20.31 & 3.17 & 0.08 & 0.17 & +0.36 & 1.92 & +0.07\\
+D-NA & DEV & 9,017 & 18.97 & 3.69 & 0.04 & 0.10 & +1.80 & 0.29 & +0.34\\
+D-NA & TEST & 10,881 & 18.31 & 3.84 & 0.06 & 0.12 & +1.18 & 0.50 & +0.22\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -167,3 +167,17 @@ docs/reports/paper_a_winner_signal_review_2026-09-12.md -text whitespace=cr-at-e
 outputs/paper_a_safe_correction/winner_signal_review_v1/** -text whitespace=cr-at-eol
 paper_a_draft/winner_signal_source_manifest.json -text whitespace=cr-at-eol
 paper_a_draft/tables/winner_signal/** -text whitespace=cr-at-eol
+
+# B15/B16 fixed-policy endpoint ties and action-conditioned harm diagnostics.
+router/ties_harm_diagnostics.py -text whitespace=cr-at-eol
+scripts/analyze_paper_a_ties_harm.py -text whitespace=cr-at-eol
+scripts/build_paper_a_ties_harm_assets.py -text whitespace=cr-at-eol
+tests/test_ties_harm_diagnostics.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_ties_harm_review.md -text whitespace=cr-at-eol
+docs/reports/paper_a_ties_harm_review_2026-09-12.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/ties_harm_review_v1/** -text whitespace=cr-at-eol
+paper_a_draft/ties_harm_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/tables/ties_harm/** -text whitespace=cr-at-eol
+# Preserve the existing historical bytes now referenced by this audit.
+docs/reports/paper_a_confidence_harm_report.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/confidence_harm/confidence_harm_summary.csv -text whitespace=cr-at-eol

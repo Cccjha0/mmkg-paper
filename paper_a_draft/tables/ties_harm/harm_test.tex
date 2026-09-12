@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{TEST harm discrimination by fixed score $1-c$. All=all valid ungated grid proposals; Prop.=their nonzero subset; Exec.=actual nonzero corrections after the original gate. $n/h$ gives observations/harm events; $P_h$ is the same-subset prevalence and constant-score AP reference. The AUROC reference is 0.5. AP is non-interpolated average precision; lift is AP minus $P_h$ in percentage points. Brackets are conditional 95\% original-triple bootstrap intervals (2,000 draws), retaining seed/direction clusters before subset restriction. All displayed metric intervals have 2,000 valid replicates. These are descriptive discrimination intervals, not calibrated harm probabilities or newly selected deployment rules.}
+\label{tab:harm-test}
+\begin{tabular}{llrrrrr}
+\toprule
+Pair & Set & $n/h$ & $P_h$ (\%) & AUROC & AP (\%) & Lift (pp)\\
+\midrule
+W-N & All & 25,644/5,804 & \shortstack{22.63\\{\scriptsize [21.90,23.36]}} & \shortstack{0.463\\{\scriptsize [0.453,0.474]}} & \shortstack{19.60\\{\scriptsize [18.91,20.28]}} & \shortstack{-3.03\\{\scriptsize [-3.37,-2.66]}}\\[3pt]
+W-N & Prop. & 22,848/5,804 & \shortstack{25.40\\{\scriptsize [24.59,26.23]}} & \shortstack{0.539\\{\scriptsize [0.528,0.551]}} & \shortstack{27.62\\{\scriptsize [26.54,28.72]}} & \shortstack{+2.21\\{\scriptsize [+1.52,+3.03]}}\\[3pt]
+W-N & Exec. & 16,240/3,885 & \shortstack{23.92\\{\scriptsize [23.01,24.82]}} & \shortstack{0.525\\{\scriptsize [0.511,0.540]}} & \shortstack{25.58\\{\scriptsize [24.34,26.86]}} & \shortstack{+1.65\\{\scriptsize [+0.86,+2.63]}}\\[3pt]
+W-A & All & 25,644/1,696 & \shortstack{6.61\\{\scriptsize [6.24,7.00]}} & \shortstack{0.468\\{\scriptsize [0.454,0.481]}} & \shortstack{5.65\\{\scriptsize [5.31,6.01]}} & \shortstack{-0.96\\{\scriptsize [-1.12,-0.80]}}\\[3pt]
+W-A & Prop. & 10,156/1,696 & \shortstack{16.70\\{\scriptsize [15.81,17.60]}} & \shortstack{0.470\\{\scriptsize [0.453,0.487]}} & \shortstack{15.40\\{\scriptsize [14.41,16.53]}} & \shortstack{-1.30\\{\scriptsize [-1.90,-0.56]}}\\[3pt]
+W-A & Exec. & 5,204/928 & \shortstack{17.83\\{\scriptsize [16.58,19.12]}} & \shortstack{0.500\\{\scriptsize [0.478,0.522]}} & \shortstack{17.46\\{\scriptsize [16.08,19.09]}} & \shortstack{-0.37\\{\scriptsize [-1.24,+0.78]}}\\[3pt]
+D-N & All & 59,412/3,164 & \shortstack{5.33\\{\scriptsize [5.11,5.55]}} & \shortstack{0.350\\{\scriptsize [0.342,0.359]}} & \shortstack{3.72\\{\scriptsize [3.57,3.89]}} & \shortstack{-1.60\\{\scriptsize [-1.68,-1.52]}}\\[3pt]
+D-N & Prop. & 20,143/3,164 & \shortstack{15.71\\{\scriptsize [15.10,16.32]}} & \shortstack{0.476\\{\scriptsize [0.464,0.488]}} & \shortstack{15.06\\{\scriptsize [14.35,15.89]}} & \shortstack{-0.65\\{\scriptsize [-1.11,-0.11]}}\\[3pt]
+D-N & Exec. & 4,678/846 & \shortstack{18.08\\{\scriptsize [16.84,19.27]}} & \shortstack{0.489\\{\scriptsize [0.467,0.511]}} & \shortstack{17.57\\{\scriptsize [16.15,19.28]}} & \shortstack{-0.52\\{\scriptsize [-1.47,+0.74]}}\\[3pt]
+D-A & All & 59,412/5,086 & \shortstack{8.56\\{\scriptsize [8.28,8.85]}} & \shortstack{0.416\\{\scriptsize [0.408,0.425]}} & \shortstack{6.64\\{\scriptsize [6.40,6.89]}} & \shortstack{-1.92\\{\scriptsize [-2.03,-1.80]}}\\[3pt]
+D-A & Prop. & 25,756/5,086 & \shortstack{19.75\\{\scriptsize [19.14,20.35]}} & \shortstack{0.440\\{\scriptsize [0.430,0.450]}} & \shortstack{17.58\\{\scriptsize [16.87,18.35]}} & \shortstack{-2.17\\{\scriptsize [-2.60,-1.66]}}\\[3pt]
+D-A & Exec. & 267/56 & \shortstack{20.97\\{\scriptsize [15.41,27.08]}} & \shortstack{0.544\\{\scriptsize [0.467,0.631]}} & \shortstack{22.77\\{\scriptsize [16.82,31.94]}} & \shortstack{+1.80\\{\scriptsize [-1.46,+9.23]}}\\[3pt]
+W-NA & All & 25,644/5,572 & \shortstack{21.73\\{\scriptsize [21.08,22.33]}} & \shortstack{0.393\\{\scriptsize [0.385,0.401]}} & \shortstack{16.74\\{\scriptsize [16.23,17.26]}} & \shortstack{-4.98\\{\scriptsize [-5.22,-4.73]}}\\[3pt]
+W-NA & Prop. & 20,282/5,572 & \shortstack{27.47\\{\scriptsize [26.68,28.21]}} & \shortstack{0.536\\{\scriptsize [0.526,0.546]}} & \shortstack{29.17\\{\scriptsize [28.18,30.18]}} & \shortstack{+1.69\\{\scriptsize [+1.02,+2.46]}}\\[3pt]
+W-NA & Exec. & 926/235 & \shortstack{25.38\\{\scriptsize [21.93,28.68]}} & \shortstack{0.464\\{\scriptsize [0.419,0.509]}} & \shortstack{23.94\\{\scriptsize [20.33,28.44]}} & \shortstack{-1.44\\{\scriptsize [-3.56,+1.78]}}\\[3pt]
+D-NA & All & 59,412/2,233 & \shortstack{3.76\\{\scriptsize [3.56,3.96]}} & \shortstack{0.231\\{\scriptsize [0.223,0.239]}} & \shortstack{2.26\\{\scriptsize [2.14,2.38]}} & \shortstack{-1.50\\{\scriptsize [-1.58,-1.41]}}\\[3pt]
+D-NA & Prop. & 16,872/2,233 & \shortstack{13.23\\{\scriptsize [12.59,13.86]}} & \shortstack{0.493\\{\scriptsize [0.479,0.507]}} & \shortstack{13.40\\{\scriptsize [12.65,14.22]}} & \shortstack{+0.16\\{\scriptsize [-0.33,+0.75]}}\\[3pt]
+D-NA & Exec. & 2,416/351 & \shortstack{14.53\\{\scriptsize [13.07,16.04]}} & \shortstack{0.483\\{\scriptsize [0.445,0.519]}} & \shortstack{14.03\\{\scriptsize [12.35,16.23]}} & \shortstack{-0.50\\{\scriptsize [-1.65,+1.25]}}\\[3pt]
+\bottomrule
+\end{tabular}
+\end{table}

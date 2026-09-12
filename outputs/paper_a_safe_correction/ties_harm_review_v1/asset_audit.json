@@ -1,0 +1,14 @@
+{
+  "status": "ties_harm_assets_verified",
+  "pooled_tie_rows": 12,
+  "seed_direction_tie_rows": 72,
+  "harm_population_rows": 36,
+  "tables": {
+    "tables/ties_harm/ties_pooled.tex": "9233f223976d09e324b5e3412c2e9b195761dae020f5991da0542dc193f39c3f",
+    "tables/ties_harm/ties_dev_oof.tex": "4d1eed23139509d5bd5cb0a88465ea44637f126d92750aeeafbb35f5aafc93c1",
+    "tables/ties_harm/harm_dev_oof.tex": "30e4a2a7240fc47de9b58347a7e6fd4a3b47383662a7eb1a8e169548e9a564ea",
+    "tables/ties_harm/ties_test.tex": "d5c144c15db015ad08157b3c301721a4b8c37c87c4d4d9a73c21a034acc95a2f",
+    "tables/ties_harm/harm_test.tex": "564eeff5d726acd2dd5f6259e3fb6dfe76b13811dfea3cdcf0778dd727c57dc9"
+  },
+  "test_used_for_selection": false
+}
