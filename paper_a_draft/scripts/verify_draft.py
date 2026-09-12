@@ -242,6 +242,43 @@ assert not any(selection_test[k] for k in ('new_training_runs','new_test_policy_
 assert r'\label{app:selection-hierarchy}' in main and r'\label{app:seed-dispersion}' in main
 assert '32.26\\%' in main and '32.16\\%' in main and 'does not itself use outer-holdout labels' in main
 
+query_pair=json.loads((ROOT/'query_pair_source_manifest.json').read_text(encoding='utf-8'))
+assert query_pair['version']=='query_pair_v1'
+for rel,sha in query_pair['sources'].items():
+    digest=hashlib.sha256()
+    with (ROOT.parent/rel).open('rb') as handle:
+        for block in iter(lambda:handle.read(1024*1024),b''): digest.update(block)
+    assert digest.hexdigest()==sha,rel
+for rel,sha in query_pair['tables'].items():
+    assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in query_pair['tables']}
+query_dir=ROOT.parent/'outputs/paper_a_safe_correction/query_pair_v1'
+query_dev=json.loads((query_dir/'dev_complete.json').read_text())
+query_test=json.loads((query_dir/'test_complete.json').read_text())
+assert query_dev['status']==query_test['status']=='query_pair_checks_passed'
+assert query_dev['selector_fits']==60 and query_dev['original_fits_replayed']==30
+assert not any(query_dev[k] for k in ('test_opened','new_test_policy','base_scorer_runs','end_to_end_unseen_query_generalization'))
+assert query_test['contrasts']==82 and query_test['paired_seed_direction_cells']==492
+assert not any(query_test[k] for k in ('test_used_for_selection','new_test_policy','selector_fits','base_scorer_runs','simultaneous_intervals','confirmatory_status'))
+for c in query_test['checks']:
+    assert c['replicates']==10000 and c['rng']=='PCG64' and c['quantile']=='linear' and c['observations_per_cluster']==6
+    assert c['seed']==(2026091212 if c['pair'].startswith('mkgw') else 2026091213)
+for dataset in ('mkgw','db15k'):
+    checks=[c for c in query_test['checks'] if c['pair'].startswith(dataset)]
+    assert len(checks)==3 and len({c['cluster_order_sha256'] for c in checks})==1
+with (query_dir/'dev_fits.csv').open(encoding='utf-8') as handle:
+    query_fits=list(csv.DictReader(handle))
+assert len(query_fits)==90
+assert all(int(r['shared_keys'])==0 for r in query_fits if r['method']=='Purged')
+with (query_dir/'paired_intervals.csv').open(encoding='utf-8') as handle:
+    query_effects=list(csv.DictReader(handle))
+assert len(query_effects)==82 and len({(r['pair'],r['comparator']) for r in query_effects})==82
+assert all(float(r['lo'])<=float(r['hi']) for r in query_effects)
+assert sum(float(r['lo'])>0 for r in query_effects if r['role']=='central retrospective')==3
+assert all(float(r['lo'])<=0<=float(r['hi']) for r in query_effects if r['comparator']=='Global' and r['label'] in ('D-N','W-NA','D-NA'))
+assert r'\label{app:query-isolation}' in main and 'transductive query distribution' in main
+assert 'Zero inclusion does not establish equivalence' in main and 'all 82' in main
+
 alignment_training=json.loads((ROOT/'alignment_training_source_manifest.json').read_text(encoding='utf-8'))
 assert alignment_training['version']=='alignment_training_v1'
 for rel,sha in alignment_training['sources'].items():
@@ -471,8 +508,8 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])|set(ties_harm['sources'])|set(rejection['sources'])|set(alignment_training['sources'])|set(selection_seed['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1 + ties_harm_review_v1 + rejection_controls_v1 + alignment_training_v1 + selection_seed_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])|set(ties_harm['sources'])|set(rejection['sources'])|set(alignment_training['sources'])|set(selection_seed['sources'])|set(query_pair['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1 + ties_harm_review_v1 + rejection_controls_v1 + alignment_training_v1 + selection_seed_v1 + query_pair_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
@@ -495,6 +532,7 @@ report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findal
         'adc_dyna_fitting_information_matched':False,'unseen_checkpoint_transfer_evaluated':False,
         'winner_signal_checks_passed':True,'winner_direction_diagnostic_rows':474732,
         'ties_harm_checks_passed':True,'tie_seed_direction_cells':72,'harm_population_cells':36,
+        'query_key_checks_passed':True,'query_purge_small_fits':60,'unified_paired_ci_checks_passed':True,'unified_paired_contrasts':82,
         'selection_hierarchy_checks_passed':True,'inner_sensitivity_logistic_fits':108,'seed_dispersion_checks_passed':True,'absolute_seed_mrr_rows':228,
         'alignment_training_checks_passed':True,'base_checkpoint_count':18,'historical_training_execution_commit_established':False,
         'rejection_controls_checks_passed':True,'matched_rejection_rows':84,'direct_gate_effect_rows':12,

@@ -1,0 +1,55 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Unified paired TEST effects, ADC minus comparator, in $10^{-4}$ MRR units. All 82 available method/component contrasts are retained across the two datasets. Brackets are two-sided pointwise 95\% percentile intervals from 10,000 original-triple resamples, retaining six seed/direction observations. The same PCG64 draws are used for every pair and comparator within a dataset. R3 first averages its three selector repetitions within an observation. Expanded-radius changes only $\beta$ to 1; no-fallback changes only $\tau$ to 0. All intervals are conditional, retrospective and unadjusted for multiplicity. A zero-containing interval is not equivalence. Displayed zero endpoints can reflect rounding; the CSV retains full precision. SD is the sample SD of the three paired base-seed effects, not a standard error.}
+\label{tab:query-paired-db15k}
+\begin{tabular}{llrlr}
+\toprule
+Pair & Comparator & $\Delta$ & 95\% CI & Seed SD\\
+\midrule
+D-N & Primary & -0.81 & [-2.51, +0.95] & 0.83\\
+D-N & Secondary & +617.24 & [+587.76, +646.66] & 15.41\\
+D-N & Equal-z & +137.41 & [+121.22, +153.27] & 21.39\\
+D-N & RRF & +201.89 & [+181.88, +221.90] & 10.47\\
+D-N & Global & -0.81 & [-2.51, +0.95] & 0.83\\
+D-N & Relation & -0.06 & [-8.28, +8.11] & 1.71\\
+D-N & Query-soft & +134.95 & [+118.82, +150.95] & 25.83\\
+D-N & Shrink & -0.81 & [-2.51, +0.95] & 0.83\\
+D-N & Shrink-gate & -0.37 & [-2.03, +1.32] & 1.10\\
+D-N & Linear-p & -0.11 & [-0.31, +0.01] & 0.18\\
+D-N & Clip-g & -0.13 & [-0.34, +0.00] & 0.22\\
+D-N & Linear-g & -0.13 & [-0.34, +0.00] & 0.22\\
+D-N & R0 & +412.64 & [+389.28, +435.70] & 361.81\\
+D-N & R3 & -4.99 & [-9.38, -0.64] & 3.36\\
+D-N & Expanded-radius & +2.33 & [-0.66, +5.35] & 2.49\\
+D-N & No-fallback & +0.66 & [-1.21, +2.59] & 2.08\\
+\addlinespace
+D-A & Primary & +2.12 & [+0.70, +3.82] & 1.18\\
+D-A & Secondary & +921.90 & [+888.80, +954.23] & 88.06\\
+D-A & Equal-z & +366.70 & [+346.30, +386.61] & 50.79\\
+D-A & RRF & +479.94 & [+455.61, +503.69] & 59.60\\
+D-A & Global & +2.12 & [+0.70, +3.82] & 1.18\\
+D-A & Relation & +15.99 & [+10.44, +21.75] & 4.68\\
+D-A & Query-soft & +360.18 & [+340.03, +380.20] & 49.99\\
+D-A & Shrink & +2.12 & [+0.70, +3.82] & 1.18\\
+D-A & Shrink-gate & -0.55 & [-1.55, +0.39] & 0.26\\
+D-A & Linear-p & +1.44 & [+0.59, +2.49] & 0.45\\
+D-A & Clip-g & -0.28 & [-0.52, -0.10] & 0.27\\
+D-A & Linear-g & -0.29 & [-0.53, -0.10] & 0.26\\
+D-A & R0 & +701.62 & [+673.26, +729.32] & 302.18\\
+D-A & R3 & +24.26 & [+19.75, +28.71] & 8.17\\
+D-A & Expanded-radius & -1.12 & [-1.86, -0.54] & 0.28\\
+D-A & No-fallback & +32.01 & [+26.53, +37.54] & 16.39\\
+\addlinespace
+D-NA & Primary & -0.15 & [-1.63, +1.30] & 0.62\\
+D-NA & Secondary & +301.58 & [+276.97, +326.42] & 99.48\\
+D-NA & Equal-z & +123.42 & [+105.15, +141.62] & 49.17\\
+D-NA & RRF & +277.58 & [+259.39, +296.05] & 51.86\\
+D-NA & Global & -0.15 & [-1.63, +1.30] & 0.62\\
+D-NA & Relation & +0.21 & [-8.36, +8.82] & 13.20\\
+D-NA & Query-soft & +122.41 & [+104.33, +140.48] & 45.66\\
+D-NA & Expanded-radius & -2.40 & [-4.03, -0.73] & 2.03\\
+D-NA & No-fallback & +6.49 & [+3.60, +9.44] & 2.86\\
+\addlinespace
+\bottomrule
+\end{tabular}
+\end{table}

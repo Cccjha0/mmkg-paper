@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Training-seed dispersion and conditional query intervals for the retained TEST policies. Absolute MRR gives mean $\pm$ sample SD over three base seeds. Paired effects, their mean $\pm$ SD and the query CI use $10^{-4}$ RR units. The final column uses the current unified 10,000-draw original-triple percentile run. Seed SD describes these three checkpoint pairs; the query CI holds their models fixed while resampling triples. Neither is a training-population CI. ADC shares one pooled selector, and directions/related pairs are not independent replications.}
+\label{tab:selection-query-seed}
+\begin{tabular}{lllrrrll}
+\toprule
+Pair & Global MRR $\pm$ SD & ADC MRR $\pm$ SD & $\Delta_1$ & $\Delta_2$ & $\Delta_3$ & $\bar\Delta\pm$ SD & Query CI\\
+\midrule
+W-N & 0.364665$\pm$0.002019 & 0.367112$\pm$0.001494 & +18.37 & +27.07 & +27.96 & 24.47$\pm$5.30 & [+14.61, +34.34]\\
+W-A & 0.359721$\pm$0.000878 & 0.360735$\pm$0.000527 & +6.12 & +13.21 & +11.10 & 10.14$\pm$3.64 & [+5.13, +15.49]\\
+D-N & 0.374567$\pm$0.000953 & 0.374485$\pm$0.000998 & -1.00 & +0.10 & -1.53 & -0.81$\pm$0.83 & [-2.51, +0.95]\\
+D-A & 0.374567$\pm$0.000953 & 0.374778$\pm$0.001025 & +1.93 & +3.38 & +1.04 & 2.12$\pm$1.18 & [+0.70, +3.82]\\
+W-NA & 0.344127$\pm$0.001226 & 0.344266$\pm$0.000927 & +6.36 & -0.59 & -1.60 & 1.39$\pm$4.33 & [-2.53, +5.38]\\
+D-NA & 0.312761$\pm$0.002529 & 0.312747$\pm$0.002469 & -0.39 & -0.61 & +0.56 & -0.15$\pm$0.62 & [-1.63, +1.30]\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -213,3 +213,13 @@ docs/reports/paper_a_selection_seed_review_2026-09-12.md -text whitespace=cr-at-
 outputs/paper_a_safe_correction/selection_seed_v1/** -text whitespace=cr-at-eol
 paper_a_draft/selection_seed_source_manifest.json -text whitespace=cr-at-eol
 paper_a_draft/tables/selection_seed/** -text whitespace=cr-at-eol
+
+# C11/C12 query-key isolation sensitivity and unified paired percentile evidence.
+scripts/analyze_paper_a_query_pair.py -text whitespace=cr-at-eol
+scripts/build_paper_a_query_pair_assets.py -text whitespace=cr-at-eol
+tests/test_query_pair_diagnostics.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_query_pair_review.md -text whitespace=cr-at-eol
+docs/reports/paper_a_query_pair_review_2026-09-12.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/query_pair_v1/** -text whitespace=cr-at-eol
+paper_a_draft/query_pair_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/tables/query_pair/** -text whitespace=cr-at-eol

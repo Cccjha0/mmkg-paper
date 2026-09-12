@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Semantic query inventory, identical across each dataset\textquotesingle s three pairs. A key is (direction, relation, known entity); the three checkpoint seeds repeat these requests and do not triple these counts. $N$ counts labeled directional answer rows, $K$ unique keys. Repeated keys have multiple gold answers. Repeated and cross-fold key cells give count / percentage of $K$; row columns use $N$. Cross-fold keys occur in multiple original-triple DEV folds. TEST has no outer folds; its final column is the fraction of answer rows with a key also in DEV. These are graph/query overlap statistics, not evidence that gold enters inference features.}
+\label{tab:query-inventory}
+\begin{tabular}{lllrrrrrrr}
+\toprule
+Dataset & Split & Dir. & $N$ & $K$ & Repeat $K$/\% & Repeat rows\% & Cross $K$/\% & Cross rows\% & DEV key\%\\
+\midrule
+MKG-W & dev & head & 4276 & 2303 & 685 / 29.74 & 62.16 & 622 / 27.01 & 59.12 & --\\
+MKG-W & dev & tail & 4276 & 4133 & 130 / 3.15 & 6.38 & 109 / 2.64 & 5.40 & --\\
+DB15K & dev & head & 7922 & 4350 & 928 / 21.33 & 56.80 & 820 / 18.85 & 53.98 & --\\
+DB15K & dev & tail & 7922 & 7394 & 465 / 6.29 & 12.53 & 380 / 5.14 & 10.35 & --\\
+MKG-W & test & head & 4274 & 2273 & 671 / 29.52 & 62.52 & -- & -- & 63.17\\
+MKG-W & test & tail & 4274 & 4132 & 123 / 2.98 & 6.20 & -- & -- & 5.64\\
+DB15K & test & head & 9902 & 5202 & 1134 / 21.80 & 58.92 & -- & -- & 57.64\\
+DB15K & test & tail & 9902 & 9101 & 690 / 7.58 & 15.06 & -- & -- & 12.64\\
+\bottomrule
+\end{tabular}
+\end{table}

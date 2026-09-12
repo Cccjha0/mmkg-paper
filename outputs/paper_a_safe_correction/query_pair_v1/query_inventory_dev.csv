@@ -1,0 +1,5 @@
+dataset,split,direction,answer_rows,unique_keys,repeated_keys,rows_on_repeated_keys,max_answers,cross_fold_keys,rows_on_cross_fold_keys
+mkgw,dev,head,4276,2303,685,2658,442,622,2528
+mkgw,dev,tail,4276,4133,130,273,4,109,231
+db15k,dev,head,7922,4350,928,4500,660,820,4276
+db15k,dev,tail,7922,7394,465,993,5,380,820

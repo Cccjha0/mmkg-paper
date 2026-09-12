@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{DEV query-isolation sensitivity on unchanged original outer holdouts. O is the original combiner; P removes whole training triples sharing either head or tail query keys with the holdout. R retains the same number of training triples per relation as P using one fixed hash draw. All refit anchor, preprocessing, logistic and the original 40 beta/gate choices within their own training portions. Differences and pointwise 95\% percentile intervals use $10^{-4}$ RR units and 2,000 original-triple draws. They condition on fitted experts, folds and fixed subsets; R does not average over random subset selection. Lower sample size and changed training composition remain relevant. No new TEST policy is applied.}
+\label{tab:query-purge}
+\begin{tabular}{lrrrll}
+\toprule
+Pair & O MRR & P MRR & R MRR & P$-$O [95\% CI] & P$-$R [95\% CI]\\
+\midrule
+W-N & 0.358821 & 0.356817 & 0.358091 & -20.04 [-36.58, -1.90] & -12.75 [-31.19, +5.83]\\
+W-A & 0.354026 & 0.354239 & 0.354076 & +2.14 [-2.02, +6.16] & +1.63 [-1.93, +5.09]\\
+D-N & 0.382578 & 0.382764 & 0.382758 & +1.86 [-1.12, +4.73] & +0.06 [-2.30, +2.45]\\
+D-A & 0.382623 & 0.382889 & 0.382862 & +2.66 [-0.13, +5.57] & +0.27 [-1.79, +2.42]\\
+W-NA & 0.335339 & 0.335397 & 0.335338 & +0.59 [-2.18, +3.38] & +0.60 [-2.51, +3.65]\\
+D-NA & 0.321052 & 0.321032 & 0.321028 & -0.21 [-1.82, +1.44] & +0.04 [-0.39, +0.50]\\
+\bottomrule
+\end{tabular}
+\end{table}
