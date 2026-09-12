@@ -1,0 +1,15 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Historical cost audit, before the information-boundary repair; not current corrected timing. Times are mean seconds per 512 sampled directional queries over three seeds and five measured repetitions per seed on an A100 (three warm-ups). $T$ is measured total wall time; $O$ includes features, policy inference and combination/ranking. Dyna here is the historical selector, not healthy R3. Ratios divide mean wall times; full stage means/SDs and raw measurements are supplied.}
+\label{tab:claims-cost}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Pair & $T_P$ & $T_G$ & $T_{ADC}$ & $T_{ADC}/T_P$ & $T_{ADC}/T_G$ & $O_{ADC}$ & $O_{Dyna}$\\
+\midrule
+W-N & 0.480 & 4.533 & 5.683 & 11.83 & 1.25 & 0.642 & 0.406\\
+W-A & 0.523 & 2.725 & 3.240 & 6.20 & 1.19 & 0.611 & 0.324\\
+D-N & 0.508 & 4.024 & 4.809 & 9.47 & 1.20 & 0.664 & 0.329\\
+D-A & 0.470 & 2.526 & 3.014 & 6.41 & 1.19 & 0.525 & 0.309\\
+\bottomrule
+\end{tabular}
+\end{table}

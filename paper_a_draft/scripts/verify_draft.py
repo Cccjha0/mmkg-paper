@@ -101,6 +101,34 @@ assert complement_audit['pairs']==6 and complement_audit['split_cells']==12
 assert complement_audit['training_runs']==0 and not complement_audit['new_policy_selection']
 assert not complement_audit['test_used_for_new_selection'] and not complement_audit['selector_features_changed']
 assert all(c['recorded_aggregate_verified'] and all(c['decompositions'].values()) for c in complement_audit['checks'])
+claims=json.loads((ROOT/'claims_cost_source_manifest.json').read_text(encoding='utf-8'))
+assert claims['version']=='claims_cost_review_v1'
+for rel,sha in claims['sources'].items():
+    digest=hashlib.sha256()
+    with (ROOT.parent/rel).open('rb') as handle:
+        for block in iter(lambda:handle.read(1024*1024),b''): digest.update(block)
+    assert digest.hexdigest()==sha,rel
+for rel,sha in claims['tables'].items():
+    assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in claims['tables']}
+claims_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/claims_cost_review_v1/audit.json').read_text())
+assert claims_audit['status']=='claims_cost_checks_passed' and not claims_audit['failures']
+assert claims_audit['primary_pairs']==4 and claims_audit['additional_pairs']==2
+assert claims_audit['method_pair_cells']==76 and claims_audit['paired_effects']==70
+assert claims_audit['paired_seed_direction_cells']==770 and claims_audit['historical_timing_rows_verified']==240
+assert not claims_audit['test_used_for_new_selection'] and claims_audit['training_runs']==0
+assert not claims_audit['pair_partition_before_test_established']
+assert not claims_audit['current_corrected_timing_available'] and not claims_audit['historical_dyna_is_healthy_r3']
+assert all(c['endpoint_and_summary_verified'] and c['complete_seed_direction_coverage'] for c in claims_audit['checks'])
+# Summary sections must retain the adverse evidence as well as the main gains.
+abstract=main.split(r'\begin{abstract}',1)[1].split(r'\end{abstract}',1)[0]
+conclusion=main.split(r'\section{Conclusion}',1)[1].split(r'\FloatBarrier',1)[0]
+for section in (abstract,conclusion):
+    assert 'four primary' in section and 'two additional' in section
+    assert '+0.000139' in section and '-0.000015' in section
+    assert 'spanning zero' in section and 'Relation' in section and 'W-N' in section
+    assert '6.20--11.83' in section and 'timing' in section
+assert ROOT/'tables/claims_cost/main.tex' in tex_files
 matched_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/matched_alternatives_v1/test_audit.json').read_text())
 assert matched_audit['status']=='matched_alternative_checks_passed' and not matched_audit['failures']
 assert matched_audit['test_used_for_selection'] is False
@@ -140,8 +168,8 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
@@ -150,6 +178,8 @@ report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findal
         'released_feature_download_source_documented':True,
         'test_history_evidence_checks_passed':True,'current_confirmatory_status':history_audit['current_confirmatory_status'],
         'complementarity_checks_passed':True,'observable_modality_support_only':True,
+        'claims_cost_checks_passed':True,'primary_plus_additional_pairs':[4,2],
+        'paired_comparisons_reported':70,'current_corrected_timing_available':False,
         'checks':'active input paths, references, rerun source/table hashes, audit status, no placeholders, page bounds: PASS',
         'page_details':page_info}
 (ROOT/'verification.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')

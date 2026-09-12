@@ -68,3 +68,10 @@ outputs/paper_a_safe_correction/complementarity_review_v1/** -text whitespace=cr
 paper_a_draft/tables/complementarity/** -text whitespace=cr-at-eol
 paper_a_draft/figures/complementarity/*.pdf -text -diff
 paper_a_draft/complementarity_source_manifest.json -text whitespace=cr-at-eol
+scripts/audit_paper_a_claims_cost.py -text whitespace=cr-at-eol
+tests/test_claims_cost_audit.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_claims_cost_review.md -text whitespace=cr-at-eol
+docs/reports/paper_a_claims_cost_review_2026-09-12.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/claims_cost_review_v1/** -text whitespace=cr-at-eol
+paper_a_draft/tables/claims_cost/** -text whitespace=cr-at-eol
+paper_a_draft/claims_cost_source_manifest.json -text whitespace=cr-at-eol

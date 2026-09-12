@@ -1,0 +1,30 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Complete corrected TEST MRR on four primary pairs and two additional architecture pairs. All use three equally weighted base seeds and both directions; R3 first averages three selector repetitions per base observation. Equal/RRF are fixed; Global, Relation and adaptive settings use DEV choices (budgets in Table~\ref{tab:matched-budget}). ADC + Global coincides with ADC. R0 retains failed seeds; R3 is healthy. Bold marks the greatest unrounded MRR among displayed deployable methods, including ties within $10^{-12}$; it is not a significance claim. Displayed ties can differ below six decimals. -- means not run. Column roles are retrospective and were not established as TEST-blind.}
+\label{tab:claims-main}
+\begin{tabular}{lrrrr|rr}
+\toprule
+ & \multicolumn{4}{c|}{Primary} & \multicolumn{2}{c}{Additional}\\
+Method & W-N & W-A & D-N & D-A & W-NA & D-NA\\
+\midrule
+Primary & 0.359721 & 0.359721 & 0.374567 & 0.374567 & 0.338037 & \textbf{0.312761}\\
+Secondary & 0.338037 & 0.296319 & 0.312761 & 0.282588 & 0.296319 & 0.282588\\
+Equal z-score & 0.364968 & 0.336645 & 0.360744 & 0.338108 & 0.327268 & 0.300405\\
+Equal RRF & 0.345546 & 0.322471 & 0.354296 & 0.326784 & 0.296458 & 0.284988\\
+Global & 0.364665 & 0.359721 & 0.374567 & 0.374567 & 0.344127 & \textbf{0.312761}\\
+Relation & 0.368921 & 0.358672 & 0.374491 & 0.373179 & 0.343964 & 0.312726\\
+\midrule
+Query-soft & 0.366543 & 0.340618 & 0.360990 & 0.338760 & 0.327328 & 0.300505\\
+Shrink & 0.366161 & 0.359721 & 0.374567 & 0.374567 & -- & --\\
+Shrink-gate & 0.366161 & 0.359721 & 0.374523 & \textbf{0.374834} & -- & --\\
+Linear-p & 0.366519 & 0.360626 & 0.374496 & 0.374634 & -- & --\\
+Clip-g & 0.367223 & \textbf{0.360983} & 0.374498 & 0.374806 & -- & --\\
+Linear-g & 0.367223 & 0.360983 & 0.374499 & 0.374807 & -- & --\\
+\midrule
+Dyna R0 (historical) & 0.347957 & 0.310320 & 0.333222 & 0.304616 & -- & --\\
+Dyna R3 (healthy) & \textbf{0.369530} & 0.359075 & \textbf{0.374984} & 0.372353 & -- & --\\
+\midrule
+ADC & 0.367112 & 0.360735 & 0.374485 & 0.374778 & \textbf{0.344266} & 0.312747\\
+\bottomrule
+\end{tabular}
+\end{table}
