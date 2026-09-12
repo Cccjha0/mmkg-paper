@@ -146,3 +146,7 @@ outputs/paper_a_safe_correction/information_boundary_v2/**/checkpoints/
 /outputs/paper_a_safe_correction/grid_sensitivity_review_v1/*_complete.json
 /outputs/paper_a_safe_correction/grid_sensitivity_review_v1/**/*.partial
 /outputs/paper_a_safe_correction/grid_sensitivity_review_v1_return.zip*
+# Returned B09 ranks and action plans stay local; retain small receipts and summaries.
+/outputs/paper_a_safe_correction/grid_sensitivity_review_v1_return/prepared/
+/outputs/paper_a_safe_correction/grid_sensitivity_review_v1_return/cells/*.csv.gz
+/outputs/paper_a_safe_correction/grid_sensitivity_review_v1_return/local_preparation_audit.json

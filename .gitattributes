@@ -113,3 +113,12 @@ tests/test_grid_sensitivity.py -text whitespace=cr-at-eol
 docs/protocols/paper_a_grid_sensitivity_review.md -text whitespace=cr-at-eol
 docs/reports/paper_a_grid_sensitivity_review_2026-09-12.md -text whitespace=cr-at-eol
 outputs/paper_a_safe_correction/grid_sensitivity_review_v1/*.json -text whitespace=cr-at-eol
+
+# B09 returned server evidence must preserve its hashed bytes.
+scripts/review_paper_a_grid_sensitivity.py -text whitespace=cr-at-eol
+scripts/build_paper_a_grid_sensitivity_assets.py -text whitespace=cr-at-eol
+tests/test_grid_sensitivity_return.py -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/grid_sensitivity_review_v1_return/** -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/grid_sensitivity_return_review_v1/** -text whitespace=cr-at-eol
+paper_a_draft/grid_sensitivity_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/tables/grid_sensitivity/** -text whitespace=cr-at-eol

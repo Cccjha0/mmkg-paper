@@ -1,0 +1,40 @@
+{
+  "status": "grid_sensitivity_assets_verified",
+  "tables": [
+    "dev",
+    "test",
+    "effects"
+  ],
+  "methods_per_pair_split": 7,
+  "dev_test_summary_rows": 56,
+  "paired_effect_rows": 104,
+  "seed_direction_rows": 336,
+  "new_grid_selection": false,
+  "original_paper_grid": 0.05,
+  "historical_results_replaced": false,
+  "new_confidence_intervals": false,
+  "adc_test_minus_global": {
+    "W-N": {
+      "grid_005": 0.0024466486686093,
+      "grid_001": 0.002505129213342,
+      "continuous": 0.0023282864528654
+    },
+    "W-A": {
+      "grid_005": 0.0010139116121535,
+      "grid_001": 0.0010815939751052,
+      "continuous": 0.0011479268892519
+    },
+    "D-N": {
+      "grid_005": -8.12232546308676e-05,
+      "grid_001": -8.400247843973096e-05,
+      "continuous": -8.019909965434263e-05
+    },
+    "D-A": {
+      "grid_005": 0.0002115535893143,
+      "grid_001": 0.0002221768277184,
+      "continuous": 0.0002078120145349
+    }
+  },
+  "adc_test_max_abs_delta_vs_005": 0.0001340152770984,
+  "adc_deadzone_suppressed_rate_max": 0.0
+}

@@ -1,0 +1,48 @@
+{
+  "pair": "mkgw_mhyper_native",
+  "phase": "dev",
+  "seed": 2,
+  "direction": "tail",
+  "input": {
+    "path": "outputs/paper_a_safe_correction/grid_sensitivity_review_v1/prepared/mkgw_mhyper_native_dev.csv.gz",
+    "sha256": "c361593e0f80e127df6ef4ecdd568901dc84ef1289fdd3ce5086b40258634dd5",
+    "rows": 25656
+  },
+  "completed_at_utc": "2026-09-12T08:14:37.007915+00:00",
+  "num_entities": 15000,
+  "plan_sha256": "6f274e29bd202e885a848358d2eb8b365de6327a9a8f6aec3764bbbe1edc9875",
+  "rows_path": "outputs/paper_a_safe_correction/grid_sensitivity_review_v1/cells/dev_mkgw_mhyper_native_s2_tail.csv.gz",
+  "rows_sha256": "802e52c5464cded50764feda0f1eae66c30cf88571319f555cd51d12da05e91c",
+  "rows": 4276,
+  "methods": [
+    "Global",
+    "ADC_grid_005",
+    "ADC_grid_001",
+    "ADC_continuous",
+    "Query-soft_grid_005",
+    "Query-soft_grid_001",
+    "Query-soft_continuous"
+  ],
+  "historical_rank_mismatch_counts": {
+    "Primary": 0,
+    "Secondary": 0,
+    "Global": 0,
+    "ADC_grid_005": 0,
+    "Query-soft_grid_005": 0
+  },
+  "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571",
+  "outer_batch": 32,
+  "scorer_query_batches": [
+    32,
+    32
+  ],
+  "runtime": {
+    "python": "3.9.1",
+    "torch": "2.6.0+cu126",
+    "cuda": "12.6",
+    "device": "NVIDIA A100-SXM4-40GB",
+    "execution_weight_dtype": "float32"
+  },
+  "candidates_exported": false,
+  "new_grid_selection": false
+}

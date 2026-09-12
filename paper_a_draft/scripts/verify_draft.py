@@ -120,6 +120,25 @@ assert not claims_audit['test_used_for_new_selection'] and claims_audit['trainin
 assert not claims_audit['pair_partition_before_test_established']
 assert not claims_audit['current_corrected_timing_available'] and not claims_audit['historical_dyna_is_healthy_r3']
 assert all(c['endpoint_and_summary_verified'] and c['complete_seed_direction_coverage'] for c in claims_audit['checks'])
+
+grid=json.loads((ROOT/'grid_sensitivity_source_manifest.json').read_text(encoding='utf-8'))
+assert grid['version']=='grid_sensitivity_return_review_v1'
+for rel,sha in grid['sources'].items():
+    digest=hashlib.sha256()
+    with (ROOT.parent/rel).open('rb') as handle:
+        for block in iter(lambda:handle.read(1024*1024),b''): digest.update(block)
+    assert digest.hexdigest()==sha,rel
+for rel,sha in grid['tables'].items():
+    assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in grid['tables']}
+grid_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/grid_sensitivity_return_review_v1/audit.json').read_text())
+assert grid_audit['status']=='grid_sensitivity_return_checks_passed' and not grid_audit['failures']
+assert grid_audit['cells']==48 and grid_audit['observations']==316488 and grid_audit['original_grid_rank_mismatches']==0
+assert not grid_audit['new_grid_selection'] and not grid_audit['historical_results_replaced'] and not grid_audit['new_confidence_intervals']
+assert grid_audit['local_scorer_runs']==0 and len(grid_audit['checks'])==8
+grid_assets=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/grid_sensitivity_return_review_v1/asset_audit.json').read_text())
+assert grid_assets['status']=='grid_sensitivity_assets_verified' and grid_assets['original_paper_grid']==.05
+assert grid_assets['dev_test_summary_rows']==56 and grid_assets['paired_effect_rows']==104 and grid_assets['seed_direction_rows']==336
 dimension=json.loads((ROOT/'feature_dimension_source_manifest.json').read_text(encoding='utf-8'))
 assert dimension['version']=='feature_dimension_review_v1'
 for rel,sha in dimension['sources'].items():
@@ -250,8 +269,8 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
@@ -263,6 +282,8 @@ report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findal
         'claims_cost_checks_passed':True,'primary_plus_additional_pairs':[4,2],
         'feature_dimension_checks_passed':True,'raw_score_return_checks_passed':True,
         'action_semantics_checks_passed':True,'expanded_radius_definition_consistent':True,
+        'grid_sensitivity_return_checks_passed':True,'grid_sensitivity_paired_effects':104,
+        'grid_selection_after_sensitivity':False,'original_grid_rank_mismatches':0,
         'raw_score_finiteness_certified':raw_review['raw_score_finiteness_certified'],
         'raw_score_finiteness_scope':raw_review['scope'],
         'historical_raw_bitwise_equality_established':False,'abnormal_input_robustness_established':False,

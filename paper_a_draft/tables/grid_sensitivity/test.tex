@@ -1,0 +1,42 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{4pt}
+\caption{Fixed TEST quantization sensitivity on all four primary pairs. Each policy changes only projection, sharing its original fitted signal and DEV-chosen parameters across resolutions. All six dynamic settings were fixed before new scoring; no grid selection or grid-specific retuning occurs. $\Delta_G$ is MRR minus Global, $L_-$ unconditional RR loss relative to Global, $H$ harm frequency and $I_\alpha$ weight-change frequency. $\Delta_G,L_-$ are scaled by $10^4$; $H,I_\alpha$ are percentages. Three seeds and both directions receive equal weight. Continuous execution retains float32 ranking. These retrospective point estimates carry no new confidence intervals.}
+\label{tab:grid-test}
+\begin{tabular}{lllrrrrr}
+\toprule
+Pair & Policy & Step & MRR & $10^4\Delta_G$ & $10^4L_-$ & $H$ (\%) & $I_\alpha$ (\%)\\
+\midrule
+W-N & Global & -- & 0.364665 & +0.00 & 0.00 & 0.00 & 0.00\\
+ & ADC & 0.05 & 0.367112 & +24.47 & 54.63 & 15.15 & 63.33\\
+ & ADC & 0.01 & 0.367170 & +25.05 & 56.32 & 15.19 & 63.33\\
+ & ADC & Cont. & 0.366993 & +23.28 & 55.64 & 15.13 & 63.33\\
+ & Query-soft & 0.05 & 0.366543 & +18.78 & 53.69 & 16.35 & 79.79\\
+ & Query-soft & 0.01 & 0.366304 & +16.39 & 68.21 & 18.59 & 95.86\\
+ & Query-soft & Cont. & 0.366124 & +14.59 & 69.73 & 18.99 & 100.00\\
+\midrule
+W-A & Global & -- & 0.359721 & +0.00 & 0.00 & 0.00 & 0.00\\
+ & ADC & 0.05 & 0.360735 & +10.14 & 14.25 & 3.62 & 20.29\\
+ & ADC & 0.01 & 0.360803 & +10.82 & 14.36 & 3.62 & 20.29\\
+ & ADC & Cont. & 0.360869 & +11.48 & 13.96 & 3.62 & 20.29\\
+ & Query-soft & 0.05 & 0.340618 & -191.03 & 386.37 & 26.36 & 100.00\\
+ & Query-soft & 0.01 & 0.340608 & -191.13 & 385.90 & 26.36 & 100.00\\
+ & Query-soft & Cont. & 0.340601 & -191.20 & 387.35 & 26.40 & 100.00\\
+\midrule
+D-N & Global & -- & 0.374567 & +0.00 & 0.00 & 0.00 & 0.00\\
+ & ADC & 0.05 & 0.374485 & -0.81 & 6.17 & 1.42 & 7.87\\
+ & ADC & 0.01 & 0.374483 & -0.84 & 5.68 & 1.36 & 7.87\\
+ & ADC & Cont. & 0.374486 & -0.80 & 5.60 & 1.35 & 7.87\\
+ & Query-soft & 0.05 & 0.360990 & -135.77 & 357.51 & 30.07 & 100.00\\
+ & Query-soft & 0.01 & 0.360783 & -137.84 & 360.38 & 30.15 & 100.00\\
+ & Query-soft & Cont. & 0.361606 & -129.61 & 351.81 & 29.97 & 100.00\\
+\midrule
+D-A & Global & -- & 0.374567 & +0.00 & 0.00 & 0.00 & 0.00\\
+ & ADC & 0.05 & 0.374778 & +2.12 & 0.48 & 0.09 & 0.45\\
+ & ADC & 0.01 & 0.374789 & +2.22 & 0.39 & 0.09 & 0.45\\
+ & ADC & Cont. & 0.374774 & +2.08 & 0.48 & 0.09 & 0.45\\
+ & Query-soft & 0.05 & 0.338760 & -358.07 & 570.61 & 34.55 & 100.00\\
+ & Query-soft & 0.01 & 0.338833 & -357.34 & 570.58 & 34.53 & 100.00\\
+ & Query-soft & Cont. & 0.338500 & -360.66 & 573.36 & 34.59 & 100.00\\
+\bottomrule
+\end{tabular}
+\end{table}

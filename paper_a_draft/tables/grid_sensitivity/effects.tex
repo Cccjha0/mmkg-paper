@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{4pt}
+\caption{Paired MRR changes from the original 0.05 grid, multiplied by $10^4$. All listed comparisons were fixed in advance; positive values favor the finer or continuous action. DEV uses OOF signals and TEST uses the full-DEV locks. Aggregate changes can conceal opposing seed or direction effects; complete cell effects accompany the numerical supplement. No significance or optimal-grid claim is made.}
+\label{tab:grid-effects}
+\begin{tabular}{llrrrr}
+\toprule
+Pair & Policy & DEV 0.01 & DEV cont. & TEST 0.01 & TEST cont.\\
+\midrule
+W-N & ADC & +2.98 & +1.57 & +0.58 & -1.18\\
+W-N & Query-soft & +4.91 & +6.55 & -2.39 & -4.19\\
+W-A & ADC & +0.39 & +0.14 & +0.68 & +1.34\\
+W-A & Query-soft & +3.32 & -3.07 & -0.10 & -0.17\\
+D-N & ADC & -0.76 & +0.38 & -0.03 & +0.01\\
+D-N & Query-soft & -0.34 & -3.10 & -2.07 & +6.16\\
+D-A & ADC & +0.07 & +0.08 & +0.11 & -0.04\\
+D-A & Query-soft & +2.37 & +3.36 & +0.73 & -2.60\\
+\bottomrule
+\end{tabular}
+\end{table}

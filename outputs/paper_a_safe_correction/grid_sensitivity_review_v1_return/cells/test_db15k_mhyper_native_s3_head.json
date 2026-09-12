@@ -1,0 +1,49 @@
+{
+  "pair": "db15k_mhyper_native",
+  "phase": "test",
+  "seed": 3,
+  "direction": "head",
+  "input": {
+    "path": "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_native/test_anchored/test_locked_query_rows.csv",
+    "sha256": "5ea9b7093849b4de94c0855689ed3c8226e81da9e6a37be58664de1e8f110f15",
+    "prepared_path": "outputs/paper_a_safe_correction/grid_sensitivity_review_v1/prepared/db15k_mhyper_native_test.csv.gz",
+    "prepared_sha256": "96c42c696e6a71de7f7ee18f0e9a2bfdef0e4de494ffa7f2da81b51ee934550e"
+  },
+  "completed_at_utc": "2026-09-12T08:46:58.039255+00:00",
+  "num_entities": 12842,
+  "plan_sha256": "6f274e29bd202e885a848358d2eb8b365de6327a9a8f6aec3764bbbe1edc9875",
+  "rows_path": "outputs/paper_a_safe_correction/grid_sensitivity_review_v1/cells/test_db15k_mhyper_native_s3_head.csv.gz",
+  "rows_sha256": "ba8fc6c9f4700cae8f0b5a3207592d09a1b72e2d4daf160f595347c48034f9a8",
+  "rows": 9902,
+  "methods": [
+    "Global",
+    "ADC_grid_005",
+    "ADC_grid_001",
+    "ADC_continuous",
+    "Query-soft_grid_005",
+    "Query-soft_grid_001",
+    "Query-soft_continuous"
+  ],
+  "historical_rank_mismatch_counts": {
+    "Primary": 0,
+    "Secondary": 0,
+    "Global": 0,
+    "ADC_grid_005": 0,
+    "Query-soft_grid_005": 0
+  },
+  "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398",
+  "outer_batch": 32,
+  "scorer_query_batches": [
+    32,
+    32
+  ],
+  "runtime": {
+    "python": "3.9.1",
+    "torch": "2.6.0+cu126",
+    "cuda": "12.6",
+    "device": "NVIDIA A100-SXM4-40GB",
+    "execution_weight_dtype": "float32"
+  },
+  "candidates_exported": false,
+  "new_grid_selection": false
+}
