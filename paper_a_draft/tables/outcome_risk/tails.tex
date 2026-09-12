@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Conditional distribution of $-\Delta$ among harmed ADC observations, in raw RR units. Quantiles use linear interpolation and exclude zero/beneficial changes; they are descriptive sample summaries. The final column is the percentage of total loss supplied by the largest $\lceil0.10n_h\rceil$ harmful observations, so its count can slightly exceed 10\% after rounding upward. All pairs and both splits are retained. A small median or unconditional loss does not bound the maximum, and the observed maximum is not a population bound.}
+\label{tab:outcome-tails}
+\begin{tabular}{llrrrrrrr}
+\toprule
+Pair & Split & $n_h$ & $q_{50}$ & $q_{90}$ & $q_{95}$ & $q_{99}$ & Max & Top 10\% share\\
+\midrule
+W-N & DEV & 3,837 & 0.000988 & 0.050000 & 0.166667 & 0.500000 & 0.833333 & 87.95\\
+W-N & TEST & 3,885 & 0.001064 & 0.075000 & 0.250000 & 0.500000 & 0.928571 & 87.65\\
+W-A & DEV & 961 & 0.000674 & 0.083333 & 0.500000 & 0.500000 & 0.750000 & 91.51\\
+W-A & TEST & 928 & 0.000704 & 0.056032 & 0.500000 & 0.500000 & 0.666667 & 90.47\\
+D-N & DEV & 783 & 0.000349 & 0.050000 & 0.166667 & 0.500000 & 0.666667 & 91.00\\
+D-N & TEST & 846 & 0.000368 & 0.166667 & 0.500000 & 0.500000 & 0.800000 & 90.09\\
+D-A & DEV & 44 & 0.012589 & 0.500000 & 0.500000 & 0.595000 & 0.666667 & 45.04\\
+D-A & TEST & 56 & 0.001172 & 0.104167 & 0.500000 & 0.612500 & 0.750000 & 87.35\\
+W-NA & DEV & 254 & 0.002926 & 0.500000 & 0.500000 & 0.500000 & 0.750000 & 59.16\\
+W-NA & TEST & 235 & 0.004762 & 0.500000 & 0.500000 & 0.666667 & 0.666667 & 58.85\\
+D-NA & DEV & 238 & 0.000221 & 0.500000 & 0.500000 & 0.500000 & 0.500000 & 64.30\\
+D-NA & TEST & 351 & 0.000151 & 0.500000 & 0.500000 & 0.500000 & 0.500000 & 67.36\\
+\bottomrule
+\end{tabular}
+\end{table}

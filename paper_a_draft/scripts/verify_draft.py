@@ -279,6 +279,41 @@ assert all(float(r['lo'])<=0<=float(r['hi']) for r in query_effects if r['compar
 assert r'\label{app:query-isolation}' in main and 'transductive query distribution' in main
 assert 'Zero inclusion does not establish equivalence' in main and 'all 82' in main
 
+outcome_risk=json.loads((ROOT/'outcome_risk_source_manifest.json').read_text(encoding='utf-8'))
+assert outcome_risk['version']=='outcome_risk_v1'
+for rel,sha in outcome_risk['sources'].items():
+    digest=hashlib.sha256()
+    with (ROOT.parent/rel).open('rb') as handle:
+        for block in iter(lambda:handle.read(1024*1024),b''): digest.update(block)
+    assert digest.hexdigest()==sha,rel
+for rel,sha in outcome_risk['tables'].items():
+    assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in outcome_risk['tables']}
+outcome_dir=ROOT.parent/'outputs/paper_a_safe_correction/outcome_risk_v1'
+outcome_audit=json.loads((outcome_dir/'audit.json').read_text())
+assert outcome_audit['status']=='outcome_risk_checks_passed' and not outcome_audit['failures']
+assert outcome_audit['pooled_rows']==12 and outcome_audit['seed_direction_cells']==72 and outcome_audit['worst_examples']==18
+assert outcome_audit['observations']==474732 and outcome_audit['bootstrap_replicates']==10000
+assert outcome_audit['max_decomposition_residual']<2.7e-17 and len(outcome_audit['ratio_metrics'])==22
+assert outcome_audit['thresholds_rr']==[.1,.5] and outcome_audit['conditional_quantiles']==[.5,.9,.95,.99]
+assert not any(outcome_audit[k] for k in ('selector_fits','scorer_runs','new_policy_selection','test_used_for_selection','historical_results_replaced','simultaneous_intervals','population_safety_guarantee'))
+assert all(c['inactive_rr_changes']==0 and c['integer_ranks_verified'] and c['minimum_valid_bootstrap_replicates']==10000 for c in outcome_audit['checks'])
+assert all(c['query_ci_reconciled_with_c12'] for c in outcome_audit['checks'] if c['split']=='test')
+with (outcome_dir/'summary.csv').open(encoding='utf-8') as handle:
+    outcome_rows=list(csv.DictReader(handle))
+assert len(outcome_rows)==12
+for r in outcome_rows:
+    assert int(r['harm_n'])+int(r['benefit_n'])+int(r['unchanged_n'])==int(r['n'])
+    assert int(r['active_unchanged_n'])+int(r['harm_n'])+int(r['benefit_n'])==int(r['active_n'])
+    assert abs(float(r['mean_gain'])-float(r['mean_loss'])-float(r['utility']))<1e-12
+    assert float(r['harm_active'])>=float(r['harm'])
+    assert all(int(r[name+'_valid_replicates'])==10000 for name in outcome_audit['ratio_metrics'])
+d_a=next(r for r in outcome_rows if r['label']=='D-A' and r['split']=='test')
+assert (int(d_a['n']),int(d_a['active_n']),int(d_a['harm_n']))==(59412,267,56)
+assert (int(d_a['top1_n']),int(d_a['active_top1_n']),int(d_a['active_top1_retained_n']))==(17798,23,19)
+assert r'\label{app:outcome-risk}' in main and '87.35--90.47' in main
+assert 'ratio' in main and 'rank-1-to-14' in main and 'unfiltered serving-list accuracy' in main
+
 alignment_training=json.loads((ROOT/'alignment_training_source_manifest.json').read_text(encoding='utf-8'))
 assert alignment_training['version']=='alignment_training_v1'
 for rel,sha in alignment_training['sources'].items():
@@ -508,8 +543,8 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])|set(ties_harm['sources'])|set(rejection['sources'])|set(alignment_training['sources'])|set(selection_seed['sources'])|set(query_pair['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1 + ties_harm_review_v1 + rejection_controls_v1 + alignment_training_v1 + selection_seed_v1 + query_pair_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])|set(ties_harm['sources'])|set(rejection['sources'])|set(alignment_training['sources'])|set(selection_seed['sources'])|set(query_pair['sources'])|set(outcome_risk['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1 + ties_harm_review_v1 + rejection_controls_v1 + alignment_training_v1 + selection_seed_v1 + query_pair_v1 + outcome_risk_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
@@ -532,6 +567,7 @@ report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findal
         'adc_dyna_fitting_information_matched':False,'unseen_checkpoint_transfer_evaluated':False,
         'winner_signal_checks_passed':True,'winner_direction_diagnostic_rows':474732,
         'ties_harm_checks_passed':True,'tie_seed_direction_cells':72,'harm_population_cells':36,
+        'outcome_risk_checks_passed':True,'outcome_risk_pooled_cells':12,'outcome_risk_ratio_metrics':22,'outcome_risk_bootstrap_replicates':10000,
         'query_key_checks_passed':True,'query_purge_small_fits':60,'unified_paired_ci_checks_passed':True,'unified_paired_contrasts':82,
         'selection_hierarchy_checks_passed':True,'inner_sensitivity_logistic_fits':108,'seed_dispersion_checks_passed':True,'absolute_seed_mrr_rows':228,
         'alignment_training_checks_passed':True,'base_checkpoint_count':18,'historical_training_execution_commit_established':False,

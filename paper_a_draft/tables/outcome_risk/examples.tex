@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Largest observed TEST RR loss per pair under the predeclared ordering: loss descending, then seed, direction and $(h,r,t)$. IDs are the canonical dataset IDs. Ranks are filtered gold ranks and weights are original locked actions. These selected extremes illustrate the tail and are neither representative queries nor independent confirmations. The full supplement retains the three largest losses per pair (18 observations), without changing selector inputs or choosing a new policy.}
+\label{tab:outcome-examples}
+\begin{tabular}{lllllr}
+\toprule
+Pair & Seed/dir. & $(h,r,t)$ & Global$\to$ADC rank & $\alpha_0\to\hat\alpha$ & Loss\\
+\midrule
+W-N & 2/tail & (13257,89,12929) & 1$\to$14 & 0.55$\to$0.75 & 0.928571\\
+W-A & 1/head & (1290,29,926) & 1$\to$3 & 1.00$\to$0.75 & 0.666667\\
+D-N & 3/head & (653,64,268) & 1$\to$5 & 1.00$\to$0.85 & 0.800000\\
+D-A & 3/head & (653,64,268) & 1$\to$4 & 1.00$\to$0.70 & 0.750000\\
+W-NA & 1/tail & (14550,16,618) & 1$\to$3 & 0.95$\to$0.60 & 0.666667\\
+D-NA & 1/head & (918,156,916) & 1$\to$2 & 1.00$\to$0.90 & 0.500000\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Grouped held-out DEV complete gain--loss decomposition against the corresponding original Global anchor. $B,H,Z$ are benefit, harm and exactly unchanged-RR percentages of all $N$ observations in Table~\ref{tab:outcome-harm-dev_oof}. $G$ and $C$ are conditional mean RR gain and loss in raw RR units. $BG$, $HC$ and net $U$ use $10^{-4}$ RR units; $U=BG-HC$. Computation precedes rounding: all pooled and seed/direction decompositions agree within $2.7\times10^{-17}$. Displayed rounding may leave a last-digit residual. Unchanged RR includes inactive and active-but-rank-unchanged rows. Empty conditional means would be undefined. Complete counts, full precision and conditional intervals are supplied with the table.}
+\label{tab:outcome-decomposition-dev_oof}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Pair & $B$ (\%) & $H$ (\%) & $Z$ (\%) & $G$ & $C$ & $BG$ & $HC$ & $U$\\
+\midrule
+W-N & 20.101 & 14.956 & 64.944 & 0.03866 & 0.03143 & 77.710 & 47.005 & 30.704\\
+W-A & 13.124 & 3.746 & 83.131 & 0.02042 & 0.03940 & 26.799 & 14.760 & 12.039\\
+D-N & 4.058 & 1.647 & 94.294 & 0.01239 & 0.03106 & 5.028 & 5.117 & -0.088\\
+D-A & 0.208 & 0.093 & 99.699 & 0.07731 & 0.13457 & 1.610 & 1.246 & 0.364\\
+W-NA & 1.633 & 0.990 & 97.377 & 0.06245 & 0.08817 & 10.199 & 8.729 & 1.470\\
+D-NA & 1.898 & 0.501 & 97.602 & 0.02230 & 0.07842 & 4.232 & 3.927 & 0.305\\
+\bottomrule
+\end{tabular}
+\end{table}

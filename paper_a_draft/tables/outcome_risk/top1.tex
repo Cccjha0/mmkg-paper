@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Filtered gold rank-1 retention under ADC. All columns restrict to observations where the corresponding Global gold rank is 1; active columns additionally require a nonzero weight change. Count cells give retained/eligible observations, followed by retention percentage and conditional 95\% original-triple percentile interval. The final column counts reference-rank-1 answers falling below the first ten positions, using the same all-eligible denominator. These are shared-evaluator filtered gold outcomes, not unfiltered serving-list accuracy. The CSV also reports lost/new rank-1 counts, net Hits@1, active-subset losses, all denominators and their intervals.}
+\label{tab:outcome-top1}
+\begin{tabular}{lll lllr}
+\toprule
+Pair & Split & All count & Retention [95\% CI] & Active count & Retention [95\% CI] & To $>10$\\
+\midrule
+W-N & DEV & 7318/7464 & 98.04 [97.72, 98.36] & 5716/5862 & 97.51 [97.09, 97.91] & 0\\
+W-N & TEST & 7430/7605 & 97.70 [97.34, 98.05] & 5735/5910 & 97.04 [96.57, 97.49] & 1\\
+W-A & DEV & 7621/7676 & 99.28 [99.06, 99.49] & 302/357 & 84.59 [80.42, 88.55] & 0\\
+W-A & TEST & 7690/7745 & 99.29 [99.09, 99.48] & 316/371 & 85.18 [81.53, 88.73] & 0\\
+D-N & DEV & 14487/14520 & 99.77 [99.69, 99.85] & 976/1009 & 96.73 [95.48, 97.82] & 0\\
+D-N & TEST & 17744/17798 & 99.70 [99.61, 99.78] & 873/927 & 94.17 [92.64, 95.66] & 0\\
+D-A & DEV & 14510/14520 & 99.93 [99.88, 99.97] & 15/25 & 60.00 [38.10, 80.00] & 0\\
+D-A & TEST & 17794/17798 & 99.98 [99.95, 99.99] & 19/23 & 82.61 [64.29, 96.15] & 0\\
+W-NA & DEV & 6349/6383 & 99.47 [99.27, 99.64] & 207/241 & 85.89 [81.45, 90.13] & 0\\
+W-NA & TEST & 6462/6493 & 99.52 [99.34, 99.69] & 153/184 & 83.15 [77.53, 88.40] & 0\\
+D-NA & DEV & 10175/10206 & 99.70 [99.58, 99.80] & 357/388 & 92.01 [89.22, 94.57] & 0\\
+D-NA & TEST & 12242/12287 & 99.63 [99.51, 99.74] & 417/462 & 90.26 [87.42, 92.94] & 0\\
+\bottomrule
+\end{tabular}
+\end{table}

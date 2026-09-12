@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Grouped held-out DEV harm with two denominators under original ADC. $N$ counts all seed/direction/triple observations; $n_I$ counts actual nonzero projected weight changes and $n_h$ harmed observations. Every harm occurs within $I$ in this replay. $H=n_h/N$ and $H_I=n_h/n_I$ are percentages, each with its own 95\% original-triple percentile interval (10,000 draws). $n_{I,0}$ counts changed weights with unchanged gold RR. Bootstrap draws retain all six observations before restricting to interventions and recompute both denominators; intervals cannot be obtained by dividing endpoints. All intervals are conditional, exploratory and unadjusted for multiplicity.}
+\label{tab:outcome-harm-dev_oof}
+\begin{tabular}{lrrrllr}
+\toprule
+Pair & $N$ & $n_I$ & $n_h$ & $H$ [95\% CI] & $H_I$ [95\% CI] & $n_{I,0}$\\
+\midrule
+W-N & 25,656 & 16,238 & 3,837 & 14.956 [14.340, 15.571] & 23.63 [22.73, 24.55] & 7,244\\
+W-A & 25,656 & 4,998 & 961 & 3.746 [3.457, 4.042] & 19.23 [17.90, 20.57] & 670\\
+D-N & 47,532 & 4,807 & 783 & 1.647 [1.511, 1.786] & 16.29 [15.08, 17.49] & 2,095\\
+D-A & 47,532 & 173 & 44 & 0.093 [0.063, 0.124] & 25.43 [18.95, 32.34] & 30\\
+W-NA & 25,656 & 1,029 & 254 & 0.990 [0.834, 1.146] & 24.68 [21.59, 27.78] & 356\\
+D-NA & 47,532 & 1,829 & 238 & 0.501 [0.429, 0.572] & 13.01 [11.34, 14.71] & 689\\
+\bottomrule
+\end{tabular}
+\end{table}

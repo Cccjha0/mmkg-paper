@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{TEST complete gain--loss decomposition against the corresponding original Global anchor. $B,H,Z$ are benefit, harm and exactly unchanged-RR percentages of all $N$ observations in Table~\ref{tab:outcome-harm-test}. $G$ and $C$ are conditional mean RR gain and loss in raw RR units. $BG$, $HC$ and net $U$ use $10^{-4}$ RR units; $U=BG-HC$. Computation precedes rounding: all pooled and seed/direction decompositions agree within $2.7\times10^{-17}$. Displayed rounding may leave a last-digit residual. Unchanged RR includes inactive and active-but-rank-unchanged rows. Empty conditional means would be undefined. Complete counts, full precision and conditional intervals are supplied with the table.}
+\label{tab:outcome-decomposition-test}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Pair & $B$ (\%) & $H$ (\%) & $Z$ (\%) & $G$ & $C$ & $BG$ & $HC$ & $U$\\
+\midrule
+W-N & 19.420 & 15.150 & 65.431 & 0.04073 & 0.03606 & 79.098 & 54.631 & 24.466\\
+W-A & 13.804 & 3.619 & 82.577 & 0.01767 & 0.03938 & 24.390 & 14.251 & 10.139\\
+D-N & 3.398 & 1.424 & 95.178 & 0.01578 & 0.04336 & 5.362 & 6.175 & -0.812\\
+D-A & 0.293 & 0.094 & 99.613 & 0.08874 & 0.05128 & 2.599 & 0.483 & 2.116\\
+W-NA & 1.568 & 0.916 & 97.516 & 0.06311 & 0.09279 & 9.893 & 8.504 & 1.389\\
+D-NA & 2.090 & 0.591 & 97.319 & 0.02080 & 0.07613 & 4.349 & 4.498 & -0.149\\
+\bottomrule
+\end{tabular}
+\end{table}

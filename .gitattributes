@@ -223,3 +223,14 @@ docs/reports/paper_a_query_pair_review_2026-09-12.md -text whitespace=cr-at-eol
 outputs/paper_a_safe_correction/query_pair_v1/** -text whitespace=cr-at-eol
 paper_a_draft/query_pair_source_manifest.json -text whitespace=cr-at-eol
 paper_a_draft/tables/query_pair/** -text whitespace=cr-at-eol
+
+# D07/D09/D10 frozen harm populations, additive utility and observed loss tails.
+router/outcome_risk_diagnostics.py -text whitespace=cr-at-eol
+scripts/analyze_paper_a_outcome_risk.py -text whitespace=cr-at-eol
+scripts/build_paper_a_outcome_risk_assets.py -text whitespace=cr-at-eol
+tests/test_outcome_risk_diagnostics.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_outcome_risk_review.md -text whitespace=cr-at-eol
+docs/reports/paper_a_outcome_risk_review_2026-09-12.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/outcome_risk_v1/** -text whitespace=cr-at-eol
+paper_a_draft/outcome_risk_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/tables/outcome_risk/** -text whitespace=cr-at-eol
