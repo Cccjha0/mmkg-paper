@@ -122,3 +122,16 @@ outputs/paper_a_safe_correction/grid_sensitivity_review_v1_return/** -text white
 outputs/paper_a_safe_correction/grid_sensitivity_return_review_v1/** -text whitespace=cr-at-eol
 paper_a_draft/grid_sensitivity_source_manifest.json -text whitespace=cr-at-eol
 paper_a_draft/tables/grid_sensitivity/** -text whitespace=cr-at-eol
+
+# B08/B10 versioned inference guard and source-bound numerical contract audit.
+router/anchored_inference.py -text whitespace=cr-at-eol
+router/endpoint_audit.py -text whitespace=cr-at-eol
+scripts/apply_anchored_safe.py -text whitespace=cr-at-eol
+scripts/audit_paper_a_inference_contract.py -text whitespace=cr-at-eol
+scripts/audit_paper_a_endpoint_contract.py -text whitespace=cr-at-eol
+tests/test_guarded_inference_endpoints.py -text whitespace=cr-at-eol
+tests/test_endpoint_audit_runner.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_inference_endpoint_contract_review.md -text whitespace=cr-at-eol
+docs/reports/paper_a_inference_endpoint_contract_review_2026-09-12.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/inference_contract_review_v1/** -text whitespace=cr-at-eol
+paper_a_draft/inference_contract_source_manifest.json -text whitespace=cr-at-eol

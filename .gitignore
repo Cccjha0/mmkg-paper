@@ -150,3 +150,7 @@ outputs/paper_a_safe_correction/information_boundary_v2/**/checkpoints/
 /outputs/paper_a_safe_correction/grid_sensitivity_review_v1_return/prepared/
 /outputs/paper_a_safe_correction/grid_sensitivity_review_v1_return/cells/*.csv.gz
 /outputs/paper_a_safe_correction/grid_sensitivity_review_v1_return/local_preparation_audit.json
+
+# B10 operational scoring receipts/difference rows; commit the reviewed summary after return.
+/outputs/paper_a_safe_correction/endpoint_contract_audit_v1/
+/outputs/paper_a_safe_correction/endpoint_contract_audit_v1_return.zip*

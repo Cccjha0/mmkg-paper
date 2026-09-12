@@ -115,7 +115,7 @@ s_\alpha(q,e)=\alpha\widetilde s_p(q,e)+(1-\alpha)\widetilde s_s(q,e),
 \quad \alpha\in[0,1].
 \label{eq:mixture}
 \end{equation}
-Throughout the paper, $\alpha$ is the \emph{primary weight}; $\alpha=1$ recovers the primary model.
+Throughout the paper, $\alpha$ is the \emph{primary weight}. Operationally, an exact $\alpha=1$ or 0 returns the raw standalone primary or secondary rank, ignoring the inactive expert; interior actions rank Eq.~\eqref{eq:mixture}. Equality between raw and normalized endpoint ranks requires qualification under floating-point arithmetic (Appendix~\ref{app:endpoint-contract}).
 
 \paragraph{Reference-relative utility.}
 Given a static reference $\alpha_0$, we assess a dynamic policy by its query-level reciprocal-rank change
@@ -135,7 +135,7 @@ An observation $i$ identifies an original triple, a paired model seed, and a pre
 \qquad \Agrid=\{0,0.05,\ldots,1\}.
 \label{eq:anchor}
 \end{equation}
-The reference can be an interior mixture or a standalone endpoint. Its role is operational: the policy retains it whenever adaptation is rejected, and all changes are expressed relative to it. Figure~\ref{fig:method} summarizes the resulting pipeline.
+If computed DEV MRR ties exactly, Global prefers the weight closest to 0.5, then the smaller weight; no MRR tolerance is used. Equivalently, it maximizes $(\MRR,-|\alpha-0.5|,-\alpha)$. The same rule applies within OOF training folds. The reference can be an interior mixture or a standalone endpoint. The policy retains it whenever adaptation is rejected, and all changes are expressed relative to it. Figure~\ref{fig:method} summarizes the pipeline.
 
 \begin{figure}[tbp]
 \centering
@@ -162,17 +162,18 @@ g(q)=w^\top x(q)+b,
 The classifier has 13 coefficients and one intercept: 14 trainable selector parameters, excluding preprocessing state and both frozen scorers. The four difference coordinates are linear combinations of the eight expert statistics on complete inputs in exact arithmetic, so these are not 13 independent signals. They change the effective L2 regularization geometry after scaling, rather than expanding the affine prediction space; independent imputation can break the dependency (Appendix~\ref{app:feature-dimension}). This count does not measure feature-extraction or end-to-end cost. Its training target represents standalone model preference; the policy mapping determines how that preference changes the reference mixture. DEV answers supply supervision, while inference uses candidate-distribution statistics and direction.
 
 \subsection{Bounded adjustment and fallback}
-The preference signal produces the raw bounded proposal
+On valid queries, the preference signal produces the raw bounded proposal
 \begin{equation}
 \alpha_{\mathrm{raw}}(q)=\clip\!\left(\alpha_0+\beta\tanh(g(q)),0,1\right),
 \label{eq:raw}
 \end{equation}
-where $\beta$ controls the radius of adjustment around the reference. We use the confidence score $c(q)=|2p_A(q)-1|$ to decide whether to apply the proposal:
+where $\beta$ controls the radius of adjustment around the reference. Before predicting, the guarded implementation rejects non-finite feature rows; it also checks transformed features before the classifier, logits before probability prediction, and the returned probability before computing an action. Let $v(q)$ indicate that these checks pass. Only valid rows have a predicted confidence $c(q)=|2p_A(q)-1|$:
 \begin{equation}
 \alpha_{\mathrm{cont}}(q)=
 \begin{cases}
-\alpha_0, & c(q)<\tau\ \text{or the feature vector is non-finite},\\
-\alpha_{\mathrm{raw}}(q), & \text{otherwise}.
+\alpha_0, & \neg v(q),\\
+\alpha_0, & v(q)\ \text{and}\ c(q)<\tau,\\
+\alpha_{\mathrm{raw}}(q), & v(q)\ \text{and}\ c(q)\geq\tau.
 \end{cases}
 \label{eq:fallback}
 \end{equation}
@@ -195,12 +196,12 @@ The original DEV search uses $\beta\in\{0.05,0.10,\ldots,0.50\}$ and $\tau\in\{0
 \toprule
 Input & Frozen candidate scores, query direction, fitted preprocessing and classifier, and locked $\alpha_0,\beta,\tau,\Agrid$.\\
 \midrule
-1 & Extract score geometry $\phi(q)$ and flag non-finite features.\\
-2 & Apply the fitted preprocessing; compute $g(q)$, $p_A(q)$, and $c(q)$.\\
-3 & Compute $\alpha_{\mathrm{raw}}$ using Eq.~\eqref{eq:raw}.\\
-4 & If non-finite or $c(q)<\tau$, set the proposal to $\alpha_0$.\\
-5 & Map the proposal to $\widehat\alpha\in\Agrid$ using the nearest-grid rule.\\
-6 & Combine the standardized scores using Eq.~\eqref{eq:mixture}; return the ranking.\\
+1 & Initialize the proposal to $\alpha_0$. Extract $\phi(q)$; if any coordinate is non-finite, go to step 6.\\
+2 & Apply fitted preprocessing to this valid row only. If any transformed coordinate is non-finite, go to step 6.\\
+3 & Compute the classifier logit $g(q)$. If non-finite, go to step 6.\\
+4 & Compute $p_A(q)$. If non-finite or outside $[0,1]$, go to step 6.\\
+5 & Compute $c(q)$; if $c(q)\geq\tau$, set the proposal using Eq.~\eqref{eq:raw}.\\
+6 & Project the proposal onto $\Agrid$ with the stated tie rule. At an exact endpoint return the corresponding standalone rank; otherwise rank the standardized mixture.\\
 \bottomrule
 \end{tabularx}
 \end{algorithm}
@@ -208,6 +209,7 @@ Input & Frozen candidate scores, query direction, fitted preprocessing and class
 \subsection{A testable meaning of conservative}
 \label{sec:conservative-definition}
 The policy is \emph{reference-anchored} because fallback returns exactly to a fixed DEV-selected $\alpha_0$, and \emph{bounded-action} because every applied weight satisfies $|\widehat\alpha(q)-\alpha_0|\leq\beta$ for the evaluated, grid-aligned radii. These are deterministic properties of the action rule. They do not bound the fraction of changed weights or the probability or magnitude of RR harm. We reserve claims of lower empirical harm for specified comparators and metrics.
+The score identity below concerns the normalized score family in Eq.~\eqref{eq:mixture}; it does not assert floating-point rank equivalence for the operational raw-endpoint dispatch.
 Let $d(q,e)=\widetilde s_p(q,e)-\widetilde s_s(q,e)$. The mixture admits the identity
 \begin{equation}
 s_\alpha(q,e)-s_{\alpha_0}(q,e)=(\alpha-\alpha_0)d(q,e).
@@ -448,7 +450,12 @@ Masking normalized expert copies before a fixed row-wise interpolation is equiva
 \paragraph{Classifier.}
 The implementation uses median imputation, feature standardization, and \texttt{LogisticRegression} with \texttt{class\_weight=balanced}, \texttt{solver=liblinear}, \texttt{max\_iter=2000}, and default $C=1$. The final model random state is 20260902; outer-fold fits use their recorded deterministic offsets. Fitted imputation and scaling statistics are reused on held-out and TEST observations. Confidence is the absolute distance of the predicted preference probability from 0.5, scaled to $[0,1]$.
 
-The geometry standard-deviation coordinate uses \texttt{torch.std} with sample correction 1, unlike population normalization above. Top-5 means use $\min(5,|\mathcal E|)$ candidates; geometry requires at least two candidates. Its existing sanitizer uses the finite minimum/maximum over the entire supplied expert batch, with low=min$-1$ and high=max$+1$, or $-100,100$ when the batch has no finite values; NaN/$-\infty$ become low and $+\infty$ becomes high. Thus abnormal geometry can depend on other batch rows even though normalization does not. At classifier input, remaining non-finite coordinates are converted to NaN for column-median imputation and separately flagged for Global fallback. That flag does not detect raw anomalies already sanitized upstream. No batch-invariance or safe-fallback claim is made for such abnormal inputs.
+The geometry standard-deviation coordinate uses \texttt{torch.std} with sample correction 1, unlike population normalization above. Top-5 means use $\min(5,|\mathcal E|)$ candidates; geometry requires at least two candidates. Its existing sanitizer uses the finite minimum/maximum over the entire supplied expert batch, with low=min$-1$ and high=max$+1$, or $-100,100$ when the batch has no finite values; NaN/$-\infty$ become low and $+\infty$ becomes high. Thus abnormal geometry can depend on other batch rows even though normalization does not. The feature guard cannot detect raw anomalies already sanitized upstream, so it does not establish batch invariance or robust ranking for arbitrary abnormal raw scores.
+
+\paragraph{Guarded application and historical replay.}
+Algorithm~\ref{alg:policy} reuses the original model and lock without fitting. Its entry point is \path{scripts/apply_anchored_safe.py}. Non-finite feature rows bypass preprocessing entirely; transformed overflow is removed before classification. Non-finite logits and invalid probabilities also retain the anchor, including at $\tau=0$. Exported validity flags distinguish skipped rows from predictions; neutral diagnostic placeholders are not inferred preferences. Schema errors or corrupt fitted state remain explicit errors. The hash-bound historical experiment scripts retain their original call order for reproduction: remaining non-finite coordinates were explicitly changed to NaN, imputed, predicted and then assigned fallback. That earlier order can fail when another large coordinate overflows during scaling; median imputation alone does not prevent this failure.
+
+The guarded entry point reproduces ADC/Query-soft grid weights and fallback flags exactly on all 474,732 saved DEV/TEST observations across six pairs, with no rejected rows. Decisions, probabilities, continuous ADC weights and cached RR agree within absolute $10^{-12}$. Full-DEV and OOF training-portion anchor selection reproduces all 36 recorded anchors. This CPU replay uses the original fitted models, makes no TEST selection and changes no historical result. It verifies the guard on observed features, not arbitrary raw-score sanitization; synthetic tests separately enforce the before-call rejection order.
 
 \paragraph{Grouping and selection.}
 Five-fold assignments use deterministic relation-stratified SHA-256 ordering and round-robin allocation of original triples, with fold seed 20260901. The six observations of a triple share a fold. The outer training data supply the static anchor, classifier, and training-portion MRR used to select the bounded policy. This is selection within each outer training fold; it does not introduce an additional inner cross-validation loop. The final full-DEV fit selects from the same expanded grids and serializes all parameters and source hashes.
@@ -456,7 +463,14 @@ Five-fold assignments use deterministic relation-stratified SHA-256 ordering and
 \input{tables/rerun/locks.tex}
 
 \paragraph{Grid application and endpoints.}
+\label{app:endpoint-contract}
 Continuous weights are mapped to the closest element of $\Agrid$. Ties use the lexicographic order of distance to the proposed value, distance to $\alpha_0$, and weight value. At $\alpha=0$ or 1, the evaluator uses the corresponding exact standalone endpoint rank. The candidate set remains the full entity universe throughout. Relation weights use a minimum support of 60 DEV observations, with low-support relations assigned the Global weight.
+
+Standalone ranking uses the shared evaluator's strict-greater rule, $1+\#\{e:s(q,e)>s(q,y)\}$ after gold-preserving filtering; equal scores do not increase rank. Tests compare both endpoint branches row by row with the actual shared head/tail evaluator, including score ties, constant rows, non-finite candidates, and an invalid inactive expert. Dense and sparse filter paths agree on these cases. These are checks of the deployed convention, not proof that a normalized endpoint always has the same rank.
+
+In exact arithmetic, finite scores and a common finite positive denominator in Eq.~\eqref{eq:zscore} preserve strict comparisons and ties, including constant rows. This implication can fail in floating point: for float32 scores $[0,1,10^8]$ and the first entry as gold, normalization merges the first two values, changing rank 3 to 2. Active non-finite scores also preclude unconditional equivalence; the inactive expert must be ignored at an endpoint to avoid contamination through $0\times\infty$. Consequently we state the endpoint dispatch explicitly rather than assert continuity of ranking utility at the boundary.
+
+The earlier raw-score audit found no exceptional rows, but finite scores alone do not exclude rounding-induced ties. Likewise, cached endpoint equality is not independent evidence because those endpoints already use standalone ranks. A fixed CUDA audit of all 18 checkpoints and 72 DEV/TEST/direction cells compares raw export, shared standalone, deployed endpoint and unoverridden normalized ranks, retaining every discrepancy. That empirical normalization comparison is pending; the present review does not rule out endpoint-convention effects on the reported gains. The protocol fixes the comparison without using TEST to choose settings or replacing historical results.
 
 \subsection{Quantization sensitivity}
 \label{app:grid-sensitivity}

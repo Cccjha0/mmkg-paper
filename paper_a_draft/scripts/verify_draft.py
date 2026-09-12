@@ -121,6 +121,21 @@ assert not claims_audit['pair_partition_before_test_established']
 assert not claims_audit['current_corrected_timing_available'] and not claims_audit['historical_dyna_is_healthy_r3']
 assert all(c['endpoint_and_summary_verified'] and c['complete_seed_direction_coverage'] for c in claims_audit['checks'])
 
+inference=json.loads((ROOT/'inference_contract_source_manifest.json').read_text(encoding='utf-8'))
+assert inference['version']=='inference_contract_review_v1'
+for rel,sha in inference['sources'].items():
+    digest=hashlib.sha256()
+    with (ROOT.parent/rel).open('rb') as handle:
+        for block in iter(lambda:handle.read(1024*1024),b''): digest.update(block)
+    assert digest.hexdigest()==sha,rel
+inference_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/inference_contract_review_v1/audit.json').read_text())
+assert inference_audit['status']=='guarded_inference_and_anchor_checks_passed'
+assert inference_audit['anchor_checks']==36 and inference_audit['observed_rows']==474732 and inference_audit['new_fallback_rows']==0
+assert inference_audit['selector_fits']==0 and inference_audit['base_model_scoring_runs']==0
+assert not inference_audit['test_used_for_selection'] and not inference_audit['historical_rows_replaced']
+assert inference_audit['b10_status']=='anchor_and_shared_endpoint_tests_passed_real_normalized_endpoint_audit_pending'
+assert len(inference_audit['checks'])==12 and all(c['adc_weights_exact'] and c['query_soft_weights_exact'] and c['fallback_exact'] and c['grid_endpoints_exact'] for c in inference_audit['checks'])
+
 grid=json.loads((ROOT/'grid_sensitivity_source_manifest.json').read_text(encoding='utf-8'))
 assert grid['version']=='grid_sensitivity_return_review_v1'
 for rel,sha in grid['sources'].items():
@@ -269,8 +284,8 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
@@ -284,6 +299,8 @@ report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findal
         'action_semantics_checks_passed':True,'expanded_radius_definition_consistent':True,
         'grid_sensitivity_return_checks_passed':True,'grid_sensitivity_paired_effects':104,
         'grid_selection_after_sensitivity':False,'original_grid_rank_mismatches':0,
+        'guarded_inference_replay_passed':True,'guarded_inference_rows':474732,'anchor_checks':36,
+        'real_normalized_endpoint_equivalence_established':False,
         'raw_score_finiteness_certified':raw_review['raw_score_finiteness_certified'],
         'raw_score_finiteness_scope':raw_review['scope'],
         'historical_raw_bitwise_equality_established':False,'abnormal_input_robustness_established':False,

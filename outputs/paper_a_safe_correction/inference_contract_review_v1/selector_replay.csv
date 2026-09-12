@@ -1,0 +1,13 @@
+pair,split,rows,guarded_rows,max_decision_error,adc_weights_exact,query_soft_weights_exact,fallback_exact,grid_endpoints_exact
+mkgw_mhyper_native,dev,25656,0,7.771561172376096e-16,True,True,True,True
+mkgw_mhyper_native,test,25644,0,7.355227538141662e-16,True,True,True,True
+mkgw_mhyper_adamf,dev,25656,0,1.3322676295501878e-15,True,True,True,True
+mkgw_mhyper_adamf,test,25644,0,1.9984014443252818e-15,True,True,True,True
+db15k_mhyper_native,dev,47532,0,1.0547118733938987e-15,True,True,True,True
+db15k_mhyper_native,test,59412,0,1.9984014443252818e-15,True,True,True,True
+db15k_mhyper_adamf,dev,47532,0,9.992007221626409e-16,True,True,True,True
+db15k_mhyper_adamf,test,59412,0,1.1102230246251565e-15,True,True,True,True
+mkgw_native_adamf,dev,25656,0,2.7755575615628914e-16,True,True,True,True
+mkgw_native_adamf,test,25644,0,3.3306690738754696e-16,True,True,True,True
+db15k_native_adamf,dev,47532,0,6.661338147750939e-16,True,True,True,True
+db15k_native_adamf,test,59412,0,8.881784197001252e-16,True,True,True,True
