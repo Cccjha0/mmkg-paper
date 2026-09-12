@@ -1,6 +1,6 @@
 # B01–B03：标准化定义、差值坐标及理论性质核查
 
-本轮完成 B02 的匹配补实验和 B03 的性质定位。B01 的标准化定义及边界测试已补齐，但发现异常输入的真实遗留局限，**原始分数异常是否影响已有结果仍待服务器审计，B01 不作整体关闭**。
+B02 的匹配补实验和 B03 的性质定位已完成。B01 初轮补齐标准化定义及边界测试后保留待核；现已收到并独立核验服务器原始分数报告，**B01 在已评估的冻结 checkpoint 和 DEV／TEST 范围内关闭**。全部异常计数为零，本次证据不提示需要因数值异常修复重评；未保存的历史 raw scores 逐位一致性及任意异常输入的排名稳健性仍不作保证。
 
 ## B01：以实际论文导出路径为准
 
@@ -23,18 +23,32 @@
 
 独立标量实现与两个实际归一化函数核对了普通行、常数行、近常数行、单个有限值、混合非有限值和全非有限行；另检验独立 finite mask、归一化 batch 不变性、样本标准差、interior/endpoint 语义与原 B07/C04 gold/filter 边界。
 
-**发现的未关闭问题：**如果 gold 参考也是 NaN，旧 strict-greater rank 函数的比较均为假，可返回 rank 1。测试明确记录此反例，不把它当成合理缺失值策略。当前保留的有限特征无法证明原始评分无异常，因此本轮未声称历史结果已经排除这一影响，也未悄悄改动旧评分路径或替换结果。
+**仍保留的异常输入局限：**如果 gold 参考也是 NaN，旧 strict-greater rank 函数的比较均为假，可返回 rank 1。测试明确记录此反例，不把它当成合理缺失值策略。有限特征本身无法证明原始评分无异常；下面的全量重执行核查提供了独立证据，但没有改动旧评分路径或替换历史结果。
 
 服务器审计脚本 `scripts/audit_paper_a_raw_score_contract.py` 读取已绑定 checkpoint/split 清单，验证 18 个 checkpoint 与配置的 SHA-256，遍历两个数据集、三个模型、三 seed、DEV/TEST 与双方向共 72 个 cell。统计部分／全非有限行、常数行、gold 异常、矩溢出、归一化异常及最多 20 个例子；不训练、不调参、不替换历史 RR。它核验重新执行的冻结模型，不能证明未保存的历史原始分数 bitwise 一致。
 
-在服务器仓库根目录运行：
+已完成的服务器命令（仅供复现；本次无需再次评分）：
 
 ```powershell
 python scripts/audit_paper_a_raw_score_contract.py --plan-only
 python scripts/audit_paper_a_raw_score_contract.py --device cuda
 ```
 
-回传 `outputs/paper_a_safe_correction/raw_score_contract_audit.json`。发现异常时脚本写完完整报告后以退出码 2 结束，不应删除异常行继续报最好结果。若异常存在，后续需确定受影响模型／pair、制定显式拒绝或修复策略，再重导出并重评；若没有异常，也只支持这次冻结 checkpoint 重执行的数值条件。当前仅在本机运行 plan-only 与合成数据单测，没有执行全量评分。
+回传文件 `outputs/paper_a_safe_correction/raw_score_contract_audit.json` 的 SHA-256 为 `d4f4c58039791a5f04309719b444889f793f0edac6d237274b983dd8fa5287a6`，状态为 `raw_score_contract_passed`。本机仅做小型报告复核、单测与论文构建，全量评分由服务器完成。
+
+| 数据集／split | 三元组 | 核查 cell 数 | expert/query 评分行数 |
+|---|---:|---:|---:|
+| MKG-W DEV | 4,276 | 18 | 76,968 |
+| MKG-W TEST | 4,274 | 18 | 76,932 |
+| DB15K DEV | 7,922 | 18 | 142,596 |
+| DB15K TEST | 9,902 | 18 | 178,236 |
+| 合计 | 26,374 | 72 | 474,732 |
+
+评分行数包含三个架构、三个 seed 和双方向的重复，不是 474,732 个独立 query。所有部分／全非有限行、非有限候选值、非有限 gold、矩异常、归一化异常计数均为 0；常数有限行也为 0。独立脚本从已绑定的 `*_split_rows.csv.gz` 重建完整顺序，检查每个规范行下标、72 个 cell 无重复无缺漏、逐 cell 行数及三元组顺序哈希、18 个 checkpoint 与配置身份、汇总状态和无训练／无新选择／无历史行替换标记。
+
+41 个服务器来源中，审计脚本、数据流水账、18 份配置的哈希完全相符；18 个 checkpoint 哈希同时匹配 checkpoint 流水账及原来源 manifest。两份评分代码仅存在整文件 LF／CRLF 差异，当前文件转换为 CRLF 后精确匹配服务器哈希，核查记录保留两端哈希；没有忽略实质代码差异。原服务器文件保持原样。
+
+本地可重复运行 `python scripts/review_paper_a_raw_score_contract.py`，生成 `raw_score_contract_review.json` 和 `paper_a_draft/raw_score_source_manifest.json`；不加载模型。新增 12 项测试包括重复／缺失 cell、错误行数／顺序／角色、异常计数被 pass 掩盖、checkpoint／代码篡改及越界选择等反例。结论仅适用于这次冻结模型重执行，原 NaN gold 反例继续披露。没有证据要求异常驱动的重新导出或重评；若将来遇到该异常，仍应停止将异常 rank 作为有效准确率证据。
 
 ## B02：差值改变参数化，未增加独立线性信号
 
@@ -63,6 +77,6 @@ TEST 的最大绝对差不足 1e-5，W-N 是 9D 略高；Query-soft 的 13D−9D
 
 ## 验证与版本
 
-43 项针对性测试通过，包括原信息边界、匹配动作和风险算术测试。`feature_dimension_source_manifest.json` 绑定本轮协议、代码、来源、锁、结果和两张表；`.gitignore` 排除拟合模型与逐 query 大文件，`.gitattributes` 保持 hash 绑定文件的原始字节。论文构建和全稿校验使用新增 `feature_dimension_review_v1`，并保留 `raw_score_finiteness_certified=false`。
+初轮 43 项针对性测试通过，包括原信息边界、匹配动作和风险算术测试。`feature_dimension_source_manifest.json` 绑定维度协议、代码、来源、锁、结果和两张表；`.gitignore` 排除拟合模型与逐 query 大文件，`.gitattributes` 保持 hash 绑定文件的原始字节。原维度审计中的 `raw_score_finiteness_certified=false` 保留，表示特征缓存本身不提供原始分数证明。新增 `raw_score_contract_review_v1` 独立绑定服务器回传及复核；全稿校验中的该标志为 true，同时强制限定 `scope=frozen_checkpoint_reexecution_dev_test`、历史 bitwise 一致性为 false、任意异常输入稳健性为 false。
 
-最终 PDF 为 47 页、41 张表、4 张图和 13 条参考文献，编译无未解析引用或 overfull 警告；全稿校验通过，核对 2,611 项来源快照。已逐页目视检查本轮修改涉及的公式、异常分数说明、margin 条件及两张维度对照表。新增结果只提交小型审计记录与汇总表，不包含模型、逐 query 缓存或 PDF 大文件。
+回传复核阶段的 40 项相关测试通过（12 项回传核验测试，以及已有标准化／特征冗余和 gold/filter 边界测试）。最终 PDF 为 47 页、41 张表、4 张图和 13 条参考文献，编译无未解析引用或 overfull 警告；全稿校验通过，核对 2,616 项来源快照。本次目视检查新增说明所在页及受分页影响的静态／Oracle 和维度对照表，调整分页避免孤立的 Oracle 表。只提交小型审计记录与代码文稿，不包含模型、逐 query 缓存或 PDF 大文件。

@@ -1,0 +1,124 @@
+{
+  "status": "raw_score_return_checks_passed",
+  "sources": {
+    "paper_a_draft/data_checkpoint_source_manifest.json": "f5a0db1a1bd41b77c7a84539baf0b8181e7315c4c3601ada8315899d654136e2",
+    "outputs/paper_a_safe_correction/raw_score_contract_audit.json": "d4f4c58039791a5f04309719b444889f793f0edac6d237274b983dd8fa5287a6",
+    "outputs/paper_a_safe_correction/data_checkpoint_review_v1/checkpoint_diagnostics.csv": "751ab33f86caa57ff149aef508c19f9e8af710b3ccc404011389688887a8c0d3",
+    "outputs/paper_a_safe_correction/data_checkpoint_review_v1/split_counts.csv": "70c6d38d9be02105345f11b6fece0651c574b89eec18f2023a582730a8f4635a",
+    "scripts/eval_heterogeneous_complementarity.py": "9e288b93c674934f930170483348503cbfb283afaebce99504e6b7287d911e88",
+    "router/score_combination.py": "95112a08304d7dc30263e7b31ebee8a96e674042d96c271f3059fce6e8e03c7f",
+    "scripts/audit_paper_a_raw_score_contract.py": "cd36a0346713794b6a14be9c2851db5f531f4c070429a231e78b317da3dbfe70",
+    "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1/config_merged.json": "7376df5cf5383162ff51832984063274c38d21cf153fbf0d05cac28123ab80ae",
+    "ml/artifacts/outputs/mkg_w_native/20260902_021506_seed1/config_merged.json": "31c76aa923716f53fef83ac23aa200d2ab70e81eaa5017dd3726486d083db44d",
+    "ml/artifacts/outputs/mkg_w_mhyper/20260902_015400_seed2/config_merged.json": "08676952cb4528acbf2421cb6c6f8ffe998c0d81134fd18e7abd99221ef31fa3",
+    "ml/artifacts/outputs/mkg_w_native/20260902_033610_seed2/config_merged.json": "bd3feb87f8b41a5c3633ecfc193352c109556727fa6c8822317dc038959be982",
+    "ml/artifacts/outputs/mkg_w_mhyper/20260902_020435_seed3/config_merged.json": "15b0ac51e56f6d379b6a8a1e77205c5b89a8a546c2d3b13d7a8f38578f805b29",
+    "ml/artifacts/outputs/mkg_w_native/20260902_044121_seed3/config_merged.json": "0afa0b107aa8539892bf6a3cfb595666a08c7bb01b92c4706be544b453eb90d4",
+    "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_060855_seed1/config_merged.json": "93a231efa327c5e836013149227d7c7484326ecf699ce060b153551e552f0497",
+    "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_083530_seed2/config_merged.json": "88c5035bc5c51b9ecabf689950b4596dd6e19a8be9d2bfd5fd1c15d053f29284",
+    "ml/artifacts/outputs/mkg_w_adamf_mat/20260902_142555_seed3/config_merged.json": "2dcb8f5df2e1ae5b7e5b09428267b1e5ebcffcceac7bd03d495fec9ca3c26647",
+    "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1/config_merged.json": "7bba01b7b582700727dd9f1d920220de8be61b7d82dcd6cc73ec73dbd43341d1",
+    "ml/artifacts/outputs/db15k_native/20260831_223530_seed1/config_merged.json": "1d295e9bc891d148eea44d6bd2a0876938f354c75b4c9999973a0fd77b0e0df9",
+    "ml/artifacts/outputs/db15k_mhyper/20260902_175015_seed2/config_merged.json": "952fe987bf8cd66497ad9b48e3e49f11b1f3f9df7b16ebeee136c62fcae7fcb0",
+    "ml/artifacts/outputs/db15k_native/20260902_182809_seed2/config_merged.json": "c51f5f474d244bed3c583749b6e5ab7299a4621cbb3666a2b818f2581b152b0e",
+    "ml/artifacts/outputs/db15k_mhyper/20260902_180912_seed3/config_merged.json": "88a2895817eb976723d41ddbb223a47ffbb756ebc6a37d44d37218a981abc53a",
+    "ml/artifacts/outputs/db15k_native/20260903_012002_seed3/config_merged.json": "21a119dcf44a869d71de0d1a0ee5d2eeb23acd46e525a77f48dd4d71532eaac0",
+    "ml/artifacts/outputs/db15k_adamf_mat/20260901_030904_seed1/config_merged.json": "25357d0ae01320f8ac1bc5d2ab53c8018929f84015de0a9f40ff0cb3e9dd80ae",
+    "ml/artifacts/outputs/db15k_adamf_mat/20260903_044823_seed2/config_merged.json": "8b4c3561b7cd49a64903f8918c42e158fe4d1c4f14e64599d46b53d770b77ce8",
+    "ml/artifacts/outputs/db15k_adamf_mat/20260903_090422_seed3/config_merged.json": "f19d6ba3c7d49a30bb4e8820eb2fbc4f64fb0b8ef5c3f829f71482ef9a452140",
+    "outputs/paper_a_safe_correction/data_checkpoint_review_v1/mkg_w_split_rows.csv.gz": "e8ce91a92a930a4d7a437797d28569d2d2cb730bdfb4e9803b4735a28d2dd0d4",
+    "outputs/paper_a_safe_correction/data_checkpoint_review_v1/db15k_split_rows.csv.gz": "fdfc67dfcf50c96b11e2dd6b74ff844576b78b925c614acac859b87361337523",
+    "scripts/review_paper_a_raw_score_contract.py": "dcc56ddb70554286a566921fd88b9a904cc5dca64fbf29f944b26409baa754c6",
+    "tests/test_raw_score_contract_return.py": "940ea2ecdc12a1f5057c3b40891f9d2e33368665338c7c1b3e1f9f3ba7b121d5"
+  },
+  "checkpoints": 18,
+  "cells": 72,
+  "score_rows": 474732,
+  "totals": {
+    "nonfinite_candidate_values": 0,
+    "partial_nonfinite_rows": 0,
+    "empty_finite_rows": 0,
+    "constant_finite_rows": 0,
+    "nonfinite_gold_rows": 0,
+    "nonfinite_moment_rows": 0,
+    "invalid_normalized_finite_values": 0,
+    "nonfinite_normalized_gold_rows": 0,
+    "exceptional_rows": 0
+  },
+  "split_checks": [
+    {
+      "dataset": "mkg_w",
+      "split": "dev",
+      "cells": 18,
+      "score_rows": 76968,
+      "triples": 4276,
+      "triple_order_sha256": "1397f72328a9d817b3fa19e7e8cb4f3b8e24ecab539099826beaf10c149b5571"
+    },
+    {
+      "dataset": "mkg_w",
+      "split": "test",
+      "cells": 18,
+      "score_rows": 76932,
+      "triples": 4274,
+      "triple_order_sha256": "df785d5ad3f966a8e80b6c2c3f224937223bc81c60ddb49fb1a3825500822d40"
+    },
+    {
+      "dataset": "db15k",
+      "split": "dev",
+      "cells": 18,
+      "score_rows": 142596,
+      "triples": 7922,
+      "triple_order_sha256": "a38c12dfe3973993fc422c0c72a2882e4605416f8922acc857bb7fa05d4f0e21"
+    },
+    {
+      "dataset": "db15k",
+      "split": "test",
+      "cells": 18,
+      "score_rows": 178236,
+      "triples": 9902,
+      "triple_order_sha256": "32455e751b27803d50e5db6b901004de59e190a7955e081440b0653fd2d06398"
+    }
+  ],
+  "source_byte_checks": [
+    {
+      "path": "outputs/paper_a_safe_correction/data_checkpoint_review_v1/checkpoint_diagnostics.csv",
+      "match": "exact_bytes",
+      "local_sha256": "751ab33f86caa57ff149aef508c19f9e8af710b3ccc404011389688887a8c0d3",
+      "server_sha256": "751ab33f86caa57ff149aef508c19f9e8af710b3ccc404011389688887a8c0d3"
+    },
+    {
+      "path": "outputs/paper_a_safe_correction/data_checkpoint_review_v1/split_counts.csv",
+      "match": "exact_bytes",
+      "local_sha256": "70c6d38d9be02105345f11b6fece0651c574b89eec18f2023a582730a8f4635a",
+      "server_sha256": "70c6d38d9be02105345f11b6fece0651c574b89eec18f2023a582730a8f4635a"
+    },
+    {
+      "path": "router/score_combination.py",
+      "match": "newline_only_to_CRLF",
+      "local_sha256": "95112a08304d7dc30263e7b31ebee8a96e674042d96c271f3059fce6e8e03c7f",
+      "server_sha256": "e962abf441e515cb4a3b70761713d4421f1d50bbcade2010d5de613a5aec7247"
+    },
+    {
+      "path": "scripts/audit_paper_a_raw_score_contract.py",
+      "match": "exact_bytes",
+      "local_sha256": "cd36a0346713794b6a14be9c2851db5f531f4c070429a231e78b317da3dbfe70",
+      "server_sha256": "cd36a0346713794b6a14be9c2851db5f531f4c070429a231e78b317da3dbfe70"
+    },
+    {
+      "path": "scripts/eval_heterogeneous_complementarity.py",
+      "match": "newline_only_to_CRLF",
+      "local_sha256": "9e288b93c674934f930170483348503cbfb283afaebce99504e6b7287d911e88",
+      "server_sha256": "b74b0c42a58ff551de6203c99e37caa9867e17afdce5278779ff60ff0177c118"
+    }
+  ],
+  "checkpoint_identity": "Returned hashes match both the bound checkpoint ledger and baseline source manifest; no local model loading.",
+  "raw_score_finiteness_certified": true,
+  "scope": "frozen_checkpoint_reexecution_dev_test",
+  "historical_raw_bitwise_equality_established": false,
+  "abnormal_input_robustness_established": false,
+  "training_runs": 0,
+  "test_used_for_selection": false,
+  "historical_rows_replaced": false,
+  "b01_status": "closed_for_evaluated_checkpoints_and_splits",
+  "decision": "No numerical-anomaly-driven repair or reevaluation is indicated by this audit."
+}

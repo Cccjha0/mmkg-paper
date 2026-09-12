@@ -87,3 +87,12 @@ docs/protocols/paper_a_feature_dimension_review.md -text whitespace=cr-at-eol
 outputs/paper_a_safe_correction/feature_dimension_review_v1/** -text whitespace=cr-at-eol
 paper_a_draft/tables/feature_dimension/** -text whitespace=cr-at-eol
 paper_a_draft/feature_dimension_source_manifest.json -text whitespace=cr-at-eol
+
+# Returned B01 score audit and its independent local verification.
+router/score_combination.py -text whitespace=cr-at-eol
+scripts/eval_heterogeneous_complementarity.py -text whitespace=cr-at-eol
+scripts/review_paper_a_raw_score_contract.py -text whitespace=cr-at-eol
+tests/test_raw_score_contract_return.py -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/raw_score_contract_audit.json -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/raw_score_contract_review.json -text whitespace=cr-at-eol
+paper_a_draft/raw_score_source_manifest.json -text whitespace=cr-at-eol
