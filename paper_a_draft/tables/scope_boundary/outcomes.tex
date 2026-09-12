@@ -1,0 +1,15 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Additional-pair outcome decomposition. Benefit/unchanged/harm refer to the sign of RR change, not to weight movement. All observations remain in the denominator of unconditional gains $BG$ and losses $HL$; those columns and net $U$ use $10^{-4}$ units. The full-precision identity $BG-HL=U$ is checked before rounding. Intervals condition on the original fitted policies and retain all six seed/direction observations per triple. Full conditional gain/loss, intervention-conditional harm and seed/direction results are bound in the supplement and Appendix~\ref{app:outcome-risk}.}
+\label{tab:scope-outcomes}
+\begin{tabular}{llrrrrrl}
+\toprule
+Pair & Split & Benefit & RR same & Harm & $BG$ & $HL$ & $U$ [95\% CI]\\
+\midrule
+W-NA & DEV-OOF & 419 & 24,983 & 254 & 10.20 & 8.73 & +1.47 [-2.14,+5.13]\\
+W-NA & TEST & 402 & 25,007 & 235 & 9.89 & 8.50 & +1.39 [-2.53,+5.38]\\
+D-NA & DEV-OOF & 902 & 46,392 & 238 & 4.23 & 3.93 & +0.31 [-1.27,+1.87]\\
+D-NA & TEST & 1,242 & 57,819 & 351 & 4.35 & 4.50 & -0.15 [-1.63,+1.30]\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,13 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Additional-pair boundary outcomes in the corrected information contract. Final full-DEV settings are $(\alpha_0,\beta,\tau)$. Rejected is the threshold fallback percentage over all observations; accepted no-op counts pass the gate but retain the reference after clipping/projection. Changed counts actual nonzero weights. $U=$ADC--Global uses $10^{-4}$ MRR units and the unified 95\% original-triple percentile interval (10,000 draws, all three seeds and both directions retained). Both intervals span zero; neither pair establishes an incremental gain.}
+\label{tab:scope-additional}
+\begin{tabular}{llrrll}
+\toprule
+Pair & $\alpha_0/\beta/\tau$ & Rejected (\%) & Accepted no-op & Changed/$N$ & $U$ [95\% CI]\\
+\midrule
+W-NA & 0.95/0.50/0.2 & 96.39 & 0 & 926/25,644 & +1.39 [-2.53,+5.38]\\
+D-NA & 1.00/0.45/0.1 & 95.27 & 395 & 2,416/59,412 & -0.15 [-1.63,+1.30]\\
+\bottomrule
+\end{tabular}
+\end{table}

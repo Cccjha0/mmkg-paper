@@ -279,6 +279,46 @@ assert all(float(r['lo'])<=0<=float(r['hi']) for r in query_effects if r['compar
 assert r'\label{app:query-isolation}' in main and 'transductive query distribution' in main
 assert 'Zero inclusion does not establish equivalence' in main and 'all 82' in main
 
+scope_boundary=json.loads((ROOT/'scope_boundary_source_manifest.json').read_text(encoding='utf-8'))
+assert scope_boundary['version']=='scope_boundary_v1'
+for rel,sha in scope_boundary['sources'].items():
+    digest=hashlib.sha256()
+    with (ROOT.parent/rel).open('rb') as handle:
+        for block in iter(lambda:handle.read(1024*1024),b''):digest.update(block)
+    assert digest.hexdigest()==sha,rel
+for rel,sha in scope_boundary['tables'].items():
+    assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in scope_boundary['tables']}
+scope_dir=ROOT.parent/'outputs/paper_a_safe_correction/scope_boundary_v1'
+scope_boundary_audit=json.loads((scope_dir/'audit.json').read_text())
+assert scope_boundary_audit['status']=='scope_boundary_checks_passed' and not scope_boundary_audit['failures']
+assert scope_boundary_audit['observations']==474732 and scope_boundary_audit['bootstrap_replicates']==10000
+assert scope_boundary_audit['band_mrr']==.005 and scope_boundary_audit['min_training_triples']==50
+assert not any(scope_boundary_audit[k] for k in ('selector_fits','scorer_runs','new_policy_selection','test_used_for_selection',
+    'historical_results_replaced','global_necessity_established','strata_maps_refitted_in_bootstrap'))
+assert all(c['original_replay_passed'] and c['prior_outcomes_and_gate_effects_reconciled']
+    and c['prior_oracle_and_fallback_reconciled'] and c['four_stages_disjoint_exhaustive'] for c in scope_boundary_audit['checks'])
+scope_records={}
+for name,count in [('summary',12),('seed_direction',72),('dev_strata',24),('dev_strata_seed_direction',144),
+    ('dev_training_cells',scope_boundary_audit['training_cell_rows']),('original_settings',36)]:
+    with (scope_dir/(name+'.csv')).open(encoding='utf-8') as handle:scope_records[name]=list(csv.DictReader(handle))
+    assert len(scope_records[name])==count
+for r in scope_records['summary']+scope_records['seed_direction']+scope_records['dev_strata']:
+    assert sum(int(r[k]) for k in ('rejected_active_n','rejected_idle_n','accepted_idle_n','active_n'))==int(r['n'])
+    assert int(r['rejected_n'])==int(r['rejected_active_n'])+int(r['rejected_idle_n'])
+    assert int(r['harm_n'])+int(r['benefit_n'])+int(r['unchanged_n'])==int(r['n'])
+    if int(r['n']):assert abs(float(r['mean_gain'])-float(r['mean_loss'])-float(r['utility']))<1e-12
+assert all(int(r['valid_replicates'])==10000 for r in scope_records['dev_strata'] if int(r['n']))
+for label in ('W-NA','D-NA'):
+    r=next(r for r in scope_records['summary'] if r['label']==label and r['split']=='test')
+    assert float(r['utility_lo'])<0<float(r['utility_hi'])
+    assert float(r['matched_gate_lo'])<0<float(r['matched_gate_hi'])
+    assert float(r['raw_utility'])<0 and float(r['gate_lo'])>0 and float(r['oracle_gap'])>0
+assert r'\label{app:scope-boundary}' in main
+assert 'scope condition, not an established necessary condition' in main
+assert 'No globally ineligible pair is evaluated' in main
+assert '96.39\\%' in main and '95.27\\%' in main
+
 component_ablation=json.loads((ROOT/'component_ablation_source_manifest.json').read_text(encoding='utf-8'))
 assert component_ablation['version']=='component_ablation_v1'
 for rel,sha in component_ablation['sources'].items():
@@ -623,8 +663,8 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])|set(ties_harm['sources'])|set(rejection['sources'])|set(alignment_training['sources'])|set(selection_seed['sources'])|set(query_pair['sources'])|set(outcome_risk['sources'])|set(coverage_quality['sources'])|set(component_ablation['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1 + ties_harm_review_v1 + rejection_controls_v1 + alignment_training_v1 + selection_seed_v1 + query_pair_v1 + outcome_risk_v1 + coverage_quality_v1 + component_ablation_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])|set(ties_harm['sources'])|set(rejection['sources'])|set(alignment_training['sources'])|set(selection_seed['sources'])|set(query_pair['sources'])|set(outcome_risk['sources'])|set(coverage_quality['sources'])|set(component_ablation['sources'])|set(scope_boundary['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1 + ties_harm_review_v1 + rejection_controls_v1 + alignment_training_v1 + selection_seed_v1 + query_pair_v1 + outcome_risk_v1 + coverage_quality_v1 + component_ablation_v1 + scope_boundary_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
@@ -647,6 +687,7 @@ report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findal
         'adc_dyna_fitting_information_matched':False,'unseen_checkpoint_transfer_evaluated':False,
         'winner_signal_checks_passed':True,'winner_direction_diagnostic_rows':474732,
         'ties_harm_checks_passed':True,'tie_seed_direction_cells':72,'harm_population_cells':36,
+        'scope_boundary_checks_passed':True,'scope_boundary_dev_strata':24,'global_primary_necessity_established':False,
         'component_ablation_checks_passed':True,'component_ablation_native_rows':96,'component_ablation_effect_rows':144,'component_ablation_bootstrap_replicates':10000,
         'coverage_quality_checks_passed':True,'coverage_quality_curve_rows':528,'coverage_quality_random_replicates':512,'coverage_quality_ap_rows':48,
         'outcome_risk_checks_passed':True,'outcome_risk_pooled_cells':12,'outcome_risk_ratio_metrics':22,'outcome_risk_bootstrap_replicates':10000,

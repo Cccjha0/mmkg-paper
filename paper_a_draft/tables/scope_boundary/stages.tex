@@ -1,0 +1,15 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Disjoint additional-pair action ledger. Raw proposals use the original radius and projection with $\tau=0$. Rejected raw-active, rejected raw-idle, accepted raw-idle and changed counts sum to $N$ in each row. The first two sum to threshold fallback; the last two sum to gate acceptance. No invalid feature rows occur in these saved observations. The accepted no-op stage explains why $1-$fallback need not equal actual intervention.}
+\label{tab:scope-stages}
+\begin{tabular}{llrrrrr}
+\toprule
+Pair & Split & $N$ & Reject active & Reject idle & Accept idle & Changed\\
+\midrule
+W-NA & DEV-OOF & 25,656 & 18,632 & 5,995 & 0 & 1,029\\
+W-NA & TEST & 25,644 & 19,356 & 5,362 & 0 & 926\\
+D-NA & DEV-OOF & 47,532 & 10,549 & 34,808 & 346 & 1,829\\
+D-NA & TEST & 59,412 & 14,456 & 42,145 & 395 & 2,416\\
+\bottomrule
+\end{tabular}
+\end{table}

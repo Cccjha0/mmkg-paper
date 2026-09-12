@@ -257,3 +257,14 @@ docs/reports/paper_a_component_ablation_review_2026-09-12.md -text whitespace=cr
 outputs/paper_a_safe_correction/component_ablation_v1/** -text whitespace=cr-at-eol
 paper_a_draft/component_ablation_source_manifest.json -text whitespace=cr-at-eol
 paper_a_draft/tables/component_ablation/** -text whitespace=cr-at-eol
+
+# E03/E04 retrospective study scope and additional-pair action/outcome boundaries.
+router/scope_boundary_diagnostics.py -text whitespace=cr-at-eol
+scripts/analyze_paper_a_scope_boundary.py -text whitespace=cr-at-eol
+scripts/build_paper_a_scope_boundary_assets.py -text whitespace=cr-at-eol
+tests/test_scope_boundary_diagnostics.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_scope_boundary_review.md -text whitespace=cr-at-eol
+docs/reports/paper_a_scope_boundary_review_2026-09-13.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/scope_boundary_v1/** -text whitespace=cr-at-eol
+paper_a_draft/scope_boundary_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/tables/scope_boundary/** -text whitespace=cr-at-eol

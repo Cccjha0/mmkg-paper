@@ -1,0 +1,15 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Fixed-map gate contrasts, all RR effects in $10^{-4}$ units with unified 95\% original-triple percentile intervals. Raw $U$ uses the same original radius with $\tau=0$. Native full-minus-no-gate measures rejection of those fixed proposals. Matched-I uniformly thins the no-gate nonzero proposals to the full gate\textquotesingle s count in each seed/fold/repetition stratum, using exact discrete-action expectations (Appendix~\ref{app:component-ablation}). This matches intervention quantity; direction/amplitude need not match. Positive native gate effects do not establish an optimal gate, useful selection beyond count reduction, or a positive full-minus-Global effect. Both TEST Matched-I intervals span zero; D-NA has a positive DEV Matched-I interval.}
+\label{tab:scope-gate}
+\begin{tabular}{lll ll}
+\toprule
+Pair & Split & Raw $U$ & Full--raw [95\% CI] & Matched-I [95\% CI]\\
+\midrule
+W-NA & DEV-OOF & -33.93 & +35.40 [+24.23,+46.76] & +3.39 [-0.06,+6.87]\\
+W-NA & TEST & -32.50 & +33.89 [+22.11,+45.92] & +3.15 [-0.53,+6.95]\\
+D-NA & DEV-OOF & -10.01 & +10.32 [+7.01,+13.68] & +1.79 [+0.44,+3.11]\\
+D-NA & TEST & -6.63 & +6.49 [+3.60,+9.44] & +0.78 [-0.50,+2.04]\\
+\bottomrule
+\end{tabular}
+\end{table}

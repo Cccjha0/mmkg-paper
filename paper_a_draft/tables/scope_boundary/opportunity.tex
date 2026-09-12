@@ -1,0 +1,15 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Opportunity and endpoint preference are separate diagnostics. B-win and ties use all observations. $O_{AB}$ is endpoint-oracle minus best-single MRR; $O_{grid}$ is the 21-weight answer-aware grid oracle minus the fold/final Global reference; both use $10^{-4}$ units and require gold RR only after evaluation. Neither is an achievable performance claim. AUROC ranks saved preference margins against A-winning endpoint labels, excludes ties ($n_{win}$), is descriptive without a new interval, and is neither natural-probability calibration nor harm prediction. No diagnostic is added to selector inputs.}
+\label{tab:scope-opportunity}
+\begin{tabular}{llrrrrrr}
+\toprule
+Pair & Split & B-win (\%) & Ties (\%) & $O_{AB}$ & $O_{grid}$ & $n_{win}$ & AUROC\\
+\midrule
+W-NA & DEV-OOF & 29.53 & 20.01 & 386.71 & 474.66 & 20,522 & 0.543\\
+W-NA & TEST & 29.02 & 20.31 & 393.12 & 503.63 & 20,436 & 0.538\\
+D-NA & DEV-OOF & 39.42 & 18.97 & 457.79 & 575.33 & 38,515 & 0.528\\
+D-NA & TEST & 39.41 & 18.31 & 448.12 & 575.88 & 48,531 & 0.523\\
+\bottomrule
+\end{tabular}
+\end{table}
