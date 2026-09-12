@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Fixed-setting component contrasts. The original fitted object supplies $g,p=\sigma(g)$ and settings $a=\alpha_0,b=\beta,t=\tau$. All proposals share clipping, 0.05 projection with original-anchor tie-breaking, and return to $a$ when rejected/invalid. Center-0.5 removes the selected center only from the accepted proposal; fallback and projection still use $a$. Shrink-fixed changes the shrinkage target/direction and envelope, so it is not a pure shape or origin ablation. No new parameter search is performed; these controls complement the separately DEV-tuned families.}
+\label{tab:component-design}
+\begin{tabular}{lll}
+\toprule
+Variant & Accepted proposal & Controlled change\\
+\midrule
+ADC & $a+b\tanh(g)$ & Original $b,t$\\
+Center-0.5 & $0.5+b\tanh(g)$ & Accepted proposal origin only\\
+Linear-p & $a+b(2p-1)$ & Bounded response shape; same $b,t$\\
+Clip-g & $a+b\clip(g,-1,1)$ & Saturation shape; same $b,t$\\
+Shrink-fixed & $(1-b)a+bp$ & Linear shrinkage with fixed $\lambda=b$, same $t$\\
+Radius-1 & $a+\tanh(g)$ & Radius only: $b\mapsto1$, same $t$\\
+No-gate & $a+b\tanh(g)$ & Threshold only: $t\mapsto0$, same $b$\\
+Global & $a$ & Static reference\\
+\bottomrule
+\end{tabular}
+\end{table}

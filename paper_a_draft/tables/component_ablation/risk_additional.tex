@@ -1,0 +1,27 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{TEST native component policies: $U$ and unconditional RR loss $L_-$ use $10^{-4}$ units; intervention $I$, all-observation harm $H$ and intervention-conditional harm $H_I$ are percentages; $D$ is mean absolute weight displacement over all observations. Undefined Global conditional harm is marked --, not zero. All policies use the same original Global reference. These are fixed-setting sensitivity points, not independently DEV-optimized competitors. The supplement retains full counts, MRR, conditional matched metrics and all DEV/seed/direction results.}
+\label{tab:component-risk_additional}
+\begin{tabular}{llrrrrrr}
+\toprule
+Pair & Variant & $U$ & $I$ (\%) & $H$ (\%) & $H_I$ (\%) & $L_-$ & $D$\\
+\midrule
+W-NA & ADC & 1.39 & 3.61 & 0.92 & 25.38 & 8.50 & 0.0081\\
+W-NA & Center-0.5 & 0.11 & 3.61 & 1.27 & 35.21 & 15.98 & 0.0233\\
+W-NA & Linear-p & 0.49 & 3.61 & 0.77 & 21.27 & 5.63 & 0.0044\\
+W-NA & Clip-g & 1.88 & 3.61 & 0.93 & 25.70 & 8.85 & 0.0089\\
+W-NA & Shrink-fixed & 0.22 & 3.61 & 1.04 & 28.73 & 10.23 & 0.0103\\
+W-NA & Radius-1 & 2.34 & 3.61 & 1.08 & 29.81 & 11.47 & 0.0160\\
+W-NA & No-gate & -32.50 & 79.09 & 21.73 & 27.47 & 116.62 & 0.0585\\
+W-NA & Global & 0.00 & 0.00 & 0.00 & -- & 0.00 & 0.0000\\
+D-NA & ADC & -0.15 & 4.07 & 0.59 & 14.53 & 4.50 & 0.0047\\
+D-NA & Center-0.5 & 4.18 & 4.73 & 1.21 & 25.58 & 18.78 & 0.0276\\
+D-NA & Linear-p & 0.25 & 4.07 & 0.50 & 12.42 & 2.12 & 0.0023\\
+D-NA & Clip-g & 0.03 & 4.07 & 0.59 & 14.61 & 4.48 & 0.0049\\
+D-NA & Shrink-fixed & 1.51 & 4.73 & 0.83 & 17.59 & 10.57 & 0.0115\\
+D-NA & Radius-1 & 2.25 & 4.07 & 0.73 & 17.84 & 8.01 & 0.0104\\
+D-NA & No-gate & -6.63 & 28.40 & 3.76 & 13.23 & 25.37 & 0.0185\\
+D-NA & Global & 0.00 & 0.00 & 0.00 & -- & 0.00 & 0.0000\\
+\bottomrule
+\end{tabular}
+\end{table}

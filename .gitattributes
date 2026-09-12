@@ -246,3 +246,14 @@ outputs/paper_a_safe_correction/coverage_quality_v1/** -text whitespace=cr-at-eo
 paper_a_draft/coverage_quality_source_manifest.json -text whitespace=cr-at-eol
 paper_a_draft/tables/coverage_quality/** -text whitespace=cr-at-eol
 paper_a_draft/figures/coverage_quality/** -text whitespace=cr-at-eol
+
+# E02 fixed-setting component ablations and pairwise exact intervention matching.
+router/component_ablation.py -text whitespace=cr-at-eol
+scripts/analyze_paper_a_component_ablation.py -text whitespace=cr-at-eol
+scripts/build_paper_a_component_ablation_assets.py -text whitespace=cr-at-eol
+tests/test_component_ablation.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_component_ablation_review.md -text whitespace=cr-at-eol
+docs/reports/paper_a_component_ablation_review_2026-09-12.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/component_ablation_v1/** -text whitespace=cr-at-eol
+paper_a_draft/component_ablation_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/tables/component_ablation/** -text whitespace=cr-at-eol

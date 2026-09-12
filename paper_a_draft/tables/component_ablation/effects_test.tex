@@ -1,0 +1,47 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{TEST ADC-minus-variant RR differences in $10^{-4}$ units with 95\% original-triple percentile intervals (10,000 common draws). Native retains each original gate/action count. Matched-I independently and uniformly thins each side to the same nonzero count in each seed/fold/repetition stratum. $n_*$ is the common observation count; retained gives ADC/variant percentages of their original nonzero counts. Each row has its own budget, so matched ADC is not one common policy across rows. Exact discrete-action expectations are compared; no expected alpha is ranked. Intervals condition on fixed fits and workload allocations, omit refitting/reallocation uncertainty and are unadjusted for multiplicity. Zero inclusion is not equivalence.}
+\label{tab:component-effects_test}
+\begin{tabular}{llllrl}
+\toprule
+Pair & Variant & Native [95\% CI] & Matched-I [95\% CI] & $n_*$ & Retained (\%)\\
+\midrule
+W-N & Center-0.5 & +3.68 [-3.42,+10.70] & +3.68 [-3.42,+10.70] & 16,240 & 100.0/100.0\\
+W-N & Linear-p & +8.35 [+0.32,+16.42] & +8.35 [+0.32,+16.42] & 16,240 & 100.0/100.0\\
+W-N & Clip-g & +0.29 [-3.28,+3.84] & +0.29 [-3.28,+3.84] & 16,240 & 100.0/100.0\\
+W-N & Shrink-fixed & +17.69 [+8.70,+26.62] & +10.22 [+3.29,+17.09] & 11,756 & 72.4/100.0\\
+W-N & Radius-1 & +0.46 [-8.60,+9.58] & +0.46 [-8.60,+9.58] & 16,240 & 100.0/100.0\\
+W-N & No-gate & +0.10 [-4.75,+4.80] & +6.66 [+2.38,+10.86] & 16,240 & 100.0/71.1\\
+W-A & Center-0.5 & +86.47 [+71.61,+101.28] & +20.32 [+13.61,+27.04] & 5,204 & 100.0/38.9\\
+W-A & Linear-p & +1.05 [-2.29,+4.38] & +1.05 [-2.29,+4.38] & 5,204 & 100.0/100.0\\
+W-A & Clip-g & -2.48 [-3.99,-1.16] & -2.48 [-3.99,-1.16] & 5,204 & 100.0/100.0\\
+W-A & Shrink-fixed & +63.03 [+53.27,+72.73] & +18.10 [+13.62,+22.73] & 5,204 & 100.0/38.9\\
+W-A & Radius-1 & -11.70 [-17.29,-6.23] & -11.70 [-17.29,-6.23] & 5,204 & 100.0/100.0\\
+W-A & No-gate & -0.33 [-3.33,+2.77] & +3.59 [+0.56,+6.70] & 5,204 & 100.0/51.2\\
+D-N & Center-0.5 & +16.38 [+11.64,+21.02] & +5.18 [+2.14,+8.26] & 4,678 & 100.0/41.9\\
+D-N & Linear-p & -1.35 [-2.76,+0.11] & -1.35 [-2.76,+0.11] & 4,678 & 100.0/100.0\\
+D-N & Clip-g & -0.13 [-0.34,+0.00] & -0.13 [-0.34,+0.00] & 4,678 & 100.0/100.0\\
+D-N & Shrink-fixed & +1.52 [+0.17,+2.87] & -0.26 [-1.25,+0.70] & 4,678 & 100.0/41.9\\
+D-N & Radius-1 & +2.33 [-0.66,+5.35] & +2.33 [-0.66,+5.35] & 4,678 & 100.0/100.0\\
+D-N & No-gate & +0.66 [-1.21,+2.59] & -0.21 [-1.46,+1.06] & 4,678 & 100.0/23.2\\
+D-A & Center-0.5 & -0.98 [-1.89,-0.15] & +0.44 [-0.26,+1.19] & 267 & 100.0/12.3\\
+D-A & Linear-p & +1.08 [+0.35,+2.03] & +1.08 [+0.35,+2.03] & 267 & 100.0/100.0\\
+D-A & Clip-g & -0.28 [-0.52,-0.10] & -0.28 [-0.52,-0.10] & 267 & 100.0/100.0\\
+D-A & Shrink-fixed & -0.36 [-0.97,+0.25] & +0.79 [+0.15,+1.52] & 267 & 100.0/12.3\\
+D-A & Radius-1 & -1.12 [-1.86,-0.54] & -1.12 [-1.86,-0.54] & 267 & 100.0/100.0\\
+D-A & No-gate & +32.01 [+26.53,+37.54] & +2.48 [+1.08,+4.14] & 267 & 100.0/1.0\\
+W-NA & Center-0.5 & +1.28 [-2.88,+5.08] & +1.28 [-2.88,+5.08] & 926 & 100.0/100.0\\
+W-NA & Linear-p & +0.90 [-1.16,+3.01] & +0.90 [-1.16,+3.01] & 926 & 100.0/100.0\\
+W-NA & Clip-g & -0.49 [-1.46,+0.41] & -0.49 [-1.46,+0.41] & 926 & 100.0/100.0\\
+W-NA & Shrink-fixed & +1.17 [-0.51,+2.90] & +1.17 [-0.51,+2.90] & 926 & 100.0/100.0\\
+W-NA & Radius-1 & -0.95 [-3.84,+1.55] & -0.95 [-3.84,+1.55] & 926 & 100.0/100.0\\
+W-NA & No-gate & +33.89 [+22.11,+45.92] & +3.15 [-0.53,+6.95] & 926 & 100.0/4.6\\
+D-NA & Center-0.5 & -4.33 [-7.54,-1.16] & -5.29 [-8.11,-2.48] & 2,416 & 100.0/85.9\\
+D-NA & Linear-p & -0.40 [-1.81,+0.98] & -0.40 [-1.81,+0.98] & 2,416 & 100.0/100.0\\
+D-NA & Clip-g & -0.18 [-0.46,+0.04] & -0.18 [-0.46,+0.04] & 2,416 & 100.0/100.0\\
+D-NA & Shrink-fixed & -1.66 [-3.69,+0.38] & -2.25 [-4.01,-0.53] & 2,416 & 100.0/86.0\\
+D-NA & Radius-1 & -2.40 [-4.03,-0.73] & -2.40 [-4.03,-0.73] & 2,416 & 100.0/100.0\\
+D-NA & No-gate & +6.49 [+3.60,+9.44] & +0.78 [-0.50,+2.04] & 2,416 & 100.0/14.3\\
+\bottomrule
+\end{tabular}
+\end{table}

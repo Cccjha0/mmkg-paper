@@ -1,0 +1,43 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{TEST native component policies: $U$ and unconditional RR loss $L_-$ use $10^{-4}$ units; intervention $I$, all-observation harm $H$ and intervention-conditional harm $H_I$ are percentages; $D$ is mean absolute weight displacement over all observations. Undefined Global conditional harm is marked --, not zero. All policies use the same original Global reference. These are fixed-setting sensitivity points, not independently DEV-optimized competitors. The supplement retains full counts, MRR, conditional matched metrics and all DEV/seed/direction results.}
+\label{tab:component-risk_primary}
+\begin{tabular}{llrrrrrr}
+\toprule
+Pair & Variant & $U$ & $I$ (\%) & $H$ (\%) & $H_I$ (\%) & $L_-$ & $D$\\
+\midrule
+W-N & ADC & 24.47 & 63.33 & 15.15 & 23.92 & 54.63 & 0.1210\\
+W-N & Center-0.5 & 20.79 & 63.33 & 15.04 & 23.75 & 56.30 & 0.1152\\
+W-N & Linear-p & 16.12 & 63.33 & 13.80 & 21.79 & 45.21 & 0.0657\\
+W-N & Clip-g & 24.18 & 63.33 & 15.37 & 24.27 & 57.20 & 0.1335\\
+W-N & Shrink-fixed & 6.78 & 45.84 & 8.90 & 19.42 & 25.16 & 0.0291\\
+W-N & Radius-1 & 24.00 & 63.33 & 17.85 & 28.18 & 88.29 & 0.2460\\
+W-N & No-gate & 24.36 & 89.10 & 22.63 & 25.40 & 74.05 & 0.1365\\
+W-N & Global & 0.00 & 0.00 & 0.00 & -- & 0.00 & 0.0000\\
+W-A & ADC & 10.14 & 20.29 & 3.62 & 17.83 & 14.25 & 0.0400\\
+W-A & Center-0.5 & -76.33 & 52.19 & 11.90 & 22.80 & 165.80 & 0.2290\\
+W-A & Linear-p & 9.09 & 20.29 & 3.08 & 15.18 & 7.92 & 0.0209\\
+W-A & Clip-g & 12.62 & 20.29 & 3.70 & 18.26 & 14.61 & 0.0440\\
+W-A & Shrink-fixed & -52.89 & 52.20 & 8.44 & 16.17 & 102.05 & 0.1227\\
+W-A & Radius-1 & 21.84 & 20.29 & 4.75 & 23.39 & 25.75 & 0.0800\\
+W-A & No-gate & 10.46 & 39.60 & 6.61 & 16.70 & 21.77 & 0.0523\\
+W-A & Global & 0.00 & 0.00 & 0.00 & -- & 0.00 & 0.0000\\
+D-N & ADC & -0.81 & 7.87 & 1.42 & 18.08 & 6.17 & 0.0080\\
+D-N & Center-0.5 & -17.20 & 18.78 & 6.92 & 36.86 & 47.89 & 0.0886\\
+D-N & Linear-p & 0.54 & 7.87 & 1.12 & 14.26 & 2.21 & 0.0040\\
+D-N & Clip-g & -0.68 & 7.87 & 1.43 & 18.11 & 6.08 & 0.0081\\
+D-N & Shrink-fixed & -2.33 & 18.78 & 4.88 & 25.97 & 10.00 & 0.0165\\
+D-N & Radius-1 & -3.14 & 7.87 & 2.26 & 28.73 & 22.24 & 0.0360\\
+D-N & No-gate & -1.47 & 33.90 & 5.33 & 15.71 & 14.72 & 0.0214\\
+D-N & Global & 0.00 & 0.00 & 0.00 & -- & 0.00 & 0.0000\\
+D-A & ADC & 2.12 & 0.45 & 0.09 & 20.97 & 0.48 & 0.0014\\
+D-A & Center-0.5 & 3.10 & 3.64 & 2.23 & 61.09 & 1.47 & 0.0093\\
+D-A & Linear-p & 1.03 & 0.45 & 0.09 & 20.22 & 0.38 & 0.0007\\
+D-A & Clip-g & 2.40 & 0.45 & 0.09 & 20.60 & 0.47 & 0.0016\\
+D-A & Shrink-fixed & 2.48 & 3.64 & 2.15 & 59.06 & 1.09 & 0.0064\\
+D-A & Radius-1 & 3.24 & 0.45 & 0.12 & 25.84 & 0.55 & 0.0027\\
+D-A & No-gate & -29.89 & 43.35 & 8.56 & 19.75 & 63.74 & 0.0465\\
+D-A & Global & 0.00 & 0.00 & 0.00 & -- & 0.00 & 0.0000\\
+\bottomrule
+\end{tabular}
+\end{table}

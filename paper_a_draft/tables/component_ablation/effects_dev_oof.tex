@@ -1,0 +1,47 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Original grouped held-out DEV ADC-minus-variant RR differences in $10^{-4}$ units with 95\% original-triple percentile intervals (10,000 common draws). Native retains each original gate/action count. Matched-I independently and uniformly thins each side to the same nonzero count in each seed/fold/repetition stratum. $n_*$ is the common observation count; retained gives ADC/variant percentages of their original nonzero counts. Each row has its own budget, so matched ADC is not one common policy across rows. Exact discrete-action expectations are compared; no expected alpha is ranked. Intervals condition on fixed fits and workload allocations, omit refitting/reallocation uncertainty and are unadjusted for multiplicity. Zero inclusion is not equivalence.}
+\label{tab:component-effects_dev_oof}
+\begin{tabular}{llllrl}
+\toprule
+Pair & Variant & Native [95\% CI] & Matched-I [95\% CI] & $n_*$ & Retained (\%)\\
+\midrule
+W-N & Center-0.5 & +2.22 [-4.17,+8.73] & +1.22 [-5.04,+7.65] & 15,751 & 97.0/100.0\\
+W-N & Linear-p & +9.71 [+2.84,+16.69] & +9.71 [+2.84,+16.69] & 16,238 & 100.0/100.0\\
+W-N & Clip-g & -1.62 [-4.67,+1.47] & -1.62 [-4.67,+1.47] & 16,238 & 100.0/100.0\\
+W-N & Shrink-fixed & +24.74 [+16.04,+33.14] & +13.93 [+7.82,+20.09] & 10,684 & 65.8/100.0\\
+W-N & Radius-1 & -9.94 [-17.88,-2.01] & -9.94 [-17.88,-2.01] & 16,238 & 100.0/100.0\\
+W-N & No-gate & -0.59 [-5.58,+4.58] & +8.25 [+3.90,+12.66] & 16,238 & 100.0/70.4\\
+W-A & Center-0.5 & +79.11 [+64.75,+93.11] & +23.80 [+17.19,+30.50] & 4,998 & 100.0/37.6\\
+W-A & Linear-p & +5.61 [+2.39,+8.90] & +5.61 [+2.39,+8.90] & 4,998 & 100.0/100.0\\
+W-A & Clip-g & -1.46 [-3.28,+0.18] & -1.46 [-3.28,+0.18] & 4,998 & 100.0/100.0\\
+W-A & Shrink-fixed & +61.43 [+52.04,+70.96] & +22.29 [+17.31,+27.38] & 4,998 & 100.0/37.6\\
+W-A & Radius-1 & -8.74 [-13.93,-3.64] & -8.74 [-13.93,-3.64] & 4,998 & 100.0/100.0\\
+W-A & No-gate & +3.98 [+1.19,+6.83] & +7.47 [+3.76,+11.20] & 4,998 & 100.0/50.2\\
+D-N & Center-0.5 & +23.81 [+17.26,+30.39] & +11.87 [+7.94,+15.82] & 4,807 & 100.0/43.5\\
+D-N & Linear-p & +0.44 [-1.08,+1.96] & +0.43 [-1.05,+1.90] & 4,359 & 90.7/100.0\\
+D-N & Clip-g & -0.19 [-0.60,+0.19] & -0.19 [-0.60,+0.19] & 4,807 & 100.0/100.0\\
+D-N & Shrink-fixed & +2.29 [+0.29,+4.34] & +1.07 [-0.26,+2.38] & 4,807 & 100.0/43.5\\
+D-N & Radius-1 & +5.36 [+1.69,+9.10] & +5.36 [+1.69,+9.10] & 4,807 & 100.0/100.0\\
+D-N & No-gate & -0.66 [-3.08,+1.72] & -0.51 [-1.74,+0.71] & 4,807 & 100.0/28.6\\
+D-A & Center-0.5 & -1.11 [-2.01,-0.25] & -0.01 [-0.75,+0.74] & 173 & 100.0/8.5\\
+D-A & Linear-p & +0.12 [-0.51,+0.86] & +0.12 [-0.51,+0.86] & 173 & 100.0/100.0\\
+D-A & Clip-g & -0.28 [-0.63,-0.03] & -0.28 [-0.63,-0.03] & 173 & 100.0/100.0\\
+D-A & Shrink-fixed & -0.49 [-1.13,+0.20] & +0.06 [-0.62,+0.78] & 173 & 100.0/8.5\\
+D-A & Radius-1 & -0.53 [-1.05,-0.05] & -0.53 [-1.05,-0.05] & 173 & 100.0/100.0\\
+D-A & No-gate & +21.36 [+16.02,+26.82] & +0.60 [-0.54,+1.86] & 173 & 100.0/0.9\\
+W-NA & Center-0.5 & +0.68 [-4.46,+5.80] & +0.68 [-4.46,+5.80] & 1,029 & 100.0/100.0\\
+W-NA & Linear-p & +2.32 [+0.02,+4.75] & +2.32 [+0.02,+4.75] & 1,029 & 100.0/100.0\\
+W-NA & Clip-g & -1.29 [-2.67,+0.01] & -1.29 [-2.67,+0.01] & 1,029 & 100.0/100.0\\
+W-NA & Shrink-fixed & +0.58 [-1.89,+3.07] & +0.58 [-1.89,+3.07] & 1,029 & 100.0/100.0\\
+W-NA & Radius-1 & -1.50 [-5.08,+2.01] & -1.50 [-5.08,+2.01] & 1,029 & 100.0/100.0\\
+W-NA & No-gate & +35.40 [+24.23,+46.76] & +3.39 [-0.06,+6.87] & 1,029 & 100.0/5.2\\
+D-NA & Center-0.5 & +1.54 [-2.05,+5.14] & -0.80 [-3.74,+2.19] & 1,829 & 100.0/84.1\\
+D-NA & Linear-p & +1.05 [-0.48,+2.52] & +1.05 [-0.48,+2.52] & 1,829 & 100.0/100.0\\
+D-NA & Clip-g & +0.03 [-0.31,+0.41] & +0.03 [-0.31,+0.41] & 1,829 & 100.0/100.0\\
+D-NA & Shrink-fixed & +1.71 [-0.69,+4.15] & +0.78 [-1.19,+2.79] & 1,829 & 100.0/84.2\\
+D-NA & Radius-1 & +0.70 [-1.21,+2.68] & +0.70 [-1.21,+2.68] & 1,829 & 100.0/100.0\\
+D-NA & No-gate & +10.32 [+7.01,+13.68] & +1.79 [+0.44,+3.11] & 1,829 & 100.0/14.8\\
+\bottomrule
+\end{tabular}
+\end{table}
