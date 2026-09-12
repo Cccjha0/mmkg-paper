@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{4pt}
+\caption{Direction and magnitude mismatch. $E$ counts non-tied observations with at least one profitable side and a feasible winner-suggested side; miss is the percentage of $E$ for which only the opposite side is profitable. Block counts opportunity observations whose suggested side is unavailable. $A$ counts actual nonzero ADC actions aligned with the endpoint winner; $H_A$ and $C_A$ are their harm percentage and conditional mean RR loss. $U_A$ is their mean ADC-minus-anchor RR in $10^{-4}$ units. Empty groups are undefined, not zero. Blocked suggestions are excluded from the miss denominator; actual aligned actions can still harm through their chosen magnitude.}
+\label{tab:winner-alignment}
+\begin{tabular}{llrrrrrrr}
+\toprule
+Pair & Split & $E$ & Miss (\%) & Block & $A$ & $H_A$ (\%) & $C_A$ & $U_A$\\
+\midrule
+W-N & DEV & 15,974 & 5.57 & 0 & 6,991 & 7.47 & 0.0739 & +209.65\\
+W-N & TEST & 15,780 & 5.60 & 0 & 6,806 & 7.66 & 0.0772 & +209.54\\
+W-A & DEV & 8,867 & 0.00 & 3,827 & 2,635 & 1.75 & 0.0073 & +198.82\\
+W-A & TEST & 8,642 & 0.00 & 3,928 & 2,655 & 1.47 & 0.0077 & +155.08\\
+D-N & DEV & 11,328 & 0.00 & 6,272 & 1,743 & 1.43 & 0.0126 & +95.92\\
+D-N & TEST & 14,264 & 0.00 & 8,019 & 1,689 & 1.24 & 0.0133 & +138.49\\
+D-A & DEV & 12,850 & 0.00 & 6,667 & 69 & 0.00 & -- & +1044.56\\
+D-A & TEST & 16,401 & 0.00 & 8,581 & 139 & 2.16 & 0.0002 & +1054.71\\
+W-NA & DEV & 14,979 & 14.66 & 0 & 435 & 3.22 & 0.0436 & +506.36\\
+W-NA & TEST & 14,861 & 14.82 & 0 & 402 & 1.74 & 0.1976 & +535.62\\
+D-NA & DEV & 17,373 & 0.00 & 4,914 & 858 & 1.28 & 0.0062 & +177.09\\
+D-NA & TEST & 21,981 & 0.00 & 6,280 & 1,184 & 1.69 & 0.0081 & +166.60\\
+\bottomrule
+\end{tabular}
+\end{table}

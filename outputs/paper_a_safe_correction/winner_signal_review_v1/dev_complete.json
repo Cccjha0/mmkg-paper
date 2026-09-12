@@ -1,0 +1,97 @@
+{
+  "status": "winner_signal_dev_checks_passed",
+  "sources": {
+    "scripts/analyze_paper_a_winner_signal.py": "ff97ee0e09e9b9ef06e78d76b4a2e9714093b4019928240599548207a274eda5",
+    "router/winner_signal_diagnostics.py": "8cf485ff9d15daf2a172d37d9747f1eaefc6e077e0ed078134d99de498ec220f",
+    "tests/test_winner_signal_diagnostics.py": "63e9b59781e2846b931419aedcfe452a1ebeda46218da70faae9e723c89374d1",
+    "docs/protocols/paper_a_winner_signal_review.md": "1c292e36d98411ca47df96c5c2d954c7bc1de3e3843c2ad86b03ba43387505fb",
+    "scripts/analyze_paper_a_matched_alternatives.py": "74295d8313428fbe4d9ee5c4cc225a69d2d684e00067b69694b8aff8bf8174e7",
+    "scripts/analyze_paper_a_conservative_radius.py": "c58b537a2b593ab9efd5235da1417f57f0994e2ac9eab57276a0cd5e0647b863",
+    "scripts/ablate_anchored_dynamic.py": "3baaefb56ddfb04906b7c5545242e4237c3ea407337c7ab9b278e37006ff26f4",
+    "scripts/crossfit_anchored_dynamic.py": "73a63d93f172b55a1dee61c4f4db7374d27047aa2594745196ebf314bfb85c87",
+    "scripts/crossfit_heterogeneous_dev_policies.py": "2aa17ce7650ec2a624d19b687013f606bc4b2eae9d90ad9805c1d4f5113ef948",
+    "router/matched_actions.py": "a68890263d5fa089cde0365ac050ae1f979d3b9b6c7e40ea0148eb87863f2253",
+    "paper_a_draft/rerun_source_manifest.json": "17b87f61db9125402ed77ae725eb6d2f382e13d57cf372fc9525611d8a768280",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_native/baseline_crossfit/dev_crossfit_query_rows.csv": "fc7775b1d6ad67531430dad9fbc92b5db45a82f0b70cd05d472c79cef41e4add",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_native/p3_ablation/dev_p3_selected_query_rows.csv": "af90dd936a683544b0233f7fa5f81b53930a53c85ff829491dbf48c7b3e33d69",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_native/p3_ablation/dev_p3_selected_by_fold.csv": "090037bad93ae5bb94f5c8dd655dad7b88ddf678b0369925bf27d3f78c4f8ba7",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_adamf/baseline_crossfit/dev_crossfit_query_rows.csv": "ac97e54fbf3f100f6f39e628eb5c4f9a05ba37b780d503da8e9fdfa41598cad9",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_adamf/p3_ablation/dev_p3_selected_query_rows.csv": "f7c2bba5580fae3b38a9315c40f4987cd8f251f1e49aaf9c0ece980f40479743",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_adamf/p3_ablation/dev_p3_selected_by_fold.csv": "a2fad68e4f067c45c8c3f14aaca1ab3a07e6ab5959f865f9167a3720a6ecb8c2",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_native/baseline_crossfit/dev_crossfit_query_rows.csv": "8c8e5f0422738256752ab126c73e36b21ef7eac969a5fc6b54443cc3306c2244",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_native/p3_ablation/dev_p3_selected_query_rows.csv": "b698cce4455f75652d0dd9d4261ea6610c463402e7da703e770f0b33418dc37e",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_native/p3_ablation/dev_p3_selected_by_fold.csv": "f8e4cfdf1bbd97ffea6355e9d53bad81151d7e849dd580137062d1239e8a25e6",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_adamf/baseline_crossfit/dev_crossfit_query_rows.csv": "ddf06dbcb1a7166433933a597f031e211735b648b9af04aa7ff62e7d5a607c1b",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_adamf/p3_ablation/dev_p3_selected_query_rows.csv": "388f50067fff9d22a252c3c1a71d9de1cbdb4f9f62d04d4a5f4215959b4acf1a",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_adamf/p3_ablation/dev_p3_selected_by_fold.csv": "c30b59fa04e4cb2be857558bd84e702203fb4103a430252526e84e16737ae12b",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_native_adamf/baseline_crossfit/dev_crossfit_query_rows.csv": "1028adc60841b3f57b72fa4d765ee01d7da6b93cf173dd2415bb3745819c8b76",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_native_adamf/p3_ablation/dev_p3_selected_query_rows.csv": "00d4de9fb66cc62955b2703b81e321e21d4eee14fd5d419572fd88a7b5989391",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_native_adamf/p3_ablation/dev_p3_selected_by_fold.csv": "25fe5ffd496991f27073971bb6c541fcbc3cbfb7f42845155717be6122af312c",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_native_adamf/baseline_crossfit/dev_crossfit_query_rows.csv": "2affdd5c0fe126ea00c2f4bbf5f6185067d39d08d199f5855463ca1a48ab6774",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_native_adamf/p3_ablation/dev_p3_selected_query_rows.csv": "6192ff83ab63a698a7732af8d577239a1f2d5ad65c975a5e79cfa1c960c62cf7",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_native_adamf/p3_ablation/dev_p3_selected_by_fold.csv": "999853c0764fabf66f1fac132591e58e267b7213bc8951d7d8fb231285ee782d"
+  },
+  "outputs": {
+    "outputs/paper_a_safe_correction/winner_signal_review_v1/probability_summary.csv": "f8775d17f82d675b8140181ee5009b0844392dd59b1af1b6985da8455ab0c46c",
+    "outputs/paper_a_safe_correction/winner_signal_review_v1/reliability_bins.csv": "571f6ab2f5fab5751045c6b8ac22ffe938ac70a19e158e1f86ce7e847e3bafb2",
+    "outputs/paper_a_safe_correction/winner_signal_review_v1/dev_policies.csv": "c35747bb39f4a9a7a69197ff357753ea46164c6b4de73521a5663e2d313b6bd9",
+    "outputs/paper_a_safe_correction/winner_signal_review_v1/dev_policy_cells.csv": "ecc4a3558c807796c69437b30b6a4e21062040406c319a9588905cecab61b2da",
+    "outputs/paper_a_safe_correction/winner_signal_review_v1/dev_choices.csv": "b06c2ab1c49bcb9a64b549afbbac6aff7e7086ecf7110d1c0689b4652aac294f",
+    "outputs/paper_a_safe_correction/winner_signal_review_v1/dev_candidates.csv": "05241aa25e1fa436305beb1d490d4e578c986e7f8f31818e25f2da6cdac13d6e",
+    "outputs/paper_a_safe_correction/winner_signal_review_v1/dev_fits.csv": "8d568bd73c1f488fc0d56f44f9163b7f6a877aaa2f8c835b22ec651aabc38a8c",
+    "outputs/paper_a_safe_correction/winner_signal_review_v1/fold_model_states.json": "0edb14163ca19bbf1a2fe20217791cd8b474b0cdff9f031b39a18b371a3df4db"
+  },
+  "checks": [
+    {
+      "pair": "mkgw_mhyper_native",
+      "observations": 25656,
+      "original_adc_and_query_soft_replayed": true,
+      "original_grouping_and_anchors_replayed": true,
+      "preprocessing_equal": true
+    },
+    {
+      "pair": "mkgw_mhyper_adamf",
+      "observations": 25656,
+      "original_adc_and_query_soft_replayed": true,
+      "original_grouping_and_anchors_replayed": true,
+      "preprocessing_equal": true
+    },
+    {
+      "pair": "db15k_mhyper_native",
+      "observations": 47532,
+      "original_adc_and_query_soft_replayed": true,
+      "original_grouping_and_anchors_replayed": true,
+      "preprocessing_equal": true
+    },
+    {
+      "pair": "db15k_mhyper_adamf",
+      "observations": 47532,
+      "original_adc_and_query_soft_replayed": true,
+      "original_grouping_and_anchors_replayed": true,
+      "preprocessing_equal": true
+    },
+    {
+      "pair": "mkgw_native_adamf",
+      "observations": 25656,
+      "original_adc_and_query_soft_replayed": true,
+      "original_grouping_and_anchors_replayed": true,
+      "preprocessing_equal": true
+    },
+    {
+      "pair": "db15k_native_adamf",
+      "observations": 47532,
+      "original_adc_and_query_soft_replayed": true,
+      "original_grouping_and_anchors_replayed": true,
+      "preprocessing_equal": true
+    }
+  ],
+  "small_model_fits": 60,
+  "balanced_reconstructions": 30,
+  "new_unweighted_fits": 30,
+  "final_models": 0,
+  "candidate_evaluations": 2460,
+  "test_opened": false,
+  "new_test_policy": false,
+  "sklearn_version": "1.7.1",
+  "max_iterations": 7
+}

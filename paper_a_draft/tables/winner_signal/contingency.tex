@@ -1,0 +1,47 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{4pt}
+\caption{Endpoint winner versus profitable correction directions. Each row reports percentages within its winner class, including ties. Down/up mean lower/higher primary weight. A side is profitable if some grid point within the original fixed radius improves the anchor RR by more than $10^{-12}$. Both and neither are retained; an unavailable direction cannot be profitable. DEV uses grouped held-out anchors/radii; TEST uses the original locks. These gold-aware opportunities are diagnostic, not selector inputs or policies.}
+\label{tab:winner-contingency}
+\begin{tabular}{lllrrrrr}
+\toprule
+Pair & Split & Winner & $n$ & Down only & Up only & Both & Neither\\
+\midrule
+W-N & DEV & A & 8,214 & 10.09 & 40.52 & 14.51 & 34.88\\
+W-N & DEV & B & 11,353 & 88.03 & 0.53 & 5.03 & 6.41\\
+W-N & DEV & tie & 6,089 & 2.59 & 0.33 & 1.68 & 95.40\\
+W-N & TEST & A & 8,367 & 9.24 & 42.20 & 14.62 & 33.94\\
+W-N & TEST & B & 11,091 & 86.62 & 0.99 & 4.83 & 7.56\\
+W-N & TEST & tie & 6,186 & 2.33 & 0.50 & 1.73 & 95.44\\
+W-A & DEV & A & 11,283 & 33.92 & 0.00 & 0.00 & 66.08\\
+W-A & DEV & B & 9,281 & 95.54 & 0.00 & 0.00 & 4.46\\
+W-A & DEV & tie & 5,092 & 4.20 & 0.00 & 0.00 & 95.80\\
+W-A & TEST & A & 11,401 & 34.45 & 0.00 & 0.00 & 65.55\\
+W-A & TEST & B & 9,025 & 95.76 & 0.00 & 0.00 & 4.24\\
+W-A & TEST & tie & 5,218 & 5.00 & 0.00 & 0.00 & 95.00\\
+D-N & DEV & A & 23,680 & 26.49 & 0.00 & 0.00 & 73.51\\
+D-N & DEV & B & 13,325 & 85.01 & 0.00 & 0.00 & 14.99\\
+D-N & DEV & tie & 10,527 & 3.45 & 0.00 & 0.00 & 96.55\\
+D-N & TEST & A & 29,742 & 26.96 & 0.00 & 0.00 & 73.04\\
+D-N & TEST & B & 16,838 & 84.71 & 0.00 & 0.00 & 15.29\\
+D-N & TEST & tie & 12,832 & 3.32 & 0.00 & 0.00 & 96.68\\
+D-A & DEV & A & 25,089 & 26.57 & 0.00 & 0.00 & 73.43\\
+D-A & DEV & B & 13,836 & 92.87 & 0.00 & 0.00 & 7.13\\
+D-A & DEV & tie & 8,607 & 6.16 & 0.00 & 0.00 & 93.84\\
+D-A & TEST & A & 31,752 & 27.03 & 0.00 & 0.00 & 72.97\\
+D-A & TEST & B & 17,257 & 95.04 & 0.00 & 0.00 & 4.96\\
+D-A & TEST & tie & 10,403 & 7.79 & 0.00 & 0.00 & 92.21\\
+W-NA & DEV & A & 12,947 & 16.51 & 39.92 & 5.89 & 37.68\\
+W-NA & DEV & B & 7,575 & 88.15 & 0.78 & 2.31 & 8.77\\
+W-NA & DEV & tie & 5,134 & 6.93 & 0.10 & 0.72 & 92.25\\
+W-NA & TEST & A & 12,993 & 16.66 & 39.39 & 5.88 & 38.07\\
+W-NA & TEST & B & 7,443 & 88.84 & 0.51 & 2.22 & 8.44\\
+W-NA & TEST & tie & 5,208 & 7.78 & 0.08 & 0.73 & 91.42\\
+D-NA & DEV & A & 19,776 & 24.85 & 0.00 & 0.00 & 75.15\\
+D-NA & DEV & B & 18,739 & 92.71 & 0.00 & 0.00 & 7.29\\
+D-NA & DEV & tie & 9,017 & 8.95 & 0.00 & 0.00 & 91.05\\
+D-NA & TEST & A & 25,115 & 25.00 & 0.00 & 0.00 & 75.00\\
+D-NA & TEST & B & 23,416 & 93.87 & 0.00 & 0.00 & 6.13\\
+D-NA & TEST & tie & 10,881 & 10.15 & 0.00 & 0.00 & 89.85\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -156,3 +156,14 @@ docs/reports/paper_a_inference_training_scope_review_2026-09-12.md -text whitesp
 outputs/paper_a_safe_correction/inference_training_scope_v1/** -text whitespace=cr-at-eol
 paper_a_draft/inference_scope_source_manifest.json -text whitespace=cr-at-eol
 paper_a_draft/tables/inference_scope/** -text whitespace=cr-at-eol
+
+# B13/B14 fixed-policy mismatch diagnostics and DEV-only class-weight control.
+router/winner_signal_diagnostics.py -text whitespace=cr-at-eol
+scripts/analyze_paper_a_winner_signal.py -text whitespace=cr-at-eol
+scripts/build_paper_a_winner_signal_assets.py -text whitespace=cr-at-eol
+tests/test_winner_signal_diagnostics.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_winner_signal_review.md -text whitespace=cr-at-eol
+docs/reports/paper_a_winner_signal_review_2026-09-12.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/winner_signal_review_v1/** -text whitespace=cr-at-eol
+paper_a_draft/winner_signal_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/tables/winner_signal/** -text whitespace=cr-at-eol

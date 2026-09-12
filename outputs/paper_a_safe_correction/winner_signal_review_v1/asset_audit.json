@@ -1,0 +1,15 @@
+{
+  "status": "winner_signal_assets_verified",
+  "contingency_rows": 36,
+  "diagnostic_cells": 12,
+  "probability_rows": 18,
+  "policy_rows": 30,
+  "small_fits": 60,
+  "tables": {
+    "tables/winner_signal/contingency.tex": "f963039ed853d147d021922ddc4910dbe904a275fe7700ffa7a6367016920155",
+    "tables/winner_signal/alignment.tex": "b7be37622c2c368e12b96a6a1f7ccbd4b0645dddda85b72f0262faa8f2b2c2d5",
+    "tables/winner_signal/weighting.tex": "1b5d7ae26a5a58b32104f81746d9ac26badaf2e9b85797117f3f89be0257c96e"
+  },
+  "test_used_for_selection": false,
+  "historical_results_replaced": false
+}

@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{4pt}
+\caption{Class-weight control on grouped held-out DEV. Balanced and unweighted use the same 13 features, non-tied training rows, preprocessing, $C=1$, folds and random states: five fits per learner per pair, with no final control model or new TEST application. Brier, 10-bin ECE and AUC use naturally weighted non-tied held-out winner labels; Prior is the training-fold winner frequency, a probability-only baseline. Lower Brier is not calibration alone, and ECE is bin-dependent. Policy outcomes use all held-out observations: $U$ is ADC+Global utility, $L_-$ its unconditional mean loss, $I$ its weight-change percentage, and $U_Q$ Query-soft utility. Utility/loss use $10^{-4}$ RR units relative to the common fold Global. Each learner gets the same 41 training-portion ADC candidates; Query-soft uses its same fitted object. All outcomes are retained, without selecting a weighting scheme from TEST.}
+\label{tab:winner-weighting}
+\begin{tabular}{llrrrrrrr}
+\toprule
+Pair & Fit & Brier & ECE (\%) & AUC & $U$ & $L_-$ & $I$ (\%) & $U_Q$\\
+\midrule
+W-N & Balanced & 0.2419 & 7.79 & 0.603 & +30.70 & 47.01 & 63.29 & +19.39\\
+W-N & Unweighted & 0.2359 & 1.63 & 0.603 & +36.81 & 67.41 & 82.85 & +23.93\\
+W-N & Prior & 0.2436 & 0.00 & 0.491 & -- & -- & -- & --\\
+W-A & Balanced & 0.2429 & 4.72 & 0.593 & +12.04 & 14.76 & 19.48 & -201.35\\
+W-A & Unweighted & 0.2408 & 0.69 & 0.592 & +6.78 & 9.19 & 15.34 & -172.44\\
+W-A & Prior & 0.2477 & 0.00 & 0.487 & -- & -- & -- & --\\
+D-N & Balanced & 0.2440 & 13.61 & 0.583 & -0.09 & 5.12 & 10.11 & -138.73\\
+D-N & Unweighted & 0.2255 & 0.84 & 0.584 & -0.03 & 0.05 & 0.16 & -91.76\\
+D-N & Prior & 0.2305 & 0.00 & 0.490 & -- & -- & -- & --\\
+D-A & Balanced & 0.2457 & 14.16 & 0.571 & +0.36 & 1.25 & 0.36 & -360.94\\
+D-A & Unweighted & 0.2256 & 1.04 & 0.571 & +0.27 & 0.22 & 0.12 & -274.52\\
+D-A & Prior & 0.2291 & 0.00 & 0.491 & -- & -- & -- & --\\
+W-NA & Balanced & 0.2482 & 12.98 & 0.543 & +1.47 & 8.73 & 4.01 & -164.32\\
+W-NA & Unweighted & 0.2314 & 0.28 & 0.542 & +0.00 & 0.00 & 0.00 & -120.14\\
+W-NA & Prior & 0.2330 & 0.00 & 0.486 & -- & -- & -- & --\\
+D-NA & Balanced & 0.2494 & 1.39 & 0.528 & +0.31 & 3.93 & 3.85 & -133.77\\
+D-NA & Unweighted & 0.2493 & 0.23 & 0.526 & +0.82 & 1.05 & 1.85 & -128.54\\
+D-NA & Prior & 0.2499 & 0.00 & 0.491 & -- & -- & -- & --\\
+\bottomrule
+\end{tabular}
+\end{table}

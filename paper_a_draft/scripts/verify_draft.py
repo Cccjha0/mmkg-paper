@@ -161,6 +161,33 @@ assert [r['label'] for r in endpoint_audit['full_dev_anchor_checks'] if r['chang
 endpoint_assets=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/endpoint_contract_return_review_v1/asset_audit.json').read_text())
 assert endpoint_assets['status']=='endpoint_assets_verified' and len(endpoint_assets['tables'])==3
 
+winner=json.loads((ROOT/'winner_signal_source_manifest.json').read_text(encoding='utf-8'))
+assert winner['version']=='winner_signal_review_v1'
+for rel,sha in winner['sources'].items():
+    digest=hashlib.sha256()
+    with (ROOT.parent/rel).open('rb') as handle:
+        for block in iter(lambda:handle.read(1024*1024),b''): digest.update(block)
+    assert digest.hexdigest()==sha,rel
+for rel,sha in winner['tables'].items():
+    assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in winner['tables']}
+winner_audit=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/winner_signal_review_v1/audit.json').read_text())
+winner_dev=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/winner_signal_review_v1/dev_complete.json').read_text())
+assert winner_audit['status']=='winner_signal_checks_passed' and not winner_audit['failures']
+assert len(winner_audit['checks'])==12 and sum(c['observations'] for c in winner_audit['checks'])==474732
+assert winner_audit['scorer_runs']==0 and winner_audit['small_model_fits']==60
+for key in ('new_test_policy','test_used_for_selection','historical_results_replaced','calibrated_harm_probability'):
+    assert not winner_audit[key],key
+assert winner_dev['status']=='winner_signal_dev_checks_passed' and not winner_dev['test_opened']
+assert winner_dev['balanced_reconstructions']==winner_dev['new_unweighted_fits']==30
+assert winner_dev['candidate_evaluations']==2460 and winner_dev['final_models']==0
+assert len(winner_dev['checks'])==6 and sum(c['observations'] for c in winner_dev['checks'])==219564
+winner_assets=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/winner_signal_review_v1/asset_audit.json').read_text())
+assert winner_assets['status']=='winner_signal_assets_verified' and winner_assets['tables']==winner['tables']
+assert winner_assets['contingency_rows']==36 and winner_assets['probability_rows']==18 and winner_assets['policy_rows']==30
+assert r'\label{eq:weighted-preference}' in main and r'\label{eq:winner-direction}' in main
+assert 'not automatically the natural probability' in main and 'zero miss rates' in main
+assert '5.57\\%' in main and '5.60\\%' in main and '7.66\\%' in main
 scope=json.loads((ROOT/'inference_scope_source_manifest.json').read_text(encoding='utf-8'))
 assert scope['version']=='inference_training_scope_v1'
 for rel,sha in scope['sources'].items():
@@ -339,8 +366,8 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
@@ -361,6 +388,9 @@ report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findal
         'inference_training_scope_checks_passed':True,'rank_cache_required_for_inference':False,
         'adc_final_selectors':6,'dyna_historical_final_selectors':12,'dyna_new_final_selectors':180,
         'adc_dyna_fitting_information_matched':False,'unseen_checkpoint_transfer_evaluated':False,
+        'winner_signal_checks_passed':True,'winner_direction_diagnostic_rows':474732,
+        'class_weight_control_small_fits':60,'class_weight_control_new_test_policy':False,
+        'natural_winner_probability_or_harm_calibration_established':False,
         'raw_score_finiteness_certified':raw_review['raw_score_finiteness_certified'],
         'raw_score_finiteness_scope':raw_review['scope'],
         'historical_raw_bitwise_equality_established':False,'abnormal_input_robustness_established':False,
