@@ -387,6 +387,21 @@ Table~\ref{tab:outcome-decomposition-test} places all terms of Eq.~\eqref{eq:uti
 
 The means conceal a substantial observed loss tail. Across the four primary pairs, the worst approximately 10\% of harmful observations contribute 87.35--90.47\% of total loss. W-N's maximum is a filtered rank-1-to-14 change (RR loss 0.928571), and D-A's is rank 1 to 4 (loss 0.75). Appendix~\ref{app:outcome-risk} reports every pair's conditional quantiles, fixed severe-loss thresholds and rank-1 retention. W-A gains MRR while losing 55 reference rank-1 outcomes and adding 51 new ones, giving a small negative Hits@1 point change; this is not a separate significance claim. These diagnostics connect the loss distribution to top-ranked-answer use, without measuring unfiltered serving-list accuracy or establishing that ADC has lighter tails than another adaptive policy.
 
+\subsection{Coverage separates mechanical accumulation from selection quality}
+\label{sec:coverage-quality}
+Fix each ungated projected proposal and its RR difference $d_i$ from Global. For nested accepted sets $S(q)$, the cumulative harm count $h(q)=\sum_i\mathbf{1}[i\in S(q),d_i<0]$ cannot decrease. Consequently $H(q)=h(q)/N$ is mechanically nondecreasing under any ordering, including random ordering. This is a construction property, not evidence that confidence identifies safer adjustments. Figure~\ref{fig:coverage-quality} therefore also reports $H_S=h/|S|$ and $H_I=h/|I|$, where $I$ contains accepted proposals with actual nonzero projected weight movement; empty conditional rates are undefined.
+
+The corrected diagnostic uses whole observable-query units and fixed per-stratum decile quotas, with the same accepted count in each of 512 random permutations. A second, nonzero-proposal-only pool additionally matches actual intervention counts. At its predeclared 50\% unit quota on TEST, confidence-ordered conditional harm is 21.05\% versus random mean 24.05\% on W-N, but 18.44\% versus 16.40\% on W-A, 16.23\% versus 15.53\% on D-N, and 22.55\% versus 19.41\% on D-A. W-A simultaneously has greater net utility, illustrating that ordering by harm frequency and ordering by RR utility are different questions. These are retrospective diagnostics, not new settings for the deployed gate. Appendix~\ref{app:coverage-quality} retains every decile, both pools, both splits and all six pairs. Randomization ranges describe the fixed workload; they are not population confidence intervals. Matching intervention counts still leaves direction and magnitude differences, so the shape-matched controls in Appendix~\ref{app:rejection} remain necessary for that narrower interpretation.
+
+Aggregation also changes the picture. Four-pair micro summaries reuse the same query observations twice within each dataset; DB15K contributes 69.85\% of the TEST full-denominator weight. Macro instead gives each pair weight $1/4$. At the same Active-pool 50\% quota, confidence utility is $+0.000174$ macro but $-0.000262$ micro. Neither summary is four independent replications. We report both, with their actual denominators, instead of selecting the favorable aggregation.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{figures/coverage_quality/aggregate_test.pdf}
+\caption{Corrected TEST All-pool coverage diagnostic over the four primary pairs. \textbf{The left-column monotonicity is forced by fixed proposals and nested acceptance, including under random ordering; it does not validate confidence.} Middle and right columns condition on acceptance and actual nonzero movement. Rows show pooled-count micro and equal-pair macro; conditional micro weights follow the corresponding subset counts. The horizontal axis is a per-stratum unit quota, not prediction coverage or necessarily the same observation fraction. Random means and pointwise 95\% randomization ranges use 512 nested permutations with exactly matched acceptance counts; these are not population CIs. Same-dataset pair observations overlap completely. Appendix~\ref{app:coverage-quality} gives definitions, weights, per-pair curves and exact-intervention matching.}
+\label{fig:coverage-quality}
+\end{figure}
+\FloatBarrier
+
 \subsection{Additional model pairs}
 \label{sec:scope-cost}
 The two additional NativE + AdaMF-MAT pairs yield increments of $+0.000139$ on MKG-W and $-0.000015$ on DB15K. Both original-triple bootstrap intervals span zero (Table~\ref{tab:claims-intervals}). Neither result establishes a reliable incremental improvement at this precision or reliable transfer beyond a M-Hyper primary. They remain in the main comparison table and complete effect inventory; their parameters and seed/direction results are included in the appendices. This architecture-based interpretation does not retrospectively establish a TEST-blind choice of reporting roles.
@@ -776,7 +791,7 @@ Here ``raw'' means before the confidence gate; clipping, the original radius and
 
 DEV recovers margins from the saved balanced OOF fold states and uses each original training-fold anchor, radius and threshold. TEST uses its original full-DEV lock. All recorded weights, fallback flags and RRs are replayed before diagnostics, with no new fits, scorer runs or parameter selection. Tables~\ref{tab:harm-dev_oof}--\ref{tab:harm-test} report each population's observation and harm counts, AUROC, non-interpolated average precision (AP), same-population prevalence $P_h$, and AP minus $P_h$. A constant score gives AUROC 0.5 when both classes occur and AP $P_h$ when harm is present. Global has no nonzero corrections and zero reference-relative harm; its absence of events is not successful harm classification. Empty-population and one-class undefined metrics are not assigned artificial zeros.
 
-For each pair/split, 2,000 bootstrap draws resample the full original-triple universe, carrying all three seeds and both directions together, before restriction to a fixed subset. The same draws serve all three subsets. Two-sided 95\% percentile intervals condition on the fixed fitted models, OOF assignments and observed seeds; they omit training/selection uncertainty and do not establish independence between related graph triples. AP lift is recomputed against each replicate's own prevalence. Undefined replicates would be omitted only for the affected metric and counted separately; every displayed metric has 2,000 valid draws here. Intervals are descriptive and not adjusted for multiple comparisons.
+For each pair/split, 2,000 bootstrap draws resample the full original-triple universe, carrying all three seeds and both directions together, before restriction to a fixed subset. The same draws serve all three subsets. Two-sided 95\% percentile intervals condition on the fixed fitted models, OOF assignments and observed seeds; they omit training/selection uncertainty and do not establish independence between related graph triples. AP lift is recomputed against each replicate's own prevalence. It is the difference AP minus prevalence, shown in percentage points, not a ratio. AP uses recall-increment weighting at tied-score thresholds, not trapezoidal PR integration; Appendix~\ref{app:coverage-quality} gives the formula and verifies both code versions. Undefined replicates would be omitted only for the affected metric and counted separately; every displayed metric has 2,000 valid draws here. Intervals are descriptive and not adjusted for multiple comparisons.
 
 \input{tables/ties_harm/harm_dev_oof.tex}
 \input{tables/ties_harm/harm_test.tex}
@@ -823,6 +838,74 @@ Random-shape nearly reproduces the full gate: five of six TEST ADC-minus-Random-
 Simple rules further limit a superiority claim. At the same TEST intervention count, Low-A-gap has W-A utility $0.001414$ versus ADC's $0.001014$ and mean loss $0.000825$ versus $0.001425$; the ADC-minus-rule interval is wholly negative before multiplicity adjustment. On D-NA it gives utility $0.000221$ versus $-0.000015$, also with lower mean loss and a negative paired interval. These rules are fixed diagnostics and are not adopted after inspecting TEST. Direction-only and gap priorities have mixed results elsewhere. The evidence establishes some effects beyond count reduction, but not uniform superiority over simple selection or a general residual benefit after matching action shape.
 
 The \path{rejection_source_manifest.json} binds the prior caches/states, allocation protocol, current code, all summaries and four formal tables. The audit verifies original actions/RRs, gold-invariant query grouping, exact intervention budgets, signed/direction histogram matching and previous-result reconciliation. Nine synthetic tests check whole-query decisions, ordering invariance, repetition-weighted counts, shape matching, enumerated random expectations, zero/full quotas, no-gate clipping and paired clustering. The controls and direct gate effects remain retrospective and do not establish universal fallback necessity.
+\FloatBarrier
+
+\section{Corrected Coverage, Aggregation and AP Definitions}
+\label{app:coverage-quality}
+
+\paragraph{Scope and gold-free allocation.}
+The \path{coverage_quality_v1} analysis replays 474,732 corrected observations with their original OOF or full-DEV states. No scorer, fitting, threshold search or new policy selection is performed. As in Appendix~\ref{app:rejection}, a unit is (base seed, fitted fold, direction, relation, known entity); changing which answer is specified as gold leaves grouping unchanged. Raw, anchor and originally applied projected weights agree within every unit. Repeated exported confidence values can differ slightly: the largest within-unit range is $4.84\times10^{-7}$, with 245 unit ranges exceeding $10^{-12}$. This batch diagnostic ranks the mean confidence within each observable unit, avoiding selection of the first gold record as a representative. The underlying recorded scores and actions remain unchanged; the AP audit below uses the original per-observation confidence values.
+
+All includes every finite proposal, including those clipped/projected to the anchor. Active restricts to nonzero ungated projected proposals. This Active pool is the Prop. population of Appendix~\ref{app:ties-harm}, not the original deployed Exec. population. Within each (seed, fold, observable repetition count) stratum containing $m_s$ eligible units, the quota at decile $d\in\{0,\ldots,10\}$ is $k_s(d)=\lfloor d m_s/10\rfloor$. Sort descending unit-mean confidence; exact ties use a fixed pseudorandom key on canonically sorted observable units. All repeated observations of a unit share its decision. This is a stratified batch ranking diagnostic, distinct from applying a single confidence threshold to a new query. Integer rounding can make observation coverage lower than the stated unit quota. Every accepted unit uses the original ungated projected weight; rejection uses the anchor. At zero quota all observations use Global, and at full quota outcomes reproduce the original no-fallback variant.
+
+\paragraph{Random ordering and denominators.}
+Generate 512 uniform random permutations within the same strata and reuse each permutation at every decile. Every realization has exactly the same accepted observation count as the confidence order, because repetitions are constant within a stratum. In Active, accepted counts also equal actual intervention counts. All-pool random intervention counts may differ. Random PCG64 seeds are $2026091200+4p+2s+a$, with pair order W-N/W-A/D-N/D-A/W-NA/D-NA, split order DEV/TEST, pool order All/Active and zero-based indices; confidence-tie seeds are $2026091250+2p+s$. No realization is selected.
+
+For every pool and quota we retain $N,n_S,n_I,n_h$, $H=n_h/N$, $H_S=n_h/n_S$, $H_I=n_h/n_I$, utility, unconditional loss and mean absolute displacement. A proposal can be accepted yet cause no weight change, and a changed weight can leave RR unchanged. Random conditional ratios are computed within each realization before averaging, not by dividing expected numerator and denominator. The CSV separately supplies exact expected additive totals and all valid-draw counts. Zero conditional denominators are undefined, including the zero-quota endpoint. Pointwise 2.5/97.5 permutation percentiles describe ordering randomness on this fixed workload, not uncertainty about a population, a simultaneous band or a significance test. They do not include training, model selection or new-workload uncertainty.
+
+The full-denominator cumulative harm is mechanically nondecreasing for both confidence and random permutations; this follows before observing the plotted shape. Accepted/active conditional harm need not be monotone. A useful ordering claim must compare outcomes at the relevant denominator and budget. Tables~\ref{tab:coverage-counts_all}--\ref{tab:coverage-counts_active} display predeclared 10/50/100\% quota checkpoints; every decile is retained in the supplement. D-A's 50\% Active diagnostic changes 12,454 observations, far more than its original deployed gate's 267. Its adverse diagnostic utility must not be confused with the original locked result.
+\input{tables/coverage_quality/counts_all.tex}
+\input{tables/coverage_quality/counts_active.tex}
+\FloatBarrier
+
+\begin{figure}[htbp]
+\centering\includegraphics[width=\linewidth]{figures/coverage_quality/pairs_all_test.pdf}
+\caption{TEST All-pool harm conditional on actual nonzero movement, for all six pairs. Confidence and random orders have equal acceptance counts at each per-stratum unit quota; actual intervention counts may differ. Random lines are means of realized conditional ratios, with pointwise 95\% randomization ranges, not population CIs. Empty conditional points are omitted. Unlike full-denominator cumulative harm, these conditional curves have no mechanically imposed monotonicity.}
+\label{fig:coverage-all-test}
+\end{figure}
+\begin{figure}[htbp]
+\centering\includegraphics[width=\linewidth]{figures/coverage_quality/pairs_active_test.pdf}
+\caption{TEST nonzero-proposal pool: conditional harm with exactly matched actual intervention counts in every random realization. Rejection keeps the anchor and acceptance keeps the fixed raw projected weight. W-N's lower conditional harm at the displayed middle quotas does not generalize to all pairs. Direction and amplitude are not additionally matched here; the Random-shape controls address those factors separately. Bands describe random ordering on this fixed workload, not population CIs.}
+\label{fig:coverage-active-test}
+\end{figure}
+\FloatBarrier
+
+\paragraph{Micro and macro refer to explicit estimands.}
+Let $j$ index only the four primary pairs. Full-denominator micro harm is $\sum_j n_{hj}/\sum_j N_j$, equivalent to weighting pair harm by $N_j/\sum_j N_j$. Micro accepted/active harm instead weights by $n_{Sj}/\sum_j n_{Sj}$ or $n_{Ij}/\sum_j n_{Ij}$, which can change at each quota and random realization. Micro utility similarly sums RR differences before dividing by $\sum_jN_j$. Macro is the arithmetic mean of the four pair-specific values with weight $1/4$; an undefined pair value is not silently dropped. Random aggregates are computed per realization before summarizing. No interval treats the four pairs as independent sampling units.
+
+The observation keys of W-N and W-A are identical within each split, as are D-N and D-A; this is 100\% overlap, not four independent sample sources. TEST has 170,112 pair-observations but only 85,056 distinct dataset/seed/direction/triple observations and 14,176 distinct dataset triples. Table~\ref{tab:coverage-weights} reports the corresponding DEV counts and all weights. DB15K's combined full-denominator micro weight is 64.95\% on DEV and 69.85\% on TEST, compared with 50\% in macro. Additional pairs remain separate. At TEST All-pool 50\% quota, confidence utility is $+0.000151$ macro but $-0.000342$ micro; the Active-pool sign difference is reported in Section~\ref{sec:coverage-quality}. Both summaries are retained without selecting the favorable one.
+\input{tables/coverage_quality/weights.tex}
+\FloatBarrier
+\begin{figure}[htbp]
+\centering\includegraphics[width=\linewidth]{figures/coverage_quality/aggregate_dev_oof.pdf}
+\caption{Original grouped held-out DEV, All pool, using the same definitions as Figure~\ref{fig:coverage-quality}. Left-column cumulative harm is mechanically monotone; the conditional columns and random reference assess different denominators. Macro and micro reuse overlapping same-dataset pair observations and are descriptive summaries. Randomization ranges condition on frozen OOF states and strata, not newly fitted models or unseen workloads.}
+\label{fig:coverage-aggregate-dev}
+\end{figure}
+\begin{figure}[htbp]
+\centering\includegraphics[width=\linewidth]{figures/coverage_quality/pairs_all_dev_oof.pdf}
+\caption{Original grouped held-out DEV All-pool conditional active harm. Matched acceptance does not imply matched actual interventions. Definitions, fixed quotas and randomization ranges are identical to Figure~\ref{fig:coverage-all-test}; no favorable DEV point is adopted as a new gate.}
+\label{fig:coverage-all-dev}
+\end{figure}
+\begin{figure}[htbp]
+\centering\includegraphics[width=\linewidth]{figures/coverage_quality/pairs_active_dev_oof.pdf}
+\caption{Original grouped held-out DEV nonzero-proposal pool, with exact intervention matching. All six pairs and every predeclared decile are retained. Conditional harm need not improve with confidence ordering; randomization bands are not query-population confidence intervals.}
+\label{fig:coverage-active-dev}
+\end{figure}
+\FloatBarrier
+
+\paragraph{Average precision, not trapezoidal PR area.}
+At distinct score thresholds in descending order, let $P_k,R_k$ be precision and recall after including the entire tied-score group, with $R_0=0$. Both the historical confidence script and the current \path{RankedBinary.evaluate} compute
+\begin{equation}
+\mathrm{AP}=\sum_k (R_k-R_{k-1})P_k,\qquad
+\mathrm{AP\ lift}=\mathrm{AP}-P_h.
+\label{eq:coverage-ap}
+\end{equation}
+This is non-interpolated average precision, not trapezoidal precision--recall area. The historical CSV fields \path{auprc_risk_to_harm} and \path{auprc_lift_over_prevalence} map to AP and AP-minus-prevalence, respectively; their archived bytes are unchanged. Formal tables use AP. Lift in percentage points is an absolute difference, not a ratio or relative percent increase. The two implementations and scikit-learn 1.7.1's \path{average_precision_score} agree on all 36 corrected pair/split/population points within $5.6\times10^{-17}$. Existing per-pair intervals recompute AP minus each bootstrap sample's own prevalence.
+
+Macro AP is the mean of four pair APs. Pooled (micro) AP concatenates their original scores and labels and recomputes a single threshold ranking; it cannot be recovered as a size-weighted mean of pair APs. Pooled prevalence uses the same population counts; macro prevalence is their equal-pair mean. Pooling uncalibrated preference scores introduces cross-pair comparisons, so aggregate AP is descriptive rather than evidence of a calibrated cross-pair harm predictor. Table~\ref{tab:coverage-ap} retains both splits and all three populations. TEST Exec. lift is $+0.64$ percentage points macro and $+0.91$ pooled, while DEV Exec. lift is $-0.44$ macro and $+0.50$ pooled. These aggregate points do not override the weak and pair-dependent discrimination or its per-pair intervals in Appendix~\ref{app:ties-harm}.
+\input{tables/coverage_quality/ap.tex}
+
+The \path{coverage_quality_source_manifest.json} binds original states and result identities, the new code and protocol, 528 curve rows, 176 aggregate rows, 48 AP rows, eight weight records, four tables and six figures. Six synthetic tests check denominator distinctions, mechanical monotonicity counterexamples, whole-query allocations, random nested quotas, macro/micro weighting and AP versus trapezoidal area. The analysis remains retrospective and supplies no calibrated harm probability or safety guarantee.
 \FloatBarrier
 
 \section{Formal Grouped DEV Evaluation}
@@ -1076,7 +1159,7 @@ Table~\ref{tab:claims-cost} makes the adverse historical timing evidence explici
 
 Total wall time is directly measured; the ratio of its means is distinct from relative overhead, which subtracts one. The historical scoring stage includes model scoring, filtered masking, transfer and endpoint ranking; the overhead includes feature extraction, policy inference and score combination/ranking. These evaluation-stage boundaries do not estimate pure serving latency. ADC's feature stage alone takes 0.381--0.493 seconds per 512 queries, and policy inference 0.068--0.078 seconds; its 14 trainable coefficients/intercept exclude imputation/scaling state, both base models and candidate arrays. Historical Dyna uses a 369-parameter selector and is not the healthy R3 comparator in the corrected MRR table.
 
-Corrected timing has not been measured. In the repaired path, unfiltered scores supply features and normalization before filtering; the old benchmark cannot establish current speed or a current MRR-per-second frontier. The historical cost table is a reporting limitation, not a new benchmark of the corrected policy. Historical coverage curves and any interpretation as confidence calibration remain excluded. Appendix~\ref{app:ties-harm} supplies corrected harm discrimination with explicit action populations and intervals, retaining the historical weak-discrimination finding as a separately labeled version; Appendix~\ref{app:radius-review} supplies corrected radius diagnostics.
+Corrected timing has not been measured. In the repaired path, unfiltered scores supply features and normalization before filtering; the old benchmark cannot establish current speed or a current MRR-per-second frontier. The historical cost table is a reporting limitation, not a new benchmark of the corrected policy. Historical coverage curves remain excluded; Appendix~\ref{app:coverage-quality} supplies corrected nested-order diagnostics with explicit denominators and random references, without interpreting confidence as calibration. Appendix~\ref{app:ties-harm} supplies corrected harm discrimination with explicit action populations and intervals, retaining the historical weak-discrimination finding as a separately labeled version; Appendix~\ref{app:radius-review} supplies corrected radius diagnostics.
 
 The B07/C04 rerun audit verifies export/model/selector hashes, split separation, coverage, endpoints and fixed-policy counterfactuals. MKG-W DEV/TEST exports contain 25,656/25,644 observations; DB15K contains 47,532/59,412. Their TEST intervals use 10,000 original-triple resamples with seed 20260910. The accompanying \texttt{rerun\_source\_manifest.json} binds the corrected tables to their inputs; \texttt{claims\_cost\_source\_manifest.json} binds the consolidated comparisons and the separately labeled historical cost snapshot.
 

@@ -234,3 +234,15 @@ docs/reports/paper_a_outcome_risk_review_2026-09-12.md -text whitespace=cr-at-eo
 outputs/paper_a_safe_correction/outcome_risk_v1/** -text whitespace=cr-at-eol
 paper_a_draft/outcome_risk_source_manifest.json -text whitespace=cr-at-eol
 paper_a_draft/tables/outcome_risk/** -text whitespace=cr-at-eol
+
+# D11/D12 corrected nested coverage, random ordering, aggregation and AP terminology.
+router/coverage_quality.py -text whitespace=cr-at-eol
+scripts/analyze_paper_a_coverage_quality.py -text whitespace=cr-at-eol
+scripts/build_paper_a_coverage_quality_assets.py -text whitespace=cr-at-eol
+tests/test_coverage_quality.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_coverage_quality_review.md -text whitespace=cr-at-eol
+docs/reports/paper_a_coverage_quality_review_2026-09-12.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/coverage_quality_v1/** -text whitespace=cr-at-eol
+paper_a_draft/coverage_quality_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/tables/coverage_quality/** -text whitespace=cr-at-eol
+paper_a_draft/figures/coverage_quality/** -text whitespace=cr-at-eol

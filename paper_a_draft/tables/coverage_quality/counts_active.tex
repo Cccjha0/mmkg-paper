@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{TEST Active-pool diagnostic at predeclared 10/50/100\% per-stratum unit quotas. $n_S,n_I,n_h$ and $H,H_S,H_I$ describe the confidence order; all three harm rates are percentages. $R_I$ is mean random-order conditional active harm, recomputed in each of 512 realizations; $U_c,U_r$ are confidence and mean random utility in $10^{-4}$ RR units. Random acceptance counts match exactly; in the Active pool actual interventions also match exactly, and $n_S=n_I$. All-pool random interventions can differ. Quotas are rounded down within strata, so requested quota is distinct from observation coverage. The zero endpoint is Global and all intermediate deciles, randomization ranges and exact expected additive totals are retained in the CSV. No point is a newly selected deployment setting.}
+\label{tab:coverage-counts_active}
+\begin{tabular}{lrrrrrrrrrr}
+\toprule
+Pair & Quota & $n_S$ & $n_I$ & $n_h$ & $H$ & $H_S$ & $H_I$ & $R_I$ & $U_c$ & $U_r$\\
+\midrule
+W-N & 10 & 1,989 & 1,989 & 385 & 1.50 & 19.36 & 19.36 & 23.82 & 3.24 & 2.11\\
+W-N & 50 & 10,241 & 10,241 & 2,156 & 8.41 & 21.05 & 21.05 & 24.05 & 19.38 & 11.18\\
+W-N & 100 & 22,848 & 22,848 & 5,804 & 22.63 & 25.40 & 25.40 & 25.40 & 24.36 & 24.36\\
+W-A & 10 & 704 & 704 & 131 & 0.51 & 18.61 & 18.61 & 15.80 & 4.96 & 0.75\\
+W-A & 50 & 3,862 & 3,862 & 712 & 2.78 & 18.44 & 18.44 & 16.40 & 6.08 & 2.86\\
+W-A & 100 & 10,156 & 10,156 & 1,696 & 6.61 & 16.70 & 16.70 & 16.70 & 10.46 & 10.46\\
+D-N & 10 & 1,739 & 1,739 & 311 & 0.52 & 17.88 & 17.88 & 15.04 & -0.31 & -0.20\\
+D-N & 50 & 9,740 & 9,740 & 1,581 & 2.66 & 16.23 & 16.23 & 15.53 & -0.49 & -0.81\\
+D-N & 100 & 20,143 & 20,143 & 3,164 & 5.33 & 15.71 & 15.71 & 15.71 & -1.47 & -1.47\\
+D-A & 10 & 2,267 & 2,267 & 578 & 0.97 & 25.50 & 25.50 & 19.03 & -0.75 & -2.87\\
+D-A & 50 & 12,454 & 12,454 & 2,808 & 4.73 & 22.55 & 22.55 & 19.41 & -18.00 & -14.75\\
+D-A & 100 & 25,756 & 25,756 & 5,086 & 8.56 & 19.75 & 19.75 & 19.75 & -29.89 & -29.89\\
+W-NA & 10 & 1,779 & 1,779 & 459 & 1.79 & 25.80 & 25.80 & 25.36 & 2.20 & -2.94\\
+W-NA & 50 & 9,186 & 9,186 & 2,249 & 8.77 & 24.48 & 24.48 & 25.78 & -6.89 & -15.47\\
+W-NA & 100 & 20,282 & 20,282 & 5,572 & 21.73 & 27.47 & 27.47 & 27.47 & -32.50 & -32.50\\
+D-NA & 10 & 1,549 & 1,549 & 236 & 0.40 & 15.24 & 15.24 & 10.95 & 0.16 & -0.70\\
+D-NA & 50 & 7,797 & 7,797 & 1,003 & 1.69 & 12.86 & 12.86 & 10.99 & -1.99 & -3.32\\
+D-NA & 100 & 16,872 & 16,872 & 2,233 & 3.76 & 13.23 & 13.23 & 13.23 & -6.63 & -6.63\\
+\bottomrule
+\end{tabular}
+\end{table}

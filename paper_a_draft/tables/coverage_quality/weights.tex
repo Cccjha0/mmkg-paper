@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Four-primary-pair aggregation weights. Each original triple supplies three seeds and two directions. Same-dataset pairs reuse exactly the same observation keys (100\% overlap); repeated pair evaluations are not independent samples. Full-denominator micro weights are $N_j/\sum N_j$; macro weights are $1/4$. Conditional micro weights instead use each accepted or active subset count, at each coverage and random draw. DEV has 146,376 pair-observations from 12,198 distinct dataset triples; TEST has 170,112 from 14,176. Additional pairs are displayed separately and do not enter these four-pair summaries.}
+\label{tab:coverage-weights}
+\begin{tabular}{llrrrr}
+\toprule
+Pair & Split & $N_j$ & Triples & Micro (\%) & Macro (\%)\\
+\midrule
+W-N & DEV & 25,656 & 4,276 & 17.5275 & 25.00\\
+W-N & TEST & 25,644 & 4,274 & 15.0748 & 25.00\\
+W-A & DEV & 25,656 & 4,276 & 17.5275 & 25.00\\
+W-A & TEST & 25,644 & 4,274 & 15.0748 & 25.00\\
+D-N & DEV & 47,532 & 7,922 & 32.4725 & 25.00\\
+D-N & TEST & 59,412 & 9,902 & 34.9252 & 25.00\\
+D-A & DEV & 47,532 & 7,922 & 32.4725 & 25.00\\
+D-A & TEST & 59,412 & 9,902 & 34.9252 & 25.00\\
+\bottomrule
+\end{tabular}
+\end{table}

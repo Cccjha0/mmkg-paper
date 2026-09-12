@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Primary-pair AP aggregation, descriptive points only. Macro averages four pair APs and four pair prevalences with weight $1/4$. Micro AP concatenates the four score/label arrays and recomputes a single threshold ranking; it is not a weighted average of pair APs. Micro prevalence weights by each population count. All/Prop./Exec. retain the definitions in Appendix~\ref{app:ties-harm}. AP is non-interpolated average precision, not trapezoidal PR area. Lift is AP minus same-population prevalence in percentage points, not a ratio. Pooling uncalibrated preference scores can add cross-pair ranking effects; neither aggregate replaces per-pair results or represents four independent datasets.}
+\label{tab:coverage-ap}
+\begin{tabular}{lllrrr}
+\toprule
+Split & Population & Aggregate & Prevalence (\%) & AP (\%) & AP lift (pp)\\
+\midrule
+DEV & all & macro & 10.52 & 8.73 & -1.79\\
+DEV & all & micro & 9.25 & 7.10 & -2.16\\
+DEV & proposed & macro & 18.88 & 18.50 & -0.38\\
+DEV & proposed & micro & 19.63 & 19.35 & -0.28\\
+DEV & executed & macro & 21.14 & 20.71 & -0.44\\
+DEV & executed & micro & 21.46 & 21.96 & 0.50\\
+TEST & all & macro & 10.78 & 8.90 & -1.88\\
+TEST & all & micro & 9.26 & 7.11 & -2.15\\
+TEST & proposed & macro & 19.39 & 18.91 & -0.48\\
+TEST & proposed & micro & 19.96 & 19.22 & -0.74\\
+TEST & executed & macro & 20.20 & 20.85 & 0.64\\
+TEST & executed & micro & 21.66 & 22.57 & 0.91\\
+\bottomrule
+\end{tabular}
+\end{table}

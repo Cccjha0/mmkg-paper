@@ -279,6 +279,48 @@ assert all(float(r['lo'])<=0<=float(r['hi']) for r in query_effects if r['compar
 assert r'\label{app:query-isolation}' in main and 'transductive query distribution' in main
 assert 'Zero inclusion does not establish equivalence' in main and 'all 82' in main
 
+coverage_quality=json.loads((ROOT/'coverage_quality_source_manifest.json').read_text(encoding='utf-8'))
+assert coverage_quality['version']=='coverage_quality_v1'
+for rel,sha in coverage_quality['sources'].items():
+    digest=hashlib.sha256()
+    with (ROOT.parent/rel).open('rb') as handle:
+        for block in iter(lambda:handle.read(1024*1024),b''): digest.update(block)
+    assert digest.hexdigest()==sha,rel
+for collection in ('tables','figures'):
+    for rel,sha in coverage_quality[collection].items():
+        assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in coverage_quality['tables']}
+coverage_dir=ROOT.parent/'outputs/paper_a_safe_correction/coverage_quality_v1'
+coverage_audit=json.loads((coverage_dir/'audit.json').read_text())
+assert coverage_audit['status']=='coverage_quality_checks_passed' and not coverage_audit['failures']
+assert coverage_audit['observations']==474732 and len(coverage_audit['checks'])==12
+assert coverage_audit['random_replicates']==512 and coverage_audit['deciles']==list(range(11))
+assert coverage_audit['pools']==['All','Active'] and coverage_audit['primary_pair_overlap_verified']
+assert coverage_audit['random_conditional_ratios_computed_per_draw']
+assert not any(coverage_audit[k] for k in ('selector_fits','scorer_runs','policy_selection','test_used_for_selection',
+    'historical_results_replaced','random_bands_are_population_ci','pairs_are_independent'))
+assert all(c['gold_invariant_units'] and c['same_query_actions_verified'] and c['nested_harm_verified']
+    and c['random_budgets_exact'] and c['zero_and_full_endpoints_verified'] and c['ap_populations_verified']==3
+    and c['invalid_rows']==0 for c in coverage_audit['checks'])
+coverage_records={}
+for name,count in [('curves',528),('aggregates',176),('average_precision',48),('weights',8)]:
+    with (coverage_dir/(name+'.csv')).open(encoding='utf-8') as handle:coverage_records[name]=list(csv.DictReader(handle))
+    assert len(coverage_records[name])==count
+for r in coverage_records['curves']:
+    if r['method']=='Confidence':
+        assert float(r['harm_n'])<=float(r['active_n'])<=float(r['accepted_n'])<=float(r['n'])
+        assert abs(float(r['harm_all'])-float(r['harm_n'])/float(r['n']))<1e-12
+    if r['pool']=='Active':assert abs(float(r['active_n'])-float(r['accepted_n']))<1e-12
+for r in coverage_records['average_precision']:
+    assert abs(float(r['ap'])-float(r['prevalence'])-float(r['ap_lift']))<1e-12
+    if r['scope']=='pair':assert abs(float(r['sklearn_error']))<1e-12
+for split in ('test','dev_oof'):
+    records=[r for r in coverage_records['weights'] if r['split']==split]
+    assert abs(sum(float(r['micro_full_weight']) for r in records)-1)<1e-12
+    assert all(float(r['macro_weight'])==.25 and float(r['same_dataset_pair_observation_overlap'])==1 for r in records)
+assert r'\label{app:coverage-quality}' in main and r'\label{eq:coverage-ap}' in main
+assert 'mechanically nondecreasing' in main and '69.85' in main and 'not trapezoidal' in main
+
 outcome_risk=json.loads((ROOT/'outcome_risk_source_manifest.json').read_text(encoding='utf-8'))
 assert outcome_risk['version']=='outcome_risk_v1'
 for rel,sha in outcome_risk['sources'].items():
@@ -543,8 +585,8 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])|set(ties_harm['sources'])|set(rejection['sources'])|set(alignment_training['sources'])|set(selection_seed['sources'])|set(query_pair['sources'])|set(outcome_risk['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1 + ties_harm_review_v1 + rejection_controls_v1 + alignment_training_v1 + selection_seed_v1 + query_pair_v1 + outcome_risk_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])|set(grid['sources'])|set(inference['sources'])|set(endpoint['sources'])|set(scope['sources'])|set(winner['sources'])|set(ties_harm['sources'])|set(rejection['sources'])|set(alignment_training['sources'])|set(selection_seed['sources'])|set(query_pair['sources'])|set(outcome_risk['sources'])|set(coverage_quality['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1 + grid_sensitivity_return_review_v1 + inference_contract_review_v1 + endpoint_contract_return_review_v1 + inference_training_scope_v1 + winner_signal_review_v1 + ties_harm_review_v1 + rejection_controls_v1 + alignment_training_v1 + selection_seed_v1 + query_pair_v1 + outcome_risk_v1 + coverage_quality_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
@@ -567,6 +609,7 @@ report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findal
         'adc_dyna_fitting_information_matched':False,'unseen_checkpoint_transfer_evaluated':False,
         'winner_signal_checks_passed':True,'winner_direction_diagnostic_rows':474732,
         'ties_harm_checks_passed':True,'tie_seed_direction_cells':72,'harm_population_cells':36,
+        'coverage_quality_checks_passed':True,'coverage_quality_curve_rows':528,'coverage_quality_random_replicates':512,'coverage_quality_ap_rows':48,
         'outcome_risk_checks_passed':True,'outcome_risk_pooled_cells':12,'outcome_risk_ratio_metrics':22,'outcome_risk_bootstrap_replicates':10000,
         'query_key_checks_passed':True,'query_purge_small_fits':60,'unified_paired_ci_checks_passed':True,'unified_paired_contrasts':82,
         'selection_hierarchy_checks_passed':True,'inner_sensitivity_logistic_fits':108,'seed_dispersion_checks_passed':True,'absolute_seed_mrr_rows':228,

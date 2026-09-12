@@ -1,0 +1,9 @@
+pair,label,dataset,split,n,original_triples,macro_weight,micro_full_weight,pooled_observations,unique_dataset_observations,unique_dataset_triples,same_dataset_pair_observation_overlap
+mkgw_mhyper_native,W-N,MKG-W,dev_oof,25656,4276,0.25,0.1752746351860961,146376,73188,12198,1.0
+mkgw_mhyper_native,W-N,MKG-W,test,25644,4274,0.25,0.1507477426636569,170112,85056,14176,1.0
+mkgw_mhyper_adamf,W-A,MKG-W,dev_oof,25656,4276,0.25,0.1752746351860961,146376,73188,12198,1.0
+mkgw_mhyper_adamf,W-A,MKG-W,test,25644,4274,0.25,0.1507477426636569,170112,85056,14176,1.0
+db15k_mhyper_native,D-N,DB15K,dev_oof,47532,7922,0.25,0.3247253648139039,146376,73188,12198,1.0
+db15k_mhyper_native,D-N,DB15K,test,59412,9902,0.25,0.34925225733634313,170112,85056,14176,1.0
+db15k_mhyper_adamf,D-A,DB15K,dev_oof,47532,7922,0.25,0.3247253648139039,146376,73188,12198,1.0
+db15k_mhyper_adamf,D-A,DB15K,test,59412,9902,0.25,0.34925225733634313,170112,85056,14176,1.0
