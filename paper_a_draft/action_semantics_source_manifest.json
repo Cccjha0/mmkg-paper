@@ -1,0 +1,34 @@
+{
+  "version": "action_semantics_review_v1",
+  "sources": {
+    "paper_a_draft/rerun_source_manifest.json": "17b87f61db9125402ed77ae725eb6d2f382e13d57cf372fc9525611d8a768280",
+    "paper_a_draft/conservative_source_manifest.json": "a113daab63064715b0d2d3f56c3eede744507eea858c60f4904c86b915497a07",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_native/dev_lock/anchored_dev_lock.json": "afbf00b5c527f237e9eda563f011fd373a497fb51de1c4ef85596e7ac29134c3",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_native/dev_lock/dev_locked_query_rows.csv": "a4c89985f92f97259ee54db1c8277190753f30075581d1924a5e51ada9616028",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_native/test_anchored/test_locked_query_rows.csv": "824d47add5102634533b9c26290ee1a57e6fd7ccdc6ffb2a01783ea2ae334672",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_adamf/dev_lock/anchored_dev_lock.json": "1c4df74d6f2bb370d974d0e58b31a6d833e7e2f10a4803adb9752f3659fb9081",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_adamf/dev_lock/dev_locked_query_rows.csv": "eb19087c29c2c1fed195bf55d05b0dafc65eb35ee5227477bb6041cae01c3b6a",
+    "outputs/paper_a_safe_correction/information_boundary_v2/mkgw_mhyper_adamf/test_anchored/test_locked_query_rows.csv": "17af333975be46a3934361fd411ba356120889181678e5a562e97f0e9c7d04e6",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_native/dev_lock/anchored_dev_lock.json": "f99414fd08f4203db4c5b12717f65c2646e64a5110a2b39b7d9f58576eda4f3d",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_native/dev_lock/dev_locked_query_rows.csv": "59d694565266c681c6954bbd4d8105b3be0eb8d452c640d3e24b055d6ecbc74d",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_native/test_anchored/test_locked_query_rows.csv": "5ea9b7093849b4de94c0855689ed3c8226e81da9e6a37be58664de1e8f110f15",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_adamf/dev_lock/anchored_dev_lock.json": "2e44c157d65cb0005cb9b44d27f8af33cdb4832844a7228f692eb3f298347719",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_adamf/dev_lock/dev_locked_query_rows.csv": "1968531879059cfc784429bbb4e1e141a43b4b2ec643c6ef002fb853ec471449",
+    "outputs/paper_a_safe_correction/information_boundary_v2/db15k_mhyper_adamf/test_anchored/test_locked_query_rows.csv": "978a007999aa7fd7e5d312a44f8038f3ee016cdf4c8b43be072b9a7cdb414295",
+    "paper_a_draft/tables/rerun/ablation.tex": "44ca758083e85800e0dc9c7e1aec30009605c4210b099dc4dc68566d5e7ea050",
+    "paper_a_draft/tables/conservative/fair.tex": "a1b4ccbcced5e87a1a2f1a1d0196c9e931f637e0a112aa268e3dbdfa2fe6d4d6",
+    "outputs/paper_a_safe_correction/conservative_radius_review/test_fair_comparison.csv": "732b6668a3e1dc4ea9f6b9f67a2fc83a367292c66c5936dae3c8b31e8b91e0c2",
+    "scripts/build_paper_a_action_semantics.py": "91cb82bfa8621bf1d30def96378d74f9a0d2b9bd30211cae8623907ce7cfd5a5",
+    "tests/test_action_semantics.py": "f70b53ae927d3b1b912acca9bb7bc8dabde2e591614d9156d022d73c8b70d898",
+    "scripts/analyze_paper_a_conservative_radius.py": "c58b537a2b593ab9efd5235da1417f57f0994e2ac9eab57276a0cd5e0647b863",
+    "scripts/ablate_anchored_dynamic.py": "3baaefb56ddfb04906b7c5545242e4237c3ea407337c7ab9b278e37006ff26f4",
+    "outputs/paper_a_safe_correction/action_semantics_review_v1/audit.json": "e1a523818800b61cb44c3b537b1960764f6924ef4094cbb7b2223d621b5c1258"
+  },
+  "tables": {
+    "tables/action_semantics/ablation.tex": "8a849cd35fe1298b26f94543e487a921f9935b26ea52e5bdfedd74429a7b9cd2",
+    "tables/action_semantics/fair.tex": "8407fde7fb8e3e556d7202317974ff889cfc13916822a1f986d2bb23f583f163"
+  },
+  "figures": {
+    "figures/action_semantics/test_utility_loss.pdf": "fe860e66dda5288263e9b7905cda01402a62727a8c90f1eb4a69a1dc8ba1843d"
+  }
+}

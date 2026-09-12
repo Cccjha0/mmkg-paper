@@ -136,3 +136,4 @@ outputs/paper_a_safe_correction/information_boundary_v2/**/checkpoints/
 # B02 matched feature dimensions: keep locks/summaries, regenerate fitted models and rows.
 /outputs/paper_a_safe_correction/feature_dimension_review_v1/models/
 /outputs/paper_a_safe_correction/feature_dimension_review_v1/query_rows/
+/paper_a_draft/figures/action_semantics/*.png

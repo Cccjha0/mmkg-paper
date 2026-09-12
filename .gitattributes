@@ -96,3 +96,11 @@ tests/test_raw_score_contract_return.py -text whitespace=cr-at-eol
 outputs/paper_a_safe_correction/raw_score_contract_audit.json -text whitespace=cr-at-eol
 outputs/paper_a_safe_correction/raw_score_contract_review.json -text whitespace=cr-at-eol
 paper_a_draft/raw_score_source_manifest.json -text whitespace=cr-at-eol
+
+# B05/B06 presentation definitions and frozen-weight mechanism checks.
+scripts/build_paper_a_action_semantics.py -text whitespace=cr-at-eol
+tests/test_action_semantics.py -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/action_semantics_review_v1/** -text whitespace=cr-at-eol
+paper_a_draft/action_semantics_source_manifest.json -text whitespace=cr-at-eol
+paper_a_draft/tables/action_semantics/** -text whitespace=cr-at-eol
+paper_a_draft/figures/action_semantics/*.pdf -text -diff

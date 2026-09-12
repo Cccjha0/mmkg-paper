@@ -153,6 +153,34 @@ assert raw_review['raw_score_finiteness_certified'] and not raw_review['historic
 assert not raw_review['abnormal_input_robustness_established']
 assert raw_review['score_rows']==474732 and raw_review['cells']==72 and raw_review['checkpoints']==18
 assert '474,732 expert/query scoring rows' in main and 'audit is prepared but remains pending' not in main
+action_semantics=json.loads((ROOT/'action_semantics_source_manifest.json').read_text(encoding='utf-8'))
+assert action_semantics['version']=='action_semantics_review_v1'
+for rel,sha in action_semantics['sources'].items():
+    digest=hashlib.sha256()
+    with (ROOT.parent/rel).open('rb') as handle:
+        for block in iter(lambda:handle.read(1024*1024),b''): digest.update(block)
+    assert digest.hexdigest()==sha,rel
+for collection in ('tables','figures'):
+    for rel,sha in action_semantics[collection].items():
+        assert hashlib.sha256((ROOT/rel).read_bytes()).hexdigest()==sha,rel
+bound_tables|={ROOT/rel for rel in action_semantics['tables']}
+coupling=json.loads((ROOT.parent/'outputs/paper_a_safe_correction/action_semantics_review_v1/audit.json').read_text())
+assert coupling['status']=='action_semantics_checks_passed' and len(coupling['checks'])==8
+assert coupling['base_model_runs']==coupling['selector_fits']==0
+assert not coupling['new_policy_selection'] and not coupling['test_used_for_selection']
+assert not coupling['historical_metrics_replaced']
+assert sum(c['rows'] for c in coupling['checks'])==316488
+assert all(c['confidence_and_full_weights_replayed'] and c['identity_max_error']<1e-12 for c in coupling['checks'])
+da=[c for c in coupling['checks'] if c['label']=='D-A']
+assert len(da)==2 and all(abs(c['observed_min_nonzero_grid_displacement']-.30)<1e-12 for c in da)
+assert r'\label{eq:confidence-displacement}' in main and '0.27523' in main
+assert not re.search(r'no[ -]local[ -]bound|no bound',source,re.IGNORECASE)
+for rel in action_semantics['tables']:
+    content=(ROOT/rel).read_text(encoding='utf-8')
+    assert content.count('& Expanded-radius &')==4 and 'fixes $\\beta=1$' in content
+    assert r'& $\beta=1$ &' not in content
+with fitz.open(ROOT/'figures/action_semantics/test_utility_loss.pdf') as figure:
+    assert 'Expanded-radius' in '\n'.join(p.get_text() for p in figure)
 # Summary sections must retain the adverse evidence as well as the main gains.
 abstract=main.split(r'\begin{abstract}',1)[1].split(r'\end{abstract}',1)[0]
 conclusion=main.split(r'\section{Conclusion}',1)[1].split(r'\FloatBarrier',1)[0]
@@ -222,8 +250,8 @@ for start in range(0,len(doc),6):
         sheet.paste(im,(x,y)); draw.text((x,y-20),f'Page {i+1}',fill='black')
     sheet.save(build/f'contact_{start//6+1}.png')
 report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findall(r'\\begin\{table\}',source)),
-        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])),
-        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1',
+        'figures':len(re.findall(r'\\begin\{figure\}',source)),'source_snapshots':len(set(manifest['sources'])|set(dyna['sources'])|set(conservative['sources'])|set(matched['sources'])|set(data_checkpoint['sources'])|set(history['sources'])|set(complement['sources'])|set(claims['sources'])|set(dimension['sources'])|set(raw_score['sources'])|set(action_semantics['sources'])),
+        'result_version':'information_boundary_v2 + dynasemble_controls_v1_review + conservative_radius_review_v1 + matched_alternatives_v1 + data_checkpoint_review_v1 + test_history_review_v1 + complementarity_review_v1 + claims_cost_review_v1 + feature_dimension_review_v1 + raw_score_contract_review_v1 + action_semantics_review_v1',
         'small_cache_evidence_verified':dyna_audit['small_cache_evidence_verified'],
         'conservative_radius_checks_passed':True,'test_used_for_new_selection':False,
         'matched_alternative_checks_passed':True,
@@ -234,6 +262,7 @@ report={'pages':len(doc),'bibliography_entries':len(keys),'tables':len(re.findal
         'complementarity_checks_passed':True,'observable_modality_support_only':True,
         'claims_cost_checks_passed':True,'primary_plus_additional_pairs':[4,2],
         'feature_dimension_checks_passed':True,'raw_score_return_checks_passed':True,
+        'action_semantics_checks_passed':True,'expanded_radius_definition_consistent':True,
         'raw_score_finiteness_certified':raw_review['raw_score_finiteness_certified'],
         'raw_score_finiteness_scope':raw_review['scope'],
         'historical_raw_bitwise_equality_established':False,'abnormal_input_robustness_established':False,
