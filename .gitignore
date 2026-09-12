@@ -137,3 +137,12 @@ outputs/paper_a_safe_correction/information_boundary_v2/**/checkpoints/
 /outputs/paper_a_safe_correction/feature_dimension_review_v1/models/
 /outputs/paper_a_safe_correction/feature_dimension_review_v1/query_rows/
 /paper_a_draft/figures/action_semantics/*.png
+
+# B09 server scoring: keep concise review evidence, not operational plans or per-query rows.
+/outputs/paper_a_safe_correction/grid_sensitivity_review_v1/prepared/
+/outputs/paper_a_safe_correction/grid_sensitivity_review_v1/cells/
+/outputs/paper_a_safe_correction/grid_sensitivity_review_v1/plan.json
+/outputs/paper_a_safe_correction/grid_sensitivity_review_v1/last_error.json
+/outputs/paper_a_safe_correction/grid_sensitivity_review_v1/*_complete.json
+/outputs/paper_a_safe_correction/grid_sensitivity_review_v1/**/*.partial
+/outputs/paper_a_safe_correction/grid_sensitivity_review_v1_return.zip*
