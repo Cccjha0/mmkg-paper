@@ -1,0 +1,30 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Observable modality support of the known query entity only: $h$ for tail prediction and $t$ for head prediction. $Q$ counts directional triple queries with seeds collapsed, not independent entities; each has three seed observations. B is the secondary-winner percentage. Empty states have undefined conditional means and zero contribution. Tiny DB15K groups are retained without inferential claims. Coverage flags measure availability, not quality, and are never passed to ADC.}
+\label{tab:complement-support}
+\begin{tabular}{lllrrrrr}
+\toprule
+Pair & Known support & $Q$ DEV/TEST & DEV B \% & DEV $U_g$ & TEST B \% & TEST $U_g$ & TEST $C_g$\\
+\midrule
+W-N & neither & 340/293 & 34.90 & +0.004586 & 28.90 & +0.001296 & +0.000044\\[2pt]
+W-N & image-only & 379/393 & 34.92 & +0.001660 & 37.40 & +0.002108 & +0.000097\\[2pt]
+W-N & text-only & 0/0 & -- & -- & -- & -- & +0.000000\\[2pt]
+W-N & both & 7,833/7,862 & 45.11 & +0.003073 & 44.08 & +0.002507 & +0.002305\\[2pt]
+\midrule
+W-A & neither & 340/293 & 11.96 & -0.002685 & 8.08 & +0.001608 & +0.000055\\[2pt]
+W-A & image-only & 379/393 & 27.00 & +0.000779 & 27.99 & -0.000404 & -0.000019\\[2pt]
+W-A & text-only & 0/0 & -- & -- & -- & -- & +0.000000\\[2pt]
+W-A & both & 7,833/7,862 & 37.67 & +0.001393 & 36.56 & +0.001063 & +0.000977\\[2pt]
+\midrule
+D-N & neither & 6/7 & 27.78 & +0.000000 & 23.81 & +0.000000 & +0.000000\\[2pt]
+D-N & image-only & 4,183/5,035 & 27.46 & +0.000121 & 27.26 & +0.000088 & +0.000022\\[2pt]
+D-N & text-only & 18/34 & 31.48 & -0.000225 & 39.22 & +0.000072 & +0.000000\\[2pt]
+D-N & both & 11,637/14,728 & 28.23 & -0.000055 & 28.69 & -0.000140 & -0.000104\\[2pt]
+\midrule
+D-A & neither & 6/7 & 0.00 & +0.000000 & 14.29 & +0.000000 & +0.000000\\[2pt]
+D-A & image-only & 4,183/5,035 & 27.38 & +0.000021 & 27.07 & +0.000192 & +0.000049\\[2pt]
+D-A & text-only & 18/34 & 29.63 & +0.000000 & 32.35 & +0.000000 & +0.000000\\[2pt]
+D-A & both & 11,637/14,728 & 29.74 & +0.000042 & 29.72 & +0.000219 & +0.000163\\[2pt]
+\bottomrule
+\end{tabular}
+\end{table}

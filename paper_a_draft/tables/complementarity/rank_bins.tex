@@ -1,0 +1,30 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Gold-rank-ratio strata, using $\rho=\max(r_A,r_B)/\min(r_A,r_B)$. These compare endpoint gold ranks, not complete candidate orderings. Mass is the percentage of seed-direction observations. $U_g$ is conditional ADC-minus-Global MRR; $C_g=\Pr(g)U_g$ is its contribution to overall utility. Contributions sum to the pair's $U$. DEV uses OOF predictions. All additional-pair strata remain in the accompanying data; no group is used to fit or choose a policy.}
+\label{tab:complement-rank_bins}
+\begin{tabular}{llrrrrrr}
+\toprule
+Pair & Stratum & DEV \% & DEV $U_g$ & DEV $C_g$ & TEST \% & TEST $U_g$ & TEST $C_g$\\
+\midrule
+W-N & equal & 23.73 & -0.000066 & -0.000016 & 24.12 & +0.000334 & +0.000081\\[2pt]
+W-N & (1,2] & 37.96 & +0.007014 & +0.002662 & 37.96 & +0.006459 & +0.002452\\[2pt]
+W-N & (2,4] & 19.61 & +0.001587 & +0.000311 & 18.93 & -0.000623 & -0.000118\\[2pt]
+W-N & >4 & 18.70 & +0.000604 & +0.000113 & 18.99 & +0.000169 & +0.000032\\[2pt]
+\midrule
+W-A & equal & 19.85 & +0.000861 & +0.000171 & 20.35 & +0.001278 & +0.000260\\[2pt]
+W-A & (1,2] & 37.52 & +0.001026 & +0.000385 & 37.14 & +0.000994 & +0.000369\\[2pt]
+W-A & (2,4] & 19.48 & +0.001160 & +0.000226 & 19.44 & +0.000154 & +0.000030\\[2pt]
+W-A & >4 & 23.16 & +0.001823 & +0.000422 & 23.07 & +0.001538 & +0.000355\\[2pt]
+\midrule
+D-N & equal & 22.15 & +0.000202 & +0.000045 & 21.60 & +0.000184 & +0.000040\\[2pt]
+D-N & (1,2] & 36.59 & +0.000169 & +0.000062 & 37.05 & +0.000120 & +0.000045\\[2pt]
+D-N & (2,4] & 20.42 & +0.000105 & +0.000021 & 20.68 & -0.000222 & -0.000046\\[2pt]
+D-N & >4 & 20.84 & -0.000655 & -0.000137 & 20.67 & -0.000579 & -0.000120\\[2pt]
+\midrule
+D-A & equal & 18.11 & +0.000010 & +0.000002 & 17.51 & +0.000013 & +0.000002\\[2pt]
+D-A & (1,2] & 39.20 & +0.000000 & +0.000000 & 39.62 & +0.000093 & +0.000037\\[2pt]
+D-A & (2,4] & 22.30 & +0.000130 & +0.000029 & 22.72 & +0.000137 & +0.000031\\[2pt]
+D-A & >4 & 20.40 & +0.000027 & +0.000005 & 20.16 & +0.000701 & +0.000141\\[2pt]
+\bottomrule
+\end{tabular}
+\end{table}

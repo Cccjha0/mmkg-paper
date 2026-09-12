@@ -1,0 +1,16 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Nearest-method distinctions. DynaSemble: Section 3 and the pinned released core (Appendix~\ref{app:dynasemble}). MoSE: Sections 3.5--3.6, Eqs.~(1)--(9), and Appendix A. The last three rows use the same preference fit in our matched study and their actions are projected onto the declared grid. A fixed coefficient, numerical zero or unchanged ranking is not an explicit rejection rule. All ADC queries still receive a prediction.}
+\label{tab:nearest-methods}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.11\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+Method & Supervision & Reference & Action space & Rejection meaning & Empirical question\\
+\midrule
+DynaSemble\newline\citep{dynasemble} & DEV gold-versus-negative margin loss & One textual coefficient fixed to 1; no DEV-Global-centered radius & Query-dependent nonnegative coefficient in released core; no $\beta$ cap & No explicit confidence gate returning a static mixture; zero is a coefficient endpoint & Textual/structural complementarity; our transfer controls in Appendix~\ref{app:dynasemble}\\[2pt]
+MoSE~\citep{mose} & Modality CE training; DEV RankBoost (BI) or CE meta-learning (MI) & No static-mixture-centered correction in the defined inference rules & Equal scores (AI), relation weights (BI), candidate-score meta-learner (MI) & No explicit return-to-static rejection gate in these inference rules & Modality-split representations and prediction; literature comparison here\\[2pt]
+Query-soft & Shared DEV winner-label logistic fit, Eq.~\eqref{eq:label} & $\alpha_0$ only for non-finite fallback & $\alpha=p_A(q)$; full interval before grid projection & Non-finite fallback; no low-confidence adjustment rejection & Same fitted object; Table~\ref{tab:matched-test}\\[2pt]
+Shrink-gate / Clip-g & Same winner fit and 41 DEV choices per family & DEV $\alpha_0$ & $(1-\lambda)\alpha_0+\lambda p_A$ / clipped-logit offset & Same confidence gate as ADC; zero strength returns Global & Matched action alternatives; Appendix~\ref{app:matched}\\[2pt]
+ADC & Winner-label logistic fit; DEV MRR selects action settings & DEV $\alpha_0$, Eq.~\eqref{eq:anchor} & $\clip(\alpha_0+\beta\tanh(g),0,1)$; Eq.~\eqref{eq:bound} & Low confidence/non-finite input returns Global; Eq.~\eqref{eq:fallback} & Reference-relative utility, loss and intervention; empirical trade-offs\\[2pt]
+\bottomrule
+\end{tabularx}
+\end{table}

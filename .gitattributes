@@ -59,3 +59,12 @@ docs/reports/paper_a_test_history_review_2026-09-12.md -text whitespace=cr-at-eo
 outputs/paper_a_safe_correction/test_history_review_v1/** -text whitespace=cr-at-eol
 paper_a_draft/tables/history/** -text whitespace=cr-at-eol
 paper_a_draft/history_source_manifest.json -text whitespace=cr-at-eol
+scripts/analyze_paper_a_complementarity.py -text whitespace=cr-at-eol
+scripts/build_paper_a_complementarity_assets.py -text whitespace=cr-at-eol
+docs/protocols/paper_a_complementarity_diagnostics.md -text whitespace=cr-at-eol
+docs/protocols/paper_a_nearest_methods_reference.json -text whitespace=cr-at-eol
+docs/reports/paper_a_complementarity_review_2026-09-12.md -text whitespace=cr-at-eol
+outputs/paper_a_safe_correction/complementarity_review_v1/** -text whitespace=cr-at-eol
+paper_a_draft/tables/complementarity/** -text whitespace=cr-at-eol
+paper_a_draft/figures/complementarity/*.pdf -text -diff
+paper_a_draft/complementarity_source_manifest.json -text whitespace=cr-at-eol

@@ -1,0 +1,32 @@
+[
+  {
+    "dataset": "mkg_w",
+    "checkpoint": "ml/artifacts/outputs/mkg_w_mhyper/20260902_014323_seed1/best.ckpt",
+    "checkpoint_sha256": "4a5cb66cf61d4cf4d68dfabf7c0560333563e7497b79b36872665b42396bbfed",
+    "tensor_sha256": {
+      "has_img": "9371bf06267acd0f7d0725b028b700fa683b91a915fc311b99245267c079e4b4",
+      "has_text": "6e8205816f3a86804eeec9d40fcabe1cd34ad7bc199190b1c92a5b2f302d9f55"
+    },
+    "entity_counts": {
+      "neither": 776,
+      "image-only": 891,
+      "text-only": 0,
+      "both": 13333
+    }
+  },
+  {
+    "dataset": "db15k",
+    "checkpoint": "ml/artifacts/outputs/db15k_mhyper/20260831_221627_seed1/best.ckpt",
+    "checkpoint_sha256": "059b45d53023bf8122ef3b07a4dc4c10660841666afa78823f863105c0d34a27",
+    "tensor_sha256": {
+      "has_img": "faea0cecfef35f2865d797ec5350ebe4d610b0bb5d66c1979212e34c080a1ea4",
+      "has_text": "3f069c07bcad303b81ab2f126ef81a13fb074a95374a7739aa3d9052b0c4f2eb"
+    },
+    "entity_counts": {
+      "neither": 4,
+      "image-only": 3760,
+      "text-only": 20,
+      "both": 9058
+    }
+  }
+]

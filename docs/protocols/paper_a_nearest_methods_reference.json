@@ -1,0 +1,34 @@
+{
+  "version": "nearest_methods_review_v1",
+  "review_date": "2026-09-12",
+  "scope": "Mechanism comparison; not a new MoSE reproduction or an exhaustive novelty claim.",
+  "sources": {
+    "dynasemble": {
+      "url": "https://aclanthology.org/2024.acl-short.20.pdf",
+      "location": "Section 3, pp.206-207; Section 5, pp.208-209",
+      "repository": "https://github.com/dair-iitd/KGC-Ensemble",
+      "commit": "48d66b915f64899798f736129fa8c4d0a40fdb78",
+      "implementation": "NBFNet/script/selector.py: Selector.__init__, get_features_and_normalize",
+      "paper_code_distinction": "The paper writes mean/variance features; the released code uses 1-mean/variance. A fixed textual coefficient is a scale convention, not a DEV-static action-radius constraint."
+    },
+    "mose": {
+      "url": "https://aclanthology.org/2022.emnlp-main.719.pdf",
+      "location": "Sections 3.5-3.6, equations (1)-(9), pp.10530-10531; Appendix A Algorithm 1, p.10536",
+      "variants": ["AI: equal averaging, equation (6)", "BI: relation-level RankBoost, equation (7) and Algorithm 1", "MI: candidate-triple score vector passed to a meta-learner, equations (8)-(9)"],
+      "boundary": "No explicit return-to-DEV-Global rejection gate is defined in these inference formulations. This does not assert that outputs cannot coincide numerically with a single modality."
+    }
+  },
+  "local_formula_evidence": {
+    "ADC": ["paper_a_draft/main.tex: eq:label, eq:signal, eq:anchor, eq:raw, eq:fallback, eq:bound"],
+    "Query-soft": ["paper_a_draft/main.tex: app:matched", "router/matched_actions.py"],
+    "Shrink-gate and Clip-g": ["paper_a_draft/main.tex: app:matched", "router/matched_actions.py"],
+    "same_object_experiment": "paper_a_draft/matched_source_manifest.json",
+    "healthy_dynamic_comparison": "paper_a_draft/dynasemble_source_manifest.json"
+  },
+  "claim_limits": [
+    "Dynamic ensembling and candidate-score features predate ADC.",
+    "Reference anchoring, bounded displacement and adjustment rejection define the studied combination; no claim that tanh, clipping, shrinkage or rejection is individually new.",
+    "Shrink-gate and Clip-g share the reference and rejection semantics; tested differences isolate action maps, and tanh-specific superiority is not supported.",
+    "MMKGC is an application setting for this general score post-processor. Observable modality coverage diagnostics are associative and never become selector inputs."
+  ]
+}

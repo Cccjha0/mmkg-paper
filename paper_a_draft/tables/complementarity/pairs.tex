@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Endpoint complementarity and actual ADC utility for every fixed pair. A/B/= are winner/tie percentages; $O$ is endpoint Oracle minus best single MRR; $D_r=\E|\log_2(r_A/r_B)|$; $X_{10}$ is gold Hits@10 disagreement (\%). $U$ is ADC minus the corresponding Global. DEV utility uses grouped held-out predictions, TEST uses the locked policy. These are descriptive observations, not new pair selection.}
+\label{tab:complement-pairs}
+\begin{tabular}{llrrrrrrr}
+\toprule
+Pair & Split & A (\%) & B (\%) & = (\%) & $O$ & $D_r$ & $X_{10}$ & $U$\\
+\midrule
+W-N & DEV & 32.02 & 44.25 & 23.73 & 0.038397 & 1.177 & 8.09 & +0.003070\\[2pt]
+W-N & TEST & 32.63 & 43.25 & 24.12 & 0.042181 & 1.172 & 8.31 & +0.002447\\[2pt]
+W-A & DEV & 43.98 & 36.17 & 19.85 & 0.029596 & 1.400 & 10.16 & +0.001204\\[2pt]
+W-A & TEST & 44.46 & 35.19 & 20.35 & 0.031011 & 1.397 & 10.48 & +0.001014\\[2pt]
+D-N & DEV & 49.82 & 28.03 & 22.15 & 0.036234 & 1.261 & 9.74 & -0.000009\\[2pt]
+D-N & TEST & 50.06 & 28.34 & 21.60 & 0.034719 & 1.254 & 10.05 & -0.000081\\[2pt]
+D-A & DEV & 52.78 & 29.11 & 18.11 & 0.031880 & 1.277 & 10.28 & +0.000036\\[2pt]
+D-A & TEST & 53.44 & 29.05 & 17.51 & 0.030434 & 1.275 & 10.22 & +0.000212\\[2pt]
+W-NA & DEV & 50.46 & 29.53 & 20.01 & 0.038671 & 1.190 & 9.49 & +0.000147\\[2pt]
+W-NA & TEST & 50.67 & 29.02 & 20.31 & 0.039312 & 1.192 & 10.07 & +0.000139\\[2pt]
+D-NA & DEV & 41.61 & 39.42 & 18.97 & 0.045779 & 1.044 & 8.50 & +0.000031\\[2pt]
+D-NA & TEST & 42.27 & 39.41 & 18.31 & 0.044812 & 1.054 & 8.54 & -0.000015\\[2pt]
+\bottomrule
+\end{tabular}
+\end{table}

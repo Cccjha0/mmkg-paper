@@ -1,0 +1,26 @@
+\begin{table}[htbp]
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
+\caption{Endpoint-winner strata. The winner is an answer-aware evaluation label, never an inference feature. Mass is the percentage of seed-direction observations. $U_g$ is conditional ADC-minus-Global MRR; $C_g=\Pr(g)U_g$ is its contribution to overall utility. Contributions sum to the pair's $U$. DEV uses OOF predictions. All additional-pair strata remain in the accompanying data; no group is used to fit or choose a policy.}
+\label{tab:complement-winners}
+\begin{tabular}{llrrrrrr}
+\toprule
+Pair & Stratum & DEV \% & DEV $U_g$ & DEV $C_g$ & TEST \% & TEST $U_g$ & TEST $C_g$\\
+\midrule
+W-N & A & 32.02 & +0.011103 & +0.003555 & 32.63 & +0.008521 & +0.002780\\[2pt]
+W-N & B & 44.25 & -0.001059 & -0.000469 & 43.25 & -0.000957 & -0.000414\\[2pt]
+W-N & tie & 23.73 & -0.000066 & -0.000016 & 24.12 & +0.000334 & +0.000081\\[2pt]
+\midrule
+W-A & A & 43.98 & -0.002294 & -0.001009 & 44.46 & -0.001916 & -0.000852\\[2pt]
+W-A & B & 36.17 & +0.005645 & +0.002042 & 35.19 & +0.004562 & +0.001606\\[2pt]
+W-A & tie & 19.85 & +0.000861 & +0.000171 & 20.35 & +0.001278 & +0.000260\\[2pt]
+\midrule
+D-N & A & 49.82 & -0.000813 & -0.000405 & 50.06 & -0.001028 & -0.000515\\[2pt]
+D-N & B & 28.03 & +0.001255 & +0.000352 & 28.34 & +0.001389 & +0.000394\\[2pt]
+D-N & tie & 22.15 & +0.000202 & +0.000045 & 21.60 & +0.000184 & +0.000040\\[2pt]
+\midrule
+D-A & A & 52.78 & -0.000222 & -0.000117 & 53.44 & -0.000070 & -0.000038\\[2pt]
+D-A & B & 29.11 & +0.000521 & +0.000152 & 29.05 & +0.000850 & +0.000247\\[2pt]
+D-A & tie & 18.11 & +0.000010 & +0.000002 & 17.51 & +0.000013 & +0.000002\\[2pt]
+\bottomrule
+\end{tabular}
+\end{table}

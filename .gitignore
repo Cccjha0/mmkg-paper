@@ -130,3 +130,5 @@ outputs/paper_a_safe_correction/information_boundary_v2/**/checkpoints/
 
 # Matched action review: retain locks and summaries; regenerate per-query outputs.
 /outputs/paper_a_safe_correction/matched_alternatives_v1/query_rows/
+# Regenerate complementarity figure previews from the tracked PDF/source.
+/paper_a_draft/figures/complementarity/*.png
